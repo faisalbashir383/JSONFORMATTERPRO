@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /static/admin/
 
-Sitemap: https://jsonformatterpro.com/sitemap.xml
+Sitemap: https://jsonformatterspro.com/sitemap.xml
