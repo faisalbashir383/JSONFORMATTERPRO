@@ -6,8 +6,32 @@ Captures IP address, geolocation, device info, and tracks page views
 import requests
 from django.utils.deprecation import MiddlewareMixin
 from django.contrib.sessions.middleware import SessionMiddleware
+from django.http import HttpResponsePermanentRedirect
 from user_agents import parse
 from formatter.models import VisitorLog, PageView
+
+
+class WWWRedirectMiddleware(MiddlewareMixin):
+    """
+    Middleware to redirect www to non-www version
+    Ensures canonical URL for SEO
+    """
+    
+    def process_request(self, request):
+        """Redirect www to non-www"""
+        host = request.get_host()
+        
+        # Check if the host starts with www.
+        if host.startswith('www.'):
+            # Remove www. prefix
+            new_host = host[4:]
+            # Build new URL
+            new_url = f"{request.scheme}://{new_host}{request.get_full_path()}"
+            # Return permanent redirect (301)
+            return HttpResponsePermanentRedirect(new_url)
+        
+        return None
+
 
 
 class VisitorTrackingMiddleware(MiddlewareMixin):
