@@ -19,6 +19,7 @@ class Command(BaseCommand):
             {'name': 'Python', 'description': 'Python programming tutorials and advanced topics'},
             {'name': 'JavaScript', 'description': 'JavaScript, TypeScript, and modern web development'},
             {'name': 'AI & Machine Learning', 'description': 'Artificial Intelligence, ML, and Deep Learning'},
+            {'name': 'Generative AI', 'description': 'ChatGPT, LLMs, prompt engineering, and AI applications'},
             {'name': 'Web Development', 'description': 'HTML, CSS, frameworks, and web technologies'},
             {'name': 'Data Science', 'description': 'Data analysis, visualization, and big data'},
             {'name': 'Programming Basics', 'description': 'Fundamental programming concepts'},
@@ -46,6 +47,7 @@ class Command(BaseCommand):
         all_posts.extend(JAVASCRIPT_POSTS)
         all_posts.extend(WEB_DEV_POSTS)
         all_posts.extend(AI_ML_POSTS)
+        all_posts.extend(GENAI_POSTS)  # Generative AI posts
         all_posts.extend(DATA_SCIENCE_POSTS)
         all_posts.extend(PROGRAMMING_BASICS_POSTS)
         all_posts.extend(DEVOPS_POSTS)
@@ -1027,7 +1029,7 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'body': 'Hello from Lambda!'
     }
-</code></pre>
+```</pre>
 
 <p>Cloud computing scales with your needs and reduces infrastructure costs!</p>
         ''',
@@ -1036,3 +1038,1830 @@ def lambda_handler(event, context):
         'meta_keywords': 'aws tutorial, cloud computing, aws basics, ec2, s3, lambda'
     },
 ]
+
+# Generative AI Posts (20 posts)
+GENAI_POSTS = [
+    {
+        'category': 'Generative AI',
+        'title': 'Getting Started with ChatGPT API: Build AI-Powered Applications',
+        'excerpt': 'Learn how to integrate OpenAI ChatGPT API into your applications. Cover authentication, making API calls, handling responses, and best practices.',
+        'content': '''
+<p>ChatGPT API enables you to build AI-powered applications with state-of-the-art language models. This guide covers everything from setup to production.</p>
+
+<h2>Setting Up OpenAI API</h2>
+<pre><code class="language-python">
+import openai
+
+# Set your API key
+openai.api_key = 'your-api-key-here'
+
+# Simple completion
+response = openai.chat.completions.create(
+    model="gpt-4",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Explain quantum computing in simple terms"}
+    ]
+)
+
+print(response.choices[0].message.content)
+```</pre>
+
+<h2>Conversation History</h2>
+<pre><code class="language-python">
+messages = [
+    {"role": "system", "content": "You are a helpful coding assistant."}
+]
+
+def chat(user_message):
+    messages.append({"role": "user", "content": user_message})
+    
+    response = openai.chat.completions.create(
+        model="gpt-4",
+        messages=messages
+    )
+    
+    assistant_message = response.choices[0].message.content
+    messages.append({"role": "assistant", "content": assistant_message})
+    
+    return assistant_message
+
+# Use it
+print(chat("How do I reverse a string in Python?"))
+print(chat("Can you show an example?"))
+```</pre>
+
+<h2>Streaming Responses</h2>
+<pre><code class="language-python">
+response = openai.chat.completions.create(
+    model="gpt-4",
+    messages=[{"role": "user", "content": "Tell me a story"}],
+    stream=True
+)
+
+for chunk in response:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end='')
+```</pre>
+
+<h2>Function Calling</h2>
+<pre><code class="language-python">
+functions = [
+    {
+        "name": "get_weather",
+        "description": "Get current weather in a location",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "location": {"type": "string"},
+                "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]}
+            },
+            "required": ["location"]
+        }
+    }
+]
+
+response = openai.chat.completions.create(
+    model="gpt-4",
+    messages=[{"role": "user", "content": "What's the weather in NYC?"}],
+    functions=functions,
+    function_call="auto"
+)
+```</pre>
+
+<h2>Best Practices</h2>
+<pre><code class="language-python">
+# Set temperature for creativity vs consistency
+response = openai.chat.completions.create(
+    model="gpt-4",
+    messages=your_messages,
+    temperature=0.7,  # 0 = deterministic, 2 = very creative
+    max_tokens=500,   # Limit response length
+    top_p=0.9        # Nucleus sampling
+)
+
+# Handle errors
+try:
+    response = openai.chat.completions.create(...)
+except openai.error.RateLimitError:
+    print("Rate limit exceeded, please retry")
+except openai.error.APIError as e:
+    print(f"API error: {e}")
+```</pre>
+
+<p>Start building amazing AI applications with ChatGPT API today!</p>
+        ''',
+        'tags': 'chatgpt, openai, gpt-4, api, generative ai, llm',
+        'meta_description': 'Learn to integrate ChatGPT API into your applications. Complete guide with code examples.',
+        'meta_keywords': 'chatgpt api, openai api, gpt-4, chatgpt tutorial, ai api'
+    },
+    {
+        'category': 'Generative AI',
+        'title': 'Prompt Engineering Mastery: Writing Effective AI Prompts',
+        'excerpt': 'Master the art of prompt engineering for ChatGPT and other LLMs. Learn techniques for better outputs, few-shot learning, and prompt optimization.',
+        'content': '''
+<p>Prompt engineering is the skill of crafting inputs that get the best results from AI models. Master these techniques for superior AI outputs.</p>
+
+<h2>Basic Prompt Structure</h2>
+<pre><code class="language-text">
+# Clear and Specific
+Bad: "Write about dogs"
+Good: "Write a 200-word informative paragraph about Golden Retrievers, 
+focusing on their temperament and suitability as family pets."
+
+# Include Role/Persona
+"You are an expert Python developer. Explain list comprehensions 
+to a beginner with 3 simple examples."
+
+# Specify Format
+"Create a JSON object with user information including name, 
+age, email, and interests as an array."
+```</pre>
+
+<h2>Few-Shot Learning</h2>
+<pre><code class="language-text">
+Extract the sentiment from these reviews:
+
+Review: "This product is amazing! Best purchase ever."
+Sentiment: Positive
+
+Review: "Terrible quality, broke after one day."
+Sentiment: Negative
+
+Review: "It's okay, nothing special."
+Sentiment: Neutral
+
+Review: "I absolutely love the color and design!"
+Sentiment: [AI will complete]
+```</pre>
+
+<h2>Chain of Thought Prompting</h2>
+<pre><code class="language-text">
+Solve this step by step:
+
+Q: A bakery baked 200 cookies. They sold 60% in the morning 
+and 25% of the remaining in the afternoon. How many are left?
+
+Let's think through this step by step:
+1. First calculate morning sales
+2. Then calculate remaining after morning
+3. Calculate afternoon sales
+4. Final remaining count
+```</pre>
+
+<h2>System Prompts for Consistency</h2>
+<pre><code class="language-python">
+system_prompt = """
+You are a professional code reviewer. For each code snippet:
+1. Identify potential bugs
+2. Suggest performance improvements
+3. Check for security issues
+4. Recommend best practices
+Format your response as numbered list with clear explanations.
+"""
+
+messages = [
+    {"role": "system", "content": system_prompt},
+    {"role": "user", "content": "Review this code: ..."}
+]
+```</pre>
+
+<h2>Prompt Templates</h2>
+<pre><code class="language-python">
+# Email generator template
+email_template = """
+Write a professional email with:
+- Recipient: {recipient}
+- Purpose: {purpose}
+- Tone: {tone}
+- Key points: {points}
+- Call to action: {cta}
+"""
+
+# Use it
+prompt = email_template.format(
+    recipient="hiring manager",
+    purpose="follow up on job application",
+    tone="polite and enthusiastic",
+    points="reiterate qualifications, express interest",
+    cta="request interview"
+)
+```</pre>
+
+<h2>Advanced Techniques</h2>
+<pre><code class="language-text">
+# Constrained Output
+"List 5 Python web frameworks. 
+Format: Framework Name | Use Case | Difficulty Level
+Output as markdown table."
+
+# Negative Prompting
+"Explain machine learning WITHOUT using technical jargon, 
+mathematical formulas, or acronyms."
+
+# Multi-step Reasoning
+"First, identify the main topic. Second, list key concepts. 
+Third, create an outline. Finally, write a comprehensive summary."
+```</pre>
+
+<p>Great prompts lead to great AI outputs. Practice and refine your prompting skills!</p>
+        ''',
+        'tags': 'prompt engineering, chatgpt, ai prompts, llm, generative ai',
+        'meta_description': 'Master prompt engineering for ChatGPT and LLMs. Learn techniques for better AI outputs.',
+        'meta_keywords': 'prompt engineering, chatgpt prompts, ai prompts, llm prompts'
+    },
+    {
+        'category': 'Generative AI',
+        'title': 'LangChain Tutorial: Building LLM Applications',
+        'excerpt': 'Learn LangChain framework for building applications with LLMs. Cover chains, agents, memory, document loaders, and vector stores.',
+        'content': '''
+<p>LangChain is a powerful framework for developing applications powered by language models. Build sophisticated AI apps with ease.</p>
+
+<h2>Basic LangChain Setup</h2>
+<pre><code class="language-python">
+from langchain.llms import OpenAI
+from langchain.prompts import PromptTemplate
+
+# Initialize LLM
+llm = OpenAI(temperature=0.7)
+
+# Create prompt template
+template = "Write a {adjective} story about {topic}"
+prompt = PromptTemplate(
+    input_variables=["adjective", "topic"],
+    template=template
+)
+
+# Generate
+result = llm(prompt.format(adjective="funny", topic="robots"))
+print(result)
+```</pre>
+
+<h2>Chains for Multi-Step Tasks</h2>
+<pre><code class="language-python">
+from langchain.chains import LLMChain, SimpleSequentialChain
+
+# First chain: Generate topic
+topic_chain = LLMChain(
+    llm=llm,
+    prompt=PromptTemplate(
+        input_variables=["interest"],
+        template="Suggest a blog topic about {interest}"
+    )
+)
+
+# Second chain: Write outline
+outline_chain = LLMChain(
+    llm=llm,
+    prompt=PromptTemplate(
+        input_variables=["topic"],
+        template="Create an outline for: {topic}"
+    )
+)
+
+# Combine chains
+overall_chain = SimpleSequentialChain(
+    chains=[topic_chain, outline_chain]
+)
+
+result = overall_chain.run("artificial intelligence")
+```</pre>
+
+<h2>Memory for Conversations</h2>
+<pre><code class="language-python">
+from langchain.memory import ConversationBufferMemory
+from langchain.chains import ConversationChain
+
+# Add memory
+memory = ConversationBufferMemory()
+conversation = ConversationChain(
+    llm=llm,
+    memory=memory,
+    verbose=True
+)
+
+# Chat with memory
+conversation.predict(input="Hi, my name is Alice")
+conversation.predict(input="What's my name?")  # Remembers "Alice"
+```</pre>
+
+<h2>Document Loaders and Splitting</h2>
+<pre><code class="language-python">
+from langchain.document_loaders import TextLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+# Load document
+loader = TextLoader('document.txt')
+documents = loader.load()
+
+# Split into chunks
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=200
+)
+chunks = text_splitter.split_documents(documents)
+```</pre>
+
+<h2>Vector Stores for Semantic Search</h2>
+<pre><code class="language-python">
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
+
+# Create embeddings
+embeddings = OpenAIEmbeddings()
+
+# Build vector store
+vectorstore = FAISS.from_documents(chunks, embeddings)
+
+# Similarity search
+query = "What is machine learning?"
+docs = vectorstore.similarity_search(query, k=3)
+```</pre>
+
+<h2>Agents for Tool Use</h2>
+<pre><code class="language-python">
+from langchain.agents import load_tools, initialize_agent
+from langchain.agents import AgentType
+
+# Load tools
+tools = load_tools(["serpapi", "llm-math"], llm=llm)
+
+# Create agent
+agent = initialize_agent(
+    tools,
+    llm,
+    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    verbose=True
+)
+
+# Use agent
+agent.run("What is the population of Tokyo multiplied by 2?")
+```</pre>
+
+<p>LangChain simplifies building complex LLM applications. Start creating today!</p>
+        ''',
+        'tags': 'langchain, llm, ai development, chatgpt, python, generative ai',
+        'meta_description': 'Learn LangChain for building LLM applications. Master chains, agents, memory, and vector stores.',
+        'meta_keywords': 'langchain tutorial, langchain python, llm applications, ai development'
+    },
+    {
+        'category': 'Generative AI',
+        'title': 'RAG (Retrieval Augmented Generation): Building Smart AI Apps',
+        'excerpt': 'Master Retrieval Augmented Generation for AI applications. Learn to combine vector databases with LLMs for accurate, context-aware responses.',
+        'content': '''
+<p>RAG combines retrieval systems with generative AI to create applications that provide accurate, source-based responses using your own data.</p>
+
+<h2>What is RAG?</h2>
+<pre><code class="language-python">
+# Traditional LLM - Limited knowledge
+response = llm("What is our company's refund policy?")
+# May hallucinate or give generic answer
+
+# RAG Approach:
+# 1. Retrieve relevant documents from your knowledge base
+# 2. Include them in the prompt
+# 3. LLM generates accurate answer based on your data
+```</pre>
+
+<h2>Building a Basic RAG System</h2>
+<pre><code class="language-python">
+from langchain.document_loaders import DirectoryLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.vectorstores import Chroma
+from langchain.chains import RetrievalQA
+from langchain.llms import OpenAI
+
+# Step 1: Load documents
+loader = DirectoryLoader('./docs', glob="**/*.txt")
+documents = loader.load()
+
+# Step 2: Split into chunks
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=200
+)
+chunks = text_splitter.split_documents(documents)
+
+# Step 3: Create embeddings and vector store
+embeddings = OpenAIEmbeddings()
+vectorstore = Chroma.from_documents(chunks, embeddings)
+
+# Step 4: Create retrieval chain
+qa_chain = RetrievalQA.from_chain_type(
+    llm=OpenAI(),
+    chain_type="stuff",
+    retriever=vectorstore.as_retriever()
+)
+
+# Step 5: Ask questions
+result = qa_chain.run("What is the company's remote work policy?")
+print(result)
+```</pre>
+
+<h2>Advanced RAG with Citations</h2>
+<pre><code class="language-python">
+from langchain.chains import RetrievalQAWithSourcesChain
+
+# Create chain that returns sources
+qa_with_sources = RetrievalQAWithSourcesChain.from_chain_type(
+    llm=OpenAI(temperature=0),
+    chain_type="stuff",
+    retriever=vectorstore.as_retriever()
+)
+
+# Get answer with sources
+result = qa_with_sources({"question": "What are the benefits?"})
+print(f"Answer: {result['answer']}")
+print(f"Sources: {result['sources']}")
+```</pre>
+
+<h2>Custom Retrieval Logic</h2>
+<pre><code class="language-python">
+# Retrieve more documents for complex questions
+retriever = vectorstore.as_retriever(
+    search_type="similarity",
+    search_kwargs={"k": 5}  # Return top 5 chunks
+)
+
+# MMR (Maximum Marginal Relevance) for diversity
+retriever = vectorstore.as_retriever(
+    search_type="mmr",
+    search_kwargs={"k": 5, "fetch_k": 20}
+)
+```</pre>
+
+<h2>Production RAG System</h2>
+<pre><code class="language-python">
+class ProductionRAG:
+    def __init__(self, docs_path):
+        self.vectorstore = self.build_vectorstore(docs_path)
+        self.qa_chain = self.create_qa_chain()
+    
+    def build_vectorstore(self, docs_path):
+        loader = DirectoryLoader(docs_path)
+        documents = loader.load()
+        
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1000,
+            chunk_overlap=200
+        )
+        chunks = text_splitter.split_documents(documents)
+        
+        embeddings = OpenAIEmbeddings()
+        return Chroma.from_documents(
+            chunks,
+            embeddings,
+            persist_directory="./chroma_db"
+        )
+    
+    def create_qa_chain(self):
+        return RetrievalQAWithSourcesChain.from_chain_type(
+            llm=OpenAI(temperature=0),
+            chain_type="stuff",
+            retriever=self.vectorstore.as_retriever(
+                search_kwargs={"k": 3}
+            )
+        )
+    
+    def ask(self, question):
+        return self.qa_chain({"question": question})
+
+# Use it
+rag = ProductionRAG("./company_docs")
+response = rag.ask("What is the vacation policy?")
+```</pre>
+
+<p>RAG enables AI to provide accurate answers using your specific data. Essential for business applications!</p>
+        ''',
+        'tags': 'RAG, retrieval augmented generation, vector database, langchain, llm',
+        'meta_description': 'Master RAG (Retrieval Augmented Generation) for building AI apps with accurate, source-based responses.',
+        'meta_keywords': 'RAG tutorial, retrieval augmented generation, vector database, ai applications'
+    },
+    {
+        'category': 'Generative AI',
+        'title': 'AI Image Generation: DALL-E, Midjourney, and Stable Diffusion',
+        'excerpt': 'Explore AI image generation tools. Learn to create stunning visuals with DALL-E, Midjourney, and Stable Diffusion using effective prompts.',
+        'content': '''
+<p>AI image generation has revolutionized digital art. Learn to create amazing images with leading AI tools.</p>
+
+<h2>DALL-E 3 via OpenAI API</h2>
+<pre><code class="language-python">
+import openai
+
+# Generate image
+response = openai.images.generate(
+    model="dall-e-3",
+    prompt="A serene Japanese garden with cherry blossoms, koi pond, and stone lanterns, digital art style, high quality",
+    size="1024x1024",
+    quality="standard",  # or "hd"
+    n=1
+)
+
+image_url = response.data[0].url
+print(f"Image URL: {image_url}")
+
+# Save image
+import requests
+from PIL import Image
+from io import BytesIO
+
+img_response = requests.get(image_url)
+img = Image.open(BytesIO(img_response.content))
+img.save("generated_image.png")
+```</pre>
+
+<h2>Image Variations</h2>
+<pre><code class="language-python">
+# Create variations of existing image
+with open("original.png", "rb") as image_file:
+    response = openai.images.create_variation(
+        image=image_file,
+        n=3,
+        size="1024x1024"
+    )
+
+for i, img in enumerate(response.data):
+    print(f"Variation {i+1}: {img.url}")
+```</pre>
+
+<h2>Effective Image Prompting</h2>
+<pre><code class="language-text">
+# Structure: Subject + Style + Details + Quality
+
+Good Prompt:
+"A majestic lion on a mountain peak at sunset, 
+realistic photography style, dramatic lighting, 
+golden hour, high detail, 4k quality"
+
+Include:
+- Subject (what): lion, mountain, sunset
+- Style: realistic photography, digital art, oil painting
+- Details: dramatic lighting, colors
+- Technical: 4k, high detail, professional
+
+Avoid:
+- Vague: "a nice picture of an animal"
+- Too many concepts: confuses the model
+```</pre>
+
+<h2>Midjourney-Style Prompts</h2>
+<pre><code class="language-text">
+/imagine prompt: cyberpunk cityscape, 
+neon lights, flying cars, rainy night, 
+blade runner style, highly detailed, 
+cinematic lighting, 8k --ar 16:9 --q 2
+
+Parameters:
+--ar 16:9    (aspect ratio)
+--q 2        (quality)
+--s 750      (stylize)
+--v 5.2      (version)
+```</pre>
+
+<h2>Stable Diffusion with Diffusers</h2>
+<pre><code class="language-python">
+from diffusers import StableDiffusionPipeline
+import torch
+
+# Load model
+model_id = "stabilityai/stable-diffusion-2-1"
+pipe = StableDiffusionPipeline.from_pretrained(
+    model_id,
+    torch_dtype=torch.float16
+)
+pipe = pipe.to("cuda")  # Use GPU
+
+# Generate image
+prompt = "A futuristic city with flying cars, cyberpunk style"
+negative_prompt = "blurry, low quality, distorted"
+
+image = pipe(
+    prompt=prompt,
+    negative_prompt=negative_prompt,
+    num_inference_steps=50,
+    guidance_scale=7.5
+).images[0]
+
+image.save("output.png")
+```</pre>
+
+<h2>Advanced Techniques</h2>
+<pre><code class="language-python">
+# Image-to-Image
+from diffusers import StableDiffusionImg2ImgPipeline
+
+pipe_img2img = StableDiffusionImg2ImgPipeline.from_pretrained(model_id)
+
+init_image = Image.open("sketch.png")
+transformed = pipe_img2img(
+    prompt="A photo-realistic version of this sketch",
+    image=init_image,
+    strength=0.75  # How much to transform
+).images[0]
+
+# Inpainting (edit parts of image)
+from diffusers import StableDiffusionInpaintPipeline
+
+pipe_inpaint = StableDiffusionInpaintPipeline.from_pretrained(model_id)
+
+result = pipe_inpaint(
+    prompt="Replace with a red sports car",
+    image=original_image,
+    mask_image=mask  # White where to edit
+).images[0]
+```</pre>
+
+<p>AI image generation opens endless creative possibilities. Experiment and create!</p>
+        ''',
+        'tags': 'AI image generation, DALL-E, Midjourney, Stable Diffusion, generative AI',
+        'meta_description': 'Learn AI image generation with DALL-E, Midjourney, and Stable Diffusion. Create stunning visuals.',
+        'meta_keywords': 'dall-e tutorial, midjourney, stable diffusion, ai image generation, ai art'
+    },
+    {
+        'category': 'Generative AI',
+        'title': 'Fine-Tuning Large Language Models: Custom AI for Your Needs',
+        'excerpt': 'Learn to fine-tune LLMs for specific tasks. Cover dataset preparation, training process, hyperparameters, and deployment of custom models.',
+        'content': '''
+<p>Fine-tuning adapts pre-trained models to your specific use case, resulting in better performance than generic prompting.</p>
+
+<h2>When to Fine-Tune</h2>
+<pre><code class="language-python">
+# Fine-tune when:
+# 1. Specific domain knowledge needed (legal, medical)
+# 2. Consistent formatting required
+# 3. Behavior modification needed
+# 4. Cost optimization (smaller fine-tuned model vs large prompts)
+
+# Don't fine-tune when:
+# - Few examples (use few-shot prompting instead)
+# - Rapid iteration needed
+# - General knowledge queries
+</code></pre>
+
+<h2>Preparing Training Data</h2>
+<pre><code class="language-python">
+import json
+
+# Format for OpenAI fine-tuning
+training_data = []
+
+for example in your_examples:
+    training_data.append({
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": example['input']},
+            {"role": "assistant", "content": example['output']}
+        ]
+    })
+
+# Save to JSONL
+with open('training_data.jsonl', 'w') as f:
+    for item in training_data:
+        f.write(json.dumps(item) + '\\n')
+</code></pre>
+
+<h2>Fine-Tuning with OpenAI</h2>
+<pre><code class="language-python">
+import openai
+
+# Upload training file
+file = openai.files.create(
+    file=open("training_data.jsonl", "rb"),
+    purpose="fine-tune"
+)
+
+# Start fine-tuning job
+job = openai.fine_tuning.jobs.create(
+    training_file=file.id,
+    model="gpt-3.5-turbo",
+    hyperparameters={
+        "n_epochs": 3,
+        "learning_rate_multiplier": 0.1
+    }
+)
+
+# Check status
+status = openai.fine_tuning.jobs.retrieve(job.id)
+print(f"Status: {status.status}")
+
+# Use fine-tuned model
+response = openai.chat.completions.create(
+    model=job.fine_tuned_model,
+    messages=[{"role": "user", "content": "Your query"}]
+)
+</code></pre>
+
+<h2>Hugging Face Fine-Tuning</h2>
+<pre><code class="language-python">
+from transformers import AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments
+from datasets import load_dataset
+
+# Load model and tokenizer
+model = AutoModelForCausalLM.from_pretrained("gpt2")
+tokenizer = AutoTokenizer.from_pretrained("gpt2")
+
+# Prepare dataset
+dataset = load_dataset("your_dataset")
+
+def tokenize_function(examples):
+    return tokenizer(examples["text"], truncation=True, padding=True)
+
+tokenized_dataset = dataset.map(tokenize_function, batched=True)
+
+# Training arguments
+training_args = TrainingArguments(
+    output_dir="./results",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    save_steps=500,
+    logging_steps=100
+)
+
+# Train
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_dataset["train"]
+)
+
+trainer.train()
+</code></pre>
+
+<p>Fine-tuning creates specialized AI models optimized for your specific use case!</p>
+        ''',
+        'tags': 'fine-tuning, LLM, machine learning, AI training, custom models',
+        'meta_description': 'Learn to fine-tune large language models for custom AI applications. Complete guide with code examples.',
+        'meta_keywords': 'fine-tuning llm, custom ai model, openai fine-tuning, model training'
+    },
+    {
+        'category': 'Generative AI',
+        'title': 'Building AI Agents: Autonomous Systems with LLMs',
+        'excerpt': 'Create autonomous AI agents that can use tools, plan actions, and execute complex tasks. Learn agent patterns, tool integration, and ReAct prompting.',
+        'content': '''
+<p>AI agents combine LLMs with tools and decision-making logic to autonomously complete complex tasks.</p>
+
+<h2>Basic Agent Pattern</h2>
+<pre><code class="language-python">
+from langchain.agents import AgentExecutor, create_react_agent
+from langchain.llms import OpenAI
+from langchain import hub
+
+# Define tools
+from langchain.tools import Tool
+
+def calculator(query):
+    return eval(query)
+
+def search_web(query):
+    # Call search API
+    return f"Search results for: {query}"
+
+tools = [
+    Tool(name="Calculator", func=calculator, description="Useful for math"),
+    Tool(name="Search", func=search_web, description="Search the web")
+]
+
+# Create agent
+llm = OpenAI(temperature=0)
+prompt = hub.pull("hwchase17/react")
+
+agent = create_react_agent(llm, tools, prompt)
+agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+
+# Run agent
+result = agent_executor.invoke({"input": "What is 25 * 4 plus 10?"})
+</code></pre>
+
+<h2>ReAct (Reasoning + Acting)</h2>
+<pre><code class="language-text">
+Thought: I need to calculate this step by step
+Action: Calculator
+Action Input: 25 * 4
+Observation: 100
+Thought: Now I need to add 10
+Action: Calculator
+Action Input: 100 + 10
+Observation: 110
+Thought: I have the final answer
+Final Answer: 110
+</code></pre>
+
+<h2>Custom Tools</h2>
+<pre><code class="language-python">
+from langchain.tools import BaseTool
+
+class DatabaseQueryTool(BaseTool):
+    name = "database_query"
+    description = "Query the database for information"
+    
+    def _run(self, query: str) -> str:
+        # Execute database query
+        results = execute_sql(query)
+        return str(results)
+
+class EmailSenderTool(BaseTool):
+    name = "send_email"
+    description = "Send an email to a recipient"
+    
+    def _run(self, to: str, subject: str, body: str) -> str:
+        # Send email
+        send_email_api(to, subject, body)
+        return "Email sent successfully"
+
+# Add to agent
+tools = [DatabaseQueryTool(), EmailSenderTool()]
+</code></pre>
+
+<h2>Multi-Agent Systems</h2>
+<pre><code class="language-python">
+# Coordinator agent
+coordinator = Agent(
+    role="Project Manager",
+    goal="Coordinate tasks between agents",
+    tools=[]
+)
+
+# Specialized agents
+researcher = Agent(
+    role="Researcher",
+    goal="Research information",
+    tools=[search_tool, scrape_tool]
+)
+
+writer = Agent(
+    role="Writer", 
+    goal="Write content",
+    tools=[write_tool, edit_tool]
+)
+
+# Execute workflow
+task = "Research AI trends and write a blog post"
+result = coordinator.delegate(task, [researcher, writer])
+</code></pre>
+
+<p>AI agents enable autonomous task completion. Build sophisticated systems today!</p>
+        ''',
+        'tags': 'AI agents, LangChain, autonomous AI, ReAct, tool use',
+        'meta_description': 'Build autonomous AI agents with LLMs. Learn agent patterns, tool integration, and complex task execution.',
+        'meta_keywords': 'AI agents, langchain agents, autonomous ai, react prompting'
+    },
+    {
+        'category': 'Generative AI',
+        'title': 'Vector Databases: Powering Semantic Search and RAG',
+        'excerpt': 'Master vector databases like Pinecone, Weaviate, and ChromaDB for AI applications. Learn embeddings, similarity search, and scaling strategies.',
+        'content': '''
+<p>Vector databases store and search high-dimensional vectors, enabling semantic search and RAG applications at scale.</p>
+
+<h2>Understanding Embeddings</h2>
+<pre><code class="language-python">
+from openai import OpenAI
+
+client = OpenAI()
+
+# Create embeddings
+text = "Machine learning is fascinating"
+response = client.embeddings.create(
+    model="text-embedding-3-small",
+    input=text
+)
+
+embedding = response.data[0].embedding  # 1536-dimensional vector
+print(f"Embedding length: {len(embedding)}")
+
+# Similar texts have similar vectors
+texts = ["AI is amazing", "Dogs are cute", "Artificial intelligence rocks"]
+embeddings = [
+    client.embeddings.create(input=t, model="text-embedding-3-small").data[0].embedding
+    for t in texts
+]
+</code></pre>
+
+<h2>ChromaDB for Local Development</h2>
+<pre><code class="language-python">
+import chromadb
+from chromadb.utils import embedding_functions
+
+# Initialize client
+client = chromadb.Client()
+
+# Create collection
+openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+    api_key="your-key",
+    model_name="text-embedding-3-small"
+)
+
+collection = client.create_collection(
+    name="my_documents",
+    embedding_function=openai_ef
+)
+
+# Add documents
+collection.add(
+    documents=["AI is the future", "Machine learning powers AI"],
+    metadatas=[{"source": "doc1"}, {"source": "doc2"}],
+    ids=["id1", "id2"]
+)
+
+# Query
+results = collection.query(
+    query_texts=["What is AI?"],
+    n_results=2
+)
+</code></pre>
+
+<h2>Pinecone for Production</h2>
+<pre><code class="language-python">
+import pinecone
+
+# Initialize
+pinecone.init(api_key="your-key", environment="us-west1-gcp")
+
+# Create index
+index_name = "my-index"
+if index_name not in pinecone.list_indexes():
+    pinecone.create_index(
+        name=index_name,
+        dimension=1536,  # OpenAI embedding size
+        metric="cosine"
+    )
+
+# Connect to index
+index = pinecone.Index(index_name)
+
+# Upsert vectors
+index.upsert(vectors=[
+    ("vec1", embedding1, {"text": "AI content"}),
+    ("vec2", embedding2, {"text": "ML content"})
+])
+
+# Search
+results = index.query(
+    vector=query_embedding,
+    top_k=5,
+    include_metadata=True
+)
+</code></pre>
+
+<h2>Weaviate for Advanced Features</h2>
+<pre><code class="language-python">
+import weaviate
+
+# Connect
+client = weaviate.Client("http://localhost:8080")
+
+# Create schema
+schema = {
+    "class": "Document",
+    "vectorizer": "text2vec-openai",
+    "properties": [
+        {"name": "content", "dataType": ["text"]},
+        {"name": "author", "dataType": ["string"]}
+    ]
+}
+client.schema.create_class(schema)
+
+# Add data
+client.data_object.create(
+    class_name="Document",
+    data_object={
+        "content": "AI trends in 2024",
+        "author": "Alice"
+    }
+)
+
+# Hybrid search (vector + keyword)
+results = client.query.get("Document", ["content", "author"])\\
+    .with_hybrid(query="AI", alpha=0.5)\\
+    .with_limit(5)\\
+    .do()
+</code></pre>
+
+<p>Vector databases are essential for modern AI applications. Choose the right one for your needs!</p>
+        ''',
+        'tags': 'vector database, embeddings, semantic search, Pinecone, ChromaDB, Weaviate',
+        'meta_description': 'Master vector databases for AI applications. Learn Pinecone, ChromaDB, Weaviate, and semantic search.',
+        'meta_keywords': 'vector database, embeddings, semantic search, pinecone, chromadb, weaviate'
+    },
+    {
+        'category': 'Generative AI',
+        'title': 'OpenAI Assistants API: Building Stateful AI Applications',
+        'excerpt': 'Learn the OpenAI Assistants API for building conversational AI with persistent threads, file handling, and code interpreter capabilities.',
+        'content': '''
+<p>The Assistants API provides a stateful interface for building AI assistants with memory, tools, and file handling.</p>
+
+<h2>Creating an Assistant</h2>
+<pre><code class="language-python">
+from openai import OpenAI
+
+client = OpenAI()
+
+# Create assistant
+assistant = client.beta.assistants.create(
+    name="Code Helper",
+    instructions="You are a helpful coding assistant. Help users with Python programming.",
+    model="gpt-4-turbo-preview",
+    tools=[{"type": "code_interpreter"}]
+)
+
+print(f"Assistant ID: {assistant.id}")
+</code></pre>
+
+<h2>Managing Threads and Messages</h2>
+<pre><code class="language-python">
+# Create thread
+thread = client.beta.threads.create()
+
+# Add message
+message = client.beta.threads.messages.create(
+    thread_id=thread.id,
+    role="user",
+    content="How do I reverse a string in Python?"
+)
+
+# Run assistant
+run = client.beta.threads.runs.create(
+    thread_id=thread.id,
+    assistant_id=assistant.id
+)
+
+# Wait for completion
+import time
+while run.status != "completed":
+    run = client.beta.threads.runs.retrieve(
+        thread_id=thread.id,
+        run_id=run.id
+    )
+    time.sleep(1)
+
+# Get response
+messages = client.beta.threads.messages.list(thread_id=thread.id)
+print(messages.data[0].content[0].text.value)
+</code></pre>
+
+<h2>File Handling</h2>
+<pre><code class="language-python">
+# Upload file
+file = client.files.create(
+    file=open("data.csv", "rb"),
+    purpose="assistants"
+)
+
+# Create assistant with file access
+assistant = client.beta.assistants.create(
+    name="Data Analyst",
+    instructions="Analyze data files",
+    model="gpt-4-turbo-preview",
+    tools=[{"type": "code_interpreter"}],
+    file_ids=[file.id]
+)
+
+# Ask questions about the file
+message = client.beta.threads.messages.create(
+    thread_id=thread.id,
+    role="user",
+    content="What's the average value in the data?"
+)
+</code></pre>
+
+<h2>Function Calling</h2>
+<pre><code class="language-python">
+# Define functions
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get weather for a location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {"type": "string"}
+                },
+                "required": ["location"]
+            }
+        }
+    }
+]
+
+assistant = client.beta.assistants.create(
+    name="Weather Assistant",
+    tools=tools,
+    model="gpt-4-turbo-preview"
+)
+
+# Handle function calls in run
+if run.status == "requires_action":
+    tool_calls = run.required_action.submit_tool_outputs.tool_calls
+    
+    tool_outputs = []
+    for call in tool_calls:
+        if call.function.name == "get_weather":
+            # Execute function
+            result = get_weather(call.function.arguments)
+            tool_outputs.append({
+                "tool_call_id": call.id,
+                "output": result
+            })
+    
+    # Submit outputs
+    run = client.beta.threads.runs.submit_tool_outputs(
+        thread_id=thread.id,
+        run_id=run.id,
+        tool_outputs=tool_outputs
+    )
+</code></pre>
+
+<p>The Assistants API simplifies building stateful, capable AI applications!</p>
+        ''',
+        'tags': 'OpenAI Assistants, AI API, conversational AI, stateful AI, GPT-4',
+        'meta_description': 'Build stateful AI applications with OpenAI Assistants API. Learn threads, file handling, and function calling.',
+        'meta_keywords': 'openai assistants api, stateful ai, conversational ai, gpt-4 api'
+    },
+    {
+        'category': 'Generative AI',
+        'title': 'Hugging Face Transformers: Open Source AI Models',
+        'excerpt': 'Master Hugging Face for accessing thousands of pre-trained models. Learn model inference, fine-tuning, and deployment.',
+        'content': '''
+<p>Hugging Face provides access to thousands of open-source AI models for text, vision, audio, and more.</p>
+
+<h2>Basic Model Usage</h2>
+<pre><code class="language-python">
+from transformers import pipeline
+
+# Text generation
+generator = pipeline("text-generation", model="gpt2")
+result = generator("The future of AI is", max_length=50)
+print(result[0]['generated_text'])
+
+# Sentiment analysis
+classifier = pipeline("sentiment-analysis")
+result = classifier("I love this product!")
+print(result)  # [{'label': 'POSITIVE', 'score': 0.99}]
+
+# Translation
+translator = pipeline("translation_en_to_fr")
+result = translator("Hello, how are you?")
+</code></pre>
+
+<h2>Using Specific Models</h2>
+<pre><code class="language-python">
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+# Load model and tokenizer
+model_name = "mistralai/Mistral-7B-v0.1"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+
+# Generate text
+inputs = tokenizer("The key to success is", return_tensors="pt")
+outputs = model.generate(**inputs, max_length=100)
+result = tokenizer.decode(outputs[0])
+</code></pre>
+
+<h2>Question Answering</h2>
+<pre><code class="language-python">
+from transformers import pipeline
+
+qa_pipeline = pipeline("question-answering")
+
+context = """
+Python is a high-level programming language known for its simplicity.
+It was created by Guido van Rossum in 1991.
+"""
+
+question = "Who created Python?"
+result = qa_pipeline(question=question, context=context)
+print(f"Answer: {result['answer']}")
+print(f"Score: {result['score']:.2f}")
+</code></pre>
+
+<h2>Image Classification</h2>
+<pre><code class="language-python">
+from transformers import pipeline
+from PIL import Image
+
+# Load classifier
+classifier = pipeline("image-classification")
+
+# Classify image
+image = Image.open("cat.jpg")
+results = classifier(image)
+
+for result in results:
+    print(f"{result['label']}: {result['score']:.2f}")
+</code></pre>
+
+<h2>Custom Model Deployment</h2>
+<pre><code class="language-python">
+# Save model
+model.save_pretrained("./my_model")
+tokenizer.save_pretrained("./my_model")
+
+# Load later
+loaded_model = AutoModelForCausalLM.from_pretrained("./my_model")
+loaded_tokenizer = AutoTokenizer.from_pretrained("./my_model")
+
+# Use with pipeline
+custom_pipeline = pipeline(
+    "text-generation",
+    model=loaded_model,
+    tokenizer=loaded_tokenizer
+)
+</code></pre>
+
+<p>Hugging Face democratizes access to cutting-edge AI models. Explore and build!</p>
+        ''',
+        'tags': 'Hugging Face, transformers, open source AI, pre-trained models, NLP',
+        'meta_description': 'Master Hugging Face Transformers for accessing pre-trained AI models. Learn inference and deployment.',
+        'meta_keywords': 'hugging face, transformers, open source ai, pre-trained models'
+    },
+    {
+        'category': 'Generative AI',
+        'title': 'AI Code Generation: GitHub Copilot, CodeLlama, and Beyond',
+        'excerpt': 'Explore AI-powered code generation tools. Learn to use GitHub Copilot, CodeLlama, and other AI coding assistants for productivity.',
+        'content': '''
+<p>AI code generation tools boost developer productivity by suggesting code completions, generating functions, and debugging errors.</p>
+
+<h2>GitHub Copilot Setup</h2>
+<pre><code class="language-python">
+# Install Copilot extension in VS Code
+# Then use inline suggestions while coding
+
+def fibonacci(n):
+    # Copilot suggests implementation
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+# Copilot can generate entire functions from comments
+# Type: "# function to reverse a string"
+# Copilot suggests complete implementation
+</code></pre>
+
+<h2>CodeLlama for Code Generation</h2>
+<pre><code class="language-python">
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+model = AutoModelForCausalLM.from_pretrained("codellama/CodeLlama-7b-hf")
+tokenizer = AutoTokenizer.from_pretrained("codellama/CodeLlama-7b-hf")
+
+prompt = "def binary_search(arr, target):"
+inputs = tokenizer(prompt, return_tensors="pt")
+outputs = model.generate(**inputs, max_length=200)
+code = tokenizer.decode(outputs[0])
+print(code)
+</code></pre>
+
+<h2>OpenAI for Code Generation</h2>
+<pre><code class="language-python">
+import openai
+
+response = openai.chat.completions.create(
+    model="gpt-4",
+    messages=[
+        {"role": "system", "content": "You are a Python coding expert."},
+        {"role": "user", "content": "Write a function to find prime numbers up to n"}
+    ]
+)
+
+generated_code = response.choices[0].message.content
+print(generated_code)
+</code></pre>
+
+<h2>Code Review with AI</h2>
+<pre><code class="language-python">
+code_to_review = """
+def calculate_total(items):
+    total = 0
+    for i in range(len(items)):
+        total = total + items[i]
+    return total
+"""
+
+prompt = f"""
+Review this code for:
+1. Performance issues
+2. Pythonic improvements  
+3. Edge cases
+
+Code:
+{code_to_review}
+"""
+
+response = openai.chat.completions.create(
+    model="gpt-4",
+    messages=[{"role": "user", "content": prompt}]
+)
+
+print(response.choices[0].message.content)
+</code></pre>
+
+<p>AI code generation accelerates development while maintaining code quality!</p>
+        ''',
+        'tags': 'AI code generation, GitHub Copilot, CodeLlama, programming AI, developer tools',
+        'meta_description': 'Master AI code generation with GitHub Copilot, CodeLlama, and GPT-4. Boost developer productivity.',
+        'meta_keywords': 'ai code generation, github copilot, codellama, ai programming, code assistant'
+    },
+    {
+        'category': 'Generative AI',
+        'title': 'Text-to-Speech and Speech-to-Text AI: Complete Guide',
+        'excerpt': 'Master AI speech technologies for voice applications. Learn OpenAI Whisper for transcription and text-to-speech synthesis.',
+        'content': '''
+<p>AI-powered speech technologies enable natural voice interactions, transcriptions, and accessibility features.</p>
+
+<h2>OpenAI Whisper for Transcription</h2>
+<pre><code class="language-python">
+import openai
+
+# Transcribe audio file
+with open("audio.mp3", "rb") as audio_file:
+    transcript = openai.audio.transcriptions.create(
+        model="whisper-1",
+        file=audio_file
+    )
+
+print(transcript.text)
+
+# Translation (to English)
+with open("spanish.mp3", "rb") as audio_file:
+    translation = openai.audio.translations.create(
+        model="whisper-1",
+        file=audio_file
+    )
+
+print(translation.text)
+</code></pre>
+
+<h2>Text-to-Speech with OpenAI</h2>
+<pre><code class="language-python">
+# Generate speech from text
+response = openai.audio.speech.create(
+    model="tts-1",
+    voice="alloy",  # alloy, echo, fable, onyx, nova, shimmer
+    input="Hello! This is AI-generated speech."
+)
+
+# Save to file
+response.stream_to_file("output.mp3")
+</code></pre>
+
+<h2>Real-Time Speech Processing</h2>
+<pre><code class="language-python">
+import speech_recognition as sr
+import pyttsx3
+
+# Speech recognition
+recognizer = sr.Recognizer()
+
+with sr.Microphone() as source:
+    print("Speak something...")
+    audio = recognizer.listen(source)
+    
+    try:
+        text = recognizer.recognize_google(audio)
+        print(f"You said: {text}")
+    except sr.UnknownValueError:
+        print("Could not understand audio")
+
+# Text-to-speech (local)
+engine = pyttsx3.init()
+engine.say("Hello, how can I help you?")
+engine.runAndWait()
+</code></pre>
+
+<h2>Building Voice Assistant</h2>
+<pre><code class="language-python">
+def voice_assistant():
+    recognizer = sr.Recognizer()
+    
+    with sr.Microphone() as source:
+        print("Listening...")
+        audio = recognizer.listen(source)
+        
+        # Transcribe
+        query = recognizer.recognize_google(audio)
+        print(f"User: {query}")
+        
+        # Process with LLM
+        response = openai.chat.completions.create(
+            model="gpt-4",
+            messages=[{"role": "user", "content": query}]
+        )
+        
+        answer = response.choices[0].message.content
+        print(f"Assistant: {answer}")
+        
+        # Speak response
+        speech = openai.audio.speech.create(
+            model="tts-1",
+            voice="nova",
+            input=answer
+        )
+        speech.stream_to_file("response.mp3")
+
+voice_assistant()
+</code></pre>
+
+<p>Speech AI enables natural voice interactions for accessible, hands-free applications!</p>
+        ''',
+        'tags': 'text-to-speech, speech-to-text, Whisper, voice AI, audio processing',
+        'meta_description': 'Master AI speech technologies with OpenAI Whisper and text-to-speech. Build voice applications.',
+        'meta_keywords': 'text to speech, speech to text, whisper ai, voice recognition, tts'
+    },
+    {
+        'category': 'Generative AI',
+        'title': 'AI Content Moderation: Building Safe Applications',
+        'excerpt': 'Implement AI content moderation for safe platforms. Learn to detect harmful content, toxic language, and inappropriate material.',
+        'content': '''
+<p>AI content moderation protects users and ensures safe online spaces by detecting harmful content automatically.</p>
+
+<h2>OpenAI Moderation API</h2>
+<pre><code class="language-python">
+import openai
+
+# Check content for violations
+response = openai.moderations.create(
+    input="Sample text to moderate"
+)
+
+result = response.results[0]
+
+if result.flagged:
+    print("Content flagged!")
+    print(f"Categories: {result.categories}")
+    print(f"Scores: {result.category_scores}")
+else:
+    print("Content is safe")
+
+# Check specific categories
+if result.categories.hate:
+    print("Contains hate speech")
+if result.categories.violence:
+    print("Contains violent content")
+</code></pre>
+
+<h2>Custom Moderation Pipeline</h2>
+<pre><code class="language-python">
+from transformers import pipeline
+
+# Toxic comment classifier
+toxicity_model = pipeline("text-classification", 
+    model="unitary/toxic-bert")
+
+def moderate_content(text):
+    # Check toxicity
+    toxicity = toxicity_model(text)[0]
+    
+    # Check with OpenAI
+    openai_result = openai.moderations.create(input=text)
+    
+    # Combine results
+    is_safe = (
+        toxicity['label'] == 'non-toxic' and
+        not openai_result.results[0].flagged
+    )
+    
+    return {
+        'safe': is_safe,
+        'toxicity_score': toxicity['score'],
+        'openai_flagged': openai_result.results[0].flagged
+    }
+
+result = moderate_content("Your text here")
+print(result)
+</code></pre>
+
+<h2>Image Moderation</h2>
+<pre><code class="language-python">
+from google.cloud import vision
+
+# Google Vision AI for image moderation
+client = vision.ImageAnnotatorClient()
+
+with open('image.jpg', 'rb') as image_file:
+    content = image_file.read()
+
+image = vision.Image(content=content)
+response = client.safe_search_detection(image=image)
+safe = response.safe_search_annotation
+
+# Check safety levels
+if safe.adult > 3 or safe.violence > 3:
+    print("Inappropriate content detected")
+else:
+    print("Image is safe")
+</code></pre>
+
+<h2>Real-Time Moderation System</h2>
+<pre><code class="language-python">
+class ContentModerator:
+    def __init__(self):
+        self.toxicity_model = pipeline("text-classification",
+            model="unitary/toxic-bert")
+    
+    def moderate_text(self, text):
+        # Quick toxicity check
+        toxicity = self.toxicity_model(text)[0]
+        
+        if toxicity['score'] > 0.8:
+            return {'approved': False, 'reason': 'High toxicity'}
+        
+        # OpenAI moderation
+        result = openai.moderations.create(input=text)
+        
+        if result.results[0].flagged:
+            categories = [k for k, v in result.results[0].categories.items() if v]
+            return {'approved': False, 'reason': f'Violations: {categories}'}
+        
+        return {'approved': True}
+
+moderator = ContentModerator()
+result = moderator.moderate_text("User comment here")
+</code></pre>
+
+<p>AI moderation creates safer online communities while scaling efficiently!</p>
+        ''',
+        'tags': 'content moderation, AI safety, toxic content detection, content filtering',
+        'meta_description': 'Implement AI content moderation for safe platforms. Detect harmful content with ML.',
+        'meta_keywords': 'content moderation, ai safety, toxic content, content filtering'
+    },
+    {
+        'category': 'Generative AI',
+        'title': 'Multimodal AI: Combining Vision and Language Models',
+        'excerpt': 'Explore multimodal AI that understands images and text together. Learn GPT-4 Vision, CLIP, and practical applications.',
+        'content': '''
+<p>Multimodal AI models process and understand multiple types of data simultaneously, enabling richer interactions.</p>
+
+<h2>GPT-4 Vision API</h2>
+<pre><code class="language-python">
+import openai
+import base64
+
+# Encode image
+with open("image.jpg", "rb") as image_file:
+    image_data = base64.b64encode(image_file.read()).decode()
+
+# Analyze image with GPT-4 Vision
+response = openai.chat.completions.create(
+    model="gpt-4-vision-preview",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "What's in this image?"},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpeg;base64,{image_data}"
+                    }
+                }
+            ]
+        }
+    ],
+    max_tokens=300
+)
+
+print(response.choices[0].message.content)
+</code></pre>
+
+<h2>Image-to-Text with Vision Models</h2>
+<pre><code class="language-python">
+# Detailed image analysis
+questions = [
+    "Describe this image in detail",
+    "What objects do you see?",
+    "What is the mood or atmosphere?",
+    "Are there any text elements visible?"
+]
+
+for question in questions:
+    response = openai.chat.completions.create(
+        model="gpt-4-vision-preview",
+        messages=[{
+            "role": "user",
+            "content": [
+                {"type": "text", "text": question},
+                {"type": "image_url", "image_url": {"url": image_url}}
+            ]
+        }]
+    )
+    print(f"Q: {question}")
+    print(f"A: {response.choices[0].message.content}\\n")
+</code></pre>
+
+<h2>CLIP for Image-Text Matching</h2>
+<pre><code class="language-python">
+from transformers import CLIPProcessor, CLIPModel
+from PIL import Image
+
+model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
+processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+
+# Load image
+image = Image.open("photo.jpg")
+
+# Define candidate labels
+labels = ["a photo of a cat", "a photo of a dog", "a photo of a bird"]
+
+# Process
+inputs = processor(text=labels, images=image, return_tensors="pt", padding=True)
+outputs = model(**inputs)
+
+# Get probabilities
+logits_per_image = outputs.logits_per_image
+probs = logits_per_image.softmax(dim=1)
+
+# Results
+for label, prob in zip(labels, probs[0]):
+    print(f"{label}: {prob:.2%}")
+</code></pre>
+
+<h2>Document Understanding</h2>
+<pre><code class="language-python">
+# Extract information from documents
+def analyze_document(image_path, questions):
+    with open(image_path, "rb") as img:
+        image_data = base64.b64encode(img.read()).decode()
+    
+    results = {}
+    for question in questions:
+        response = openai.chat.completions.create(
+            model="gpt-4-vision-preview",
+            messages=[{
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": question},
+                    {"type": "image_url", 
+                     "image_url": {"url": f"data:image/jpeg;base64,{image_data}"}}
+                ]
+            }]
+        )
+        results[question] = response.choices[0].message.content
+    
+    return results
+
+# Use it
+questions = [
+    "What is the total amount on this invoice?",
+    "What is the invoice date?",
+    "Who is the vendor?"
+]
+
+info = analyze_document("invoice.pdf", questions)
+</code></pre>
+
+<p>Multimodal AI unlocks new possibilities by understanding the world like humans do!</p>
+        ''',
+        'tags': 'multimodal AI, GPT-4 Vision, CLIP, image analysis, vision language',
+        'meta_description': 'Master multimodal AI combining vision and language. Learn GPT-4 Vision and CLIP.',
+        'meta_keywords': 'multimodal ai, gpt-4 vision, clip, image to text, vision language models'
+    },
+    {
+        'category': 'Generative AI',
+        'title': 'Cost Optimization for LLM Applications: Reduce AI Expenses',
+        'excerpt': 'Learn strategies to reduce LLM costs. Cover prompt optimization, caching, model selection, and efficient token usage.',
+        'content': '''
+<p>LLM costs can add up quickly. Learn optimization strategies to reduce expenses while maintaining quality.</p>
+
+<h2>Understanding Token Costs</h2>
+<pre><code class="language-python">
+import tiktoken
+
+# Count tokens
+encoding = tiktoken.encoding_for_model("gpt-4")
+text = "Your prompt here"
+tokens = encoding.encode(text)
+token_count = len(tokens)
+
+# Estimate cost (GPT-4: $0.03/1K input, $0.06/1K output)
+input_cost = (token_count / 1000) * 0.03
+print(f"Tokens: {token_count}, Est. cost: ${input_cost:.4f}")
+</code></pre>
+
+<h2>Prompt Optimization</h2>
+<pre><code class="language-python">
+# Bad: Verbose prompt (500 tokens)
+bad_prompt = """
+I would like you to please help me by analyzing the following text 
+and providing a comprehensive summary. Please make sure to capture 
+all the key points and important details...
+[Long repetitive instructions]
+"""
+
+# Good: Concise prompt (50 tokens)
+good_prompt = "Summarize key points from this text:"
+
+# Savings: 450 tokens = $0.0135 per call
+# At 1000 calls/day: $13.50/day saved
+</code></pre>
+
+<h2>Response Caching</h2>
+<pre><code class="language-python">
+import hashlib
+import json
+
+cache = {}
+
+def cached_completion(prompt, model="gpt-4"):
+    # Create cache key
+    key = hashlib.md5(f"{prompt}{model}".encode()).hexdigest()
+    
+    # Check cache
+    if key in cache:
+        print("Cache hit!")
+        return cache[key]
+    
+    # Call API
+    response = openai.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}]
+    )
+    
+    result = response.choices[0].message.content
+    cache[key] = result
+    
+    return result
+
+# Repeated queries are free!
+result1 = cached_completion("What is Python?")
+result2 = cached_completion("What is Python?")  # No API call
+</code></pre>
+
+<h2>Model Selection Strategy</h2>
+<pre><code class="language-python">
+# Use cheaper models for simple tasks
+def smart_completion(prompt, complexity="low"):
+    # Route based on complexity
+    models = {
+        "low": "gpt-3.5-turbo",      # $0.001/1K
+        "medium": "gpt-4-turbo",     # $0.01/1K  
+        "high": "gpt-4"              # $0.03/1K
+    }
+    
+    model = models[complexity]
+    
+    response = openai.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}]
+    )
+    
+    return response.choices[0].message.content
+
+# Save 97% on simple tasks
+simple_answer = smart_completion("What is 2+2?", complexity="low")
+</code></pre>
+
+<h2>Batch Processing</h2>
+<pre><code class="language-python">
+# Process multiple items in one call
+def batch_process(items):
+    # Instead of N API calls, make 1
+    prompt = f"""
+    Process each item and return results as JSON:
+    {json.dumps(items)}
+    
+    Format: {{"item": "result"}}
+    """
+    
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    
+    return json.loads(response.choices[0].message.content)
+
+# 10 items: 1 API call instead of 10 = 90% cost reduction
+items = ["task1", "task2", "task3", "task4", "task5"]
+results = batch_process(items)
+</code></pre>
+
+<h2>Streaming for Better UX</h2>
+<pre><code class="language-python">
+# Stream responses to show progress
+# Costs same but improves user experience
+def stream_response(prompt):
+    response = openai.chat.completions.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}],
+        stream=True
+    )
+    
+    full_response = ""
+    for chunk in response:
+        if chunk.choices[0].delta.content:
+            content = chunk.choices[0].delta.content
+            print(content, end='', flush=True)
+            full_response += content
+    
+    return full_response
+</code></pre>
+
+<p>Smart optimization reduces LLM costs by 50-90% while maintaining quality!</p>
+        ''',
+        'tags': 'LLM cost optimization, AI cost reduction, token optimization, efficient AI',
+        'meta_description': 'Reduce LLM costs with optimization strategies. Learn prompt engineering, caching, and model selection.',
+        'meta_keywords': 'llm cost optimization, reduce ai costs, token optimization, efficient ai'
+    },
+]
+
