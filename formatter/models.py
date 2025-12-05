@@ -133,3 +133,98 @@ class BlogPost(models.Model):
             category=self.category,
             published=True
         ).exclude(id=self.id)[:limit]
+
+
+class VisitorLog(models.Model):
+    """Track unique visitors with IP, location, and device information"""
+    # Visitor Identification
+    ip_address = models.GenericIPAddressField(help_text="Visitor's IP address")
+    session_key = models.CharField(max_length=40, blank=True, null=True, help_text="Session identifier")
+    
+    # Geolocation Data
+    country = models.CharField(max_length=100, blank=True, null=True, help_text="Country name")
+    country_code = models.CharField(max_length=2, blank=True, null=True, help_text="2-letter country code")
+    city = models.CharField(max_length=100, blank=True, null=True, help_text="City name")
+    region = models.CharField(max_length=100, blank=True, null=True, help_text="State/Region")
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    
+    # Device & Browser Information
+    user_agent = models.TextField(blank=True, null=True, help_text="Full user agent string")
+    browser = models.CharField(max_length=100, blank=True, null=True, help_text="Browser name")
+    browser_version = models.CharField(max_length=50, blank=True, null=True)
+    device_type = models.CharField(max_length=50, blank=True, null=True, help_text="Desktop/Mobile/Tablet")
+    os = models.CharField(max_length=100, blank=True, null=True, help_text="Operating system")
+    os_version = models.CharField(max_length=50, blank=True, null=True)
+    
+    # Referral Information
+    referrer = models.URLField(max_length=500, blank=True, null=True, help_text="Referring URL")
+    landing_page = models.CharField(max_length=500, blank=True, null=True, help_text="First page visited")
+    
+    # Visit Tracking
+    first_visit = models.DateTimeField(auto_now_add=True, help_text="First time visitor arrived")
+    last_visit = models.DateTimeField(auto_now=True, help_text="Most recent visit")
+    visit_count = models.IntegerField(default=1, help_text="Number of visits by this user")
+    total_page_views = models.IntegerField(default=0, help_text="Total pages viewed")
+    
+    # Flags
+    is_bot = models.BooleanField(default=False, help_text="Detected as bot/crawler")
+    is_mobile = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-last_visit']
+        indexes = [
+            models.Index(fields=['-last_visit']),
+            models.Index(fields=['ip_address']),
+            models.Index(fields=['country_code']),
+        ]
+        verbose_name = "Visitor Log"
+        verbose_name_plural = "Visitor Logs"
+    
+    def __str__(self):
+        return f"{self.ip_address} - {self.country or 'Unknown'} ({self.first_visit.strftime('%Y-%m-%d')})"
+    
+    def increment_visit(self):
+        """Increment visit count and update last visit time"""
+        self.visit_count += 1
+        self.save(update_fields=['visit_count', 'last_visit'])
+
+
+class PageView(models.Model):
+    """Track individual page views with detailed analytics"""
+    visitor = models.ForeignKey(VisitorLog, on_delete=models.CASCADE, related_name='page_views', null=True, blank=True)
+    
+    # Page Information
+    url = models.CharField(max_length=500, help_text="Page URL / path")
+    page_title = models.CharField(max_length=200, blank=True, null=True)
+    method = models.CharField(max_length=10, default='GET', help_text="HTTP method")
+    
+    # Request Details
+    ip_address = models.GenericIPAddressField(help_text="IP address (denormalized for quick queries)")
+    user_agent = models.TextField(blank=True, null=True)
+    referrer = models.URLField(max_length=500, blank=True, null=True)
+    
+    # Timing
+    timestamp = models.DateTimeField(auto_now_add=True, help_text="When page was viewed")
+    load_time = models.IntegerField(blank=True, null=True, help_text="Page load time in milliseconds")
+    
+    # Session
+    session_key = models.CharField(max_length=40, blank=True, null=True)
+    
+    # Analytics
+    country_code = models.CharField(max_length=2, blank=True, null=True, help_text="Denormalized country code")
+    device_type = models.CharField(max_length=50, blank=True, null=True)
+    
+    class Meta:
+        ordering = ['-timestamp']
+        indexes = [
+            models.Index(fields=['-timestamp']),
+            models.Index(fields=['url']),
+            models.Index(fields=['ip_address']),
+            models.Index(fields=['country_code']),
+        ]
+        verbose_name = "Page View"
+        verbose_name_plural = "Page Views"
+    
+    def __str__(self):
+        return f"{self.url} - {self.ip_address} ({self.timestamp.strftime('%Y-%m-%d %H:%M')})"

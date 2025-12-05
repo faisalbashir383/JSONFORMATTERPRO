@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import BlogCategory, BlogPost, SiteSettings
+from .models import BlogCategory, BlogPost, SiteSettings, VisitorLog, PageView
 
 
 @admin.register(SiteSettings)
@@ -66,3 +66,33 @@ class BlogPostAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         """Auto-save with reading time calculation"""
         super().save_model(request, obj, form, change)
+
+
+@admin.register(VisitorLog)
+class VisitorLogAdmin(admin.ModelAdmin):
+    list_display = ['ip_address', 'country', 'city', 'device_type', 'browser', 'visit_count', 'first_visit', 'last_visit', 'is_bot']
+    list_filter = ['is_bot', 'is_mobile', 'device_type', 'country_code', 'first_visit']
+    search_fields = ['ip_address', 'country', 'city', 'browser', 'os']
+    readonly_fields = ['ip_address', 'session_key', 'country', 'country_code', 'city', 'region', 
+                       'latitude', 'longitude', 'user_agent', 'browser', 'browser_version',
+                       'device_type', 'os', 'os_version', 'referrer', 'landing_page',
+                       'first_visit', 'last_visit', 'visit_count', 'total_page_views', 'is_bot', 'is_mobile']
+    date_hierarchy = 'first_visit'
+    
+    def has_add_permission(self, request):
+        # Don't allow manual addition
+        return False
+
+
+@admin.register(PageView)
+class PageViewAdmin(admin.ModelAdmin):
+    list_display = ['url', 'ip_address', 'country_code', 'device_type', 'timestamp']
+    list_filter = ['timestamp', 'country_code', 'device_type', 'method']
+    search_fields = ['url', 'page_title', 'ip_address']
+    readonly_fields = ['visitor', 'url', 'page_title', 'method', 'ip_address', 'user_agent',
+                       'referrer', 'timestamp', 'load_time', 'session_key', 'country_code', 'device_type']
+    date_hierarchy = 'timestamp'
+    
+    def has_add_permission(self, request):
+        # Don't allow manual addition
+        return False
