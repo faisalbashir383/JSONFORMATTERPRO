@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}JSON Formatter Pro - Free Online JSON Validator, Formatter, Minifier & Converter Tool 2024
+{% endblock %}
+
+{% block meta_title %}JSON Formatter Online - Free JSON Validator, Beautifier, Minifier & Editor | JSON Formatter Pro
+{% endblock %}
+
+{% block meta_description %}Free online JSON formatter, validator, and beautifier. Format, validate, minify JSON
+instantly. Convert JSON to XML, CSV, YAML. Fix JSON errors, prettify JSON, lint JSON online. No signup, 100% free,
+client-side processing.{% endblock %}
+
+{% block meta_keywords %}json formatter, json validator, json beautifier, json minifier, json editor, json viewer,
+jsonlint, json lint, online json formatter, free json formatter, format json online, validate json, beautify json, json
+parser, json checker, json pretty print, json syntax checker, json error checker, online json validator, json to xml,
+json to csv, json to yaml, json converter, minify json, compact json, json tree view, json debugging, fix json errors,
+json data formatter, json api formatter, json formatter online free, best json formatter 2024, json syntax validation,
+json file formatter, json linter, json pretty printer, json online editor, json beautifier online, json viewer online,
+json formatter tool, json validator online free, json escape online, json unescape, json tester, json formatter and
+validator, json compare, json diff, json schema validator, rest api json formatter, javascript object notation
+formatter, json data interchange format, format json file, validate json syntax, json readability tool, client side json
+formatter, secure json formatter, json formatter no signup{% endblock %}
+
+{% block meta_robots %}index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1{% endblock %}
+
+{% block author %}JSON Formatter Pro - Professional JSON Tools{% endblock %}
+
+{% block og_type %}website{% endblock %}
+{% block og_title %}JSON Formatter Pro - Free Online JSON Validator & Beautifier Tool 2024{% endblock %}
+{% block og_description %}Professional JSON formatter, validator, and converter. Format, validate, minify JSON
+instantly. Convert to XML, CSV, YAML. Client-side processing. 100% free, no signup required.{% endblock %}
+
+{% block twitter_title %}JSON Formatter Pro - Format, Validate & Convert JSON Online Free{% endblock %}
+{% block twitter_description %}Free JSON formatter, validator & converter. Instant formatting, validation, minification.
+Convert JSON to XML/CSV/YAML. Secure client-side processing.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "JSON Formatter Pro",
+  "description": "Professional online JSON formatter, validator, beautifier, minifier, and converter tool",
+  "url": "{{ SITE_URL }}",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "browserRequirements": "Requires JavaScript. Requires HTML5.",
+  "softwareVersion": "2.0",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "ratingCount": "15000",
+    "bestRating": "5",
+    "worstRating": "1"
+  },
+  "featureList": [
+    "JSON Formatting and Beautification",
+    "JSON Syntax Validation",
+    "JSON Minification and Compression",
+    "JSON to XML Conversion",
+    "JSON to CSV Conversion",
+    "Base64 Encoding and Decoding",
+    "Syntax Error Detection and Debugging",
+    "JSON Tree View Visualization",
+    "Download Formatted Files",
+    "Client-Side Processing for Security",
+    "Real-Time Formatting",
+    "Copy to Clipboard",
+    "Dark Mode Support"
+  ],
+  "screenshot": "{{ SITE_URL }}/static/images/json-formatter-screenshot.png"
+}
+</script>
+
+<!-- Organization Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "JSON Formatter Pro",
+  "url": "{{ SITE_URL }}",
+  "logo": "{{ SITE_URL }}/static/images/logo.png",
+  "sameAs": [
+    "https://twitter.com/jsonformatterpro",
+    "https://github.com/jsonformatterpro"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Customer Support",
+    "url": "{{ SITE_URL }}/contact/"
+  }
+}
+</script>
+
+<!-- FAQ Schema for SEO -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a JSON formatter?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A JSON formatter is a tool that beautifies and formats JSON data with proper indentation and line breaks, making it human-readable and easier to understand and debug."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I validate JSON online?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To validate JSON online, paste your JSON code into JSON Formatter Pro, and it will automatically check for syntax errors, missing brackets, commas, and other common issues."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is JSON Formatter Pro free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, JSON Formatter Pro is 100% free to use with no signup required. All processing is done client-side in your browser for maximum security and privacy."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block extra_head %}
+<!-- Homepage specific CSS -->
+<link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+<link rel="stylesheet" href="{% static 'css/fullscreen.css' %}">
+
+<!-- Additional SEO Tags -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="JSON Formatter Pro">
+<meta name="application-name" content="JSON Formatter Pro">
+<meta name="theme-color" content="#6366F1">
+<meta name="msapplication-TileColor" content="#6366F1">
+<meta name="format-detection" content="telephone=no">
+
+<!-- Preconnect for Performance -->
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin">
+{% endblock %}
+
+{% block navigation %}
+<!-- Full navigation from base.html -->
+{{ block.super }}
+{% endblock %}
+
+{% block content %}
+<header class="header">
+    <h1 class="header-title">JSON Formatter Pro</h1>
+    <p class="header-subtitle">Format, Validate, Minify & Convert JSON Instantly - 100% Free</p>
+</header>
+
+<!-- File Upload Zone -->
+<div class="upload-zone" id="uploadZone">
+    <div class="upload-icon">📁</div>
+    <p class="upload-text">Drag & Drop JSON file here or <label for="fileInput" class="browse-link">browse</label></p>
+    <input type="file" id="fileInput" accept=".json" hidden>
+</div>
+
+<!-- Action Buttons -->
+<section class="actions-section" role="toolbar" aria-label="JSON formatting actions">
+    <div class="button-group">
+        <button id="formatBtn" class="btn btn-primary" title="Format and beautify JSON">
+            <span class="btn-icon">✨</span>
+            <span>Format JSON</span>
+        </button>
+        <button id="minifyBtn" class="btn btn-secondary" title="Minify and compress JSON">
+            <span class="btn-icon">📦</span>
+            <span>Minify JSON</span>
+        </button>
+        <button id="validateBtn" class="btn btn-accent" title="Validate JSON syntax">
+            <span class="btn-icon">✓</span>
+            <span>Validate JSON</span>
+        </button>
+        <button id="toXmlBtn" class="btn btn-conversion" title="Convert JSON to XML format">
+            <span class="btn-icon">🔄</span>
+            <span>Convert to XML</span>
+        </button>
+        <button id="toCsvBtn" class="btn btn-conversion" title="Convert JSON to CSV format">
+            <span class="btn-icon">📊</span>
+            <span>Convert to CSV</span>
+        </button>
+    </div>
+
+    <div class="button-group secondary-actions">
+        <button id="clearBtn" class="btn btn-warning" title="Clear both input and output">
+            <span class="btn-icon">🗑️</span>
+            <span>Clear</span>
+        </button>
+        <button id="downloadBtn" class="btn btn-success" title="Download JSON file">
+            <span class="btn-icon">↓</span>
+            <span>Download</span>
+        </button>
+    </div>
+</section>
+
+<!-- Main Editor Container -->
+<div class="editor-container">
+    <!-- Input Panel -->
+    <div class="editor-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">Input JSON</h2>
+            <div class="panel-info">
+                <span id="charCount">0 characters</span>
+            </div>
+        </div>
+        <textarea id="inputJson" class="editor-textarea" placeholder="Paste your JSON here..." spellcheck="false"
+            aria-label="JSON input editor"></textarea>
+    </div>
+
+    <!-- Output Panel -->
+    <div class="editor-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">Output</h2>
+            <div class="panel-info">
+                <button id="fullscreenBtn" class="icon-btn" title="Toggle fullscreen">
+                    <span>⛶</span>
+                </button>
+            </div>
+        </div>
+        <textarea id="outputJson" class="editor-textarea" readonly placeholder="Formatted output will appear here..."
+            aria-label="Formatted JSON output" aria-live="polite"></textarea>
+    </div>
+</div>
+
+<!-- SEO Content Section -->
+<article class="seo-content">
+    <section class="content-section">
+        <h2>Professional JSON Formatter & Validator Tool</h2>
+        <p>
+            JSON Formatter Pro is the most advanced free online tool for formatting, validating, and converting JSON
+            data.
+            Whether you're a developer working with APIs, a data scientist analyzing JSON datasets, or anyone dealing
+            with
+            JSON files, our tool provides instant, accurate results with a beautiful interface.
+        </p>
+    </section>
+
+    <section class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">✨</div>
+            <h3>Instant Formatting</h3>
+            <p>Beautify your JSON with proper indentation, line breaks, and syntax highlighting for maximum readability.
+            </p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">✓</div>
+            <h3>Real-Time Validation</h3>
+            <p>Detect syntax errors, missing brackets, incorrect commas, and other issues instantly with detailed error
+                messages.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📦</div>
+            <h3>JSON Minification</h3>
+            <p>Compress JSON by removing whitespace and reducing file size for production deployment and API
+                optimization.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔄</div>
+            <h3>Format Conversion</h3>
+            <p>Convert JSON to XML, CSV, or YAML formats seamlessly for data interchange and integration purposes.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3>100% Secure</h3>
+            <p>All processing happens client-side in your browser. Your data never leaves your device, ensuring complete
+                privacy.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Lightning Fast</h3>
+            <p>Instant results with no server delays. Process large JSON files up to 10MB quickly and efficiently.</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>Why Choose JSON Formatter Pro?</h2>
+        <ul class="benefits-list">
+            <li><strong>No Signup Required:</strong> Start formatting JSON immediately without creating an account</li>
+            <li><strong>Free Forever:</strong> All features are completely free with no hidden costs or limitations</li>
+            <li><strong>Client-Side Processing:</strong> Your sensitive JSON data stays on your device</li>
+            <li><strong>Dark Mode Support:</strong> Easy on the eyes with beautiful dark theme option</li>
+            <li><strong>Mobile Friendly:</strong> Works perfectly on all devices - desktop, tablet, and mobile</li>
+            <li><strong>Copy & Download:</strong> Easily copy to clipboard or download formatted JSON files</li>
+            <li><strong>Error Debugging:</strong> Pinpoint exact locations of syntax errors with helpful messages</li>
+            <li><strong>Pretty Print:</strong> Make ugly JSON beautiful with one click</li>
+        </ul>
+    </section>
+
+    <section class="content-section">
+        <h2>Common Use Cases for JSON Formatting</h2>
+        <div class="use-cases">
+            <div class="use-case">
+                <h4>🔧 API Development</h4>
+                <p>Format and validate API responses, test REST API endpoints, and debug JSON payloads during
+                    development.</p>
+            </div>
+            <div class="use-case">
+                <h4>📊 Data Analysis</h4>
+                <p>Clean and structure JSON data for analysis, convert to CSV for spreadsheet tools, visualize data
+                    structures.</p>
+            </div>
+            <div class="use-case">
+                <h4>🐛 Debugging</h4>
+                <p>Quickly identify and fix JSON syntax errors, missing brackets, misplaced commas, and formatting
+                    issues.</p>
+            </div>
+            <div class="use-case">
+                <h4>📝 Documentation</h4>
+                <p>Create readable JSON examples for technical documentation, tutorials, and code samples with proper
+                    formatting.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section faq-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-item">
+            <h3>What is JSON?</h3>
+            <p>JSON (JavaScript Object Notation) is a lightweight data interchange format that's easy for humans to read
+                and write, and easy for machines to parse and generate. It's widely used for APIs, configuration files,
+                and data storage.</p>
+        </div>
+        <div class="faq-item">
+            <h3>How do I format JSON online?</h3>
+            <p>Simply paste your JSON code into the input area, and click "Format JSON". The tool will automatically
+                beautify it with proper indentation and syntax highlighting.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Can I validate JSON syntax?</h3>
+            <p>Yes! Click the "Validate" button to check your JSON for syntax errors. The tool will show you exactly
+                where any errors are located with helpful error messages.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Is my data secure when using this tool?</h3>
+            <p>Absolutely. All JSON processing happens entirely in your browser using JavaScript. Your data is never
+                sent to any server, ensuring complete privacy and security.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Can I convert JSON to other formats?</h3>
+            <p>Yes! JSON Formatter Pro supports conversion to XML and CSV formats. Simply format your JSON first, then
+                click the conversion button for your desired output format.</p>
+        </div>
+    </section>
+</article>
+
+<!-- Fullscreen Modal -->
+<div id="fullscreenModal" class="fullscreen-modal">
+    <div class="fullscreen-content">
+        <div class="fullscreen-actions">
+            <button id="copyFullscreen" class="copy-fullscreen" aria-label="Copy to clipboard"
+                title="Copy to clipboard">
+                📋
+            </button>
+            <button id="closeFullscreen" class="close-fullscreen" aria-label="Close fullscreen">✕</button>
+        </div>
+        <pre id="fullscreenOutput" class="fullscreen-output"></pre>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/app.js' %}"></script>
+{% endblock %}

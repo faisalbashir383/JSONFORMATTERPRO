@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ post.title }} | JSON Formatter Pro Blog{% endblock %}
+{% block meta_title %}{{ post.title }} - {{ post.category.name }} Tutorial | JSON Formatter Pro{% endblock %}
+{% block meta_description %}{{ post.meta_description }}{% endblock %}
+{% block meta_keywords %}{{ post.meta_keywords }}{% endblock %}
+{% block author %}JSON Formatter Pro{% endblock %}
+
+{% block og_type %}article{% endblock %}
+{% block og_url %}https://jsonformatterpro.com{% url 'blog_detail' post.slug %}{% endblock %}
+{% block og_title %}{{ post.title }}{% endblock %}
+{% block og_description %}{{ post.excerpt }}{% endblock %}
+
+{% block twitter_url %}https://jsonformatterpro.com{% url 'blog_detail' post.slug %}{% endblock %}
+{% block twitter_title %}{{ post.title }}{% endblock %}
+{% block twitter_description %}{{ post.excerpt }}{% endblock %}
+
+{% block canonical_url %}https://jsonformatterpro.com{% url 'blog_detail' post.slug %}{% endblock %}
+
+{% block structured_data %}
+<!-- Enhanced Article Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "{{ post.title|escapejs }}",
+  "description": "{{ post.meta_description|escapejs }}",
+  "image": "https://jsonformatterpro.com/static/images/blog-default.png",
+  "datePublished": "{{ post.published_at|date:'c' }}",
+  "dateModified": "{{ post.updated_at|date:'c' }}",
+  "author": {
+    "@type": "Organization",
+    "name": "JSON Formatter Pro",
+    "url": "https://jsonformatterpro.com"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "JSON Formatter Pro",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jsonformatterpro.com/static/images/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jsonformatterpro.com{% url 'blog_detail' post.slug %}"
+  },
+  "articleSection": "{{ post.category.name|escapejs }}",
+  "keywords": "{{ post.meta_keywords|escapejs }}",
+  "wordCount": {{ post.content|wordcount }},
+  "timeRequired": "PT{{ post.reading_time }}M",
+  "articleBody": "{{ post.content|striptags|escapejs|truncatewords:50 }}"
+}
+</script>
+
+<!-- BreadcrumbList Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://jsonformatterpro.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://jsonformatterpro.com/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "{{ post.category.name|escapejs }}",
+      "item": "https://jsonformatterpro.com/blog/category/{{ post.category.slug }}/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": "{{ post.title|escapejs }}",
+      "item": "https://jsonformatterpro.com{% url 'blog_detail' post.slug %}"
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block extra_head %}
+<!-- Prism.js for Code Highlighting -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css"
+    rel="stylesheet" />
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .blog-content {
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.8;
+    }
+
+    .blog-content h2 {
+        margin-top: 2rem;
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+
+    .blog-content h3 {
+        margin-top: 1.5rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .blog-content p {
+        margin: 1rem 0;
+        color: var(--color-text);
+    }
+
+    .blog-content ul,
+    .blog-content ol {
+        margin: 1rem 0;
+        padding-left: 2rem;
+    }
+
+    .blog-content li {
+        margin: 0.5rem 0;
+    }
+
+    .blog-content code:not([class*="language-"]) {
+        background: var(--color-surface-alt);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-size: 0.9em;
+        color: var(--color-primary);
+    }
+
+    .blog-content pre[class*="language-"] {
+        margin: 1.5rem 0;
+        border-radius: var(--radius-md);
+    }
+
+    .breadcrumb {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .breadcrumb a {
+        color: var(--color-primary);
+        text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .share-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .share-btn {
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all var(--transition-fast);
+    }
+
+    .share-twitter {
+        background: #1DA1F2;
+        color: white;
+    }
+
+    .share-linkedin {
+        background: #0A66C2;
+        color: white;
+    }
+
+    .share-facebook {
+        background: #1877F2;
+        color: white;
+    }
+
+    .share-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+</style>
+{% endblock %}
+
+{% block navigation %}
+<!-- Simplified navigation for blog pages -->
+<button id="hamburgerBtn" class="hamburger-btn" aria-label="Toggle menu">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+</button>
+{% endblock %}
+
+{% block nav_actions %}
+<a href="/" class="btn btn-secondary" style="text-decoration: none;">JSON Tools</a>
+<a href="/base64/" class="btn btn-secondary" style="text-decoration: none;">Base64</a>
+<a href="/blog/" class="btn btn-secondary" style="text-decoration: none;">← Blog</a>
+{% endblock %}
+
+{% block content %}
+<article class="blog-content">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span>›</span>
+        <a href="/blog/">Blog</a>
+        <span>›</span>
+        <a href="/blog/category/{{ post.category.slug }}/">{{ post.category.name }}</a>
+        <span>›</span>
+        <span>{{ post.title }}</span>
+    </nav>
+
+    <!-- Article Header -->
+    <header style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--color-border);">
+        <span
+            style="color: var(--color-primary); font-size: 0.875rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">
+            {{ post.category.name }}
+        </span>
+        <h1 style="font-size: 2.5rem; font-weight: 700; margin: 1rem 0; line-height: 1.2;">{{ post.title }}</h1>
+        <div
+            style="display: flex; gap: 2rem; color: var(--color-text-secondary); font-size: 0.875rem; flex-wrap: wrap;">
+            <span>📅 {{ post.published_at|date:"F d, Y" }}</span>
+            <span>⏱️ {{ post.reading_time }} min read</span>
+            <span>👁️ {{ post.views }} views</span>
+            <span>🏷️ {{ post.category.name }}</span>
+        </div>
+    </header>
+
+    <!-- Article Content -->
+    <div class="content" itemscope itemtype="https://schema.org/Article">
+        <meta itemprop="headline" content="{{ post.title }}">
+        <meta itemprop="datePublished" content="{{ post.published_at|date:'c' }}">
+        <meta itemprop="dateModified" content="{{ post.updated_at|date:'c' }}">
+        <div itemprop="articleBody">
+            {{ post.content|safe }}
+        </div>
+    </div>
+
+    <!-- Tags -->
+    {% if post.tags %}
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-border);">
+        <strong
+            style="color: var(--color-text-secondary); font-size: 0.875rem; display: block; margin-bottom: 0.75rem;">
+            🏷️ Tags:
+        </strong>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+            {% for tag in post.get_tags_list %}
+            <span
+                style="display: inline-block; background: var(--color-surface-alt); padding: 0.35rem 0.85rem; border-radius: var(--radius-full); font-size: 0.85rem;">
+                {{ tag }}
+            </span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Share Buttons -->
+    <div class="share-buttons">
+        <strong style="color: var(--color-text-secondary); font-size: 0.875rem; line-height: 2.5;">Share:</strong>
+        <a href="https://twitter.com/intent/tweet?text={{ post.title|urlencode }}&url=https://jsonformatterpro.com{% url 'blog_detail' post.slug %}"
+            target="_blank" rel="noopener" class="share-btn share-twitter">
+            Twitter
+        </a>
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://jsonformatterpro.com{% url 'blog_detail' post.slug %}"
+            target="_blank" rel="noopener" class="share-btn share-linkedin">
+            LinkedIn
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://jsonformatterpro.com{% url 'blog_detail' post.slug %}"
+            target="_blank" rel="noopener" class="share-btn share-facebook">
+            Facebook
+        </a>
+    </div>
+</article>
+
+<!-- Related Posts -->
+{% if related_posts %}
+<section style="max-width: 800px; margin: 4rem auto 0;">
+    <h3 style="font-size: 1.75rem; margin-bottom: 1.5rem; font-weight: 600;">📚 Related Articles</h3>
+    <div style="display: grid; gap: 1.5rem;">
+        {% for related in related_posts %}
+        <article
+            style="background: var(--color-surface); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); transition: all var(--transition-fast);"
+            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px var(--color-shadow)'"
+            onmouseout="this.style.transform=''; this.style.boxShadow=''">
+            <span style="color: var(--color-primary); font-size: 0.75rem; font-weight: 500; text-transform: uppercase;">
+                {{ related.category.name }}
+            </span>
+            <h4 style="font-size: 1.25rem; margin: 0.5rem 0; font-weight: 600;">
+                <a href="{% url 'blog_detail' related.slug %}" style="color: var(--color-text); text-decoration: none;">
+                    {{ related.title }}
+                </a>
+            </h4>
+            <p style="color: var(--color-text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
+                {{ related.excerpt|truncatewords:20 }}
+            </p>
+            <div
+                style="display: flex; gap: 1rem; margin-top: 1rem; font-size: 0.75rem; color: var(--color-text-secondary);">
+                <span>⏱️ {{ related.reading_time }} min</span>
+                <span>👁️ {{ related.views }} views</span>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block footer_attrs %}style="margin-top: 4rem;"{% endblock %}
+
+{% block extra_js %}
+<!-- Prism.js for Syntax Highlighting -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+{% endblock %}

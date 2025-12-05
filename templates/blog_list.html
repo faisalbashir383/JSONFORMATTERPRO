@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Programming Blog - Tech Tutorials & Learning | JSON Formatter Pro{% endblock %}
+{% block meta_title %}Programming Blog - Python, JavaScript, AI & Tech Tutorials | JSON Formatter Pro{% endblock %}
+{% block meta_description %}Read insightful articles about programming, web development, AI, machine learning, and
+technology. Learn Python, JavaScript, Data Science, DevOps, and more with practical code examples.{% endblock %}
+{% block meta_keywords %}programming blog, tech blog, python tutorials, javascript tutorials, ai learning, web
+development, coding blog, data science tutorials, devops guides, machine learning, programming tutorials, coding tips,
+software development{% endblock %}
+
+{% block og_title %}Programming Blog - Free Tech Tutorials | JSON Formatter Pro{% endblock %}
+{% block og_description %}Learn programming with our comprehensive tutorials on Python, JavaScript, AI, Web Development,
+and more. Free code examples and step-by-step guides.{% endblock %}
+
+{% block canonical_url %}https://jsonformatterpro.com/blog/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "JSON Formatter Pro Blog",
+  "description": "Programming tutorials, tech insights, and coding best practices",
+  "url": "https://jsonformatterpro.com/blog/",
+  "publisher": {
+    "@type": "Organization",
+    "name": "JSON Formatter Pro",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jsonformatterpro.com/static/images/logo.png"
+    }
+  },
+  "blogPost": [
+    {% for post in page_obj.object_list|slice:":5" %}
+    {
+      "@type": "BlogPosting",
+      "headline": "{{ post.title|escapejs }}",
+      "description": "{{ post.excerpt|escapejs }}",
+      "url": "https://jsonformatterpro.com{% url 'blog_detail' post.slug %}",
+      "datePublished": "{{ post.published_at|date:'c' }}",
+      "dateModified": "{{ post.updated_at|date:'c' }}",
+      "author": {
+        "@type": "Organization",
+        "name": "JSON Formatter Pro"
+      }
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block navigation %}
+<button id="hamburgerBtn" class="hamburger-btn" aria-label="Toggle menu">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+</button>
+{% endblock %}
+
+{% block nav_actions %}
+<a href="/" class="btn btn-secondary" style="text-decoration: none;">JSON Tools</a>
+<a href="/base64/" class="btn btn-secondary" style="text-decoration: none;">Base64</a>
+{% endblock %}
+
+{% block main_attrs %}style="max-width: 1200px; margin: 0 auto;"{% endblock %}
+
+{% block content %}
+<header class="header">
+    <h1 class="header-title">📝 Programming Blog</h1>
+    <p class="header-subtitle">Tutorials, tips, and insights on programming and technology</p>
+</header>
+
+<!-- Category Filter -->
+{% if categories %}
+<div
+    style="margin: 2rem 0; padding: 1.5rem; background: var(--color-surface); border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+    <strong style="display: block; margin-bottom: 1rem; color: var(--color-text);">Filter by Category:</strong>
+    <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+        <a href="/blog/" class="btn {% if not current_category %}btn-primary{% else %}btn-secondary{% endif %}"
+            style="text-decoration: none; padding: 0.5rem 1rem; font-size: 0.875rem;">
+            All Posts
+        </a>
+        {% for category in categories %}
+        <a href="/blog/category/{{ category.slug }}/"
+            class="btn {% if current_category == category.slug %}btn-primary{% else %}btn-secondary{% endif %}"
+            style="text-decoration: none; padding: 0.5rem 1rem; font-size: 0.875rem;">
+            {{ category.name }}
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Blog Posts Grid -->
+{% if page_obj.object_list %}
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; margin-top: 2rem;">
+    {% for post in page_obj %}
+    <article itemscope itemtype="https://schema.org/BlogPosting"
+        style="background: var(--color-surface); border-radius: var(--radius-lg); padding: 1.75rem; border: 1px solid var(--color-border); display: flex; flex-direction: column; transition: all var(--transition-fast);"
+        onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px var(--color-shadow)'"
+        onmouseout="this.style.transform=''; this.style.boxShadow=''">
+
+        <!-- Category Badge -->
+        <span itemprop="articleSection"
+            style="color: var(--color-primary); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+            {{ post.category.name }}
+        </span>
+
+        <!-- Title -->
+        <h2 itemprop="headline" style="font-size: 1.5rem; font-weight: 600; line-height: 1.3; margin: 1rem 0;">
+            <a href="{% url 'blog_detail' post.slug %}" itemprop="url"
+                style="color: var(--color-text); text-decoration: none;">
+                {{ post.title }}
+            </a>
+        </h2>
+
+        <!-- Excerpt -->
+        <p itemprop="description"
+            style="color: var(--color-text-secondary); line-height: 1.6; flex-grow: 1; margin: 0.5rem 0;">
+            {{ post.excerpt }}
+        </p>
+
+        <!-- Meta Information -->
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--color-border); flex-wrap: wrap; gap: 0.5rem;">
+            <div style="display: flex; gap: 1rem; font-size: 0.75rem; color: var(--color-text-secondary);">
+                <span>⏱️ {{ post.reading_time }} min</span>
+                <span>👁️ {{ post.views }} views</span>
+            </div>
+            <a href="{% url 'blog_detail' post.slug %}" class="btn btn-primary"
+                style="text-decoration: none; padding: 0.5rem 1rem; font-size: 0.875rem;">
+                Read More →
+            </a>
+        </div>
+
+        <!-- Hidden Schema Data -->
+        <meta itemprop="datePublished" content="{{ post.published_at|date:'c' }}">
+        <meta itemprop="dateModified" content="{{ post.updated_at|date:'c' }}">
+        <div itemprop="author" itemscope itemtype="https://schema.org/Organization" style="display: none;">
+            <meta itemprop="name" content="JSON Formatter Pro">
+        </div>
+    </article>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<nav aria-label="Blog pagination"
+    style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 3rem; flex-wrap: wrap;">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}"
+        class="btn btn-secondary" style="text-decoration: none;">
+        ← Previous
+    </a>
+    {% endif %}
+
+    <span
+        style="padding: 0.75rem 1.5rem; background: var(--color-surface); border-radius: var(--radius-md); font-weight: 500; border: 1px solid var(--color-border);">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}"
+        class="btn btn-secondary" style="text-decoration: none;">
+        Next →
+    </a>
+    {% endif %}
+</nav>
+{% endif %}
+
+{% else %}
+<!-- No Posts Message -->
+<div
+    style="text-align: center; padding: 4rem 2rem; background: var(--color-surface); border-radius: var(--radius-lg); margin-top: 2rem; border: 1px solid var(--color-border);">
+    <div style="font-size: 4rem; margin-bottom: 1rem;">📝</div>
+    <h3 style="font-size: 1.5rem; margin-bottom: 1rem; font-weight: 600;">No blog posts yet</h3>
+    <p style="color: var(--color-text-secondary);">Check back soon for interesting articles about programming and
+        technology!</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block footer_attrs %}style="margin-top: 4rem;"{% endblock %}

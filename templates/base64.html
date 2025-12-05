@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Base64 Encoder & Decoder - Free Online Base64 Tool | JSON Formatter Pro{% endblock %}
+{% block meta_title %}Base64 Encoder & Decoder - Free Online Base64 Tool | JSON Formatter Pro{% endblock %}
+{% block meta_description %}Free online Base64 encoder and decoder tool. Encode text to Base64 or decode Base64 to text.
+Fast, secure, and easy to use. No signup required.{% endblock %}
+{% block meta_keywords %}base64 encoder, base64 decoder, base64 converter, encode base64, decode base64, base64 tool
+online, free base64, base64 encode decode, json formatter, json validator, json beautifier, json minifier, json editor,
+json viewer,
+jsonlint, json lint, online json formatter, free json formatter, format json online, validate json, beautify json, json
+parser, json checker, json pretty print, json syntax checker, json error checker, online json validator, json to xml,
+json to csv, json to yaml, json converter, minify json, compact json, json tree view, json debugging, fix json errors,
+json data formatter, json api formatter, json formatter online free, best json formatter 2024, json syntax validation,
+json file formatter, json linter, json pretty printer, json online editor, json beautifier online, json viewer online,
+json formatter tool, json validator online free, json escape online, json unescape, json tester, json formatter and
+validator, json compare, json diff, json schema validator, rest api json formatter, javascript object notation
+formatter, json data interchange format, format json file, validate json syntax, json readability tool, client side json
+formatter, secure json formatter, json formatter no signup{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/base64/{% endblock %}
+
+{% block navigation %}
+<button id="hamburgerBtn" class="hamburger-btn" aria-label="Toggle menu">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+</button>
+{% endblock %}
+
+
+{% block nav_actions %}
+<a href="/" class="btn btn-secondary" style="text-decoration: none;">← JSON Formatter</a>
+<a href="/blog/" class="btn btn-secondary" style="text-decoration: none;">📝 Blog</a>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Modern Base64 Page Styling */
+    .base64-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding: 2rem 0;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+        border-radius: var(--radius-xl);
+    }
+
+    .base64-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .base64-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.125rem;
+    }
+
+    .base64-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    @media (max-width: 968px) {
+        .base64-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .base64-panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        border: 1px solid var(--color-border);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        transition: all var(--transition-base);
+    }
+
+    .base64-panel:hover {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        border-color: var(--color-primary);
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--color-border);
+    }
+
+    .panel-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--color-primary);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .panel-count {
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+        font-family: 'Courier New', monospace;
+        background: var(--color-surface-alt);
+        padding: 0.25rem 0.75rem;
+        border-radius: var(--radius-full);
+    }
+
+    .base64-textarea {
+        width: 100%;
+        min-height: 350px;
+        padding: 1.25rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        resize: vertical;
+        transition: all var(--transition-fast);
+    }
+
+    .base64-textarea:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .base64-textarea::placeholder {
+        color: var(--color-text-muted);
+        font-style: italic;
+    }
+
+    .base64-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 2rem 0;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--color-border);
+    }
+
+    .base64-btn {
+        padding: 0.875rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: var(--radius-lg);
+        border: none;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .base64-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .base64-btn:active {
+        transform: translateY(0);
+    }
+
+    .btn-encode {
+        background: linear-gradient(135deg, var(--color-primary) 0%, #5558DD 100%);
+        color: white;
+    }
+
+    .btn-decode {
+        background: linear-gradient(135deg, var(--color-accent) 0%, #A855F7 100%);
+        color: white;
+    }
+
+    .btn-clear {
+        background: var(--color-surface-alt);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+    }
+
+    .btn-download {
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        color: white;
+    }
+
+    .info-section {
+        margin-top: 3rem;
+        padding: 2.5rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.03) 0%, rgba(139, 92, 246, 0.03) 100%);
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        font-size: 1.05rem;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .feature-card {
+        padding: 1.5rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        text-align: center;
+        transition: all var(--transition-fast);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        border-color: var(--color-primary);
+    }
+
+    .feature-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .feature-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+    }
+
+    .feature-desc {
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="base64-header">
+    <h1>🔐 Base64 Encoder & Decoder</h1>
+    <p>Encode or decode Base64 strings instantly with our modern, secure online tool</p>
+</div>
+
+<!-- Editor Grid -->
+<div class="base64-grid">
+    <!-- Input Panel -->
+    <div class="base64-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">
+                <span>📝</span> Input
+            </h2>
+            <span class="panel-count" id="inputCount">0 characters</span>
+        </div>
+        <textarea id="inputText" class="base64-textarea"
+            placeholder="Enter your text to encode or Base64 string to decode..." spellcheck="false">Try encoding this text! 🚀
+Base64 is perfect for:
+- API data transmission
+- Embedded images in HTML/CSS
+- Data encoding in URLs
+- Email attachments</textarea>
+    </div>
+
+    <!-- Output Panel -->
+    <div class="base64-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">
+                <span>✨</span> Output
+            </h2>
+            <span class="panel-count" id="outputCount">0 characters</span>
+        </div>
+        <textarea id="outputText" class="base64-textarea" readonly
+            placeholder="Encoded or decoded output will appear here..."></textarea>
+    </div>
+</div>
+
+<!-- Actions -->
+<div class="base64-actions">
+    <button id="encodeBtn" class="base64-btn btn-encode">
+        <span>🔐</span>
+        <span>Encode to Base64</span>
+    </button>
+    <button id="decodeBtn" class="base64-btn btn-decode">
+        <span>🔓</span>
+        <span>Decode from Base64</span>
+    </button>
+    <button id="clearBtn" class="base64-btn btn-clear">
+        <span>✕</span>
+        <span>Clear All</span>
+    </button>
+    <button id="downloadBtn" class="base64-btn btn-download">
+        <span>↓</span>
+        <span>Download Result</span>
+    </button>
+</div>
+
+<!-- Info Section -->
+<div class="info-section">
+    <h3>💡 About Base64 Encoding</h3>
+    <p>
+        Base64 is a binary-to-text encoding scheme that represents binary data in an ASCII string format.
+        It's commonly used to encode data that needs to be stored and transferred over media designed to deal with text.
+        This encoding helps ensure data remains intact without modification during transport.
+    </p>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <div class="feature-title">Instant Encoding</div>
+            <div class="feature-desc">Real-time Base64 encoding with no delays</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <div class="feature-desc">Client-side processing keeps your data secure</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🌍</div>
+            <div class="feature-title">UTF-8 Support</div>
+            <div class="feature-desc">Works with all international characters</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💾</div>
+            <div class="feature-title">Download Results</div>
+            <div class="feature-desc">Save encoded or decoded output as files</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/base64.js' %}"></script>
+{% endblock %}

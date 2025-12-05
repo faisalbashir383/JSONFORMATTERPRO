@@ -1,0 +1,278 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Primary Meta Tags -->
+    <title>{% block title %}JSON Formatter Pro - Free Online JSON Tools{% endblock %}</title>
+    <meta name="title"
+        content="{% block meta_title %}JSON Formatter Pro - Format, Validate, Minify & Convert JSON Online Free{% endblock %}">
+    <meta name="description"
+        content="{% block meta_description %}Free online JSON formatter and validator. Format JSON with proper indentation, minify, validate syntax, convert to XML/CSV, and encode/decode Base64. Fast, secure, no signup required.{% endblock %}">
+    <meta name="keywords"
+        content="{% block meta_keywords %}{% if site_settings %}{{ site_settings.get_all_keywords }}{% else %}json formatter, json validator, json minifier, json beautifier, json parser, json editor, format json online, validate json, minify json, json to xml, json to csv, json converter, base64 encoder, base64 decoder, online json tool, json syntax checker, json pretty print, compact json, json online, free json formatter, json formatter online free, json viewer, json lint, json escape, json unescape, json tester, json checker, json decode, json encode, rest api json, json api, jsonlint, json compare, json diff, json merge, json split, json xpath, json query, json path, json schema validator{% endif %}{% endblock %}">
+    <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
+    <meta name="language" content="English">
+    <meta name="author" content="{% block author %}JSON Formatter Pro{% endblock %}">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="revisit-after" content="7 days">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}{{ SITE_URL }}/{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{{ SITE_NAME }} - Free Online JSON Tools{% endblock %}">
+    <meta property="og:description"
+        content="{% block og_description %}Format, validate, minify, and convert JSON with our free online tool. Support for XML, CSV conversion, and Base64 encoding.{% endblock %}">
+    <meta property="og:image"
+        content="{% block og_image %}{% if site_settings.og_image %}{{ site_settings.og_image }}{% else %}{{ SITE_URL }}/static/images/og-image.png{% endif %}{% endblock %}">
+    <meta property="og:site_name" content="{{ SITE_NAME }}">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{% block twitter_url %}{{ SITE_URL }}/{% endblock %}">
+    <meta property="twitter:title"
+        content="{% block twitter_title %}{{ SITE_NAME }} - Free Online JSON Tools{% endblock %}">
+    <meta property="twitter:description"
+        content="{% block twitter_description %}Format, validate, minify, and convert JSON online for free. No signup required.{% endblock %}">
+    <meta property="twitter:image"
+        content="{% block twitter_image %}{{ SITE_URL }}/static/images/twitter-card.png{% endblock %}">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical_url %}{{ SITE_URL }}/{% endblock %}">
+
+    <!-- Structured Data -->
+    {% block structured_data %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "JSON Formatter Pro",
+      "description": "Free online JSON formatter, validator, minifier, and converter tool",
+      "url": "{{ SITE_URL }}",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "JSON Formatting",
+        "JSON Validation",
+        "JSON Minification",
+        "JSON to XML Conversion",
+        "JSON to CSV Conversion",
+        "Base64 Encoding/Decoding",
+        "Syntax Error Detection",
+        "Download Formatted Files"
+      ],
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "softwareVersion": "2.0"
+    }
+    </script>
+    {% endblock %}
+
+    <!-- Additional Head Content -->
+    {% block extra_head %}{% endblock %}
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Page-specific CSS -->
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="/"
+                    style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="brand-icon">{ }</span>
+                    <span class="brand-name">JSON Formatter Pro</span>
+                </a>
+            </div>
+
+            {% block navigation %}
+            <!-- Premium Hamburger Menu Button -->
+            <button id="hamburgerBtn" class="hamburger-btn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <!-- Navigation Menu -->
+            <div class="nav-menu" id="navMenu">
+                <div class="nav-item dropdown">
+                    <button class="nav-link">JSON Tools ▾</button>
+                    <div class="dropdown-content">
+                        <a href="/#" class="dropdown-item" data-action="format">✨ Formatter</a>
+                        <a href="/#" class="dropdown-item" data-action="minify">📦 Minifier</a>
+                        <a href="/#" class="dropdown-item" data-action="validate">✓ Validator</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/#" class="dropdown-item" data-action="toXml">🔄 JSON → XML</a>
+                        <a href="/#" class="dropdown-item" data-action="toCsv">📊 JSON → CSV</a>
+                    </div>
+                </div>
+
+                <div class="nav-item dropdown">
+                    <button class="nav-link">Code Tools ▾</button>
+                    <div class="dropdown-content">
+                        <a href="/base64/" class="dropdown-item">🔐 Base64 Encode/Decode</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item coming-soon">🔗 URL Encode/Decode</a>
+                        <a href="#" class="dropdown-item coming-soon">🎨 HTML Escape/Unescape</a>
+                    </div>
+                </div>
+
+                <div class="nav-item dropdown">
+                    <button class="nav-link">Text Tools ▾</button>
+                    <div class="dropdown-content">
+                        <a href="#" class="dropdown-item coming-soon">🔤 Case Converter</a>
+                        <a href="#" class="dropdown-item coming-soon">🗑️ Remove Duplicates</a>
+                        <a href="#" class="dropdown-item coming-soon">📝 Word Counter</a>
+                    </div>
+                </div>
+
+                <!-- Blog Link -->
+                <div class="nav-item">
+                    <a href="/blog/" class="nav-link" style="text-decoration: none;">📝 Blog</a>
+                </div>
+
+            </div>
+
+            <!-- Theme Toggle -->
+            <div class="nav-actions">
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                    <span class="theme-icon light-icon">☀️</span>
+                    <span class="theme-icon dark-icon">🌙</span>
+                </button>
+            </div>
+            {% endblock %}
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container" {% block main_attrs %}{% endblock %}>
+        {% block content %}
+        <!-- Page content goes here -->
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" {% block footer_attrs %}{% endblock %}>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="brand-icon">{ }</span>
+                <span class="footer-name">JSON Formatter Pro</span>
+            </div>
+            <div class="footer-info">
+                <p>&copy; <span id="currentYear"></span> JSON Formatter Pro. All rights reserved.</p>
+                {% block footer_extra %}{% endblock %}
+            </div>
+        </div>
+    </footer>
+
+    <!-- Message Container -->
+    <div id="messageContainer" class="message-container"></div>
+
+    <!-- Base JavaScript -->
+    <script>
+        // Set current year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Theme management
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        const themeToggle = document.getElementById('themeToggle');
+        const mobileThemeToggle = document.getElementById('mobileThemeToggle');
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        if (themeToggle) {
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+
+        if (mobileThemeToggle) {
+            mobileThemeToggle.addEventListener('click', () => {
+                toggleTheme();
+                // Close mobile menu after theme change
+                if (hamburgerBtn && navMenu) {
+                    hamburgerBtn.classList.remove('active');
+                    navMenu.classList.remove('active');
+                }
+            });
+        }
+
+        // Hamburger menu
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const navMenu = document.getElementById('navMenu');
+
+        if (hamburgerBtn && navMenu) {
+            hamburgerBtn.addEventListener('click', () => {
+                hamburgerBtn.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+        }
+
+        // Mobile dropdown toggle
+        const dropdownItems = document.querySelectorAll('.nav-item.dropdown');
+        dropdownItems.forEach(dropdown => {
+            const button = dropdown.querySelector('.nav-link');
+            if (button) {
+                button.addEventListener('click', (e) => {
+                    // Only toggle on mobile (when menu is active)
+                    if (window.innerWidth <= 1024) {
+                        e.preventDefault();
+
+                        // Close other dropdowns
+                        dropdownItems.forEach(item => {
+                            if (item !== dropdown) {
+                                item.classList.remove('active');
+                            }
+                        });
+
+                        // Toggle this dropdown
+                        dropdown.classList.toggle('active');
+                    }
+                });
+            }
+        });
+
+        // Close mobile menu when clicking on non-dropdown links or dropdown items
+        const allLinks = document.querySelectorAll('.nav-link:not(.nav-item.dropdown .nav-link), .dropdown-item');
+        allLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (hamburgerBtn && navMenu && window.innerWidth <= 1024) {
+                    // Use setTimeout to allow navigation to proceed first
+                    setTimeout(() => {
+                        hamburgerBtn.classList.remove('active');
+                        navMenu.classList.remove('active');
+                        // Close all dropdowns
+                        dropdownItems.forEach(item => item.classList.remove('active'));
+                    }, 100);
+                }
+            });
+        });
+    </script>
+
+    <!-- Page-specific JavaScript -->
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>
