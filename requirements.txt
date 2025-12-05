@@ -4,3 +4,5 @@ django-cors-headers==4.9.0
 dicttoxml==1.7.16
 asgiref==3.11.0
 sqlparse==0.5.4
+psycopg2==2.9.11
+python-dotenv==1.2.1
