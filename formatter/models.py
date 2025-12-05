@@ -16,11 +16,11 @@ class SiteSettings(models.Model):
     
     # SEO Keywords
     primary_keywords = models.TextField(
-        default="json formatter, json validator, json minifier, json beautifier, json parser",
+        default="json formatter, json validator, json beautifier, json minifier, json parser, json editor, json viewer, jsonlint, json lint, online json formatter, free json formatter, format json online, validate json, beautify json, json pretty print, json syntax checker, json error checker, online json validator, json tree view, json converter, json to xml, json to csv, json to yaml, api formatter, rest api json formatter, json file formatter, json linter, best json formatter 2024",
         help_text="Comma-separated primary keywords"
     )
     secondary_keywords = models.TextField(
-        default="format json online, validate json, minify json, json to xml, json to csv, base64 encoder",
+        default="minify json, compact json, json debugging, json online editor, json beautifier online, json viewer online, json formatter tool, json validator online free, json escape online, json unescape, json tester, json formatter and validator, json compare, json diff, json schema validator, javascript object notation formatter, json data interchange format, format json file, validate json syntax, json readability tool, client side json formatter, secure json formatter, json formatter no signup, json explorer, json tree viewer, json graph view, json visualization, api response formatter, json file viewer, json file upload, drag and drop json, download json, large json files, json copy clipboard, json error detection, json corrector, json error finder, how to format json, how to validate json online, how to minify json, how to fix json syntax errors, how to convert json to xml, how to convert json to csv, json data formatter, json api formatter, json pretty printer, fix json errors, json syntax validation",
         help_text="Comma-separated secondary keywords"
     )
     
