@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Contact Us - JSON Formatters Pro{% endblock %}
+
+{% block meta_title %}Contact JSON Formatters Pro - Get in Touch{% endblock %}
+
+{% block meta_description %}Contact JSON Formatter Pro for support, feedback, or inquiries. We're here to help you with
+all your JSON formatting and validation needs.{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+<style>
+    .contact-form-section {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 2rem;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: var(--color-text);
+        font-size: 1.1rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        font-size: 1rem;
+        font-family: inherit;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        transition: all 300ms ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12),
+            0 4px 12px rgba(99, 102, 241, 0.15);
+        transform: translateY(-2px);
+    }
+
+    .form-group textarea {
+        min-height: 200px;
+        resize: vertical;
+        font-family: inherit;
+        line-height: 1.6;
+    }
+
+    .submit-btn {
+        background: linear-gradient(135deg, #6366f1 0%, #5558DD 100%);
+        color: white;
+        padding: 1.25rem 3rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        width: 100%;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .submit-btn:active {
+        transform: translateY(-2px);
+    }
+
+    .contact-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+    }
+
+    .contact-info-card {
+        padding: 2.5rem;
+        background: var(--glass-bg);
+        backdrop-filter: var(--backdrop-blur);
+        -webkit-backdrop-filter: var(--backdrop-blur);
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--glass-shadow);
+        text-align: center;
+        transition: all 400ms ease;
+    }
+
+    .contact-info-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--glass-hover-shadow);
+    }
+
+    .contact-info-icon {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.25));
+    }
+
+    .contact-info-card h3 {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .contact-info-card p {
+        color: var(--color-text-secondary);
+        font-size: 1.05rem;
+        line-height: 1.7;
+    }
+
+    .contact-info-card a {
+        color: var(--color-primary);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    .contact-info-card a:hover {
+        color: var(--color-accent);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="header">
+    <h1 class="header-title">Get in Touch</h1>
+    <p class="header-subtitle">We'd Love to Hear From You</p>
+</div>
+
+<article class="seo-content">
+    <section class="content-section">
+        <h2>Contact Information</h2>
+        <div class="contact-info-grid">
+            <div class="contact-info-card">
+                <div class="contact-info-icon">📧</div>
+                <h3>Email Us</h3>
+                <p>For general inquiries and support</p>
+                <p><a href="mailto:support@jsonformatterpro.com">support@jsonformatterpro.com</a></p>
+            </div>
+            <div class="contact-info-card">
+                <div class="contact-info-icon">💬</div>
+                <h3>Feedback</h3>
+                <p>Share your ideas and suggestions</p>
+                <p><a href="mailto:feedback@jsonformatterpro.com">feedback@jsonformatterpro.com</a></p>
+            </div>
+            <div class="contact-info-card">
+                <div class="contact-info-icon">🐛</div>
+                <h3>Report Issues</h3>
+                <p>Found a bug? Let us know</p>
+                <p><a href="mailto:bugs@jsonformatterpro.com">bugs@jsonformatterpro.com</a></p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section contact-form-section">
+        <h2>Send Us a Message</h2>
+
+        <!-- Display Django Messages -->
+        {% if messages %}
+        <div style="margin-bottom: 2rem;">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" style="
+                padding: 1rem 1.5rem;
+                margin-bottom: 1rem;
+                border-radius: var(--radius-lg);
+                {% if message.tags == 'success' %}
+                background: rgba(16, 185, 129, 0.1);
+                border: 2px solid rgba(16, 185, 129, 0.3);
+                color: #10b981;
+                {% elif message.tags == 'error' %}
+                background: rgba(239, 68, 68, 0.1);
+                border: 2px solid rgba(239, 68, 68, 0.3);
+                color: #ef4444;
+                {% else %}
+                background: rgba(99, 102, 241, 0.1);
+                border: 2px solid rgba(99, 102, 241, 0.3);
+                color: #6366f1;
+                {% endif %}
+                font-weight: 500;
+            ">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form id="contactForm" action="#" method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="name">Your Name *</label>
+                <input type="text" id="name" name="name" required placeholder="John Doe">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" required placeholder="john@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="subject">Subject *</label>
+                <select id="subject" name="subject" required>
+                    <option value="">Select a topic...</option>
+                    <option value="general">General Inquiry</option>
+                    <option value="support">Technical Support</option>
+                    <option value="feedback">Feedback & Suggestions</option>
+                    <option value="bug">Bug Report</option>
+                    <option value="feature">Feature Request</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message *</label>
+                <textarea id="message" name="message" required placeholder="Tell us how we can help you..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <span>Send Message</span>
+            </button>
+        </form>
+    </section>
+
+    <section class="content-section faq-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-item">
+            <h3>How long does it take to get a response?</h3>
+            <p>We typically respond to all inquiries within 24-48 hours during business days. For urgent matters, please
+                mark your email subject as "URGENT".</p>
+        </div>
+        <div class="faq-item">
+            <h3>Do you offer custom features or enterprise solutions?</h3>
+            <p>Yes! We're open to discussing custom implementations and enterprise solutions. Please contact us with
+                your specific requirements.</p>
+        </div>
+        <div class="faq-item">
+            <h3>How can I report a security issue?</h3>
+            <p>For security-related concerns, please email us directly at security@jsonformatterpro.com. We take
+                security very seriously and will respond promptly.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Can I contribute to JSON Formatter Pro?</h3>
+            <p>We appreciate community contributions! Contact us to discuss how you can help improve JSON Formatter Pro.
+            </p>
+        </div>
+    </section>
+</article>
+
+{% endblock %}

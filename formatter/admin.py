@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import BlogCategory, BlogPost, SiteSettings, VisitorLog, PageView
+from .models import BlogCategory, BlogPost, SiteSettings, VisitorLog, PageView, ContactMessage
 
 
 @admin.register(SiteSettings)
@@ -96,3 +96,41 @@ class PageViewAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         # Don't allow manual addition
         return False
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    """Admin interface for Contact Messages"""
+    list_display = ['name', 'email', 'subject', 'created_at', 'is_read', 'is_replied']
+    list_filter = ['subject', 'is_read', 'is_replied', 'created_at']
+    search_fields = ['name', 'email', 'message']
+    readonly_fields = ['created_at', 'ip_address', 'user_agent']
+    ordering = ['-created_at']
+    
+    fieldsets = (
+        ('Contact Information', {
+            'fields': ('name', 'email', 'subject')
+        }),
+        ('Message', {
+            'fields': ('message',)
+        }),
+        ('Metadata', {
+            'fields': ('created_at', 'ip_address', 'user_agent'),
+            'classes': ('collapse',)
+        }),
+        ('Status', {
+            'fields': ('is_read', 'is_replied', 'replied_at', 'notes')
+        }),
+    )
+    
+    actions = ['mark_as_read', 'mark_as_unread']
+    
+    def mark_as_read(self, request, queryset):
+        updated = queryset.update(is_read=True)
+        self.message_user(request, f'{updated} message(s) marked as read.')
+    mark_as_read.short_description = 'Mark selected messages as read'
+    
+    def mark_as_unread(self, request, queryset):
+        updated = queryset.update(is_read=False)
+        self.message_user(request, f'{updated} message(s) marked as unread.')
+    mark_as_unread.short_description = 'Mark selected messages as unread'

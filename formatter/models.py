@@ -228,3 +228,55 @@ class PageView(models.Model):
     
     def __str__(self):
         return f"{self.url} - {self.ip_address} ({self.timestamp.strftime('%Y-%m-%d %H:%M')})"
+
+
+class ContactMessage(models.Model):
+    """Store contact form submissions"""
+    SUBJECT_CHOICES = [
+        ('general', 'General Inquiry'),
+        ('support', 'Technical Support'),
+        ('feedback', 'Feedback & Suggestions'),
+        ('bug', 'Bug Report'),
+        ('feature', 'Feature Request'),
+        ('other', 'Other'),
+    ]
+    
+    name = models.CharField(max_length=200, help_text="Sender's name")
+    email = models.EmailField(help_text="Sender's email address")
+    subject = models.CharField(max_length=20, choices=SUBJECT_CHOICES, help_text="Message subject category")
+    message = models.TextField(help_text="Message content")
+    
+    # Metadata
+    created_at = models.DateTimeField(auto_now_add=True, help_text="When the message was submitted")
+    ip_address = models.GenericIPAddressField(null=True, blank=True, help_text="Sender's IP address")
+    user_agent = models.TextField(null=True, blank=True, help_text="Sender's browser user agent")
+    
+    # Status tracking
+    is_read = models.BooleanField(default=False, help_text="Has this message been read?")
+    is_replied = models.BooleanField(default=False, help_text="Has this message been replied to?")
+    replied_at = models.DateTimeField(null=True, blank=True, help_text="When the reply was sent")
+    notes = models.TextField(blank=True, help_text="Internal notes about this message")
+    
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['-created_at']),
+            models.Index(fields=['email']),
+            models.Index(fields=['is_read']),
+        ]
+        verbose_name = "Contact Message"
+        verbose_name_plural = "Contact Messages"
+    
+    def __str__(self):
+        return f"{self.name} - {self.get_subject_display()} ({self.created_at.strftime('%Y-%m-%d')})"
+    
+    def mark_as_read(self):
+        """Mark message as read"""
+        self.is_read = True
+        self.save(update_fields=['is_read'])
+    
+    def mark_as_replied(self):
+        """Mark message as replied"""
+        self.is_replied = True
+        self.replied_at = timezone.now()
+        self.save(update_fields=['is_replied', 'replied_at'])

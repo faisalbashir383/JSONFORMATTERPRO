@@ -17,6 +17,8 @@ urlpatterns = [
     
     # Page views
     path('base64/', views.base64_page, name='base64_page'),
+    path('about/', views.about_page, name='about_page'),
+    path('contact/', views.contact_page, name='contact_page'),
     path('robots.txt', views.robots_txt, name='robots_txt'),
     
     # Blog URLs

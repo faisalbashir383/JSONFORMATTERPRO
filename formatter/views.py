@@ -362,6 +362,75 @@ def base64_page(request):
     return render(request, 'base64.html')
 
 
+def about_page(request):
+    """Render the About Us page"""
+    return render(request, 'about.html')
+
+
+def contact_page(request):
+    """Render the Contact Us page and handle form submissions"""
+    from .models import ContactMessage
+    from django.contrib import messages
+    
+    if request.method == 'POST':
+        # Get form data
+        name = request.POST.get('name', '').strip()
+        email = request.POST.get('email', '').strip()
+        subject = request.POST.get('subject', '').strip()
+        message_text = request.POST.get('message', '').strip()
+        
+        # Validate required fields
+        errors = []
+        if not name:
+            errors.append('Name is required.')
+        if not email:
+            errors.append('Email is required.')
+        elif '@' not in email or '.' not in email:
+            errors.append('Please enter a valid email address.')
+        if not subject:
+            errors.append('Subject is required.')
+        if not message_text:
+            errors.append('Message is required.')
+        
+        if errors:
+            for error in errors:
+                messages.error(request, error)
+        else:
+            try:
+                # Get client IP and user agent
+                def get_client_ip(req):
+                    x_forwarded_for = req.META.get('HTTP_X_FORWARDED_FOR')
+                    if x_forwarded_for:
+                        ip = x_forwarded_for.split(',')[0].strip()
+                    else:
+                        ip = req.META.get('REMOTE_ADDR')
+                    return ip
+                
+                ip_address = get_client_ip(request)
+                user_agent = request.META.get('HTTP_USER_AGENT', '')
+                
+                # Create contact message
+                contact = ContactMessage.objects.create(
+                    name=name,
+                    email=email,
+                    subject=subject,
+                    message=message_text,
+                    ip_address=ip_address,
+                    user_agent=user_agent
+                )
+                
+                messages.success(request, 'Thank you for your message! We\'ll get back to you soon.')
+                
+                # Redirect to prevent form resubmission
+                from django.shortcuts import redirect
+                return redirect('contact_page')
+                
+            except Exception as e:
+                messages.error(request, f'An error occurred: {str(e)}. Please try again.')
+    
+    return render(request, 'contact.html')
+
+
 def robots_txt(request):
     """Serve robots.txt file"""
     return render(request, 'robots.txt', content_type='text/plain')
