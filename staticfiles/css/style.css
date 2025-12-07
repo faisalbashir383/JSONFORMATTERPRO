@@ -985,6 +985,18 @@ body {
   color: var(--color-primary);
 }
 
+/* Soon badge for coming soon items */
+.soon-badge {
+  font-size: 0.6rem;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.2rem;
+  font-weight: 600;
+  margin-left: 0.35rem;
+  text-transform: uppercase;
+}
+
 /* Footer Bottom */
 .footer .footer-bottom {
   padding-top: 2rem;
@@ -1216,12 +1228,12 @@ body {
 
   /* When dropdown is active/expanded */
   .nav-item.dropdown.active .dropdown-content {
-        max-height: 150px;
-        padding: 0.5rem 0;
-        background: rgba(0, 0, 0, 0.03);
-        overflow: scroll;
-        display: flex;
-        flex-direction: column;
+    max-height: 150px;
+    padding: 0.5rem 0;
+    background: rgba(0, 0, 0, 0.03);
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
   }
 
   [data-theme="dark"] .nav-item.dropdown.active .dropdown-content {
