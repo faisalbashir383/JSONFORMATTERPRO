@@ -168,10 +168,10 @@ processing. No signup required.{% endblock %}
 {% endblock %}
 
 {% block content %}
-<header class="header">
-    <h1 class="header-title">JSON Formatters Pro</h1>
-    <p class="header-subtitle">Format, Validate, Minify & Convert JSON Instantly - 100% Free</p>
-</header>
+<!--<header class="header">-->
+<!--    <h1 class="header-title">JSON Formatters Pro</h1>-->
+<!--    <p class="header-subtitle">Format, Validate, Minify & Convert JSON Instantly - 100% Free</p>-->
+<!--</header>-->
 
 <!-- File Upload Zone -->
 <div class="upload-zone" id="uploadZone">
@@ -180,49 +180,12 @@ processing. No signup required.{% endblock %}
     <input type="file" id="fileInput" accept=".json" hidden>
 </div>
 
-<!-- Action Buttons -->
-<section class="actions-section" role="toolbar" aria-label="JSON formatting actions">
-    <div class="button-group">
-        <button id="formatBtn" class="btn btn-primary" title="Format and beautify JSON">
-            <span class="btn-icon">✨</span>
-            <span>Format JSON</span>
-        </button>
-        <button id="minifyBtn" class="btn btn-secondary" title="Minify and compress JSON">
-            <span class="btn-icon">📦</span>
-            <span>Minify JSON</span>
-        </button>
-        <button id="validateBtn" class="btn btn-accent" title="Validate JSON syntax">
-            <span class="btn-icon">✓</span>
-            <span>Validate JSON</span>
-        </button>
-        <button id="toXmlBtn" class="btn btn-conversion" title="Convert JSON to XML format">
-            <span class="btn-icon">🔄</span>
-            <span>Convert to XML</span>
-        </button>
-        <button id="toCsvBtn" class="btn btn-conversion" title="Convert JSON to CSV format">
-            <span class="btn-icon">📊</span>
-            <span>Convert to CSV</span>
-        </button>
-    </div>
-
-    <div class="button-group secondary-actions">
-        <button id="clearBtn" class="btn btn-warning" title="Clear both input and output">
-            <span class="btn-icon">🗑️</span>
-            <span>Clear</span>
-        </button>
-        <button id="downloadBtn" class="btn btn-success" title="Download JSON file">
-            <span class="btn-icon">↓</span>
-            <span>Download</span>
-        </button>
-    </div>
-</section>
-
-<!-- Main Editor Container -->
-<div class="editor-container">
-    <!-- Input Panel -->
+<!-- Main Editor Container with Center Actions -->
+<div class="editor-wrapper">
+    <!-- Input Panel (Left) -->
     <div class="editor-panel">
         <div class="panel-header">
-            <h2 class="panel-title">Input JSON</h2>
+            <h2 class="panel-title">Left JSON</h2>
             <div class="panel-info">
                 <span id="charCount">0 characters</span>
             </div>
@@ -231,13 +194,41 @@ processing. No signup required.{% endblock %}
             aria-label="JSON input editor"></textarea>
     </div>
 
-    <!-- Output Panel -->
+    <!-- Center Actions (Buttons Between Panels) -->
+    <div class="center-actions">
+        <button id="formatBtn" class="center-btn" title="Format and beautify JSON">
+            <span>Format</span>
+        </button>
+        <button id="validateBtn" class="center-btn" title="Validate JSON syntax">
+            <span>Validate</span>
+        </button>
+        <button id="minifyBtn" class="center-btn" title="Minify and compress JSON">
+            <span>Minify</span>
+        </button>
+        <button id="viewBtn" class="center-btn" title="View formatted JSON">
+            <span>View</span>
+        </button>
+        <button id="stringifyBtn" class="center-btn" title="Stringify JSON">
+            <span>Stringify</span>
+        </button>
+        <button id="toXmlBtn" class="center-btn" title="Convert JSON to XML format">
+            <span>Json to XML</span>
+        </button>
+        <button id="toCsvBtn" class="center-btn" title="Convert JSON to CSV format">
+            <span>Json to CSV</span>
+        </button>
+        <button id="toYamlBtn" class="center-btn" title="Convert JSON to YAML format">
+            <span>Convert to YAML</span>
+        </button>
+    </div>
+
+    <!-- Output Panel (Right) -->
     <div class="editor-panel">
         <div class="panel-header">
-            <h2 class="panel-title">Output</h2>
+            <h2 class="panel-title">Right JSON</h2>
             <div class="panel-info">
-                <button id="fullscreenBtn" class="icon-btn" title="Toggle fullscreen">
-                    <span>⛶</span>
+                <button id="copyOutputBtn" class="icon-btn" title="Copy to clipboard">
+                    <span>Copy</span> 📋
                 </button>
             </div>
         </div>
@@ -245,6 +236,22 @@ processing. No signup required.{% endblock %}
             aria-label="Formatted JSON output" aria-live="polite"></textarea>
     </div>
 </div>
+
+<!-- Secondary Actions (Clear, Download) -->
+<section class="secondary-actions-section" role="toolbar" aria-label="Secondary actions">
+    <button id="clearBtn" class="btn btn-warning" title="Clear both input and output">
+        <span class="btn-icon">🗑️</span>
+        <span>Clear</span>
+    </button>
+    <button id="downloadBtn" class="btn btn-success" title="Download JSON file">
+        <span class="btn-icon">↓</span>
+        <span>Download</span>
+    </button>
+    <button id="fullscreenBtn" class="btn btn-primary" title="Toggle fullscreen">
+        <span class="btn-icon">⛶</span>
+        <span>Fullscreen</span>
+    </button>
+</section>
 
 <!-- SEO Content Section -->
 <article class="seo-content">
