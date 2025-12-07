@@ -431,6 +431,12 @@ def contact_page(request):
     return render(request, 'contact.html')
 
 
+def privacy_page(request):
+    """Render the Privacy Policy page"""
+    return render(request, 'privacy.html')
+
+
+
 def robots_txt(request):
     """Serve robots.txt file"""
     return render(request, 'robots.txt', content_type='text/plain')
