@@ -545,3 +545,388 @@ def blog_category(request, slug):
     
     return render(request, 'blog_list.html', context)
 
+
+# ====================
+# API & Network Tools Pages
+# ====================
+
+def http_headers_page(request):
+    """Render the HTTP Headers Parser page"""
+    return render(request, 'http-headers.html')
+
+
+def ip_info_page(request):
+    """Render the IP Address Info page"""
+    return render(request, 'ip-info.html')
+
+
+def dns_lookup_page(request):
+    """Render the DNS Lookup page"""
+    return render(request, 'dns-lookup.html')
+
+
+def ssl_checker_page(request):
+    """Render the SSL Certificate Checker page"""
+    return render(request, 'ssl-checker.html')
+
+
+def cors_checker_page(request):
+    """Render the CORS Checker page"""
+    return render(request, 'cors-checker.html')
+
+
+# ====================
+# Code Tools Pages
+# ====================
+
+def cron_builder_page(request):
+    """Render the Cron Builder page"""
+    return render(request, 'cron-builder.html')
+
+
+def markdown_preview_page(request):
+    """Render the Markdown Preview page"""
+    return render(request, 'markdown-preview.html')
+
+
+def sql_formatter_page(request):
+    """Render the SQL Formatter page"""
+    return render(request, 'sql-formatter.html')
+
+
+def qr_generator_page(request):
+    """Render the QR Code Generator page"""
+    return render(request, 'qr-generator.html')
+
+
+@api_view(['POST'])
+def generate_qr_code(request):
+    """
+    Generate QR code from text/URL using Python qrcode library.
+    Returns base64 encoded PNG image.
+    
+    Expected input: {
+        "content": "text or URL",
+        "size": 256 (optional, default 256),
+        "fg_color": "#000000" (optional),
+        "bg_color": "#FFFFFF" (optional)
+    }
+    """
+    import qrcode
+    from PIL import Image
+    import io
+    
+    try:
+        content = request.data.get('content', '').strip()
+        size = int(request.data.get('size', 256))
+        fg_color = request.data.get('fg_color', '#000000')
+        bg_color = request.data.get('bg_color', '#FFFFFF')
+        
+        if not content:
+            return Response({
+                'success': False,
+                'error': 'Content is required. Please provide text or URL.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Limit size to reasonable bounds
+        size = max(64, min(size, 1024))
+        
+        # Create QR code
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(content)
+        qr.make(fit=True)
+        
+        # Create image with colors
+        qr_img = qr.make_image(fill_color=fg_color, back_color=bg_color)
+        
+        # Convert to PIL Image (the make_image returns a PilImage wrapper)
+        # Get the underlying PIL image
+        if hasattr(qr_img, 'get_image'):
+            pil_img = qr_img.get_image()
+        else:
+            pil_img = qr_img
+        
+        # Convert to RGB mode for proper PNG saving
+        if pil_img.mode != 'RGB':
+            pil_img = pil_img.convert('RGB')
+        
+        # Resize to requested size
+        pil_img = pil_img.resize((size, size), Image.Resampling.LANCZOS)
+        
+        # Convert to base64
+        buffer = io.BytesIO()
+        pil_img.save(buffer, format='PNG', quality=95)
+        buffer.seek(0)
+        img_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        
+        return Response({
+            'success': True,
+            'image': f'data:image/png;base64,{img_base64}',
+            'size': size
+        })
+        
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return Response({
+            'success': False,
+            'error': f'Failed to generate QR code: {str(e)}'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# ====================
+# API Endpoints for Network Tools
+# ====================
+
+import socket
+import ssl
+import re
+from datetime import datetime
+from urllib.parse import urlparse
+
+
+@api_view(['POST'])
+def dns_lookup_api(request):
+    """
+    Perform DNS lookup for a domain.
+    Returns A, AAAA records with geolocation info for each IP.
+    """
+    import requests as http_requests
+    
+    try:
+        domain = request.data.get('domain', '').strip()
+        
+        if not domain:
+            return Response({'error': 'Domain is required'}, status=400)
+        
+        # Clean domain (remove protocol if present)
+        domain = re.sub(r'^https?://', '', domain)
+        domain = domain.split('/')[0]  # Remove path
+        
+        result = {
+            'domain': domain,
+            'records': {},
+            'ipDetails': []
+        }
+        
+        # A records (IPv4)
+        try:
+            a_records = socket.getaddrinfo(domain, None, socket.AF_INET)
+            ips = list(set([r[4][0] for r in a_records]))
+            result['records']['A'] = ips
+        except:
+            result['records']['A'] = []
+        
+        # AAAA records (IPv6)
+        try:
+            aaaa_records = socket.getaddrinfo(domain, None, socket.AF_INET6)
+            ipv6s = list(set([r[4][0] for r in aaaa_records]))
+            result['records']['AAAA'] = ipv6s
+        except:
+            result['records']['AAAA'] = []
+        
+        # Get hostname
+        try:
+            hostname = socket.gethostbyaddr(result['records']['A'][0])[0] if result['records']['A'] else None
+            result['hostname'] = hostname
+        except:
+            result['hostname'] = None
+        
+        # Get geolocation for each IP (limit to first 5)
+        all_ips = result['records']['A'][:5]
+        for ip in all_ips:
+            try:
+                geo_response = http_requests.get(
+                    f'http://ip-api.com/json/{ip}?fields=status,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as',
+                    timeout=5
+                )
+                if geo_response.status_code == 200:
+                    geo_data = geo_response.json()
+                    if geo_data.get('status') == 'success':
+                        result['ipDetails'].append({
+                            'ip': ip,
+                            'country': geo_data.get('country', ''),
+                            'countryCode': geo_data.get('countryCode', ''),
+                            'region': geo_data.get('regionName', ''),
+                            'city': geo_data.get('city', ''),
+                            'zip': geo_data.get('zip', ''),
+                            'lat': geo_data.get('lat'),
+                            'lon': geo_data.get('lon'),
+                            'timezone': geo_data.get('timezone', ''),
+                            'isp': geo_data.get('isp', ''),
+                            'org': geo_data.get('org', ''),
+                            'as': geo_data.get('as', '')
+                        })
+            except:
+                # Skip if geolocation fails for this IP
+                result['ipDetails'].append({
+                    'ip': ip,
+                    'error': 'Could not fetch location'
+                })
+        
+        # Get nameservers using socket
+        try:
+            ns_info = socket.gethostbyname_ex(domain)
+            result['aliases'] = ns_info[1] if ns_info[1] else []
+        except:
+            result['aliases'] = []
+        
+        return Response(result)
+        
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+
+
+@api_view(['POST'])
+def ssl_checker_api(request):
+    """
+    Check SSL certificate for a domain.
+    Returns certificate details including expiry.
+    """
+    try:
+        domain = request.data.get('domain', '').strip()
+        
+        if not domain:
+            return Response({'error': 'Domain is required'}, status=400)
+        
+        # Clean domain
+        domain = re.sub(r'^https?://', '', domain)
+        domain = domain.split('/')[0]
+        
+        # Create SSL context
+        context = ssl.create_default_context()
+        
+        try:
+            with socket.create_connection((domain, 443), timeout=10) as sock:
+                with context.wrap_socket(sock, server_hostname=domain) as ssock:
+                    cert = ssock.getpeercert()
+                    
+                    # Parse dates
+                    not_before = datetime.strptime(cert['notBefore'], '%b %d %H:%M:%S %Y %Z')
+                    not_after = datetime.strptime(cert['notAfter'], '%b %d %H:%M:%S %Y %Z')
+                    
+                    # Calculate days until expiry
+                    days_remaining = (not_after - datetime.utcnow()).days
+                    
+                    # Get subject and issuer
+                    subject = dict(x[0] for x in cert.get('subject', []))
+                    issuer = dict(x[0] for x in cert.get('issuer', []))
+                    
+                    result = {
+                        'domain': domain,
+                        'valid': True,
+                        'subject': {
+                            'commonName': subject.get('commonName', ''),
+                            'organization': subject.get('organizationName', ''),
+                        },
+                        'issuer': {
+                            'commonName': issuer.get('commonName', ''),
+                            'organization': issuer.get('organizationName', ''),
+                        },
+                        'validFrom': not_before.isoformat(),
+                        'validTo': not_after.isoformat(),
+                        'daysRemaining': days_remaining,
+                        'expired': days_remaining < 0,
+                        'serialNumber': cert.get('serialNumber', ''),
+                        'version': cert.get('version', ''),
+                        'subjectAltNames': [x[1] for x in cert.get('subjectAltName', [])],
+                    }
+                    
+                    return Response(result)
+                    
+        except ssl.SSLError as e:
+            return Response({
+                'domain': domain,
+                'valid': False,
+                'error': f'SSL Error: {str(e)}'
+            })
+        except socket.timeout:
+            return Response({
+                'domain': domain,
+                'valid': False,
+                'error': 'Connection timed out'
+            })
+        except socket.gaierror:
+            return Response({
+                'domain': domain,
+                'valid': False,
+                'error': 'Could not resolve domain'
+            })
+            
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+
+
+@api_view(['POST'])
+def cors_checker_api(request):
+    """
+    Check CORS headers for a URL.
+    Tests with different origins to check CORS policy.
+    """
+    import requests
+    
+    try:
+        url = request.data.get('url', '').strip()
+        test_origin = request.data.get('origin', 'https://example.com')
+        
+        if not url:
+            return Response({'error': 'URL is required'}, status=400)
+        
+        # Add protocol if missing
+        if not url.startswith('http'):
+            url = 'https://' + url
+        
+        headers = {
+            'Origin': test_origin,
+            'User-Agent': 'Mozilla/5.0 CORS Checker'
+        }
+        
+        try:
+            # Send preflight OPTIONS request
+            options_response = requests.options(url, headers=headers, timeout=10)
+            
+            # Send GET request
+            get_response = requests.get(url, headers=headers, timeout=10)
+            
+            # Extract CORS headers
+            cors_headers = {
+                'Access-Control-Allow-Origin': get_response.headers.get('Access-Control-Allow-Origin', ''),
+                'Access-Control-Allow-Methods': get_response.headers.get('Access-Control-Allow-Methods', ''),
+                'Access-Control-Allow-Headers': get_response.headers.get('Access-Control-Allow-Headers', ''),
+                'Access-Control-Allow-Credentials': get_response.headers.get('Access-Control-Allow-Credentials', ''),
+                'Access-Control-Expose-Headers': get_response.headers.get('Access-Control-Expose-Headers', ''),
+                'Access-Control-Max-Age': get_response.headers.get('Access-Control-Max-Age', ''),
+            }
+            
+            # Determine if CORS is enabled
+            allow_origin = cors_headers['Access-Control-Allow-Origin']
+            cors_enabled = bool(allow_origin)
+            allows_any = allow_origin == '*'
+            allows_test_origin = allow_origin == test_origin or allow_origin == '*'
+            
+            result = {
+                'url': url,
+                'testOrigin': test_origin,
+                'corsEnabled': cors_enabled,
+                'allowsAnyOrigin': allows_any,
+                'allowsTestOrigin': allows_test_origin,
+                'headers': cors_headers,
+                'statusCode': get_response.status_code,
+            }
+            
+            return Response(result)
+            
+        except requests.exceptions.SSLError:
+            return Response({'error': 'SSL certificate verification failed'}, status=400)
+        except requests.exceptions.ConnectionError:
+            return Response({'error': 'Could not connect to the URL'}, status=400)
+        except requests.exceptions.Timeout:
+            return Response({'error': 'Request timed out'}, status=400)
+            
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)

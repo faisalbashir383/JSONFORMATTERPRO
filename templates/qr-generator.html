@@ -1,0 +1,473 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}QR Code Generator - Create QR Codes Online Free | JSON Formatters Pro{% endblock %}
+{% block meta_title %}QR Code Generator - Create QR Codes Online Free{% endblock %}
+{% block meta_description %}Generate QR codes online for free. Create QR codes for URLs, text, emails, and phone
+numbers.{% endblock %}
+{% block meta_keywords %}qr code generator, qr code maker, create qr code, free qr code{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/qr-generator/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "QR Code Generator",
+  "description": "Free online QR code generator",
+  "url": "{{ SITE_URL }}/qr-generator/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--color-primary) 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+    }
+
+    .generator-container {
+        display: grid;
+        grid-template-columns: 1fr 350px;
+        gap: 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .input-panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 2rem;
+    }
+
+    .input-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .input-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        transition: border-color 200ms ease;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: var(--color-primary);
+    }
+
+    textarea.input-field {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .options-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .color-picker {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .color-input {
+        width: 50px;
+        height: 40px;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .generate-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+    }
+
+    .generate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    }
+
+    .generate-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .qr-panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .qr-display {
+        background: white;
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        min-height: 250px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .qr-display img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .qr-placeholder {
+        color: #999;
+        font-size: 0.9rem;
+    }
+
+    .download-btn {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--color-primary);
+        background: transparent;
+        border: 2px solid var(--color-primary);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .download-btn:hover {
+        background: var(--color-primary);
+        color: white;
+    }
+
+    .download-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .preset-btns {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+    }
+
+    .preset-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .preset-btn:hover,
+    .preset-btn.active {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+    }
+
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+    }
+
+    .error-message {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s linear infinite;
+        margin-right: 8px;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @media (max-width: 900px) {
+        .generator-container {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>📱 QR Code Generator</h1>
+    <p>Create QR codes for URLs, text, emails, and more</p>
+</div>
+
+<div class="generator-container">
+    <div class="input-panel">
+        <div class="preset-btns">
+            <button class="preset-btn active" data-type="text">📝 Text</button>
+            <button class="preset-btn" data-type="url">🔗 URL</button>
+            <button class="preset-btn" data-type="email">📧 Email</button>
+            <button class="preset-btn" data-type="phone">📞 Phone</button>
+            <button class="preset-btn" data-type="wifi">📶 WiFi</button>
+        </div>
+
+        <div id="errorContainer"></div>
+
+        <div class="input-group">
+            <label class="input-label" id="inputLabel">Enter Text</label>
+            <textarea id="qrContent" class="input-field"
+                placeholder="Enter text or URL to generate QR code..."></textarea>
+        </div>
+
+        <div class="options-row">
+            <div class="input-group">
+                <label class="input-label">Size</label>
+                <select id="qrSize" class="input-field">
+                    <option value="128">Small (128px)</option>
+                    <option value="256" selected>Medium (256px)</option>
+                    <option value="512">Large (512px)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Foreground</label>
+                <div class="color-picker">
+                    <input type="color" id="fgColor" class="color-input" value="#000000">
+                    <span id="fgColorText">#000000</span>
+                </div>
+            </div>
+        </div>
+
+        <button id="generateBtn" class="generate-btn">📱 Generate QR Code</button>
+    </div>
+
+    <div class="qr-panel">
+        <div class="qr-display" id="qrDisplay">
+            <div class="qr-placeholder">QR code will appear here</div>
+        </div>
+        <button id="downloadBtn" class="download-btn" disabled>⬇️ Download PNG</button>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>💡 About QR Codes</h2>
+    <p>
+        QR (Quick Response) codes are 2D barcodes that can store URLs, text, contact info, WiFi credentials,
+        and more. They can be scanned by smartphone cameras for quick access to information.
+    </p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const qrContent = document.getElementById('qrContent');
+        const qrSize = document.getElementById('qrSize');
+        const fgColor = document.getElementById('fgColor');
+        const fgColorText = document.getElementById('fgColorText');
+        const generateBtn = document.getElementById('generateBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const qrDisplay = document.getElementById('qrDisplay');
+        const errorContainer = document.getElementById('errorContainer');
+        const inputLabel = document.getElementById('inputLabel');
+        const presetBtns = document.querySelectorAll('.preset-btn');
+
+        let currentQRImage = null;
+
+        // Preset button handlers
+        const presets = {
+            text: { label: 'Enter Text', placeholder: 'Enter text to generate QR code...' },
+            url: { label: 'Enter URL', placeholder: 'https://example.com' },
+            email: { label: 'Enter Email', placeholder: 'email@example.com' },
+            phone: { label: 'Enter Phone Number', placeholder: '+1234567890' },
+            wifi: { label: 'WiFi Details', placeholder: 'WIFI:T:WPA;S:NetworkName;P:Password;;' }
+        };
+
+        presetBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                presetBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const type = btn.dataset.type;
+                inputLabel.textContent = presets[type].label;
+                qrContent.placeholder = presets[type].placeholder;
+            });
+        });
+
+        // Color picker handler
+        fgColor.addEventListener('input', () => {
+            fgColorText.textContent = fgColor.value.toUpperCase();
+        });
+
+        // Generate QR code
+        generateBtn.addEventListener('click', async () => {
+            const content = qrContent.value.trim();
+
+            if (!content) {
+                showError('Please enter some text or URL to generate a QR code.');
+                return;
+            }
+
+            clearError();
+            setLoading(true);
+
+            try {
+                const response = await fetch('/api/qr-generator/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        content: content,
+                        size: parseInt(qrSize.value),
+                        fg_color: fgColor.value,
+                        bg_color: '#FFFFFF'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    currentQRImage = data.image;
+                    qrDisplay.innerHTML = `<img src="${data.image}" alt="QR Code" />`;
+                    downloadBtn.disabled = false;
+                } else {
+                    showError(data.error || 'Failed to generate QR code. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Failed to connect to the server. Please try again.');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // Download QR code
+        downloadBtn.addEventListener('click', () => {
+            if (!currentQRImage) return;
+
+            try {
+                // Convert base64 data URL to blob
+                const base64Data = currentQRImage.split(',')[1];
+                const byteCharacters = atob(base64Data);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: 'image/png' });
+
+                // Create download link
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'qr-code.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Download error:', error);
+                showError('Failed to download QR code. Please try again.');
+            }
+        });
+
+        function setLoading(loading) {
+            if (loading) {
+                generateBtn.disabled = true;
+                generateBtn.innerHTML = '<span class="loading-spinner"></span>Generating...';
+            } else {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '📱 Generate QR Code';
+            }
+        }
+
+        function showError(message) {
+            errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
+        }
+
+        function clearError() {
+            errorContainer.innerHTML = '';
+        }
+    });
+</script>
+{% endblock %}

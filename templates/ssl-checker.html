@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}SSL Certificate Checker - Check SSL Expiry & Details | JSON Formatters Pro{% endblock %}
+{% block meta_title %}SSL Certificate Checker - Check SSL Expiry & Details | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Check SSL certificate validity, expiry date, and details for any website. Verify HTTPS
+security, issuer information, and certificate chain. Free SSL checker tool.{% endblock %}
+{% block meta_keywords %}ssl certificate checker, ssl expiry checker, https checker, ssl certificate validator, ssl
+test, check ssl certificate online, ssl security checker, certificate expiry, ssl verification, website security check,
+ssl cert checker, tls checker, ssl certificate details, certificate validity, ssl expiration date, ssl certificate
+tester, https certificate check, free ssl checker{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/ssl-checker/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "SSL Certificate Checker",
+  "description": "Free online tool to check SSL certificate validity and expiry",
+  "url": "{{ SITE_URL }}/ssl-checker/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .checker-container {
+        max-width: 800px;
+        margin: 0 auto 2rem;
+    }
+
+    .search-box {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .domain-input {
+        flex: 1;
+        padding: 1rem 1.25rem;
+        font-size: 1.1rem;
+        background: var(--color-surface);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        transition: all 200ms ease;
+    }
+
+    .domain-input:focus {
+        outline: none;
+        border-color: #22c55e;
+    }
+
+    .check-btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+        white-space: nowrap;
+    }
+
+    .check-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+    }
+
+    .check-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .result-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+        box-shadow: 0 4px 16px var(--color-shadow);
+    }
+
+    [data-theme="dark"] .result-card {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .status-header {
+        padding: 2rem;
+        text-align: center;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .status-header.valid {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+    }
+
+    .status-header.invalid {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+    }
+
+    .status-header.warning {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.1) 100%);
+    }
+
+    .status-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .status-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .status-header.valid .status-text {
+        color: #22c55e;
+    }
+
+    .status-header.invalid .status-text {
+        color: #ef4444;
+    }
+
+    .status-header.warning .status-text {
+        color: #f59e0b;
+    }
+
+    .days-remaining {
+        font-size: 1.1rem;
+        color: var(--color-text-secondary);
+    }
+
+    .days-remaining strong {
+        color: var(--color-text);
+    }
+
+    .cert-details {
+        padding: 1.5rem;
+    }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+
+    .detail-item {
+        padding: 1rem;
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+    }
+
+    .detail-label {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.35rem;
+    }
+
+    .detail-value {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--color-text);
+        word-break: break-word;
+    }
+
+    .san-list {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+    }
+
+    .san-title {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.75rem;
+    }
+
+    .san-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .san-tag {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.6rem;
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--color-primary);
+        border-radius: var(--radius-sm);
+        font-family: 'SF Mono', monospace;
+    }
+
+    .loading {
+        text-align: center;
+        padding: 3rem;
+        color: var(--color-text-secondary);
+    }
+
+    .loading .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid var(--color-border);
+        border-top-color: #22c55e;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .error-message {
+        text-align: center;
+        padding: 2rem;
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        border-radius: var(--radius-md);
+    }
+
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .search-box {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>🔒 SSL Certificate Checker</h1>
+    <p>Check SSL certificate validity, expiry date, and security details for any website</p>
+</div>
+
+<div class="checker-container">
+    <div class="search-box">
+        <input type="text" id="domainInput" class="domain-input" placeholder="Enter domain (e.g., google.com)">
+        <button id="checkBtn" class="check-btn">🔍 Check SSL</button>
+    </div>
+
+    <div id="resultContainer">
+        <div class="result-card" style="display: none;" id="resultCard">
+            <div class="status-header" id="statusHeader">
+                <div class="status-icon" id="statusIcon">🔒</div>
+                <div class="status-text" id="statusText">Valid Certificate</div>
+                <div class="days-remaining" id="daysRemaining">-</div>
+            </div>
+            <div class="cert-details">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">Common Name</div>
+                        <div class="detail-value" id="commonName">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Organization</div>
+                        <div class="detail-value" id="organization">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Issuer</div>
+                        <div class="detail-value" id="issuer">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Valid From</div>
+                        <div class="detail-value" id="validFrom">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Valid To</div>
+                        <div class="detail-value" id="validTo">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Serial Number</div>
+                        <div class="detail-value" id="serialNumber">-</div>
+                    </div>
+                </div>
+                <div class="san-list" id="sanList" style="display: none;">
+                    <div class="san-title">Subject Alternative Names (SANs)</div>
+                    <div class="san-tags" id="sanTags"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="loadingState" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Checking SSL certificate...</p>
+        </div>
+
+        <div id="errorState" class="error-message" style="display: none;"></div>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>💡 About SSL Certificates</h2>
+    <p>
+        SSL (Secure Sockets Layer) certificates are digital certificates that authenticate a website's identity
+        and enable an encrypted connection. They are essential for protecting sensitive data and building trust
+        with visitors.
+    </p>
+    <p>
+        <strong>What this tool checks:</strong> Certificate validity, expiry date, issuer information,
+        common name, organization, and Subject Alternative Names (SANs).
+    </p>
+    <p>
+        <strong>Why it matters:</strong> Expired or invalid certificates can prevent users from accessing your
+        site and damage your SEO rankings. Regular monitoring helps avoid security issues.
+    </p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/ssl-checker.js' %}"></script>
+{% endblock %}

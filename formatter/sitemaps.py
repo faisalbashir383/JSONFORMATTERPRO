@@ -25,6 +25,17 @@ class StaticViewSitemap(Sitemap):
             'json_schema_page',
             'json_tree_page',
             'dummy_json_page',
+            # API & Network Tools
+            'http_headers_page',
+            'ip_info_page',
+            'dns_lookup_page',
+            'ssl_checker_page',
+            'cors_checker_page',
+            # Code Tools
+            'cron_builder_page',
+            'markdown_preview_page',
+            'sql_formatter_page',
+            'qr_generator_page',
         ]
     
     def location(self, item):

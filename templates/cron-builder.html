@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Cron Expression Builder - Visual Cron Job Generator | JSON Formatters Pro{% endblock %}
+{% block meta_title %}Cron Expression Builder - Visual Cron Job Generator | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Build cron expressions visually with our free cron builder. Generate cron schedules for
+Linux, Unix, and cron jobs.{% endblock %}
+{% block meta_keywords %}cron expression builder, cron generator, cron job builder, crontab generator, visual cron
+editor{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/cron-builder/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Cron Expression Builder",
+  "description": "Free online visual cron expression builder and generator",
+  "url": "{{ SITE_URL }}/cron-builder/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(59, 130, 246, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--color-primary) 0%, #3b82f6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .cron-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .cron-output {
+        background: var(--color-surface);
+        border: 2px solid var(--color-primary);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .cron-expression {
+        font-family: 'SF Mono', monospace;
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-primary);
+        margin-bottom: 0.75rem;
+        letter-spacing: 2px;
+    }
+
+    .cron-description {
+        font-size: 1.1rem;
+        color: var(--color-text);
+    }
+
+    .cron-copy-btn {
+        margin-top: 1rem;
+        padding: 0.5rem 1.5rem;
+        font-size: 0.9rem;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .cron-copy-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .cron-fields {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .cron-field {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 1.25rem;
+        text-align: center;
+    }
+
+    .cron-field-label {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+    }
+
+    .cron-field-value {
+        font-family: 'SF Mono', monospace;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-primary);
+        margin-bottom: 0.75rem;
+    }
+
+    .cron-field select {
+        width: 100%;
+        padding: 0.5rem;
+        font-size: 0.9rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+    }
+
+    .preset-section {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .preset-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 1rem;
+    }
+
+    .preset-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .preset-btn {
+        padding: 0.75rem 1rem;
+        font-size: 0.85rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+        text-align: left;
+    }
+
+    .preset-btn:hover {
+        border-color: var(--color-primary);
+        background: rgba(99, 102, 241, 0.05);
+    }
+
+    .preset-btn .cron {
+        font-family: 'SF Mono', monospace;
+        font-size: 0.75rem;
+        color: var(--color-primary);
+        display: block;
+        margin-top: 0.25rem;
+    }
+
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .cron-fields {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .cron-expression {
+            font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .cron-fields {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>⏰ Cron Expression Builder</h1>
+    <p>Build cron expressions visually with human-readable descriptions</p>
+</div>
+
+<div class="cron-container">
+    <div class="cron-output">
+        <div class="cron-expression" id="cronExpression">* * * * *</div>
+        <div class="cron-description" id="cronDescription">Every minute</div>
+        <button class="cron-copy-btn" id="copyBtn">📋 Copy Expression</button>
+    </div>
+
+    <div class="cron-fields">
+        <div class="cron-field">
+            <div class="cron-field-label">Minute</div>
+            <div class="cron-field-value" id="minuteValue">*</div>
+            <select id="minute">
+                <option value="*">Every minute (*)</option>
+                <option value="0">0</option>
+                <option value="15">15</option>
+                <option value="30">30</option>
+                <option value="45">45</option>
+                <option value="*/5">Every 5 min</option>
+                <option value="*/10">Every 10 min</option>
+                <option value="*/15">Every 15 min</option>
+                <option value="*/30">Every 30 min</option>
+            </select>
+        </div>
+        <div class="cron-field">
+            <div class="cron-field-label">Hour</div>
+            <div class="cron-field-value" id="hourValue">*</div>
+            <select id="hour">
+                <option value="*">Every hour (*)</option>
+                <option value="0">0 (Midnight)</option>
+                <option value="6">6 AM</option>
+                <option value="9">9 AM</option>
+                <option value="12">12 PM</option>
+                <option value="18">6 PM</option>
+                <option value="21">9 PM</option>
+                <option value="*/2">Every 2 hours</option>
+                <option value="*/6">Every 6 hours</option>
+                <option value="*/12">Every 12 hours</option>
+            </select>
+        </div>
+        <div class="cron-field">
+            <div class="cron-field-label">Day (Month)</div>
+            <div class="cron-field-value" id="dayValue">*</div>
+            <select id="day">
+                <option value="*">Every day (*)</option>
+                <option value="1">1st</option>
+                <option value="15">15th</option>
+                <option value="L">Last day</option>
+                <option value="1,15">1st & 15th</option>
+            </select>
+        </div>
+        <div class="cron-field">
+            <div class="cron-field-label">Month</div>
+            <div class="cron-field-value" id="monthValue">*</div>
+            <select id="month">
+                <option value="*">Every month (*)</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="6">June</option>
+                <option value="12">December</option>
+                <option value="*/3">Quarterly</option>
+            </select>
+        </div>
+        <div class="cron-field">
+            <div class="cron-field-label">Day (Week)</div>
+            <div class="cron-field-value" id="weekdayValue">*</div>
+            <select id="weekday">
+                <option value="*">Every day (*)</option>
+                <option value="0">Sunday</option>
+                <option value="1">Monday</option>
+                <option value="2">Tuesday</option>
+                <option value="3">Wednesday</option>
+                <option value="4">Thursday</option>
+                <option value="5">Friday</option>
+                <option value="6">Saturday</option>
+                <option value="1-5">Mon-Fri</option>
+                <option value="0,6">Weekends</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="preset-section">
+        <div class="preset-title">📋 Common Presets</div>
+        <div class="preset-grid">
+            <button class="preset-btn" data-cron="* * * * *">Every minute<span class="cron">* * * * *</span></button>
+            <button class="preset-btn" data-cron="*/5 * * * *">Every 5 minutes<span class="cron">*/5 * * *
+                    *</span></button>
+            <button class="preset-btn" data-cron="0 * * * *">Every hour<span class="cron">0 * * * *</span></button>
+            <button class="preset-btn" data-cron="0 0 * * *">Daily at midnight<span class="cron">0 0 * *
+                    *</span></button>
+            <button class="preset-btn" data-cron="0 9 * * 1-5">Weekdays 9 AM<span class="cron">0 9 * *
+                    1-5</span></button>
+            <button class="preset-btn" data-cron="0 0 * * 0">Weekly (Sunday)<span class="cron">0 0 * * 0</span></button>
+            <button class="preset-btn" data-cron="0 0 1 * *">Monthly (1st)<span class="cron">0 0 1 * *</span></button>
+            <button class="preset-btn" data-cron="0 0 1 1 *">Yearly (Jan 1)<span class="cron">0 0 1 1 *</span></button>
+        </div>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>💡 About Cron Expressions</h2>
+    <p>
+        Cron is a time-based job scheduler in Unix-like operating systems. A cron expression consists of
+        5 fields that define when a job should run: Minute (0-59), Hour (0-23), Day of Month (1-31),
+        Month (1-12), and Day of Week (0-6, where 0 is Sunday).
+    </p>
+    <p>
+        <strong>Special characters:</strong> * (any), */n (every n), - (range), , (list)
+    </p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/cron-builder.js' %}"></script>
+{% endblock %}

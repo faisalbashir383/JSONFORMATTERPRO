@@ -1,0 +1,406 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}HTTP Headers Parser - Analyze HTTP Response Headers Online | JSON Formatters Pro{% endblock %}
+{% block meta_title %}HTTP Headers Parser - Analyze HTTP Response Headers Online | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Parse and analyze HTTP headers online. Understand Content-Type, Cache-Control, CORS headers,
+security headers, and more. Free HTTP header analyzer and decoder tool.{% endblock %}
+{% block meta_keywords %}http headers parser, http header analyzer, response headers checker, http header decoder, parse
+http headers, view http headers online, analyze headers, content-type header, cache-control header, http response
+headers, request headers analyzer, header viewer, http header tool, security headers checker, cors headers,
+x-frame-options, content-security-policy, strict-transport-security, http header parser online free, header analysis
+tool, web headers checker{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/http-headers/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "HTTP Headers Parser",
+  "description": "Free online tool to parse and analyze HTTP response headers",
+  "url": "{{ SITE_URL }}/http-headers/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(34, 197, 94, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--color-primary) 0%, #22c55e 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .parser-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 16px var(--color-shadow);
+        overflow: hidden;
+    }
+
+    [data-theme="dark"] .panel {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    [data-theme="dark"] .panel-header {
+        background: rgba(30, 41, 59, 0.7);
+    }
+
+    .panel-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 0;
+    }
+
+    .panel-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .action-btn {
+        background: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        padding: 0.35rem 0.75rem;
+        cursor: pointer;
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        transition: all 200ms ease;
+    }
+
+    .action-btn:hover {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+    }
+
+    .input-textarea,
+    .output-content {
+        width: 100%;
+        min-height: 400px;
+        flex: 1;
+        padding: 1.25rem;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.9rem;
+        line-height: 1.7;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: none;
+        resize: vertical;
+    }
+
+    [data-theme="dark"] .input-textarea,
+    [data-theme="dark"] .output-content {
+        background: rgba(10, 15, 26, 0.95);
+    }
+
+    .input-textarea:focus {
+        outline: none;
+    }
+
+    .output-content {
+        overflow-y: auto;
+    }
+
+    .header-item {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--color-border);
+        transition: background 150ms ease;
+    }
+
+    .header-item:hover {
+        background: rgba(99, 102, 241, 0.05);
+    }
+
+    .header-item:last-child {
+        border-bottom: none;
+    }
+
+    .header-name {
+        font-weight: 600;
+        color: var(--color-primary);
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .header-value {
+        color: var(--color-text);
+        font-size: 0.85rem;
+        word-break: break-all;
+    }
+
+    .header-desc {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.35rem;
+        font-style: italic;
+    }
+
+    .header-badge {
+        display: inline-block;
+        font-size: 0.65rem;
+        padding: 0.15rem 0.4rem;
+        border-radius: 0.2rem;
+        margin-left: 0.5rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .badge-security {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+
+    .badge-cache {
+        background: rgba(34, 197, 94, 0.1);
+        color: #22c55e;
+    }
+
+    .badge-cors {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+    }
+
+    .badge-content {
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--color-primary);
+    }
+
+    .parse-btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin: 1.5rem auto;
+    }
+
+    .parse-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: var(--color-text-secondary);
+    }
+
+    .empty-state .icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .stats-bar {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .stat-item {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 0.75rem 1.5rem;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-primary);
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+    }
+
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 900px) {
+        .parser-container {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .input-textarea,
+        .output-content {
+            min-height: 300px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>🌐 HTTP Headers Parser</h1>
+    <p>Paste HTTP response headers to parse and analyze them with detailed explanations</p>
+</div>
+
+<div class="stats-bar" id="statsBar" style="display: none;">
+    <div class="stat-item">
+        <div class="stat-value" id="totalHeaders">0</div>
+        <div class="stat-label">Total Headers</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value" id="securityHeaders">0</div>
+        <div class="stat-label">Security</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value" id="cacheHeaders">0</div>
+        <div class="stat-label">Cache</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value" id="corsHeaders">0</div>
+        <div class="stat-label">CORS</div>
+    </div>
+</div>
+
+<div class="parser-container">
+    <!-- Input Panel -->
+    <div class="panel">
+        <div class="panel-header">
+            <h2 class="panel-title">📥 Paste Headers</h2>
+            <div class="panel-actions">
+                <button id="sampleBtn" class="action-btn">📝 Sample</button>
+                <button id="clearBtn" class="action-btn">🗑️ Clear</button>
+            </div>
+        </div>
+        <textarea id="headerInput" class="input-textarea" placeholder="Paste HTTP headers here...
+
+Example:
+Content-Type: application/json
+Cache-Control: max-age=3600
+X-Frame-Options: DENY
+Access-Control-Allow-Origin: *"></textarea>
+    </div>
+
+    <!-- Output Panel -->
+    <div class="panel">
+        <div class="panel-header">
+            <h2 class="panel-title">📊 Parsed Headers</h2>
+            <div class="panel-actions">
+                <button id="copyBtn" class="action-btn">📋 Copy JSON</button>
+            </div>
+        </div>
+        <div id="parsedOutput" class="output-content">
+            <div class="empty-state">
+                <div class="icon">📋</div>
+                <p>Paste headers on the left and click "Parse Headers"</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button id="parseBtn" class="parse-btn">
+    <span>🔍</span> Parse Headers
+</button>
+
+<div class="info-section">
+    <h2>💡 About HTTP Headers Parser</h2>
+    <p>
+        HTTP headers are key-value pairs sent between clients and servers during HTTP requests and responses.
+        They carry important metadata about the request or response, including content type, caching directives,
+        security policies, and more.
+    </p>
+    <p>
+        <strong>Common header categories:</strong>
+    </p>
+    <p>
+        <strong>Security:</strong> X-Frame-Options, Content-Security-Policy, Strict-Transport-Security,
+        X-Content-Type-Options<br>
+        <strong>Caching:</strong> Cache-Control, ETag, Last-Modified, Expires<br>
+        <strong>CORS:</strong> Access-Control-Allow-Origin, Access-Control-Allow-Methods,
+        Access-Control-Allow-Headers<br>
+        <strong>Content:</strong> Content-Type, Content-Length, Content-Encoding
+    </p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/http-headers.js' %}"></script>
+{% endblock %}

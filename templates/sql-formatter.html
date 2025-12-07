@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}SQL Formatter - Format & Beautify SQL Queries Online | JSON Formatters Pro{% endblock %}
+{% block meta_title %}SQL Formatter - Format & Beautify SQL Queries Online | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Format and beautify SQL queries online for free. Clean up messy SQL with proper indentation,
+uppercase keywords, and readable formatting. Supports MySQL, PostgreSQL, and more.{% endblock %}
+{% block meta_keywords %}sql formatter, sql beautifier, format sql online, sql query formatter, sql pretty print, sql
+indenter, beautify sql, sql online formatter, mysql formatter, postgresql formatter, sql code formatter, sql formatting
+tool, free sql formatter, sql syntax formatter{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/sql-formatter/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "SQL Formatter",
+  "description": "Free online SQL formatter and beautifier",
+  "url": "{{ SITE_URL }}/sql-formatter/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(249, 115, 22, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--color-primary) 0%, #f97316 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1rem;
+    }
+
+    .formatter-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        min-height: 500px;
+    }
+
+    .panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .panel-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    .panel-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .action-btn {
+        background: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        padding: 0.35rem 0.75rem;
+        cursor: pointer;
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        transition: all 200ms ease;
+    }
+
+    .action-btn:hover {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+    }
+
+    .sql-textarea {
+        flex: 1;
+        width: 100%;
+        padding: 1.25rem;
+        font-family: 'SF Mono', monospace;
+        font-size: 0.9rem;
+        line-height: 1.7;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: none;
+        resize: none;
+    }
+
+    .sql-textarea:focus {
+        outline: none;
+    }
+
+    .options-bar {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .option-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .option-label {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+    }
+
+    .option-select {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        background: var(--color-surface);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+    }
+
+    .format-btn {
+        padding: 1rem 3rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+        margin: 1.5rem auto;
+        display: block;
+    }
+
+    .format-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+    }
+
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+    }
+
+    @media (max-width: 900px) {
+        .formatter-container {
+            grid-template-columns: 1fr;
+        }
+
+        .panel {
+            min-height: 300px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>🗃️ SQL Formatter</h1>
+    <p>Format and beautify your SQL queries with proper indentation</p>
+</div>
+
+<div class="options-bar">
+    <div class="option-group">
+        <span class="option-label">Indent:</span>
+        <select id="indentSize" class="option-select">
+            <option value="2">2 spaces</option>
+            <option value="4" selected>4 spaces</option>
+            <option value="tab">Tab</option>
+        </select>
+    </div>
+    <div class="option-group">
+        <span class="option-label">Keywords:</span>
+        <select id="keywordCase" class="option-select">
+            <option value="upper" selected>UPPERCASE</option>
+            <option value="lower">lowercase</option>
+            <option value="preserve">Preserve</option>
+        </select>
+    </div>
+</div>
+
+<div class="formatter-container">
+    <div class="panel">
+        <div class="panel-header">
+            <h2 class="panel-title">📥 Input SQL</h2>
+            <div class="panel-actions">
+                <button id="sampleBtn" class="action-btn">📝 Sample</button>
+                <button id="clearBtn" class="action-btn">🗑️ Clear</button>
+            </div>
+        </div>
+        <textarea id="inputSql" class="sql-textarea" placeholder="Paste your SQL query here..."></textarea>
+    </div>
+
+    <div class="panel">
+        <div class="panel-header">
+            <h2 class="panel-title">📤 Formatted SQL</h2>
+            <div class="panel-actions">
+                <button id="copyBtn" class="action-btn">📋 Copy</button>
+            </div>
+        </div>
+        <textarea id="outputSql" class="sql-textarea" readonly
+            placeholder="Formatted SQL will appear here..."></textarea>
+    </div>
+</div>
+
+<button id="formatBtn" class="format-btn">🎨 Format SQL</button>
+
+<div class="info-section">
+    <h2>💡 About SQL Formatter</h2>
+    <p>
+        This tool formats your SQL queries with proper indentation, line breaks, and consistent keyword casing.
+        It supports common SQL statements including SELECT, INSERT, UPDATE, DELETE, CREATE, and JOIN clauses.
+    </p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/sql-formatter.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,393 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}IP Address Lookup - IP Geolocation & Info Tool | JSON Formatters Pro{% endblock %}
+{% block meta_title %}IP Address Lookup - IP Geolocation & Info Tool | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Look up any IP address to get geolocation, country, city, ISP, and more. Find your public IP
+address and get detailed location information. Free IP lookup tool.{% endblock %}
+{% block meta_keywords %}ip address lookup, ip geolocation, what is my ip, my ip address, ip location finder, ip to
+location, geoip lookup, ip country finder, ip address locator, find ip location, ip tracker, ip info, ip details, public
+ip address, check ip address, ip geolocation api, ip to country, ip city lookup, ip isp lookup, ip whois, free ip
+lookup, ipv4 lookup, ipv6 lookup, ip address checker online{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/ip-info/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "IP Address Lookup Tool",
+  "description": "Free online tool to lookup IP address geolocation and details",
+  "url": "{{ SITE_URL }}/ip-info/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(6, 182, 212, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--color-primary) 0%, #06b6d4 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .lookup-container {
+        max-width: 800px;
+        margin: 0 auto 2rem;
+    }
+
+    .search-box {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .ip-input {
+        flex: 1;
+        padding: 1rem 1.25rem;
+        font-size: 1.1rem;
+        background: var(--color-surface);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        transition: all 200ms ease;
+    }
+
+    .ip-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+    }
+
+    .ip-input::placeholder {
+        color: var(--color-text-secondary);
+    }
+
+    .lookup-btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+        white-space: nowrap;
+    }
+
+    .lookup-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(6, 182, 212, 0.4);
+    }
+
+    .lookup-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .my-ip-btn {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-primary);
+        background: var(--color-surface);
+        border: 2px solid var(--color-primary);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .my-ip-btn:hover {
+        background: var(--color-primary);
+        color: white;
+    }
+
+    .result-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+        box-shadow: 0 4px 16px var(--color-shadow);
+    }
+
+    [data-theme="dark"] .result-card {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .result-header {
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+        border-bottom: 1px solid var(--color-border);
+        text-align: center;
+    }
+
+    .ip-display {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-text);
+        font-family: 'SF Mono', 'Monaco', monospace;
+        margin-bottom: 0.5rem;
+    }
+
+    .location-display {
+        font-size: 1.1rem;
+        color: var(--color-text-secondary);
+    }
+
+    .flag-emoji {
+        font-size: 1.5rem;
+        margin-right: 0.5rem;
+    }
+
+    .result-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1px;
+        background: var(--color-border);
+    }
+
+    .result-item {
+        padding: 1.25rem;
+        background: var(--color-surface);
+    }
+
+    [data-theme="dark"] .result-item {
+        background: rgba(15, 23, 42, 0.9);
+    }
+
+    .result-label {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.35rem;
+    }
+
+    .result-value {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        word-break: break-word;
+    }
+
+    .map-container {
+        height: 300px;
+        background: var(--color-bg);
+        border-top: 1px solid var(--color-border);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .map-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+    }
+
+    .map-coords {
+        position: absolute;
+        bottom: 1rem;
+        left: 1rem;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-sm);
+        font-family: 'SF Mono', monospace;
+        font-size: 0.85rem;
+    }
+
+    .loading {
+        text-align: center;
+        padding: 3rem;
+        color: var(--color-text-secondary);
+    }
+
+    .loading .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid var(--color-border);
+        border-top-color: var(--color-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .error-message {
+        text-align: center;
+        padding: 2rem;
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        border-radius: var(--radius-md);
+    }
+
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .search-box {
+            flex-direction: column;
+        }
+
+        .ip-display {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>📍 IP Address Lookup</h1>
+    <p>Get geolocation, country, city, ISP, and more for any IP address</p>
+</div>
+
+<div class="lookup-container">
+    <div class="search-box">
+        <input type="text" id="ipInput" class="ip-input" placeholder="Enter IP address (e.g., 8.8.8.8)">
+        <button id="myIpBtn" class="my-ip-btn">🏠 My IP</button>
+        <button id="lookupBtn" class="lookup-btn">🔍 Lookup</button>
+    </div>
+
+    <div id="resultContainer">
+        <div class="result-card" style="display: none;" id="resultCard">
+            <div class="result-header">
+                <div class="ip-display" id="displayIp">-</div>
+                <div class="location-display">
+                    <span class="flag-emoji" id="flagEmoji">🌍</span>
+                    <span id="locationText">-</span>
+                </div>
+            </div>
+            <div class="result-grid">
+                <div class="result-item">
+                    <div class="result-label">Country</div>
+                    <div class="result-value" id="country">-</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Region</div>
+                    <div class="result-value" id="region">-</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">City</div>
+                    <div class="result-value" id="city">-</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">ZIP Code</div>
+                    <div class="result-value" id="zip">-</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Timezone</div>
+                    <div class="result-value" id="timezone">-</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">ISP</div>
+                    <div class="result-value" id="isp">-</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Organization</div>
+                    <div class="result-value" id="org">-</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">AS Number</div>
+                    <div class="result-value" id="asn">-</div>
+                </div>
+            </div>
+            <div class="map-container">
+                <div class="map-placeholder" id="mapPlaceholder">
+                    📍 Map coordinates available
+                </div>
+                <div class="map-coords" id="mapCoords" style="display: none;">
+                    Lat: <span id="lat">-</span>, Lon: <span id="lon">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="loadingState" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Looking up IP address...</p>
+        </div>
+
+        <div id="errorState" class="error-message" style="display: none;"></div>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>💡 About IP Address Lookup</h2>
+    <p>
+        An IP (Internet Protocol) address is a unique identifier assigned to every device connected to the internet.
+        This tool allows you to look up any IP address and get detailed geolocation information including country,
+        city, timezone, ISP, and approximate coordinates.
+    </p>
+    <p>
+        <strong>What you can find:</strong> Country and region, city and ZIP code, timezone, ISP (Internet Service
+        Provider),
+        organization name, AS number, and geographic coordinates.
+    </p>
+    <p>
+        <strong>Use cases:</strong> Security analysis, fraud detection, geo-targeting, troubleshooting network issues,
+        understanding user location, and verifying VPN connections.
+    </p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/ip-info.js' %}"></script>
+{% endblock %}

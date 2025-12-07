@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}DNS Lookup Tool - Check DNS Records Online | JSON Formatters Pro{% endblock %}
+{% block meta_title %}DNS Lookup Tool - Check DNS Records Online | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Look up DNS records for any domain. Check A, AAAA, MX, TXT, NS, and CNAME records. Free
+online DNS lookup and propagation checker tool.{% endblock %}
+{% block meta_keywords %}dns lookup, dns checker, dns record lookup, mx record lookup, a record lookup, nameserver
+lookup, txt record checker, dns propagation checker, check dns records, dns query tool, domain dns lookup, nslookup
+online, dns record finder, cname lookup, aaaa record lookup, dns diagnostic tool, free dns lookup, dns record check,
+domain nameserver lookup, dns testing tool{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/dns-lookup/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DNS Lookup Tool",
+  "description": "Free online tool to lookup DNS records for any domain",
+  "url": "{{ SITE_URL }}/dns-lookup/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--color-primary) 0%, #a855f7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .lookup-container {
+        max-width: 800px;
+        margin: 0 auto 2rem;
+    }
+
+    .search-box {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .domain-input {
+        flex: 1;
+        padding: 1rem 1.25rem;
+        font-size: 1.1rem;
+        background: var(--color-surface);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        transition: all 200ms ease;
+    }
+
+    .domain-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+    }
+
+    .lookup-btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+        white-space: nowrap;
+    }
+
+    .lookup-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+    }
+
+    .lookup-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .result-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+        box-shadow: 0 4px 16px var(--color-shadow);
+    }
+
+    [data-theme="dark"] .result-card {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .result-header {
+        padding: 1.25rem 1.5rem;
+        background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .domain-display {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-text);
+        font-family: 'SF Mono', monospace;
+    }
+
+    .record-section {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .record-section:last-child {
+        border-bottom: none;
+    }
+
+    .record-type {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #a855f7, #9333ea);
+        padding: 0.35rem 0.75rem;
+        border-radius: var(--radius-sm);
+        margin-bottom: 0.75rem;
+    }
+
+    .record-values {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .record-value {
+        font-family: 'SF Mono', monospace;
+        font-size: 0.9rem;
+        color: var(--color-text);
+        padding: 0.5rem 0.75rem;
+        background: var(--color-bg);
+        border-radius: var(--radius-sm);
+        word-break: break-all;
+    }
+
+    .no-records {
+        color: var(--color-text-secondary);
+        font-style: italic;
+    }
+
+    .loading {
+        text-align: center;
+        padding: 3rem;
+        color: var(--color-text-secondary);
+    }
+
+    .loading .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid var(--color-border);
+        border-top-color: #a855f7;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .error-message {
+        text-align: center;
+        padding: 2rem;
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        border-radius: var(--radius-md);
+    }
+
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .search-box {
+            flex-direction: column;
+        }
+
+        .ip-detail-grid {
+            grid-template-columns: 1fr !important;
+        }
+    }
+
+    /* IP Details Cards */
+    .ip-details-section {
+        padding: 1.5rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .ip-details-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .ip-detail-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 1rem;
+    }
+
+    .ip-card {
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+        padding: 1.25rem;
+        border: 1px solid var(--color-border);
+    }
+
+    .ip-card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .ip-flag {
+        font-size: 2rem;
+    }
+
+    .ip-address {
+        font-family: 'SF Mono', monospace;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--color-primary);
+    }
+
+    .ip-location {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+    }
+
+    .ip-info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .ip-info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+    }
+
+    .ip-info-label {
+        font-size: 0.7rem;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .ip-info-value {
+        font-size: 0.85rem;
+        color: var(--color-text);
+        font-weight: 500;
+    }
+
+    .ip-info-item.full-width {
+        grid-column: 1 / -1;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>🔍 DNS Lookup Tool</h1>
+    <p>Look up DNS records for any domain including A, AAAA, MX, TXT, and NS records</p>
+</div>
+
+<div class="lookup-container">
+    <div class="search-box">
+        <input type="text" id="domainInput" class="domain-input" placeholder="Enter domain (e.g., google.com)">
+        <button id="lookupBtn" class="lookup-btn">🔍 Lookup DNS</button>
+    </div>
+
+    <div id="resultContainer">
+        <div class="result-card" style="display: none;" id="resultCard">
+            <div class="result-header">
+                <div class="domain-display" id="displayDomain">-</div>
+            </div>
+            <div id="recordsContainer"></div>
+        </div>
+
+        <div id="loadingState" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Looking up DNS records...</p>
+        </div>
+
+        <div id="errorState" class="error-message" style="display: none;"></div>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>💡 About DNS Lookup</h2>
+    <p>
+        DNS (Domain Name System) is the phonebook of the internet. It translates human-readable domain names
+        like "google.com" into IP addresses that computers use to communicate. This tool lets you look up
+        various DNS records for any domain.
+    </p>
+    <p>
+        <strong>Common DNS Record Types:</strong><br>
+        <strong>A Record:</strong> Maps domain to IPv4 address<br>
+        <strong>AAAA Record:</strong> Maps domain to IPv6 address<br>
+        <strong>MX Record:</strong> Mail server records<br>
+        <strong>TXT Record:</strong> Text records (SPF, DKIM, etc.)<br>
+        <strong>NS Record:</strong> Nameserver records<br>
+        <strong>CNAME Record:</strong> Canonical name (alias)
+    </p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/dns-lookup.js' %}"></script>
+{% endblock %}

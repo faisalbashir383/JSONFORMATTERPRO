@@ -28,6 +28,27 @@ urlpatterns = [
     path('json-tree/', views.json_tree_page, name='json_tree_page'),
     path('dummy-json/', views.dummy_json_page, name='dummy_json_page'),
     
+    # API & Network Tool Pages
+    path('http-headers/', views.http_headers_page, name='http_headers_page'),
+    path('ip-info/', views.ip_info_page, name='ip_info_page'),
+    path('dns-lookup/', views.dns_lookup_page, name='dns_lookup_page'),
+    path('ssl-checker/', views.ssl_checker_page, name='ssl_checker_page'),
+    path('cors-checker/', views.cors_checker_page, name='cors_checker_page'),
+    
+    # API & Network Tool API Endpoints
+    path('api/dns-lookup/', views.dns_lookup_api, name='dns_lookup_api'),
+    path('api/ssl-checker/', views.ssl_checker_api, name='ssl_checker_api'),
+    path('api/cors-checker/', views.cors_checker_api, name='cors_checker_api'),
+    
+    # Code Tool Pages
+    path('cron-builder/', views.cron_builder_page, name='cron_builder_page'),
+    path('markdown-preview/', views.markdown_preview_page, name='markdown_preview_page'),
+    path('sql-formatter/', views.sql_formatter_page, name='sql_formatter_page'),
+    path('qr-generator/', views.qr_generator_page, name='qr_generator_page'),
+    
+    # Code Tool API Endpoints
+    path('api/qr-generator/', views.generate_qr_code, name='generate_qr_code'),
+    
     path('robots.txt', views.robots_txt, name='robots_txt'),
     
     # Blog URLs
