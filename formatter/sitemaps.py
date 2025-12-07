@@ -13,7 +13,19 @@ class StaticViewSitemap(Sitemap):
     changefreq = 'weekly'
     
     def items(self):
-        return ['index', 'base64_page', 'blog_list']
+        return [
+            'index',
+            'base64_page',
+            'blog_list',
+            'about_page',
+            'contact_page',
+            'privacy_page',
+            'json_to_yaml_page',
+            'json_diff_page',
+            'json_schema_page',
+            'json_tree_page',
+            'dummy_json_page',
+        ]
     
     def location(self, item):
         return reverse(item)
