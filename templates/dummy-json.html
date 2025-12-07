@@ -1,0 +1,443 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dummy JSON Generator - Create Fake JSON Data Online | JSON Formatters Pro{% endblock %}
+{% block meta_title %}Dummy JSON Generator - Create Fake JSON Data Online | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Generate random dummy JSON data instantly. Create fake JSON with names, emails, addresses,
+dates, and more. Customizable fields and array sizes. Perfect for testing and development.{% endblock %}
+{% block meta_keywords %}dummy json generator, fake json generator, random json generator, json mock data, test json
+generator, sample json data, json placeholder, fake data generator, mock json api, random json data, json test data
+generator, fake json online, generate dummy data, json data faker, mock data generator, api mock data, test data
+generator json, fake json api, random json object, json sample generator, dummy data creator, fake user json, random
+address json, mock json generator online free, json fixture generator, seed data generator, free json generator{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/dummy-json/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Free Dummy JSON Generator",
+  "description": "Free online tool to generate random dummy JSON data for testing",
+  "url": "{{ SITE_URL }}/dummy-json/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(245, 158, 11, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--color-primary) 0%, #f59e0b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .generator-container {
+        display: grid;
+        grid-template-columns: 350px 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Settings Panel */
+    .settings-panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1.5rem;
+        box-shadow: 0 4px 16px var(--color-shadow);
+    }
+
+    [data-theme="dark"] .settings-panel {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .settings-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .setting-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .setting-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.5rem;
+    }
+
+    .setting-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        transition: border-color 200ms ease;
+    }
+
+    .setting-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+    }
+
+    .setting-select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+    }
+
+    .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        padding: 0.5rem 0.75rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--color-border);
+        transition: all 200ms ease;
+    }
+
+    .checkbox-item:hover {
+        border-color: var(--color-primary);
+    }
+
+    .checkbox-item input {
+        cursor: pointer;
+    }
+
+    .checkbox-item.checked {
+        background: rgba(99, 102, 241, 0.1);
+        border-color: var(--color-primary);
+    }
+
+    .checkbox-label {
+        font-size: 0.85rem;
+        color: var(--color-text);
+    }
+
+    .generate-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .generate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+    }
+
+    /* Output Panel */
+    .output-panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 16px var(--color-shadow);
+        overflow: hidden;
+    }
+
+    [data-theme="dark"] .output-panel {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    [data-theme="dark"] .panel-header {
+        background: rgba(30, 41, 59, 0.7);
+    }
+
+    .panel-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 0;
+    }
+
+    .panel-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .copy-btn,
+    .download-btn {
+        background: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        padding: 0.35rem 0.75rem;
+        cursor: pointer;
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        transition: all 200ms ease;
+    }
+
+    .copy-btn:hover,
+    .download-btn:hover {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+    }
+
+    .output-textarea {
+        width: 100%;
+        min-height: 500px;
+        flex: 1;
+        padding: 1.25rem;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.9rem;
+        line-height: 1.7;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: none;
+        resize: vertical;
+    }
+
+    [data-theme="dark"] .output-textarea {
+        background: rgba(10, 15, 26, 0.95);
+    }
+
+    .output-textarea:focus {
+        outline: none;
+    }
+
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 900px) {
+        .generator-container {
+            grid-template-columns: 1fr;
+        }
+
+        .settings-panel {
+            order: 1;
+        }
+
+        .output-panel {
+            order: 2;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .output-textarea {
+            min-height: 350px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>🎲 Free Dummy JSON Generator</h1>
+    <p>Generate random fake JSON data for testing, prototyping, and development</p>
+</div>
+
+<div class="generator-container">
+    <!-- Settings Panel -->
+    <div class="settings-panel">
+        <h2 class="settings-title">⚙️ Configuration</h2>
+
+        <div class="setting-group">
+            <label class="setting-label">Number of Records</label>
+            <input type="number" id="recordCount" class="setting-input" value="5" min="1" max="100">
+        </div>
+
+        <div class="setting-group">
+            <label class="setting-label">Output Format</label>
+            <select id="outputFormat" class="setting-select">
+                <option value="array">Array of Objects</option>
+                <option value="object">Single Object</option>
+                <option value="nested">Nested Structure</option>
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label class="setting-label">Include Fields</label>
+            <div class="checkbox-group" id="fieldOptions">
+                <label class="checkbox-item checked">
+                    <input type="checkbox" value="id" checked>
+                    <span class="checkbox-label">ID</span>
+                </label>
+                <label class="checkbox-item checked">
+                    <input type="checkbox" value="name" checked>
+                    <span class="checkbox-label">Name</span>
+                </label>
+                <label class="checkbox-item checked">
+                    <input type="checkbox" value="email" checked>
+                    <span class="checkbox-label">Email</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" value="phone">
+                    <span class="checkbox-label">Phone</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" value="address">
+                    <span class="checkbox-label">Address</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" value="company">
+                    <span class="checkbox-label">Company</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" value="date">
+                    <span class="checkbox-label">Date</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" value="avatar">
+                    <span class="checkbox-label">Avatar URL</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" value="bio">
+                    <span class="checkbox-label">Bio</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" value="age">
+                    <span class="checkbox-label">Age</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" value="isActive">
+                    <span class="checkbox-label">Active Status</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" value="salary">
+                    <span class="checkbox-label">Salary</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="setting-group">
+            <label class="setting-label">Indent Size</label>
+            <select id="indentSize" class="setting-select">
+                <option value="2" selected>2 Spaces</option>
+                <option value="4">4 Spaces</option>
+                <option value="tab">Tab</option>
+                <option value="0">Minified</option>
+            </select>
+        </div>
+
+        <button id="generateBtn" class="generate-btn">
+            <span>🎲</span> Generate JSON
+        </button>
+    </div>
+
+    <!-- Output Panel -->
+    <div class="output-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">Generated JSON</h2>
+            <div class="panel-actions">
+                <button id="copyBtn" class="copy-btn">📋 Copy</button>
+                <button id="downloadBtn" class="download-btn">⬇ Download</button>
+            </div>
+        </div>
+        <textarea id="jsonOutput" class="output-textarea" readonly
+            placeholder="Click 'Generate JSON' to create dummy data..."></textarea>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>💡 About Dummy JSON Generator</h2>
+    <p>
+        Create realistic fake JSON data for testing, prototyping, and development. Our generator creates
+        random but realistic-looking data including names, emails, addresses, phone numbers, and more.
+        Perfect for API testing, frontend development, database seeding, and demo applications.
+    </p>
+    <p>
+        <strong>Use cases:</strong> API mocking, unit testing, database seeding, UI prototyping,
+        demo data, load testing, documentation examples.
+    </p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/dummy-json.js' %}"></script>
+{% endblock %}

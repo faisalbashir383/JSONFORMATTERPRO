@@ -26,6 +26,7 @@ urlpatterns = [
     path('json-diff/', views.json_diff_page, name='json_diff_page'),
     path('json-schema/', views.json_schema_page, name='json_schema_page'),
     path('json-tree/', views.json_tree_page, name='json_tree_page'),
+    path('dummy-json/', views.dummy_json_page, name='dummy_json_page'),
     
     path('robots.txt', views.robots_txt, name='robots_txt'),
     

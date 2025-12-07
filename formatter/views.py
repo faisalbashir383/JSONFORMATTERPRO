@@ -456,6 +456,11 @@ def json_tree_page(request):
     return render(request, 'json-tree.html')
 
 
+def dummy_json_page(request):
+    """Render the Dummy JSON Generator page"""
+    return render(request, 'dummy-json.html')
+
+
 
 def robots_txt(request):
     """Serve robots.txt file"""
