@@ -1,0 +1,370 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}JSON Diff Tool - Compare JSON Online Free | JSON Formatters Pro{% endblock %}
+{% block meta_title %}JSON Diff Tool - Compare JSON Online Free | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Compare two JSON objects and find differences instantly. Free online JSON diff tool with
+visual highlighting. Identify additions, deletions, and changes in JSON data.{% endblock %}
+{% block meta_keywords %}json diff, json compare, compare json, json difference, json comparison tool, diff json online,
+json diff viewer, compare two json, json compare online free, json delta, json diff tool, json comparator, json file
+compare, compare json objects, json diff checker, json comparison online, find difference in json, json merge diff, json
+patch diff, side by side json compare, json diff api, visual json diff, json diff npm, deep json compare, json object
+diff, compare json files online free, json diff javascript, json structure compare, api response diff, json change
+detector, json diff highlighter, best json diff tool{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/json-diff/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "JSON Diff Tool",
+  "description": "Free online tool to compare two JSON objects and visualize differences",
+  "url": "{{ SITE_URL }}/json-diff/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--color-primary) 0%, #ec4899 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .diff-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .diff-panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 16px var(--color-shadow);
+        overflow: hidden;
+    }
+
+    [data-theme="dark"] .diff-panel {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    [data-theme="dark"] .panel-header {
+        background: rgba(30, 41, 59, 0.7);
+    }
+
+    .panel-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 0;
+    }
+
+    .diff-textarea {
+        width: 100%;
+        min-height: 350px;
+        flex: 1;
+        padding: 1.25rem;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.9rem;
+        line-height: 1.7;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: none;
+        resize: vertical;
+    }
+
+    [data-theme="dark"] .diff-textarea {
+        background: rgba(10, 15, 26, 0.95);
+    }
+
+    .diff-textarea:focus {
+        outline: none;
+    }
+
+    .actions-bar {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 1.5rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        margin-bottom: 1.5rem;
+    }
+
+    .compare-btn {
+        padding: 1rem 2.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .compare-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
+    }
+
+    .action-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--color-text);
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .action-btn:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    /* Diff Results */
+    .diff-results {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        display: none;
+    }
+
+    .diff-results.active {
+        display: block;
+    }
+
+    .diff-results h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .diff-output {
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.9rem;
+        line-height: 1.8;
+        white-space: pre-wrap;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .diff-line-added {
+        background: rgba(16, 185, 129, 0.15);
+        color: #10b981;
+        padding: 2px 8px;
+        display: block;
+        border-left: 3px solid #10b981;
+    }
+
+    .diff-line-removed {
+        background: rgba(239, 68, 68, 0.15);
+        color: #ef4444;
+        padding: 2px 8px;
+        display: block;
+        border-left: 3px solid #ef4444;
+    }
+
+    .diff-line-changed {
+        background: rgba(245, 158, 11, 0.15);
+        color: #f59e0b;
+        padding: 2px 8px;
+        display: block;
+        border-left: 3px solid #f59e0b;
+    }
+
+    .diff-stats {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .stat-badge {
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-full);
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    .stat-added {
+        background: rgba(16, 185, 129, 0.15);
+        color: #10b981;
+    }
+
+    .stat-removed {
+        background: rgba(239, 68, 68, 0.15);
+        color: #ef4444;
+    }
+
+    .stat-changed {
+        background: rgba(245, 158, 11, 0.15);
+        color: #f59e0b;
+    }
+
+    .stat-same {
+        background: var(--color-surface-alt);
+        color: var(--color-text-secondary);
+    }
+
+    .info-section {
+        margin-top: 3rem;
+        padding: 2.5rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .diff-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .diff-textarea {
+            min-height: 250px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>🔍 JSON Diff Tool</h1>
+    <p>Compare two JSON objects and identify differences with visual highlighting</p>
+</div>
+
+<div class="diff-grid">
+    <!-- Left JSON Panel -->
+    <div class="diff-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">Original JSON (Left)</h2>
+        </div>
+        <textarea id="jsonLeft" class="diff-textarea" placeholder='Paste original JSON here...
+
+Example:
+{
+  "name": "John",
+  "age": 30
+}'></textarea>
+    </div>
+
+    <!-- Right JSON Panel -->
+    <div class="diff-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">Modified JSON (Right)</h2>
+        </div>
+        <textarea id="jsonRight" class="diff-textarea" placeholder='Paste modified JSON here...
+
+Example:
+{
+  "name": "John Doe",
+  "age": 31,
+  "city": "NYC"
+}'></textarea>
+    </div>
+</div>
+
+<div class="actions-bar">
+    <button id="compareBtn" class="compare-btn">
+        <span>🔍</span> Compare JSON
+    </button>
+    <button id="swapBtn" class="action-btn">⇄ Swap</button>
+    <button id="clearBtn" class="action-btn">Clear All</button>
+    <button id="sampleBtn" class="action-btn">Load Sample</button>
+</div>
+
+<div id="diffResults" class="diff-results">
+    <h3>📊 Comparison Results</h3>
+    <div id="diffStats" class="diff-stats"></div>
+    <div id="diffOutput" class="diff-output"></div>
+</div>
+
+<div class="info-section">
+    <h2>💡 About JSON Diff</h2>
+    <p>
+        JSON Diff compares two JSON objects and shows you exactly what changed between them.
+        This is useful for debugging API responses, comparing configuration files, tracking data changes,
+        and reviewing JSON modifications.
+    </p>
+    <p>
+        <strong>Color Legend:</strong>
+        <span style="color: #10b981;">● Green = Added</span> |
+        <span style="color: #ef4444;">● Red = Removed</span> |
+        <span style="color: #f59e0b;">● Yellow = Changed</span>
+    </p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/json-diff.js' %}"></script>
+{% endblock %}

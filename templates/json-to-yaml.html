@@ -1,0 +1,348 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}JSON to YAML Converter - Free Online Tool | JSON Formatters Pro{% endblock %}
+{% block meta_title %}JSON to YAML Converter - Free Online Tool | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Convert JSON to YAML instantly with our free online converter. Easy-to-use, secure,
+client-side processing. No signup required. Transform JSON data to YAML format.{% endblock %}
+{% block meta_keywords %}json to yaml, json yaml converter, convert json to yaml, json to yaml online, yaml converter,
+json to yaml tool, yaml generator, json to yaml free, json yaml online, transform json yaml, json to yaml converter
+online free, yaml from json, json2yaml, convert json file to yaml, json to yml, json to yaml python, json to yaml
+javascript, online yaml converter, free yaml generator, json to yaml api, json to yaml npm, json object to yaml, json
+string to yaml, json array to yaml, best json to yaml converter, json to yaml format, json data to yaml, json
+configuration to yaml, kubernetes json to yaml, docker json to yaml, ansible json to yaml{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/json-to-yaml/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "JSON to YAML Converter",
+  "description": "Free online tool to convert JSON to YAML format instantly",
+  "url": "{{ SITE_URL }}/json-to-yaml/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--color-primary) 0%, #10b981 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .converter-grid {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        align-items: stretch;
+    }
+
+    .converter-panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 16px var(--color-shadow);
+        overflow: hidden;
+    }
+
+    [data-theme="dark"] .converter-panel {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    [data-theme="dark"] .panel-header {
+        background: rgba(30, 41, 59, 0.7);
+    }
+
+    .panel-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 0;
+    }
+
+    .converter-textarea {
+        width: 100%;
+        min-height: 450px;
+        flex: 1;
+        padding: 1.25rem;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.9rem;
+        line-height: 1.7;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: none;
+        resize: vertical;
+    }
+
+    [data-theme="dark"] .converter-textarea {
+        background: rgba(10, 15, 26, 0.95);
+    }
+
+    .converter-textarea:focus {
+        outline: none;
+    }
+
+    .center-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+    }
+
+    .convert-btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .convert-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+
+    .action-btn {
+        padding: 0.65rem 1.25rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--color-text);
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .action-btn:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    .copy-btn {
+        background: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        padding: 0.35rem 0.75rem;
+        cursor: pointer;
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        transition: all 200ms ease;
+    }
+
+    .copy-btn:hover {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+    }
+
+    .info-section {
+        margin-top: 3rem;
+        padding: 2.5rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .feature-card {
+        padding: 1.5rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-md);
+        text-align: center;
+    }
+
+    .feature-icon {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .feature-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+    }
+
+    .feature-desc {
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+    }
+
+    @media (max-width: 1024px) {
+        .converter-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .center-actions {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .converter-textarea {
+            min-height: 300px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>📋 JSON to YAML Converter</h1>
+    <p>Transform your JSON data to clean, human-readable YAML format instantly</p>
+</div>
+
+<div class="converter-grid">
+    <!-- Input Panel -->
+    <div class="converter-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">JSON Input</h2>
+            <span id="inputCount" style="font-size: 0.85rem; color: var(--color-text-secondary);">0 chars</span>
+        </div>
+        <textarea id="jsonInput" class="converter-textarea" placeholder='Paste your JSON here...
+
+Example:
+{
+  "name": "John Doe",
+  "age": 30,
+  "skills": ["JavaScript", "Python", "Go"]
+}'></textarea>
+    </div>
+
+    <!-- Center Actions -->
+    <div class="center-actions">
+        <button id="convertBtn" class="convert-btn">
+            <span>→</span> Convert to YAML
+        </button>
+        <button id="clearBtn" class="action-btn">Clear All</button>
+        <button id="sampleBtn" class="action-btn">Load Sample</button>
+    </div>
+
+    <!-- Output Panel -->
+    <div class="converter-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">YAML Output</h2>
+            <button id="copyBtn" class="copy-btn">📋 Copy</button>
+        </div>
+        <textarea id="yamlOutput" class="converter-textarea" readonly
+            placeholder="YAML output will appear here..."></textarea>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>💡 About JSON to YAML Conversion</h2>
+    <p>
+        YAML (YAML Ain't Markup Language) is a human-readable data serialization format. It's commonly used for
+        configuration files
+        and data exchange. YAML is more readable than JSON for complex structures due to its use of indentation instead
+        of brackets.
+    </p>
+    <p>
+        Our converter transforms JSON to YAML while preserving all data types including strings, numbers, booleans,
+        arrays, and nested objects. The conversion happens entirely in your browser for maximum security.
+    </p>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <div class="feature-title">Instant Conversion</div>
+            <div class="feature-desc">Convert JSON to YAML in milliseconds</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <div class="feature-title">100% Secure</div>
+            <div class="feature-desc">Client-side processing, data never leaves your browser</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📝</div>
+            <div class="feature-title">Clean Output</div>
+            <div class="feature-desc">Properly formatted, readable YAML</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💾</div>
+            <div class="feature-title">Copy & Use</div>
+            <div class="feature-desc">One-click copy to clipboard</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/json-yaml.js' %}"></script>
+{% endblock %}

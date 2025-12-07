@@ -436,6 +436,26 @@ def privacy_page(request):
     return render(request, 'privacy.html')
 
 
+def json_to_yaml_page(request):
+    """Render the JSON to YAML converter page"""
+    return render(request, 'json-to-yaml.html')
+
+
+def json_diff_page(request):
+    """Render the JSON Diff comparison tool page"""
+    return render(request, 'json-diff.html')
+
+
+def json_schema_page(request):
+    """Render the JSON Schema Validator page"""
+    return render(request, 'json-schema.html')
+
+
+def json_tree_page(request):
+    """Render the JSON Tree Viewer page"""
+    return render(request, 'json-tree.html')
+
+
 
 def robots_txt(request):
     """Serve robots.txt file"""

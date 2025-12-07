@@ -1,0 +1,357 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}JSON Schema Validator - Validate JSON Against Schema | JSON Formatters Pro{% endblock %}
+{% block meta_title %}JSON Schema Validator - Validate JSON Against Schema | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Validate your JSON data against JSON Schema online. Free JSON Schema validator with detailed
+error messages. Ensure your JSON conforms to your schema definition.{% endblock %}
+{% block meta_keywords %}json schema validator, validate json schema, json schema online, json schema checker, json
+validation, schema validator, json schema tester, validate json against schema, json schema validator online free, json
+schema validation tool, ajv json schema validator, json schema draft 7 validator, json schema draft 4, json schema draft
+2020, json schema format validator, json schema required fields, json schema type validation, json schema pattern
+validator, json schema enum validator, json schema object validator, json schema array validator, api json schema
+validator, openapi schema validator, swagger json validator, json schema generator, json to schema, infer json schema,
+json schema documentation, json schema examples, best json schema validator{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/json-schema/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "JSON Schema Validator",
+  "description": "Free online tool to validate JSON data against JSON Schema",
+  "url": "{{ SITE_URL }}/json-schema/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--color-primary) 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .schema-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .schema-panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 16px var(--color-shadow);
+        overflow: hidden;
+    }
+
+    [data-theme="dark"] .schema-panel {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    [data-theme="dark"] .panel-header {
+        background: rgba(30, 41, 59, 0.7);
+    }
+
+    .panel-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 0;
+    }
+
+    .schema-textarea {
+        width: 100%;
+        min-height: 350px;
+        flex: 1;
+        padding: 1.25rem;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.9rem;
+        line-height: 1.7;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: none;
+        resize: vertical;
+    }
+
+    [data-theme="dark"] .schema-textarea {
+        background: rgba(10, 15, 26, 0.95);
+    }
+
+    .schema-textarea:focus {
+        outline: none;
+    }
+
+    .actions-bar {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 1.5rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        margin-bottom: 1.5rem;
+    }
+
+    .validate-btn {
+        padding: 1rem 2.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .validate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    }
+
+    .action-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--color-text);
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .action-btn:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    /* Validation Results */
+    .validation-results {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        display: none;
+    }
+
+    .validation-results.active {
+        display: block;
+    }
+
+    .validation-results h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .result-success {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid #10b981;
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        color: #10b981;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .result-success .icon {
+        font-size: 2rem;
+    }
+
+    .result-error {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid #ef4444;
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+    }
+
+    .error-header {
+        color: #ef4444;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .error-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .error-item {
+        padding: 0.75rem 1rem;
+        background: rgba(239, 68, 68, 0.05);
+        border-radius: var(--radius-sm);
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+        font-family: 'SF Mono', monospace;
+        font-size: 0.875rem;
+    }
+
+    .error-path {
+        color: #ef4444;
+        font-weight: 600;
+    }
+
+    .info-section {
+        margin-top: 3rem;
+        padding: 2.5rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .schema-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .schema-textarea {
+            min-height: 250px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>📐 JSON Schema Validator</h1>
+    <p>Validate your JSON data against a JSON Schema definition</p>
+</div>
+
+<div class="schema-grid">
+    <!-- JSON Data Panel -->
+    <div class="schema-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">JSON Data</h2>
+        </div>
+        <textarea id="jsonData" class="schema-textarea" placeholder='Paste your JSON data here...
+
+Example:
+{
+  "name": "John Doe",
+  "age": 30,
+  "email": "john@example.com"
+}'></textarea>
+    </div>
+
+    <!-- JSON Schema Panel -->
+    <div class="schema-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">JSON Schema</h2>
+        </div>
+        <textarea id="jsonSchema" class="schema-textarea" placeholder='Paste your JSON Schema here...
+
+Example:
+{
+  "type": "object",
+  "required": ["name", "email"],
+  "properties": {
+    "name": { "type": "string" },
+    "age": { "type": "integer", "minimum": 0 },
+    "email": { "type": "string", "format": "email" }
+  }
+}'></textarea>
+    </div>
+</div>
+
+<div class="actions-bar">
+    <button id="validateBtn" class="validate-btn">
+        <span>✓</span> Validate
+    </button>
+    <button id="clearBtn" class="action-btn">Clear All</button>
+    <button id="sampleBtn" class="action-btn">Load Sample</button>
+</div>
+
+<div id="validationResults" class="validation-results">
+    <h3>📊 Validation Results</h3>
+    <div id="resultContent"></div>
+</div>
+
+<div class="info-section">
+    <h2>💡 About JSON Schema</h2>
+    <p>
+        JSON Schema is a vocabulary that allows you to annotate and validate JSON documents.
+        It defines the structure, data types, and constraints that your JSON data must follow.
+        This is essential for API validation, configuration file validation, and data quality assurance.
+    </p>
+    <p>
+        <strong>Common schema keywords:</strong> type, properties, required, minimum, maximum,
+        pattern, enum, items, minLength, maxLength, format.
+    </p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/json-schema.js' %}"></script>
+{% endblock %}
