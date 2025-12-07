@@ -18,6 +18,6 @@ def site_settings(request):
     
     return {
         'site_settings': settings,
-        'SITE_URL': settings.base_url if settings else 'https://jsonformatterpro.com',
-        'SITE_NAME': settings.site_name if settings else 'JSON Formatter Pro',
+        'SITE_URL': settings.base_url if settings else 'https://jsonformatterspro.com',
+        'SITE_NAME': settings.site_name if settings else 'JSON Formatters Pro',
     }
