@@ -395,6 +395,30 @@ address json, mock json generator online free, json fixture generator, seed data
             </div>
         </div>
 
+        <!-- Custom Fields Section -->
+        <div class="setting-group">
+            <label class="setting-label">➕ Add Custom Field</label>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <input type="text" id="customFieldName" class="setting-input" placeholder="Field name (e.g., status)"
+                    style="padding: 0.5rem 0.75rem; font-size: 0.85rem; background: var(--color-bg); color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--radius-sm);">
+                <select id="customFieldType" class="setting-select" style="font-size: 0.85rem;">
+                    <option value="static">Static Value</option>
+                    <option value="random">Random from List</option>
+                    <option value="number">Random Number</option>
+                    <option value="uuid">UUID</option>
+                    <option value="boolean">Boolean</option>
+                </select>
+                <input type="text" id="customFieldValue" class="setting-input"
+                    placeholder="Value or values (comma separated)"
+                    style="padding: 0.5rem 0.75rem; font-size: 0.85rem; background: var(--color-bg); color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--radius-sm);">
+                <button id="addCustomFieldBtn"
+                    style="padding: 0.5rem; font-size: 0.85rem; font-weight: 600; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; border: none; border-radius: var(--radius-sm); cursor: pointer;">
+                    Add Custom Field
+                </button>
+            </div>
+            <div id="customFieldsList" style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
+        </div>
+
         <div class="setting-group">
             <label class="setting-label">Indent Size</label>
             <select id="indentSize" class="setting-select">

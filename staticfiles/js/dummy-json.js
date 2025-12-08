@@ -13,6 +13,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const downloadBtn = document.getElementById('downloadBtn');
     const jsonOutput = document.getElementById('jsonOutput');
 
+    // Custom fields
+    const customFieldName = document.getElementById('customFieldName');
+    const customFieldType = document.getElementById('customFieldType');
+    const customFieldValue = document.getElementById('customFieldValue');
+    const addCustomFieldBtn = document.getElementById('addCustomFieldBtn');
+    const customFieldsList = document.getElementById('customFieldsList');
+    const customFields = {};
+
     // Sample data pools
     const firstNames = ['James', 'Mary', 'John', 'Patricia', 'Robert', 'Jennifer', 'Michael', 'Linda', 'William', 'Elizabeth', 'David', 'Barbara', 'Richard', 'Susan', 'Joseph', 'Jessica', 'Thomas', 'Sarah', 'Charles', 'Karen', 'Christopher', 'Nancy', 'Daniel', 'Lisa', 'Matthew', 'Betty', 'Anthony', 'Margaret', 'Mark', 'Sandra', 'Emma', 'Olivia', 'Ava', 'Isabella', 'Sophia', 'Mia', 'Charlotte', 'Amelia', 'Harper', 'Evelyn'];
     const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez', 'Hernandez', 'Lopez', 'Gonzalez', 'Wilson', 'Anderson', 'Thomas', 'Taylor', 'Moore', 'Jackson', 'Martin', 'Lee', 'Perez', 'Thompson', 'White', 'Harris', 'Sanchez', 'Clark', 'Ramirez', 'Lewis', 'Robinson'];
@@ -123,6 +131,36 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+        // Process custom fields
+        for (const [fieldName, fieldConfig] of Object.entries(customFields)) {
+            const { type, values } = fieldConfig;
+            switch (type) {
+                case 'static':
+                    record[fieldName] = values;
+                    break;
+                case 'random':
+                    record[fieldName] = random(values.split(',').map(v => v.trim()));
+                    break;
+                case 'number':
+                    const parts = values.split('-').map(n => parseInt(n.trim()));
+                    if (parts.length === 2) {
+                        record[fieldName] = randomInt(parts[0], parts[1]);
+                    } else {
+                        record[fieldName] = randomInt(0, parseInt(values) || 100);
+                    }
+                    break;
+                case 'uuid':
+                    record[fieldName] = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+                        const r = Math.random() * 16 | 0;
+                        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                    });
+                    break;
+                case 'boolean':
+                    record[fieldName] = Math.random() > 0.5;
+                    break;
+            }
+        }
+
         return record;
     }
 
@@ -206,6 +244,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Generate button handler
     generateBtn.addEventListener('click', generateJSON);
+
+    // Add Custom Field button handler
+    if (addCustomFieldBtn) {
+        addCustomFieldBtn.addEventListener('click', function () {
+            const name = customFieldName.value.trim();
+            const type = customFieldType.value;
+            const value = customFieldValue.value.trim();
+
+            if (!name) {
+                alert('Please enter a field name');
+                return;
+            }
+
+            // Store custom field
+            customFields[name] = { type, values: value };
+
+            // Create visual chip
+            const chip = document.createElement('span');
+            chip.style.cssText = 'display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.6rem; background: rgba(139, 92, 246, 0.15); color: #8b5cf6; border-radius: 4px; font-size: 0.8rem; font-weight: 500;';
+            chip.innerHTML = `${name} <span style="cursor: pointer; color: #ef4444;" class="remove-field">×</span>`;
+
+            chip.querySelector('.remove-field').addEventListener('click', function () {
+                delete customFields[name];
+                chip.remove();
+            });
+
+            customFieldsList.appendChild(chip);
+
+            // Clear inputs
+            customFieldName.value = '';
+            customFieldValue.value = '';
+        });
+    }
 
     // Copy button handler
     copyBtn.addEventListener('click', function () {
