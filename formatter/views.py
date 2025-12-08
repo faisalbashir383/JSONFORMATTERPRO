@@ -474,6 +474,7 @@ def robots_txt(request):
 def blog_list(request):
     """List all published blog posts with pagination and filtering"""
     posts = BlogPost.objects.filter(published=True)
+    total_posts = posts.count()
     
     # Category filter
     category_slug = request.GET.get('category')
@@ -501,6 +502,7 @@ def blog_list(request):
         'categories': categories,
         'current_category': category_slug,
         'query': query,
+        'total_posts': total_posts,
     }
     
     return render(request, 'blog_list.html', context)
@@ -528,6 +530,7 @@ def blog_category(request, slug):
     """Filter blog posts by category"""
     category = get_object_or_404(BlogCategory, slug=slug)
     posts = BlogPost.objects.filter(category=category, published=True)
+    total_posts = BlogPost.objects.filter(published=True).count()
     
     # Pagination
     paginator = Paginator(posts, 10)
@@ -541,6 +544,7 @@ def blog_category(request, slug):
         'category': category,
         'categories': all_categories,
         'current_category': slug,
+        'total_posts': total_posts,
     }
     
     return render(request, 'blog_list.html', context)

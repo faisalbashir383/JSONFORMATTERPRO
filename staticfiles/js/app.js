@@ -193,14 +193,17 @@ function showMessage(type, title, text) {
       <div class="message-title">${title}</div>
       <div class="message-text">${text}</div>
     </div>
+    <button class="message-close" onclick="this.parentElement.remove()" aria-label="Close">&times;</button>
   `;
 
     elements.messageContainer.appendChild(message);
 
     // Auto remove after 5 seconds
     setTimeout(() => {
-        message.style.animation = 'slideOut 0.3s ease-in-out';
-        setTimeout(() => message.remove(), 300);
+        if (message.parentElement) {
+            message.style.animation = 'slideOut 0.3s ease-in-out';
+            setTimeout(() => message.remove(), 300);
+        }
     }, 5000);
 }
 
@@ -767,9 +770,6 @@ function init() {
     updateCharCount();
     setCurrentYear();
     setupNavMenuActions();
-
-    // Show welcome message
-    showMessage('info', 'Welcome!', 'Paste your JSON or drag & drop a file to get started.');
 }
 
 // Run initialization when DOM is ready

@@ -1,22 +1,23 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Programming Blog - Tech Tutorials & Learning | JSON Formatters Pro{% endblock %}
-{% block meta_title %}Programming Blog - Python, JavaScript, AI & Tech Tutorials | JSON Formatters Pro{% endblock %}
+{% block title %}Programming Articles - Tech Tutorials & Learning | JSON Formatters Pro{% endblock %}
+{% block meta_title %}Programming Articles - Python, JavaScript, AI & Tech Tutorials | JSON Formatters Pro{% endblock %}
 {% block meta_description %}Learn programming with free tutorials on Python, JavaScript, React, Node.js, Django, Web
 Development, APIs, JSON, and more. Step-by-step coding guides, practical examples, and best practices for developers of
 all levels.{% endblock %}
-{% block meta_keywords %}programming blog, tech blog, coding blog, developer blog, python tutorials, javascript
+{% block meta_keywords %}programming articles, tech articles, coding tutorials, developer guides, python tutorials,
+javascript
 tutorials, web development, software development, programming tutorials, coding tips, how to programming, learn
 programming, python programming, javascript programming, react tutorial, node.js tutorial, django framework, flask
-python, vue.js, angular framework, programming guide, coding guide, software engineering blog, technical blog, api
+python, vue.js, angular framework, programming guide, coding guide, software engineering, technical articles, api
 development, rest api, frontend development, backend development, full stack development, data science tutorials,
 machine learning, ai programming, programming for beginners, code examples, algorithm tutorials, data structure
 tutorial, git tutorial, docker tutorial, kubernetes guide, aws tutorial, cloud computing, devops, mongodb tutorial, sql
 tutorial, responsive design, coding best practices, clean code, programming interview questions, software architecture,
 microservices{% endblock %}
 
-{% block og_title %}Programming Blog - Free Tech Tutorials | JSON Formatter Pro{% endblock %}
+{% block og_title %}Programming Articles - Free Tech Tutorials | JSON Formatter Pro{% endblock %}
 {% block og_description %}Learn programming with our comprehensive tutorials on Python, JavaScript, AI, Web Development,
 and more. Free code examples and step-by-step guides.{% endblock %}
 
@@ -27,7 +28,7 @@ and more. Free code examples and step-by-step guides.{% endblock %}
 {
   "@context": "https://schema.org",
   "@type": "Blog",
-  "name": "JSON Formatter Pro Blog",
+  "name": "JSON Formatter Pro Articles",
   "description": "Programming tutorials, tech insights, and coding best practices",
   "url": "https://jsonformatterpro.com/blog/",
   "publisher": {
@@ -73,73 +74,323 @@ and more. Free code examples and step-by-step guides.{% endblock %}
 
 {% block main_attrs %}style="max-width: 1200px; margin: 0 auto;"{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Modern Category Filter Styles */
+    .articles-filter-container {
+        margin: 2rem 0;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(99, 102, 241, 0.15);
+    }
+
+    .articles-filter-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .articles-filter-header svg {
+        width: 18px;
+        height: 18px;
+        color: var(--color-primary);
+    }
+
+    .articles-filter-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .articles-filter-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .filter-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        border-radius: 9999px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
+        cursor: pointer;
+    }
+
+    .filter-tag-inactive {
+        background: var(--color-surface);
+        color: var(--color-text-secondary);
+        border-color: var(--color-border);
+    }
+
+    .filter-tag-inactive:hover {
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--color-primary);
+        border-color: rgba(99, 102, 241, 0.3);
+        transform: translateY(-1px);
+    }
+
+    .filter-tag-active {
+        background: linear-gradient(135deg, var(--color-primary) 0%, #8b5cf6 100%);
+        color: white;
+        box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+    }
+
+    .filter-tag-active:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.45);
+    }
+
+    .filter-tag-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 20px;
+        height: 20px;
+        padding: 0 0.375rem;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        border-radius: 9999px;
+    }
+
+    .filter-tag-inactive .filter-tag-count {
+        background: var(--color-border);
+        color: var(--color-text-secondary);
+    }
+
+    .filter-tag-active .filter-tag-count {
+        background: rgba(255, 255, 255, 0.25);
+        color: white;
+    }
+
+    /* Article Card Enhancements */
+    .articles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .article-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        padding: 1.75rem;
+        border: 1px solid var(--color-border);
+        display: flex;
+        flex-direction: column;
+        transition: all 0.25s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .article-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--color-primary) 0%, #8b5cf6 50%, #ec4899 100%);
+        opacity: 0;
+        transition: opacity 0.25s ease;
+    }
+
+    .article-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px var(--color-shadow);
+        border-color: rgba(99, 102, 241, 0.2);
+    }
+
+    .article-card:hover::before {
+        opacity: 1;
+    }
+
+    .article-category {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        color: var(--color-primary);
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .article-category::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        background: currentColor;
+        border-radius: 50%;
+        opacity: 0.5;
+    }
+
+    .article-title {
+        font-size: 1.375rem;
+        font-weight: 600;
+        line-height: 1.35;
+        margin: 0.875rem 0;
+    }
+
+    .article-title a {
+        color: var(--color-text);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .article-title a:hover {
+        color: var(--color-primary);
+    }
+
+    .article-excerpt {
+        color: var(--color-text-secondary);
+        line-height: 1.65;
+        flex-grow: 1;
+        margin: 0.5rem 0;
+        font-size: 0.9375rem;
+    }
+
+    .article-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--color-border);
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .article-meta {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+    }
+
+    .article-meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .read-more-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: var(--color-primary);
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .read-more-btn:hover {
+        background: var(--color-primary);
+        color: white;
+        transform: translateX(2px);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .articles-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .articles-filter-container {
+            padding: 1rem;
+        }
+
+        .filter-tag {
+            padding: 0.4rem 0.75rem;
+            font-size: 0.75rem;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <header class="header">
-    <h1 class="header-title">📝 Programming Blog</h1>
+    <h1 class="header-title">✨ Programming Articles</h1>
     <p class="header-subtitle">Learn Python, JavaScript, Web Development, APIs, JSON, and more - Free coding tutorials,
         tips, and best practices for developers</p>
 </header>
 
-<!-- Category Filter -->
+<!-- Modern Category Filter -->
 {% if categories %}
-<div
-    style="margin: 2rem 0; padding: 1.5rem; background: var(--color-surface); border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
-    <strong style="display: block; margin-bottom: 1rem; color: var(--color-text);">Filter by Category:</strong>
-    <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
-        <a href="/blog/" class="btn {% if not current_category %}btn-primary{% else %}btn-secondary{% endif %}"
-            style="text-decoration: none; padding: 0.5rem 1rem; font-size: 0.875rem;">
-            All Posts
+<div class="articles-filter-container">
+    <div class="articles-filter-header">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
+        </svg>
+        <span class="articles-filter-label">Browse by Topic</span>
+    </div>
+    <div class="articles-filter-tags">
+        <a href="/blog/"
+            class="filter-tag {% if not current_category %}filter-tag-active{% else %}filter-tag-inactive{% endif %}">
+            All Articles
+            <span class="filter-tag-count">{{ total_posts }}</span>
         </a>
         {% for category in categories %}
         <a href="/blog/category/{{ category.slug }}/"
-            class="btn {% if current_category == category.slug %}btn-primary{% else %}btn-secondary{% endif %}"
-            style="text-decoration: none; padding: 0.5rem 1rem; font-size: 0.875rem;">
+            class="filter-tag {% if current_category == category.slug %}filter-tag-active{% else %}filter-tag-inactive{% endif %}">
             {{ category.name }}
+            <span class="filter-tag-count">{{ category.posts.count }}</span>
         </a>
         {% endfor %}
     </div>
 </div>
 {% endif %}
 
-<!-- Blog Posts Grid -->
+<!-- Articles Grid -->
 {% if page_obj.object_list %}
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; margin-top: 2rem;">
+<div class="articles-grid">
     {% for post in page_obj %}
-    <article itemscope itemtype="https://schema.org/BlogPosting"
-        style="background: var(--color-surface); border-radius: var(--radius-lg); padding: 1.75rem; border: 1px solid var(--color-border); display: flex; flex-direction: column; transition: all var(--transition-fast);"
-        onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px var(--color-shadow)'"
-        onmouseout="this.style.transform=''; this.style.boxShadow=''">
+    <article class="article-card" itemscope itemtype="https://schema.org/BlogPosting">
 
         <!-- Category Badge -->
-        <span itemprop="articleSection"
-            style="color: var(--color-primary); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+        <span class="article-category" itemprop="articleSection">
             {{ post.category.name }}
         </span>
 
         <!-- Title -->
-        <h2 itemprop="headline" style="font-size: 1.5rem; font-weight: 600; line-height: 1.3; margin: 1rem 0;">
-            <a href="{% url 'blog_detail' post.slug %}" itemprop="url"
-                style="color: var(--color-text); text-decoration: none;">
+        <h2 class="article-title" itemprop="headline">
+            <a href="{% url 'blog_detail' post.slug %}" itemprop="url">
                 {{ post.title }}
             </a>
         </h2>
 
         <!-- Excerpt -->
-        <p itemprop="description"
-            style="color: var(--color-text-secondary); line-height: 1.6; flex-grow: 1; margin: 0.5rem 0;">
+        <p class="article-excerpt" itemprop="description">
             {{ post.excerpt }}
         </p>
 
         <!-- Meta Information -->
-        <div
-            style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--color-border); flex-wrap: wrap; gap: 0.5rem;">
-            <div style="display: flex; gap: 1rem; font-size: 0.75rem; color: var(--color-text-secondary);">
-                <span>⏱️ {{ post.reading_time }} min</span>
-                <span>👁️ {{ post.views }} views</span>
+        <div class="article-footer">
+            <div class="article-meta">
+                <span class="article-meta-item">⏱️ {{ post.reading_time }} min</span>
+                <span class="article-meta-item">👁️ {{ post.views|default:"0" }}</span>
             </div>
-            <a href="{% url 'blog_detail' post.slug %}" class="btn btn-primary"
-                style="text-decoration: none; padding: 0.5rem 1rem; font-size: 0.875rem;">
-                Read More →
+            <a href="{% url 'blog_detail' post.slug %}" class="read-more-btn">
+                Read Article
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
             </a>
         </div>
 
@@ -155,7 +406,7 @@ and more. Free code examples and step-by-step guides.{% endblock %}
 
 <!-- Pagination -->
 {% if page_obj.has_other_pages %}
-<nav aria-label="Blog pagination"
+<nav aria-label="Article pagination"
     style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 3rem; flex-wrap: wrap;">
     {% if page_obj.has_previous %}
     <a href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}"
@@ -179,11 +430,11 @@ and more. Free code examples and step-by-step guides.{% endblock %}
 {% endif %}
 
 {% else %}
-<!-- No Posts Message -->
+<!-- No Articles Message -->
 <div
     style="text-align: center; padding: 4rem 2rem; background: var(--color-surface); border-radius: var(--radius-lg); margin-top: 2rem; border: 1px solid var(--color-border);">
     <div style="font-size: 4rem; margin-bottom: 1rem;">📝</div>
-    <h3 style="font-size: 1.5rem; margin-bottom: 1rem; font-weight: 600;">No blog posts yet</h3>
+    <h3 style="font-size: 1.5rem; margin-bottom: 1rem; font-weight: 600;">No articles yet</h3>
     <p style="color: var(--color-text-secondary);">Check back soon for interesting articles about programming and
         technology!</p>
 </div>
