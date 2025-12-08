@@ -40,6 +40,7 @@ class StaticViewSitemap(Sitemap):
             'push_notification_tester_page',
             'api_response_tester_page',
             'image_to_base64_page',
+            'json_editor_page',
         ]
     
     def location(self, item):

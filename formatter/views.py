@@ -628,6 +628,11 @@ def image_to_base64_page(request):
     return render(request, 'image-to-base64.html')
 
 
+def json_editor_page(request):
+    """Render the JSON Editor page"""
+    return render(request, 'json-editor.html')
+
+
 def swagger_viewer_page(request):
     """Render the Swagger/OpenAPI Viewer page"""
     return render(request, 'swagger-viewer.html')
