@@ -599,6 +599,16 @@ def qr_generator_page(request):
     return render(request, 'qr-generator.html')
 
 
+def meta_tag_generator_page(request):
+    """Render the Meta Tag Generator page"""
+    return render(request, 'meta-tag-generator.html')
+
+
+def swagger_viewer_page(request):
+    """Render the Swagger/OpenAPI Viewer page"""
+    return render(request, 'swagger-viewer.html')
+
+
 @api_view(['POST'])
 def generate_qr_code(request):
     """

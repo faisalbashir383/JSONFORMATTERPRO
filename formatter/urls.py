@@ -45,6 +45,8 @@ urlpatterns = [
     path('markdown-preview/', views.markdown_preview_page, name='markdown_preview_page'),
     path('sql-formatter/', views.sql_formatter_page, name='sql_formatter_page'),
     path('qr-generator/', views.qr_generator_page, name='qr_generator_page'),
+    path('meta-tag-generator/', views.meta_tag_generator_page, name='meta_tag_generator_page'),
+    path('swagger-viewer/', views.swagger_viewer_page, name='swagger_viewer_page'),
     
     # Code Tool API Endpoints
     path('api/qr-generator/', views.generate_qr_code, name='generate_qr_code'),

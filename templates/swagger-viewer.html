@@ -1,0 +1,979 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Swagger/OpenAPI Viewer - View API Documentation Online | JSON Formatters Pro{% endblock %}
+{% block meta_title %}Swagger/OpenAPI Viewer - View API Documentation Online Free{% endblock %}
+{% block meta_description %}View and explore Swagger/OpenAPI specifications online. Paste your API spec to see
+endpoints, schemas, and documentation beautifully formatted.{% endblock %}
+{% block meta_keywords %}swagger viewer, openapi viewer, api documentation, swagger ui, openapi spec viewer, api
+explorer{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/swagger-viewer/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Swagger/OpenAPI Viewer",
+  "description": "Free online Swagger and OpenAPI specification viewer",
+  "url": "{{ SITE_URL }}/swagger-viewer/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(249, 115, 22, 0.08) 0%, rgba(234, 88, 12, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+    }
+
+    .input-section {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .input-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .url-input {
+        flex: 1;
+        min-width: 300px;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+    }
+
+    .url-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+    }
+
+    .load-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .load-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+    }
+
+    .or-divider {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 1rem 0;
+        color: var(--color-text-secondary);
+        font-size: 0.85rem;
+    }
+
+    .or-divider::before,
+    .or-divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--color-border);
+    }
+
+    .spec-input {
+        width: 100%;
+        min-height: 200px;
+        padding: 1rem;
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        resize: vertical;
+    }
+
+    .spec-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+    }
+
+    .btn-row {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .parse-btn {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .parse-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+    }
+
+    .sample-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--color-primary);
+        background: transparent;
+        border: 2px solid var(--color-primary);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .sample-btn:hover {
+        background: var(--color-primary);
+        color: white;
+    }
+
+    .error-message {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin-top: 1rem;
+        display: none;
+    }
+
+    /* API Documentation Styles */
+    .api-docs {
+        display: none;
+    }
+
+    .api-docs.visible {
+        display: block;
+    }
+
+    .api-header {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .api-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+    }
+
+    .api-version {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        background: rgba(34, 197, 94, 0.1);
+        color: #22c55e;
+        border-radius: var(--radius-sm);
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .api-description {
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    .api-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .api-info-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .api-info-item .label {
+        color: var(--color-text-secondary);
+    }
+
+    .api-info-item .value {
+        color: var(--color-text);
+        font-weight: 500;
+    }
+
+    .endpoints-section {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+    }
+
+    .section-header {
+        padding: 1rem 1.5rem;
+        background: var(--color-bg);
+        border-bottom: 1px solid var(--color-border);
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .endpoint-group {
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .endpoint-group:last-child {
+        border-bottom: none;
+    }
+
+    .endpoint-group-header {
+        padding: 1rem 1.5rem;
+        background: var(--color-bg);
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--color-primary);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .endpoint-group-header:hover {
+        background: rgba(99, 102, 241, 0.05);
+    }
+
+    .endpoint {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--color-border);
+        cursor: pointer;
+        transition: background 200ms ease;
+    }
+
+    .endpoint:last-child {
+        border-bottom: none;
+    }
+
+    .endpoint:hover {
+        background: rgba(99, 102, 241, 0.03);
+    }
+
+    .endpoint-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .method-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        min-width: 60px;
+        text-align: center;
+    }
+
+    .method-get {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+
+    .method-post {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .method-put {
+        background: #fef3c7;
+        color: #b45309;
+    }
+
+    .method-patch {
+        background: #e0e7ff;
+        color: #4338ca;
+    }
+
+    .method-delete {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .endpoint-path {
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 0.9rem;
+        color: var(--color-text);
+        flex: 1;
+    }
+
+    .endpoint-summary {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.5rem;
+        padding-left: calc(60px + 1rem);
+    }
+
+    .endpoint-details {
+        display: none;
+        padding: 1rem 1.5rem;
+        background: var(--color-bg);
+        border-top: 1px solid var(--color-border);
+    }
+
+    .endpoint-details.open {
+        display: block;
+    }
+
+    .detail-section {
+        margin-bottom: 1rem;
+    }
+
+    .detail-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .detail-title {
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.5rem;
+    }
+
+    .params-table {
+        width: 100%;
+        font-size: 0.85rem;
+        border-collapse: collapse;
+    }
+
+    .params-table th {
+        text-align: left;
+        padding: 0.5rem;
+        background: var(--color-surface);
+        border-bottom: 1px solid var(--color-border);
+        font-weight: 600;
+    }
+
+    .params-table td {
+        padding: 0.5rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .param-name {
+        font-family: 'Monaco', 'Menlo', monospace;
+        color: var(--color-primary);
+    }
+
+    .param-required {
+        color: #ef4444;
+        font-size: 0.75rem;
+    }
+
+    .param-type {
+        color: #f97316;
+        font-size: 0.8rem;
+    }
+
+    .response-code {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-right: 0.5rem;
+    }
+
+    .response-2xx {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .response-4xx {
+        background: #fef3c7;
+        color: #b45309;
+    }
+
+    .response-5xx {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .schemas-section {
+        margin-top: 1.5rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+    }
+
+    .schema-item {
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .schema-item:last-child {
+        border-bottom: none;
+    }
+
+    .schema-header {
+        padding: 1rem 1.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .schema-header:hover {
+        background: rgba(99, 102, 241, 0.03);
+    }
+
+    .schema-name {
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-weight: 600;
+        color: var(--color-primary);
+    }
+
+    .schema-details {
+        display: none;
+        padding: 1rem 1.5rem;
+        background: var(--color-bg);
+        border-top: 1px solid var(--color-border);
+    }
+
+    .schema-details.open {
+        display: block;
+    }
+
+    .schema-code {
+        background: var(--color-surface);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 0.8rem;
+        overflow-x: auto;
+        white-space: pre-wrap;
+    }
+
+    .loading {
+        display: none;
+        text-align: center;
+        padding: 2rem;
+        color: var(--color-text-secondary);
+    }
+
+    .loading.visible {
+        display: block;
+    }
+
+    .loading-spinner {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        border: 3px solid var(--color-border);
+        border-radius: 50%;
+        border-top-color: var(--color-primary);
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>📋 Swagger/OpenAPI Viewer</h1>
+    <p>View and explore your API documentation beautifully</p>
+</div>
+
+<div class="input-section">
+    <div class="input-row">
+        <input type="url" id="specUrl" class="url-input"
+            placeholder="Enter OpenAPI spec URL (e.g., https://petstore.swagger.io/v2/swagger.json)">
+        <button id="loadUrlBtn" class="load-btn">📥 Load from URL</button>
+    </div>
+
+    <div class="or-divider">OR paste your spec below</div>
+
+    <textarea id="specInput" class="spec-input" placeholder='Paste your OpenAPI/Swagger JSON or YAML specification here...
+
+Example:
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "My API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/users": {
+      "get": {
+        "summary": "Get all users"
+      }
+    }
+  }
+}'></textarea>
+
+    <div class="btn-row">
+        <button id="parseBtn" class="parse-btn">🔍 Parse & View Spec</button>
+        <button id="sampleBtn" class="sample-btn">📄 Load Sample</button>
+    </div>
+
+    <div class="error-message" id="errorMessage"></div>
+</div>
+
+<div class="loading" id="loading">
+    <div class="loading-spinner"></div>
+    <p>Loading specification...</p>
+</div>
+
+<div class="api-docs" id="apiDocs">
+    <div class="api-header">
+        <h2 class="api-title" id="apiTitle">API Title</h2>
+        <span class="api-version" id="apiVersion">v1.0.0</span>
+        <p class="api-description" id="apiDescription"></p>
+        <div class="api-info-grid" id="apiInfoGrid"></div>
+    </div>
+
+    <div class="endpoints-section">
+        <div class="section-header">📡 Endpoints</div>
+        <div id="endpointsList"></div>
+    </div>
+
+    <div class="schemas-section" id="schemasSection" style="display: none;">
+        <div class="section-header">📦 Schemas</div>
+        <div id="schemasList"></div>
+    </div>
+</div>
+
+<div class="info-section" id="infoSection">
+    <h2>💡 About OpenAPI/Swagger</h2>
+    <p>
+        OpenAPI (formerly Swagger) is a specification for describing REST APIs.
+        This tool helps you visualize and explore OpenAPI 2.0 (Swagger) and OpenAPI 3.0 specifications.
+        Simply paste your JSON or YAML spec, or load it from a URL to see all endpoints, parameters, and schemas.
+    </p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const specUrl = document.getElementById('specUrl');
+        const specInput = document.getElementById('specInput');
+        const loadUrlBtn = document.getElementById('loadUrlBtn');
+        const parseBtn = document.getElementById('parseBtn');
+        const sampleBtn = document.getElementById('sampleBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const loading = document.getElementById('loading');
+        const apiDocs = document.getElementById('apiDocs');
+        const infoSection = document.getElementById('infoSection');
+
+        // Sample OpenAPI spec
+        const sampleSpec = {
+            "openapi": "3.0.0",
+            "info": {
+                "title": "Sample Pet Store API",
+                "description": "A sample API that uses a petstore as an example to demonstrate features in the OpenAPI 3.0 specification",
+                "version": "1.0.0",
+                "contact": {
+                    "name": "API Support",
+                    "email": "support@example.com"
+                }
+            },
+            "servers": [
+                { "url": "https://api.example.com/v1", "description": "Production server" },
+                { "url": "https://staging-api.example.com", "description": "Staging server" }
+            ],
+            "paths": {
+                "/pets": {
+                    "get": {
+                        "summary": "List all pets",
+                        "description": "Returns all pets from the system that the user has access to",
+                        "operationId": "listPets",
+                        "tags": ["pets"],
+                        "parameters": [
+                            { "name": "limit", "in": "query", "description": "Maximum number of pets to return", "required": false, "schema": { "type": "integer", "format": "int32" } },
+                            { "name": "status", "in": "query", "description": "Filter by status", "required": false, "schema": { "type": "string", "enum": ["available", "pending", "sold"] } }
+                        ],
+                        "responses": {
+                            "200": { "description": "A list of pets" },
+                            "400": { "description": "Invalid request" }
+                        }
+                    },
+                    "post": {
+                        "summary": "Create a pet",
+                        "description": "Creates a new pet in the store",
+                        "operationId": "createPet",
+                        "tags": ["pets"],
+                        "requestBody": {
+                            "description": "Pet to add to the store",
+                            "required": true,
+                            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Pet" } } }
+                        },
+                        "responses": {
+                            "201": { "description": "Pet created successfully" },
+                            "400": { "description": "Invalid input" }
+                        }
+                    }
+                },
+                "/pets/{petId}": {
+                    "get": {
+                        "summary": "Get pet by ID",
+                        "description": "Returns a single pet by its ID",
+                        "operationId": "getPetById",
+                        "tags": ["pets"],
+                        "parameters": [
+                            { "name": "petId", "in": "path", "description": "ID of pet to return", "required": true, "schema": { "type": "integer", "format": "int64" } }
+                        ],
+                        "responses": {
+                            "200": { "description": "Successful operation" },
+                            "404": { "description": "Pet not found" }
+                        }
+                    },
+                    "put": {
+                        "summary": "Update a pet",
+                        "description": "Updates an existing pet",
+                        "operationId": "updatePet",
+                        "tags": ["pets"],
+                        "parameters": [
+                            { "name": "petId", "in": "path", "required": true, "schema": { "type": "integer" } }
+                        ],
+                        "responses": {
+                            "200": { "description": "Pet updated" },
+                            "404": { "description": "Pet not found" }
+                        }
+                    },
+                    "delete": {
+                        "summary": "Delete a pet",
+                        "description": "Deletes a pet from the store",
+                        "operationId": "deletePet",
+                        "tags": ["pets"],
+                        "parameters": [
+                            { "name": "petId", "in": "path", "required": true, "schema": { "type": "integer" } }
+                        ],
+                        "responses": {
+                            "204": { "description": "Pet deleted" },
+                            "404": { "description": "Pet not found" }
+                        }
+                    }
+                },
+                "/users": {
+                    "get": {
+                        "summary": "List all users",
+                        "tags": ["users"],
+                        "responses": { "200": { "description": "Success" } }
+                    },
+                    "post": {
+                        "summary": "Create user",
+                        "tags": ["users"],
+                        "responses": { "201": { "description": "User created" } }
+                    }
+                }
+            },
+            "components": {
+                "schemas": {
+                    "Pet": {
+                        "type": "object",
+                        "required": ["name"],
+                        "properties": {
+                            "id": { "type": "integer", "format": "int64" },
+                            "name": { "type": "string" },
+                            "tag": { "type": "string" },
+                            "status": { "type": "string", "enum": ["available", "pending", "sold"] }
+                        }
+                    },
+                    "User": {
+                        "type": "object",
+                        "properties": {
+                            "id": { "type": "integer" },
+                            "username": { "type": "string" },
+                            "email": { "type": "string", "format": "email" }
+                        }
+                    }
+                }
+            }
+        };
+
+        // Load sample
+        sampleBtn.addEventListener('click', () => {
+            specInput.value = JSON.stringify(sampleSpec, null, 2);
+        });
+
+        // Load from URL
+        loadUrlBtn.addEventListener('click', async () => {
+            const url = specUrl.value.trim();
+            if (!url) {
+                showError('Please enter a URL');
+                return;
+            }
+
+            showLoading();
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Failed to fetch spec');
+                const text = await response.text();
+                specInput.value = text;
+                parseSpec(text);
+            } catch (error) {
+                showError('Failed to load spec from URL. Try pasting the content directly.');
+                hideLoading();
+            }
+        });
+
+        // Parse spec
+        parseBtn.addEventListener('click', () => {
+            const text = specInput.value.trim();
+            if (!text) {
+                showError('Please enter an OpenAPI specification');
+                return;
+            }
+            parseSpec(text);
+        });
+
+        function parseSpec(text) {
+            showLoading();
+            hideError();
+
+            try {
+                let spec;
+                // Try JSON first
+                try {
+                    spec = JSON.parse(text);
+                } catch (e) {
+                    // Try YAML
+                    spec = jsyaml.load(text);
+                }
+
+                if (!spec) {
+                    throw new Error('Could not parse specification');
+                }
+
+                renderSpec(spec);
+                hideLoading();
+                apiDocs.classList.add('visible');
+                infoSection.style.display = 'none';
+            } catch (error) {
+                showError('Invalid OpenAPI specification: ' + error.message);
+                hideLoading();
+            }
+        }
+
+        function renderSpec(spec) {
+            // API Info
+            const info = spec.info || {};
+            document.getElementById('apiTitle').textContent = info.title || 'API Documentation';
+            document.getElementById('apiVersion').textContent = 'v' + (info.version || '1.0.0');
+            document.getElementById('apiDescription').textContent = info.description || '';
+
+            // Info grid
+            const infoGrid = document.getElementById('apiInfoGrid');
+            infoGrid.innerHTML = '';
+
+            if (info.contact?.email) {
+                infoGrid.innerHTML += `<div class="api-info-item"><span class="label">Contact:</span><span class="value">${info.contact.email}</span></div>`;
+            }
+
+            if (spec.servers?.length) {
+                infoGrid.innerHTML += `<div class="api-info-item"><span class="label">Server:</span><span class="value">${spec.servers[0].url}</span></div>`;
+            }
+
+            // Swagger 2.0 host/basePath
+            if (spec.host) {
+                const baseUrl = (spec.schemes?.[0] || 'https') + '://' + spec.host + (spec.basePath || '');
+                infoGrid.innerHTML += `<div class="api-info-item"><span class="label">Base URL:</span><span class="value">${baseUrl}</span></div>`;
+            }
+
+            // Endpoints
+            const endpointsList = document.getElementById('endpointsList');
+            endpointsList.innerHTML = '';
+
+            const paths = spec.paths || {};
+            const groupedByTag = {};
+
+            for (const [path, methods] of Object.entries(paths)) {
+                for (const [method, details] of Object.entries(methods)) {
+                    if (['get', 'post', 'put', 'patch', 'delete'].includes(method)) {
+                        const tags = details.tags || ['default'];
+                        const tag = tags[0];
+                        if (!groupedByTag[tag]) groupedByTag[tag] = [];
+                        groupedByTag[tag].push({ path, method, details });
+                    }
+                }
+            }
+
+            for (const [tag, endpoints] of Object.entries(groupedByTag)) {
+                const groupHtml = `
+                <div class="endpoint-group">
+                    <div class="endpoint-group-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                        📁 ${tag.charAt(0).toUpperCase() + tag.slice(1)} (${endpoints.length})
+                    </div>
+                    ${endpoints.map((ep, idx) => renderEndpoint(ep, tag + idx)).join('')}
+                </div>
+            `;
+                endpointsList.innerHTML += groupHtml;
+            }
+
+            // Schemas
+            const schemas = spec.components?.schemas || spec.definitions || {};
+            const schemasSection = document.getElementById('schemasSection');
+            const schemasList = document.getElementById('schemasList');
+
+            if (Object.keys(schemas).length > 0) {
+                schemasSection.style.display = 'block';
+                schemasList.innerHTML = '';
+
+                for (const [name, schema] of Object.entries(schemas)) {
+                    schemasList.innerHTML += `
+                    <div class="schema-item">
+                        <div class="schema-header" onclick="this.nextElementSibling.classList.toggle('open')">
+                            <span class="schema-name">${name}</span>
+                            <span>▼</span>
+                        </div>
+                        <div class="schema-details">
+                            <pre class="schema-code">${JSON.stringify(schema, null, 2)}</pre>
+                        </div>
+                    </div>
+                `;
+                }
+            } else {
+                schemasSection.style.display = 'none';
+            }
+        }
+
+        function renderEndpoint(ep, id) {
+            const { path, method, details } = ep;
+            const params = details.parameters || [];
+            const responses = details.responses || {};
+
+            return `
+            <div class="endpoint">
+                <div class="endpoint-header" onclick="document.getElementById('details-${id}').classList.toggle('open')">
+                    <span class="method-badge method-${method}">${method}</span>
+                    <span class="endpoint-path">${path}</span>
+                </div>
+                ${details.summary ? `<div class="endpoint-summary">${details.summary}</div>` : ''}
+                <div class="endpoint-details" id="details-${id}">
+                    ${details.description ? `<div class="detail-section"><div class="detail-title">Description</div><p>${details.description}</p></div>` : ''}
+                    ${params.length > 0 ? `
+                        <div class="detail-section">
+                            <div class="detail-title">Parameters</div>
+                            <table class="params-table">
+                                <thead><tr><th>Name</th><th>In</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+                                <tbody>
+                                    ${params.map(p => `
+                                        <tr>
+                                            <td><span class="param-name">${p.name}</span></td>
+                                            <td>${p.in}</td>
+                                            <td><span class="param-type">${p.schema?.type || p.type || '-'}</span></td>
+                                            <td>${p.required ? '<span class="param-required">required</span>' : 'optional'}</td>
+                                            <td>${p.description || '-'}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    ` : ''}
+                    <div class="detail-section">
+                        <div class="detail-title">Responses</div>
+                        ${Object.entries(responses).map(([code, resp]) => {
+                let cls = 'response-2xx';
+                if (code.startsWith('4')) cls = 'response-4xx';
+                if (code.startsWith('5')) cls = 'response-5xx';
+                return `<div><span class="response-code ${cls}">${code}</span> ${resp.description || ''}</div>`;
+            }).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+        }
+
+        function showError(msg) {
+            errorMessage.textContent = msg;
+            errorMessage.style.display = 'block';
+        }
+
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
+
+        function showLoading() {
+            loading.classList.add('visible');
+            apiDocs.classList.remove('visible');
+        }
+
+        function hideLoading() {
+            loading.classList.remove('visible');
+        }
+    });
+</script>
+{% endblock %}
