@@ -38,6 +38,7 @@ class StaticViewSitemap(Sitemap):
             'qr_generator_page',
             'mock_api_generator_page',
             'push_notification_tester_page',
+            'api_response_tester_page',
         ]
     
     def location(self, item):

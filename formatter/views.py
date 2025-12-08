@@ -618,6 +618,11 @@ def push_notification_tester_page(request):
     return render(request, 'push-notification-tester.html')
 
 
+def api_response_tester_page(request):
+    """Render the API Response Tester page"""
+    return render(request, 'api-response-tester.html')
+
+
 def swagger_viewer_page(request):
     """Render the Swagger/OpenAPI Viewer page"""
     return render(request, 'swagger-viewer.html')
