@@ -121,7 +121,7 @@ print(response['message']['content'])
 <p>If you haven't experimented with small language models yet, I'd genuinely recommend setting aside an afternoon to try. The capabilities might just surprise you – they certainly surprised me.</p>
         ''',
         'tags': 'small language models, SLM, edge AI, local AI, Phi-2, TinyLlama',
-        'meta_description': 'Explore small language models (SLMs) and discover why compact AI models are revolutionizing edge deployment, privacy, and cost-effective AI applications.',
+        'meta_description': 'Explore small language models (SLMs) for edge deployment, privacy, and cost-effective AI applications.',
         'meta_keywords': 'small language models, SLM, edge AI, Phi-2, TinyLlama, local inference, efficient AI'
     },
     {
@@ -217,7 +217,7 @@ def layered_safety_check(user_input, model_output):
 <p>Start with the basics – moderation APIs, output filtering, rate limiting. Then iterate based on what your specific users try to do. Because they will surprise you, and that's okay. That's how we all learn to build better, safer AI systems.</p>
         ''',
         'tags': 'AI safety, AI alignment, responsible AI, content moderation, guardrails',
-        'meta_description': 'A practical guide to AI safety for developers. Learn real-world techniques for content moderation, hallucination prevention, and building responsible AI applications.',
+        'meta_description': 'Practical AI safety guide for developers. Learn content moderation and responsible AI techniques.',
         'meta_keywords': 'AI safety, AI alignment, responsible AI, content moderation, AI guardrails, jailbreak prevention'
     },
     {
@@ -300,7 +300,7 @@ def calculate_average(numbers):
 <p>And honestly? All three are remarkable. We're living in an incredible time for AI capabilities. The differences I'm describing here are nuances at the frontier of what's possible.</p>
         ''',
         'tags': 'ChatGPT, Claude, Gemini, AI comparison, GPT-4, model comparison',
-        'meta_description': 'Honest comparison of ChatGPT, Claude, and Gemini based on real-world use. Learn when to use each AI model for coding, analysis, and creative tasks.',
+        'meta_description': 'Honest comparison of ChatGPT, Claude, and Gemini. Learn when to use each AI model.',
         'meta_keywords': 'ChatGPT vs Claude, Claude vs Gemini, GPT-4 comparison, best AI model 2024, AI model comparison'
     },
     {
@@ -410,7 +410,7 @@ Final Answer: $1000 would buy approximately 0.023 Bitcoin
 <p>Agentic AI represents a genuine paradigm shift in how we build software. It's not perfect yet, but the trajectory is clear: AI systems that don't just answer questions, but actually get things done.</p>
         ''',
         'tags': 'agentic AI, AI agents, autonomous AI, LangChain, ReAct, tool use',
-        'meta_description': 'Learn to build agentic AI systems that can plan, reason, and use tools autonomously. Practical guide with examples using LangChain and ReAct patterns.',
+        'meta_description': 'Build agentic AI systems that plan, reason, and use tools autonomously with LangChain.',
         'meta_keywords': 'agentic AI, AI agents, autonomous AI, LangChain agents, ReAct pattern, tool use'
     },
     {
@@ -511,7 +511,7 @@ class HealthcareAIGuidelines:
 <p>If you're working in this space, my advice: focus on tools that augment clinicians rather than replace them. Build explainability into everything. Test extensively across diverse populations. And remember that at the end of every data point is a real patient whose life may be affected by the decisions your system influences.</p>
         ''',
         'tags': 'AI in healthcare, medical AI, health tech, diagnostics AI, responsible AI',
-        'meta_description': 'Explore practical AI applications in healthcare, from medical imaging to predictive analytics. Learn about successes, failures, and ethical considerations.',
+        'meta_description': 'Explore practical AI in healthcare: medical imaging, predictive analytics, and ethics.',
         'meta_keywords': 'AI in healthcare, medical AI, health tech, diagnostics, healthcare automation, medical imaging AI'
     },
     {
@@ -644,7 +644,7 @@ def extract_to_graph(document):
 <p>But for the right use cases, the improvement in answer quality is dramatic. My product support bot went from "pretty good" to "actually helpful" once relationships were in play.</p>
         ''',
         'tags': 'GraphRAG, knowledge graphs, RAG, semantic search, LangChain, information retrieval',
-        'meta_description': 'Learn how GraphRAG combines knowledge graphs with vector search for superior AI-powered information retrieval and question answering.',
+        'meta_description': 'Learn GraphRAG: combining knowledge graphs with vector search for better AI retrieval.',
         'meta_keywords': 'GraphRAG, knowledge graph, RAG, retrieval augmented generation, semantic search, LangChain'
     },
     {
@@ -743,7 +743,7 @@ def process_email_thread(thread):
 <p>Don't try to automate everything. Identify the specific bottlenecks in your workflow, and target those with AI tools. That focused approach beats trying every shiny new tool that launches.</p>
         ''',
         'tags': 'AI productivity, AI tools, GitHub Copilot, AI writing, productivity apps',
-        'meta_description': 'Honest review of AI productivity tools that actually work. From coding assistants to writing tools, discover what\'s worth your time.',
+        'meta_description': 'Honest review of AI productivity tools. Discover what actually works for developers.',
         'meta_keywords': 'AI productivity tools, GitHub Copilot, AI writing assistant, productivity apps, AI tools review'
     },
     {
@@ -841,7 +841,7 @@ def generate(prompt, complexity='medium'):
 <p>The era of "OpenAI or nothing" is ending. And honestly? That's great for everyone.</p>
         ''',
         'tags': 'open source AI, Llama, Mistral, self-hosted AI, local LLMs',
-        'meta_description': 'Explore the open source AI revolution with Llama, Mistral, and Mixtral. Learn how to run competitive AI models locally.',
+        'meta_description': 'Explore open source AI with Llama, Mistral, and Mixtral. Run competitive models locally.',
         'meta_keywords': 'open source AI, Llama, Mistral, self-hosted AI, local AI, open source LLM'
     },
     {
@@ -967,7 +967,7 @@ def process_transaction(
 <p>The tools that stick are the ones that integrate seamlessly into existing workflows. Any tool requiring a major context switch gets abandoned within a week. Choose accordingly.</p>
         ''',
         'tags': 'AI developer tools, GitHub Copilot, AI coding, developer productivity, code generation',
-        'meta_description': 'Discover AI tools that genuinely improve developer productivity. From GitHub Copilot to AI debugging assistants, find what actually works.',
+        'meta_description': 'Discover AI tools that boost developer productivity. GitHub Copilot, AI debugging, and more.',
         'meta_keywords': 'AI developer tools, GitHub Copilot, AI coding assistant, developer productivity, AI debugging'
     },
     {
@@ -1120,7 +1120,7 @@ print(result)
 <p>Local LLMs have gone from "interesting experiment" to "practical tool" in just one year. If privacy matters to you, now is the time to explore them.</p>
         ''',
         'tags': 'local LLM, Ollama, privacy AI, self-hosted AI, llama.cpp',
-        'meta_description': 'Complete guide to running LLMs locally for privacy-first AI. Learn to use Ollama, llama.cpp, and build local RAG systems.',
+        'meta_description': 'Complete guide to running LLMs locally with Ollama and llama.cpp for privacy-first AI.',
         'meta_keywords': 'local LLM, Ollama, privacy AI, self-hosted AI, llama.cpp, offline AI, local inference'
     },
 ]
