@@ -1,18 +1,23 @@
 /**
  * JSON Diff Tool
- * Client-side JSON comparison with visual diff
+ * Client-side JSON comparison with inline visual highlighting
  */
 
 document.addEventListener('DOMContentLoaded', function () {
     const jsonLeft = document.getElementById('jsonLeft');
     const jsonRight = document.getElementById('jsonRight');
+    const highlightLeft = document.getElementById('highlightLeft');
+    const highlightRight = document.getElementById('highlightRight');
     const compareBtn = document.getElementById('compareBtn');
     const swapBtn = document.getElementById('swapBtn');
     const clearBtn = document.getElementById('clearBtn');
     const sampleBtn = document.getElementById('sampleBtn');
-    const diffResults = document.getElementById('diffResults');
-    const diffStats = document.getElementById('diffStats');
-    const diffOutput = document.getElementById('diffOutput');
+    const editLeftBtn = document.getElementById('editLeftBtn');
+    const editRightBtn = document.getElementById('editRightBtn');
+    const diffSummary = document.getElementById('diffSummary');
+    const statAdded = document.getElementById('statAdded');
+    const statRemoved = document.getElementById('statRemoved');
+    const statChanged = document.getElementById('statChanged');
 
     // Deep compare two values
     function deepEqual(a, b) {
@@ -109,11 +114,105 @@ document.addEventListener('DOMContentLoaded', function () {
         return diffs;
     }
 
+    // Escape HTML
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
     // Format value for display
     function formatValue(value) {
         if (typeof value === 'string') return `"${value}"`;
         if (typeof value === 'object') return JSON.stringify(value);
         return String(value);
+    }
+
+    // Create highlighted JSON with inline markers
+    function createHighlightedJson(json, diffs, side) {
+        // Get paths that apply to this side
+        const pathsToHighlight = new Map();
+
+        if (side === 'left') {
+            // Removed items (in left, not in right)
+            diffs.removed.forEach(d => {
+                pathsToHighlight.set(d.path, { type: 'removed', tooltip: `Removed: ${formatValue(d.value)}` });
+            });
+            // Changed items - show old value
+            diffs.changed.forEach(d => {
+                pathsToHighlight.set(d.path, { type: 'changed', tooltip: `Changed from ${formatValue(d.oldValue)} to ${formatValue(d.newValue)}` });
+            });
+        } else {
+            // Added items (in right, not in left)
+            diffs.added.forEach(d => {
+                pathsToHighlight.set(d.path, { type: 'added', tooltip: `Added: ${formatValue(d.value)}` });
+            });
+            // Changed items - show new value
+            diffs.changed.forEach(d => {
+                pathsToHighlight.set(d.path, { type: 'changed', tooltip: `Changed from ${formatValue(d.oldValue)} to ${formatValue(d.newValue)}` });
+            });
+        }
+
+        // Recursively build highlighted JSON
+        function highlightObject(obj, currentPath = '') {
+            if (obj === null) return '<span class="json-null">null</span>';
+            if (typeof obj === 'boolean') return `<span class="json-bool">${obj}</span>`;
+            if (typeof obj === 'number') return `<span class="json-number">${obj}</span>`;
+            if (typeof obj === 'string') return `<span class="json-string">"${escapeHtml(obj)}"</span>`;
+
+            if (Array.isArray(obj)) {
+                if (obj.length === 0) return '[]';
+                let html = '[\n';
+                obj.forEach((item, i) => {
+                    const itemPath = currentPath ? `${currentPath}[${i}]` : `[${i}]`;
+                    const highlight = pathsToHighlight.get(itemPath);
+                    let itemHtml = highlightObject(item, itemPath);
+
+                    if (highlight) {
+                        itemHtml = `<span class="diff-${highlight.type}" data-tooltip="${escapeHtml(highlight.tooltip)}">${itemHtml}</span>`;
+                    }
+
+                    html += '  ' + itemHtml + (i < obj.length - 1 ? ',' : '') + '\n';
+                });
+                html += ']';
+                return html;
+            }
+
+            if (typeof obj === 'object') {
+                const keys = Object.keys(obj);
+                if (keys.length === 0) return '{}';
+                let html = '{\n';
+                keys.forEach((key, i) => {
+                    const keyPath = currentPath ? `${currentPath}.${key}` : key;
+                    const highlight = pathsToHighlight.get(keyPath);
+                    let valueHtml = highlightObject(obj[key], keyPath);
+                    let lineHtml = `  <span class="json-key">"${escapeHtml(key)}"</span>: ${valueHtml}`;
+
+                    if (highlight) {
+                        lineHtml = `<span class="diff-${highlight.type}" data-tooltip="${escapeHtml(highlight.tooltip)}">${lineHtml}</span>`;
+                    }
+
+                    html += lineHtml + (i < keys.length - 1 ? ',' : '') + '\n';
+                });
+                html += '}';
+                return html;
+            }
+
+            return escapeHtml(String(obj));
+        }
+
+        return highlightObject(json);
+    }
+
+    // Show edit mode
+    function showEditMode() {
+        jsonLeft.style.display = 'block';
+        jsonRight.style.display = 'block';
+        highlightLeft.classList.remove('active');
+        highlightRight.classList.remove('active');
+        editLeftBtn.style.display = 'none';
+        editRightBtn.style.display = 'none';
+        diffSummary.classList.remove('active');
     }
 
     // Compare button handler
@@ -122,9 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const rightInput = jsonRight.value.trim();
 
         if (!leftInput || !rightInput) {
-            diffResults.classList.add('active');
-            diffStats.innerHTML = '';
-            diffOutput.innerHTML = '<span style="color: var(--color-error);">Please provide JSON in both panels</span>';
+            alert('Please provide JSON in both panels');
             return;
         }
 
@@ -132,63 +229,55 @@ document.addEventListener('DOMContentLoaded', function () {
             const leftJson = JSON.parse(leftInput);
             const rightJson = JSON.parse(rightInput);
 
-            // Check if identical
-            if (deepEqual(leftJson, rightJson)) {
-                diffResults.classList.add('active');
-                diffStats.innerHTML = '<span class="stat-badge stat-same">✓ JSON objects are identical</span>';
-                diffOutput.innerHTML = '';
-                return;
-            }
-
             // Find differences
             const diffs = findDiff(leftJson, rightJson);
 
-            // Display stats
-            diffStats.innerHTML = `
-                <span class="stat-badge stat-added">+ ${diffs.added.length} Added</span>
-                <span class="stat-badge stat-removed">− ${diffs.removed.length} Removed</span>
-                <span class="stat-badge stat-changed">~ ${diffs.changed.length} Changed</span>
-            `;
+            // Update stats
+            statAdded.textContent = `+ ${diffs.added.length} Added`;
+            statRemoved.textContent = `− ${diffs.removed.length} Removed`;
+            statChanged.textContent = `~ ${diffs.changed.length} Changed`;
 
-            // Display differences
-            let output = '';
+            // Check if identical
+            if (diffs.added.length === 0 && diffs.removed.length === 0 && diffs.changed.length === 0) {
+                alert('✓ JSON objects are identical!');
+                return;
+            }
 
-            diffs.removed.forEach(d => {
-                output += `<span class="diff-line-removed">− ${d.path}: ${formatValue(d.value)}</span>`;
-            });
+            // Create highlighted views
+            highlightLeft.innerHTML = createHighlightedJson(leftJson, diffs, 'left');
+            highlightRight.innerHTML = createHighlightedJson(rightJson, diffs, 'right');
 
-            diffs.added.forEach(d => {
-                output += `<span class="diff-line-added">+ ${d.path}: ${formatValue(d.value)}</span>`;
-            });
-
-            diffs.changed.forEach(d => {
-                output += `<span class="diff-line-changed">~ ${d.path}: ${formatValue(d.oldValue)} → ${formatValue(d.newValue)}</span>`;
-            });
-
-            diffOutput.innerHTML = output || '<span style="color: var(--color-text-secondary);">No differences found</span>';
-            diffResults.classList.add('active');
+            // Switch to highlight mode
+            jsonLeft.style.display = 'none';
+            jsonRight.style.display = 'none';
+            highlightLeft.classList.add('active');
+            highlightRight.classList.add('active');
+            editLeftBtn.style.display = 'block';
+            editRightBtn.style.display = 'block';
+            diffSummary.classList.add('active');
 
         } catch (e) {
-            diffResults.classList.add('active');
-            diffStats.innerHTML = '';
-            diffOutput.innerHTML = `<span style="color: var(--color-error);">Error: Invalid JSON\n${e.message}</span>`;
+            alert('Error: Invalid JSON\n' + e.message);
         }
     });
+
+    // Edit buttons
+    editLeftBtn.addEventListener('click', showEditMode);
+    editRightBtn.addEventListener('click', showEditMode);
 
     // Swap button handler
     swapBtn.addEventListener('click', function () {
         const temp = jsonLeft.value;
         jsonLeft.value = jsonRight.value;
         jsonRight.value = temp;
+        showEditMode();
     });
 
     // Clear button handler
     clearBtn.addEventListener('click', function () {
         jsonLeft.value = '';
         jsonRight.value = '';
-        diffResults.classList.remove('active');
-        diffStats.innerHTML = '';
-        diffOutput.innerHTML = '';
+        showEditMode();
     });
 
     // Sample button handler
@@ -206,5 +295,7 @@ document.addEventListener('DOMContentLoaded', function () {
             "country": "USA",
             "skills": ["JavaScript", "Python", "Go"]
         }, null, 2);
+
+        showEditMode();
     });
 });
