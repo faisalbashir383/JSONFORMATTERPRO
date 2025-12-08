@@ -47,6 +47,8 @@ urlpatterns = [
     path('qr-generator/', views.qr_generator_page, name='qr_generator_page'),
     path('meta-tag-generator/', views.meta_tag_generator_page, name='meta_tag_generator_page'),
     path('swagger-viewer/', views.swagger_viewer_page, name='swagger_viewer_page'),
+    path('mock-api/', views.mock_api_generator_page, name='mock_api_generator_page'),
+    path('push-notification-tester/', views.push_notification_tester_page, name='push_notification_tester_page'),
     
     # Code Tool API Endpoints
     path('api/qr-generator/', views.generate_qr_code, name='generate_qr_code'),

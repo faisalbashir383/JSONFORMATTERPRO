@@ -1,0 +1,1341 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Free Mock API Generator - Create Fake REST Endpoints Online | JSON Formatters Pro{% endblock %}
+{% block meta_title %}Free Mock API Generator - Create Fake REST API Endpoints Online | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Generate mock API endpoints instantly. Create fake REST APIs with custom JSON responses,
+latency simulation, error rates, and template variables. Perfect for frontend development, testing, and prototyping.
+Free online API mocking tool.{% endblock %}
+{% block meta_keywords %}mock api generator, fake api generator, api testing tool, mock rest api, api simulator, test
+api online, generate mock api endpoints, api mocking service, free mock api, json api generator, mock server, api
+prototyping, frontend testing, mock backend, rest api simulator, api response generator, fake json api, mock http
+server, api mock tool, test api responses, mock api free, api endpoint generator, fake rest api, mock api online,
+generate fake api, api testing online, mock web service, rest mock, json mock server, api faker{% endblock %}
+{% block canonical_url %}https://jsonformatterspro.com/mock-api/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Free Mock API Generator",
+  "description": "Generate mock REST API endpoints with custom responses, latency simulation, and template variables for testing and development",
+  "url": "https://jsonformatterspro.com/mock-api/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Custom JSON response templates",
+    "Template variables (firstName, email, uuid, etc.)",
+    "Latency simulation",
+    "Error response simulation",
+    "Multiple HTTP methods",
+    "Request history tracking",
+    "OpenAPI/Swagger export",
+    "Copy and download functionality"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Create a Mock API Endpoint",
+  "description": "Learn how to generate mock REST API endpoints for testing your applications",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Configure Endpoint",
+      "text": "Set your endpoint path, HTTP method, and status code"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Define Response",
+      "text": "Write your JSON response body using template variables like {{firstName}}, {{email}}"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Set Options",
+      "text": "Configure latency, error rate, and response headers"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Generate and Test",
+      "text": "Click Generate to create your mock endpoint and test it"
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a Mock API Generator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A Mock API Generator creates fake API endpoints that return predefined responses. It helps frontend developers test their applications without a real backend, simulate various response scenarios, and prototype API designs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why use template variables in mock APIs?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Template variables like {{firstName}}, {{email}}, and {{uuid}} generate realistic random data each time the API is called. This creates more realistic test scenarios compared to static responses."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does latency simulation help testing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Latency simulation adds configurable delays to responses, helping you test loading states, timeout handling, and user experience under slow network conditions."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(59, 130, 246, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .generator-container {
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Config Panel */
+    .config-panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1.5rem;
+        box-shadow: 0 4px 16px var(--color-shadow);
+        max-height: fit-content;
+    }
+
+    .config-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .config-section {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .config-section:last-of-type {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .section-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--color-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .input-group {
+        margin-bottom: 1rem;
+    }
+
+    .input-label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.4rem;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 0.65rem 0.9rem;
+        font-size: 0.9rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        transition: border-color 200ms ease;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: var(--color-primary);
+    }
+
+    .input-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .method-select {
+        width: 100%;
+        padding: 0.65rem 0.9rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+    }
+
+    .method-select option[value="GET"] {
+        color: #10b981;
+    }
+
+    .method-select option[value="POST"] {
+        color: #3b82f6;
+    }
+
+    .method-select option[value="PUT"] {
+        color: #f59e0b;
+    }
+
+    .method-select option[value="DELETE"] {
+        color: #ef4444;
+    }
+
+    .slider-group {
+        margin-bottom: 1rem;
+    }
+
+    .slider-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+
+    .slider-value {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--color-primary);
+    }
+
+    .slider {
+        width: 100%;
+        height: 6px;
+        border-radius: 3px;
+        background: var(--color-border);
+        outline: none;
+        appearance: none;
+        -webkit-appearance: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--color-primary);
+        cursor: pointer;
+        border: 2px solid white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .generate-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .generate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+    }
+
+    /* Main Panel */
+    .main-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .panel-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+        box-shadow: 0 4px 16px var(--color-shadow);
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .panel-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .panel-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .action-btn {
+        background: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        padding: 0.4rem 0.75rem;
+        cursor: pointer;
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        transition: all 200ms ease;
+    }
+
+    .action-btn:hover {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+    }
+
+    .response-textarea {
+        width: 100%;
+        min-height: 280px;
+        padding: 1.25rem;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.875rem;
+        line-height: 1.7;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: none;
+        resize: vertical;
+    }
+
+    .response-textarea:focus {
+        outline: none;
+    }
+
+    /* Endpoint Display */
+    .endpoint-display {
+        padding: 1.25rem;
+        background: var(--color-bg);
+    }
+
+    .endpoint-url {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        font-family: 'SF Mono', 'Monaco', monospace;
+        font-size: 0.875rem;
+    }
+
+    .method-badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .method-badge.get {
+        background: rgba(16, 185, 129, 0.15);
+        color: #10b981;
+    }
+
+    .method-badge.post {
+        background: rgba(59, 130, 246, 0.15);
+        color: #3b82f6;
+    }
+
+    .method-badge.put {
+        background: rgba(245, 158, 11, 0.15);
+        color: #f59e0b;
+    }
+
+    .method-badge.delete {
+        background: rgba(239, 68, 68, 0.15);
+        color: #ef4444;
+    }
+
+    .endpoint-path {
+        flex: 1;
+        color: var(--color-text);
+        word-break: break-all;
+    }
+
+    .copy-url-btn {
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        padding: 0.4rem 0.75rem;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-size: 0.8rem;
+        font-weight: 500;
+        transition: all 200ms ease;
+    }
+
+    .copy-url-btn:hover {
+        transform: scale(1.05);
+    }
+
+    /* Template Variables Reference */
+    .variables-section {
+        padding: 1.25rem;
+    }
+
+    .variable-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 0.5rem;
+    }
+
+    .variable-chip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.5rem 0.75rem;
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        font-size: 0.75rem;
+        font-family: 'SF Mono', monospace;
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .variable-chip:hover {
+        border-color: var(--color-primary);
+        background: rgba(99, 102, 241, 0.1);
+    }
+
+    .variable-chip .insert-icon {
+        opacity: 0;
+        font-size: 0.7rem;
+        color: var(--color-primary);
+    }
+
+    .variable-chip:hover .insert-icon {
+        opacity: 1;
+    }
+
+    /* Request History */
+    .history-list {
+        max-height: 200px;
+        overflow-y: auto;
+        padding: 1rem 1.25rem;
+    }
+
+    .history-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-sm);
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .history-time {
+        color: var(--color-text-secondary);
+        font-size: 0.75rem;
+    }
+
+    .history-status {
+        padding: 0.2rem 0.5rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+    .history-status.success {
+        background: rgba(16, 185, 129, 0.15);
+        color: #10b981;
+    }
+
+    .history-status.error {
+        background: rgba(239, 68, 68, 0.15);
+        color: #ef4444;
+    }
+
+    .empty-history {
+        text-align: center;
+        padding: 2rem;
+        color: var(--color-text-secondary);
+    }
+
+    /* Info Section */
+    .info-section {
+        margin-top: 2.5rem;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .info-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+    }
+
+    .info-card h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-card p,
+    .info-card li {
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        font-size: 0.95rem;
+    }
+
+    .info-card ul {
+        margin: 0;
+        padding-left: 1.25rem;
+    }
+
+    .info-card li {
+        margin-bottom: 0.5rem;
+    }
+
+    .info-card code {
+        background: var(--color-surface-alt);
+        padding: 0.15rem 0.4rem;
+        border-radius: 4px;
+        font-size: 0.85em;
+        color: var(--color-primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .generator-container {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .input-row {
+            grid-template-columns: 1fr;
+        }
+
+        .variable-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% verbatim %}
+<div class="tool-header">
+    <h1>🔌 Free Mock API Generator</h1>
+    <p>Create fake REST API endpoints with custom responses, template variables, latency simulation, and error handling.
+        Perfect for frontend development & testing.</p>
+</div>
+
+<div class="generator-container">
+    <!-- Configuration Panel -->
+    <div class="config-panel">
+        <h2 class="config-title">⚙️ Endpoint Configuration</h2>
+
+        <div class="config-section">
+            <span class="section-label">Endpoint Setup</span>
+
+            <div class="input-group">
+                <label class="input-label">Endpoint Path</label>
+                <input type="text" id="endpointPath" class="input-field" value="/api/users" placeholder="/api/users">
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label class="input-label">HTTP Method</label>
+                    <select id="httpMethod" class="method-select">
+                        <option value="GET">GET</option>
+                        <option value="POST">POST</option>
+                        <option value="PUT">PUT</option>
+                        <option value="DELETE">DELETE</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Status Code</label>
+                    <select id="statusCode" class="input-field">
+                        <option value="200">200 OK</option>
+                        <option value="201">201 Created</option>
+                        <option value="204">204 No Content</option>
+                        <option value="400">400 Bad Request</option>
+                        <option value="401">401 Unauthorized</option>
+                        <option value="403">403 Forbidden</option>
+                        <option value="404">404 Not Found</option>
+                        <option value="500">500 Server Error</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="config-section">
+            <span class="section-label">Simulation Options</span>
+
+            <div class="slider-group">
+                <div class="slider-header">
+                    <label class="input-label">Response Latency</label>
+                    <span class="slider-value" id="latencyValue">0ms</span>
+                </div>
+                <input type="range" id="latencySlider" class="slider" min="0" max="5000" step="100" value="0">
+            </div>
+
+            <div class="slider-group">
+                <div class="slider-header">
+                    <label class="input-label">Error Rate</label>
+                    <span class="slider-value" id="errorRateValue">0%</span>
+                </div>
+                <input type="range" id="errorRateSlider" class="slider" min="0" max="100" step="5" value="0">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Number of Records</label>
+                <input type="number" id="recordCount" class="input-field" value="5" min="1" max="100">
+            </div>
+        </div>
+
+        <button id="generateBtn" class="generate-btn">
+            <span>⚡</span> Generate Mock Response
+        </button>
+
+        <button id="testEndpointBtn" class="generate-btn"
+            style="margin-top: 0.75rem; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+            <span>🧪</span> Test Endpoint
+        </button>
+    </div>
+
+    <!-- Main Panel -->
+    <div class="main-panel">
+        <!-- Response Editor -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2 class="panel-title">📝 Response Body Template</h2>
+                <div class="panel-actions">
+                    <button id="formatBtn" class="action-btn">Format</button>
+                    <button id="resetBtn" class="action-btn">Reset</button>
+                </div>
+            </div>
+            <textarea id="responseTemplate" class="response-textarea"
+                placeholder="Enter your JSON response template...">{
+  "success": true,
+  "data": [
+    {
+      "id": "{{uuid}}",
+      "firstName": "{{firstName}}",
+      "lastName": "{{lastName}}",
+      "email": "{{email}}",
+      "avatar": "{{avatar}}",
+      "createdAt": "{{isoDate}}"
+    }
+  ],
+  "meta": {
+    "total": {{number:100}},
+    "page": 1,
+    "limit": 10
+  }
+}</textarea>
+        </div>
+
+        <!-- Template Variables -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2 class="panel-title">🎲 Template Variables (Click to Insert)</h2>
+            </div>
+            <div class="variables-section">
+                <div class="variable-grid" id="variableGrid">
+                    <div class="variable-chip" data-var="{{uuid}}">{{uuid}}<span class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="{{firstName}}">{{firstName}}<span class="insert-icon">+</span>
+                    </div>
+                    <div class="variable-chip" data-var="{{lastName}}">{{lastName}}<span class="insert-icon">+</span>
+                    </div>
+                    <div class="variable-chip" data-var="{{fullName}}">{{fullName}}<span class="insert-icon">+</span>
+                    </div>
+                    <div class="variable-chip" data-var="{{email}}">{{email}}<span class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="{{phone}}">{{phone}}<span class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="{{avatar}}">{{avatar}}<span class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="{{username}}">{{username}}<span class="insert-icon">+</span>
+                    </div>
+                    <div class="variable-chip" data-var="{{company}}">{{company}}<span class="insert-icon">+</span>
+                    </div>
+                    <div class="variable-chip" data-var="{{jobTitle}}">{{jobTitle}}<span class="insert-icon">+</span>
+                    </div>
+                    <div class="variable-chip" data-var="{{street}}">{{street}}<span class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="{{city}}">{{city}}<span class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="{{country}}">{{country}}<span class="insert-icon">+</span>
+                    </div>
+                    <div class="variable-chip" data-var="{{zipCode}}">{{zipCode}}<span class="insert-icon">+</span>
+                    </div>
+                    <div class="variable-chip" data-var="{{isoDate}}">{{isoDate}}<span class="insert-icon">+</span>
+                    </div>
+                    <div class="variable-chip" data-var="{{pastDate}}">{{pastDate}}<span class="insert-icon">+</span>
+                    </div>
+                    <div class="variable-chip" data-var="{{boolean}}">{{boolean}}<span class="insert-icon">+</span>
+                    </div>
+                    <div class="variable-chip" data-var="{{number:100}}">{{number:N}}<span class="insert-icon">+</span>
+                    </div>
+                    <div class="variable-chip" data-var="{{lorem:20}}">{{lorem:N}}<span class="insert-icon">+</span>
+                    </div>
+                    <div class="variable-chip" data-var="{{imageUrl}}">{{imageUrl}}<span class="insert-icon">+</span>
+                    </div>
+                </div>
+
+                <!-- Custom Variables -->
+                <div class="custom-vars-section"
+                    style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--color-border);">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                        <span style="font-size: 0.8rem; font-weight: 600; color: var(--color-primary);">➕ Add Custom
+                            Variable</span>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <input type="text" id="customVarName" placeholder="Variable name"
+                            style="flex: 1; min-width: 100px; padding: 0.5rem 0.75rem; font-size: 0.85rem; background: var(--color-bg); color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--radius-sm);">
+                        <input type="text" id="customVarValue" placeholder="Value or values (comma separated)"
+                            style="flex: 2; min-width: 150px; padding: 0.5rem 0.75rem; font-size: 0.85rem; background: var(--color-bg); color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--radius-sm);">
+                        <button id="addCustomVarBtn"
+                            style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; border: none; border-radius: var(--radius-sm); cursor: pointer; transition: all 200ms ease;">
+                            Add
+                        </button>
+                    </div>
+                    <div id="customVarsList" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generated Endpoint -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2 class="panel-title">📡 Generated Endpoint</h2>
+                <div class="panel-actions">
+                    <button id="exportSwaggerBtn" class="action-btn">Export OpenAPI</button>
+                </div>
+            </div>
+            <div class="endpoint-display">
+                <div class="endpoint-url">
+                    <span class="method-badge get" id="methodBadge">GET</span>
+                    <span class="endpoint-path" id="endpointUrlDisplay">https://api.mockendpoint.dev/api/users</span>
+                    <button class="copy-url-btn" id="copyUrlBtn">Copy</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generated Response -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2 class="panel-title">📤 Generated Response</h2>
+                <div class="panel-actions">
+                    <button id="copyResponseBtn" class="action-btn">📋 Copy</button>
+                    <button id="downloadResponseBtn" class="action-btn">⬇ Download</button>
+                </div>
+            </div>
+            <textarea id="generatedResponse" class="response-textarea" readonly
+                placeholder="Click 'Generate Mock Response' to see the output..."></textarea>
+        </div>
+
+        <!-- Request History -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2 class="panel-title">📜 Request History</h2>
+                <div class="panel-actions">
+                    <button id="clearHistoryBtn" class="action-btn">Clear</button>
+                </div>
+            </div>
+            <div class="history-list" id="historyList">
+                <div class="empty-history">No requests yet. Generate and test an endpoint to see history.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Information Section -->
+<div class="info-section">
+    <div class="info-grid">
+        <div class="info-card">
+            <h3>🚀 What is Mock API Generator?</h3>
+            <p>
+                A Mock API Generator creates simulated REST API endpoints that return fake but realistic data.
+                It's essential for frontend developers who need to build and test applications <strong>before
+                    the real backend is ready</strong>. Our generator supports template variables, custom responses,
+                and advanced simulation features.
+            </p>
+        </div>
+
+        <div class="info-card">
+            <h3>✨ Key Features</h3>
+            <ul>
+                <li><strong>Template Variables</strong> - Use <code>{{firstName}}</code>, <code>{{email}}</code> for
+                    realistic random data</li>
+                <li><strong>Latency Simulation</strong> - Test loading states and timeout handling</li>
+                <li><strong>Error Simulation</strong> - Configure error rates to test error handling</li>
+                <li><strong>Multiple Methods</strong> - Support for GET, POST, PUT, DELETE</li>
+                <li><strong>OpenAPI Export</strong> - Generate Swagger documentation</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h3>💡 Common Use Cases</h3>
+            <ul>
+                <li>Frontend development without backend</li>
+                <li>UI/UX prototyping with realistic data</li>
+                <li>Testing error handling and edge cases</li>
+                <li>Demo applications and presentations</li>
+                <li>API design and documentation</li>
+                <li>Load testing and performance testing</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h3>🎯 Template Variable Examples</h3>
+            <p>
+                <code>{{uuid}}</code> → "a1b2c3d4-e5f6-..."<br>
+                <code>{{firstName}}</code> → "John"<br>
+                <code>{{email}}</code> → "john.doe@example.com"<br>
+                <code>{{number:100}}</code> → Random 0-100<br>
+                <code>{{lorem:20}}</code> → 20 words of lorem ipsum<br>
+                <code>{{isoDate}}</code> → "2024-01-15T10:30:00Z"
+            </p>
+        </div>
+    </div>
+</div>
+{% endverbatim %}
+{% endblock %}
+
+{% block extra_js %}
+{% verbatim %}
+<script>
+    (function () {
+        // DOM Elements
+        const endpointPath = document.getElementById('endpointPath');
+        const httpMethod = document.getElementById('httpMethod');
+        const statusCode = document.getElementById('statusCode');
+        const latencySlider = document.getElementById('latencySlider');
+        const latencyValue = document.getElementById('latencyValue');
+        const errorRateSlider = document.getElementById('errorRateSlider');
+        const errorRateValue = document.getElementById('errorRateValue');
+        const recordCount = document.getElementById('recordCount');
+        const responseTemplate = document.getElementById('responseTemplate');
+        const generatedResponse = document.getElementById('generatedResponse');
+        const generateBtn = document.getElementById('generateBtn');
+        const testEndpointBtn = document.getElementById('testEndpointBtn');
+        const formatBtn = document.getElementById('formatBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const copyUrlBtn = document.getElementById('copyUrlBtn');
+        const copyResponseBtn = document.getElementById('copyResponseBtn');
+        const downloadResponseBtn = document.getElementById('downloadResponseBtn');
+        const exportSwaggerBtn = document.getElementById('exportSwaggerBtn');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        const methodBadge = document.getElementById('methodBadge');
+        const endpointUrlDisplay = document.getElementById('endpointUrlDisplay');
+        const historyList = document.getElementById('historyList');
+        const variableGrid = document.getElementById('variableGrid');
+
+        // Fake Data Generators
+        const fakeData = {
+            firstNames: ['James', 'Emma', 'Liam', 'Olivia', 'Noah', 'Ava', 'Ethan', 'Sophia', 'Mason', 'Isabella', 'Lucas', 'Mia', 'Oliver', 'Charlotte', 'Aiden', 'Amelia', 'Elijah', 'Harper', 'Sebastian', 'Evelyn'],
+            lastNames: ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez', 'Hernandez', 'Lopez', 'Gonzalez', 'Wilson', 'Anderson', 'Thomas', 'Taylor', 'Moore', 'Jackson', 'Martin'],
+            companies: ['TechCorp', 'Innovate Inc', 'Digital Dynamics', 'CloudFirst', 'DataDriven', 'NetSolutions', 'CyberWave', 'AppWorks', 'CodeCraft', 'ByteLogic', 'Nexus Systems', 'Quantum Labs', 'Fusion Tech', 'Apex Digital', 'Synergy Solutions'],
+            jobTitles: ['Software Engineer', 'Product Manager', 'UX Designer', 'Data Scientist', 'DevOps Engineer', 'Frontend Developer', 'Backend Developer', 'Full Stack Developer', 'QA Engineer', 'Tech Lead', 'Architect', 'CTO', 'VP Engineering', 'Scrum Master', 'Project Manager'],
+            cities: ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'San Francisco', 'Seattle', 'Denver', 'Boston', 'Austin', 'Portland', 'Miami', 'Atlanta', 'Dallas', 'San Diego'],
+            countries: ['United States', 'Canada', 'United Kingdom', 'Germany', 'France', 'Australia', 'Japan', 'India', 'Brazil', 'Mexico', 'Spain', 'Italy', 'Netherlands', 'Sweden', 'Singapore'],
+            streets: ['Main St', 'Oak Ave', 'Maple Dr', 'Cedar Ln', 'Pine Rd', 'Elm St', 'Washington Blvd', 'Park Ave', 'Lake Dr', 'Hill Rd', 'River Rd', 'Sunset Blvd', 'Ocean Dr', 'Valley Way', 'Mountain View'],
+            loremWords: ['lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit', 'sed', 'do', 'eiusmod', 'tempor', 'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna', 'aliqua', 'enim', 'ad', 'minim', 'veniam', 'quis', 'nostrud', 'exercitation', 'ullamco', 'laboris', 'nisi', 'aliquip']
+        };
+
+        // Custom Variables Storage
+        const customVariables = {};
+        const customVarName = document.getElementById('customVarName');
+        const customVarValue = document.getElementById('customVarValue');
+        const addCustomVarBtn = document.getElementById('addCustomVarBtn');
+        const customVarsList = document.getElementById('customVarsList');
+
+        function randomItem(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function generateEmail(firstName, lastName) {
+            const domains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'example.com', 'company.io'];
+            return `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${randomItem(domains)}`;
+        }
+
+        function generatePhone() {
+            const prefix = ['+1', '+44', '+91', '+49', '+33'][Math.floor(Math.random() * 5)];
+            const num = Math.floor(Math.random() * 9000000000 + 1000000000);
+            return `${prefix} ${num.toString().replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')}`;
+        }
+
+        function generateAvatar() {
+            const id = Math.floor(Math.random() * 70) + 1;
+            return `https://i.pravatar.cc/150?img=${id}`;
+        }
+
+        function generateUsername(firstName, lastName) {
+            const suffix = Math.floor(Math.random() * 999);
+            return `${firstName.toLowerCase()}${lastName.charAt(0).toLowerCase()}${suffix}`;
+        }
+
+        function generateISODate() {
+            const now = new Date();
+            const past = new Date(now.getTime() - Math.random() * 365 * 24 * 60 * 60 * 1000);
+            return past.toISOString();
+        }
+
+        function generatePastDate() {
+            const now = new Date();
+            const past = new Date(now.getTime() - Math.random() * 365 * 5 * 24 * 60 * 60 * 1000);
+            return past.toISOString().split('T')[0];
+        }
+
+        function generateLorem(wordCount) {
+            let result = [];
+            for (let i = 0; i < wordCount; i++) {
+                result.push(randomItem(fakeData.loremWords));
+            }
+            return result.join(' ');
+        }
+
+        function generateImageUrl() {
+            const width = [200, 300, 400, 600][Math.floor(Math.random() * 4)];
+            const height = [200, 300, 400][Math.floor(Math.random() * 3)];
+            const id = Math.floor(Math.random() * 1000);
+            return `https://picsum.photos/seed/${id}/${width}/${height}`;
+        }
+
+        // Process template and replace variables
+        function processTemplate(template) {
+            let result = template;
+            const firstName = randomItem(fakeData.firstNames);
+            const lastName = randomItem(fakeData.lastNames);
+
+            // Replace template variables
+            result = result.replace(/\{\{uuid\}\}/g, () => generateUUID());
+            result = result.replace(/\{\{firstName\}\}/g, () => firstName);
+            result = result.replace(/\{\{lastName\}\}/g, () => lastName);
+            result = result.replace(/\{\{fullName\}\}/g, () => `${randomItem(fakeData.firstNames)} ${randomItem(fakeData.lastNames)}`);
+            result = result.replace(/\{\{email\}\}/g, () => generateEmail(randomItem(fakeData.firstNames), randomItem(fakeData.lastNames)));
+            result = result.replace(/\{\{phone\}\}/g, () => generatePhone());
+            result = result.replace(/\{\{avatar\}\}/g, () => generateAvatar());
+            result = result.replace(/\{\{username\}\}/g, () => generateUsername(randomItem(fakeData.firstNames), randomItem(fakeData.lastNames)));
+            result = result.replace(/\{\{company\}\}/g, () => randomItem(fakeData.companies));
+            result = result.replace(/\{\{jobTitle\}\}/g, () => randomItem(fakeData.jobTitles));
+            result = result.replace(/\{\{street\}\}/g, () => `${Math.floor(Math.random() * 9999) + 1} ${randomItem(fakeData.streets)}`);
+            result = result.replace(/\{\{city\}\}/g, () => randomItem(fakeData.cities));
+            result = result.replace(/\{\{country\}\}/g, () => randomItem(fakeData.countries));
+            result = result.replace(/\{\{zipCode\}\}/g, () => String(Math.floor(Math.random() * 90000) + 10000));
+            result = result.replace(/\{\{isoDate\}\}/g, () => generateISODate());
+            result = result.replace(/\{\{pastDate\}\}/g, () => generatePastDate());
+            result = result.replace(/\{\{boolean\}\}/g, () => String(Math.random() > 0.5));
+            result = result.replace(/\{\{number:(\d+)\}\}/g, (_, max) => String(Math.floor(Math.random() * parseInt(max))));
+            result = result.replace(/\{\{lorem:(\d+)\}\}/g, (_, count) => generateLorem(parseInt(count)));
+            result = result.replace(/\{\{imageUrl\}\}/g, () => generateImageUrl());
+
+            // Process custom variables
+            for (const [name, values] of Object.entries(customVariables)) {
+                const regex = new RegExp(`\\{\\{${name}\\}\\}`, 'g');
+                result = result.replace(regex, () => {
+                    if (Array.isArray(values)) {
+                        return randomItem(values);
+                    }
+                    return values;
+                });
+            }
+
+            return result;
+        }
+
+        // Generate mock response
+        function generateMockResponse() {
+            const count = parseInt(recordCount.value) || 1;
+            const template = responseTemplate.value;
+
+            try {
+                // Check if template contains array indicator (look for data array)
+                let result;
+
+                if (template.includes('"data": [')) {
+                    // Generate multiple records for array
+                    const beforeArray = template.split('"data": [')[0] + '"data": [';
+                    const afterArrayMatch = template.match(/\]([\s\S]*?)$/);
+                    const afterArray = afterArrayMatch ? ']' + afterArrayMatch[1] : ']';
+
+                    // Extract single item template
+                    const arrayContent = template.split('"data": [')[1].split(']')[0];
+                    const itemTemplate = arrayContent.trim();
+
+                    const items = [];
+                    for (let i = 0; i < count; i++) {
+                        items.push(processTemplate(itemTemplate));
+                    }
+
+                    const jsonStr = beforeArray + '\n    ' + items.join(',\n    ') + '\n  ' + afterArray;
+                    result = JSON.parse(jsonStr);
+                } else {
+                    // Single object
+                    result = JSON.parse(processTemplate(template));
+                }
+
+                generatedResponse.value = JSON.stringify(result, null, 2);
+
+            } catch (e) {
+                // If JSON parsing fails, just process as text
+                generatedResponse.value = processTemplate(template);
+            }
+        }
+
+        // Test endpoint (simulate request)
+        function testEndpoint() {
+            const latency = parseInt(latencySlider.value);
+            const errorRate = parseInt(errorRateSlider.value);
+            const method = httpMethod.value;
+            const path = endpointPath.value;
+            const status = statusCode.value;
+
+            // Simulate latency
+            generateBtn.disabled = true;
+            testEndpointBtn.disabled = true;
+            testEndpointBtn.innerHTML = '<span>⏳</span> Simulating...';
+
+            setTimeout(() => {
+                // Check for random error based on error rate
+                const shouldError = Math.random() * 100 < errorRate;
+                const finalStatus = shouldError ? '500' : status;
+
+                if (shouldError) {
+                    generatedResponse.value = JSON.stringify({
+                        error: true,
+                        message: 'Simulated server error',
+                        status: 500
+                    }, null, 2);
+                } else {
+                    generateMockResponse();
+                }
+
+                // Add to history
+                addToHistory(method, path, finalStatus);
+
+                generateBtn.disabled = false;
+                testEndpointBtn.disabled = false;
+                testEndpointBtn.innerHTML = '<span>🧪</span> Test Endpoint';
+            }, latency);
+        }
+
+        // Add request to history
+        function addToHistory(method, path, status) {
+            const emptyMsg = historyList.querySelector('.empty-history');
+            if (emptyMsg) emptyMsg.remove();
+
+            const time = new Date().toLocaleTimeString();
+            const isSuccess = parseInt(status) < 400;
+
+            const item = document.createElement('div');
+            item.className = 'history-item';
+            item.innerHTML = `
+            <span class="method-badge ${method.toLowerCase()}">${method}</span>
+            <span style="flex: 1; font-family: monospace; font-size: 0.85rem;">${path}</span>
+            <span class="history-status ${isSuccess ? 'success' : 'error'}">${status}</span>
+            <span class="history-time">${time}</span>
+        `;
+
+            historyList.insertBefore(item, historyList.firstChild);
+        }
+
+        // Update displays
+        function updateEndpointDisplay() {
+            const method = httpMethod.value;
+            const path = endpointPath.value;
+            methodBadge.textContent = method;
+            methodBadge.className = `method-badge ${method.toLowerCase()}`;
+            endpointUrlDisplay.textContent = `https://api.mockendpoint.dev${path}`;
+        }
+
+        // Format JSON
+        function formatJSON() {
+            try {
+                const parsed = JSON.parse(responseTemplate.value);
+                responseTemplate.value = JSON.stringify(parsed, null, 2);
+            } catch (e) {
+                alert('Invalid JSON. Please fix syntax errors first.');
+            }
+        }
+
+        // Reset template
+        function resetTemplate() {
+            responseTemplate.value = `{
+  "success": true,
+  "data": [
+    {
+      "id": "{{uuid}}",
+      "firstName": "{{firstName}}",
+      "lastName": "{{lastName}}",
+      "email": "{{email}}",
+      "avatar": "{{avatar}}",
+      "createdAt": "{{isoDate}}"
+    }
+  ],
+  "meta": {
+    "total": {{number:100}},
+    "page": 1,
+    "limit": 10
+  }
+}`;
+        }
+
+        // Copy functions
+        function copyToClipboard(text, btnElement) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btnElement.textContent;
+                btnElement.textContent = '✓ Copied!';
+                setTimeout(() => btnElement.textContent = originalText, 1500);
+            });
+        }
+
+        // Download JSON
+        function downloadJSON() {
+            const content = generatedResponse.value;
+            if (!content) return alert('No response to download');
+
+            const blob = new Blob([content], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'mock-response.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Export OpenAPI/Swagger
+        function exportSwagger() {
+            const method = httpMethod.value.toLowerCase();
+            const path = endpointPath.value;
+            const status = statusCode.value;
+
+            const openapi = {
+                openapi: '3.0.0',
+                info: {
+                    title: 'Mock API',
+                    version: '1.0.0',
+                    description: 'Generated mock API specification'
+                },
+                servers: [
+                    { url: 'https://api.mockendpoint.dev' }
+                ],
+                paths: {
+                    [path]: {
+                        [method]: {
+                            summary: `${httpMethod.value} ${path}`,
+                            responses: {
+                                [status]: {
+                                    description: 'Mock response',
+                                    content: {
+                                        'application/json': {
+                                            example: generatedResponse.value ? JSON.parse(generatedResponse.value) : {}
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(openapi, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'openapi-spec.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Insert variable into template
+        function insertVariable(variable) {
+            const cursorPos = responseTemplate.selectionStart;
+            const before = responseTemplate.value.substring(0, cursorPos);
+            const after = responseTemplate.value.substring(cursorPos);
+            responseTemplate.value = before + variable + after;
+            responseTemplate.focus();
+            responseTemplate.selectionStart = responseTemplate.selectionEnd = cursorPos + variable.length;
+        }
+
+        // Event listeners
+        generateBtn.addEventListener('click', generateMockResponse);
+        testEndpointBtn.addEventListener('click', testEndpoint);
+        formatBtn.addEventListener('click', formatJSON);
+        resetBtn.addEventListener('click', resetTemplate);
+        copyUrlBtn.addEventListener('click', () => copyToClipboard(endpointUrlDisplay.textContent, copyUrlBtn));
+        copyResponseBtn.addEventListener('click', () => copyToClipboard(generatedResponse.value, copyResponseBtn));
+        downloadResponseBtn.addEventListener('click', downloadJSON);
+        exportSwaggerBtn.addEventListener('click', exportSwagger);
+        clearHistoryBtn.addEventListener('click', () => {
+            historyList.innerHTML = '<div class="empty-history">No requests yet. Generate and test an endpoint to see history.</div>';
+        });
+
+        latencySlider.addEventListener('input', () => {
+            latencyValue.textContent = latencySlider.value + 'ms';
+        });
+
+        errorRateSlider.addEventListener('input', () => {
+            errorRateValue.textContent = errorRateSlider.value + '%';
+        });
+
+        httpMethod.addEventListener('change', updateEndpointDisplay);
+        endpointPath.addEventListener('input', updateEndpointDisplay);
+
+        // Custom Variables - Add button handler
+        addCustomVarBtn.addEventListener('click', () => {
+            const name = customVarName.value.trim();
+            const value = customVarValue.value.trim();
+
+            if (!name) {
+                alert('Please enter a variable name');
+                return;
+            }
+            if (!value) {
+                alert('Please enter a value or values');
+                return;
+            }
+
+            // Parse values - if comma-separated, make array
+            const values = value.includes(',')
+                ? value.split(',').map(v => v.trim()).filter(v => v)
+                : value;
+
+            customVariables[name] = values;
+
+            // Create visual chip
+            const chip = document.createElement('div');
+            chip.className = 'variable-chip';
+            chip.setAttribute('data-var', `{{${name}}}`);
+            chip.innerHTML = `{{${name}}}<span class="delete-icon" style="margin-left: 0.5rem; color: #ef4444; cursor: pointer;">×</span>`;
+            chip.style.background = 'rgba(139, 92, 246, 0.15)';
+            chip.style.borderColor = '#8b5cf6';
+
+            // Click to insert
+            chip.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('delete-icon')) {
+                    insertVariable(`{{${name}}}`);
+                }
+            });
+
+            // Delete handler
+            chip.querySelector('.delete-icon').addEventListener('click', (e) => {
+                e.stopPropagation();
+                delete customVariables[name];
+                chip.remove();
+            });
+
+            customVarsList.appendChild(chip);
+
+            // Clear inputs
+            customVarName.value = '';
+            customVarValue.value = '';
+        });
+
+        // Variable chips click handlers
+        variableGrid.querySelectorAll('.variable-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                insertVariable(chip.dataset.var);
+            });
+        });
+
+        // Initial display update
+        updateEndpointDisplay();
+    })();
+</script>
+{% endverbatim %}
+{% endblock %}

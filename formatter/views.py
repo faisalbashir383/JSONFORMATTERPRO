@@ -608,6 +608,16 @@ def meta_tag_generator_page(request):
     return render(request, 'meta-tag-generator.html')
 
 
+def mock_api_generator_page(request):
+    """Render the Mock API Generator page"""
+    return render(request, 'mock-api-generator.html')
+
+
+def push_notification_tester_page(request):
+    """Render the Push Notification Tester page"""
+    return render(request, 'push-notification-tester.html')
+
+
 def swagger_viewer_page(request):
     """Render the Swagger/OpenAPI Viewer page"""
     return render(request, 'swagger-viewer.html')

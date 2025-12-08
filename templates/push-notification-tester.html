@@ -1,0 +1,862 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Free Push Notification Tester - Send FCM & OneSignal Notifications Online | JSON Formatters Pro{% endblock %}
+{% block meta_title %}Free Push Notification Tester - Firebase FCM & OneSignal API Testing | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Test push notifications via Firebase Cloud Messaging (FCM), OneSignal, or browser
+notifications. Send real notifications to devices, preview content, and debug your notification setup. Free online
+tool.{% endblock %}
+{% block meta_keywords %}push notification tester, fcm push notification, firebase cloud messaging test, onesignal api
+test, send push notification online, firebase notification tester, onesignal notification sender, web push test, mobile
+push notification, fcm api tester, notification debugger, fcm tester, push notification{% endblock %}
+{% block canonical_url %}https://jsonformatterspro.com/push-notification-tester/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Push Notification Tester - FCM & OneSignal",
+  "description": "Send real push notifications via Firebase Cloud Messaging, OneSignal, or browser API",
+  "url": "https://jsonformatterspro.com/push-notification-tester/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Firebase Cloud Messaging (FCM) integration",
+    "OneSignal push notification API",
+    "Browser notification testing",
+    "Real-time notification delivery",
+    "Custom notification content"
+  ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(239, 68, 68, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* Tabs */
+    .tabs-container {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        padding: 0.75rem 1.5rem;
+        border: 2px solid var(--color-border);
+        background: var(--color-surface);
+        color: var(--color-text);
+        font-size: 0.95rem;
+        font-weight: 600;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 200ms ease;
+    }
+
+    .tab-btn:hover {
+        border-color: var(--color-primary);
+    }
+
+    .tab-btn.active {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+    }
+
+    .tab-btn.active.fcm {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        border-color: #f59e0b;
+    }
+
+    .tab-btn.active.onesignal {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        border-color: #e74c3c;
+    }
+
+    .tab-btn.active.browser {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        border-color: #3b82f6;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    /* Panel */
+    .panel-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+        box-shadow: 0 4px 16px var(--color-shadow);
+        margin-bottom: 1.5rem;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .panel-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .panel-body {
+        padding: 1.5rem;
+    }
+
+    .input-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .input-label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.4rem;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        transition: border-color 200ms ease;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: var(--color-primary);
+    }
+
+    textarea.input-field {
+        min-height: 80px;
+        resize: vertical;
+        font-family: inherit;
+    }
+
+    .input-hint {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.25rem;
+    }
+
+    /* Credential Section */
+    .credential-section {
+        background: rgba(245, 158, 11, 0.05);
+        border: 1px solid rgba(245, 158, 11, 0.2);
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .credential-section.onesignal {
+        background: rgba(231, 76, 60, 0.05);
+        border-color: rgba(231, 76, 60, 0.2);
+    }
+
+    .credential-title {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Send Button */
+    .send-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .send-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+    }
+
+    .send-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .send-btn.onesignal {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    }
+
+    .send-btn.onesignal:hover {
+        box-shadow: 0 4px 16px rgba(231, 76, 60, 0.4);
+    }
+
+    .send-btn.browser {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    }
+
+    .send-btn.browser:hover {
+        box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Response Panel */
+    .response-panel {
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        font-family: 'SF Mono', 'Monaco', monospace;
+        font-size: 0.85rem;
+        min-height: 120px;
+        max-height: 250px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .response-panel.success {
+        border-color: rgba(16, 185, 129, 0.5);
+        background: rgba(16, 185, 129, 0.05);
+    }
+
+    .response-panel.error {
+        border-color: rgba(239, 68, 68, 0.5);
+        background: rgba(239, 68, 68, 0.05);
+    }
+
+    /* Two Column Layout */
+    .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    /* Info Cards */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .info-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem;
+    }
+
+    .info-card h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-card p,
+    .info-card li {
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+        font-size: 0.9rem;
+    }
+
+    .info-card ul {
+        margin: 0;
+        padding-left: 1.25rem;
+    }
+
+    .info-card li {
+        margin-bottom: 0.35rem;
+    }
+
+    /* Permission Status */
+    .permission-status {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .permission-status.granted {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .permission-status.denied {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .permission-status.default {
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .request-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        margin-left: auto;
+    }
+
+    @media (max-width: 900px) {
+        .two-col {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .tabs-container {
+            flex-direction: column;
+        }
+
+        .tab-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% verbatim %}
+<div class="tool-header">
+    <h1>🔔 Push Notification Tester</h1>
+    <p>Send real push notifications via Firebase Cloud Messaging (FCM), OneSignal API, or test browser notifications
+        locally.</p>
+</div>
+
+<!-- Tabs -->
+<div class="tabs-container">
+    <button class="tab-btn browser active" data-tab="browser">🌐 Browser Notification</button>
+    <button class="tab-btn fcm" data-tab="fcm">🔥 Firebase (FCM)</button>
+    <button class="tab-btn onesignal" data-tab="onesignal">📱 OneSignal</button>
+</div>
+
+<!-- Browser Notification Tab -->
+<div class="tab-content active" id="tab-browser">
+    <div class="two-col">
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2 class="panel-title">🌐 Browser Notification</h2>
+            </div>
+            <div class="panel-body">
+                <div class="permission-status default" id="permissionStatus">
+                    <span>⏳</span>
+                    <span>Checking permission...</span>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Title *</label>
+                    <input type="text" id="browserTitle" class="input-field" value="Hello from JSON Formatters Pro!">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Body *</label>
+                    <textarea id="browserBody" class="input-field">This is a test push notification!</textarea>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Icon URL (optional)</label>
+                    <input type="text" id="browserIcon" class="input-field" placeholder="https://example.com/icon.png">
+                </div>
+
+                <button id="sendBrowserBtn" class="send-btn browser">
+                    🔔 Send Browser Notification
+                </button>
+            </div>
+        </div>
+
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2 class="panel-title">📋 Response</h2>
+            </div>
+            <div class="panel-body">
+                <div class="response-panel" id="browserResponse">Click "Send Browser Notification" to test...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Firebase FCM Tab -->
+<div class="tab-content" id="tab-fcm">
+    <div class="two-col">
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2 class="panel-title">🔥 Firebase Cloud Messaging</h2>
+            </div>
+            <div class="panel-body">
+                <div class="credential-section">
+                    <div class="credential-title">🔑 FCM Credentials</div>
+                    <div class="input-group">
+                        <label class="input-label">Server Key *</label>
+                        <input type="password" id="fcmServerKey" class="input-field" placeholder="AAAA...">
+                        <div class="input-hint">Find in Firebase Console → Project Settings → Cloud Messaging</div>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label class="input-label">Device Token / Topic *</label>
+                        <input type="text" id="fcmToken" class="input-field"
+                            placeholder="Device token or /topics/your-topic">
+                        <div class="input-hint">FCM registration token or topic name (e.g., /topics/news)</div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Notification Title *</label>
+                    <input type="text" id="fcmTitle" class="input-field" value="Hello from FCM!">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Notification Body *</label>
+                    <textarea id="fcmBody"
+                        class="input-field">This is a test notification sent via Firebase Cloud Messaging.</textarea>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Click Action URL (optional)</label>
+                    <input type="text" id="fcmClickAction" class="input-field" placeholder="https://example.com/page">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Custom Data (JSON, optional)</label>
+                    <textarea id="fcmData" class="input-field" style="min-height: 60px;"
+                        placeholder='{"key": "value"}'></textarea>
+                </div>
+
+                <button id="sendFcmBtn" class="send-btn">
+                    🔥 Send FCM Notification
+                </button>
+            </div>
+        </div>
+
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2 class="panel-title">📋 API Response</h2>
+            </div>
+            <div class="panel-body">
+                <div class="response-panel" id="fcmResponse">Enter your FCM credentials and click "Send FCM
+                    Notification" to test...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- OneSignal Tab -->
+<div class="tab-content" id="tab-onesignal">
+    <div class="two-col">
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2 class="panel-title">📱 OneSignal Push</h2>
+            </div>
+            <div class="panel-body">
+                <div class="credential-section onesignal">
+                    <div class="credential-title">🔑 OneSignal Credentials</div>
+                    <div class="input-group">
+                        <label class="input-label">App ID *</label>
+                        <input type="text" id="osAppId" class="input-field"
+                            placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+                        <div class="input-hint">Find in OneSignal Dashboard → Settings → Keys & IDs</div>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label class="input-label">REST API Key *</label>
+                        <input type="password" id="osApiKey" class="input-field" placeholder="Your REST API Key">
+                        <div class="input-hint">Keep this key secure!</div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Target</label>
+                    <select id="osTarget" class="input-field">
+                        <option value="all">All Subscribed Users</option>
+                        <option value="segment">Specific Segment</option>
+                        <option value="player">Specific Player ID</option>
+                    </select>
+                </div>
+
+                <div class="input-group" id="osSegmentGroup" style="display: none;">
+                    <label class="input-label">Segment Name</label>
+                    <input type="text" id="osSegment" class="input-field" placeholder="Active Users">
+                </div>
+
+                <div class="input-group" id="osPlayerGroup" style="display: none;">
+                    <label class="input-label">Player ID</label>
+                    <input type="text" id="osPlayerId" class="input-field"
+                        placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Notification Title *</label>
+                    <input type="text" id="osTitle" class="input-field" value="Hello from OneSignal!">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Notification Message *</label>
+                    <textarea id="osMessage"
+                        class="input-field">This is a test notification sent via OneSignal API.</textarea>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Launch URL (optional)</label>
+                    <input type="text" id="osUrl" class="input-field" placeholder="https://example.com">
+                </div>
+
+                <button id="sendOsBtn" class="send-btn onesignal">
+                    📱 Send OneSignal Notification
+                </button>
+            </div>
+        </div>
+
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2 class="panel-title">📋 API Response</h2>
+            </div>
+            <div class="panel-body">
+                <div class="response-panel" id="osResponse">Enter your OneSignal credentials and click "Send OneSignal
+                    Notification" to test...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Info Cards -->
+<div class="info-grid">
+    <div class="info-card">
+        <h3>🌐 Browser Notifications</h3>
+        <p>Test browser's native Notification API. Works locally without any external service. Great for testing
+            notification appearance and permissions.</p>
+    </div>
+
+    <div class="info-card">
+        <h3>🔥 Firebase Cloud Messaging</h3>
+        <ul>
+            <li>Send to specific device tokens</li>
+            <li>Send to topics (e.g., /topics/news)</li>
+            <li>Include custom data payload</li>
+            <li>Free for all Firebase projects</li>
+        </ul>
+    </div>
+
+    <div class="info-card">
+        <h3>📱 OneSignal</h3>
+        <ul>
+            <li>Send to all subscribers</li>
+            <li>Target specific segments</li>
+            <li>Target individual player IDs</li>
+            <li>Free tier: 10,000 subscribers</li>
+        </ul>
+    </div>
+
+    <div class="info-card">
+        <h3>⚠️ Security Note</h3>
+        <p>API keys are sent directly to the provider APIs and are NOT stored on our servers. For production use, always
+            call these APIs from your backend.</p>
+    </div>
+</div>
+{% endverbatim %}
+{% endblock %}
+
+{% block extra_js %}
+{% verbatim %}
+<script>
+(function() {
+    // Tab switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.dataset.tab;
+            
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            btn.classList.add('active');
+            document.getElementById('tab-' + target).classList.add('active');
+        });
+    });
+
+    // ==================== Browser Notifications ====================
+    const permissionStatus = document.getElementById('permissionStatus');
+    const sendBrowserBtn = document.getElementById('sendBrowserBtn');
+    const browserResponse = document.getElementById('browserResponse');
+    const notificationsSupported = 'Notification' in window;
+
+    function updatePermissionStatus() {
+        if (!notificationsSupported) {
+            permissionStatus.className = 'permission-status denied';
+            permissionStatus.innerHTML = '<span>❌</span><span>Notifications not supported</span>';
+            sendBrowserBtn.disabled = true;
+            return;
+        }
+
+        const perm = Notification.permission;
+        if (perm === 'granted') {
+            permissionStatus.className = 'permission-status granted';
+            permissionStatus.innerHTML = '<span>✅</span><span>Permission granted</span>';
+            sendBrowserBtn.disabled = false;
+        } else if (perm === 'denied') {
+            permissionStatus.className = 'permission-status denied';
+            permissionStatus.innerHTML = '<span>🚫</span><span>Permission denied - enable in browser settings</span>';
+            sendBrowserBtn.disabled = true;
+        } else {
+            permissionStatus.className = 'permission-status default';
+            permissionStatus.innerHTML = '<span>❓</span><span>Permission required</span><button class="request-btn" id="reqPermBtn">Request</button>';
+            document.getElementById('reqPermBtn').addEventListener('click', () => {
+                Notification.requestPermission().then(updatePermissionStatus);
+            });
+            sendBrowserBtn.disabled = true;
+        }
+    }
+
+    sendBrowserBtn.addEventListener('click', () => {
+        const title = document.getElementById('browserTitle').value.trim();
+        const body = document.getElementById('browserBody').value.trim();
+        const icon = document.getElementById('browserIcon').value.trim();
+
+        if (!title) { alert('Please enter a title'); return; }
+
+        try {
+            const notif = new Notification(title, { body, icon: icon || undefined });
+            notif.onclick = () => { window.focus(); notif.close(); };
+            
+            browserResponse.className = 'response-panel success';
+            browserResponse.textContent = '✅ Notification sent successfully!\n\nTitle: ' + title + '\nBody: ' + body;
+        } catch(e) {
+            browserResponse.className = 'response-panel error';
+            browserResponse.textContent = '❌ Error: ' + e.message;
+        }
+    });
+
+    updatePermissionStatus();
+
+    // ==================== Firebase Cloud Messaging ====================
+    const sendFcmBtn = document.getElementById('sendFcmBtn');
+    const fcmResponse = document.getElementById('fcmResponse');
+
+    sendFcmBtn.addEventListener('click', async () => {
+        const serverKey = document.getElementById('fcmServerKey').value.trim();
+        const token = document.getElementById('fcmToken').value.trim();
+        const title = document.getElementById('fcmTitle').value.trim();
+        const body = document.getElementById('fcmBody').value.trim();
+        const clickAction = document.getElementById('fcmClickAction').value.trim();
+        const customData = document.getElementById('fcmData').value.trim();
+
+        if (!serverKey) { alert('Please enter FCM Server Key'); return; }
+        if (!token) { alert('Please enter device token or topic'); return; }
+        if (!title) { alert('Please enter notification title'); return; }
+
+        sendFcmBtn.disabled = true;
+        sendFcmBtn.innerHTML = '⏳ Sending...';
+        fcmResponse.className = 'response-panel';
+        fcmResponse.textContent = 'Sending notification...';
+
+        const payload = {
+            notification: { title, body },
+        };
+
+        if (token.startsWith('/topics/')) {
+            payload.to = token;
+        } else {
+            payload.to = token;
+        }
+
+        if (clickAction) {
+            payload.notification.click_action = clickAction;
+        }
+
+        if (customData) {
+            try {
+                payload.data = JSON.parse(customData);
+            } catch(e) {
+                fcmResponse.className = 'response-panel error';
+                fcmResponse.textContent = '❌ Invalid JSON in custom data field';
+                sendFcmBtn.disabled = false;
+                sendFcmBtn.innerHTML = '🔥 Send FCM Notification';
+                return;
+            }
+        }
+
+        try {
+            const response = await fetch('https://fcm.googleapis.com/fcm/send', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'key=' + serverKey,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+            
+            if (response.ok && data.success >= 1) {
+                fcmResponse.className = 'response-panel success';
+                fcmResponse.textContent = '✅ Notification sent successfully!\n\n' + JSON.stringify(data, null, 2);
+            } else {
+                fcmResponse.className = 'response-panel error';
+                fcmResponse.textContent = '❌ FCM Error:\n\n' + JSON.stringify(data, null, 2);
+            }
+        } catch(e) {
+            fcmResponse.className = 'response-panel error';
+            fcmResponse.textContent = '❌ Network Error: ' + e.message + '\n\nNote: FCM may block browser requests due to CORS. Use a backend for production.';
+        }
+
+        sendFcmBtn.disabled = false;
+        sendFcmBtn.innerHTML = '🔥 Send FCM Notification';
+    });
+
+    // ==================== OneSignal ====================
+    const osTarget = document.getElementById('osTarget');
+    const osSegmentGroup = document.getElementById('osSegmentGroup');
+    const osPlayerGroup = document.getElementById('osPlayerGroup');
+    const sendOsBtn = document.getElementById('sendOsBtn');
+    const osResponse = document.getElementById('osResponse');
+
+    osTarget.addEventListener('change', () => {
+        osSegmentGroup.style.display = osTarget.value === 'segment' ? 'block' : 'none';
+        osPlayerGroup.style.display = osTarget.value === 'player' ? 'block' : 'none';
+    });
+
+    sendOsBtn.addEventListener('click', async () => {
+        const appId = document.getElementById('osAppId').value.trim();
+        const apiKey = document.getElementById('osApiKey').value.trim();
+        const title = document.getElementById('osTitle').value.trim();
+        const message = document.getElementById('osMessage').value.trim();
+        const url = document.getElementById('osUrl').value.trim();
+        const target = osTarget.value;
+
+        if (!appId) { alert('Please enter OneSignal App ID'); return; }
+        if (!apiKey) { alert('Please enter OneSignal REST API Key'); return; }
+        if (!title) { alert('Please enter notification title'); return; }
+        if (!message) { alert('Please enter notification message'); return; }
+
+        sendOsBtn.disabled = true;
+        sendOsBtn.innerHTML = '⏳ Sending...';
+        osResponse.className = 'response-panel';
+        osResponse.textContent = 'Sending notification...';
+
+        const payload = {
+            app_id: appId,
+            headings: { en: title },
+            contents: { en: message }
+        };
+
+        if (url) {
+            payload.url = url;
+        }
+
+        if (target === 'all') {
+            payload.included_segments = ['All'];
+        } else if (target === 'segment') {
+            const segment = document.getElementById('osSegment').value.trim();
+            if (!segment) { alert('Please enter segment name'); sendOsBtn.disabled = false; sendOsBtn.innerHTML = '📱 Send OneSignal Notification'; return; }
+            payload.included_segments = [segment];
+        } else if (target === 'player') {
+            const playerId = document.getElementById('osPlayerId').value.trim();
+            if (!playerId) { alert('Please enter player ID'); sendOsBtn.disabled = false; sendOsBtn.innerHTML = '📱 Send OneSignal Notification'; return; }
+            payload.include_player_ids = [playerId];
+        }
+
+        try {
+            const response = await fetch('https://onesignal.com/api/v1/notifications', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Basic ' + apiKey,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+            
+            if (response.ok && data.id) {
+                osResponse.className = 'response-panel success';
+                osResponse.textContent = '✅ Notification sent successfully!\n\n' + JSON.stringify(data, null, 2);
+            } else {
+                osResponse.className = 'response-panel error';
+                osResponse.textContent = '❌ OneSignal Error:\n\n' + JSON.stringify(data, null, 2);
+            }
+        } catch(e) {
+            osResponse.className = 'response-panel error';
+            osResponse.textContent = '❌ Network Error: ' + e.message + '\n\nNote: OneSignal may block browser requests due to CORS. Use a backend for production.';
+        }
+
+        sendOsBtn.disabled = false;
+        sendOsBtn.innerHTML = '📱 Send OneSignal Notification';
+    });
+})();
+</script>
+{% endverbatim %}
+{% endblock %}

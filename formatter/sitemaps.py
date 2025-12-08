@@ -36,6 +36,8 @@ class StaticViewSitemap(Sitemap):
             'markdown_preview_page',
             'sql_formatter_page',
             'qr_generator_page',
+            'mock_api_generator_page',
+            'push_notification_tester_page',
         ]
     
     def location(self, item):
