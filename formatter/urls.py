@@ -52,6 +52,7 @@ urlpatterns = [
     path('api-response-tester/', views.api_response_tester_page, name='api_response_tester_page'),
     path('image-to-base64/', views.image_to_base64_page, name='image_to_base64_page'),
     path('json-editor/', views.json_editor_page, name='json_editor_page'),
+    path('regex-tester/', views.regex_tester_page, name='regex_tester_page'),
     
     # Code Tool API Endpoints
     path('api/qr-generator/', views.generate_qr_code, name='generate_qr_code'),

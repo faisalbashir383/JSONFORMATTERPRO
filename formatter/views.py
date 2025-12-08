@@ -633,6 +633,11 @@ def json_editor_page(request):
     return render(request, 'json-editor.html')
 
 
+def regex_tester_page(request):
+    """Render the Regex Tester page"""
+    return render(request, 'regex-tester.html')
+
+
 def swagger_viewer_page(request):
     """Render the Swagger/OpenAPI Viewer page"""
     return render(request, 'swagger-viewer.html')

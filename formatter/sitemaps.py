@@ -41,6 +41,7 @@ class StaticViewSitemap(Sitemap):
             'api_response_tester_page',
             'image_to_base64_page',
             'json_editor_page',
+            'regex_tester_page',
         ]
     
     def location(self, item):
