@@ -39,6 +39,7 @@ class StaticViewSitemap(Sitemap):
             'mock_api_generator_page',
             'push_notification_tester_page',
             'api_response_tester_page',
+            'image_to_base64_page',
         ]
     
     def location(self, item):

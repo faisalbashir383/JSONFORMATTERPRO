@@ -623,6 +623,11 @@ def api_response_tester_page(request):
     return render(request, 'api-response-tester.html')
 
 
+def image_to_base64_page(request):
+    """Render the Image to Base64 Converter page"""
+    return render(request, 'image-to-base64.html')
+
+
 def swagger_viewer_page(request):
     """Render the Swagger/OpenAPI Viewer page"""
     return render(request, 'swagger-viewer.html')

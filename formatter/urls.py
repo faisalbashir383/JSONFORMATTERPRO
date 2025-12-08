@@ -50,6 +50,7 @@ urlpatterns = [
     path('mock-api/', views.mock_api_generator_page, name='mock_api_generator_page'),
     path('push-notification-tester/', views.push_notification_tester_page, name='push_notification_tester_page'),
     path('api-response-tester/', views.api_response_tester_page, name='api_response_tester_page'),
+    path('image-to-base64/', views.image_to_base64_page, name='image_to_base64_page'),
     
     # Code Tool API Endpoints
     path('api/qr-generator/', views.generate_qr_code, name='generate_qr_code'),
