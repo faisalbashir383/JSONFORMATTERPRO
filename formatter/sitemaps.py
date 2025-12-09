@@ -42,7 +42,9 @@ class StaticViewSitemap(Sitemap):
             'image_to_base64_page',
             'json_editor_page',
             'regex_tester_page',
-            'json_visualizer_page'
+            'json_visualizer_page',
+            # SEO & Web Tools
+            'lorem_ipsum_page',
         ]
     
     def location(self, item):

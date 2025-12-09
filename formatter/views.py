@@ -648,6 +648,11 @@ def swagger_viewer_page(request):
     return render(request, 'swagger-viewer.html')
 
 
+def lorem_ipsum_page(request):
+    """Render the Lorem Ipsum Generator page"""
+    return render(request, 'lorem-ipsum.html')
+
+
 @api_view(['POST'])
 def generate_qr_code(request):
     """
