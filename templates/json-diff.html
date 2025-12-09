@@ -30,6 +30,24 @@ detector, json diff highlighter, best json diff tool{% endblock %}
   }
 }
 </script>
+<!-- JSON Tools Category Sitelinks -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "JSON Tools",
+  "itemListElement": [
+    {"@type": "SiteNavigationElement", "position": 1, "name": "JSON Formatter", "url": "{{ SITE_URL }}/"},
+    {"@type": "SiteNavigationElement", "position": 2, "name": "JSON Schema Validator", "url": "{{ SITE_URL }}/json-schema/"},
+    {"@type": "SiteNavigationElement", "position": 3, "name": "JSON to YAML", "url": "{{ SITE_URL }}/json-to-yaml/"},
+    {"@type": "SiteNavigationElement", "position": 4, "name": "JSON Diff", "url": "{{ SITE_URL }}/json-diff/"},
+    {"@type": "SiteNavigationElement", "position": 5, "name": "JSON Tree Viewer", "url": "{{ SITE_URL }}/json-tree/"},
+    {"@type": "SiteNavigationElement", "position": 6, "name": "JSON Visualizer", "url": "{{ SITE_URL }}/json-visualizer/"},
+    {"@type": "SiteNavigationElement", "position": 7, "name": "Dummy JSON Generator", "url": "{{ SITE_URL }}/dummy-json/"},
+    {"@type": "SiteNavigationElement", "position": 8, "name": "JSON Editor", "url": "{{ SITE_URL }}/json-editor/"}
+  ]
+}
+</script>
 {% endblock %}
 
 {% block extra_css %}

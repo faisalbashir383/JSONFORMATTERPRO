@@ -26,6 +26,24 @@ editor{% endblock %}
   }
 }
 </script>
+<!-- Dev Tools Category Sitelinks -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Developer Tools",
+  "itemListElement": [
+    {"@type": "SiteNavigationElement", "position": 1, "name": "Cron Builder", "url": "{{ SITE_URL }}/cron-builder/"},
+    {"@type": "SiteNavigationElement", "position": 2, "name": "SQL Formatter", "url": "{{ SITE_URL }}/sql-formatter/"},
+    {"@type": "SiteNavigationElement", "position": 3, "name": "Markdown Preview", "url": "{{ SITE_URL }}/markdown-preview/"},
+    {"@type": "SiteNavigationElement", "position": 4, "name": "QR Code Generator", "url": "{{ SITE_URL }}/qr-generator/"},
+    {"@type": "SiteNavigationElement", "position": 5, "name": "Regex Tester", "url": "{{ SITE_URL }}/regex-tester/"},
+    {"@type": "SiteNavigationElement", "position": 6, "name": "Mock API Generator", "url": "{{ SITE_URL }}/mock-api/"},
+    {"@type": "SiteNavigationElement", "position": 7, "name": "Swagger Viewer", "url": "{{ SITE_URL }}/swagger-viewer/"},
+    {"@type": "SiteNavigationElement", "position": 8, "name": "Push Notification Tester", "url": "{{ SITE_URL }}/push-notification-tester/"}
+  ]
+}
+</script>
 {% endblock %}
 
 {% block extra_css %}

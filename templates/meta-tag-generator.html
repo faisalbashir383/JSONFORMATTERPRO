@@ -26,6 +26,21 @@ description generator{% endblock %}
   }
 }
 </script>
+<!-- SEO & Web Tools Category Sitelinks -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "SEO and Web Tools",
+  "itemListElement": [
+    {"@type": "SiteNavigationElement", "position": 1, "name": "Meta Tag Generator", "url": "{{ SITE_URL }}/meta-tag-generator/"},
+    {"@type": "SiteNavigationElement", "position": 2, "name": "Lorem Ipsum Generator", "url": "{{ SITE_URL }}/lorem-ipsum/"},
+    {"@type": "SiteNavigationElement", "position": 3, "name": "QR Code Generator", "url": "{{ SITE_URL }}/qr-generator/"},
+    {"@type": "SiteNavigationElement", "position": 4, "name": "Base64 Encoder", "url": "{{ SITE_URL }}/base64/"},
+    {"@type": "SiteNavigationElement", "position": 5, "name": "Image to Base64", "url": "{{ SITE_URL }}/image-to-base64/"}
+  ]
+}
+</script>
 {% endblock %}
 
 {% block extra_css %}

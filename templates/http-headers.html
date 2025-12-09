@@ -29,6 +29,22 @@ tool, web headers checker{% endblock %}
   }
 }
 </script>
+<!-- Network Tools Category Sitelinks -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Network Tools",
+  "itemListElement": [
+    {"@type": "SiteNavigationElement", "position": 1, "name": "HTTP Headers Parser", "url": "{{ SITE_URL }}/http-headers/"},
+    {"@type": "SiteNavigationElement", "position": 2, "name": "CORS Checker", "url": "{{ SITE_URL }}/cors-checker/"},
+    {"@type": "SiteNavigationElement", "position": 3, "name": "IP Address Lookup", "url": "{{ SITE_URL }}/ip-info/"},
+    {"@type": "SiteNavigationElement", "position": 4, "name": "DNS Lookup", "url": "{{ SITE_URL }}/dns-lookup/"},
+    {"@type": "SiteNavigationElement", "position": 5, "name": "SSL Certificate Checker", "url": "{{ SITE_URL }}/ssl-checker/"},
+    {"@type": "SiteNavigationElement", "position": 6, "name": "API Response Tester", "url": "{{ SITE_URL }}/api-response-tester/"}
+  ]
+}
+</script>
 {% endblock %}
 
 {% block extra_css %}

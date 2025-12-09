@@ -85,6 +85,78 @@
       "softwareVersion": "2.0"
     }
     </script>
+
+    <!-- Website Schema with Sitelinks Search Box -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "JSON Formatters Pro",
+      "alternateName": ["JSONFormattersPro", "JSON Formatter Pro"],
+      "url": "{{ SITE_URL }}",
+      "description": "Free online JSON formatter, validator, minifier, and converter tools for developers",
+      "publisher": {
+        "@type": "Organization",
+        "name": "JSON Formatters Pro",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "{{ SITE_URL }}/static/images/favicon-512.png"
+        }
+      }
+    }
+    </script>
+
+    <!-- Site Navigation Elements for Sitelinks - Core Pages Only -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "itemListElement": [
+        {
+          "@type": "SiteNavigationElement",
+          "position": 1,
+          "name": "JSON Formatter",
+          "description": "Format and beautify JSON online",
+          "url": "{{ SITE_URL }}/"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 2,
+          "name": "JSON Validator",
+          "description": "Validate JSON syntax and schema",
+          "url": "{{ SITE_URL }}/json-schema/"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 3,
+          "name": "JSON to YAML",
+          "description": "Convert JSON to YAML format",
+          "url": "{{ SITE_URL }}/json-to-yaml/"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 4,
+          "name": "Base64 Encoder",
+          "description": "Encode and decode Base64",
+          "url": "{{ SITE_URL }}/base64/"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 5,
+          "name": "JSON Diff",
+          "description": "Compare JSON documents",
+          "url": "{{ SITE_URL }}/json-diff/"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 6,
+          "name": "JSON Tree Viewer",
+          "description": "View JSON as tree structure",
+          "url": "{{ SITE_URL }}/json-tree/"
+        }
+      ]
+    }
+    </script>
     {% endblock %}
 
     <!-- Favicon -->
