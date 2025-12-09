@@ -5,7 +5,7 @@
 {% block meta_title %}{{ post.title }} - {{ post.category.name }} Tutorial | JSON Formatters Pro{% endblock %}
 {% block meta_description %}{{ post.meta_description }}{% endblock %}
 {% block meta_keywords %}{{ post.meta_keywords }}{% endblock %}
-{% block author %}JSON Formatter Pro{% endblock %}
+{% block author %}JSON Formatters Pro{% endblock %}
 
 {% block og_type %}article{% endblock %}
 {% block og_url %}https://jsonformatterpro.com{% url 'blog_detail' post.slug %}{% endblock %}
@@ -31,7 +31,7 @@
   "dateModified": "{{ post.updated_at|date:'c' }}",
   "author": {
     "@type": "Organization",
-    "name": "JSON Formatter Pro",
+    "name": "JSON Formatters Pro",
     "url": "https://jsonformatterpro.com"
   },
   "publisher": {
