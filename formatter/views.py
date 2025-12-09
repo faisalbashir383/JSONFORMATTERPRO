@@ -456,6 +456,11 @@ def json_tree_page(request):
     return render(request, 'json-tree.html')
 
 
+def json_visualizer_page(request):
+    """Render the JSON Visualizer page with graph view"""
+    return render(request, 'json-visualizer.html')
+
+
 def dummy_json_page(request):
     """Render the Dummy JSON Generator page"""
     return render(request, 'dummy-json.html')
