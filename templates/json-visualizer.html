@@ -3,8 +3,14 @@
 
 {% block title %}JSON Visualizer - Interactive Graph & Tree View | JSON Formatters Pro{% endblock %}
 {% block meta_title %}JSON Visualizer - Interactive Graph & Tree View | JSON Formatters Pro{% endblock %}
-{% block meta_description %}Visualize JSON data as an interactive graph with nodes and connections. Switch between tree view, chart view, and JSON editor. Free online JSON visualization tool.{% endblock %}
-{% block meta_keywords %}json visualizer, json graph view, json chart, json node graph, json visualization tool, interactive json viewer, json tree chart, json diagram, json structure visualizer, json data visualization, json flowchart, json hierarchy viewer, json map, json mind map, json node viewer, visual json editor, json explorer online{% endblock %}
+{% block meta_description %}Visualize JSON data as an interactive graph with nodes and connections. Switch between tree
+view, chart view, and JSON editor. Free online JSON visualization tool.{% endblock %}
+{% block meta_keywords %}json visualizer, json graph view, json chart, json node graph, json visualization tool,
+interactive json viewer, json tree chart, json diagram, json structure visualizer, json data visualization,
+json flowchart, json hierarchy viewer, json map, json mind map, json node viewer, visual json editor,
+json explorer online, json visualizer 2026, best json visualizer 2026, json graph 2026, free json visualizer 2026,
+json visualization online 2026, json chart tool 2026, json diagram generator, json structure viewer,
+json hierarchy chart, json data diagram, json graphical view, json visual representation, json no signup{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/json-visualizer/{% endblock %}
 
 {% block structured_data %}
@@ -364,11 +370,27 @@
         font-weight: 600;
     }
 
-    .tree-value-string { color: var(--viz-node-string); }
-    .tree-value-number { color: var(--viz-node-number); }
-    .tree-value-boolean { color: var(--viz-node-boolean); }
-    .tree-value-null { color: var(--viz-node-null); font-style: italic; }
-    .tree-type { color: var(--viz-text-muted); font-size: 0.8rem; }
+    .tree-value-string {
+        color: var(--viz-node-string);
+    }
+
+    .tree-value-number {
+        color: var(--viz-node-number);
+    }
+
+    .tree-value-boolean {
+        color: var(--viz-node-boolean);
+    }
+
+    .tree-value-null {
+        color: var(--viz-node-null);
+        font-style: italic;
+    }
+
+    .tree-type {
+        color: var(--viz-text-muted);
+        font-size: 0.8rem;
+    }
 
     /* Info Section */
     .viz-info {
@@ -412,12 +434,29 @@
         border-radius: 50%;
     }
 
-    .viz-legend-dot.object { background: #a855f7; }
-    .viz-legend-dot.array { background: #3b82f6; }
-    .viz-legend-dot.string { background: #22c55e; }
-    .viz-legend-dot.number { background: #f59e0b; }
-    .viz-legend-dot.boolean { background: #ec4899; }
-    .viz-legend-dot.null { background: #6b7280; }
+    .viz-legend-dot.object {
+        background: #a855f7;
+    }
+
+    .viz-legend-dot.array {
+        background: #3b82f6;
+    }
+
+    .viz-legend-dot.string {
+        background: #22c55e;
+    }
+
+    .viz-legend-dot.number {
+        background: #f59e0b;
+    }
+
+    .viz-legend-dot.boolean {
+        background: #ec4899;
+    }
+
+    .viz-legend-dot.null {
+        background: #6b7280;
+    }
 
     /* Responsive */
     @media (max-width: 1024px) {
@@ -458,9 +497,13 @@
 {% endblock %}
 
 {% block content %}
-<div class="tool-header" style="text-align: center; margin-bottom: 2rem; padding: 2rem; background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(34, 197, 94, 0.08) 100%); border-radius: var(--radius-lg);">
-    <h1 style="font-size: 2.25rem; font-weight: 700; background: linear-gradient(135deg, #6366f1 0%, #22c55e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.75rem;">📊 JSON Visualizer</h1>
-    <p style="color: var(--color-text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Interactive graph visualization for JSON data with tree and chart views</p>
+<div class="tool-header"
+    style="text-align: center; margin-bottom: 2rem; padding: 2rem; background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(34, 197, 94, 0.08) 100%); border-radius: var(--radius-lg);">
+    <h1
+        style="font-size: 2.25rem; font-weight: 700; background: linear-gradient(135deg, #6366f1 0%, #22c55e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.75rem;">
+        📊 JSON Visualizer</h1>
+    <p style="color: var(--color-text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Interactive
+        graph visualization for JSON data with tree and chart views</p>
 </div>
 
 <div class="visualizer-wrapper">
@@ -524,7 +567,8 @@ Example:
 
         <!-- JSON Editor View -->
         <div class="viz-editor-panel" id="editorPanel">
-            <textarea id="editorTextarea" class="viz-full-textarea" placeholder="JSON will appear here after visualization..."></textarea>
+            <textarea id="editorTextarea" class="viz-full-textarea"
+                placeholder="JSON will appear here after visualization..."></textarea>
         </div>
     </div>
 </div>
@@ -533,12 +577,13 @@ Example:
 <div class="viz-info">
     <h2>💡 About JSON Visualizer</h2>
     <p>
-        The JSON Visualizer transforms your JSON data into an interactive graphical representation. 
+        The JSON Visualizer transforms your JSON data into an interactive graphical representation.
         Each node represents a key-value pair, with curved lines connecting parent nodes to their children.
         This makes it easy to understand complex nested structures at a glance.
     </p>
     <p>
-        <strong>Features:</strong> Zoom and pan to navigate large structures, switch between Chart, Tree, and Editor views,
+        <strong>Features:</strong> Zoom and pan to navigate large structures, switch between Chart, Tree, and Editor
+        views,
         click nodes to expand/collapse branches, and use the path indicator to track your current position.
     </p>
     <div class="viz-legend">
@@ -554,513 +599,513 @@ Example:
 
 {% block extra_js %}
 <script>
-(function() {
-    // DOM Elements
-    const jsonInput = document.getElementById('jsonInput');
-    const vizCanvas = document.getElementById('vizCanvas');
-    const ctx = vizCanvas.getContext('2d');
-    const visualizeBtn = document.getElementById('visualizeBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const sampleBtn = document.getElementById('sampleBtn');
-    const zoomInBtn = document.getElementById('zoomInBtn');
-    const zoomOutBtn = document.getElementById('zoomOutBtn');
-    const resetViewBtn = document.getElementById('resetViewBtn');
-    const fitToScreenBtn = document.getElementById('fitToScreenBtn');
-    const zoomLevelSpan = document.getElementById('zoomLevel');
-    const currentPathSpan = document.getElementById('currentPath');
-    const treeContent = document.getElementById('treeContent');
-    const editorTextarea = document.getElementById('editorTextarea');
+    (function () {
+        // DOM Elements
+        const jsonInput = document.getElementById('jsonInput');
+        const vizCanvas = document.getElementById('vizCanvas');
+        const ctx = vizCanvas.getContext('2d');
+        const visualizeBtn = document.getElementById('visualizeBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const sampleBtn = document.getElementById('sampleBtn');
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+        const resetViewBtn = document.getElementById('resetViewBtn');
+        const fitToScreenBtn = document.getElementById('fitToScreenBtn');
+        const zoomLevelSpan = document.getElementById('zoomLevel');
+        const currentPathSpan = document.getElementById('currentPath');
+        const treeContent = document.getElementById('treeContent');
+        const editorTextarea = document.getElementById('editorTextarea');
 
-    // View Tabs
-    const treeTabBtn = document.getElementById('treeTabBtn');
-    const chartTabBtn = document.getElementById('chartTabBtn');
-    const editorTabBtn = document.getElementById('editorTabBtn');
-    const chartPanel = document.getElementById('chartPanel');
-    const treePanel = document.getElementById('treePanel');
-    const editorPanel = document.getElementById('editorPanel');
-    const inputPanel = document.getElementById('inputPanel');
+        // View Tabs
+        const treeTabBtn = document.getElementById('treeTabBtn');
+        const chartTabBtn = document.getElementById('chartTabBtn');
+        const editorTabBtn = document.getElementById('editorTabBtn');
+        const chartPanel = document.getElementById('chartPanel');
+        const treePanel = document.getElementById('treePanel');
+        const editorPanel = document.getElementById('editorPanel');
+        const inputPanel = document.getElementById('inputPanel');
 
-    // Visualization State
-    let nodes = [];
-    let parsedData = null;
-    let zoom = 1;
-    let panX = 50;
-    let panY = 0;
-    let isDragging = false;
-    let lastMouseX = 0;
-    let lastMouseY = 0;
+        // Visualization State
+        let nodes = [];
+        let parsedData = null;
+        let zoom = 1;
+        let panX = 50;
+        let panY = 0;
+        let isDragging = false;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
 
-    // Colors
-    const colors = {
-        object: '#a855f7',
-        array: '#3b82f6',
-        string: '#22c55e',
-        number: '#f59e0b',
-        boolean: '#ec4899',
-        null: '#6b7280',
-        line: '#22c55e',
-        text: '#c9d1d9',
-        bg: '#0d1117'
-    };
-
-    // Node Configuration
-    const nodeConfig = {
-        nodeRadius: 6,
-        horizontalSpacing: 180,
-        verticalSpacing: 28,
-        fontSize: 12,
-        labelOffset: 14
-    };
-
-    // Initialize canvas size
-    function initCanvas() {
-        const container = chartPanel;
-        vizCanvas.width = container.clientWidth;
-        vizCanvas.height = container.clientHeight;
-        draw();
-    }
-
-    // Get type of value
-    function getType(value) {
-        if (value === null) return 'null';
-        if (Array.isArray(value)) return 'array';
-        return typeof value;
-    }
-
-    // Build node tree from JSON
-    function buildNodeTree(key, value, depth = 0, parentY = 0, yOffset = { value: 0 }) {
-        const type = getType(value);
-        const x = depth * nodeConfig.horizontalSpacing;
-        const y = yOffset.value * nodeConfig.verticalSpacing;
-        
-        const node = {
-            key: key,
-            value: value,
-            type: type,
-            x: x,
-            y: y,
-            depth: depth,
-            children: [],
-            collapsed: false
+        // Colors
+        const colors = {
+            object: '#a855f7',
+            array: '#3b82f6',
+            string: '#22c55e',
+            number: '#f59e0b',
+            boolean: '#ec4899',
+            null: '#6b7280',
+            line: '#22c55e',
+            text: '#c9d1d9',
+            bg: '#0d1117'
         };
 
-        if (type === 'object' && value !== null) {
-            const keys = Object.keys(value);
-            keys.forEach((k, i) => {
-                yOffset.value++;
-                const childNode = buildNodeTree(k, value[k], depth + 1, y, yOffset);
-                node.children.push(childNode);
-            });
-        } else if (type === 'array') {
-            value.forEach((item, i) => {
-                yOffset.value++;
-                const childNode = buildNodeTree(`[${i}]`, item, depth + 1, y, yOffset);
-                node.children.push(childNode);
-            });
+        // Node Configuration
+        const nodeConfig = {
+            nodeRadius: 6,
+            horizontalSpacing: 180,
+            verticalSpacing: 28,
+            fontSize: 12,
+            labelOffset: 14
+        };
+
+        // Initialize canvas size
+        function initCanvas() {
+            const container = chartPanel;
+            vizCanvas.width = container.clientWidth;
+            vizCanvas.height = container.clientHeight;
+            draw();
         }
 
-        return node;
-    }
-
-    // Flatten nodes for rendering
-    function flattenNodes(node, result = []) {
-        result.push(node);
-        if (!node.collapsed) {
-            node.children.forEach(child => flattenNodes(child, result));
-        }
-        return result;
-    }
-
-    // Recalculate Y positions
-    function recalculatePositions(node, yOffset = { value: 0 }) {
-        node.y = yOffset.value * nodeConfig.verticalSpacing;
-        if (!node.collapsed) {
-            node.children.forEach(child => {
-                yOffset.value++;
-                recalculatePositions(child, yOffset);
-            });
-        }
-    }
-
-    // Draw bezier curve between nodes
-    function drawConnection(fromX, fromY, toX, toY) {
-        ctx.beginPath();
-        ctx.moveTo(fromX, fromY);
-        
-        const controlX1 = fromX + (toX - fromX) * 0.5;
-        const controlX2 = fromX + (toX - fromX) * 0.5;
-        
-        ctx.bezierCurveTo(controlX1, fromY, controlX2, toY, toX, toY);
-        ctx.strokeStyle = colors.line;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-    }
-
-    // Draw a node
-    function drawNode(node) {
-        const x = (node.x + panX) * zoom;
-        const y = (node.y + panY + 50) * zoom;
-        const radius = nodeConfig.nodeRadius * zoom;
-
-        // Draw node circle
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = colors[node.type] || colors.object;
-        ctx.fill();
-
-        // Draw label
-        ctx.font = `${nodeConfig.fontSize * zoom}px 'SF Mono', monospace`;
-        ctx.fillStyle = colors.text;
-        ctx.textBaseline = 'middle';
-        
-        let label = node.key !== null ? String(node.key) : 'ROOT';
-        
-        // Add value preview for primitives
-        if (node.type === 'string' || node.type === 'number' || node.type === 'boolean' || node.type === 'null') {
-            let valueStr = node.type === 'string' ? `"${node.value}"` : String(node.value);
-            if (valueStr.length > 20) valueStr = valueStr.substring(0, 17) + '...';
-            label = label;
-            ctx.fillText(label, x + nodeConfig.labelOffset * zoom, y);
-            
-            // Draw value in appropriate color
-            const labelWidth = ctx.measureText(label + ': ').width;
-        } else if (node.children.length > 0) {
-            const count = node.children.length;
-            const suffix = node.collapsed ? ` ▶ (${count})` : '';
-            ctx.fillText(label + suffix, x + nodeConfig.labelOffset * zoom, y);
-        } else {
-            ctx.fillText(label, x + nodeConfig.labelOffset * zoom, y);
-        }
-    }
-
-    // Main draw function
-    function draw() {
-        // Clear canvas
-        ctx.fillStyle = colors.bg;
-        ctx.fillRect(0, 0, vizCanvas.width, vizCanvas.height);
-
-        if (!parsedData) {
-            // Draw placeholder text
-            ctx.font = '14px Inter, sans-serif';
-            ctx.fillStyle = '#8b949e';
-            ctx.textAlign = 'center';
-            ctx.fillText('Enter JSON and click "Visualize" to see the graph', vizCanvas.width / 2, vizCanvas.height / 2);
-            ctx.textAlign = 'left';
-            return;
+        // Get type of value
+        function getType(value) {
+            if (value === null) return 'null';
+            if (Array.isArray(value)) return 'array';
+            return typeof value;
         }
 
-        // Draw connections first (below nodes)
-        function drawConnections(node) {
+        // Build node tree from JSON
+        function buildNodeTree(key, value, depth = 0, parentY = 0, yOffset = { value: 0 }) {
+            const type = getType(value);
+            const x = depth * nodeConfig.horizontalSpacing;
+            const y = yOffset.value * nodeConfig.verticalSpacing;
+
+            const node = {
+                key: key,
+                value: value,
+                type: type,
+                x: x,
+                y: y,
+                depth: depth,
+                children: [],
+                collapsed: false
+            };
+
+            if (type === 'object' && value !== null) {
+                const keys = Object.keys(value);
+                keys.forEach((k, i) => {
+                    yOffset.value++;
+                    const childNode = buildNodeTree(k, value[k], depth + 1, y, yOffset);
+                    node.children.push(childNode);
+                });
+            } else if (type === 'array') {
+                value.forEach((item, i) => {
+                    yOffset.value++;
+                    const childNode = buildNodeTree(`[${i}]`, item, depth + 1, y, yOffset);
+                    node.children.push(childNode);
+                });
+            }
+
+            return node;
+        }
+
+        // Flatten nodes for rendering
+        function flattenNodes(node, result = []) {
+            result.push(node);
+            if (!node.collapsed) {
+                node.children.forEach(child => flattenNodes(child, result));
+            }
+            return result;
+        }
+
+        // Recalculate Y positions
+        function recalculatePositions(node, yOffset = { value: 0 }) {
+            node.y = yOffset.value * nodeConfig.verticalSpacing;
             if (!node.collapsed) {
                 node.children.forEach(child => {
-                    const fromX = (node.x + panX) * zoom + nodeConfig.nodeRadius * zoom;
-                    const fromY = (node.y + panY + 50) * zoom;
-                    const toX = (child.x + panX) * zoom - nodeConfig.nodeRadius * zoom;
-                    const toY = (child.y + panY + 50) * zoom;
-                    
-                    drawConnection(fromX, fromY, toX, toY);
-                    drawConnections(child);
+                    yOffset.value++;
+                    recalculatePositions(child, yOffset);
                 });
             }
         }
 
-        if (rootNode) {
-            drawConnections(rootNode);
+        // Draw bezier curve between nodes
+        function drawConnection(fromX, fromY, toX, toY) {
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+
+            const controlX1 = fromX + (toX - fromX) * 0.5;
+            const controlX2 = fromX + (toX - fromX) * 0.5;
+
+            ctx.bezierCurveTo(controlX1, fromY, controlX2, toY, toX, toY);
+            ctx.strokeStyle = colors.line;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
         }
 
-        // Draw nodes
-        const allNodes = rootNode ? flattenNodes(rootNode) : [];
-        allNodes.forEach(node => drawNode(node));
+        // Draw a node
+        function drawNode(node) {
+            const x = (node.x + panX) * zoom;
+            const y = (node.y + panY + 50) * zoom;
+            const radius = nodeConfig.nodeRadius * zoom;
 
-        // Update zoom level display
-        zoomLevelSpan.textContent = Math.round(zoom * 100) + '%';
-    }
+            // Draw node circle
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fillStyle = colors[node.type] || colors.object;
+            ctx.fill();
 
-    let rootNode = null;
+            // Draw label
+            ctx.font = `${nodeConfig.fontSize * zoom}px 'SF Mono', monospace`;
+            ctx.fillStyle = colors.text;
+            ctx.textBaseline = 'middle';
 
-    // Visualize JSON
-    function visualize() {
-        const input = jsonInput.value.trim();
-        
-        if (!input) {
-            alert('Please enter JSON to visualize');
-            return;
+            let label = node.key !== null ? String(node.key) : 'ROOT';
+
+            // Add value preview for primitives
+            if (node.type === 'string' || node.type === 'number' || node.type === 'boolean' || node.type === 'null') {
+                let valueStr = node.type === 'string' ? `"${node.value}"` : String(node.value);
+                if (valueStr.length > 20) valueStr = valueStr.substring(0, 17) + '...';
+                label = label;
+                ctx.fillText(label, x + nodeConfig.labelOffset * zoom, y);
+
+                // Draw value in appropriate color
+                const labelWidth = ctx.measureText(label + ': ').width;
+            } else if (node.children.length > 0) {
+                const count = node.children.length;
+                const suffix = node.collapsed ? ` ▶ (${count})` : '';
+                ctx.fillText(label + suffix, x + nodeConfig.labelOffset * zoom, y);
+            } else {
+                ctx.fillText(label, x + nodeConfig.labelOffset * zoom, y);
+            }
         }
 
-        try {
-            parsedData = JSON.parse(input);
-            const yOffset = { value: 0 };
-            rootNode = buildNodeTree('ROOT', parsedData, 0, 0, yOffset);
-            recalculatePositions(rootNode);
-            
-            // Reset view
-            zoom = 1;
-            panX = 50;
-            panY = 0;
-            
-            draw();
-            updateTreeView();
-            editorTextarea.value = JSON.stringify(parsedData, null, 2);
-            currentPathSpan.textContent = 'ROOT';
-        } catch (e) {
-            alert('Invalid JSON: ' + e.message);
+        // Main draw function
+        function draw() {
+            // Clear canvas
+            ctx.fillStyle = colors.bg;
+            ctx.fillRect(0, 0, vizCanvas.width, vizCanvas.height);
+
+            if (!parsedData) {
+                // Draw placeholder text
+                ctx.font = '14px Inter, sans-serif';
+                ctx.fillStyle = '#8b949e';
+                ctx.textAlign = 'center';
+                ctx.fillText('Enter JSON and click "Visualize" to see the graph', vizCanvas.width / 2, vizCanvas.height / 2);
+                ctx.textAlign = 'left';
+                return;
+            }
+
+            // Draw connections first (below nodes)
+            function drawConnections(node) {
+                if (!node.collapsed) {
+                    node.children.forEach(child => {
+                        const fromX = (node.x + panX) * zoom + nodeConfig.nodeRadius * zoom;
+                        const fromY = (node.y + panY + 50) * zoom;
+                        const toX = (child.x + panX) * zoom - nodeConfig.nodeRadius * zoom;
+                        const toY = (child.y + panY + 50) * zoom;
+
+                        drawConnection(fromX, fromY, toX, toY);
+                        drawConnections(child);
+                    });
+                }
+            }
+
+            if (rootNode) {
+                drawConnections(rootNode);
+            }
+
+            // Draw nodes
+            const allNodes = rootNode ? flattenNodes(rootNode) : [];
+            allNodes.forEach(node => drawNode(node));
+
+            // Update zoom level display
+            zoomLevelSpan.textContent = Math.round(zoom * 100) + '%';
         }
-    }
 
-    // Update Tree View
-    function updateTreeView() {
-        if (!parsedData) {
-            treeContent.innerHTML = '<span style="color: var(--viz-text-muted);">Enter JSON and click "Visualize" to see tree view</span>';
-            return;
+        let rootNode = null;
+
+        // Visualize JSON
+        function visualize() {
+            const input = jsonInput.value.trim();
+
+            if (!input) {
+                alert('Please enter JSON to visualize');
+                return;
+            }
+
+            try {
+                parsedData = JSON.parse(input);
+                const yOffset = { value: 0 };
+                rootNode = buildNodeTree('ROOT', parsedData, 0, 0, yOffset);
+                recalculatePositions(rootNode);
+
+                // Reset view
+                zoom = 1;
+                panX = 50;
+                panY = 0;
+
+                draw();
+                updateTreeView();
+                editorTextarea.value = JSON.stringify(parsedData, null, 2);
+                currentPathSpan.textContent = 'ROOT';
+            } catch (e) {
+                alert('Invalid JSON: ' + e.message);
+            }
         }
 
-        function renderNode(key, value, isLast = true) {
-            const type = getType(value);
-            let html = '';
+        // Update Tree View
+        function updateTreeView() {
+            if (!parsedData) {
+                treeContent.innerHTML = '<span style="color: var(--viz-text-muted);">Enter JSON and click "Visualize" to see tree view</span>';
+                return;
+            }
 
-            if (type === 'object' || type === 'array') {
-                const isEmpty = type === 'object' ? Object.keys(value).length === 0 : value.length === 0;
-                const bracket = type === 'object' ? ['{', '}'] : ['[', ']'];
-                const count = type === 'object' ? Object.keys(value).length : value.length;
+            function renderNode(key, value, isLast = true) {
+                const type = getType(value);
+                let html = '';
 
-                if (isEmpty) {
-                    html = `<div class="tree-item">
+                if (type === 'object' || type === 'array') {
+                    const isEmpty = type === 'object' ? Object.keys(value).length === 0 : value.length === 0;
+                    const bracket = type === 'object' ? ['{', '}'] : ['[', ']'];
+                    const count = type === 'object' ? Object.keys(value).length : value.length;
+
+                    if (isEmpty) {
+                        html = `<div class="tree-item">
                         <span class="tree-toggle"></span>
                         ${key !== null ? `<span class="tree-key">"${escapeHtml(key)}"</span>: ` : ''}
                         <span class="tree-type">${bracket[0]}${bracket[1]}</span>
                     </div>`;
-                } else {
-                    html = `<div class="tree-item tree-expandable">
+                    } else {
+                        html = `<div class="tree-item tree-expandable">
                         <span class="tree-toggle" onclick="this.parentElement.classList.toggle('collapsed'); this.textContent = this.textContent === '▼' ? '▶' : '▼';">▼</span>
                         ${key !== null ? `<span class="tree-key">"${escapeHtml(key)}"</span>: ` : ''}
                         <span class="tree-type">${bracket[0]} ${count} ${type === 'object' ? 'properties' : 'items'}</span>
                     </div>
                     <div class="tree-node tree-children">`;
 
-                    if (type === 'object') {
-                        const keys = Object.keys(value);
-                        keys.forEach((k, i) => {
-                            html += renderNode(k, value[k], i === keys.length - 1);
-                        });
-                    } else {
-                        value.forEach((item, i) => {
-                            html += renderNode(i, item, i === value.length - 1);
-                        });
+                        if (type === 'object') {
+                            const keys = Object.keys(value);
+                            keys.forEach((k, i) => {
+                                html += renderNode(k, value[k], i === keys.length - 1);
+                            });
+                        } else {
+                            value.forEach((item, i) => {
+                                html += renderNode(i, item, i === value.length - 1);
+                            });
+                        }
+
+                        html += '</div>';
                     }
+                } else {
+                    let valueClass = 'tree-value-' + type;
+                    let displayValue = type === 'string' ? `"${escapeHtml(value)}"` :
+                        type === 'null' ? 'null' :
+                            String(value);
 
-                    html += '</div>';
-                }
-            } else {
-                let valueClass = 'tree-value-' + type;
-                let displayValue = type === 'string' ? `"${escapeHtml(value)}"` : 
-                                  type === 'null' ? 'null' : 
-                                  String(value);
-
-                html = `<div class="tree-item">
+                    html = `<div class="tree-item">
                     <span class="tree-toggle"></span>
                     ${key !== null ? `<span class="tree-key">"${escapeHtml(String(key))}"</span>: ` : ''}
                     <span class="${valueClass}">${displayValue}</span>
                 </div>`;
+                }
+
+                return html;
             }
 
-            return html;
+            function escapeHtml(str) {
+                return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            }
+
+            treeContent.innerHTML = renderNode(null, parsedData);
         }
 
-        function escapeHtml(str) {
-            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-        }
+        // Event Listeners
+        visualizeBtn.addEventListener('click', visualize);
 
-        treeContent.innerHTML = renderNode(null, parsedData);
-    }
+        clearBtn.addEventListener('click', () => {
+            jsonInput.value = '';
+            parsedData = null;
+            rootNode = null;
+            draw();
+            treeContent.innerHTML = '<span style="color: var(--viz-text-muted);">Enter JSON and click "Visualize" to see tree view</span>';
+            editorTextarea.value = '';
+            currentPathSpan.textContent = 'ROOT';
+        });
 
-    // Event Listeners
-    visualizeBtn.addEventListener('click', visualize);
-
-    clearBtn.addEventListener('click', () => {
-        jsonInput.value = '';
-        parsedData = null;
-        rootNode = null;
-        draw();
-        treeContent.innerHTML = '<span style="color: var(--viz-text-muted);">Enter JSON and click "Visualize" to see tree view</span>';
-        editorTextarea.value = '';
-        currentPathSpan.textContent = 'ROOT';
-    });
-
-    sampleBtn.addEventListener('click', () => {
-        const sample = {
-            "rb-rwl-devices-store": {
-                "customDevices": []
-            },
-            "version": "1.0.0",
-            "generatedAt": "2024-01-15T10:30:00Z",
-            "generatedBy": "system",
-            "state": {
-                "rb-rwl-workspace-store": {
-                    "workspaces": ["workspace[0]", "workspace[1]"],
-                    "selectedWorkspaceId": "ws-001",
-                    "selectedScreenId": "screen-01",
-                    "_hasHydrated": true
+        sampleBtn.addEventListener('click', () => {
+            const sample = {
+                "rb-rwl-devices-store": {
+                    "customDevices": []
                 },
-                "rb-rwl-settings": {
-                    "downloadDirectory": "/downloads",
-                    "imageFormat": "png",
-                    "fileNameSuffix": "_export"
-                },
-                "rb-rwl-feature-toggle": {
-                    "_activeFeatures": ["activeFeatures[0]"],
-                    "_hasHydrated": true
-                },
-                "rb-rwl-ui-config": {
-                    "version": "2.0",
-                    "scale": 1.0,
-                    "fitToScreenScale": true,
-                    "zoomLevel": 100,
-                    "_hasHydrated": true,
-                    "onBoardingInfo": {
-                        "onboardedAt": "2024-01-01",
-                        "onBoardedVersion": "1.0"
+                "version": "1.0.0",
+                "generatedAt": "2024-01-15T10:30:00Z",
+                "generatedBy": "system",
+                "state": {
+                    "rb-rwl-workspace-store": {
+                        "workspaces": ["workspace[0]", "workspace[1]"],
+                        "selectedWorkspaceId": "ws-001",
+                        "selectedScreenId": "screen-01",
+                        "_hasHydrated": true
+                    },
+                    "rb-rwl-settings": {
+                        "downloadDirectory": "/downloads",
+                        "imageFormat": "png",
+                        "fileNameSuffix": "_export"
+                    },
+                    "rb-rwl-feature-toggle": {
+                        "_activeFeatures": ["activeFeatures[0]"],
+                        "_hasHydrated": true
+                    },
+                    "rb-rwl-ui-config": {
+                        "version": "2.0",
+                        "scale": 1.0,
+                        "fitToScreenScale": true,
+                        "zoomLevel": 100,
+                        "_hasHydrated": true,
+                        "onBoardingInfo": {
+                            "onboardedAt": "2024-01-01",
+                            "onBoardedVersion": "1.0"
+                        }
                     }
                 }
-            }
-        };
-        jsonInput.value = JSON.stringify(sample, null, 2);
-    });
+            };
+            jsonInput.value = JSON.stringify(sample, null, 2);
+        });
 
-    // Zoom controls
-    zoomInBtn.addEventListener('click', () => {
-        zoom = Math.min(zoom * 1.2, 3);
-        draw();
-    });
+        // Zoom controls
+        zoomInBtn.addEventListener('click', () => {
+            zoom = Math.min(zoom * 1.2, 3);
+            draw();
+        });
 
-    zoomOutBtn.addEventListener('click', () => {
-        zoom = Math.max(zoom / 1.2, 0.3);
-        draw();
-    });
+        zoomOutBtn.addEventListener('click', () => {
+            zoom = Math.max(zoom / 1.2, 0.3);
+            draw();
+        });
 
-    resetViewBtn.addEventListener('click', () => {
-        zoom = 1;
-        panX = 50;
-        panY = 0;
-        draw();
-    });
+        resetViewBtn.addEventListener('click', () => {
+            zoom = 1;
+            panX = 50;
+            panY = 0;
+            draw();
+        });
 
-    fitToScreenBtn.addEventListener('click', () => {
-        zoom = 1;
-        panX = 50;
-        panY = 0;
-        draw();
-    });
+        fitToScreenBtn.addEventListener('click', () => {
+            zoom = 1;
+            panX = 50;
+            panY = 0;
+            draw();
+        });
 
-    // Mouse wheel zoom
-    vizCanvas.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? 0.9 : 1.1;
-        zoom = Math.max(0.3, Math.min(3, zoom * delta));
-        draw();
-    });
+        // Mouse wheel zoom
+        vizCanvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? 0.9 : 1.1;
+            zoom = Math.max(0.3, Math.min(3, zoom * delta));
+            draw();
+        });
 
-    // Pan with mouse drag
-    vizCanvas.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        lastMouseX = e.clientX;
-        lastMouseY = e.clientY;
-        vizCanvas.style.cursor = 'grabbing';
-    });
-
-    vizCanvas.addEventListener('mousemove', (e) => {
-        if (isDragging) {
-            const dx = (e.clientX - lastMouseX) / zoom;
-            const dy = (e.clientY - lastMouseY) / zoom;
-            panX += dx;
-            panY += dy;
+        // Pan with mouse drag
+        vizCanvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
             lastMouseX = e.clientX;
             lastMouseY = e.clientY;
-            draw();
-        }
-    });
+            vizCanvas.style.cursor = 'grabbing';
+        });
 
-    vizCanvas.addEventListener('mouseup', () => {
-        isDragging = false;
-        vizCanvas.style.cursor = 'grab';
-    });
-
-    vizCanvas.addEventListener('mouseleave', () => {
-        isDragging = false;
-        vizCanvas.style.cursor = 'grab';
-    });
-
-    // Node click handling
-    vizCanvas.addEventListener('click', (e) => {
-        if (!rootNode) return;
-
-        const rect = vizCanvas.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-
-        const allNodes = flattenNodes(rootNode);
-        
-        for (const node of allNodes) {
-            const nodeX = (node.x + panX) * zoom;
-            const nodeY = (node.y + panY + 50) * zoom;
-            const radius = nodeConfig.nodeRadius * zoom * 2; // Larger hit area
-
-            const distance = Math.sqrt((mouseX - nodeX) ** 2 + (mouseY - nodeY) ** 2);
-            
-            if (distance <= radius && node.children.length > 0) {
-                node.collapsed = !node.collapsed;
-                recalculatePositions(rootNode);
+        vizCanvas.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const dx = (e.clientX - lastMouseX) / zoom;
+                const dy = (e.clientY - lastMouseY) / zoom;
+                panX += dx;
+                panY += dy;
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
                 draw();
-                break;
+            }
+        });
+
+        vizCanvas.addEventListener('mouseup', () => {
+            isDragging = false;
+            vizCanvas.style.cursor = 'grab';
+        });
+
+        vizCanvas.addEventListener('mouseleave', () => {
+            isDragging = false;
+            vizCanvas.style.cursor = 'grab';
+        });
+
+        // Node click handling
+        vizCanvas.addEventListener('click', (e) => {
+            if (!rootNode) return;
+
+            const rect = vizCanvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            const allNodes = flattenNodes(rootNode);
+
+            for (const node of allNodes) {
+                const nodeX = (node.x + panX) * zoom;
+                const nodeY = (node.y + panY + 50) * zoom;
+                const radius = nodeConfig.nodeRadius * zoom * 2; // Larger hit area
+
+                const distance = Math.sqrt((mouseX - nodeX) ** 2 + (mouseY - nodeY) ** 2);
+
+                if (distance <= radius && node.children.length > 0) {
+                    node.collapsed = !node.collapsed;
+                    recalculatePositions(rootNode);
+                    draw();
+                    break;
+                }
+            }
+        });
+
+        // View Tab Switching
+        function switchView(view) {
+            treeTabBtn.classList.remove('active');
+            chartTabBtn.classList.remove('active');
+            editorTabBtn.classList.remove('active');
+
+            chartPanel.style.display = 'none';
+            treePanel.classList.remove('active');
+            editorPanel.classList.remove('active');
+
+            if (view === 'tree') {
+                treeTabBtn.classList.add('active');
+                treePanel.classList.add('active');
+                inputPanel.style.display = 'flex';
+            } else if (view === 'chart') {
+                chartTabBtn.classList.add('active');
+                chartPanel.style.display = 'block';
+                inputPanel.style.display = 'flex';
+                initCanvas();
+            } else if (view === 'editor') {
+                editorTabBtn.classList.add('active');
+                editorPanel.classList.add('active');
+                inputPanel.style.display = 'none';
             }
         }
-    });
 
-    // View Tab Switching
-    function switchView(view) {
-        treeTabBtn.classList.remove('active');
-        chartTabBtn.classList.remove('active');
-        editorTabBtn.classList.remove('active');
-        
-        chartPanel.style.display = 'none';
-        treePanel.classList.remove('active');
-        editorPanel.classList.remove('active');
+        treeTabBtn.addEventListener('click', () => switchView('tree'));
+        chartTabBtn.addEventListener('click', () => switchView('chart'));
+        editorTabBtn.addEventListener('click', () => switchView('editor'));
 
-        if (view === 'tree') {
-            treeTabBtn.classList.add('active');
-            treePanel.classList.add('active');
-            inputPanel.style.display = 'flex';
-        } else if (view === 'chart') {
-            chartTabBtn.classList.add('active');
-            chartPanel.style.display = 'block';
-            inputPanel.style.display = 'flex';
-            initCanvas();
-        } else if (view === 'editor') {
-            editorTabBtn.classList.add('active');
-            editorPanel.classList.add('active');
-            inputPanel.style.display = 'none';
-        }
-    }
+        // Sync editor changes back
+        editorTextarea.addEventListener('input', () => {
+            jsonInput.value = editorTextarea.value;
+        });
 
-    treeTabBtn.addEventListener('click', () => switchView('tree'));
-    chartTabBtn.addEventListener('click', () => switchView('chart'));
-    editorTabBtn.addEventListener('click', () => switchView('editor'));
+        // Initialize
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
 
-    // Sync editor changes back
-    editorTextarea.addEventListener('input', () => {
-        jsonInput.value = editorTextarea.value;
-    });
-
-    // Initialize
-    window.addEventListener('resize', initCanvas);
-    initCanvas();
-
-    // Allow Enter key in JSON input to auto-visualize (with Shift)
-    jsonInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && e.shiftKey) {
-            e.preventDefault();
-            visualize();
-        }
-    });
-})();
+        // Allow Enter key in JSON input to auto-visualize (with Shift)
+        jsonInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.shiftKey) {
+                e.preventDefault();
+                visualize();
+            }
+        });
+    })();
 </script>
 {% endblock %}
