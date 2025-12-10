@@ -979,6 +979,16 @@ json parser, json lint, json pretty print{% endblock %}
         // Initialize
         updateLineNumbers();
         updateStats();
+
+        // Auto-paste JSON from CSV converter if available
+        const csvJson = sessionStorage.getItem('csvToJsonOutput');
+        if (csvJson) {
+            editor.value = csvJson;
+            sessionStorage.removeItem('csvToJsonOutput');
+            updateLineNumbers();
+            updateStats();
+            validateJSON();
+        }
     })();
 </script>
 {% endverbatim %}

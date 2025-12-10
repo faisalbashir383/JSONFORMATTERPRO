@@ -535,4 +535,31 @@ processing. No signup required.{% endblock %}
 
 {% block extra_js %}
 <script src="{% static 'js/app.js' %}" defer></script>
+<script>
+  // Auto-paste JSON from CSV converter if available
+  document.addEventListener('DOMContentLoaded', function () {
+    const csvJson = sessionStorage.getItem('csvToJsonOutput');
+    if (csvJson) {
+      const inputField = document.getElementById('inputJson');
+      if (inputField) {
+        inputField.value = csvJson;
+        // Clear after using
+        sessionStorage.removeItem('csvToJsonOutput');
+
+        // Check for action parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const action = urlParams.get('action');
+
+        // Auto-trigger the action if specified
+        if (action === 'format' && typeof formatJson === 'function') {
+          setTimeout(formatJson, 100);
+        } else if (action === 'minify' && typeof minifyJson === 'function') {
+          setTimeout(minifyJson, 100);
+        } else if (action === 'validate' && typeof validateJson === 'function') {
+          setTimeout(validateJson, 100);
+        }
+      }
+    }
+  });
+</script>
 {% endblock %}

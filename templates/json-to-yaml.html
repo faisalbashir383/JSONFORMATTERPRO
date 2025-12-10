@@ -451,4 +451,19 @@ Example:
 
 {% block extra_js %}
 <script src="{% static 'js/json-yaml.js' %}"></script>
+<script>
+    // Auto-paste JSON from CSV converter if available
+    document.addEventListener('DOMContentLoaded', function () {
+        const csvJson = sessionStorage.getItem('csvToJsonOutput');
+        if (csvJson) {
+            const inputField = document.getElementById('jsonInput');
+            if (inputField) {
+                inputField.value = csvJson;
+                sessionStorage.removeItem('csvToJsonOutput');
+                // Auto-convert
+                document.getElementById('convertBtn')?.click();
+            }
+        }
+    });
+</script>
 {% endblock %}

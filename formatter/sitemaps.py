@@ -21,6 +21,7 @@ class StaticViewSitemap(Sitemap):
             'contact_page',
             'privacy_page',
             'json_to_yaml_page',
+            'csv_to_json_page',
             'json_diff_page',
             'json_schema_page',
             'json_tree_page',

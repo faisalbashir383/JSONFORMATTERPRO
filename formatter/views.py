@@ -441,6 +441,11 @@ def json_to_yaml_page(request):
     return render(request, 'json-to-yaml.html')
 
 
+def csv_to_json_page(request):
+    """Render the CSV to JSON converter page"""
+    return render(request, 'csv-to-json.html')
+
+
 def json_diff_page(request):
     """Render the JSON Diff comparison tool page"""
     return render(request, 'json-diff.html')

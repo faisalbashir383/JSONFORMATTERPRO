@@ -372,4 +372,17 @@ Example:
 
 {% block extra_js %}
 <script src="{% static 'js/json-schema.js' %}"></script>
+<script>
+    // Auto-paste JSON from CSV converter if available
+    document.addEventListener('DOMContentLoaded', function () {
+        const csvJson = sessionStorage.getItem('csvToJsonOutput');
+        if (csvJson) {
+            const inputField = document.getElementById('jsonData');
+            if (inputField) {
+                inputField.value = csvJson;
+                sessionStorage.removeItem('csvToJsonOutput');
+            }
+        }
+    });
+</script>
 {% endblock %}

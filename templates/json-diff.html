@@ -611,4 +611,17 @@ Example:
 
 {% block extra_js %}
 <script src="{% static 'js/json-diff.js' %}"></script>
+<script>
+    // Auto-paste JSON from CSV converter if available (to left panel)
+    document.addEventListener('DOMContentLoaded', function () {
+        const csvJson = sessionStorage.getItem('csvToJsonOutput');
+        if (csvJson) {
+            const inputField = document.getElementById('jsonLeft');
+            if (inputField) {
+                inputField.value = csvJson;
+                sessionStorage.removeItem('csvToJsonOutput');
+            }
+        }
+    });
+</script>
 {% endblock %}

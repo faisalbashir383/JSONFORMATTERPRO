@@ -23,6 +23,7 @@ urlpatterns = [
     
     # JSON Tool Pages
     path('json-to-yaml/', views.json_to_yaml_page, name='json_to_yaml_page'),
+    path('csv-to-json/', views.csv_to_json_page, name='csv_to_json_page'),
     path('json-diff/', views.json_diff_page, name='json_diff_page'),
     path('json-schema/', views.json_schema_page, name='json_schema_page'),
     path('json-tree/', views.json_tree_page, name='json_tree_page'),
