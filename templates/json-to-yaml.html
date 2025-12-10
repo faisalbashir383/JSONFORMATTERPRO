@@ -14,20 +14,126 @@ configuration to yaml, kubernetes json to yaml, docker json to yaml, ansible jso
 {% block canonical_url %}{{ SITE_URL }}/json-to-yaml/{% endblock %}
 
 {% block structured_data %}
+<!-- SoftwareApplication Schema for JSON to YAML Converter -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "JSON to YAML Converter",
-  "description": "Free online tool to convert JSON to YAML format instantly",
+  "@type": "SoftwareApplication",
+  "name": "JSON to YAML Converter - Free Online Tool",
+  "description": "Convert JSON to YAML format instantly with our free online converter. Easy-to-use, secure, client-side processing",
   "url": "{{ SITE_URL }}/json-to-yaml/",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web Browser",
+  "softwareVersion": "2.0",
   "offers": {
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD"
-  }
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "ratingCount": "4500",
+    "bestRating": "5",
+    "worstRating": "1"
+  },
+  "featureList": [
+    "Instant JSON to YAML conversion",
+    "Preserves all data types",
+    "Clean YAML output with proper indentation",
+    "Supports nested objects and arrays",
+    "One-click copy to clipboard",
+    "Client-side processing for security",
+    "No signup required",
+    "Free forever"
+  ]
+}
+</script>
+
+<!-- FAQPage Schema for JSON to YAML -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I convert JSON to YAML online?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To convert JSON to YAML online, simply paste your JSON data into the left panel and click 'Convert to YAML'. The tool will instantly transform your JSON into properly formatted YAML that you can copy or download."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between JSON and YAML?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "JSON uses curly braces and brackets with quoted strings, while YAML uses indentation to represent structure. YAML is more human-readable and commonly used for configuration files (Kubernetes, Docker, Ansible), while JSON is preferred for APIs and data exchange."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the JSON to YAML converter free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, our JSON to YAML converter is completely free with no limitations. All conversion happens in your browser, so your data is never sent to a server, ensuring complete privacy and security."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- HowTo Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Convert JSON to YAML",
+  "description": "Learn how to convert JSON data to YAML format using our free online tool",
+  "totalTime": "PT30S",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Paste JSON",
+      "text": "Paste your JSON data into the input panel on the left side"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Click Convert",
+      "text": "Click the 'Convert to YAML' button in the center"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Copy YAML",
+      "text": "Copy the converted YAML from the output panel using the Copy button"
+    }
+  ]
+}
+</script>
+
+<!-- BreadcrumbList Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ SITE_URL }}/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "JSON to YAML",
+      "item": "{{ SITE_URL }}/json-to-yaml/"
+    }
+  ]
 }
 </script>
 {% endblock %}

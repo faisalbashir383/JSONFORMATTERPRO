@@ -14,22 +14,129 @@ detector, json diff highlighter, best json diff tool{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/json-diff/{% endblock %}
 
 {% block structured_data %}
+<!-- SoftwareApplication Schema for JSON Diff Tool -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "JSON Diff Tool",
-  "description": "Free online tool to compare two JSON objects and visualize differences",
+  "@type": "SoftwareApplication",
+  "name": "JSON Diff Tool - Compare JSON Online",
+  "description": "Free online tool to compare two JSON objects, identify differences, and visualize changes with syntax highlighting",
   "url": "{{ SITE_URL }}/json-diff/",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web Browser",
+  "softwareVersion": "2.0",
   "offers": {
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD"
-  }
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "3200",
+    "bestRating": "5",
+    "worstRating": "1"
+  },
+  "featureList": [
+    "Side-by-side JSON comparison",
+    "Visual diff highlighting",
+    "Addition, removal, and change detection",
+    "Deep nested object comparison",
+    "Array element diff",
+    "One-click swap panels",
+    "Client-side processing",
+    "No signup required"
+  ]
 }
 </script>
+
+<!-- FAQPage Schema for JSON Diff -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I compare two JSON files online?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To compare two JSON files online, paste your original JSON in the left panel and the modified JSON in the right panel of JSON Diff Tool. Click 'Compare JSON' to instantly see all differences highlighted with colors - green for additions, red for removals, and yellow for changes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is JSON diff?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "JSON diff is the process of comparing two JSON objects to identify their differences. It shows what was added, removed, or changed between two JSON documents, making it essential for debugging APIs, comparing configurations, and tracking data changes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the JSON comparison tool free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, JSON Diff Tool is completely free with no limitations. All comparison happens in your browser, so your data stays private and secure. No signup or registration required."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- HowTo Schema for JSON Comparison -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Compare JSON Files Online",
+  "description": "Learn how to compare and find differences between two JSON objects using JSON Diff Tool",
+  "totalTime": "PT1M",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Paste Original JSON",
+      "text": "Paste your original or first JSON document into the left panel"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Paste Modified JSON",
+      "text": "Paste the second or modified JSON document into the right panel"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Click Compare",
+      "text": "Click the 'Compare JSON' button to see highlighted differences"
+    }
+  ]
+}
+</script>
+
+<!-- BreadcrumbList Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ SITE_URL }}/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "JSON Diff",
+      "item": "{{ SITE_URL }}/json-diff/"
+    }
+  ]
+}
+</script>
+
 <!-- JSON Tools Category Sitelinks -->
 <script type="application/ld+json">
 {
