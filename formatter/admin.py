@@ -72,7 +72,7 @@ class BlogPostAdmin(admin.ModelAdmin):
 class VisitorLogAdmin(admin.ModelAdmin):
     list_display = ['ip_address', 'country', 'city', 'device_type', 'browser', 'visit_count', 'first_visit', 'last_visit', 'is_bot']
     list_filter = ['is_bot', 'is_mobile', 'device_type', 'country_code', 'first_visit']
-    search_fields = ['ip_address', 'country', 'city', 'browser', 'os']
+    search_fields = ['ip_address', 'country', 'city', 'browser', 'os', 'referrer']
     readonly_fields = ['ip_address', 'session_key', 'country', 'country_code', 'city', 'region', 
                        'latitude', 'longitude', 'user_agent', 'browser', 'browser_version',
                        'device_type', 'os', 'os_version', 'referrer', 'landing_page',
