@@ -1,20 +1,29 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Free Image Resizer - Resize Images Online | JSON Formatters Pro{% endblock %}
-{% block meta_title %}Free Image Resizer - Resize Images Online | JSON Formatters Pro{% endblock %}
-{% block meta_description %}Resize images online for free. Resize for Instagram, Facebook, Twitter. Multiple output
-sizes, custom dimensions, batch download. image background remover, 100% secure.{% endblock %}
+{% block title %}Free Image Resizer & Background Remover - AI Powered | JSON Formatters Pro{% endblock %}
+{% block meta_title %}Free Image Resizer & AI Background Remover Online | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Free online image resizer and AI background remover. Resize images for Instagram, Facebook,
+Twitter. Remove backgrounds instantly with AI. No signup, 100% secure, works in browser.{% endblock %}
 {% block meta_keywords %}image resizer, resize image, image resize online, photo resizer, picture resizer, resize image
-online free, resize image for instagram, resize image without losing quality, bulk image resizer online, resize multiple
-images at once, image resizer for social media, resize image to specific size, compress and resize image, resize image
-in kb, resize image for facebook, resize jpg image online, resize png image, best image resizer 2026, free image resize
-tool, resize image pixels, crop and resize image online, resize image for twitter, resize image for linkedin, youtube
-thumbnail size, image dimension changer, image size reducer, resize image for website, image size reducer in kb,
-resize image for email, image resizer online, photo size changer, photo resizer, free image resizer 2026,
-free image size reducer, image instagram resize, facebook image resizer, twitter image resizer, image background remover,
-free image background remover online, remove image background, image format converter,
-image background remover online, AI image background remover, free AI background remover, remove background from image
+online free,
+resize image for instagram, resize image without losing quality, bulk image resizer online, resize multiple images at
+once,
+image resizer for social media, resize image to specific size, compress and resize image, resize image in kb,
+resize image for facebook, resize jpg image online, resize png image, best image resizer 2026, free image resize tool,
+resize image pixels, crop and resize image online, resize image for twitter, resize image for linkedin, youtube
+thumbnail size,
+image dimension changer, image size reducer, resize image for website, image size reducer in kb, resize image for email,
+image resizer online, photo size changer, photo resizer, free image resizer 2026, free image size reducer,
+image instagram resize, facebook image resizer, twitter image resizer,
+background remover, image background remover, remove background from image, AI background remover, free background
+remover,
+remove bg, background eraser, transparent background maker, photo background remover, remove background online free,
+AI image background remover, free AI background remover, background remover online, automatic background removal,
+remove background from photo, background cutter, background removal tool, instant background remover,
+erase background from image, background remover no signup, product photo background remover,
+portrait background remover, passport photo background remover, remove white background, png background remover,
+make image transparent, transparent png maker, background remover AI free, best background remover 2026
 {% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/image-resizer/{% endblock %}
 
@@ -58,7 +67,11 @@ image background remover online, AI image background remover, free AI background
     {"@type": "Question", "name": "Is this image resizer free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, completely free with no limits. No signup required."}},
     {"@type": "Question", "name": "Is my image data secure?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, all processing happens in your browser. Images are never uploaded to any server."}},
     {"@type": "Question", "name": "What image formats are supported?", "acceptedAnswer": {"@type": "Answer", "text": "We support JPG, PNG, WebP, and GIF formats for input and output."}},
-    {"@type": "Question", "name": "Can I resize multiple images?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, you can generate multiple sizes from one image and download all as a ZIP file."}}
+    {"@type": "Question", "name": "Can I resize multiple images?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, you can generate multiple sizes from one image and download all as a ZIP file."}},
+    {"@type": "Question", "name": "How does the AI background remover work?", "acceptedAnswer": {"@type": "Answer", "text": "Our AI background remover uses machine learning to automatically detect and remove backgrounds from images. It runs entirely in your browser for privacy."}},
+    {"@type": "Question", "name": "Is the background remover really AI-powered?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, it uses a neural network model that runs locally in your browser. The first use downloads the AI model (~40MB), which is then cached."}},
+    {"@type": "Question", "name": "What types of images work best with background removal?", "acceptedAnswer": {"@type": "Answer", "text": "The AI works best with photos of people, products, animals, and objects with clear edges. Complex backgrounds or similar colors may be challenging."}},
+    {"@type": "Question", "name": "Can I resize and remove background at the same time?", "acceptedAnswer": {"@type": "Answer", "text": "Yes! First remove the background, then resize. The transparent background is preserved in PNG format."}}
   ]
 }
 </script>
@@ -667,7 +680,8 @@ image background remover online, AI image background remover, free AI background
 {% block content %}
 <div class="tool-header">
     <h1>📸 Image Resizer & Background remover</h1>
-    <p>Resize images online for free. Multiple sizes, social media presets, batch download, AI image background remover</p>
+    <p>Resize images online for free. Multiple sizes, social media presets, batch download, AI image background remover
+    </p>
 </div>
 
 <div class="resizer-grid">
@@ -818,7 +832,7 @@ image background remover online, AI image background remover, free AI background
 
 <!-- Info Section -->
 <div class="info-section">
-    <h2>💡 About Image Resizer</h2>
+    <h2>💡 About Image Resizer & Background Remover</h2>
     <p>
         Our free online image resizer lets you resize images for any purpose - social media, websites,
         emails, or printing. All processing happens in your browser, so your images are never uploaded
@@ -827,8 +841,68 @@ image background remover online, AI image background remover, free AI background
     <p>
         <strong>Features:</strong> Custom dimensions • Social media presets • Percentage scaling •
         Multiple output formats (JPG, PNG, WebP) • Quality control • Batch download as ZIP •
-        Aspect ratio lock • Works with large images
+        Aspect ratio lock • AI Background Removal • Works with large images
     </p>
+</div>
+
+<!-- FAQ Section -->
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>❓ Frequently Asked Questions</h2>
+
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">Is this image resizer free?</h3>
+        <p style="margin: 0;">Yes, completely free with no limits. No signup or registration required. Use it as many
+            times as you need.</p>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">Is my image data secure?</h3>
+        <p style="margin: 0;">Absolutely! All processing happens in your browser using JavaScript. Your images are never
+            uploaded to any server - they stay on your device.</p>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">What image formats are
+            supported?</h3>
+        <p style="margin: 0;">We support JPG, PNG, WebP, and GIF formats for input. You can output in JPG, PNG, or WebP
+            format with adjustable quality.</p>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">Can I resize to multiple sizes
+            at once?</h3>
+        <p style="margin: 0;">Yes! Select multiple social media presets or enter custom dimensions. All resized images
+            can be downloaded individually or as a ZIP file.</p>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">How does the AI background
+            remover work?</h3>
+        <p style="margin: 0;">Our AI background remover uses a machine learning neural network that runs entirely in
+            your browser. It automatically detects the subject and removes the background, creating a transparent PNG.
+        </p>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">Why does background removal take
+            time on first use?</h3>
+        <p style="margin: 0;">The first time you use background removal, the AI model (~40MB) is downloaded to your
+            browser. This is cached, so subsequent uses are much faster.</p>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">What types of images work best
+            with AI background removal?</h3>
+        <p style="margin: 0;">The AI works best with photos of people, products, animals, and objects with clear edges
+            against distinct backgrounds. Very complex or camouflaged subjects may be challenging.</p>
+    </div>
+
+    <div style="margin-bottom: 0;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">Can I resize and remove
+            background together?</h3>
+        <p style="margin: 0;">Yes! First remove the background to get a transparent image, then resize it to your
+            desired dimensions. The transparency is preserved when you output as PNG.</p>
+    </div>
 </div>
 {% endblock %}
 
