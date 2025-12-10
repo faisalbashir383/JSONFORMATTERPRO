@@ -321,6 +321,151 @@
 </head>
 
 <body>
+    <!-- JSON Page Loader -->
+    <div id="pageLoader" class="page-loader">
+        <div class="loader-content">
+            <div class="json-animation">
+                <span class="json-bracket">{</span>
+                <div class="json-lines">
+                    <div class="json-line"><span class="json-key">"loading"</span>: <span class="json-value">true</span>
+                    </div>
+                    <div class="json-line"><span class="json-key">"progress"</span>: <span class="json-dots">...</span>
+                    </div>
+                </div>
+                <span class="json-bracket">}</span>
+            </div>
+            <div class="loader-text">JSON Formatters Pro</div>
+        </div>
+    </div>
+    <style>
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .json-animation {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 1.2rem;
+            color: #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .json-bracket {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .json-lines {
+            padding: 0.5rem 0;
+        }
+
+        .json-line {
+            opacity: 0;
+            animation: fadeSlide 0.5s ease forwards;
+        }
+
+        .json-line:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .json-line:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .json-key {
+            color: #a78bfa;
+        }
+
+        .json-value {
+            color: #4ade80;
+        }
+
+        .json-dots {
+            color: #fbbf24;
+            animation: dots 1s steps(3, end) infinite;
+        }
+
+        .loader-text {
+            font-size: 1rem;
+            color: #64748b;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            animation: fadeIn 0.5s ease 0.6s forwards;
+            opacity: 0;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes dots {
+            0% {
+                content: '.';
+            }
+
+            33% {
+                content: '..';
+            }
+
+            66% {
+                content: '...';
+            }
+        }
+    </style>
+
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="nav-container">
@@ -672,6 +817,25 @@
         document.querySelectorAll('.nav-menu, .dropdown-content').forEach(el => {
             el.style.visibility = 'visible';
         });
+
+        // Hide page loader when page is ready
+        const pageLoader = document.getElementById('pageLoader');
+        if (pageLoader) {
+            // Minimum display time for smooth UX (300ms - quick but smooth)
+            const minDisplayTime = 300;
+            const startTime = performance.now();
+
+            window.addEventListener('load', () => {
+                const elapsed = performance.now() - startTime;
+                const remaining = Math.max(0, minDisplayTime - elapsed);
+
+                setTimeout(() => {
+                    pageLoader.classList.add('hidden');
+                    // Remove from DOM after transition
+                    setTimeout(() => pageLoader.remove(), 400);
+                }, remaining);
+            });
+        }
     </script>
 
     <!-- Page-specific JavaScript -->
