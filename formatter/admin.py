@@ -88,7 +88,7 @@ class VisitorLogAdmin(admin.ModelAdmin):
 class PageViewAdmin(admin.ModelAdmin):
     list_display = ['url', 'ip_address', 'country_code', 'device_type', 'timestamp']
     list_filter = ['timestamp', 'country_code', 'device_type', 'method']
-    search_fields = ['url', 'page_title', 'ip_address']
+    search_fields = ['url', 'page_title', 'ip_address', 'referrer']
     readonly_fields = ['visitor', 'url', 'page_title', 'method', 'ip_address', 'user_agent',
                        'referrer', 'timestamp', 'load_time', 'session_key', 'country_code', 'device_type']
     date_hierarchy = 'timestamp'
