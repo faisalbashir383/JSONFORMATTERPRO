@@ -1009,3 +1009,8 @@ def cors_checker_api(request):
             
     except Exception as e:
         return Response({'error': str(e)}, status=500)
+
+
+def image_resizer_page(request):
+    """Render the Image Resizer tool page"""
+    return render(request, 'image-resizer.html')

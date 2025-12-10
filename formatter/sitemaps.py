@@ -46,6 +46,7 @@ class StaticViewSitemap(Sitemap):
             'json_visualizer_page',
             # SEO & Web Tools
             'lorem_ipsum_page',
+            'image_resizer_page',
         ]
     
     def location(self, item):

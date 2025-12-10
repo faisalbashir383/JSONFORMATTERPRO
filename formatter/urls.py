@@ -56,6 +56,7 @@ urlpatterns = [
     path('json-editor/', views.json_editor_page, name='json_editor_page'),
     path('regex-tester/', views.regex_tester_page, name='regex_tester_page'),
     path('lorem-ipsum/', views.lorem_ipsum_page, name='lorem_ipsum_page'),
+    path('image-resizer/', views.image_resizer_page, name='image_resizer_page'),
     
     # Code Tool API Endpoints
     path('api/qr-generator/', views.generate_qr_code, name='generate_qr_code'),
