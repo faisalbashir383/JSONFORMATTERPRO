@@ -3,8 +3,8 @@
 
 {% block title %}Swagger/OpenAPI Viewer - View API Documentation Online | JSON Formatters Pro{% endblock %}
 {% block meta_title %}Swagger/OpenAPI Viewer - View API Documentation Online Free{% endblock %}
-{% block meta_description %}View and explore Swagger/OpenAPI specifications online. Paste your API spec to see
-endpoints, schemas, and documentation beautifully formatted.{% endblock %}
+{% block meta_description %}View and explore Swagger/OpenAPI specifications online. Parse JSON or YAML specs, generate
+code snippets, export documentation, and visualize your API beautifully. Free tool with no signup.{% endblock %}
 {% block meta_keywords %}swagger viewer, openapi viewer, api documentation, swagger ui, openapi spec viewer,
 api explorer, openapi online viewer, online openapi viewer, online swagger, swagger online, swagger editor, openapi,
 api spec viewer, api documentation tool, swagger documentation viewer, openapi documentation tool,
@@ -19,7 +19,7 @@ api docs viewer, swagger visualizer, openapi explorer, swagger reader, swagger n
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Swagger/OpenAPI Viewer",
-  "description": "Free online Swagger and OpenAPI specification viewer",
+  "description": "Free online Swagger and OpenAPI specification viewer with code generation",
   "url": "{{ SITE_URL }}/swagger-viewer/",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web Browser",
@@ -28,6 +28,38 @@ api docs viewer, swagger visualizer, openapi explorer, swagger reader, swagger n
     "price": "0",
     "priceCurrency": "USD"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is OpenAPI/Swagger?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "OpenAPI (formerly known as Swagger) is a specification for describing, producing, consuming, and visualizing RESTful APIs. It provides a standard way to document APIs that both humans and computers can understand."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the difference between OpenAPI 2.0 and 3.0?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "OpenAPI 3.0 includes improved security definitions, better support for webhooks, enhanced schema objects with oneOf/anyOf/allOf, requestBody for defining request payloads, and callbacks for asynchronous operations."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What file formats are supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This viewer supports both JSON and YAML formats for OpenAPI specifications. You can paste your spec directly or load it from a URL."
+      }
+    }
+  ]
 }
 </script>
 {% endblock %}
@@ -55,6 +87,27 @@ api docs viewer, swagger visualizer, openapi explorer, swagger reader, swagger n
     .tool-header p {
         color: var(--color-text-secondary);
         font-size: 1.1rem;
+    }
+
+    /* Feature badges */
+    .feature-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+
+    .feature-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.35rem 0.75rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 20px;
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
     }
 
     .input-section {
@@ -145,6 +198,7 @@ api docs viewer, swagger visualizer, openapi explorer, swagger reader, swagger n
         display: flex;
         gap: 1rem;
         margin-top: 1rem;
+        flex-wrap: wrap;
     }
 
     .parse-btn {
@@ -164,7 +218,8 @@ api docs viewer, swagger visualizer, openapi explorer, swagger reader, swagger n
         box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
     }
 
-    .sample-btn {
+    .sample-btn,
+    .secondary-btn {
         padding: 0.75rem 1.5rem;
         font-size: 0.9rem;
         font-weight: 500;
@@ -176,7 +231,8 @@ api docs viewer, swagger visualizer, openapi explorer, swagger reader, swagger n
         transition: all 200ms ease;
     }
 
-    .sample-btn:hover {
+    .sample-btn:hover,
+    .secondary-btn:hover {
         background: var(--color-primary);
         color: white;
     }
@@ -189,6 +245,110 @@ api docs viewer, swagger visualizer, openapi explorer, swagger reader, swagger n
         border-radius: var(--radius-md);
         margin-top: 1rem;
         display: none;
+    }
+
+    /* Stats Section */
+    .stats-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-primary);
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        margin-top: 0.25rem;
+    }
+
+    .stat-card.get .stat-value {
+        color: #1d4ed8;
+    }
+
+    .stat-card.post .stat-value {
+        color: #15803d;
+    }
+
+    .stat-card.put .stat-value {
+        color: #b45309;
+    }
+
+    .stat-card.delete .stat-value {
+        color: #b91c1c;
+    }
+
+    /* Toolbar */
+    .toolbar {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+    }
+
+    .search-box {
+        flex: 1;
+        min-width: 200px;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+    }
+
+    .search-box:focus {
+        outline: none;
+        border-color: var(--color-primary);
+    }
+
+    .toolbar-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .toolbar-btn:hover {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+    }
+
+    .server-select {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
     }
 
     /* API Documentation Styles */
@@ -269,6 +429,9 @@ api docs viewer, swagger visualizer, openapi explorer, swagger reader, swagger n
         border-bottom: 1px solid var(--color-border);
         font-size: 1.1rem;
         font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
     .endpoint-group {
@@ -298,7 +461,6 @@ api docs viewer, swagger visualizer, openapi explorer, swagger reader, swagger n
     .endpoint {
         padding: 1rem 1.5rem;
         border-bottom: 1px solid var(--color-border);
-        cursor: pointer;
         transition: background 200ms ease;
     }
 
@@ -310,10 +472,15 @@ api docs viewer, swagger visualizer, openapi explorer, swagger reader, swagger n
         background: rgba(99, 102, 241, 0.03);
     }
 
+    .endpoint.hidden {
+        display: none;
+    }
+
     .endpoint-header {
         display: flex;
         align-items: center;
         gap: 1rem;
+        cursor: pointer;
     }
 
     .method-badge {
@@ -356,6 +523,22 @@ api docs viewer, swagger visualizer, openapi explorer, swagger reader, swagger n
         font-size: 0.9rem;
         color: var(--color-text);
         flex: 1;
+    }
+
+    .copy-btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        background: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        opacity: 0.6;
+        transition: opacity 200ms;
+    }
+
+    .copy-btn:hover {
+        opacity: 1;
+        background: var(--color-bg);
     }
 
     .endpoint-summary {
@@ -450,6 +633,66 @@ api docs viewer, swagger visualizer, openapi explorer, swagger reader, swagger n
         color: #b91c1c;
     }
 
+    /* Code Snippet Section */
+    .code-snippets {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+    }
+
+    .snippet-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .snippet-tab {
+        color: white;
+        padding: 0.35rem 0.75rem;
+        font-size: 0.8rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+    }
+
+    .snippet-tab.active {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+    }
+
+    .snippet-code {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 0.8rem;
+        overflow-x: auto;
+        white-space: pre;
+        position: relative;
+    }
+
+    .snippet-copy-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.7rem;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+    }
+
+    .snippet-copy-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
     .schemas-section {
         margin-top: 1.5rem;
         background: var(--color-surface);
@@ -532,6 +775,67 @@ api docs viewer, swagger visualizer, openapi explorer, swagger reader, swagger n
         }
     }
 
+    /* FAQ Section */
+    .faq-section {
+        margin-top: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+    }
+
+    .faq-section h2 {
+        padding: 1.25rem 1.5rem;
+        font-size: 1.25rem;
+        font-weight: 700;
+        border-bottom: 1px solid var(--color-border);
+        background: var(--color-bg);
+        margin: 0;
+    }
+
+    .faq-item {
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .faq-item:last-child {
+        border-bottom: none;
+    }
+
+    .faq-question {
+        padding: 1rem 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .faq-question:hover {
+        background: rgba(99, 102, 241, 0.03);
+    }
+
+    .faq-question .icon {
+        font-size: 1.25rem;
+        transition: transform 200ms;
+    }
+
+    .faq-item.open .faq-question .icon {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        display: none;
+        padding: 0 1.5rem 1rem 1.5rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+    }
+
+    .faq-item.open .faq-answer {
+        display: block;
+    }
+
+    /* Info section */
     .info-section {
         margin-top: 2rem;
         padding: 2rem;
@@ -550,13 +854,61 @@ api docs viewer, swagger visualizer, openapi explorer, swagger reader, swagger n
         color: var(--color-text-secondary);
         line-height: 1.7;
     }
+
+    /* Toast notification */
+    .toast {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: #22c55e;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-md);
+        font-weight: 500;
+        z-index: 1000;
+        display: none;
+        animation: slideIn 300ms ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .stats-section {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .toolbar {
+            flex-direction: column;
+        }
+
+        .search-box {
+            width: 100%;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="tool-header">
     <h1>📋 Swagger/OpenAPI Viewer</h1>
-    <p>View and explore your API documentation beautifully</p>
+    <p>View, explore, and generate code from your API documentation</p>
+    <div class="feature-badges">
+        <span class="feature-badge">✨ JSON/YAML Support</span>
+        <span class="feature-badge">🔍 Search Endpoints</span>
+        <span class="feature-badge">💻 Code Snippets</span>
+        <span class="feature-badge">📤 Export Options</span>
+        <span class="feature-badge">🔒 No Data Stored</span>
+    </div>
 </div>
 
 <div class="input-section">
@@ -589,6 +941,7 @@ Example:
     <div class="btn-row">
         <button id="parseBtn" class="parse-btn">🔍 Parse & View Spec</button>
         <button id="sampleBtn" class="sample-btn">📄 Load Sample</button>
+        <button id="clearBtn" class="secondary-btn">🗑️ Clear</button>
     </div>
 
     <div class="error-message" id="errorMessage"></div>
@@ -600,6 +953,42 @@ Example:
 </div>
 
 <div class="api-docs" id="apiDocs">
+    <!-- Stats -->
+    <div class="stats-section" id="statsSection">
+        <div class="stat-card">
+            <div class="stat-value" id="totalEndpoints">0</div>
+            <div class="stat-label">Total Endpoints</div>
+        </div>
+        <div class="stat-card get">
+            <div class="stat-value" id="getCount">0</div>
+            <div class="stat-label">GET</div>
+        </div>
+        <div class="stat-card post">
+            <div class="stat-value" id="postCount">0</div>
+            <div class="stat-label">POST</div>
+        </div>
+        <div class="stat-card put">
+            <div class="stat-value" id="putCount">0</div>
+            <div class="stat-label">PUT</div>
+        </div>
+        <div class="stat-card delete">
+            <div class="stat-value" id="deleteCount">0</div>
+            <div class="stat-label">DELETE</div>
+        </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search endpoints...">
+        <select class="server-select" id="serverSelect">
+            <option value="">Select Server</option>
+        </select>
+        <button class="toolbar-btn" id="expandAllBtn">➕ Expand All</button>
+        <button class="toolbar-btn" id="collapseAllBtn">➖ Collapse All</button>
+        <button class="toolbar-btn" id="exportMdBtn">📄 Export MD</button>
+        <button class="toolbar-btn" id="exportJsonBtn">📋 Copy JSON</button>
+    </div>
+
     <div class="api-header">
         <h2 class="api-title" id="apiTitle">API Title</h2>
         <span class="api-version" id="apiVersion">v1.0.0</span>
@@ -608,7 +997,10 @@ Example:
     </div>
 
     <div class="endpoints-section">
-        <div class="section-header">📡 Endpoints</div>
+        <div class="section-header">
+            <span>📡 Endpoints</span>
+            <span id="visibleCount"></span>
+        </div>
         <div id="endpointsList"></div>
     </div>
 
@@ -618,14 +1010,121 @@ Example:
     </div>
 </div>
 
+<!-- FAQ Section -->
+<div class="faq-section">
+    <h2>❓ Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            <span>What is OpenAPI/Swagger?</span>
+            <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">
+            OpenAPI (formerly known as Swagger) is an industry-standard specification for describing, producing,
+            consuming, and visualizing RESTful web services. It provides a way to describe your API's structure in a
+            format that both humans and machines can understand. The specification includes information about endpoints,
+            request/response formats, authentication methods, and more.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            <span>What's the difference between OpenAPI 2.0 and 3.0?</span>
+            <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">
+            OpenAPI 3.0 introduced several improvements over 2.0 (Swagger):
+            <br><br>• <strong>Simplified structure</strong>: Components section replaces definitions, parameters,
+            responses
+            <br>• <strong>Request body</strong>: Dedicated requestBody keyword instead of body parameters
+            <br>• <strong>Multiple content types</strong>: Better support for different media types
+            <br>• <strong>oneOf/anyOf/allOf</strong>: Enhanced schema composition
+            <br>• <strong>Callbacks</strong>: Support for webhook-style async operations
+            <br>• <strong>Links</strong>: Relationship links between operations
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            <span>What file formats are supported?</span>
+            <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">
+            This viewer supports both <strong>JSON</strong> and <strong>YAML</strong> formats. You can paste your
+            specification in either format, and the tool will automatically detect and parse it. You can also load
+            specifications directly from a URL if your server allows CORS requests.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            <span>How do I create an OpenAPI specification?</span>
+            <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">
+            There are several ways to create an OpenAPI spec:
+            <br><br>• <strong>Manual writing</strong>: Write JSON/YAML following the OpenAPI spec
+            <br>• <strong>Swagger Editor</strong>: Use the official Swagger Editor for guided creation
+            <br>• <strong>Code annotations</strong>: Use annotations in your code (like springdoc, swagger-jsdoc)
+            <br>• <strong>API clients</strong>: Tools like Postman can export OpenAPI specs
+            <br>• <strong>Auto-generation</strong>: Many frameworks auto-generate specs from your routes
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            <span>Can I generate code from my API spec?</span>
+            <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">
+            Yes! This tool can generate code snippets in multiple languages (cURL, JavaScript, Python) for each
+            endpoint. Click on any endpoint to expand it, and you'll see the code snippets section. For full SDK
+            generation, you can use tools like OpenAPI Generator or Swagger Codegen.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            <span>Is my API specification data stored?</span>
+            <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">
+            <strong>No, absolutely not!</strong> All processing happens entirely in your browser. Your API specification
+            is never sent to our servers and is not stored anywhere. This makes it safe to use even with sensitive or
+            proprietary API documentation.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            <span>What are common use cases for OpenAPI/Swagger?</span>
+            <span class="icon">+</span>
+        </div>
+        <div class="faq-answer">
+            • <strong>API Documentation</strong>: Generate interactive documentation for developers
+            <br>• <strong>Client SDK Generation</strong>: Auto-generate SDKs in multiple languages
+            <br>• <strong>API Testing</strong>: Create test cases from the spec
+            <br>• <strong>Mock Servers</strong>: Generate mock servers for frontend development
+            <br>• <strong>API Validation</strong>: Validate requests/responses against the spec
+            <br>• <strong>Contract Testing</strong>: Ensure API implementation matches the spec
+        </div>
+    </div>
+</div>
+
 <div class="info-section" id="infoSection">
-    <h2>💡 About OpenAPI/Swagger</h2>
+    <h2>💡 About This Tool</h2>
     <p>
-        OpenAPI (formerly Swagger) is a specification for describing REST APIs.
-        This tool helps you visualize and explore OpenAPI 2.0 (Swagger) and OpenAPI 3.0 specifications.
-        Simply paste your JSON or YAML spec, or load it from a URL to see all endpoints, parameters, and schemas.
+        Our Swagger/OpenAPI Viewer helps you visualize and explore API specifications. Simply paste your JSON or YAML
+        spec
+        or load it from a URL. Features include endpoint search, statistics overview, code snippet generation for cURL,
+        JavaScript and Python, export to Markdown, and full support for both OpenAPI 2.0 (Swagger) and OpenAPI 3.0
+        specifications.
+        All processing is done client-side - your data never leaves your browser.
     </p>
 </div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
 {% endblock %}
 
 {% block extra_js %}
@@ -637,203 +1136,168 @@ Example:
         const loadUrlBtn = document.getElementById('loadUrlBtn');
         const parseBtn = document.getElementById('parseBtn');
         const sampleBtn = document.getElementById('sampleBtn');
+        const clearBtn = document.getElementById('clearBtn');
         const errorMessage = document.getElementById('errorMessage');
         const loading = document.getElementById('loading');
         const apiDocs = document.getElementById('apiDocs');
         const infoSection = document.getElementById('infoSection');
+        const searchBox = document.getElementById('searchBox');
+        const serverSelect = document.getElementById('serverSelect');
+        const toast = document.getElementById('toast');
+
+        let currentSpec = null;
+        let currentBaseUrl = '';
 
         // Sample OpenAPI spec
         const sampleSpec = {
             "openapi": "3.0.0",
             "info": {
                 "title": "Sample Pet Store API",
-                "description": "A sample API that uses a petstore as an example to demonstrate features in the OpenAPI 3.0 specification",
+                "description": "A sample API demonstrating OpenAPI 3.0 features",
                 "version": "1.0.0",
-                "contact": {
-                    "name": "API Support",
-                    "email": "support@example.com"
-                }
+                "contact": { "name": "API Support", "email": "support@example.com" }
             },
             "servers": [
-                { "url": "https://api.example.com/v1", "description": "Production server" },
-                { "url": "https://staging-api.example.com", "description": "Staging server" }
+                { "url": "https://api.example.com/v1", "description": "Production" },
+                { "url": "https://staging.example.com/v1", "description": "Staging" }
             ],
             "paths": {
                 "/pets": {
                     "get": {
                         "summary": "List all pets",
-                        "description": "Returns all pets from the system that the user has access to",
-                        "operationId": "listPets",
+                        "description": "Returns all pets from the system",
                         "tags": ["pets"],
                         "parameters": [
-                            { "name": "limit", "in": "query", "description": "Maximum number of pets to return", "required": false, "schema": { "type": "integer", "format": "int32" } },
-                            { "name": "status", "in": "query", "description": "Filter by status", "required": false, "schema": { "type": "string", "enum": ["available", "pending", "sold"] } }
+                            { "name": "limit", "in": "query", "description": "Max pets to return", "schema": { "type": "integer" } },
+                            { "name": "status", "in": "query", "description": "Filter by status", "schema": { "type": "string", "enum": ["available", "pending", "sold"] } }
                         ],
-                        "responses": {
-                            "200": { "description": "A list of pets" },
-                            "400": { "description": "Invalid request" }
-                        }
+                        "responses": { "200": { "description": "List of pets" }, "400": { "description": "Bad request" } }
                     },
                     "post": {
                         "summary": "Create a pet",
-                        "description": "Creates a new pet in the store",
-                        "operationId": "createPet",
                         "tags": ["pets"],
-                        "requestBody": {
-                            "description": "Pet to add to the store",
-                            "required": true,
-                            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Pet" } } }
-                        },
-                        "responses": {
-                            "201": { "description": "Pet created successfully" },
-                            "400": { "description": "Invalid input" }
-                        }
+                        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Pet" } } } },
+                        "responses": { "201": { "description": "Pet created" } }
                     }
                 },
                 "/pets/{petId}": {
                     "get": {
                         "summary": "Get pet by ID",
-                        "description": "Returns a single pet by its ID",
-                        "operationId": "getPetById",
                         "tags": ["pets"],
-                        "parameters": [
-                            { "name": "petId", "in": "path", "description": "ID of pet to return", "required": true, "schema": { "type": "integer", "format": "int64" } }
-                        ],
-                        "responses": {
-                            "200": { "description": "Successful operation" },
-                            "404": { "description": "Pet not found" }
-                        }
+                        "parameters": [{ "name": "petId", "in": "path", "required": true, "schema": { "type": "integer" } }],
+                        "responses": { "200": { "description": "Success" }, "404": { "description": "Not found" } }
                     },
                     "put": {
-                        "summary": "Update a pet",
-                        "description": "Updates an existing pet",
-                        "operationId": "updatePet",
+                        "summary": "Update pet",
                         "tags": ["pets"],
-                        "parameters": [
-                            { "name": "petId", "in": "path", "required": true, "schema": { "type": "integer" } }
-                        ],
-                        "responses": {
-                            "200": { "description": "Pet updated" },
-                            "404": { "description": "Pet not found" }
-                        }
+                        "parameters": [{ "name": "petId", "in": "path", "required": true, "schema": { "type": "integer" } }],
+                        "responses": { "200": { "description": "Updated" } }
                     },
                     "delete": {
-                        "summary": "Delete a pet",
-                        "description": "Deletes a pet from the store",
-                        "operationId": "deletePet",
+                        "summary": "Delete pet",
                         "tags": ["pets"],
-                        "parameters": [
-                            { "name": "petId", "in": "path", "required": true, "schema": { "type": "integer" } }
-                        ],
-                        "responses": {
-                            "204": { "description": "Pet deleted" },
-                            "404": { "description": "Pet not found" }
-                        }
+                        "parameters": [{ "name": "petId", "in": "path", "required": true, "schema": { "type": "integer" } }],
+                        "responses": { "204": { "description": "Deleted" } }
                     }
                 },
                 "/users": {
-                    "get": {
-                        "summary": "List all users",
-                        "tags": ["users"],
-                        "responses": { "200": { "description": "Success" } }
-                    },
-                    "post": {
-                        "summary": "Create user",
-                        "tags": ["users"],
-                        "responses": { "201": { "description": "User created" } }
-                    }
+                    "get": { "summary": "List users", "tags": ["users"], "responses": { "200": { "description": "Success" } } },
+                    "post": { "summary": "Create user", "tags": ["users"], "responses": { "201": { "description": "Created" } } }
                 }
             },
             "components": {
                 "schemas": {
-                    "Pet": {
-                        "type": "object",
-                        "required": ["name"],
-                        "properties": {
-                            "id": { "type": "integer", "format": "int64" },
-                            "name": { "type": "string" },
-                            "tag": { "type": "string" },
-                            "status": { "type": "string", "enum": ["available", "pending", "sold"] }
-                        }
-                    },
-                    "User": {
-                        "type": "object",
-                        "properties": {
-                            "id": { "type": "integer" },
-                            "username": { "type": "string" },
-                            "email": { "type": "string", "format": "email" }
-                        }
-                    }
+                    "Pet": { "type": "object", "required": ["name"], "properties": { "id": { "type": "integer" }, "name": { "type": "string" }, "status": { "type": "string" } } },
+                    "User": { "type": "object", "properties": { "id": { "type": "integer" }, "username": { "type": "string" }, "email": { "type": "string" } } }
                 }
             }
         };
 
-        // Load sample
-        sampleBtn.addEventListener('click', () => {
-            specInput.value = JSON.stringify(sampleSpec, null, 2);
-        });
+        // Event listeners
+        sampleBtn.addEventListener('click', () => { specInput.value = JSON.stringify(sampleSpec, null, 2); });
+        clearBtn.addEventListener('click', () => { specInput.value = ''; specUrl.value = ''; hideError(); });
 
-        // Load from URL
         loadUrlBtn.addEventListener('click', async () => {
             const url = specUrl.value.trim();
-            if (!url) {
-                showError('Please enter a URL');
-                return;
-            }
-
+            if (!url) { showError('Please enter a URL'); return; }
             showLoading();
             try {
                 const response = await fetch(url);
-                if (!response.ok) throw new Error('Failed to fetch spec');
+                if (!response.ok) throw new Error('Failed to fetch');
                 const text = await response.text();
                 specInput.value = text;
                 parseSpec(text);
-            } catch (error) {
-                showError('Failed to load spec from URL. Try pasting the content directly.');
+            } catch (e) {
+                showError('Failed to load from URL. Try pasting directly.');
                 hideLoading();
             }
         });
 
-        // Parse spec
         parseBtn.addEventListener('click', () => {
             const text = specInput.value.trim();
-            if (!text) {
-                showError('Please enter an OpenAPI specification');
-                return;
-            }
+            if (!text) { showError('Please enter an OpenAPI spec'); return; }
             parseSpec(text);
         });
 
-        function parseSpec(text) {
-            showLoading();
-            hideError();
+        // Search functionality
+        searchBox.addEventListener('input', () => {
+            const query = searchBox.value.toLowerCase();
+            const endpoints = document.querySelectorAll('.endpoint');
+            let visible = 0;
+            endpoints.forEach(ep => {
+                const path = ep.querySelector('.endpoint-path')?.textContent.toLowerCase() || '';
+                const summary = ep.querySelector('.endpoint-summary')?.textContent.toLowerCase() || '';
+                if (path.includes(query) || summary.includes(query)) {
+                    ep.classList.remove('hidden');
+                    visible++;
+                } else {
+                    ep.classList.add('hidden');
+                }
+            });
+            document.getElementById('visibleCount').textContent = `(${visible} shown)`;
+        });
 
+        // Server selector
+        serverSelect.addEventListener('change', () => {
+            currentBaseUrl = serverSelect.value;
+            showToast('Server changed to: ' + currentBaseUrl);
+        });
+
+        // Expand/collapse all
+        document.getElementById('expandAllBtn').addEventListener('click', () => {
+            document.querySelectorAll('.endpoint-details').forEach(d => d.classList.add('open'));
+        });
+        document.getElementById('collapseAllBtn').addEventListener('click', () => {
+            document.querySelectorAll('.endpoint-details').forEach(d => d.classList.remove('open'));
+        });
+
+        // Export buttons
+        document.getElementById('exportMdBtn').addEventListener('click', exportMarkdown);
+        document.getElementById('exportJsonBtn').addEventListener('click', () => {
+            if (currentSpec) {
+                navigator.clipboard.writeText(JSON.stringify(currentSpec, null, 2));
+                showToast('JSON copied to clipboard!');
+            }
+        });
+
+        function parseSpec(text) {
+            showLoading(); hideError();
             try {
                 let spec;
-                // Try JSON first
-                try {
-                    spec = JSON.parse(text);
-                } catch (e) {
-                    // Try YAML
-                    spec = jsyaml.load(text);
-                }
-
-                if (!spec) {
-                    throw new Error('Could not parse specification');
-                }
-
+                try { spec = JSON.parse(text); } catch (e) { spec = jsyaml.load(text); }
+                if (!spec) throw new Error('Could not parse');
+                currentSpec = spec;
                 renderSpec(spec);
                 hideLoading();
                 apiDocs.classList.add('visible');
                 infoSection.style.display = 'none';
-            } catch (error) {
-                showError('Invalid OpenAPI specification: ' + error.message);
+            } catch (e) {
+                showError('Invalid spec: ' + e.message);
                 hideLoading();
             }
         }
 
         function renderSpec(spec) {
-            // API Info
             const info = spec.info || {};
             document.getElementById('apiTitle').textContent = info.title || 'API Documentation';
             document.getElementById('apiVersion').textContent = 'v' + (info.version || '1.0.0');
@@ -842,49 +1306,62 @@ Example:
             // Info grid
             const infoGrid = document.getElementById('apiInfoGrid');
             infoGrid.innerHTML = '';
+            if (info.contact?.email) infoGrid.innerHTML += `<div class="api-info-item"><span class="label">Contact:</span><span class="value">${info.contact.email}</span></div>`;
+            if (info.license?.name) infoGrid.innerHTML += `<div class="api-info-item"><span class="label">License:</span><span class="value">${info.license.name}</span></div>`;
 
-            if (info.contact?.email) {
-                infoGrid.innerHTML += `<div class="api-info-item"><span class="label">Contact:</span><span class="value">${info.contact.email}</span></div>`;
-            }
-
+            // Servers
+            serverSelect.innerHTML = '<option value="">Select Server</option>';
             if (spec.servers?.length) {
-                infoGrid.innerHTML += `<div class="api-info-item"><span class="label">Server:</span><span class="value">${spec.servers[0].url}</span></div>`;
+                spec.servers.forEach(s => {
+                    serverSelect.innerHTML += `<option value="${s.url}">${s.description || s.url}</option>`;
+                });
+                currentBaseUrl = spec.servers[0].url;
+                serverSelect.value = currentBaseUrl;
             }
-
-            // Swagger 2.0 host/basePath
             if (spec.host) {
-                const baseUrl = (spec.schemes?.[0] || 'https') + '://' + spec.host + (spec.basePath || '');
-                infoGrid.innerHTML += `<div class="api-info-item"><span class="label">Base URL:</span><span class="value">${baseUrl}</span></div>`;
+                const url = (spec.schemes?.[0] || 'https') + '://' + spec.host + (spec.basePath || '');
+                serverSelect.innerHTML += `<option value="${url}">${url}</option>`;
+                currentBaseUrl = url;
+                serverSelect.value = url;
             }
 
-            // Endpoints
-            const endpointsList = document.getElementById('endpointsList');
-            endpointsList.innerHTML = '';
-
+            // Count endpoints
             const paths = spec.paths || {};
+            let total = 0, gets = 0, posts = 0, puts = 0, deletes = 0;
             const groupedByTag = {};
 
             for (const [path, methods] of Object.entries(paths)) {
                 for (const [method, details] of Object.entries(methods)) {
                     if (['get', 'post', 'put', 'patch', 'delete'].includes(method)) {
-                        const tags = details.tags || ['default'];
-                        const tag = tags[0];
+                        total++;
+                        if (method === 'get') gets++;
+                        if (method === 'post') posts++;
+                        if (method === 'put') puts++;
+                        if (method === 'delete') deletes++;
+                        const tag = (details.tags || ['default'])[0];
                         if (!groupedByTag[tag]) groupedByTag[tag] = [];
                         groupedByTag[tag].push({ path, method, details });
                     }
                 }
             }
 
+            // Update stats
+            document.getElementById('totalEndpoints').textContent = total;
+            document.getElementById('getCount').textContent = gets;
+            document.getElementById('postCount').textContent = posts;
+            document.getElementById('putCount').textContent = puts;
+            document.getElementById('deleteCount').textContent = deletes;
+            document.getElementById('visibleCount').textContent = `(${total} shown)`;
+
+            // Render endpoints
+            const endpointsList = document.getElementById('endpointsList');
+            endpointsList.innerHTML = '';
+
             for (const [tag, endpoints] of Object.entries(groupedByTag)) {
-                const groupHtml = `
-                <div class="endpoint-group">
-                    <div class="endpoint-group-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                        📁 ${tag.charAt(0).toUpperCase() + tag.slice(1)} (${endpoints.length})
-                    </div>
-                    ${endpoints.map((ep, idx) => renderEndpoint(ep, tag + idx)).join('')}
-                </div>
-            `;
-                endpointsList.innerHTML += groupHtml;
+                let html = `<div class="endpoint-group"><div class="endpoint-group-header" onclick="this.parentElement.classList.toggle('collapsed')">📁 ${tag.charAt(0).toUpperCase() + tag.slice(1)} (${endpoints.length})</div>`;
+                endpoints.forEach((ep, idx) => { html += renderEndpoint(ep, tag + idx); });
+                html += '</div>';
+                endpointsList.innerHTML += html;
             }
 
             // Schemas
@@ -895,19 +1372,8 @@ Example:
             if (Object.keys(schemas).length > 0) {
                 schemasSection.style.display = 'block';
                 schemasList.innerHTML = '';
-
                 for (const [name, schema] of Object.entries(schemas)) {
-                    schemasList.innerHTML += `
-                    <div class="schema-item">
-                        <div class="schema-header" onclick="this.nextElementSibling.classList.toggle('open')">
-                            <span class="schema-name">${name}</span>
-                            <span>▼</span>
-                        </div>
-                        <div class="schema-details">
-                            <pre class="schema-code">${JSON.stringify(schema, null, 2)}</pre>
-                        </div>
-                    </div>
-                `;
+                    schemasList.innerHTML += `<div class="schema-item"><div class="schema-header" onclick="this.nextElementSibling.classList.toggle('open')"><span class="schema-name">${name}</span><span>▼</span></div><div class="schema-details"><pre class="schema-code">${JSON.stringify(schema, null, 2)}</pre></div></div>`;
                 }
             } else {
                 schemasSection.style.display = 'none';
@@ -919,64 +1385,138 @@ Example:
             const params = details.parameters || [];
             const responses = details.responses || {};
 
+            // Generate code snippets
+            const curl = generateCurl(method, path, params);
+            const js = generateJS(method, path, params);
+            const python = generatePython(method, path, params);
+
             return `
-            <div class="endpoint">
-                <div class="endpoint-header" onclick="document.getElementById('details-${id}').classList.toggle('open')">
-                    <span class="method-badge method-${method}">${method}</span>
-                    <span class="endpoint-path">${path}</span>
-                </div>
-                ${details.summary ? `<div class="endpoint-summary">${details.summary}</div>` : ''}
-                <div class="endpoint-details" id="details-${id}">
-                    ${details.description ? `<div class="detail-section"><div class="detail-title">Description</div><p>${details.description}</p></div>` : ''}
-                    ${params.length > 0 ? `
-                        <div class="detail-section">
-                            <div class="detail-title">Parameters</div>
-                            <table class="params-table">
-                                <thead><tr><th>Name</th><th>In</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
-                                <tbody>
-                                    ${params.map(p => `
-                                        <tr>
-                                            <td><span class="param-name">${p.name}</span></td>
-                                            <td>${p.in}</td>
-                                            <td><span class="param-type">${p.schema?.type || p.type || '-'}</span></td>
-                                            <td>${p.required ? '<span class="param-required">required</span>' : 'optional'}</td>
-                                            <td>${p.description || '-'}</td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
-                        </div>
-                    ` : ''}
+        <div class="endpoint">
+            <div class="endpoint-header" onclick="document.getElementById('details-${id}').classList.toggle('open')">
+                <span class="method-badge method-${method}">${method}</span>
+                <span class="endpoint-path">${path}</span>
+                <button class="copy-btn" onclick="event.stopPropagation(); copyPath('${path}')">📋</button>
+            </div>
+            ${details.summary ? `<div class="endpoint-summary">${details.summary}</div>` : ''}
+            <div class="endpoint-details" id="details-${id}">
+                ${details.description ? `<div class="detail-section"><div class="detail-title">Description</div><p>${details.description}</p></div>` : ''}
+                ${params.length > 0 ? `
                     <div class="detail-section">
-                        <div class="detail-title">Responses</div>
-                        ${Object.entries(responses).map(([code, resp]) => {
+                        <div class="detail-title">Parameters</div>
+                        <table class="params-table">
+                            <thead><tr><th>Name</th><th>In</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+                            <tbody>
+                                ${params.map(p => `<tr><td><span class="param-name">${p.name}</span></td><td>${p.in}</td><td><span class="param-type">${p.schema?.type || p.type || '-'}</span></td><td>${p.required ? '<span class="param-required">required</span>' : 'optional'}</td><td>${p.description || '-'}</td></tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                ` : ''}
+                <div class="detail-section">
+                    <div class="detail-title">Responses</div>
+                    ${Object.entries(responses).map(([code, resp]) => {
                 let cls = 'response-2xx';
                 if (code.startsWith('4')) cls = 'response-4xx';
                 if (code.startsWith('5')) cls = 'response-5xx';
                 return `<div><span class="response-code ${cls}">${code}</span> ${resp.description || ''}</div>`;
             }).join('')}
+                </div>
+                <div class="code-snippets">
+                    <div class="detail-title">Code Snippets</div>
+                    <div class="snippet-tabs">
+                        <button class="snippet-tab active" onclick="showSnippet(this, 'curl-${id}')">cURL</button>
+                        <button class="snippet-tab" onclick="showSnippet(this, 'js-${id}')">JavaScript</button>
+                        <button class="snippet-tab" onclick="showSnippet(this, 'py-${id}')">Python</button>
                     </div>
+                    <div class="snippet-code" id="curl-${id}">${escapeHtml(curl)}<button class="snippet-copy-btn" onclick="copySnippet('curl-${id}')">Copy</button></div>
+                    <div class="snippet-code" id="js-${id}" style="display:none">${escapeHtml(js)}<button class="snippet-copy-btn" onclick="copySnippet('js-${id}')">Copy</button></div>
+                    <div class="snippet-code" id="py-${id}" style="display:none">${escapeHtml(python)}<button class="snippet-copy-btn" onclick="copySnippet('py-${id}')">Copy</button></div>
                 </div>
             </div>
-        `;
+        </div>`;
         }
 
-        function showError(msg) {
-            errorMessage.textContent = msg;
-            errorMessage.style.display = 'block';
+        function generateCurl(method, path, params) {
+            let url = currentBaseUrl + path;
+            const queryParams = params.filter(p => p.in === 'query').map(p => `${p.name}=value`);
+            if (queryParams.length) url += '?' + queryParams.join('&');
+            let cmd = `curl -X ${method.toUpperCase()} "${url}"`;
+            if (['post', 'put', 'patch'].includes(method)) cmd += ` \\\n  -H "Content-Type: application/json" \\\n  -d '{"key": "value"}'`;
+            return cmd;
         }
 
-        function hideError() {
-            errorMessage.style.display = 'none';
+        function generateJS(method, path, params) {
+            let url = currentBaseUrl + path;
+            const hasBody = ['post', 'put', 'patch'].includes(method);
+            return `fetch("${url}", {
+  method: "${method.toUpperCase()}"${hasBody ? `,
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ key: "value" })` : ''}
+})
+  .then(res => res.json())
+  .then(data => console.log(data));`;
         }
 
-        function showLoading() {
-            loading.classList.add('visible');
-            apiDocs.classList.remove('visible');
+        function generatePython(method, path, params) {
+            let url = currentBaseUrl + path;
+            const hasBody = ['post', 'put', 'patch'].includes(method);
+            return `import requests
+
+response = requests.${method}("${url}"${hasBody ? ', json={"key": "value"}' : ''})
+print(response.json())`;
         }
 
-        function hideLoading() {
-            loading.classList.remove('visible');
+        function exportMarkdown() {
+            if (!currentSpec) return;
+            const info = currentSpec.info || {};
+            let md = `# ${info.title || 'API'}\n\n${info.description || ''}\n\n**Version:** ${info.version || '1.0.0'}\n\n## Endpoints\n\n`;
+
+            for (const [path, methods] of Object.entries(currentSpec.paths || {})) {
+                for (const [method, details] of Object.entries(methods)) {
+                    if (['get', 'post', 'put', 'patch', 'delete'].includes(method)) {
+                        md += `### ${method.toUpperCase()} ${path}\n\n${details.summary || ''}\n\n`;
+                    }
+                }
+            }
+
+            const blob = new Blob([md], { type: 'text/markdown' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'api-documentation.md';
+            a.click();
+            showToast('Markdown exported!');
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        window.showSnippet = function (btn, id) {
+            const parent = btn.closest('.code-snippets');
+            parent.querySelectorAll('.snippet-tab').forEach(t => t.classList.remove('active'));
+            parent.querySelectorAll('.snippet-code').forEach(c => c.style.display = 'none');
+            btn.classList.add('active');
+            document.getElementById(id).style.display = 'block';
+        };
+
+        window.copySnippet = function (id) {
+            const code = document.getElementById(id).textContent.replace('Copy', '').trim();
+            navigator.clipboard.writeText(code);
+            showToast('Code copied!');
+        };
+
+        window.copyPath = function (path) {
+            navigator.clipboard.writeText(currentBaseUrl + path);
+            showToast('URL copied!');
+        };
+
+        function showError(msg) { errorMessage.textContent = msg; errorMessage.style.display = 'block'; }
+        function hideError() { errorMessage.style.display = 'none'; }
+        function showLoading() { loading.classList.add('visible'); apiDocs.classList.remove('visible'); }
+        function hideLoading() { loading.classList.remove('visible'); }
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
         }
     });
 </script>
