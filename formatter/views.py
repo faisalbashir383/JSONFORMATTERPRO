@@ -1014,3 +1014,8 @@ def cors_checker_api(request):
 def image_resizer_page(request):
     """Render the Image Resizer tool page"""
     return render(request, 'image-resizer.html')
+
+
+def toon_converter_page(request):
+    """Render the JSON to TOON Converter tool page"""
+    return render(request, 'toon-converter.html')

@@ -47,6 +47,8 @@ class StaticViewSitemap(Sitemap):
             # SEO & Web Tools
             'lorem_ipsum_page',
             'image_resizer_page',
+            # Data Format Tools
+            'toon_converter_page',
         ]
     
     def location(self, item):
