@@ -58,7 +58,7 @@ class Command(BaseCommand):
 HOW_TO_FORMAT_JSON = {
     'title': 'How to Format JSON: The Complete Guide for Developers (2026)',
     'excerpt': 'Learn everything about JSON formatting including syntax rules, beautification techniques, online tools, programming language examples, and best practices for clean, readable JSON data.',
-    'meta_description': 'Complete guide on how to format JSON data. Learn JSON syntax, beautification, validation, and formatting in JavaScript, Python, and online tools. 2024 best practices.',
+    'meta_description': 'Learn how to format JSON data with our complete guide. JSON syntax, beautification, and formatting in JavaScript and Python.',
     'meta_keywords': 'how to format json, json formatter, format json online, json beautifier, json pretty print, json formatting, beautify json, json syntax, json structure, format json file, json formatter tool, online json formatter, best json formatter, json validator, json editor, json formatting guide, json tutorial, json basics',
     'tags': 'json, formatting, tutorial, javascript, python, web development, api, data',
     'content': '''
@@ -561,7 +561,7 @@ node -e "console.log(JSON.stringify(require('./data.json'), null, 2))"</code></p
 JSON_VS_XML = {
     'title': 'JSON vs XML: Complete Comparison Guide for Developers (2026)',
     'excerpt': 'Comprehensive comparison of JSON and XML formats. Learn the differences, pros and cons, use cases, performance benchmarks, and when to use each format for your projects.',
-    'meta_description': 'JSON vs XML comparison guide. Understand the differences between JSON and XML, their advantages, disadvantages, and when to use each format. 2026 complete guide.',
+    'meta_description': 'JSON vs XML comparison guide. Learn the differences, advantages, and when to use each data format for your projects.',
     'meta_keywords': 'json vs xml, xml vs json, json or xml, difference between json and xml, json xml comparison, json advantages, xml advantages, json vs xml performance, json vs xml api, which is better json or xml, json xml difference, json to xml, xml to json, json vs xml example',
     'tags': 'json, xml, comparison, api, web development, data formats, rest api, soap',
     'content': '''
@@ -984,7 +984,7 @@ def xml_to_json(xml_string):
 JSON_SYNTAX_ERRORS_GUIDE = {
     'title': 'How to Fix JSON Syntax Errors: Complete Troubleshooting Guide (2026)',
     'excerpt': 'Learn how to identify and fix common JSON syntax errors including trailing commas, unquoted keys, single quotes, and more. Complete debugging guide with examples and solutions.',
-    'meta_description': 'Fix JSON syntax errors with this complete guide. Learn to identify and resolve trailing commas, quote issues, encoding problems, and more. Practical examples included.',
+    'meta_description': 'Fix JSON syntax errors with this guide. Resolve trailing commas, quote issues, and common JSON parsing problems.',
     'meta_keywords': 'fix json error, json syntax error, json parse error, json validation error, json error message, invalid json, json lint, json validator, fix json online, json error checker, json syntax checker, json debugging, json error fix, common json errors, json troubleshooting, json not working, json format error',
     'tags': 'json, debugging, errors, validation, troubleshooting, syntax, tutorial',
     'content': '''
