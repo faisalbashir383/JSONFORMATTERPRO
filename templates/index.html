@@ -260,9 +260,19 @@ processing. No signup required.{% endblock %}
 {% endblock %}
 
 {% block extra_head %}
-<!-- Homepage specific CSS -->
-<link rel="stylesheet" href="{% static 'css/homepage.css' %}">
-<link rel="stylesheet" href="{% static 'css/fullscreen.css' %}">
+<!-- Preload Homepage CSS -->
+<link rel="preload" href="{% static 'css/homepage.css' %}" as="style">
+<link rel="preload" href="{% static 'css/fullscreen.css' %}" as="style">
+
+<!-- Homepage specific CSS - Non-blocking -->
+<link rel="stylesheet" href="{% static 'css/homepage.css' %}" media="print" onload="this.media='all'">
+<noscript>
+  <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+</noscript>
+<link rel="stylesheet" href="{% static 'css/fullscreen.css' %}" media="print" onload="this.media='all'">
+<noscript>
+  <link rel="stylesheet" href="{% static 'css/fullscreen.css' %}">
+</noscript>
 
 <!-- Additional SEO Tags -->
 <meta name="mobile-web-app-capable" content="yes">
@@ -524,5 +534,5 @@ processing. No signup required.{% endblock %}
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/app.js' %}"></script>
+<script src="{% static 'js/app.js' %}" defer></script>
 {% endblock %}
