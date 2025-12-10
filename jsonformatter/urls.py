@@ -33,3 +33,8 @@ urlpatterns = [
     # Sitemap
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]
+
+# Custom error handlers for SEO-friendly error pages
+handler404 = 'formatter.views.custom_404'
+handler500 = 'formatter.views.custom_500'
+

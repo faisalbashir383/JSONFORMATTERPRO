@@ -6,7 +6,7 @@ Captures IP address, geolocation, device info, and tracks page views
 import requests
 from django.utils.deprecation import MiddlewareMixin
 from django.contrib.sessions.middleware import SessionMiddleware
-from django.http import HttpResponsePermanentRedirect
+from django.http import HttpResponsePermanentRedirect, HttpResponseRedirect
 from user_agents import parse
 from formatter.models import VisitorLog, PageView
 
@@ -32,6 +32,35 @@ class WWWRedirectMiddleware(MiddlewareMixin):
         
         return None
 
+
+class RedirectMiddleware(MiddlewareMixin):
+    """
+    Middleware to handle URL redirects from the Redirect model
+    Supports 301 (permanent) and 302 (temporary) redirects
+    """
+    
+    def process_request(self, request):
+        """Check if the current path matches any active redirect"""
+        from .models import Redirect
+        
+        path = request.path
+        
+        try:
+            redirect = Redirect.objects.get(old_path=path, is_active=True)
+            
+            # Increment hit count for analytics
+            redirect.increment_hit_count()
+            
+            # Return appropriate redirect response
+            if redirect.redirect_type == 301:
+                return HttpResponsePermanentRedirect(redirect.new_path)
+            else:
+                return HttpResponseRedirect(redirect.new_path)
+                
+        except Redirect.DoesNotExist:
+            pass
+        
+        return None
 
 
 class VisitorTrackingMiddleware(MiddlewareMixin):

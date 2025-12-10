@@ -1,0 +1,261 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- SEO: Tell search engines not to index this error page -->
+    <meta name="robots" content="noindex, follow">
+
+    <title>404 - Page Not Found | JSON Formatters Pro</title>
+    <meta name="description"
+        content="The page you're looking for doesn't exist. Explore our JSON tools including formatter, validator, converter, and more.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32.png' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        .error-container {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+            line-height: 1;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .error-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 1rem 0;
+        }
+
+        .error-message {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .error-btn {
+            padding: 0.875rem 1.75rem;
+            border-radius: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .error-btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .error-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .error-btn-secondary {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .error-btn-secondary:hover {
+            background: var(--hover-bg);
+            border-color: var(--primary-color);
+        }
+
+        .popular-tools {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .popular-tools h3 {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .tool-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .tool-link:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .tool-icon {
+            font-size: 1.5rem;
+        }
+
+        .tool-name {
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 5rem;
+            }
+
+            .error-title {
+                font-size: 1.5rem;
+            }
+
+            .error-actions {
+                flex-direction: column;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="/"
+                    style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="brand-icon">{ }</span>
+                    <span class="brand-name">JSON Formatters Pro</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="error-container">
+            <h1 class="error-code">404</h1>
+            <h2 class="error-title">Page Not Found</h2>
+            <p class="error-message">
+                Oops! The page you're looking for seems to have wandered off.
+                Don't worry, let's get you back on track with our awesome JSON tools.
+            </p>
+
+            <div class="error-actions">
+                <a href="/" class="error-btn error-btn-primary">
+                    🏠 Go to Homepage
+                </a>
+                <a href="/contact/" class="error-btn error-btn-secondary">
+                    📧 Report Issue
+                </a>
+            </div>
+
+            <div class="popular-tools">
+                <h3>🔧 Popular Tools You Might Like</h3>
+                <div class="tools-grid">
+                    <a href="/" class="tool-link">
+                        <span class="tool-icon">✨</span>
+                        <span class="tool-name">JSON Formatter</span>
+                    </a>
+                    <a href="/json-diff/" class="tool-link">
+                        <span class="tool-icon">🔍</span>
+                        <span class="tool-name">JSON Diff</span>
+                    </a>
+                    <a href="/json-to-yaml/" class="tool-link">
+                        <span class="tool-icon">🔄</span>
+                        <span class="tool-name">JSON to YAML</span>
+                    </a>
+                    <a href="/base64/" class="tool-link">
+                        <span class="tool-icon">🔐</span>
+                        <span class="tool-name">Base64 Encoder</span>
+                    </a>
+                    <a href="/json-schema/" class="tool-link">
+                        <span class="tool-icon">📐</span>
+                        <span class="tool-name">Schema Validator</span>
+                    </a>
+                    <a href="/blog/" class="tool-link">
+                        <span class="tool-icon">📰</span>
+                        <span class="tool-name">Blog & Articles</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Simple Footer -->
+    <footer style="text-align: center; padding: 2rem; color: var(--text-secondary); font-size: 0.9rem;">
+        &copy; <span id="year"></span> JSON Formatters Pro. All rights reserved.
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Theme management
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+</body>
+
+</html>

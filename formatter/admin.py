@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import BlogCategory, BlogPost, SiteSettings, VisitorLog, PageView, ContactMessage
+from .models import BlogCategory, BlogPost, SiteSettings, VisitorLog, PageView, ContactMessage, Redirect
 
 
 @admin.register(SiteSettings)
@@ -134,3 +134,46 @@ class ContactMessageAdmin(admin.ModelAdmin):
         updated = queryset.update(is_read=False)
         self.message_user(request, f'{updated} message(s) marked as unread.')
     mark_as_unread.short_description = 'Mark selected messages as unread'
+
+
+@admin.register(Redirect)
+class RedirectAdmin(admin.ModelAdmin):
+    """Admin interface for managing URL redirects"""
+    list_display = ['old_path', 'new_path', 'redirect_type', 'is_active', 'hit_count', 'created_at', 'updated_at']
+    list_filter = ['redirect_type', 'is_active', 'created_at']
+    search_fields = ['old_path', 'new_path', 'notes']
+    list_editable = ['is_active']
+    ordering = ['-created_at']
+    readonly_fields = ['hit_count', 'created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Redirect Configuration', {
+            'fields': ('old_path', 'new_path', 'redirect_type', 'is_active')
+        }),
+        ('Statistics', {
+            'fields': ('hit_count', 'created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+        ('Notes', {
+            'fields': ('notes',),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    actions = ['enable_redirects', 'disable_redirects', 'reset_hit_counts']
+    
+    def enable_redirects(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} redirect(s) enabled.')
+    enable_redirects.short_description = 'Enable selected redirects'
+    
+    def disable_redirects(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} redirect(s) disabled.')
+    disable_redirects.short_description = 'Disable selected redirects'
+    
+    def reset_hit_counts(self, request, queryset):
+        updated = queryset.update(hit_count=0)
+        self.message_user(request, f'Hit counts reset for {updated} redirect(s).')
+    reset_hit_counts.short_description = 'Reset hit counts to zero'
+

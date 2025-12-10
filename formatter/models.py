@@ -280,3 +280,67 @@ class ContactMessage(models.Model):
         self.is_replied = True
         self.replied_at = timezone.now()
         self.save(update_fields=['is_replied', 'replied_at'])
+
+
+class Redirect(models.Model):
+    """
+    Manage URL redirects for SEO
+    Supports both 301 (permanent) and 302 (temporary) redirects
+    """
+    REDIRECT_TYPES = [
+        (301, 'Permanent (301) - SEO link juice preserved'),
+        (302, 'Temporary (302) - No SEO value transfer'),
+    ]
+    
+    old_path = models.CharField(
+        max_length=500, 
+        unique=True,
+        help_text="Old URL path (e.g., /old-page/). Must start with /"
+    )
+    new_path = models.CharField(
+        max_length=500,
+        help_text="New URL path or full URL (e.g., /new-page/ or https://example.com/)"
+    )
+    redirect_type = models.IntegerField(
+        choices=REDIRECT_TYPES, 
+        default=301,
+        help_text="301 for permanent moves (SEO-friendly), 302 for temporary redirects"
+    )
+    is_active = models.BooleanField(
+        default=True,
+        help_text="Uncheck to disable this redirect without deleting it"
+    )
+    hit_count = models.IntegerField(
+        default=0,
+        help_text="Number of times this redirect has been triggered"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    notes = models.TextField(
+        blank=True,
+        help_text="Optional notes about why this redirect exists"
+    )
+    
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['old_path']),
+            models.Index(fields=['is_active']),
+        ]
+        verbose_name = "URL Redirect"
+        verbose_name_plural = "URL Redirects"
+    
+    def __str__(self):
+        status = "✓" if self.is_active else "✗"
+        return f"{status} {self.old_path} → {self.new_path} ({self.redirect_type})"
+    
+    def save(self, *args, **kwargs):
+        # Ensure old_path starts with /
+        if self.old_path and not self.old_path.startswith('/'):
+            self.old_path = '/' + self.old_path
+        super().save(*args, **kwargs)
+    
+    def increment_hit_count(self):
+        """Increment the hit counter"""
+        self.hit_count += 1
+        self.save(update_fields=['hit_count'])

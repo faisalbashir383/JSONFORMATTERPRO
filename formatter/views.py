@@ -653,6 +653,26 @@ def lorem_ipsum_page(request):
     return render(request, 'lorem-ipsum.html')
 
 
+# ====================
+# Custom Error Handlers
+# ====================
+
+def custom_404(request, exception):
+    """
+    Custom 404 error handler
+    Returns SEO-friendly 404 page with noindex meta tag
+    """
+    return render(request, '404.html', status=404)
+
+
+def custom_500(request):
+    """
+    Custom 500 error handler
+    Returns user-friendly 500 page
+    """
+    return render(request, '500.html', status=500)
+
+
 @api_view(['POST'])
 def generate_qr_code(request):
     """
