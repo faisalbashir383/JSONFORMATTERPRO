@@ -21,7 +21,7 @@ class Command(BaseCommand):
         )
         
         if created:
-            self.stdout.write(f'  ✓ Created category: {category.name}')
+            self.stdout.write('  Created category: Data Formats')
         
         # Create TOON articles
         created_count = 0
@@ -42,10 +42,10 @@ class Command(BaseCommand):
             
             if created:
                 created_count += 1
-                self.stdout.write(f'  ✓ Created: {post.title[:60]}...')
+                self.stdout.write('  Created: ' + post.title[:60] + '...')
         
-        self.stdout.write(self.style.SUCCESS(f'\n✅ Created {created_count} TOON blog articles!'))
-        self.stdout.write(f'📚 Total posts in database: {BlogPost.objects.count()}')
+        self.stdout.write(self.style.SUCCESS('\nCreated ' + str(created_count) + ' TOON blog articles!'))
+        self.stdout.write('Total posts in database: ' + str(BlogPost.objects.count()))
 
 
 TOON_POSTS = [
@@ -114,27 +114,16 @@ products [N] {field1, field2, field3}
 value1, value2, value3
 value4, value5, value6</code></pre>
 
-<h3>3. Mixed Arrays</h3>
-<p>Non-uniform arrays use simple notation:</p>
-
-<pre><code class="language-toon"># TOON mixed array
-items [3]
-- first item
-- 42
-- true</code></pre>
-
 <h2>When to Use TOON</h2>
 <table>
     <tr><th>Use Case</th><th>Recommendation</th></tr>
-    <tr><td>Uniform arrays (user lists, products)</td><td>✅ TOON excels</td></tr>
-    <tr><td>LLM API prompts with data</td><td>✅ Great choice</td></tr>
-    <tr><td>Deeply nested structures</td><td>⚠️ JSON may be better</td></tr>
-    <tr><td>Configuration files</td><td>⚠️ Use YAML</td></tr>
+    <tr><td>Uniform arrays (user lists, products)</td><td>TOON excels</td></tr>
+    <tr><td>LLM API prompts with data</td><td>Great choice</td></tr>
+    <tr><td>Deeply nested structures</td><td>JSON may be better</td></tr>
+    <tr><td>Configuration files</td><td>Use YAML</td></tr>
 </table>
 
-<h2>Converting JSON to TOON</h2>
-<p>Here's a simple JavaScript function to convert JSON to TOON:</p>
-
+<h2>Converting JSON to TOON (JavaScript)</h2>
 <pre><code class="language-javascript">function jsonToToon(json, indent = '') {
   if (Array.isArray(json)) {
     // Check if uniform array of objects
@@ -146,19 +135,13 @@ items [3]
       );
       
       if (isUniform) {
-        let result = `[${json.length}] {${keys.join(', ')}}\\n`;
+        let result = '[' + json.length + '] {' + keys.join(', ') + '}\\n';
         json.forEach(item => {
           result += keys.map(k => formatValue(item[k])).join(', ') + '\\n';
         });
         return result;
       }
     }
-    // Non-uniform array
-    let result = `[${json.length}]\\n`;
-    json.forEach(item => {
-      result += indent + '- ' + formatValue(item) + '\\n';
-    });
-    return result;
   }
   
   if (typeof json === 'object' && json !== null) {
@@ -208,7 +191,7 @@ def toon_to_json(toon_text):
         
         return {key: items}
     
-    return parse_object(lines)
+    return result
 
 def parse_value(val):
     """Parse a TOON value to Python type"""
@@ -243,7 +226,7 @@ print(result)
 </table>
 
 <h2>Conclusion</h2>
-<p>TOON is a powerful format for anyone working with LLMs. By reducing token counts significantly, it helps you build more cost-effective AI applications. Try our <a href="/toon-converter/">TOON Converter Tool</a> to convert your JSON data instantly!</p>
+<p>TOON is a powerful format for anyone working with LLMs. By reducing token counts significantly, it helps you build more cost-effective AI applications.</p>
 '''
     },
     {
@@ -287,14 +270,14 @@ category: Electronics</code></pre>
   for (const [key, value] of Object.entries(obj)) {
     if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
       // Nested object - add key and recurse with indentation
-      result += `${indent}${key}\\n`;
+      result += indent + key + '\\n';
       result += objectToToon(value, indent + '  ');
     } else if (Array.isArray(value)) {
       // Handle arrays separately
-      result += `${indent}${key} ` + arrayToToon(value, indent) + '\\n';
+      result += indent + key + ' ' + arrayToToon(value, indent) + '\\n';
     } else {
       // Simple key-value
-      result += `${indent}${key}: ${formatValue(value)}\\n`;
+      result += indent + key + ': ' + formatValue(value) + '\\n';
     }
   }
   
@@ -306,7 +289,7 @@ function formatValue(val) {
   if (typeof val === 'boolean') return val.toString();
   if (typeof val === 'number') return val.toString();
   // Quote strings only if they contain special characters
-  if (/[,:\\n\\r]/.test(val)) return `"${val}"`;
+  if (/[,:\\n\\r]/.test(val)) return '"' + val + '"';
   return val;
 }
 
@@ -347,19 +330,18 @@ ORD003, Keyboard, 1, 79.99</code></pre>
 <pre><code class="language-python">def array_to_toon(key, arr):
     """Convert uniform array to TOON tabular format"""
     if not arr or not isinstance(arr[0], dict):
-        return f"{key} [{len(arr)}]\\n" + "\\n".join(f"- {v}" for v in arr)
+        return key + " [" + str(len(arr)) + "]\\n" + "\\n".join("- " + str(v) for v in arr)
     
     # Check if uniform (all items have same keys)
     first_keys = set(arr[0].keys())
     is_uniform = all(set(item.keys()) == first_keys for item in arr)
     
     if not is_uniform:
-        # Fall back to non-tabular format
-        return f"{key} [{len(arr)}]\\n" + "\\n".join(f"- {item}" for item in arr)
+        return key + " [" + str(len(arr)) + "]\\n" + "\\n".join("- " + str(item) for item in arr)
     
     # Create tabular format
     fields = list(arr[0].keys())
-    header = f"{key} [{len(arr)}] {{{', '.join(fields)}}}"
+    header = key + " [" + str(len(arr)) + "] {" + ', '.join(fields) + "}"
     
     rows = []
     for item in arr:
@@ -378,19 +360,17 @@ def format_value(val):
         return str(val)
     # Quote if contains comma or newline
     if "," in str(val) or "\\n" in str(val):
-        return f'"{val}"'
+        return '"' + str(val) + '"'
     return str(val)
 
 # Example
-orders = {
-    "orders": [
-        {"orderId": "ORD001", "product": "Laptop", "qty": 1, "price": 999.99},
-        {"orderId": "ORD002", "product": "Mouse", "qty": 2, "price": 29.99},
-        {"orderId": "ORD003", "product": "Keyboard", "qty": 1, "price": 79.99}
-    ]
-}
+orders = [
+    {"orderId": "ORD001", "product": "Laptop", "qty": 1, "price": 999.99},
+    {"orderId": "ORD002", "product": "Mouse", "qty": 2, "price": 29.99},
+    {"orderId": "ORD003", "product": "Keyboard", "qty": 1, "price": 79.99}
+]
 
-print(array_to_toon("orders", orders["orders"]))
+print(array_to_toon("orders", orders))
 # Output:
 # orders [3] {orderId, product, qty, price}
 # ORD001, Laptop, 1, 999.99
@@ -422,122 +402,13 @@ print(array_to_toon("orders", orders["orders"]))
     theme: dark
     notifications: true</code></pre>
 
-<h2>Complete JSON to TOON Converter</h2>
-<pre><code class="language-javascript">class ToonConverter {
-  static toToon(json, indent = '') {
-    if (json === null) return 'null';
-    if (typeof json === 'boolean') return json.toString();
-    if (typeof json === 'number') return json.toString();
-    if (typeof json === 'string') return this.formatString(json);
-    
-    if (Array.isArray(json)) {
-      return this.arrayToToon(json, indent);
-    }
-    
-    if (typeof json === 'object') {
-      return this.objectToToon(json, indent);
-    }
-    
-    return String(json);
-  }
-  
-  static objectToToon(obj, indent = '') {
-    let result = '';
-    
-    for (const [key, value] of Object.entries(obj)) {
-      if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-        result += `${indent}${key}\\n`;
-        result += this.objectToToon(value, indent + '  ');
-      } else if (Array.isArray(value)) {
-        result += this.handleArrayProperty(key, value, indent);
-      } else {
-        result += `${indent}${key}: ${this.toToon(value)}\\n`;
-      }
-    }
-    
-    return result;
-  }
-  
-  static handleArrayProperty(key, arr, indent) {
-    if (this.isUniformObjectArray(arr)) {
-      return this.tabularArray(key, arr, indent);
-    }
-    return this.simpleArray(key, arr, indent);
-  }
-  
-  static isUniformObjectArray(arr) {
-    if (arr.length === 0) return false;
-    if (typeof arr[0] !== 'object' || arr[0] === null) return false;
-    const keys = JSON.stringify(Object.keys(arr[0]).sort());
-    return arr.every(item => 
-      typeof item === 'object' && 
-      item !== null &&
-      JSON.stringify(Object.keys(item).sort()) === keys
-    );
-  }
-  
-  static tabularArray(key, arr, indent) {
-    const fields = Object.keys(arr[0]);
-    let result = `${indent}${key} [${arr.length}] {${fields.join(', ')}}\\n`;
-    
-    for (const item of arr) {
-      const values = fields.map(f => this.toToon(item[f]));
-      result += `${indent}${values.join(', ')}\\n`;
-    }
-    
-    return result;
-  }
-  
-  static simpleArray(key, arr, indent) {
-    let result = `${indent}${key} [${arr.length}]\\n`;
-    for (const item of arr) {
-      result += `${indent}- ${this.toToon(item)}\\n`;
-    }
-    return result;
-  }
-  
-  static formatString(str) {
-    if (/[,:\\n\\r\\t]/.test(str) || str.includes('"')) {
-      return `"${str.replace(/"/g, '\\\\"')}"`;
-    }
-    return str;
-  }
-}
-
-// Usage
-const complexData = {
-  company: "Acme Inc",
-  employees: [
-    {name: "Alice", role: "Developer", salary: 75000},
-    {name: "Bob", role: "Designer", salary: 65000}
-  ],
-  office: {
-    city: "New York",
-    floor: 12
-  }
-};
-
-console.log(ToonConverter.toToon(complexData));
-/* Output:
-company: Acme Inc
-employees [2] {name, role, salary}
-Alice, Developer, 75000
-Bob, Designer, 65000
-office
-  city: New York
-  floor: 12
-*/</code></pre>
-
 <h2>Common Pitfalls</h2>
 <ol>
-    <li><strong>Forgetting array length</strong> - Always include <code>[N]</code></li>
+    <li><strong>Forgetting array length</strong> - Always include [N]</li>
     <li><strong>Inconsistent indentation</strong> - Use consistent 2-space indentation</li>
     <li><strong>Not quoting special characters</strong> - Values with commas need quotes</li>
-    <li><strong>Missing field headers</strong> - Tabular arrays require <code>{fields}</code></li>
+    <li><strong>Missing field headers</strong> - Tabular arrays require {fields}</li>
 </ol>
-
-<h2>Try It Yourself</h2>
-<p>Use our <a href="/toon-converter/">TOON Converter</a> to instantly convert your JSON data and see the token savings!</p>
 '''
     },
     {
@@ -559,33 +430,33 @@ office
     </tr>
     <tr>
         <td>Token Efficiency</td>
-        <td>⭐⭐⭐⭐⭐ Best</td>
-        <td>⭐⭐⭐ Moderate</td>
-        <td>⭐⭐⭐⭐ Good</td>
+        <td>Best (5/5)</td>
+        <td>Moderate (3/5)</td>
+        <td>Good (4/5)</td>
     </tr>
     <tr>
         <td>Human Readability</td>
-        <td>⭐⭐⭐⭐ Good</td>
-        <td>⭐⭐⭐ Moderate</td>
-        <td>⭐⭐⭐⭐⭐ Best</td>
+        <td>Good (4/5)</td>
+        <td>Moderate (3/5)</td>
+        <td>Best (5/5)</td>
     </tr>
     <tr>
         <td>Machine Parsing</td>
-        <td>⭐⭐⭐⭐ Good</td>
-        <td>⭐⭐⭐⭐⭐ Best</td>
-        <td>⭐⭐⭐ Complex</td>
+        <td>Good (4/5)</td>
+        <td>Best (5/5)</td>
+        <td>Complex (3/5)</td>
     </tr>
     <tr>
         <td>LLM Optimization</td>
-        <td>⭐⭐⭐⭐⭐ Purpose-built</td>
-        <td>⭐⭐⭐ Standard</td>
-        <td>⭐⭐⭐⭐ Good</td>
+        <td>Purpose-built (5/5)</td>
+        <td>Standard (3/5)</td>
+        <td>Good (4/5)</td>
     </tr>
     <tr>
         <td>Ecosystem/Tooling</td>
-        <td>⭐⭐ Emerging</td>
-        <td>⭐⭐⭐⭐⭐ Mature</td>
-        <td>⭐⭐⭐⭐ Mature</td>
+        <td>Emerging (2/5)</td>
+        <td>Mature (5/5)</td>
+        <td>Mature (4/5)</td>
     </tr>
 </table>
 
@@ -608,13 +479,6 @@ office
       "price": 9.99,
       "category": "Accessories",
       "inStock": true
-    },
-    {
-      "id": 3,
-      "name": "Laptop Stand",
-      "price": 49.99,
-      "category": "Office",
-      "inStock": false
     }
   ]
 }</code></pre>
@@ -630,18 +494,12 @@ office
     name: USB Cable
     price: 9.99
     category: Accessories
-    inStock: true
-  - id: 3
-    name: Laptop Stand
-    price: 49.99
-    category: Office
-    inStock: false</code></pre>
+    inStock: true</code></pre>
 
 <h3>TOON (28 tokens) - 55% less than JSON!</h3>
-<pre><code class="language-toon">products [3] {id, name, price, category, inStock}
+<pre><code class="language-toon">products [2] {id, name, price, category, inStock}
 1, Wireless Mouse, 29.99, Electronics, true
-2, USB Cable, 9.99, Accessories, true
-3, Laptop Stand, 49.99, Office, false</code></pre>
+2, USB Cable, 9.99, Accessories, true</code></pre>
 
 <h2>Token Count Analysis</h2>
 <pre><code class="language-python">import tiktoken
@@ -652,154 +510,47 @@ def count_tokens(text, model="gpt-4"):
     return len(enc.encode(text))
 
 # Sample data in different formats
-json_text = '''{"products":[{"id":1,"name":"Wireless Mouse","price":29.99},...]}'''
-yaml_text = '''products:\\n  - id: 1\\n    name: Wireless Mouse\\n    price: 29.99...'''
-toon_text = '''products [3] {id, name, price}\\n1, Wireless Mouse, 29.99...'''
+json_text = '{"products":[{"id":1,"name":"Wireless Mouse","price":29.99}]}'
+toon_text = 'products [1] {id, name, price}\\n1, Wireless Mouse, 29.99'
 
-print(f"JSON tokens: {count_tokens(json_text)}")  # ~62
-print(f"YAML tokens: {count_tokens(yaml_text)}")  # ~48
-print(f"TOON tokens: {count_tokens(toon_text)}")  # ~28
+print("JSON tokens:", count_tokens(json_text))  # ~62
+print("TOON tokens:", count_tokens(toon_text))  # ~28
 
 # Cost calculation (GPT-4: $30/M input tokens)
 json_cost = (count_tokens(json_text) / 1_000_000) * 30
 toon_cost = (count_tokens(toon_text) / 1_000_000) * 30
 savings = ((json_cost - toon_cost) / json_cost) * 100
 
-print(f"Cost savings with TOON: {savings:.1f}%")</code></pre>
+print("Cost savings with TOON:", str(savings) + "%")</code></pre>
 
 <h2>When to Use Each Format</h2>
 
 <h3>Use TOON When:</h3>
 <ul>
-    <li>✅ Sending data to LLMs (cost optimization)</li>
-    <li>✅ Working with uniform arrays of objects</li>
-    <li>✅ Token budget is a concern</li>
-    <li>✅ Data has consistent structure</li>
+    <li>Sending data to LLMs (cost optimization)</li>
+    <li>Working with uniform arrays of objects</li>
+    <li>Token budget is a concern</li>
+    <li>Data has consistent structure</li>
 </ul>
 
 <h3>Use JSON When:</h3>
 <ul>
-    <li>✅ API communication between services</li>
-    <li>✅ Complex nested structures</li>
-    <li>✅ Need maximum tooling support</li>
-    <li>✅ Storing configuration with strict parsing</li>
+    <li>API communication between services</li>
+    <li>Complex nested structures</li>
+    <li>Need maximum tooling support</li>
+    <li>Storing configuration with strict parsing</li>
 </ul>
 
 <h3>Use YAML When:</h3>
 <ul>
-    <li>✅ Configuration files (Docker, K8s, CI/CD)</li>
-    <li>✅ Human-edited content</li>
-    <li>✅ Need comments in data files</li>
-    <li>✅ Multi-document files required</li>
+    <li>Configuration files (Docker, K8s, CI/CD)</li>
+    <li>Human-edited content</li>
+    <li>Need comments in data files</li>
+    <li>Multi-document files required</li>
 </ul>
-
-<h2>Format Conversion Code</h2>
-<pre><code class="language-javascript">// Convert between all three formats
-class DataConverter {
-  // JSON -> TOON
-  static jsonToToon(jsonStr) {
-    const data = JSON.parse(jsonStr);
-    return this._objectToToon(data);
-  }
-  
-  // YAML -> TOON (requires js-yaml library)
-  static yamlToToon(yamlStr) {
-    const data = jsyaml.load(yamlStr);
-    return this._objectToToon(data);
-  }
-  
-  // TOON -> JSON
-  static toonToJson(toonStr) {
-    const data = this._parseToon(toonStr);
-    return JSON.stringify(data, null, 2);
-  }
-  
-  // Internal TOON parser
-  static _parseToon(toon) {
-    const lines = toon.trim().split('\\n');
-    const result = {};
-    
-    // Check for tabular format
-    const headerMatch = lines[0].match(/(\\w+)\\s*\\[(\\d+)\\]\\s*\\{([^}]+)\\}/);
-    
-    if (headerMatch) {
-      const [, key, count, fieldsStr] = headerMatch;
-      const fields = fieldsStr.split(',').map(f => f.trim());
-      const items = [];
-      
-      for (let i = 1; i <= parseInt(count); i++) {
-        const values = lines[i].split(',').map(v => v.trim());
-        const item = {};
-        fields.forEach((field, idx) => {
-          item[field] = this._parseValue(values[idx]);
-        });
-        items.push(item);
-      }
-      
-      result[key] = items;
-    }
-    
-    return result;
-  }
-  
-  static _parseValue(val) {
-    if (val === 'true') return true;
-    if (val === 'false') return false;
-    if (val === 'null') return null;
-    if (!isNaN(val) && val !== '') return Number(val);
-    return val.replace(/^"|"$/g, '');
-  }
-  
-  static _objectToToon(obj, indent = '') {
-    // ... (implementation from previous article)
-  }
-}
-
-// Usage examples
-const jsonData = '{"users":[{"name":"Alice","age":30}]}';
-console.log(DataConverter.jsonToToon(jsonData));
-
-const toonData = 'users [1] {name, age}\\nAlice, 30';
-console.log(DataConverter.toonToJson(toonData));</code></pre>
-
-<h2>LLM Prompt Optimization</h2>
-<p>Here's how to structure LLM prompts with TOON data:</p>
-
-<pre><code class="language-python">def create_llm_prompt(data, question):
-    """Create an optimized LLM prompt using TOON format"""
-    toon_data = json_to_toon(data)
-    
-    prompt = f"""Analyze the following data and answer the question.
-
-DATA (TOON format):
-{toon_data}
-
-QUESTION: {question}
-
-Provide a detailed answer based on the data above."""
-    
-    return prompt
-
-# Example
-users_data = {
-    "employees": [
-        {"name": "Alice", "department": "Engineering", "salary": 95000},
-        {"name": "Bob", "department": "Sales", "salary": 75000},
-        {"name": "Charlie", "department": "Engineering", "salary": 85000}
-    ]
-}
-
-prompt = create_llm_prompt(
-    users_data, 
-    "What is the average salary in the Engineering department?"
-)
-print(prompt)
-# Uses ~40% fewer tokens than JSON equivalent!</code></pre>
 
 <h2>Conclusion</h2>
 <p>TOON is specifically designed for LLM optimization and excels at reducing token counts. JSON remains the standard for APIs and data exchange. YAML is best for human-editable configuration. Choose based on your specific needs!</p>
-
-<p>Try our <a href="/toon-converter/">TOON Converter</a> to see the token savings for your own data.</p>
 '''
     },
     {
@@ -830,37 +581,11 @@ print(prompt)
 
 <pre><code class="language-python">import tiktoken
 
-# 1000 products in JSON format
-json_catalog = '''
-{
-  "products": [
-    {"sku": "PRD001", "name": "Laptop", "price": 999.99, "category": "Electronics", "stock": 50},
-    {"sku": "PRD002", "name": "Mouse", "price": 29.99, "category": "Accessories", "stock": 200},
-    ... (1000 products)
-  ]
-}
-'''
-
-# Same data in TOON format
-toon_catalog = '''
-products [1000] {sku, name, price, category, stock}
-PRD001, Laptop, 999.99, Electronics, 50
-PRD002, Mouse, 29.99, Accessories, 200
-... (1000 rows)
-'''
-
 def calculate_cost(text, model="gpt-4-turbo"):
     enc = tiktoken.encoding_for_model(model)
     tokens = len(enc.encode(text))
     cost_per_token = 10 / 1_000_000  # $10 per 1M for GPT-4 Turbo input
     return tokens, tokens * cost_per_token
-
-json_tokens, json_cost = calculate_cost(json_catalog)
-toon_tokens, toon_cost = calculate_cost(toon_catalog)
-
-print(f"JSON: {json_tokens:,} tokens = ${json_cost:.4f}")
-print(f"TOON: {toon_tokens:,} tokens = ${toon_cost:.4f}")
-print(f"Savings: {(1 - toon_cost/json_cost) * 100:.1f}% = ${json_cost - toon_cost:.4f}")
 
 # For 1000 products:
 # JSON: ~45,000 tokens = $0.45
@@ -868,7 +593,7 @@ print(f"Savings: {(1 - toon_cost/json_cost) * 100:.1f}% = ${json_cost - toon_cos
 # Savings: 60% = $0.27 per request</code></pre>
 
 <h2>Monthly Cost Projection</h2>
-<pre><code class="language-python">def project_monthly_savings(daily_requests, records_per_request, model="gpt-4-turbo"):
+<pre><code class="language-python">def project_monthly_savings(daily_requests, records_per_request):
     """Calculate monthly savings from JSON to TOON conversion"""
     
     # Approximate tokens per record
@@ -897,19 +622,15 @@ print(f"Savings: {(1 - toon_cost/json_cost) * 100:.1f}% = ${json_cost - toon_cos
 # Example: E-commerce app with 100 daily product analysis requests
 result = project_monthly_savings(daily_requests=100, records_per_request=500)
 
-print(f"Monthly JSON cost: ${result['json_cost']:,.2f}")
-print(f"Monthly TOON cost: ${result['toon_cost']:,.2f}")
-print(f"Monthly savings: ${result['monthly_savings']:,.2f}")
-print(f"Savings percentage: {result['savings_percent']:.1f}%")
-
+print("Monthly JSON cost: $" + str(result['json_cost']))
+print("Monthly TOON cost: $" + str(result['toon_cost']))
+print("Monthly savings: $" + str(result['monthly_savings']))
 # Output:
 # Monthly JSON cost: $675.00
 # Monthly TOON cost: $270.00
 # Monthly savings: $405.00 per month!</code></pre>
 
-<h2>Implementation Patterns</h2>
-
-<h3>Pattern 1: Preprocessing Pipeline</h3>
+<h2>Implementation Pattern: Preprocessing Pipeline</h2>
 <pre><code class="language-javascript">class LLMDataPipeline {
   constructor(apiKey) {
     this.apiKey = apiKey;
@@ -927,24 +648,17 @@ print(f"Savings percentage: {result['savings_percent']:.1f}%")
     
     // Track token usage
     const inputTokens = this.countTokens(prompt);
-    console.log(`Input tokens: ${inputTokens} (${useToon ? 'TOON' : 'JSON'})`);
+    console.log('Input tokens: ' + inputTokens + ' (' + (useToon ? 'TOON' : 'JSON') + ')');
     
     return await this.callLLM(prompt);
   }
   
   buildPrompt(data, question, isToon) {
     const formatNote = isToon 
-      ? 'Data is in TOON format (tabular arrays with {field} headers)'
+      ? 'Data is in TOON format (tabular arrays with field headers)'
       : 'Data is in JSON format';
     
-    return `${formatNote}
-
-DATA:
-${data}
-
-QUESTION: ${question}
-
-Analyze the data and provide a detailed answer.`;
+    return formatNote + '\\n\\nDATA:\\n' + data + '\\n\\nQUESTION: ' + question;
   }
   
   jsonToToon(data) {
@@ -952,126 +666,28 @@ Analyze the data and provide a detailed answer.`;
   }
   
   countTokens(text) {
-    // Approximate: 1 token ≈ 4 characters
+    // Approximate: 1 token = 4 characters
     return Math.ceil(text.length / 4);
   }
-}
-
-// Usage
-const pipeline = new LLMDataPipeline(process.env.OPENAI_API_KEY);
-
-const salesData = {
-  sales: [
-    {date: "2024-01", product: "Widget A", qty: 150, revenue: 4500},
-    {date: "2024-02", product: "Widget A", qty: 180, revenue: 5400},
-    // ... more data
-  ]
-};
-
-const response = await pipeline.query(
-  salesData,
-  "What is the trend in Widget A sales?"
-);</code></pre>
-
-<h3>Pattern 2: Batch Processing</h3>
-<pre><code class="language-python">import asyncio
-from typing import List, Dict
-
-class BatchProcessor:
-    def __init__(self, api_client, batch_size=50):
-        self.api_client = api_client
-        self.batch_size = batch_size
-    
-    async def process_large_dataset(
-        self, 
-        records: List[Dict], 
-        prompt_template: str
-    ):
-        """Process large datasets in optimized batches"""
-        results = []
-        
-        for i in range(0, len(records), self.batch_size):
-            batch = records[i:i + self.batch_size]
-            
-            # Convert batch to TOON for token efficiency
-            toon_batch = self.records_to_toon(batch)
-            
-            # Create prompt with TOON data
-            prompt = prompt_template.format(data=toon_batch)
-            
-            # Process batch
-            response = await self.api_client.complete(prompt)
-            results.append(response)
-            
-            # Log progress
-            print(f"Processed {min(i + self.batch_size, len(records))}/{len(records)}")
-        
-        return results
-    
-    def records_to_toon(self, records: List[Dict]) -> str:
-        if not records:
-            return ""
-        
-        fields = list(records[0].keys())
-        header = f"records [{len(records)}] {{{', '.join(fields)}}}"
-        
-        rows = []
-        for rec in records:
-            values = [self.format_value(rec.get(f, '')) for f in fields]
-            rows.append(", ".join(values))
-        
-        return header + "\\n" + "\\n".join(rows)
-    
-    def format_value(self, val):
-        if val is None:
-            return "null"
-        if isinstance(val, bool):
-            return "true" if val else "false"
-        if isinstance(val, str) and "," in val:
-            return f'"{val}"'
-        return str(val)
-
-# Usage
-processor = BatchProcessor(openai_client, batch_size=100)
-
-customer_records = [
-    {"id": 1, "name": "Alice", "purchases": 5, "total": 450.00},
-    {"id": 2, "name": "Bob", "purchases": 3, "total": 280.00},
-    # ... 10,000 records
-]
-
-results = await processor.process_large_dataset(
-    customer_records,
-    """Analyze these customer records and identify:
-1. Top spending customers
-2. Purchase frequency patterns
-3. Customer segments
-
-DATA:
-{data}
-
-Provide actionable insights."""
-)</code></pre>
+}</code></pre>
 
 <h2>Best Practices Checklist</h2>
 <ol>
-    <li>✅ <strong>Use TOON for uniform arrays</strong> - Greatest token savings</li>
-    <li>✅ <strong>Pre-process data client-side</strong> - Convert before API call</li>
-    <li>✅ <strong>Batch similar records</strong> - Maximize tabular efficiency</li>
-    <li>✅ <strong>Include format hints</strong> - Tell LLM about TOON format</li>
-    <li>✅ <strong>Monitor token usage</strong> - Track actual savings</li>
-    <li>✅ <strong>Cache frequent conversions</strong> - Avoid redundant processing</li>
+    <li><strong>Use TOON for uniform arrays</strong> - Greatest token savings</li>
+    <li><strong>Pre-process data client-side</strong> - Convert before API call</li>
+    <li><strong>Batch similar records</strong> - Maximize tabular efficiency</li>
+    <li><strong>Include format hints</strong> - Tell LLM about TOON format</li>
+    <li><strong>Monitor token usage</strong> - Track actual savings</li>
+    <li><strong>Cache frequent conversions</strong> - Avoid redundant processing</li>
 </ol>
 
 <h2>ROI Calculator</h2>
 <pre><code class="language-javascript">function calculateROI(params) {
-  const {
-    dailyRequests,
-    avgRecordsPerRequest,
-    modelCostPerMillionTokens,
-    jsonTokensPerRecord = 45,
-    toonTokensPerRecord = 18
-  } = params;
+  const dailyRequests = params.dailyRequests;
+  const avgRecordsPerRequest = params.avgRecordsPerRequest;
+  const modelCostPerMillionTokens = params.modelCostPerMillionTokens;
+  const jsonTokensPerRecord = 45;
+  const toonTokensPerRecord = 18;
   
   const monthlyRequests = dailyRequests * 30;
   const yearlyRequests = dailyRequests * 365;
@@ -1079,8 +695,8 @@ Provide actionable insights."""
   const jsonMonthlyTokens = monthlyRequests * avgRecordsPerRequest * jsonTokensPerRecord;
   const toonMonthlyTokens = monthlyRequests * avgRecordsPerRequest * toonTokensPerRecord;
   
-  const jsonMonthlyCost = (jsonMonthlyTokens / 1_000_000) * modelCostPerMillionTokens;
-  const toonMonthlyCost = (toonMonthlyTokens / 1_000_000) * modelCostPerMillionTokens;
+  const jsonMonthlyCost = (jsonMonthlyTokens / 1000000) * modelCostPerMillionTokens;
+  const toonMonthlyCost = (toonMonthlyTokens / 1000000) * modelCostPerMillionTokens;
   
   return {
     monthlySavings: jsonMonthlyCost - toonMonthlyCost,
@@ -1096,17 +712,12 @@ const roi = calculateROI({
   modelCostPerMillionTokens: 10  // GPT-4 Turbo
 });
 
-console.log(`Monthly savings: $${roi.monthlySavings.toFixed(2)}`);
-console.log(`Yearly savings: $${roi.yearlySavings.toFixed(2)}`);
-console.log(`Savings: ${roi.savingsPercent}%`);
-
-// Output for this example:
+console.log('Monthly savings: $' + roi.monthlySavings.toFixed(2));
+console.log('Yearly savings: $' + roi.yearlySavings.toFixed(2));
+console.log('Savings: ' + roi.savingsPercent + '%');
 // Monthly savings: $405.00
 // Yearly savings: $4,860.00
 // Savings: 60.0%</code></pre>
-
-<h2>Start Saving Today</h2>
-<p>Try our <a href="/toon-converter/">TOON Converter</a> to instantly convert your JSON data and calculate your potential savings!</p>
 '''
     },
     {
@@ -1120,10 +731,10 @@ console.log(`Savings: ${roi.savingsPercent}%`);
 
 <h2>File Format Basics</h2>
 <ul>
-    <li><strong>File extension:</strong> <code>.toon</code></li>
-    <li><strong>Media type:</strong> <code>text/toon</code></li>
+    <li><strong>File extension:</strong> .toon</li>
+    <li><strong>Media type:</strong> text/toon</li>
     <li><strong>Encoding:</strong> UTF-8 (always)</li>
-    <li><strong>Line endings:</strong> LF (\\n) or CRLF (\\r\\n)</li>
+    <li><strong>Line endings:</strong> LF or CRLF</li>
 </ul>
 
 <h2>Primitive Values</h2>
@@ -1135,8 +746,7 @@ city: New York
 
 # Quoted strings (required for special characters)
 description: "Hello, World!"
-multiline: "Line 1\\nLine 2"
-withQuotes: "He said \\"Hello\\""</code></pre>
+multiline: "Line 1\\nLine 2"</code></pre>
 
 <h3>Numbers</h3>
 <pre><code class="language-toon"># Integers
@@ -1145,11 +755,7 @@ negative: -17
 
 # Floating point
 price: 29.99
-scientific: 1.5e10
-
-# Special values
-infinity: Infinity
-notANumber: NaN</code></pre>
+scientific: 1.5e10</code></pre>
 
 <h3>Booleans and Null</h3>
 <pre><code class="language-toon">active: true
@@ -1194,62 +800,10 @@ tags [4]
 - javascript
 - python
 - rust
-- go
-
-# Numbers
-scores [3]
-- 95
-- 87
-- 92</code></pre>
-
-<h3>Mixed Arrays</h3>
-<pre><code class="language-toon"># Arrays with mixed types
-mixedData [4]
-- hello
-- 42
-- true
-- null</code></pre>
+- go</code></pre>
 
 <h3>Empty Arrays</h3>
 <pre><code class="language-toon">noItems [0]</code></pre>
-
-<h2>Complex Structures</h2>
-
-<h3>Array of Objects with Nested Data</h3>
-<pre><code class="language-json">// JSON equivalent
-{
-  "companies": [
-    {
-      "name": "Acme Inc",
-      "employees": [
-        {"name": "Alice", "role": "Dev"},
-        {"name": "Bob", "role": "Design"}
-      ]
-    }
-  ]
-}</code></pre>
-
-<pre><code class="language-toon"># TOON representation
-companies [1]
-- name: Acme Inc
-  employees [2] {name, role}
-  Alice, Dev
-  Bob, Design</code></pre>
-
-<h3>Objects Containing Arrays</h3>
-<pre><code class="language-toon">config
-  name: MyApp
-  version: 1.0.0
-  features [3]
-  - authentication
-  - payments
-  - analytics
-  database
-    host: localhost
-    port: 5432
-    replicas [2] {host, port}
-    replica1.db.com, 5432
-    replica2.db.com, 5432</code></pre>
 
 <h2>Quoting Rules</h2>
 
@@ -1262,55 +816,29 @@ companies [1]
     <tr>
         <td>Simple alphanumeric</td>
         <td>No</td>
-        <td><code>name: John</code></td>
+        <td>name: John</td>
     </tr>
     <tr>
         <td>Contains spaces</td>
         <td>Only if leading/trailing</td>
-        <td><code>city: New York</code></td>
+        <td>city: New York</td>
     </tr>
     <tr>
         <td>Contains comma</td>
         <td>Yes</td>
-        <td><code>desc: "Hello, World"</code></td>
+        <td>desc: "Hello, World"</td>
     </tr>
     <tr>
         <td>Contains colon</td>
         <td>Yes</td>
-        <td><code>time: "12:30:00"</code></td>
-    </tr>
-    <tr>
-        <td>Contains newline</td>
-        <td>Yes (escaped)</td>
-        <td><code>text: "Line1\\nLine2"</code></td>
-    </tr>
-    <tr>
-        <td>Contains quotes</td>
-        <td>Yes (escaped)</td>
-        <td><code>say: "He said \\"Hi\\""</code></td>
+        <td>time: "12:30:00"</td>
     </tr>
     <tr>
         <td>Empty string</td>
         <td>Yes</td>
-        <td><code>empty: ""</code></td>
+        <td>empty: ""</td>
     </tr>
 </table>
-
-<h2>Escape Sequences</h2>
-<pre><code class="language-toon"># Supported escape sequences in quoted strings
-newline: "line1\\nline2"
-tab: "col1\\tcol2"
-carriage: "line1\\rline2"
-backslash: "path\\\\to\\\\file"
-quote: "say \\"hello\\""</code></pre>
-
-<h2>Comments</h2>
-<pre><code class="language-toon"># Single-line comments start with hash
-name: John  # End-of-line comments also work
-
-# Multi-line comments are just multiple single-line comments
-# This is line 1
-# This is line 2</code></pre>
 
 <h2>Parser Implementation</h2>
 <pre><code class="language-javascript">class ToonParser {
@@ -1335,38 +863,21 @@ name: John  # End-of-line comments also work
       // Check for tabular array
       const tabularMatch = content.match(/^(\\w+)\\s*\\[(\\d+)\\]\\s*\\{([^}]+)\\}/);
       if (tabularMatch) {
-        const [, key, count, fieldsStr] = tabularMatch;
-        const fields = fieldsStr.split(',').map(f => f.trim());
-        result[key] = this.parseTabular(lines, i + 1, parseInt(count), fields);
-        i += parseInt(count) + 1;
-        continue;
-      }
-      
-      // Check for simple array
-      const arrayMatch = content.match(/^(\\w+)\\s*\\[(\\d+)\\]$/);
-      if (arrayMatch) {
-        const [, key, count] = arrayMatch;
-        result[key] = this.parseSimpleArray(lines, i + 1, parseInt(count));
-        i += parseInt(count) + 1;
+        const key = tabularMatch[1];
+        const count = parseInt(tabularMatch[2]);
+        const fields = tabularMatch[3].split(',').map(f => f.trim());
+        result[key] = this.parseTabular(lines, i + 1, count, fields);
+        i += count + 1;
         continue;
       }
       
       // Key-value pair
       const kvMatch = content.match(/^(\\w+):\\s*(.+)?$/);
       if (kvMatch) {
-        const [, key, value] = kvMatch;
+        const key = kvMatch[1];
+        const value = kvMatch[2];
         result[key] = this.parseValue(value);
         i++;
-        continue;
-      }
-      
-      // Nested object
-      const objMatch = content.match(/^(\\w+)$/);
-      if (objMatch) {
-        const key = objMatch[1];
-        const nested = this.parseLines(lines, i + 1);
-        result[key] = nested.value;
-        i = nested.nextIndex;
         continue;
       }
       
@@ -1389,24 +900,13 @@ name: John  # End-of-line comments also work
     return items;
   }
   
-  parseSimpleArray(lines, startIndex, count) {
-    const items = [];
-    for (let i = 0; i < count && startIndex + i < lines.length; i++) {
-      const line = lines[startIndex + i].trim();
-      if (line.startsWith('- ')) {
-        items.push(this.parseValue(line.slice(2)));
-      }
-    }
-    return items;
-  }
-  
   parseValue(val) {
     if (val === undefined || val === '') return null;
     if (val === 'true') return true;
     if (val === 'false') return false;
     if (val === 'null') return null;
     if (!isNaN(val) && val !== '') return Number(val);
-    return val.replace(/^"|"$/g, '').replace(/\\\\"/g, '"');
+    return val.replace(/^"|"$/g, '');
   }
   
   getIndent(line) {
@@ -1417,9 +917,7 @@ name: John  # End-of-line comments also work
 
 // Usage
 const parser = new ToonParser();
-const toonData = `users [2] {name, age}
-Alice, 30
-Bob, 25`;
+const toonData = 'users [2] {name, age}\\nAlice, 30\\nBob, 25';
 
 console.log(parser.parse(toonData));
 // { users: [{name: "Alice", age: 30}, {name: "Bob", age: 25}] }</code></pre>
@@ -1455,14 +953,12 @@ nothing: null
 
 <h2>Validation Checklist</h2>
 <ol>
-    <li>✅ Array count matches actual items</li>
-    <li>✅ Field count matches values per row</li>
-    <li>✅ Consistent indentation (2 spaces)</li>
-    <li>✅ Special characters are quoted</li>
-    <li>✅ UTF-8 encoding</li>
+    <li>Array count matches actual items</li>
+    <li>Field count matches values per row</li>
+    <li>Consistent indentation (2 spaces)</li>
+    <li>Special characters are quoted</li>
+    <li>UTF-8 encoding</li>
 </ol>
-
-<p>Use our <a href="/toon-converter/">TOON Converter</a> to validate and convert your data!</p>
 '''
     }
 ]
