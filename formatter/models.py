@@ -81,7 +81,7 @@ class BlogPost(models.Model):
     
     # SEO fields
     meta_description = models.CharField(max_length=160, help_text="SEO meta description")
-    meta_keywords = models.CharField(max_length=200, help_text="SEO keywords, comma-separated")
+    meta_keywords = models.CharField(max_length=500, help_text="SEO keywords, comma-separated")
     
     # Timestamps
     published = models.BooleanField(default=False)
