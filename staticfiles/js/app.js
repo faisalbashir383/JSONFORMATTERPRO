@@ -682,14 +682,14 @@ function setupNavMenuActions() {
 // Event Listeners
 // ====================
 
-// Button clicks
-elements.formatBtn.addEventListener('click', formatJson);
-elements.minifyBtn.addEventListener('click', minifyJson);
-elements.validateBtn.addEventListener('click', validateJson);
-elements.toXmlBtn.addEventListener('click', convertToXml);
-elements.toCsvBtn.addEventListener('click', convertToCsv);
-elements.clearBtn.addEventListener('click', clearInputs);
-elements.downloadBtn.addEventListener('click', downloadOutput);
+// Button clicks - using optional chaining for null safety
+elements.formatBtn?.addEventListener('click', formatJson);
+elements.minifyBtn?.addEventListener('click', minifyJson);
+elements.validateBtn?.addEventListener('click', validateJson);
+elements.toXmlBtn?.addEventListener('click', convertToXml);
+elements.toCsvBtn?.addEventListener('click', convertToCsv);
+elements.clearBtn?.addEventListener('click', clearInputs);
+elements.downloadBtn?.addEventListener('click', downloadOutput);
 // Theme toggle handled in base.html - removed duplicate listener
 
 // Hamburger menu - Handled in base.html inline script
@@ -706,30 +706,30 @@ if (copyFullscreenBtn) {
 }
 
 // Character counting
-elements.inputJson.addEventListener('input', () => {
+elements.inputJson?.addEventListener('input', () => {
     updateCharCount();
     clearErrorHighlight(); // Clear errors when user starts typing
 });
 
 // File upload
-elements.uploadZone.addEventListener('click', () => elements.fileInput.click());
-elements.fileInput.addEventListener('change', (e) => {
+elements.uploadZone?.addEventListener('click', () => elements.fileInput?.click());
+elements.fileInput?.addEventListener('change', (e) => {
     if (e.target.files.length > 0) {
         handleFileUpload(e.target.files[0]);
     }
 });
 
 // Drag and drop
-elements.uploadZone.addEventListener('dragover', (e) => {
+elements.uploadZone?.addEventListener('dragover', (e) => {
     e.preventDefault();
     elements.uploadZone.classList.add('dragover');
 });
 
-elements.uploadZone.addEventListener('dragleave', () => {
+elements.uploadZone?.addEventListener('dragleave', () => {
     elements.uploadZone.classList.remove('dragover');
 });
 
-elements.uploadZone.addEventListener('drop', (e) => {
+elements.uploadZone?.addEventListener('drop', (e) => {
     e.preventDefault();
     elements.uploadZone.classList.remove('dragover');
 
