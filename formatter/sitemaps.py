@@ -47,6 +47,7 @@ class StaticViewSitemap(Sitemap):
             # SEO & Web Tools
             'lorem_ipsum_page',
             'image_resizer_page',
+            'domain_age_page',
             # Data Format Tools
             'toon_converter_page',
         ]

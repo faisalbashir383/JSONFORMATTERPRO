@@ -1,0 +1,1151 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Domain Age Checker - Check Domain Registration Date & WHOIS Info | JSON Formatters Pro{% endblock %}
+{% block meta_title %}Domain Age Checker - Free WHOIS Lookup & Domain Age Calculator Online{% endblock %}
+{% block meta_description %}Free domain age checker tool to find when a domain was registered. Check domain age, WHOIS
+information, expiry date, registrar details, nameservers, and more. Accurate domain age lookup for SEO analysis.
+{% endblock %}
+{% block meta_keywords %}domain age, domain age checker, WHOIS lookup, domain lookup, domain check, domain info,
+registrar, expiry date, domain history, nameserver, DNS, domain registration, domain details, domain analysis, domain
+verify, domain status, domain information, domain checker tool, domain tools, domain validator, domain monitor, domain
+search, domain query, domain finder, domain inspector, domain test, domain scan, domain report, domain research, domain
+audit, domain metrics, domain data, domain stats, domain overview, domain profile, domain review, domain examine, domain
+explore, check domain age, free domain age checker, domain age lookup tool, how old is my domain, domain registration
+date, domain expiry date checker, WHOIS lookup free, domain age for SEO, domain history checker, domain age calculator,
+domain age analyzer, online domain age checker, bulk domain age checker, domain age by URL, domain age verification,
+domain age check online free, best domain age checker 2024, best domain age checker 2025, accurate domain age tool,
+domain creation date finder, domain registration information, domain WHOIS data, domain name age checker, website age
+checker, when was domain registered, domain age lookup by name, check website age, domain age check for SEO, domain
+registrar information, domain age and SEO ranking, domain age importance, domain age impact on SEO, check multiple
+domain ages, domain age and authority, domain age for backlink analysis, domain purchase date checker, domain renewal
+date checker, domain age history timeline, domain ownership history, domain transfer history, domain age comparison
+tool, domain age bulk lookup, domain age API, domain age REST API, programmatic domain age check, domain age for link
+building, domain age verification service, domain age audit tool, domain registration lookup, domain name information
+lookup, WHOIS domain age query, free WHOIS lookup tool, domain age SEO tool, domain age marketing tool, domain age
+competitive analysis, domain age research tool{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/domain-age/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Domain Age Checker",
+  "description": "Free online tool to check domain age, registration date, and WHOIS information",
+  "url": "{{ SITE_URL }}/domain-age/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Domain Age Calculation",
+    "WHOIS Information Lookup",
+    "Domain Expiry Date Check",
+    "Registrar Information",
+    "Nameserver Details",
+    "Domain Status Codes"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is domain age?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Domain age refers to the length of time a domain name has been registered and active on the internet. It is calculated from the domain's original registration date to the present day."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is domain age important for SEO?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Domain age is considered a trust signal by search engines. Older domains often have more established backlink profiles and content history, which can positively influence search rankings."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How accurate is this domain age checker?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our domain age checker uses official WHOIS databases to retrieve accurate registration information. The data is sourced directly from domain registrars and is typically accurate to the exact day."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .checker-container {
+        max-width: 900px;
+        margin: 0 auto 2rem;
+    }
+
+    .search-box {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .domain-input {
+        flex: 1;
+        padding: 1rem 1.25rem;
+        font-size: 1.1rem;
+        background: var(--color-surface);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        transition: all 200ms ease;
+    }
+
+    .domain-input:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .check-btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .check-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .check-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Loading Animation */
+    .loading-container {
+        display: none;
+        text-align: center;
+        padding: 3rem 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .loading-container.active {
+        display: block;
+    }
+
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 1.5rem;
+        position: relative;
+    }
+
+    .loading-spinner::before,
+    .loading-spinner::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 4px solid transparent;
+    }
+
+    .loading-spinner::before {
+        border-top-color: #6366f1;
+        border-right-color: #8b5cf6;
+        animation: spin 1s linear infinite;
+    }
+
+    .loading-spinner::after {
+        border-bottom-color: #a78bfa;
+        border-left-color: #c4b5fd;
+        animation: spin 1.5s linear infinite reverse;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .loading-icon {
+        font-size: 2rem;
+        animation: pulse 1.5s ease-in-out infinite;
+        margin-bottom: 1rem;
+    }
+
+    @keyframes pulse {
+
+        0%,
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+    }
+
+    .loading-text {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .loading-domain {
+        font-weight: 600;
+        color: var(--color-text);
+        font-family: 'SF Mono', monospace;
+    }
+
+    .loading-dots::after {
+        content: '';
+        animation: dots 1.5s steps(4, end) infinite;
+    }
+
+    @keyframes dots {
+
+        0%,
+        20% {
+            content: '';
+        }
+
+        40% {
+            content: '.';
+        }
+
+        60% {
+            content: '..';
+        }
+
+        80%,
+        100% {
+            content: '...';
+        }
+    }
+
+    /* Result Card */
+    .result-container {
+        display: none;
+    }
+
+    .result-container.active {
+        display: block;
+    }
+
+    .result-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+        box-shadow: 0 4px 16px var(--color-shadow);
+    }
+
+    [data-theme="dark"] .result-card {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .age-header {
+        padding: 2rem;
+        text-align: center;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .domain-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-text);
+        font-family: 'SF Mono', monospace;
+        margin-bottom: 1rem;
+    }
+
+    .age-display {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .age-item {
+        text-align: center;
+    }
+
+    .age-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .age-label {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 9999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .status-badge.active {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    .status-badge.expiring {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+    }
+
+    .status-badge.expired {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+
+    /* Details Grid */
+    .details-section {
+        padding: 1.5rem;
+    }
+
+    .details-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .detail-card {
+        padding: 1rem;
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+    }
+
+    .detail-label {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.35rem;
+    }
+
+    .detail-value {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--color-text);
+        word-break: break-word;
+    }
+
+    /* Nameservers */
+    .nameservers-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .ns-tag {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.75rem;
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--color-primary);
+        border-radius: var(--radius-sm);
+        font-family: 'SF Mono', monospace;
+    }
+
+    /* Status Codes */
+    .status-codes-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .status-tag {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        background: var(--color-bg);
+        color: var(--color-text-secondary);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--color-border);
+    }
+
+    /* Timeline */
+    .timeline-section {
+        margin-top: 1rem;
+        padding: 1.5rem;
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+    }
+
+    .timeline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        padding: 1rem 0;
+    }
+
+    .timeline::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 10%;
+        right: 10%;
+        height: 4px;
+        background: linear-gradient(90deg, #10b981 0%, #6366f1 50%, #ef4444 100%);
+        border-radius: 2px;
+    }
+
+    .timeline-item {
+        text-align: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .timeline-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        margin: 0 auto 0.5rem;
+        border: 3px solid var(--color-surface);
+    }
+
+    .timeline-dot.created {
+        background: #10b981;
+    }
+
+    .timeline-dot.updated {
+        background: #6366f1;
+    }
+
+    .timeline-dot.expiry {
+        background: #ef4444;
+    }
+
+    .timeline-date {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+    }
+
+    .timeline-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    /* Error State */
+    .error-container {
+        display: none;
+        text-align: center;
+        padding: 2rem;
+        background: rgba(239, 68, 68, 0.05);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        border-radius: var(--radius-lg);
+    }
+
+    .error-container.active {
+        display: block;
+    }
+
+    .error-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .error-message {
+        color: #ef4444;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    .error-hint {
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+        margin-top: 3rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .faq-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .faq-item {
+        border-bottom: 1px solid var(--color-border);
+        padding: 1rem 0;
+    }
+
+    .faq-item:last-child {
+        border-bottom: none;
+    }
+
+    .faq-question {
+        font-weight: 600;
+        color: var(--color-text);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+    }
+
+    .faq-question:hover {
+        color: var(--color-primary);
+    }
+
+    .faq-toggle {
+        transition: transform 200ms ease;
+    }
+
+    .faq-item.active .faq-toggle {
+        transform: rotate(180deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 300ms ease;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+    }
+
+    .faq-item.active .faq-answer {
+        max-height: 500px;
+        padding-top: 0.75rem;
+    }
+
+    /* Info Section */
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .info-section ul {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-left: 1.5rem;
+    }
+
+    .info-section li {
+        margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .search-box {
+            flex-direction: column;
+        }
+
+        .age-display {
+            gap: 1rem;
+        }
+
+        .age-number {
+            font-size: 2rem;
+        }
+
+        .timeline {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .timeline::before {
+            display: none;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>🕐 Domain Age Checker</h1>
+    <p>Check domain registration date, age, WHOIS information, expiry details, and more - completely free</p>
+</div>
+
+<div class="checker-container">
+    <div class="search-box">
+        <input type="text" id="domainInput" class="domain-input" placeholder="Enter domain name (e.g., google.com)"
+            autocomplete="off">
+        <button id="checkBtn" class="check-btn">
+            <span>🔍</span>
+            <span>Check Age</span>
+        </button>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-container" id="loadingContainer">
+        <div class="loading-spinner"></div>
+        <div class="loading-icon">🌐</div>
+        <div class="loading-text">Looking up WHOIS data for<span class="loading-dots"></span></div>
+        <div class="loading-domain" id="loadingDomain">domain.com</div>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-container" id="errorContainer">
+        <div class="error-icon">❌</div>
+        <div class="error-message" id="errorMessage">Unable to fetch domain information</div>
+        <div class="error-hint">Please check the domain name and try again</div>
+    </div>
+
+    <!-- Result Container -->
+    <div class="result-container" id="resultContainer">
+        <div class="result-card">
+            <!-- Age Header -->
+            <div class="age-header">
+                <div class="domain-name" id="resultDomain">example.com</div>
+                <div class="age-display">
+                    <div class="age-item">
+                        <div class="age-number" id="ageYears">0</div>
+                        <div class="age-label">Years</div>
+                    </div>
+                    <div class="age-item">
+                        <div class="age-number" id="ageMonths">0</div>
+                        <div class="age-label">Months</div>
+                    </div>
+                    <div class="age-item">
+                        <div class="age-number" id="ageDays">0</div>
+                        <div class="age-label">Days</div>
+                    </div>
+                </div>
+                <div class="status-badge active" id="statusBadge">
+                    <span>✓</span>
+                    <span id="statusText">Active</span>
+                </div>
+            </div>
+
+            <!-- Details Section -->
+            <div class="details-section">
+                <h3 class="details-title">📋 Registration Details</h3>
+                <div class="details-grid">
+                    <div class="detail-card">
+                        <div class="detail-label">Created Date</div>
+                        <div class="detail-value" id="createdDate">-</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">Updated Date</div>
+                        <div class="detail-value" id="updatedDate">-</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">Expiry Date</div>
+                        <div class="detail-value" id="expiryDate">-</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">Days Until Expiry</div>
+                        <div class="detail-value" id="daysUntilExpiry">-</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">Registrar</div>
+                        <div class="detail-value" id="registrar">-</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">DNSSEC</div>
+                        <div class="detail-value" id="dnssec">-</div>
+                    </div>
+                </div>
+
+                <!-- Timeline -->
+                <div class="timeline-section">
+                    <h3 class="details-title">📅 Domain Timeline</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot created"></div>
+                            <div class="timeline-label">Created</div>
+                            <div class="timeline-date" id="timelineCreated">-</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot updated"></div>
+                            <div class="timeline-label">Updated</div>
+                            <div class="timeline-date" id="timelineUpdated">-</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot expiry"></div>
+                            <div class="timeline-label">Expires</div>
+                            <div class="timeline-date" id="timelineExpiry">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nameservers -->
+                <div class="details-section" style="padding: 0; margin-top: 1rem;">
+                    <h3 class="details-title">🌐 Name Servers</h3>
+                    <div class="nameservers-list" id="nameserversList">
+                        <span class="ns-tag">-</span>
+                    </div>
+                </div>
+
+                <!-- Status Codes -->
+                <div class="details-section" style="padding: 0; margin-top: 1rem;">
+                    <h3 class="details-title">🔒 Domain Status</h3>
+                    <div class="status-codes-list" id="statusCodesList">
+                        <span class="status-tag">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="faq-section">
+    <h2 class="faq-title">❓ Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>What is domain age?</span>
+            <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+            Domain age refers to how long a domain name has been registered and active on the internet. It is calculated
+            from the domain's original creation date (when it was first registered) to the current date. For example, if
+            a domain was registered on January 1, 2010, its domain age would be calculated from that date to today.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Why is domain age important for SEO?</span>
+            <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+            Domain age is considered one of the many ranking factors in search engine optimization. While it's not the
+            most critical factor, older domains often benefit from: (1) More established backlink profiles built over
+            time, (2) Longer content history that search engines have indexed, (3) Greater perceived trustworthiness,
+            (4) More time to accumulate authority signals. However, a new domain with excellent content can still
+            outrank older domains.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>How accurate is this domain age checker?</span>
+            <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+            Our domain age checker retrieves information directly from WHOIS databases maintained by domain registrars
+            and ICANN-accredited organizations. The creation date we display is the official registration date on
+            record. This data is highly accurate and is the same information used by domain registrars, web hosting
+            companies, and SEO professionals worldwide.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>What information can I get from WHOIS lookup?</span>
+            <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+            A WHOIS lookup provides various details about a domain including: (1) Creation date - when the domain was
+            first registered, (2) Updated date - when the registration was last modified, (3) Expiration date - when the
+            current registration expires, (4) Registrar - the company through which the domain was registered, (5) Name
+            servers - DNS servers handling the domain, (6) Domain status codes - current status like
+            clientTransferProhibited, (7) DNSSEC status - whether domain security extensions are enabled.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>How does domain age affect Google ranking?</span>
+            <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+            Google has stated that domain age by itself is not a significant ranking factor. However, older domains
+            often correlate with factors that do matter: (1) More time to build quality backlinks, (2) Established
+            content that has been indexed and evaluated, (3) User behavior data accumulated over time, (4) Brand
+            recognition and trust signals. Focus on creating quality content rather than just domain age.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>What is a good domain age?</span>
+            <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+            There's no specific "good" domain age threshold. Domains over 2-3 years are generally considered
+            established. Domains over 10 years may have additional trust advantages. However, many successful websites
+            are built on newer domains. What matters more is the quality of your content, backlink profile, user
+            experience, and overall SEO strategy rather than age alone.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Can I check multiple domains at once?</span>
+            <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+            Currently, our tool checks one domain at a time to provide detailed, accurate information. This ensures
+            reliable results and prevents rate limiting from WHOIS servers. For bulk domain age checking needs, you can
+            check domains sequentially, and we're working on a bulk lookup feature for the future.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>How to find when a domain expires?</span>
+            <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+            Simply enter the domain name in our checker above and click "Check Age". The results will show the
+            expiration date prominently, along with the number of days until expiry. This is useful for: (1) Monitoring
+            your own domains for renewal, (2) Checking competitor domains, (3) Finding potentially expiring domains to
+            acquire, (4) Due diligence before purchasing a domain.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>What is WHOIS information?</span>
+            <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+            WHOIS (pronounced "who is") is a query and response protocol used to look up information about domain name
+            registrations. It was created in the 1980s and provides a directory of domain ownership and technical
+            information. While privacy protection has limited some personal data, you can still find registration dates,
+            registrar information, name servers, and domain status through WHOIS lookups.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>What are nameservers?</span>
+            <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+            Nameservers are specialized servers that handle DNS (Domain Name System) queries for a domain. They
+            translate human-readable domain names (like google.com) into IP addresses that computers use. When you see
+            nameservers like "ns1.example.com", they indicate which servers are authoritative for that domain's DNS
+            records. Nameservers are typically provided by your web hosting company or a dedicated DNS service.
+        </div>
+    </div>
+</div>
+
+<!-- Info Section -->
+<div class="info-section">
+    <h2>💡 About Domain Age Checker</h2>
+    <p>
+        Our free Domain Age Checker tool helps you discover when a website's domain was first registered and provides
+        comprehensive WHOIS information. Whether you're conducting SEO research, evaluating a domain for purchase, or
+        simply curious about a website's history, this tool delivers accurate, real-time data.
+    </p>
+    <p>
+        <strong>Key features of our Domain Age Checker:</strong>
+    </p>
+    <ul>
+        <li><strong>Accurate Age Calculation:</strong> See exact years, months, and days since registration</li>
+        <li><strong>WHOIS Data:</strong> Access registrar, nameserver, and DNS information</li>
+        <li><strong>Expiry Tracking:</strong> Know when a domain expires and days remaining</li>
+        <li><strong>Status Monitoring:</strong> View domain status codes and DNSSEC status</li>
+        <li><strong>Visual Timeline:</strong> See domain lifecycle from creation to expiry</li>
+    </ul>
+    <p>
+        <strong>Use cases for domain age checking:</strong>
+    </p>
+    <ul>
+        <li><strong>SEO Analysis:</strong> Evaluate domain authority and trust signals</li>
+        <li><strong>Competitive Research:</strong> Understand competitor domain history</li>
+        <li><strong>Domain Acquisition:</strong> Assess value before purchasing a domain</li>
+        <li><strong>Due Diligence:</strong> Verify website legitimacy and history</li>
+        <li><strong>Backlink Analysis:</strong> Evaluate link sources by domain age</li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const domainInput = document.getElementById('domainInput');
+        const checkBtn = document.getElementById('checkBtn');
+        const loadingContainer = document.getElementById('loadingContainer');
+        const loadingDomain = document.getElementById('loadingDomain');
+        const errorContainer = document.getElementById('errorContainer');
+        const errorMessage = document.getElementById('errorMessage');
+        const resultContainer = document.getElementById('resultContainer');
+
+        // FAQ toggle functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                item.classList.toggle('active');
+            });
+        });
+
+        // Enter key handler
+        domainInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkDomainAge();
+            }
+        });
+
+        // Check button handler
+        checkBtn.addEventListener('click', checkDomainAge);
+
+        function cleanDomain(domain) {
+            // Remove protocol and path
+            domain = domain.trim().toLowerCase();
+            domain = domain.replace(/^https?:\/\//, '');
+            domain = domain.replace(/^www\./, '');
+            domain = domain.split('/')[0];
+            domain = domain.split('?')[0];
+            return domain;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function formatShortDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+
+        async function checkDomainAge() {
+            const domain = cleanDomain(domainInput.value);
+
+            if (!domain) {
+                showError('Please enter a domain name');
+                return;
+            }
+
+            // Basic domain validation
+            const domainRegex = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,}$/;
+            if (!domainRegex.test(domain)) {
+                showError('Please enter a valid domain name (e.g., example.com)');
+                return;
+            }
+
+            // Show loading state
+            hideAllContainers();
+            loadingDomain.textContent = domain;
+            loadingContainer.classList.add('active');
+            checkBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/domain-age/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ domain: domain })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || data.error) {
+                    showError(data.error || 'Unable to fetch domain information');
+                    return;
+                }
+
+                displayResults(data);
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Network error. Please check your connection and try again.');
+            } finally {
+                checkBtn.disabled = false;
+            }
+        }
+
+        function hideAllContainers() {
+            loadingContainer.classList.remove('active');
+            errorContainer.classList.remove('active');
+            resultContainer.classList.remove('active');
+        }
+
+        function showError(message) {
+            hideAllContainers();
+            errorMessage.textContent = message;
+            errorContainer.classList.add('active');
+        }
+
+        function displayResults(data) {
+            hideAllContainers();
+
+            // Domain name
+            document.getElementById('resultDomain').textContent = data.domain;
+
+            // Age display
+            document.getElementById('ageYears').textContent = data.age?.years || 0;
+            document.getElementById('ageMonths').textContent = data.age?.months || 0;
+            document.getElementById('ageDays').textContent = data.age?.days || 0;
+
+            // Status badge
+            const statusBadge = document.getElementById('statusBadge');
+            const statusText = document.getElementById('statusText');
+            const daysUntilExpiry = data.daysUntilExpiry || 0;
+
+            statusBadge.className = 'status-badge';
+            if (daysUntilExpiry < 0) {
+                statusBadge.classList.add('expired');
+                statusText.textContent = 'Expired';
+                statusBadge.querySelector('span:first-child').textContent = '⚠';
+            } else if (daysUntilExpiry < 30) {
+                statusBadge.classList.add('expiring');
+                statusText.textContent = 'Expiring Soon';
+                statusBadge.querySelector('span:first-child').textContent = '⚠';
+            } else {
+                statusBadge.classList.add('active');
+                statusText.textContent = 'Active';
+                statusBadge.querySelector('span:first-child').textContent = '✓';
+            }
+
+            // Registration details
+            document.getElementById('createdDate').textContent = formatDate(data.createdDate);
+            document.getElementById('updatedDate').textContent = formatDate(data.updatedDate);
+            document.getElementById('expiryDate').textContent = formatDate(data.expiryDate);
+            document.getElementById('daysUntilExpiry').textContent = daysUntilExpiry > 0
+                ? `${daysUntilExpiry} days`
+                : (daysUntilExpiry < 0 ? 'Expired' : 'Today');
+            document.getElementById('registrar').textContent = data.registrar || '-';
+            document.getElementById('dnssec').textContent = data.dnssec || 'Unsigned';
+
+            // Timeline
+            document.getElementById('timelineCreated').textContent = formatShortDate(data.createdDate);
+            document.getElementById('timelineUpdated').textContent = formatShortDate(data.updatedDate);
+            document.getElementById('timelineExpiry').textContent = formatShortDate(data.expiryDate);
+
+            // Nameservers
+            const nsContainer = document.getElementById('nameserversList');
+            nsContainer.innerHTML = '';
+            if (data.nameServers && data.nameServers.length > 0) {
+                data.nameServers.forEach(ns => {
+                    const tag = document.createElement('span');
+                    tag.className = 'ns-tag';
+                    tag.textContent = ns.toLowerCase();
+                    nsContainer.appendChild(tag);
+                });
+            } else {
+                nsContainer.innerHTML = '<span class="ns-tag">Not available</span>';
+            }
+
+            // Status codes
+            const statusContainer = document.getElementById('statusCodesList');
+            statusContainer.innerHTML = '';
+            if (data.status && data.status.length > 0) {
+                data.status.forEach(status => {
+                    const tag = document.createElement('span');
+                    tag.className = 'status-tag';
+                    // Clean up status codes for display
+                    const cleanStatus = status.replace(/https?:\/\/.*$/, '').trim();
+                    tag.textContent = cleanStatus;
+                    statusContainer.appendChild(tag);
+                });
+            } else {
+                statusContainer.innerHTML = '<span class="status-tag">Active</span>';
+            }
+
+            resultContainer.classList.add('active');
+        }
+    });
+</script>
+{% endblock %}

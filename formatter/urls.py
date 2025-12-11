@@ -58,9 +58,11 @@ urlpatterns = [
     path('lorem-ipsum/', views.lorem_ipsum_page, name='lorem_ipsum_page'),
     path('image-resizer/', views.image_resizer_page, name='image_resizer_page'),
     path('toon-converter/', views.toon_converter_page, name='toon_converter_page'),
+    path('domain-age/', views.domain_age_page, name='domain_age_page'),
     
     # Code Tool API Endpoints
     path('api/qr-generator/', views.generate_qr_code, name='generate_qr_code'),
+    path('api/domain-age/', views.domain_age_api, name='domain_age_api'),
     
     path('robots.txt', views.robots_txt, name='robots_txt'),
     

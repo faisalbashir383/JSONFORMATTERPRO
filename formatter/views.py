@@ -1019,3 +1019,122 @@ def image_resizer_page(request):
 def toon_converter_page(request):
     """Render the JSON to TOON Converter tool page"""
     return render(request, 'toon-converter.html')
+
+
+def domain_age_page(request):
+    """Render the Domain Age Checker page"""
+    return render(request, 'domain-age-checker.html')
+
+
+@api_view(['POST'])
+def domain_age_api(request):
+    """
+    Check domain age and WHOIS information.
+    Returns registration dates, registrar, nameservers, and calculated age.
+    """
+    try:
+        import whois
+        from datetime import datetime
+        
+        domain = request.data.get('domain', '').strip()
+        
+        if not domain:
+            return Response({'error': 'Domain is required'}, status=400)
+        
+        # Clean domain (remove protocol and path)
+        domain = re.sub(r'^https?://', '', domain)
+        domain = re.sub(r'^www\.', '', domain)
+        domain = domain.split('/')[0]
+        domain = domain.split('?')[0]
+        
+        try:
+            w = whois.whois(domain)
+        except Exception as e:
+            return Response({'error': f'Unable to fetch WHOIS data: {str(e)}'}, status=400)
+        
+        if not w or not w.domain_name:
+            return Response({'error': 'Domain not found or WHOIS data unavailable'}, status=404)
+        
+        # Handle dates that might be lists
+        def get_first_date(date_value):
+            if isinstance(date_value, list):
+                return date_value[0] if date_value else None
+            return date_value
+        
+        created_date = get_first_date(w.creation_date)
+        updated_date = get_first_date(w.updated_date)
+        expiry_date = get_first_date(w.expiration_date)
+        
+        # Calculate age
+        age = {'years': 0, 'months': 0, 'days': 0}
+        if created_date:
+            now = datetime.now()
+            if hasattr(created_date, 'tzinfo') and created_date.tzinfo:
+                created_date = created_date.replace(tzinfo=None)
+            
+            delta = now - created_date
+            total_days = delta.days
+            
+            age['years'] = total_days // 365
+            remaining_days = total_days % 365
+            age['months'] = remaining_days // 30
+            age['days'] = remaining_days % 30
+        
+        # Calculate days until expiry
+        days_until_expiry = None
+        if expiry_date:
+            if hasattr(expiry_date, 'tzinfo') and expiry_date.tzinfo:
+                expiry_date_clean = expiry_date.replace(tzinfo=None)
+            else:
+                expiry_date_clean = expiry_date
+            days_until_expiry = (expiry_date_clean - datetime.now()).days
+        
+        # Handle registrar (might be a list)
+        registrar = w.registrar
+        if isinstance(registrar, list):
+            registrar = registrar[0] if registrar else None
+        
+        # Handle nameservers
+        name_servers = w.name_servers
+        if name_servers:
+            if isinstance(name_servers, str):
+                name_servers = [name_servers]
+            name_servers = list(set([ns.lower() for ns in name_servers if ns]))
+        else:
+            name_servers = []
+        
+        # Handle status
+        status = w.status
+        if status:
+            if isinstance(status, str):
+                status = [status]
+        else:
+            status = []
+        
+        # Handle DNSSEC
+        dnssec = getattr(w, 'dnssec', None)
+        if dnssec:
+            if isinstance(dnssec, list):
+                dnssec = dnssec[0] if dnssec else 'Unsigned'
+        else:
+            dnssec = 'Unsigned'
+        
+        result = {
+            'domain': domain,
+            'createdDate': created_date.isoformat() if created_date else None,
+            'updatedDate': updated_date.isoformat() if updated_date else None,
+            'expiryDate': expiry_date.isoformat() if expiry_date else None,
+            'age': age,
+            'daysUntilExpiry': days_until_expiry,
+            'registrar': registrar,
+            'nameServers': name_servers,
+            'status': status,
+            'dnssec': dnssec,
+        }
+        
+        return Response(result)
+        
+    except ImportError:
+        return Response({'error': 'WHOIS library not installed. Please install python-whois.'}, status=500)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
