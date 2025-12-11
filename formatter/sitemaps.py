@@ -4,7 +4,7 @@ Sitemaps for JSON Formatter Pro
 
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
-from .models import BlogPost
+from .models import BlogPost, Tutorial
 
 
 class StaticViewSitemap(Sitemap):
@@ -17,6 +17,7 @@ class StaticViewSitemap(Sitemap):
             'index',
             'base64_page',
             'blog_list',
+            'tutorials_list',
             'about_page',
             'contact_page',
             'privacy_page',
@@ -69,3 +70,19 @@ class BlogPostSitemap(Sitemap):
     
     def location(self, obj):
         return obj.get_absolute_url()
+
+
+class TutorialSitemap(Sitemap):
+    """Sitemap for tutorials"""
+    changefreq = 'weekly'
+    priority = 0.9
+    
+    def items(self):
+        return Tutorial.objects.filter(is_published=True)
+    
+    def lastmod(self, obj):
+        return obj.updated_at
+    
+    def location(self, obj):
+        return obj.get_absolute_url()
+

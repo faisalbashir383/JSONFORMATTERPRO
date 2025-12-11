@@ -1138,3 +1138,88 @@ def domain_age_api(request):
         return Response({'error': 'WHOIS library not installed. Please install python-whois.'}, status=500)
     except Exception as e:
         return Response({'error': str(e)}, status=500)
+
+
+# ====================
+# Tutorial Views
+# ====================
+
+from .models import ProgrammingLanguage, TutorialCategory, Tutorial
+
+
+def tutorials_list(request):
+    """List all tutorials grouped by category with language selection"""
+    # Get all active languages
+    languages = ProgrammingLanguage.objects.filter(is_active=True)
+    
+    # Get selected language from query param or default to first
+    selected_lang_slug = request.GET.get('lang')
+    selected_language = None
+    if selected_lang_slug:
+        selected_language = languages.filter(slug=selected_lang_slug).first()
+    if not selected_language and languages.exists():
+        selected_language = languages.first()
+    
+    # Get all categories with their published tutorials
+    categories = TutorialCategory.objects.prefetch_related(
+        'tutorials'
+    ).filter(
+        tutorials__is_published=True
+    ).distinct().order_by('order')
+    
+    context = {
+        'languages': languages,
+        'selected_language': selected_language,
+        'categories': categories,
+    }
+    
+    return render(request, 'tutorials-list.html', context)
+
+
+def tutorial_detail(request, slug):
+    """Display a single tutorial with code examples and MCQs"""
+    tutorial = get_object_or_404(Tutorial, slug=slug, is_published=True)
+    
+    # Get all active languages
+    languages = ProgrammingLanguage.objects.filter(is_active=True)
+    
+    # Get selected language from query param or default to first
+    selected_lang_slug = request.GET.get('lang')
+    selected_language = None
+    if selected_lang_slug:
+        selected_language = languages.filter(slug=selected_lang_slug).first()
+    if not selected_language and languages.exists():
+        selected_language = languages.first()
+    
+    # Get all code examples for this tutorial (show all, don't filter by language)
+    code_examples = tutorial.code_examples.all().order_by('order')
+    
+    # Get MCQ questions with their options
+    mcq_questions = tutorial.mcq_questions.prefetch_related('options').order_by('order')
+    
+    # Get all tutorials in the same category for sidebar navigation
+    category_tutorials = Tutorial.objects.filter(
+        category=tutorial.category,
+        is_published=True
+    ).order_by('order')
+    
+    # Increment views
+    tutorial.increment_views()
+    
+    # Get next and previous tutorials
+    next_tutorial = tutorial.get_next_tutorial()
+    prev_tutorial = tutorial.get_previous_tutorial()
+    
+    context = {
+        'tutorial': tutorial,
+        'languages': languages,
+        'selected_language': selected_language,
+        'code_examples': code_examples,
+        'mcq_questions': mcq_questions,
+        'category_tutorials': category_tutorials,
+        'next_tutorial': next_tutorial,
+        'prev_tutorial': prev_tutorial,
+    }
+    
+    return render(request, 'tutorial-detail.html', context)
+

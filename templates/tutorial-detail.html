@@ -1,0 +1,749 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ tutorial.meta_title }} | {{ selected_language.name }} Tutorial | JSON Formatters Pro{% endblock %}
+
+{% block meta_description %}{{ tutorial.meta_description|default:tutorial.description }}{% endblock %}
+
+{% block meta_keywords %}{{ tutorial.meta_keywords }}{% endblock %}
+
+{% block canonical_url %}{{ SITE_URL }}/tutorials/{{ tutorial.slug }}/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ tutorial.title }}",
+    "description": "{{ tutorial.description }}",
+    "author": {
+        "@type": "Organization",
+        "name": "JSON Formatters Pro"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "JSON Formatters Pro"
+    },
+    "datePublished": "{{ tutorial.created_at|date:'c' }}",
+    "dateModified": "{{ tutorial.updated_at|date:'c' }}",
+    "url": "{{ SITE_URL }}/tutorials/{{ tutorial.slug }}/"
+}
+</script>
+{% if mcq_questions %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {% for question in mcq_questions %}
+        {
+            "@type": "Question",
+            "name": "{{ question.question|escapejs }}",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "{{ question.explanation|default:question.get_correct_option.option_text|escapejs }}"
+            }
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<style>
+    /* Tutorial Detail Page */
+    .tutorial-container {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* Sidebar */
+    .tutorial-sidebar {
+        position: sticky;
+        top: 90px;
+        height: fit-content;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+    }
+
+    .sidebar-section {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .sidebar-title {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 1rem;
+    }
+
+    /* Language Pills */
+    .lang-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .lang-pill {
+        padding: 0.4rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        background: var(--color-surface-alt);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        border: 1px solid var(--color-border);
+    }
+
+    .lang-pill:hover {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+    }
+
+    .lang-pill.active {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+    }
+
+    /* Topic Navigation */
+    .topic-nav {
+        list-style: none;
+    }
+
+    .topic-nav-item {
+        margin-bottom: 0.25rem;
+    }
+
+    .topic-nav-link {
+        display: block;
+        padding: 0.6rem 0.75rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        text-decoration: none;
+        transition: all 0.2s;
+        border-left: 3px solid transparent;
+    }
+
+    .topic-nav-link:hover {
+        background: var(--color-surface-alt);
+        color: var(--color-text);
+    }
+
+    .topic-nav-link.active {
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--color-primary);
+        border-left-color: var(--color-primary);
+        font-weight: 600;
+    }
+
+    /* Main Content */
+    .tutorial-main {
+        min-width: 0;
+    }
+
+    .tutorial-header {
+        margin-bottom: 2rem;
+    }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 1rem;
+    }
+
+    .breadcrumb a {
+        color: var(--color-primary);
+        text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .tutorial-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--color-text);
+        margin-bottom: 0.75rem;
+        line-height: 1.3;
+    }
+
+    .tutorial-description {
+        font-size: 1.1rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    /* Content Area */
+    .tutorial-content-area {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .tutorial-content-area h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 2rem 0 1rem;
+        color: var(--color-text);
+    }
+
+    .tutorial-content-area h2:first-child {
+        margin-top: 0;
+    }
+
+    .tutorial-content-area p {
+        line-height: 1.8;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .tutorial-content-area ul,
+    .tutorial-content-area ol {
+        margin-bottom: 1.5rem;
+        padding-left: 1.5rem;
+    }
+
+    .tutorial-content-area li {
+        margin-bottom: 0.5rem;
+        line-height: 1.7;
+    }
+
+    /* Code Examples */
+    .code-example {
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        margin: 1.5rem 0;
+        overflow: hidden;
+    }
+
+    .code-example-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .code-example-title {
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .copy-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        padding: 0.4rem 0.75rem;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: background 0.2s;
+    }
+
+    .copy-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .code-block {
+        padding: 0;
+        margin: 0;
+        overflow-x: auto;
+    }
+
+    .code-block pre {
+        margin: 0;
+        padding: 1rem;
+        border-radius: 0;
+    }
+
+    .code-block code {
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    /* Output Section */
+    .output-section {
+        background: #1e1e1e;
+        padding: 1rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .output-label {
+        font-size: 0.75rem;
+        color: #888;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.05em;
+    }
+
+    .output-content {
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+        color: #4ade80;
+        white-space: pre-wrap;
+        line-height: 1.5;
+    }
+
+    /* Explanation */
+    .code-explanation {
+        padding: 1rem;
+        background: var(--color-surface);
+        border-top: 1px solid var(--color-border);
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    /* MCQ Quiz Section */
+    .quiz-section {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .quiz-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .quiz-icon {
+        font-size: 2rem;
+    }
+
+    .quiz-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    .quiz-subtitle {
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .mcq-question {
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .question-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        background: var(--color-primary);
+        color: white;
+        border-radius: 50%;
+        font-size: 0.85rem;
+        font-weight: 700;
+        margin-right: 0.75rem;
+    }
+
+    .question-text {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 1.25rem;
+        color: var(--color-text);
+        display: inline;
+    }
+
+    .options-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .option-item {
+        margin-bottom: 0.6rem;
+    }
+
+    .option-label {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background: var(--color-surface);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .option-label:hover {
+        border-color: var(--color-primary);
+        background: rgba(99, 102, 241, 0.05);
+    }
+
+    .option-label input {
+        margin-right: 0.75rem;
+        accent-color: var(--color-primary);
+    }
+
+    .option-label.correct {
+        border-color: #10b981;
+        background: rgba(16, 185, 129, 0.1);
+    }
+
+    .option-label.incorrect {
+        border-color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+    }
+
+    .question-explanation {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: rgba(99, 102, 241, 0.1);
+        border-radius: var(--radius-sm);
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        display: none;
+    }
+
+    .question-explanation.show {
+        display: block;
+    }
+
+    .check-answer-btn {
+        margin-top: 1rem;
+        padding: 0.6rem 1.25rem;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .check-answer-btn:hover {
+        background: var(--color-primary-hover);
+    }
+
+    /* Navigation */
+    .tutorial-navigation {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .nav-btn {
+        flex: 1;
+        padding: 1.25rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+        border-color: var(--color-primary);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .nav-btn.prev {
+        text-align: left;
+    }
+
+    .nav-btn.next {
+        text-align: right;
+    }
+
+    .nav-label {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.25rem;
+    }
+
+    .nav-title {
+        font-weight: 600;
+        color: var(--color-primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .tutorial-container {
+            grid-template-columns: 1fr;
+        }
+
+        .tutorial-sidebar {
+            position: static;
+            max-height: none;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .sidebar-section {
+            flex: 1;
+            min-width: 200px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .tutorial-content-area {
+            padding: 1.25rem;
+        }
+
+        .tutorial-title {
+            font-size: 1.5rem;
+        }
+
+        .tutorial-navigation {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="tutorial-container">
+        <!-- Sidebar -->
+        <aside class="tutorial-sidebar">
+            <!-- Language Selector -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Select Language</h3>
+                <div class="lang-pills">
+                    {% for lang in languages %}
+                    <a href="?lang={{ lang.slug }}"
+                        class="lang-pill {% if selected_language.slug == lang.slug %}active{% endif %}">
+                        {{ lang.icon }} {{ lang.name }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Topic Navigation -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">{{ tutorial.category.name }}</h3>
+                <ul class="topic-nav">
+                    {% for t in category_tutorials %}
+                    <li class="topic-nav-item">
+                        <a href="{% url 'tutorial_detail' slug=t.slug %}{% if selected_language %}?lang={{ selected_language.slug }}{% endif %}"
+                            class="topic-nav-link {% if t.slug == tutorial.slug %}active{% endif %}">
+                            {{ t.title }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="tutorial-main">
+            <!-- Header -->
+            <header class="tutorial-header">
+                <nav class="breadcrumb">
+                    <a href="{% url 'tutorials_list' %}">Tutorials</a>
+                    <span>/</span>
+                    <a href="{% url 'tutorials_list' %}?category={{ tutorial.category.slug }}">{{ tutorial.category.name
+                        }}</a>
+                    <span>/</span>
+                    <span>{{ tutorial.title }}</span>
+                </nav>
+
+                <h1 class="tutorial-title">{{ tutorial.title }}</h1>
+                <p class="tutorial-description">{{ tutorial.description }}</p>
+            </header>
+
+            <!-- Tutorial Content -->
+            <div class="tutorial-content-area">
+                {{ tutorial.content|safe }}
+
+                <!-- Code Examples -->
+                {% for example in code_examples %}
+                <div class="code-example" id="code-example-{{ example.order }}">
+                    <div class="code-example-header">
+                        <span class="code-example-title">💻 {{ example.title }}</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <div class="code-block">
+                        <pre><code class="language-{{ example.language.syntax_highlight }}">{{ example.code }}</code></pre>
+                    </div>
+                    {% if example.output %}
+                    <div class="output-section">
+                        <div class="output-label">Output</div>
+                        <div class="output-content">{{ example.output }}</div>
+                    </div>
+                    {% endif %}
+                    {% if example.explanation %}
+                    <div class="code-explanation">💡 {{ example.explanation }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- MCQ Quiz Section -->
+            {% if mcq_questions %}
+            <section class="quiz-section">
+                <div class="quiz-header">
+                    <span class="quiz-icon">🎯</span>
+                    <div>
+                        <h2 class="quiz-title">Test Your Knowledge</h2>
+                        <p class="quiz-subtitle">Answer these questions to check your understanding</p>
+                    </div>
+                </div>
+
+                {% for question in mcq_questions %}
+                <div class="mcq-question" data-question-id="{{ question.id }}">
+                    <div class="question-header">
+                        <span class="question-number">{{ forloop.counter }}</span>
+                        <span class="question-text">{{ question.question }}</span>
+                    </div>
+
+                    <ul class="options-list">
+                        {% for option in question.options.all %}
+                        <li class="option-item">
+                            <label class="option-label" data-correct="{{ option.is_correct }}">
+                                <input type="radio" name="question_{{ question.id }}" value="{{ option.id }}">
+                                {{ option.option_text }}
+                            </label>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <button class="check-answer-btn" onclick="checkAnswer(this)">Check Answer</button>
+
+                    {% if question.explanation %}
+                    <div class="question-explanation">
+                        💡 {{ question.explanation }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </section>
+            {% endif %}
+
+            <!-- Navigation -->
+            <nav class="tutorial-navigation">
+                {% if prev_tutorial %}
+                <a href="{% url 'tutorial_detail' slug=prev_tutorial.slug %}{% if selected_language %}?lang={{ selected_language.slug }}{% endif %}"
+                    class="nav-btn prev">
+                    <div class="nav-label">← Previous</div>
+                    <div class="nav-title">{{ prev_tutorial.title }}</div>
+                </a>
+                {% else %}
+                <div class="nav-btn prev" style="visibility: hidden;"></div>
+                {% endif %}
+
+                {% if next_tutorial %}
+                <a href="{% url 'tutorial_detail' slug=next_tutorial.slug %}{% if selected_language %}?lang={{ selected_language.slug }}{% endif %}"
+                    class="nav-btn next">
+                    <div class="nav-label">Next →</div>
+                    <div class="nav-title">{{ next_tutorial.title }}</div>
+                </a>
+                {% else %}
+                <div class="nav-btn next" style="visibility: hidden;"></div>
+                {% endif %}
+            </nav>
+        </main>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+<script>
+    // Copy code to clipboard
+    function copyCode(btn) {
+        const codeBlock = btn.closest('.code-example').querySelector('code');
+        const code = codeBlock.textContent;
+
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = btn.textContent;
+            btn.textContent = '✓ Copied!';
+            setTimeout(() => {
+                btn.textContent = originalText;
+            }, 2000);
+        });
+    }
+
+    // Check MCQ answer
+    function checkAnswer(btn) {
+        const questionDiv = btn.closest('.mcq-question');
+        const selectedInput = questionDiv.querySelector('input:checked');
+
+        if (!selectedInput) {
+            alert('Please select an answer');
+            return;
+        }
+
+        const selectedLabel = selectedInput.closest('.option-label');
+        const isCorrect = selectedLabel.dataset.correct === 'True';
+
+        // Reset all options
+        questionDiv.querySelectorAll('.option-label').forEach(label => {
+            label.classList.remove('correct', 'incorrect');
+        });
+
+        // Mark selected answer
+        if (isCorrect) {
+            selectedLabel.classList.add('correct');
+        } else {
+            selectedLabel.classList.add('incorrect');
+            // Show correct answer
+            questionDiv.querySelectorAll('.option-label').forEach(label => {
+                if (label.dataset.correct === 'True') {
+                    label.classList.add('correct');
+                }
+            });
+        }
+
+        // Show explanation
+        const explanation = questionDiv.querySelector('.question-explanation');
+        if (explanation) {
+            explanation.classList.add('show');
+        }
+
+        // Disable button
+        btn.disabled = true;
+        btn.textContent = isCorrect ? '✓ Correct!' : '✗ Incorrect';
+    }
+
+    // Process content and replace placeholders
+    document.addEventListener('DOMContentLoaded', function () {
+        // Highlight code blocks
+        Prism.highlightAll();
+    });
+</script>
+{% endblock %}

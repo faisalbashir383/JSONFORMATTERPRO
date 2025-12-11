@@ -177,3 +177,138 @@ class RedirectAdmin(admin.ModelAdmin):
         self.message_user(request, f'Hit counts reset for {updated} redirect(s).')
     reset_hit_counts.short_description = 'Reset hit counts to zero'
 
+
+# ====================
+# Tutorial System Admin
+# ====================
+
+from .models import ProgrammingLanguage, TutorialCategory, Tutorial, CodeExample, MCQQuestion, MCQOption
+
+
+@admin.register(ProgrammingLanguage)
+class ProgrammingLanguageAdmin(admin.ModelAdmin):
+    list_display = ['name', 'icon', 'slug', 'syntax_highlight', 'is_active', 'order']
+    list_editable = ['is_active', 'order']
+    prepopulated_fields = {'slug': ('name',)}
+    search_fields = ['name']
+    ordering = ['order', 'name']
+
+
+@admin.register(TutorialCategory)
+class TutorialCategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'icon', 'slug', 'order', 'get_tutorials_count']
+    list_editable = ['order']
+    prepopulated_fields = {'slug': ('name',)}
+    search_fields = ['name', 'description']
+    ordering = ['order', 'name']
+    
+    def get_tutorials_count(self, obj):
+        return obj.get_tutorials_count()
+    get_tutorials_count.short_description = 'Published Tutorials'
+
+
+class CodeExampleInline(admin.TabularInline):
+    model = CodeExample
+    extra = 1
+    fields = ['language', 'title', 'code', 'output', 'explanation', 'order']
+    ordering = ['order']
+
+
+class MCQOptionInline(admin.TabularInline):
+    model = MCQOption
+    extra = 4
+    fields = ['option_text', 'is_correct', 'order']
+    ordering = ['order']
+
+
+class MCQQuestionInline(admin.StackedInline):
+    model = MCQQuestion
+    extra = 1
+    fields = ['question', 'explanation', 'order']
+    ordering = ['order']
+    show_change_link = True
+
+
+@admin.register(Tutorial)
+class TutorialAdmin(admin.ModelAdmin):
+    list_display = ['title', 'category', 'is_published', 'order', 'views', 'updated_at']
+    list_filter = ['category', 'is_published', 'created_at']
+    list_editable = ['is_published', 'order']
+    search_fields = ['title', 'description', 'content', 'meta_keywords']
+    prepopulated_fields = {'slug': ('title',)}
+    date_hierarchy = 'created_at'
+    readonly_fields = ['views', 'created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'slug', 'category', 'description')
+        }),
+        ('Content', {
+            'fields': ('content',),
+            'description': 'Use {{CODE_EXAMPLE_1}}, {{CODE_EXAMPLE_2}} etc. as placeholders for code examples'
+        }),
+        ('SEO (50+ keywords required)', {
+            'fields': ('meta_title', 'meta_description', 'meta_keywords'),
+            'description': 'Add at least 50 comma-separated keywords for SEO optimization'
+        }),
+        ('Publishing', {
+            'fields': ('is_published', 'order')
+        }),
+        ('Statistics', {
+            'fields': ('views', 'created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    inlines = [CodeExampleInline, MCQQuestionInline]
+    
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+
+
+@admin.register(CodeExample)
+class CodeExampleAdmin(admin.ModelAdmin):
+    list_display = ['title', 'tutorial', 'language', 'order']
+    list_filter = ['language', 'tutorial__category']
+    search_fields = ['title', 'code', 'explanation']
+    ordering = ['tutorial', 'order']
+    
+    fieldsets = (
+        ('Relationship', {
+            'fields': ('tutorial', 'language', 'order')
+        }),
+        ('Code', {
+            'fields': ('title', 'code', 'output', 'explanation')
+        }),
+    )
+
+
+@admin.register(MCQQuestion)
+class MCQQuestionAdmin(admin.ModelAdmin):
+    list_display = ['short_question', 'tutorial', 'order', 'options_count']
+    list_filter = ['tutorial__category', 'tutorial']
+    search_fields = ['question', 'explanation']
+    ordering = ['tutorial', 'order']
+    inlines = [MCQOptionInline]
+    
+    def short_question(self, obj):
+        return obj.question[:50] + '...' if len(obj.question) > 50 else obj.question
+    short_question.short_description = 'Question'
+    
+    def options_count(self, obj):
+        return obj.options.count()
+    options_count.short_description = 'Options'
+
+
+@admin.register(MCQOption)
+class MCQOptionAdmin(admin.ModelAdmin):
+    list_display = ['short_option', 'question', 'is_correct', 'order']
+    list_filter = ['is_correct', 'question__tutorial']
+    search_fields = ['option_text']
+    list_editable = ['is_correct', 'order']
+    
+    def short_option(self, obj):
+        return obj.option_text[:40] + '...' if len(obj.option_text) > 40 else obj.option_text
+    short_option.short_description = 'Option'
+
+

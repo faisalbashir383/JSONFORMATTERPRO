@@ -344,3 +344,225 @@ class Redirect(models.Model):
         """Increment the hit counter"""
         self.hit_count += 1
         self.save(update_fields=['hit_count'])
+
+
+# ====================
+# Tutorial System Models
+# ====================
+
+class ProgrammingLanguage(models.Model):
+    """Supported programming languages for tutorials"""
+    name = models.CharField(max_length=50, help_text="Language name (e.g., Python, JavaScript)")
+    slug = models.SlugField(unique=True, max_length=50)
+    icon = models.CharField(max_length=50, default="💻", help_text="Emoji or icon class for the language")
+    syntax_highlight = models.CharField(
+        max_length=20, 
+        default="python",
+        help_text="Prism.js language identifier for syntax highlighting"
+    )
+    is_active = models.BooleanField(default=True)
+    order = models.IntegerField(default=0, help_text="Display order (lower = first)")
+    
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = "Programming Language"
+        verbose_name_plural = "Programming Languages"
+    
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+
+class TutorialCategory(models.Model):
+    """Categories for organizing tutorials (e.g., Basics, Control Flow, Functions)"""
+    name = models.CharField(max_length=100, help_text="Category name")
+    slug = models.SlugField(unique=True, max_length=100)
+    description = models.TextField(blank=True, help_text="Brief description of this category")
+    icon = models.CharField(max_length=50, default="📂", help_text="Emoji or icon for the category")
+    order = models.IntegerField(default=0, help_text="Display order (lower = first)")
+    
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = "Tutorial Category"
+        verbose_name_plural = "Tutorial Categories"
+    
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+    
+    def get_tutorials_count(self):
+        """Get count of published tutorials in this category"""
+        return self.tutorials.filter(is_published=True).count()
+
+
+class Tutorial(models.Model):
+    """Individual tutorial/topic with content, code examples, and quizzes"""
+    title = models.CharField(max_length=200, help_text="Tutorial title")
+    slug = models.SlugField(unique=True, max_length=250)
+    category = models.ForeignKey(
+        TutorialCategory, 
+        on_delete=models.CASCADE, 
+        related_name='tutorials'
+    )
+    description = models.TextField(help_text="Brief description of what this tutorial covers")
+    content = models.TextField(
+        help_text="Rich HTML content. Use {{CODE_EXAMPLE_1}}, {{CODE_EXAMPLE_2}} etc. as placeholders for code examples"
+    )
+    
+    # SEO Fields (50+ keywords each)
+    meta_title = models.CharField(
+        max_length=200, 
+        blank=True, 
+        help_text="SEO title (leave blank to use tutorial title)"
+    )
+    meta_description = models.TextField(
+        blank=True,
+        help_text="SEO meta description (150-160 characters recommended)"
+    )
+    meta_keywords = models.TextField(
+        help_text="50+ comma-separated SEO keywords for this tutorial"
+    )
+    
+    # Publishing
+    order = models.IntegerField(default=0, help_text="Display order within category (lower = first)")
+    is_published = models.BooleanField(default=False)
+    
+    # Stats
+    views = models.PositiveIntegerField(default=0)
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['category__order', 'order', 'title']
+        indexes = [
+            models.Index(fields=['slug']),
+            models.Index(fields=['is_published']),
+            models.Index(fields=['category', 'order']),
+        ]
+        verbose_name = "Tutorial"
+        verbose_name_plural = "Tutorials"
+    
+    def __str__(self):
+        return f"{self.category.name} - {self.title}"
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        if not self.meta_title:
+            self.meta_title = self.title
+        super().save(*args, **kwargs)
+    
+    def get_absolute_url(self):
+        return reverse('tutorial_detail', kwargs={'slug': self.slug})
+    
+    def increment_views(self):
+        """Increment view count"""
+        self.views += 1
+        self.save(update_fields=['views'])
+    
+    def get_code_examples_for_language(self, language):
+        """Get code examples for a specific programming language"""
+        return self.code_examples.filter(language=language).order_by('order')
+    
+    def get_next_tutorial(self):
+        """Get the next tutorial in the same category"""
+        return Tutorial.objects.filter(
+            category=self.category,
+            is_published=True,
+            order__gt=self.order
+        ).first()
+    
+    def get_previous_tutorial(self):
+        """Get the previous tutorial in the same category"""
+        return Tutorial.objects.filter(
+            category=self.category,
+            is_published=True,
+            order__lt=self.order
+        ).order_by('-order').first()
+
+
+class CodeExample(models.Model):
+    """Multi-language code examples for tutorials"""
+    tutorial = models.ForeignKey(
+        Tutorial, 
+        on_delete=models.CASCADE, 
+        related_name='code_examples'
+    )
+    language = models.ForeignKey(
+        ProgrammingLanguage, 
+        on_delete=models.CASCADE,
+        related_name='code_examples'
+    )
+    title = models.CharField(max_length=200, help_text="Title for this code example")
+    code = models.TextField(help_text="The actual code snippet")
+    output = models.TextField(blank=True, help_text="Expected output when code is run")
+    explanation = models.TextField(blank=True, help_text="Explanation of what this code does")
+    order = models.IntegerField(default=0, help_text="Order of this example within the tutorial")
+    
+    class Meta:
+        ordering = ['order']
+        unique_together = ['tutorial', 'language', 'order']
+        verbose_name = "Code Example"
+        verbose_name_plural = "Code Examples"
+    
+    def __str__(self):
+        return f"{self.tutorial.title} - {self.language.name} - {self.title}"
+
+
+class MCQQuestion(models.Model):
+    """Multiple Choice Questions for tutorial quizzes"""
+    tutorial = models.ForeignKey(
+        Tutorial, 
+        on_delete=models.CASCADE, 
+        related_name='mcq_questions'
+    )
+    question = models.TextField(help_text="The question text")
+    explanation = models.TextField(
+        blank=True, 
+        help_text="Explanation shown after answering (regardless of correct/incorrect)"
+    )
+    order = models.IntegerField(default=0, help_text="Order of this question in the quiz")
+    
+    class Meta:
+        ordering = ['order']
+        verbose_name = "MCQ Question"
+        verbose_name_plural = "MCQ Questions"
+    
+    def __str__(self):
+        return f"{self.tutorial.title} - Q{self.order}: {self.question[:50]}..."
+    
+    def get_correct_option(self):
+        """Get the correct answer option"""
+        return self.options.filter(is_correct=True).first()
+
+
+class MCQOption(models.Model):
+    """Answer options for MCQ questions"""
+    question = models.ForeignKey(
+        MCQQuestion, 
+        on_delete=models.CASCADE, 
+        related_name='options'
+    )
+    option_text = models.CharField(max_length=500, help_text="The answer option text")
+    is_correct = models.BooleanField(default=False, help_text="Is this the correct answer?")
+    order = models.IntegerField(default=0, help_text="Display order of this option")
+    
+    class Meta:
+        ordering = ['order']
+        verbose_name = "MCQ Option"
+        verbose_name_plural = "MCQ Options"
+    
+    def __str__(self):
+        correct = "✓" if self.is_correct else "✗"
+        return f"{correct} {self.option_text[:50]}..."
+

@@ -1,0 +1,437 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Learn Programming - Free Tutorials for Python, JavaScript, Java & More | JSON Formatters Pro
+{% endblock %}
+
+{% block meta_description %}Master programming with our free comprehensive tutorials. Learn Python, JavaScript, Java,
+C++, and more from scratch to advanced. Step-by-step lessons with code examples, output previews, and quizzes.
+{% endblock %}
+
+{% block meta_keywords %}programming tutorials, learn programming, coding lessons, python tutorial, javascript tutorial,
+java tutorial, c++ tutorial, programming for beginners, learn to code, coding bootcamp, free programming course, online
+coding lessons, programming guide, developer tutorial, software development tutorial, web development tutorial, learn
+python free, javascript basics, java programming, c++ basics, programming examples, code samples, coding exercises,
+programming quiz, learn coding online, beginner programming, intermediate programming, advanced programming, programming
+fundamentals, coding fundamentals, computer science tutorial, programming languages, coding languages, learn software
+development, programming course, coding course, programming education, learn development, coding education, programming
+skills, developer skills, coding skills, programming practice, code practice, learn algorithms, data structures
+tutorial, object oriented programming, functional programming, web programming{% endblock %}
+
+{% block canonical_url %}{{ SITE_URL }}/tutorials/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Programming Tutorials",
+    "description": "Free comprehensive programming tutorials for all skill levels. Learn Python, JavaScript, Java, C++, and more.",
+    "url": "{{ SITE_URL }}/tutorials/",
+    "provider": {
+        "@type": "Organization",
+        "name": "JSON Formatters Pro"
+    }
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Programming Tutorials",
+    "itemListElement": [
+        {% for category in categories %}
+        {
+            "@type": "ListItem",
+            "position": {{ forloop.counter }},
+            "name": "{{ category.name }}",
+            "url": "{{ SITE_URL }}/tutorials/?category={{ category.slug }}"
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Tutorials Page Styles */
+    .tutorials-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 4rem 2rem;
+        text-align: center;
+        border-radius: var(--radius-lg);
+        margin-bottom: 3rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tutorials-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.3;
+    }
+
+    .tutorials-hero h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+
+    .tutorials-hero p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto 2rem;
+        position: relative;
+    }
+
+    /* Language Selector */
+    .language-selector {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        position: relative;
+    }
+
+    .lang-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-md);
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 2px solid transparent;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .lang-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+    }
+
+    .lang-btn.active {
+        background: white;
+        color: #667eea;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Categories Grid */
+    .categories-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .category-section {
+        margin-bottom: 3rem;
+    }
+
+    .category-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--color-border);
+    }
+
+    .category-icon {
+        font-size: 2rem;
+    }
+
+    .category-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-text);
+    }
+
+    .category-count {
+        background: var(--color-primary);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    /* Tutorial Cards Grid */
+    .tutorials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .tutorial-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+        display: block;
+    }
+
+    .tutorial-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--color-primary);
+    }
+
+    .tutorial-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 50%;
+        font-size: 0.85rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .tutorial-card h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+    }
+
+    .tutorial-card p {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        line-height: 1.5;
+        margin-bottom: 1rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .tutorial-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+    }
+
+    .tutorial-meta span {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-lg);
+    }
+
+    .empty-state h3 {
+        font-size: 1.5rem;
+        color: var(--color-text);
+        margin-bottom: 1rem;
+    }
+
+    .empty-state p {
+        color: var(--color-text-secondary);
+    }
+
+    /* Info Section */
+    .info-section {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 2.5rem;
+        margin-top: 3rem;
+    }
+
+    .info-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .feature-item {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .feature-icon {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .feature-content h4 {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+    }
+
+    .feature-content p {
+        font-size: 0.9rem;
+        margin-bottom: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .tutorials-hero {
+            padding: 2.5rem 1.5rem;
+        }
+
+        .tutorials-hero h1 {
+            font-size: 1.75rem;
+        }
+
+        .tutorials-hero p {
+            font-size: 1rem;
+        }
+
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .tutorials-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .category-header {
+            flex-wrap: wrap;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <!-- Hero Section -->
+    <section class="tutorials-hero">
+        <h1>📚 Learn Programming From Scratch</h1>
+        <p>Master coding with our comprehensive, free tutorials. From beginner basics to advanced concepts with hands-on
+            examples.</p>
+
+        <!-- Language Selector -->
+        <div class="language-selector">
+            {% for lang in languages %}
+            <a href="?lang={{ lang.slug }}"
+                class="lang-btn {% if selected_language.slug == lang.slug %}active{% endif %}">
+                {{ lang.icon }} {{ lang.name }}
+            </a>
+            {% empty %}
+            <p>No programming languages available yet.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Categories and Tutorials -->
+    <div class="categories-container">
+        {% for category in categories %}
+        <section class="category-section">
+            <div class="category-header">
+                <span class="category-icon">{{ category.icon }}</span>
+                <h2 class="category-title">{{ category.name }}</h2>
+                <span class="category-count">{{ category.tutorials.count }} lessons</span>
+            </div>
+
+            <div class="tutorials-grid">
+                {% for tutorial in category.tutorials.all %}
+                {% if tutorial.is_published %}
+                <a href="{% url 'tutorial_detail' slug=tutorial.slug %}{% if selected_language %}?lang={{ selected_language.slug }}{% endif %}"
+                    class="tutorial-card">
+                    <span class="tutorial-number">{{ forloop.counter }}</span>
+                    <h3>{{ tutorial.title }}</h3>
+                    <p>{{ tutorial.description }}</p>
+                    <div class="tutorial-meta">
+                        <span>👁️ {{ tutorial.views }} views</span>
+                        <span>📖 {{ tutorial.mcq_questions.count }} quiz questions</span>
+                    </div>
+                </a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+        {% empty %}
+        <div class="empty-state">
+            <h3>🚀 Tutorials Coming Soon!</h3>
+            <p>We're working on comprehensive programming tutorials. Check back soon!</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Info Section -->
+    <section class="info-section">
+        <h2>Why Learn Programming With Us?</h2>
+        <p>
+            Our tutorials are designed to take you from a complete beginner to a confident programmer.
+            Each lesson includes detailed explanations, real-world code examples, expected outputs, and
+            interactive quizzes to test your understanding.
+        </p>
+
+        <div class="features-grid">
+            <div class="feature-item">
+                <span class="feature-icon">🌐</span>
+                <div class="feature-content">
+                    <h4>Multi-Language Support</h4>
+                    <p>Learn the same concepts in Python, JavaScript, Java, C++, and more.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">💻</span>
+                <div class="feature-content">
+                    <h4>Code Examples</h4>
+                    <p>Every topic includes working code examples with syntax highlighting.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">📊</span>
+                <div class="feature-content">
+                    <h4>Output Preview</h4>
+                    <p>See exactly what each code example produces when executed.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">❓</span>
+                <div class="feature-content">
+                    <h4>Interactive Quizzes</h4>
+                    <p>Test your knowledge with MCQs at the end of each lesson.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
