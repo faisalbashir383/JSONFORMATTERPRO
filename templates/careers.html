@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Careers at JSON Formatters Pro - Join Our Team{% endblock %}
+
+{% block meta_title %}Careers at JSON Formatters Pro - Developer Jobs & Opportunities{% endblock %}
+
+{% block meta_description %}Join the JSON Formatters Pro team! Explore exciting career opportunities in software
+development, engineering, and more. Remote-friendly positions available in Delhi, India.{% endblock %}
+
+{% block meta_keywords %}json formatters pro careers, developer jobs, software engineer jobs delhi, tech jobs india,
+remote developer jobs, frontend developer jobs, backend developer jobs, full stack developer jobs, json tools team,
+programming jobs, coding jobs, web developer careers, api developer jobs, software development careers, engineering jobs
+delhi, technology careers india, startup jobs, developer opportunities, json formatter team hiring, open positions
+{% endblock %}
+
+{% block canonical_url %}{{ SITE_URL }}/careers/{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Careers at JSON Formatters Pro",
+    "description": "Explore career opportunities at JSON Formatters Pro",
+    "url": "{{ SITE_URL }}/careers/",
+    "publisher": {
+        "@type": "Organization",
+        "name": "JSON Formatters Pro",
+        "url": "{{ SITE_URL }}"
+    }
+}
+</script>
+{% for job in jobs %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    "title": "{{ job.title }}",
+    "description": "{{ job.description|striptags|truncatewords:50 }}",
+    "datePosted": "{{ job.created_at|date:'c' }}",
+    "employmentType": "{{ job.get_employment_type_display|upper }}",
+    "hiringOrganization": {
+        "@type": "Organization",
+        "name": "JSON Formatters Pro",
+        "sameAs": "{{ SITE_URL }}",
+        "logo": "{{ SITE_URL }}/static/images/logo.svg"
+    },
+    "jobLocation": {
+        "@type": "Place",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "New Delhi",
+            "addressRegion": "Delhi",
+            "postalCode": "110001",
+            "addressCountry": "IN"
+        }
+    },
+    "url": "{{ SITE_URL }}{{ job.get_absolute_url }}"
+    {% if job.salary_min and job.show_salary %}
+    ,"baseSalary": {
+        "@type": "MonetaryAmount",
+        "currency": "{{ job.salary_currency }}",
+        "value": {
+            "@type": "QuantitativeValue",
+            "minValue": {{ job.salary_min }},
+            {% if job.salary_max %}"maxValue": {{ job.salary_max }},{% endif %}
+            "unitText": "YEAR"
+        }
+    }
+    {% endif %}
+}
+</script>
+{% endfor %}
+{% endblock %}
+
+{% block content %}
+<div class="header">
+    <h1 class="header-title">Join Our Team</h1>
+    <p class="header-subtitle">Build the future of developer tools with us</p>
+</div>
+
+<article class="seo-content">
+    <!-- Company Culture Section -->
+    <section class="content-section">
+        <h2>Why JSON Formatters Pro?</h2>
+        <p>
+            At JSON Formatters Pro, we're passionate about creating tools that make developers' lives easier.
+            Our mission is to provide the most intuitive, powerful, and privacy-focused JSON tools available online.
+            Join a team of talented individuals who love building products that millions of developers use every day.
+        </p>
+
+        <div class="features-grid" style="margin-top: 2rem;">
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Innovation First</h3>
+                <p>Work on cutting-edge technologies and help shape the future of developer tools.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3>Remote Friendly</h3>
+                <p>Work from anywhere. We believe in flexibility and trust our team to deliver results.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>Growth Opportunities</h3>
+                <p>Continuous learning and career advancement opportunities for every team member.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤝</div>
+                <h3>Collaborative Culture</h3>
+                <p>Work with talented people who are passionate about building great products.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="content-section">
+        <h2>Benefits & Perks</h2>
+        <ul class="benefits-list">
+            <li><strong>Competitive Salary:</strong> Market-leading compensation packages</li>
+            <li><strong>Flexible Hours:</strong> Work when you're most productive</li>
+            <li><strong>Remote Work:</strong> Work from anywhere in the world</li>
+            <li><strong>Health Insurance:</strong> Comprehensive health coverage for you and your family</li>
+            <li><strong>Learning Budget:</strong> Annual budget for courses, conferences, and books</li>
+            <li><strong>Equipment Allowance:</strong> Get the tools you need to do your best work</li>
+            <li><strong>Paid Time Off:</strong> Generous vacation policy to recharge</li>
+            <li><strong>Team Events:</strong> Regular virtual and in-person team gatherings</li>
+        </ul>
+    </section>
+
+    <!-- Filters -->
+    {% if jobs %}
+    <section class="content-section">
+        <h2>Open Positions</h2>
+        <p style="color: var(--color-text-secondary); margin-bottom: 1.5rem;">
+            {{ total_jobs }} open position{{ total_jobs|pluralize }}
+        </p>
+
+        <!-- Filter Options -->
+        <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+            <select id="departmentFilter" onchange="filterJobs()"
+                style="padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text);">
+                <option value="">All Departments</option>
+                {% for code, name in departments %}
+                <option value="{{ code }}" {% if current_department == code %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+
+            <select id="typeFilter" onchange="filterJobs()"
+                style="padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text);">
+                <option value="">All Types</option>
+                {% for code, name in employment_types %}
+                <option value="{{ code }}" {% if current_type == code %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Job Listings -->
+        <div class="use-cases">
+            {% for job in jobs %}
+            <div class="use-case" style="cursor: pointer;" onclick="window.location='{{ job.get_absolute_url }}'">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <h4 style="margin: 0;">💼 {{ job.title }}</h4>
+                    {% if job.is_featured %}
+                    <span
+                        style="background: linear-gradient(135deg, var(--color-primary), #a855f7); color: white; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600;">Featured</span>
+                    {% endif %}
+                </div>
+                <div
+                    style="display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 0.75rem;">
+                    <span>🏢 {{ job.get_department_display }}</span>
+                    <span>📍 {{ job.location }}</span>
+                    <span>⏰ {{ job.get_employment_type_display }}</span>
+                </div>
+                <p style="margin-bottom: 0;">{{ job.description|striptags|truncatewords:25 }}</p>
+                {% if job.get_salary_range %}
+                <p style="margin-top: 0.5rem; font-weight: 600; color: var(--color-primary);">{{ job.get_salary_range }}
+                    / year</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% else %}
+    <section class="content-section">
+        <h2>Open Positions</h2>
+        <div
+            style="text-align: center; padding: 3rem; background: var(--color-surface-alt); border-radius: var(--radius-lg);">
+            <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🔍</span>
+            <h3>No Open Positions Right Now</h3>
+            <p style="color: var(--color-text-secondary);">
+                We don't have any open positions at the moment, but we're always looking for talented people.
+                Check back soon or send your resume to <a href="mailto:careers@jsonformatterspro.com"
+                    style="color: var(--color-primary);">careers@jsonformatterspro.com</a>
+            </p>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Contact Section -->
+    <section class="content-section">
+        <h2>Don't See the Right Role?</h2>
+        <p>
+            We're always interested in meeting talented individuals. If you think you'd be a great fit for our team
+            but don't see a suitable position, feel free to reach out! Send your resume and a brief introduction to
+            <a href="mailto:careers@jsonformatterspro.com"
+                style="color: var(--color-primary); font-weight: 600;">careers@jsonformatterspro.com</a>
+        </p>
+    </section>
+</article>
+
+<script>
+    function filterJobs() {
+        const department = document.getElementById('departmentFilter').value;
+        const type = document.getElementById('typeFilter').value;
+
+        let url = '/careers/';
+        const params = [];
+        if (department) params.push('department=' + department);
+        if (type) params.push('type=' + type);
+        if (params.length > 0) url += '?' + params.join('&');
+
+        window.location = url;
+    }
+</script>
+{% endblock %}

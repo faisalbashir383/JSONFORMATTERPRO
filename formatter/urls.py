@@ -98,6 +98,9 @@ urlpatterns = [
     path('api/typing-test/submit/', views.submit_typing_score, name='submit_typing_score'),
     path('api/typing-test/leaderboard/', views.get_typing_leaderboard, name='get_typing_leaderboard'),
 
+    # Careers Pages
+    path('careers/', views.careers_page, name='careers_page'),
+    path('careers/<slug:slug>/', views.job_detail, name='job_detail'),
     
     path('robots.txt', views.robots_txt, name='robots_txt'),
     

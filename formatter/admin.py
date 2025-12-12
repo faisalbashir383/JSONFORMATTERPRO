@@ -357,3 +357,127 @@ class TypingScoreAdmin(admin.ModelAdmin):
         self.message_user(request, f'{updated} score(s) marked as suspicious.')
     unverify_scores.short_description = 'Mark selected as suspicious'
 
+
+# ====================
+# Job Postings Admin
+# ====================
+
+from .models import JobPosting
+
+
+@admin.register(JobPosting)
+class JobPostingAdmin(admin.ModelAdmin):
+    list_display = ['title', 'department', 'location', 'employment_type', 'is_active', 'is_featured', 'created_at']
+    list_filter = ['is_active', 'is_featured', 'department', 'employment_type', 'created_at']
+    search_fields = ['title', 'description', 'requirements', 'responsibilities', 'meta_keywords']
+    list_editable = ['is_active', 'is_featured']
+    prepopulated_fields = {'slug': ('title',)}
+    ordering = ['-is_featured', '-created_at']
+    date_hierarchy = 'created_at'
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'slug', 'department', 'location', 'employment_type')
+        }),
+        ('Job Details', {
+            'fields': ('description', 'requirements', 'responsibilities', 'benefits')
+        }),
+        ('Salary (Optional)', {
+            'fields': ('show_salary', 'salary_min', 'salary_max', 'salary_currency'),
+            'classes': ('collapse',)
+        }),
+        ('SEO', {
+            'fields': ('meta_title', 'meta_description', 'meta_keywords'),
+            'classes': ('collapse',),
+            'description': 'SEO fields for search engine optimization'
+        }),
+        ('Publishing', {
+            'fields': ('is_active', 'is_featured')
+        }),
+        ('Application', {
+            'fields': ('apply_email', 'apply_url'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    actions = ['activate_jobs', 'deactivate_jobs', 'feature_jobs', 'unfeature_jobs']
+    
+    def activate_jobs(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} job(s) activated.')
+    activate_jobs.short_description = 'Activate selected jobs'
+    
+    def deactivate_jobs(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} job(s) deactivated.')
+    deactivate_jobs.short_description = 'Deactivate selected jobs'
+    
+    def feature_jobs(self, request, queryset):
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} job(s) featured.')
+    feature_jobs.short_description = 'Feature selected jobs'
+    
+    def unfeature_jobs(self, request, queryset):
+        updated = queryset.update(is_featured=False)
+        self.message_user(request, f'{updated} job(s) unfeatured.')
+    unfeature_jobs.short_description = 'Unfeature selected jobs'
+
+
+# ====================
+# Job Applications Admin
+# ====================
+
+from .models import JobApplication
+
+
+@admin.register(JobApplication)
+class JobApplicationAdmin(admin.ModelAdmin):
+    list_display = ['full_name', 'email', 'job', 'status', 'years_of_experience', 'applied_at']
+    list_filter = ['status', 'job', 'applied_at', 'years_of_experience']
+    search_fields = ['full_name', 'email', 'phone', 'current_company', 'current_role', 'cover_letter']
+    list_editable = ['status']
+    ordering = ['-applied_at']
+    date_hierarchy = 'applied_at'
+    readonly_fields = ['job', 'full_name', 'email', 'phone', 'cover_letter', 'resume_url', 
+                       'portfolio_url', 'linkedin_url', 'years_of_experience', 'current_company',
+                       'current_role', 'ip_address', 'user_agent', 'applied_at', 'updated_at']
+    
+    fieldsets = (
+        ('Applicant Information', {
+            'fields': ('full_name', 'email', 'phone')
+        }),
+        ('Application', {
+            'fields': ('job', 'cover_letter', 'years_of_experience', 'current_company', 'current_role')
+        }),
+        ('Links', {
+            'fields': ('resume_url', 'portfolio_url', 'linkedin_url')
+        }),
+        ('Status', {
+            'fields': ('status', 'notes')
+        }),
+        ('Metadata', {
+            'fields': ('ip_address', 'user_agent', 'applied_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    actions = ['mark_as_reviewing', 'mark_as_shortlisted', 'mark_as_rejected']
+    
+    def mark_as_reviewing(self, request, queryset):
+        updated = queryset.update(status='reviewing')
+        self.message_user(request, f'{updated} application(s) marked as under review.')
+    mark_as_reviewing.short_description = 'Mark as Under Review'
+    
+    def mark_as_shortlisted(self, request, queryset):
+        updated = queryset.update(status='shortlisted')
+        self.message_user(request, f'{updated} application(s) shortlisted.')
+    mark_as_shortlisted.short_description = 'Mark as Shortlisted'
+    
+    def mark_as_rejected(self, request, queryset):
+        updated = queryset.update(status='rejected')
+        self.message_user(request, f'{updated} application(s) rejected.')
+    mark_as_rejected.short_description = 'Mark as Rejected'
+    
+    def has_add_permission(self, request):
+        # Applications come from the website, not admin
+        return False

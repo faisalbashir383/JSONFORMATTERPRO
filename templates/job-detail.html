@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ job.title }} - Careers at JSON Formatters Pro{% endblock %}
+
+{% block meta_title %}{{ job.meta_title }}{% endblock %}
+
+{% block meta_description %}{{ job.meta_description }}{% endblock %}
+
+{% block meta_keywords %}{{ job.meta_keywords }}{% endblock %}
+
+{% block canonical_url %}{{ SITE_URL }}{{ job.get_absolute_url }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    "title": "{{ job.title }}",
+    "description": "{{ job.description|striptags }}",
+    "datePosted": "{{ job.created_at|date:'c' }}",
+    "employmentType": "{{ job.get_employment_type_display|upper }}",
+    "hiringOrganization": {
+        "@type": "Organization",
+        "name": "JSON Formatters Pro",
+        "sameAs": "{{ SITE_URL }}",
+        "logo": "{{ SITE_URL }}/static/images/logo.svg"
+    },
+    "jobLocation": {
+        "@type": "Place",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Connaught Place",
+            "addressLocality": "New Delhi",
+            "addressRegion": "Delhi",
+            "postalCode": "110001",
+            "addressCountry": "IN"
+        }
+    },
+    "url": "{{ SITE_URL }}{{ job.get_absolute_url }}"
+    {% if job.salary_min and job.show_salary %}
+    ,"baseSalary": {
+        "@type": "MonetaryAmount",
+        "currency": "{{ job.salary_currency }}",
+        "value": {
+            "@type": "QuantitativeValue",
+            "minValue": {{ job.salary_min }},
+            {% if job.salary_max %}"maxValue": {{ job.salary_max }},{% endif %}
+            "unitText": "YEAR"
+        }
+    }
+    {% endif %}
+}
+</script>
+
+<!-- BreadcrumbList for SEO -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{ SITE_URL }}"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Careers",
+            "item": "{{ SITE_URL }}/careers/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "{{ job.title }}",
+            "item": "{{ SITE_URL }}{{ job.get_absolute_url }}"
+        }
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="header">
+    <nav style="margin-bottom: 1rem;">
+        <a href="/careers/" style="color: var(--color-text-secondary); text-decoration: none;">
+            ← Back to Careers
+        </a>
+    </nav>
+    <h1 class="header-title">{{ job.title }}</h1>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 0.5rem;">
+        <span style="background: var(--color-surface-alt); padding: 0.5rem 1rem; border-radius: var(--radius-sm);">
+            🏢 {{ job.get_department_display }}
+        </span>
+        <span style="background: var(--color-surface-alt); padding: 0.5rem 1rem; border-radius: var(--radius-sm);">
+            📍 {{ job.location }}
+        </span>
+        <span style="background: var(--color-surface-alt); padding: 0.5rem 1rem; border-radius: var(--radius-sm);">
+            ⏰ {{ job.get_employment_type_display }}
+        </span>
+    </div>
+    {% if job.get_salary_range %}
+    <p style="margin-top: 1rem; font-weight: 600; color: var(--color-primary); font-size: 1.25rem;">
+        {{ job.get_salary_range }} / year
+    </p>
+    {% endif %}
+</div>
+
+<article class="seo-content">
+    <!-- Job Description -->
+    <section class="content-section">
+        <h2>About This Role</h2>
+        <div class="job-content">
+            {{ job.description|safe }}
+        </div>
+    </section>
+
+    <!-- Responsibilities -->
+    <section class="content-section">
+        <h2>Key Responsibilities</h2>
+        <div class="job-content">
+            {{ job.responsibilities|safe }}
+        </div>
+    </section>
+
+    <!-- Requirements -->
+    <section class="content-section">
+        <h2>Requirements</h2>
+        <div class="job-content">
+            {{ job.requirements|safe }}
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    {% if job.benefits %}
+    <section class="content-section">
+        <h2>Benefits & Perks</h2>
+        <div class="job-content">
+            {{ job.benefits|safe }}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Apply Section with Form -->
+    <section class="content-section" id="apply-section">
+        <h2 style="text-align: center; margin-bottom: 1rem;">Apply for This Position</h2>
+        <p style="text-align: center; margin-bottom: 2rem; color: var(--color-text-secondary);">
+            Fill out the form below to submit your application. Fields marked with * are required.
+        </p>
+
+        <!-- Display messages -->
+        {% if messages %}
+        <div style="margin-bottom: 1.5rem;">
+            {% for message in messages %}
+            <div
+                style="padding: 1rem; border-radius: var(--radius-md); margin-bottom: 0.5rem; 
+                        {% if message.tags == 'success' %}background: rgba(16, 185, 129, 0.1); border: 1px solid var(--color-success); color: var(--color-success);
+                        {% else %}background: rgba(239, 68, 68, 0.1); border: 1px solid var(--color-error); color: var(--color-error);{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{{ job.get_absolute_url }}#apply-section" style="max-width: 600px; margin: 0 auto;">
+            {% csrf_token %}
+
+            <!-- Personal Information -->
+            <div style="display: grid; gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Full Name *</label>
+                    <input type="text" name="full_name" required placeholder="Enter your full name"
+                        style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); font-size: 1rem;">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email *</label>
+                        <input type="email" name="email" required placeholder="your@email.com"
+                            style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); font-size: 1rem;">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Phone</label>
+                        <input type="tel" name="phone" placeholder="+91 98765 43210"
+                            style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); font-size: 1rem;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Information -->
+            <div style="display: grid; gap: 1rem; margin-bottom: 1.5rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Current Company</label>
+                        <input type="text" name="current_company" placeholder="Company name"
+                            style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); font-size: 1rem;">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Current Role</label>
+                        <input type="text" name="current_role" placeholder="Your job title"
+                            style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); font-size: 1rem;">
+                    </div>
+                </div>
+
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Years of Experience</label>
+                    <select name="years_of_experience"
+                        style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); font-size: 1rem;">
+                        <option value="0">Less than 1 year</option>
+                        <option value="1">1-2 years</option>
+                        <option value="3">3-5 years</option>
+                        <option value="5">5-7 years</option>
+                        <option value="7">7-10 years</option>
+                        <option value="10">10+ years</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Links -->
+            <div style="display: grid; gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Resume/CV Link *</label>
+                    <input type="url" name="resume_url" required
+                        placeholder="https://drive.google.com/your-resume or LinkedIn profile"
+                        style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); font-size: 1rem;">
+                    <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 0.25rem;">
+                        Share a link to your resume (Google Drive, Dropbox, LinkedIn, etc.)
+                    </p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Portfolio URL</label>
+                        <input type="url" name="portfolio_url" placeholder="https://yourportfolio.com"
+                            style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); font-size: 1rem;">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">LinkedIn URL</label>
+                        <input type="url" name="linkedin_url" placeholder="https://linkedin.com/in/yourprofile"
+                            style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); font-size: 1rem;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cover Letter -->
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Cover Letter / Message</label>
+                <textarea name="cover_letter" rows="5" placeholder="Tell us why you'd be a great fit for this role..."
+                    style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); font-size: 1rem; resize: vertical;"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div style="text-align: center;">
+                <button type="submit"
+                    style="display: inline-block; background: linear-gradient(135deg, var(--color-primary), #a855f7); color: white; padding: 1rem 3rem; border-radius: var(--radius-md); border: none; font-weight: 600; font-size: 1.1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(99, 102, 241, 0.3)';"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                    Submit Application →
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Related Jobs -->
+    {% if related_jobs %}
+    <section class="content-section">
+        <h2>Other Positions in {{ job.get_department_display }}</h2>
+        <div class="use-cases">
+            {% for related in related_jobs %}
+            <div class="use-case" style="cursor: pointer;" onclick="window.location='{{ related.get_absolute_url }}'">
+                <h4 style="margin-bottom: 0.5rem;">💼 {{ related.title }}</h4>
+                <div
+                    style="display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.9rem; color: var(--color-text-secondary);">
+                    <span>📍 {{ related.location }}</span>
+                    <span>⏰ {{ related.get_employment_type_display }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <p style="text-align: center; margin-top: 1.5rem;">
+            <a href="/careers/" style="color: var(--color-primary); font-weight: 600;">View All Open Positions →</a>
+        </p>
+    </section>
+    {% endif %}
+</article>
+
+<style>
+    .job-content ul {
+        list-style: disc;
+        margin-left: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .job-content li {
+        margin-bottom: 0.5rem;
+    }
+
+    .job-content p {
+        margin-bottom: 1rem;
+    }
+
+    /* Form responsive styles */
+    @media (max-width: 600px) {
+        form [style*="grid-template-columns: 1fr 1fr"] {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+{% endblock %}

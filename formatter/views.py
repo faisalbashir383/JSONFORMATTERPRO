@@ -796,6 +796,134 @@ def typing_test_page(request):
 
 
 # ====================
+# Careers Pages
+# ====================
+
+def careers_page(request):
+    """List all active job postings"""
+    from .models import JobPosting
+    
+    jobs = JobPosting.objects.filter(is_active=True)
+    
+    # Filter by department
+    department = request.GET.get('department')
+    if department:
+        jobs = jobs.filter(department=department)
+    
+    # Filter by employment type
+    employment_type = request.GET.get('type')
+    if employment_type:
+        jobs = jobs.filter(employment_type=employment_type)
+    
+    # Get unique departments and employment types for filters
+    departments = JobPosting.DEPARTMENT_CHOICES
+    employment_types = JobPosting.EMPLOYMENT_TYPE_CHOICES
+    
+    context = {
+        'jobs': jobs,
+        'departments': departments,
+        'employment_types': employment_types,
+        'current_department': department,
+        'current_type': employment_type,
+        'total_jobs': jobs.count(),
+    }
+    
+    return render(request, 'careers.html', context)
+
+
+def job_detail(request, slug):
+    """Display individual job posting and handle application submissions"""
+    from .models import JobPosting, JobApplication
+    from django.contrib import messages
+    
+    job = get_object_or_404(JobPosting, slug=slug, is_active=True)
+    
+    # Handle form submission
+    if request.method == 'POST':
+        # Get form data
+        full_name = request.POST.get('full_name', '').strip()
+        email = request.POST.get('email', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        cover_letter = request.POST.get('cover_letter', '').strip()
+        resume_url = request.POST.get('resume_url', '').strip()
+        portfolio_url = request.POST.get('portfolio_url', '').strip()
+        linkedin_url = request.POST.get('linkedin_url', '').strip()
+        years_of_experience = request.POST.get('years_of_experience', 0)
+        current_company = request.POST.get('current_company', '').strip()
+        current_role = request.POST.get('current_role', '').strip()
+        
+        # Validate required fields
+        errors = []
+        if not full_name:
+            errors.append('Full name is required.')
+        if not email:
+            errors.append('Email is required.')
+        elif '@' not in email or '.' not in email:
+            errors.append('Please enter a valid email address.')
+        if not resume_url:
+            errors.append('Resume/CV link is required.')
+        
+        if errors:
+            for error in errors:
+                messages.error(request, error)
+        else:
+            try:
+                # Get client IP
+                x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+                if x_forwarded_for:
+                    ip_address = x_forwarded_for.split(',')[0].strip()
+                else:
+                    ip_address = request.META.get('REMOTE_ADDR')
+                
+                user_agent = request.META.get('HTTP_USER_AGENT', '')
+                
+                # Parse years of experience
+                try:
+                    years_exp = int(years_of_experience)
+                except (ValueError, TypeError):
+                    years_exp = 0
+                
+                # Create application
+                JobApplication.objects.create(
+                    job=job,
+                    full_name=full_name,
+                    email=email,
+                    phone=phone,
+                    cover_letter=cover_letter,
+                    resume_url=resume_url,
+                    portfolio_url=portfolio_url,
+                    linkedin_url=linkedin_url,
+                    years_of_experience=years_exp,
+                    current_company=current_company,
+                    current_role=current_role,
+                    ip_address=ip_address,
+                    user_agent=user_agent
+                )
+                
+                messages.success(request, 'Thank you for applying! We\'ve received your application and will get back to you soon.')
+                
+                # Redirect to prevent form resubmission
+                from django.shortcuts import redirect
+                return redirect('job_detail', slug=slug)
+                
+            except Exception as e:
+                messages.error(request, f'An error occurred while submitting your application. Please try again.')
+    
+    # Get related jobs in same department
+    related_jobs = JobPosting.objects.filter(
+        is_active=True,
+        department=job.department
+    ).exclude(id=job.id)[:3]
+    
+    context = {
+        'job': job,
+        'related_jobs': related_jobs,
+    }
+    
+    return render(request, 'job-detail.html', context)
+
+
+# ====================
 # Typing Test API
 # ====================
 

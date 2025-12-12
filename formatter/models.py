@@ -648,3 +648,265 @@ class TypingScore(models.Model):
     def get_user_scores(cls, session_key, limit=10):
         """Get user's recent scores"""
         return cls.objects.filter(session_key=session_key).order_by('-created_at')[:limit]
+
+
+# ====================
+# Careers / Job Postings
+# ====================
+
+class JobPosting(models.Model):
+    """Job posting for careers page with SEO optimization"""
+    
+    EMPLOYMENT_TYPE_CHOICES = [
+        ('full-time', 'Full-time'),
+        ('part-time', 'Part-time'),
+        ('contract', 'Contract'),
+        ('internship', 'Internship'),
+        ('remote', 'Remote'),
+        ('hybrid', 'Hybrid'),
+    ]
+    
+    DEPARTMENT_CHOICES = [
+        ('engineering', 'Engineering'),
+        ('product', 'Product'),
+        ('design', 'Design'),
+        ('marketing', 'Marketing'),
+        ('sales', 'Sales'),
+        ('operations', 'Operations'),
+        ('hr', 'Human Resources'),
+        ('finance', 'Finance'),
+        ('other', 'Other'),
+    ]
+    
+    # Basic Information
+    title = models.CharField(max_length=200, help_text="Job title")
+    slug = models.SlugField(unique=True, max_length=250)
+    department = models.CharField(
+        max_length=50, 
+        choices=DEPARTMENT_CHOICES, 
+        default='engineering',
+        help_text="Department this role belongs to"
+    )
+    location = models.CharField(
+        max_length=200, 
+        default="Delhi, India",
+        help_text="Job location (e.g., 'Delhi, India' or 'Remote')"
+    )
+    employment_type = models.CharField(
+        max_length=20, 
+        choices=EMPLOYMENT_TYPE_CHOICES, 
+        default='full-time',
+        help_text="Type of employment"
+    )
+    
+    # Job Details
+    description = models.TextField(
+        help_text="Full job description (HTML supported)"
+    )
+    requirements = models.TextField(
+        help_text="Skills and qualifications required (HTML supported)"
+    )
+    responsibilities = models.TextField(
+        help_text="Key responsibilities (HTML supported)"
+    )
+    benefits = models.TextField(
+        blank=True,
+        help_text="Benefits and perks (HTML supported)"
+    )
+    
+    # Salary Information
+    salary_min = models.PositiveIntegerField(
+        null=True, 
+        blank=True,
+        help_text="Minimum salary (optional)"
+    )
+    salary_max = models.PositiveIntegerField(
+        null=True, 
+        blank=True,
+        help_text="Maximum salary (optional)"
+    )
+    salary_currency = models.CharField(
+        max_length=10, 
+        default="INR",
+        help_text="Salary currency code"
+    )
+    show_salary = models.BooleanField(
+        default=False,
+        help_text="Display salary range on job posting"
+    )
+    
+    # SEO Fields
+    meta_title = models.CharField(
+        max_length=200, 
+        blank=True,
+        help_text="SEO title (leave blank to use job title)"
+    )
+    meta_description = models.TextField(
+        blank=True,
+        help_text="SEO meta description (150-160 characters recommended)"
+    )
+    meta_keywords = models.TextField(
+        blank=True,
+        help_text="Comma-separated SEO keywords"
+    )
+    
+    # Publishing
+    is_active = models.BooleanField(
+        default=True,
+        help_text="Is this job currently open?"
+    )
+    is_featured = models.BooleanField(
+        default=False,
+        help_text="Feature this job at the top of listings"
+    )
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    # Application
+    apply_email = models.EmailField(
+        blank=True,
+        help_text="Email to receive applications"
+    )
+    apply_url = models.URLField(
+        blank=True,
+        help_text="External application URL"
+    )
+    
+    class Meta:
+        ordering = ['-is_featured', '-created_at']
+        indexes = [
+            models.Index(fields=['slug']),
+            models.Index(fields=['is_active']),
+            models.Index(fields=['department']),
+            models.Index(fields=['-created_at']),
+        ]
+        verbose_name = "Job Posting"
+        verbose_name_plural = "Job Postings"
+    
+    def __str__(self):
+        status = "✓" if self.is_active else "✗"
+        return f"{status} {self.title} ({self.get_department_display()})"
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        if not self.meta_title:
+            self.meta_title = f"{self.title} - Careers at JSON Formatters Pro"
+        if not self.meta_description:
+            self.meta_description = f"Apply for {self.title} position at JSON Formatters Pro. {self.get_employment_type_display()} role in {self.location}."
+        super().save(*args, **kwargs)
+    
+    def get_absolute_url(self):
+        return reverse('job_detail', kwargs={'slug': self.slug})
+    
+    def get_salary_range(self):
+        """Get formatted salary range if available"""
+        if self.show_salary and self.salary_min:
+            if self.salary_max:
+                return f"{self.salary_currency} {self.salary_min:,} - {self.salary_max:,}"
+            return f"{self.salary_currency} {self.salary_min:,}+"
+        return None
+
+
+class JobApplication(models.Model):
+    """Store job applications submitted through the careers page"""
+    
+    STATUS_CHOICES = [
+        ('pending', 'Pending Review'),
+        ('reviewing', 'Under Review'),
+        ('shortlisted', 'Shortlisted'),
+        ('interview', 'Interview Scheduled'),
+        ('rejected', 'Rejected'),
+        ('hired', 'Hired'),
+    ]
+    
+    # Link to job posting
+    job = models.ForeignKey(
+        JobPosting,
+        on_delete=models.CASCADE,
+        related_name='applications',
+        help_text="The job position applied for"
+    )
+    
+    # Applicant Information
+    full_name = models.CharField(max_length=200, help_text="Applicant's full name")
+    email = models.EmailField(help_text="Applicant's email address")
+    phone = models.CharField(max_length=20, blank=True, help_text="Applicant's phone number")
+    
+    # Application Details
+    cover_letter = models.TextField(
+        blank=True,
+        help_text="Cover letter or message from the applicant"
+    )
+    resume_url = models.URLField(
+        blank=True,
+        help_text="Link to resume (Google Drive, Dropbox, LinkedIn, etc.)"
+    )
+    portfolio_url = models.URLField(
+        blank=True,
+        help_text="Link to portfolio or personal website"
+    )
+    linkedin_url = models.URLField(
+        blank=True,
+        help_text="LinkedIn profile URL"
+    )
+    
+    # Experience
+    years_of_experience = models.PositiveIntegerField(
+        default=0,
+        help_text="Years of relevant experience"
+    )
+    current_company = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Current or most recent company"
+    )
+    current_role = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Current or most recent job title"
+    )
+    
+    # Status tracking
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending',
+        help_text="Application status"
+    )
+    
+    # Metadata
+    ip_address = models.GenericIPAddressField(
+        null=True, blank=True,
+        help_text="Applicant's IP address"
+    )
+    user_agent = models.TextField(
+        blank=True,
+        help_text="Browser user agent"
+    )
+    
+    # Timestamps
+    applied_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    # Admin notes
+    notes = models.TextField(
+        blank=True,
+        help_text="Internal notes about this application"
+    )
+    
+    class Meta:
+        ordering = ['-applied_at']
+        indexes = [
+            models.Index(fields=['-applied_at']),
+            models.Index(fields=['job']),
+            models.Index(fields=['status']),
+            models.Index(fields=['email']),
+        ]
+        verbose_name = "Job Application"
+        verbose_name_plural = "Job Applications"
+    
+    def __str__(self):
+        return f"{self.full_name} - {self.job.title} ({self.get_status_display()})"
