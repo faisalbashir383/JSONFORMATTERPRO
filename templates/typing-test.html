@@ -1214,20 +1214,105 @@ global leaderboard!{% endblock %}
         function playKeySound(isCorrect = true) {
             if (!soundEnabled || !audioContext) return;
 
-            const osc = audioContext.createOscillator();
-            const gain = audioContext.createGain();
+            // Create realistic typewriter click sound
+            const bufferSize = audioContext.sampleRate * 0.08; // 80ms
+            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            const data = buffer.getChannelData(0);
 
-            osc.connect(gain);
+            // Generate typewriter click noise
+            for (let i = 0; i < bufferSize; i++) {
+                const t = i / audioContext.sampleRate;
+                // Sharp initial click with quick decay
+                const envelope = Math.exp(-t * 80);
+                // Mix of noise and click
+                const noise = (Math.random() * 2 - 1) * 0.3;
+                const click = Math.sin(i * 0.15) * Math.exp(-t * 150);
+                data[i] = (noise + click) * envelope * (isCorrect ? 1 : 0.5);
+            }
+
+            const source = audioContext.createBufferSource();
+            source.buffer = buffer;
+
+            // Add filter for more mechanical sound
+            const filter = audioContext.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.value = isCorrect ? 800 : 300;
+
+            const gain = audioContext.createGain();
+            gain.gain.value = isCorrect ? 0.25 : 0.15;
+
+            source.connect(filter);
+            filter.connect(gain);
             gain.connect(audioContext.destination);
 
-            osc.frequency.setValueAtTime(isCorrect ? 800 : 200, audioContext.currentTime);
-            osc.type = 'square';
+            source.start();
+        }
 
-            gain.gain.setValueAtTime(0.08, audioContext.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.04);
+        // Carriage return / bell sound for line end
+        function playCarriageReturn() {
+            if (!soundEnabled || !audioContext) return;
 
-            osc.start(audioContext.currentTime);
-            osc.stop(audioContext.currentTime + 0.04);
+            // Create mechanical ding sound
+            const osc = audioContext.createOscillator();
+            const osc2 = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            const filter = audioContext.createBiquadFilter();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(2000, audioContext.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.1);
+
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(1500, audioContext.currentTime);
+
+            filter.type = 'lowpass';
+            filter.frequency.value = 3000;
+
+            gain.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+
+            osc.connect(filter);
+            osc2.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioContext.destination);
+
+            osc.start();
+            osc2.start();
+            osc.stop(audioContext.currentTime + 0.3);
+            osc2.stop(audioContext.currentTime + 0.3);
+        }
+
+        // Space bar sound - slightly different mechanical feel
+        function playSpaceSound() {
+            if (!soundEnabled || !audioContext) return;
+
+            const bufferSize = audioContext.sampleRate * 0.1;
+            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            const data = buffer.getChannelData(0);
+
+            for (let i = 0; i < bufferSize; i++) {
+                const t = i / audioContext.sampleRate;
+                const envelope = Math.exp(-t * 40);
+                const thump = Math.sin(i * 0.08) * Math.exp(-t * 60);
+                const noise = (Math.random() * 2 - 1) * 0.2;
+                data[i] = (thump + noise) * envelope;
+            }
+
+            const source = audioContext.createBufferSource();
+            source.buffer = buffer;
+
+            const gain = audioContext.createGain();
+            gain.gain.value = 0.3;
+
+            const filter = audioContext.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 600;
+
+            source.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioContext.destination);
+
+            source.start();
         }
 
         function playBellSound() {
@@ -1578,7 +1663,12 @@ global leaderboard!{% endblock %}
             const expectedChar = currentText[currentIndex];
 
             if (lastChar === expectedChar) {
-                playKeySound(true);
+                // Use different sound for space bar
+                if (lastChar === ' ') {
+                    playSpaceSound();
+                } else {
+                    playKeySound(true);
+                }
                 correctChars++;
                 currentIndex++;
             } else {
@@ -1615,7 +1705,7 @@ global leaderboard!{% endblock %}
                             if (timeRemaining <= 0) endTest();
                         }, 1000);
                     }
-                    playKeySound(true);
+                    playCarriageReturn(); // Typewriter carriage return sound
                     correctChars++;
                     totalChars++;
                     currentIndex++;
