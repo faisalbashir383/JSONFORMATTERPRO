@@ -72,14 +72,17 @@
     <meta property="og:locale" content="en_US">
 
     <!-- Twitter Card -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="{% block twitter_url %}{{ SITE_URL }}/{% endblock %}">
-    <meta property="twitter:title"
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@jsonformatterspro">
+    <meta name="twitter:url" content="{% block twitter_url %}{{ SITE_URL }}/{% endblock %}">
+    <meta name="twitter:title"
         content="{% block twitter_title %}{{ SITE_NAME }} - Free Online JSON Tools{% endblock %}">
-    <meta property="twitter:description"
+    <meta name="twitter:description"
         content="{% block twitter_description %}Format, validate, minify, and convert JSON online for free. No signup required.{% endblock %}">
-    <meta property="twitter:image"
+    <meta name="twitter:image"
         content="{% block twitter_image %}{{ SITE_URL }}/static/images/og-image.png{% endblock %}">
+    <meta name="twitter:image:alt"
+        content="{% block twitter_image_alt %}JSON Formatters Pro - Free Online JSON Tools{% endblock %}">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="{% block canonical_url %}{{ SITE_URL }}/{% endblock %}">
