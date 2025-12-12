@@ -1,0 +1,1610 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Typing Speed Test - Free Online WPM Test with Typewriter Sound | JSON Formatters Pro{% endblock %}
+{% block meta_title %}Typing Speed Test - Check Your WPM Free Online 2026{% endblock %}
+{% block meta_description %}Free online typing speed test with typewriter sounds. Check your WPM, accuracy, and improve
+your typing skills. Multiple difficulty levels, code typing test for Python, JavaScript, SQL. Global leaderboard and
+real-time feedback.{% endblock %}
+{% block meta_keywords %}typing test, typing speed test, wpm test, words per minute test, typing test online,
+free typing test, typing speed test online, online typing test, typing test wpm,
+typing speed checker, keyboard typing test, typing practice, improve typing speed,
+typing test with timer, 1 minute typing test, typing test for job, typing test certificate,
+touch typing test, fast typing test, typing speed test words per minute, typing accuracy test,
+typing test 2026, professional typing test, typing test for students, typing test for beginners,
+typing test with sounds, typewriter sound test, mechanical keyboard typing test,
+typing speed test free, wpm typing test, check typing speed, typing speed calculator,
+typing test for employment, government typing test, data entry typing test,
+typing test paragraphs, typing test sentences, typing test quotes, typing test english,
+typing test practice, typing lessons, learn typing, touch typing practice,
+typing speed improvement, how fast can i type, average typing speed,
+typing test games, typing race, typing competition, typing challenge,
+60 wpm typing test, 80 wpm typing test, 100 wpm typing test, fast typist test,
+typing leaderboard, global typing rankings, typing test leaderboard,
+code typing test, python typing test, javascript typing test, html typing test, sql typing test,
+programming typing test, developer typing test, coding speed test, code speed test,
+programmer typing test, coding typing practice, type code faster{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/typing-test/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Typing Speed Test",
+    "description": "Free online typing speed test with typewriter sounds, WPM calculation, accuracy tracking, code typing for programmers, and global leaderboard",
+    "url": "{{ SITE_URL }}/typing-test/",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+    },
+    "featureList": [
+        "Words per minute (WPM) calculation",
+        "Accuracy percentage tracking",
+        "Typewriter sound effects",
+        "Multiple difficulty levels",
+        "Code typing test for Python, JavaScript, SQL",
+        "Global leaderboard with rankings",
+        "Real-time character highlighting",
+        "Timer options: 15s, 30s, 1min, 2min, 5min"
+    ]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "What is a good typing speed?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "An average typing speed is 40 WPM. Professional typists type 65-75 WPM. Expert typists can reach 80-100+ WPM. For data entry jobs, 60-80 WPM is typically required."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How is WPM calculated?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "WPM (Words Per Minute) is calculated by dividing the total number of characters typed by 5 (average word length), then dividing by the time in minutes. Formula: WPM = (Characters Typed / 5) / Minutes"
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What is a code typing test?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A code typing test measures how fast you can type programming code including special characters like brackets, semicolons, and operators. It's essential for developers who want to improve their coding speed."
+            }
+        }
+    ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --typewriter-bg: #faf8f5;
+        --typewriter-paper: #fff;
+        --typewriter-text: #2c3e50;
+        --typewriter-accent: #c0392b;
+        --typewriter-correct: #27ae60;
+        --typewriter-wrong: #e74c3c;
+        --typewriter-pending: #95a5a6;
+    }
+
+    [data-theme="dark"] {
+        --typewriter-bg: #1a1a2e;
+        --typewriter-paper: #16213e;
+        --typewriter-text: #e8e8e8;
+        --typewriter-accent: #e94560;
+    }
+
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(192, 57, 43, 0.1) 0%, rgba(241, 196, 15, 0.1) 100%);
+        border-radius: var(--radius-lg);
+        border: 3px solid rgba(192, 57, 43, 0.2);
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #c0392b, #f39c12);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+        font-family: 'Courier New', monospace;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .typing-container {
+        max-width: 900px;
+        margin: 0 auto 2rem;
+    }
+
+    .controls-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .control-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .control-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+    }
+
+    .control-select,
+    .control-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .control-select:hover,
+    .control-btn:hover {
+        border-color: #c0392b;
+    }
+
+    .sound-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: var(--color-bg);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .sound-toggle.active {
+        background: #27ae60;
+        color: white;
+        border-color: #27ae60;
+    }
+
+    .typewriter-card {
+        background: var(--typewriter-paper);
+        border-radius: var(--radius-lg);
+        border: 3px solid var(--color-border);
+        padding: 0;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="dark"] .typewriter-card {
+        background: var(--typewriter-paper);
+    }
+
+    .stats-bar {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        padding: 1.25rem;
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        color: white;
+        gap: 0.5rem;
+    }
+
+    .stat-item {
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .stat-value {
+        font-size: 1.75rem;
+        font-weight: 800;
+        font-family: 'Courier New', monospace;
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        opacity: 0.8;
+        letter-spacing: 1px;
+    }
+
+    .stat-value.wpm {
+        color: #f39c12;
+    }
+
+    .stat-value.accuracy {
+        color: #2ecc71;
+    }
+
+    .stat-value.time {
+        color: #3498db;
+    }
+
+    .stat-value.chars {
+        color: #e74c3c;
+    }
+
+    .text-display {
+        padding: 1.5rem 2rem;
+        font-size: 1.25rem;
+        line-height: 2.2;
+        font-family: 'Georgia', serif;
+        min-height: 180px;
+        max-height: 300px;
+        overflow-y: auto;
+        position: relative;
+        background: var(--typewriter-paper);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .text-display.code-mode {
+        font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+        font-size: 1rem;
+        line-height: 1.8;
+        background: #1e1e1e;
+        color: #d4d4d4;
+    }
+
+    [data-theme="dark"] .text-display {
+        background: #0f172a;
+    }
+
+    .char {
+        display: inline;
+        transition: background 0.1s;
+    }
+
+    .char.correct {
+        color: var(--typewriter-correct);
+    }
+
+    .char.incorrect {
+        color: white;
+        background: var(--typewriter-wrong);
+        border-radius: 2px;
+    }
+
+    .char.current {
+        border-left: 2px solid #c0392b;
+        animation: blink 0.5s infinite;
+        padding-left: 1px;
+    }
+
+    @keyframes blink {
+
+        0%,
+        100% {
+            border-color: #c0392b;
+        }
+
+        50% {
+            border-color: transparent;
+        }
+    }
+
+    .char.pending {
+        color: var(--typewriter-pending);
+    }
+
+    .code-mode .char.pending {
+        color: #808080;
+    }
+
+    .input-area {
+        padding: 1.25rem 2rem;
+        border-top: 2px dashed var(--color-border);
+        background: var(--color-bg);
+    }
+
+    .typing-input {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.1rem;
+        font-family: 'Courier New', monospace;
+        background: var(--typewriter-paper);
+        color: var(--typewriter-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        outline: none;
+        transition: all 0.2s;
+    }
+
+    .typing-input:focus {
+        border-color: #c0392b;
+        box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.2);
+    }
+
+    .typing-input:disabled {
+        background: var(--color-bg);
+        cursor: not-allowed;
+    }
+
+    .code-language-bar {
+        display: none;
+        padding: 0.75rem 2rem;
+        background: #252526;
+        border-bottom: 1px solid #3c3c3c;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .code-language-bar.show {
+        display: flex;
+    }
+
+    .lang-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        background: #3c3c3c;
+        color: #cccccc;
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .lang-btn:hover,
+    .lang-btn.active {
+        background: #0e639c;
+        color: white;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        padding: 1.5rem;
+        background: var(--color-surface);
+        flex-wrap: wrap;
+    }
+
+    .action-btn {
+        padding: 0.85rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 700;
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .action-btn.primary {
+        background: linear-gradient(135deg, #c0392b, #e74c3c);
+        color: white;
+    }
+
+    .action-btn.primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(192, 57, 43, 0.4);
+    }
+
+    .action-btn.secondary {
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+    }
+
+    .action-btn.secondary:hover {
+        border-color: #c0392b;
+        color: #c0392b;
+    }
+
+    /* Username Modal */
+    .username-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .username-modal.show {
+        display: flex;
+    }
+
+    .username-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+    }
+
+    .username-card h3 {
+        margin-bottom: 1rem;
+    }
+
+    .username-card input {
+        width: 100%;
+        padding: 0.85rem;
+        font-size: 1rem;
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+    }
+
+    /* Results Modal */
+    .results-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        padding: 1rem;
+    }
+
+    .results-overlay.show {
+        display: flex;
+    }
+
+    .results-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        animation: slideUp 0.3s ease;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(30px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .results-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+    }
+
+    .results-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .result-stat {
+        background: var(--color-bg);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+    }
+
+    .result-stat .value {
+        font-size: 2rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #c0392b, #f39c12);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .result-stat .label {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+    }
+
+    .result-rank {
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .rank-beginner {
+        background: #ecf0f1;
+        color: #7f8c8d;
+    }
+
+    .rank-average {
+        background: #3498db20;
+        color: #3498db;
+    }
+
+    .rank-good {
+        background: #2ecc7120;
+        color: #2ecc71;
+    }
+
+    .rank-fast {
+        background: #f39c1220;
+        color: #f39c12;
+    }
+
+    .rank-expert {
+        background: #e74c3c20;
+        color: #e74c3c;
+    }
+
+    .your-rank-info {
+        background: linear-gradient(135deg, #667eea20, #764ba220);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+    }
+
+    .your-rank-info .rank-number {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #667eea;
+    }
+
+    /* Leaderboard */
+    .leaderboard-section {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .leaderboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .leaderboard-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .leaderboard-filter {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+    }
+
+    .your-rank-box {
+        background: linear-gradient(135deg, #667eea20, #764ba220);
+        border: 2px solid #667eea;
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .your-rank-box .rank-label {
+        font-weight: 600;
+    }
+
+    .your-rank-box .rank-value {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #667eea;
+    }
+
+    .leaderboard-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+
+    .leaderboard-table th,
+    .leaderboard-table td {
+        padding: 0.6rem 0.5rem;
+        text-align: center;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .leaderboard-table th {
+        background: var(--color-bg);
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+    }
+
+    .leaderboard-table tr:hover {
+        background: var(--color-bg);
+    }
+
+    .medal {
+        font-size: 1.1rem;
+    }
+
+    /* Info Sections */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .info-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1.5rem;
+    }
+
+    .info-card h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-card ul {
+        padding-left: 1.25rem;
+    }
+
+    .info-card li {
+        color: var(--color-text-secondary);
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+        font-size: 0.9rem;
+    }
+
+    .wpm-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .wpm-table th,
+    .wpm-table td {
+        padding: 0.5rem;
+        text-align: left;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .wpm-table th {
+        font-weight: 600;
+        background: var(--color-bg);
+    }
+
+    /* FAQ Section */
+    .faq-section {
+        margin-top: 3rem;
+    }
+
+    .faq-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .faq-item {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        margin-bottom: 0.75rem;
+        overflow: hidden;
+    }
+
+    .faq-question {
+        padding: 1rem 1.25rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.95rem;
+    }
+
+    .faq-question:hover {
+        background: var(--color-bg);
+    }
+
+    .faq-answer {
+        display: none;
+        padding: 0 1.25rem 1rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        font-size: 0.9rem;
+    }
+
+    .faq-item.open .faq-answer {
+        display: block;
+    }
+
+    .faq-item.open .faq-toggle {
+        transform: rotate(180deg);
+    }
+
+    @media (max-width: 768px) {
+        .stats-bar {
+            padding: 1rem;
+        }
+
+        .stat-value {
+            font-size: 1.4rem;
+        }
+
+        .text-display {
+            font-size: 1rem;
+            padding: 1rem;
+            line-height: 2;
+        }
+
+        .results-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .result-stat .value {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>⌨️ Typing Speed Test</h1>
+    <p>Test your typing speed with typewriter sounds. Track WPM, accuracy, compete on global leaderboard!</p>
+</div>
+
+<div class="typing-container">
+    <!-- Controls -->
+    <div class="controls-bar">
+        <div class="control-group">
+            <span class="control-label">⏱️ Time:</span>
+            <select class="control-select" id="timeSelect">
+                <option value="15">15 sec</option>
+                <option value="30">30 sec</option>
+                <option value="60" selected>1 min</option>
+                <option value="120">2 min</option>
+                <option value="300">5 min</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <span class="control-label">📊 Mode:</span>
+            <select class="control-select" id="levelSelect" onchange="handleLevelChange()">
+                <option value="easy">Easy</option>
+                <option value="medium" selected>Medium</option>
+                <option value="hard">Hard</option>
+                <option value="expert">Expert</option>
+                <optgroup label="💻 Code Typing">
+                    <option value="python">🐍 Python</option>
+                    <option value="javascript">⚡ JavaScript</option>
+                    <option value="html">🌐 HTML/CSS</option>
+                    <option value="sql">🗃️ SQL</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <button class="sound-toggle active" id="soundToggle" onclick="toggleSound()">
+            <span id="soundIcon">🔊</span>
+            <span id="soundText">Sound</span>
+        </button>
+    </div>
+
+    <!-- Typewriter Card -->
+    <div class="typewriter-card">
+        <!-- Code Language Bar (shown for code modes) -->
+        <div class="code-language-bar" id="codeLangBar">
+            <span style="color: #888; font-size: 0.8rem;">Language:</span>
+            <button class="lang-btn active" data-lang="python" onclick="setCodeLanguage('python')">Python</button>
+            <button class="lang-btn" data-lang="javascript" onclick="setCodeLanguage('javascript')">JavaScript</button>
+            <button class="lang-btn" data-lang="html" onclick="setCodeLanguage('html')">HTML/CSS</button>
+            <button class="lang-btn" data-lang="sql" onclick="setCodeLanguage('sql')">SQL</button>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value wpm" id="wpmDisplay">0</div>
+                <div class="stat-label">WPM</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value accuracy" id="accuracyDisplay">100%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value time" id="timeDisplay">60</div>
+                <div class="stat-label">Seconds</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value chars" id="charsDisplay">0</div>
+                <div class="stat-label">Correct</div>
+            </div>
+        </div>
+
+        <!-- Text Display -->
+        <div class="text-display" id="textDisplay">
+            Click "Start Test" to begin...
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <input type="text" class="typing-input" id="typingInput" placeholder="Click Start and begin typing here..."
+                disabled autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="action-btn primary" id="startBtn" onclick="startTest()">
+                ▶️ Start Test
+            </button>
+            <button class="action-btn secondary" id="resetBtn" onclick="resetTest()">
+                🔄 Reset
+            </button>
+            <button class="action-btn secondary" onclick="newParagraph()">
+                📝 New Text
+            </button>
+        </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="leaderboard-section">
+        <div class="leaderboard-header">
+            <h3 class="leaderboard-title">🏆 Global Leaderboard</h3>
+            <select class="leaderboard-filter" id="leaderboardFilter" onchange="loadLeaderboard()">
+                <option value="all">All Modes</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+                <option value="expert">Expert</option>
+                <option value="python">Python</option>
+                <option value="javascript">JavaScript</option>
+            </select>
+        </div>
+
+        <div class="your-rank-box" id="yourRankBox" style="display: none;">
+            <div>
+                <span class="rank-label">🎯 Your Best Rank:</span>
+            </div>
+            <div>
+                <span class="rank-value" id="yourRankValue">#-</span>
+                <span id="yourBestWpm"></span>
+            </div>
+        </div>
+
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>WPM</th>
+                    <th>Acc</th>
+                    <th>Mode</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboardBody">
+                <tr>
+                    <td colspan="5" style="color: var(--color-text-secondary); padding: 2rem;">Loading leaderboard...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Info Section -->
+<div class="info-grid">
+    <div class="info-card">
+        <h3>📊 Typing Speed Benchmarks</h3>
+        <table class="wpm-table">
+            <tr>
+                <th>Level</th>
+                <th>WPM Range</th>
+            </tr>
+            <tr>
+                <td>Beginner</td>
+                <td>0 - 30 WPM</td>
+            </tr>
+            <tr>
+                <td>Average</td>
+                <td>31 - 50 WPM</td>
+            </tr>
+            <tr>
+                <td>Good</td>
+                <td>51 - 70 WPM</td>
+            </tr>
+            <tr>
+                <td>Fast</td>
+                <td>71 - 90 WPM</td>
+            </tr>
+            <tr>
+                <td>Expert</td>
+                <td>91+ WPM</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="info-card">
+        <h3>💡 Tips to Improve</h3>
+        <ul>
+            <li><strong>Don't look at the keyboard</strong></li>
+            <li><strong>Use all 10 fingers</strong></li>
+            <li><strong>Maintain good posture</strong></li>
+            <li><strong>Practice daily</strong></li>
+            <li><strong>Focus on accuracy first</strong></li>
+        </ul>
+    </div>
+
+    <div class="info-card">
+        <h3>💻 Code Typing Test</h3>
+        <p style="color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.6;">
+            Practice typing real code snippets in Python, JavaScript, HTML, and SQL. Improve your coding speed with
+            syntax-highlighted code challenges!
+        </p>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="faq-section">
+    <h2>❓ Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+            <span>What is a good typing speed?</span>
+            <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+            An average typing speed is around 40 WPM. Professional typists typically achieve 65-75 WPM. Expert typists
+            can reach 80-100+ WPM.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+            <span>How is WPM calculated?</span>
+            <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+            WPM = (Characters Typed / 5) / Minutes. We divide by 5 because the average word length in English is 5
+            characters.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+            <span>What is a code typing test?</span>
+            <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+            A code typing test measures how fast you can type programming code including brackets, semicolons, and
+            operators. Select Python, JavaScript, HTML, or SQL mode to practice!
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+            <span>How does the leaderboard work?</span>
+            <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+            After completing a test, enter your name to save your score to the global leaderboard. Your rank is
+            calculated based on WPM and accuracy. Filter by mode to see rankings for specific difficulty levels.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Why use typewriter sounds?</span>
+            <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+            Typewriter sounds provide satisfying audio feedback that can help maintain rhythm and make typing practice
+            more enjoyable. Toggle sounds on/off as you prefer.
+        </div>
+    </div>
+</div>
+
+<!-- Username Modal -->
+<div class="username-modal" id="usernameModal">
+    <div class="username-card">
+        <h3>🏆 Save Your Score!</h3>
+        <p style="color: var(--color-text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">Enter a name for the
+            leaderboard:</p>
+        <input type="text" id="usernameInput" placeholder="Your name..." maxlength="30">
+        <div style="display: flex; gap: 0.5rem;">
+            <button class="action-btn secondary" onclick="closeUsernameModal()" style="flex: 1;">Skip</button>
+            <button class="action-btn primary" onclick="submitScore()" style="flex: 1;">Save Score</button>
+        </div>
+    </div>
+</div>
+
+<!-- Results Modal -->
+<div class="results-overlay" id="resultsModal">
+    <div class="results-card">
+        <h2 class="results-title">🎉 Test Complete!</h2>
+        <div class="results-grid">
+            <div class="result-stat">
+                <div class="value" id="finalWpm">0</div>
+                <div class="label">WPM</div>
+            </div>
+            <div class="result-stat">
+                <div class="value" id="finalAccuracy">0%</div>
+                <div class="label">Accuracy</div>
+            </div>
+            <div class="result-stat">
+                <div class="value" id="finalChars">0</div>
+                <div class="label">Correct</div>
+            </div>
+            <div class="result-stat">
+                <div class="value" id="finalErrors">0</div>
+                <div class="label">Errors</div>
+            </div>
+        </div>
+        <div class="result-rank" id="resultRank">
+            🎯 Average Typist
+        </div>
+        <div class="your-rank-info" id="savedRankInfo" style="display: none;">
+            <div>Your Global Rank</div>
+            <div class="rank-number" id="savedRankNumber">#1</div>
+        </div>
+        <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+            <button class="action-btn primary" onclick="closeResults(); startTest();">
+                🔄 Try Again
+            </button>
+            <button class="action-btn secondary" onclick="closeResults();">
+                ✖️ Close
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    // Text paragraphs by difficulty
+    const paragraphs = {
+        easy: [
+            "The quick brown fox jumps over the lazy dog. A dog is a good pet. I like to run in the park.",
+            "I have a cat. She is soft and warm. We play every day. She likes to sleep on my bed.",
+            "Today is a good day. The sky is blue and the sun is out. I will go to the park.",
+            "My name is Sam. I live in a big house. I have a dog and a cat. They are my best friends."
+        ],
+        medium: [
+            "The ability to type quickly and accurately is an essential skill in today's digital world. Practice makes perfect when it comes to typing.",
+            "Touch typing is a technique where you type without looking at the keyboard. By memorizing the position of keys, you can achieve faster speeds.",
+            "Good posture is important for comfortable and efficient typing. Sit up straight, keep your feet flat on the floor.",
+            "A standard QWERTY keyboard layout has been used for over a century. Most people learn on QWERTY because it remains widely used."
+        ],
+        hard: [
+            "Cryptographic algorithms such as RSA and AES provide essential security mechanisms for protecting sensitive data in transit and at rest.",
+            "The implementation of microservices architecture requires careful consideration of inter-service communication patterns and deployment strategies.",
+            "Machine learning pipelines encompass data preprocessing, feature engineering, model training, and deployment infrastructure.",
+            "Distributed systems face inherent challenges including network partitions, consensus algorithms, and eventual consistency models."
+        ],
+        expert: [
+            "The juxtaposition of ephemeral phenomena with persistent architectural frameworks necessitates meticulous calibration of observability mechanisms.",
+            "Implementing Byzantine fault-tolerant consensus mechanisms in heterogeneous distributed environments requires sophisticated cryptographic primitives.",
+            "Contemporary software engineering paradigms emphasize infrastructure-as-code methodologies, immutable artifacts, and declarative configuration.",
+            "Neuromorphic computing architectures leverage event-driven processing and in-memory computation for unprecedented energy efficiency."
+        ],
+        python: [
+            "def calculate_sum(numbers):\n    return sum(numbers)\n\nresult = calculate_sum([1, 2, 3])",
+            "for i in range(10):\n    if i % 2 == 0:\n        print(f'Even: {i}')",
+            "class User:\n    def __init__(self, name):\n        self.name = name",
+            "import json\ndata = {'key': 'value'}\njson.dumps(data)"
+        ],
+        javascript: [
+            "const sum = (a, b) => a + b;\nconsole.log(sum(1, 2));",
+            "const arr = [1, 2, 3];\narr.map(x => x * 2);",
+            "async function fetchData(url) {\n  return await fetch(url);\n}",
+            "document.querySelector('#btn').addEventListener('click', () => {});"
+        ],
+        html: [
+            "<div class=\"container\">\n  <h1>Hello</h1>\n  <p>World</p>\n</div>",
+            "<button onclick=\"submit()\">\n  Click me\n</button>",
+            "<input type=\"text\" placeholder=\"Enter name\" />\n<button>Submit</button>",
+            "<style>\n  .box { display: flex; }\n</style>"
+        ],
+        sql: [
+            "SELECT * FROM users WHERE age > 18 ORDER BY name;",
+            "INSERT INTO products (name, price) VALUES ('Item', 99.99);",
+            "UPDATE orders SET status = 'shipped' WHERE id = 123;",
+            "SELECT COUNT(*) FROM logs GROUP BY date HAVING COUNT(*) > 10;"
+        ]
+    };
+
+    // State
+    let currentText = '';
+    let currentIndex = 0;
+    let startTime = null;
+    let timerInterval = null;
+    let timeRemaining = 60;
+    let totalDuration = 60;
+    let totalChars = 0;
+    let correctChars = 0;
+    let errors = 0;
+    let isRunning = false;
+    let soundEnabled = true;
+    let currentLevel = 'medium';
+    let pendingScore = null;
+
+    // Audio context
+    let audioContext = null;
+
+    function initAudio() {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+    }
+
+    function playKeySound(isCorrect = true) {
+        if (!soundEnabled || !audioContext) return;
+        
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+        
+        osc.frequency.setValueAtTime(isCorrect ? 800 : 200, audioContext.currentTime);
+        osc.type = 'square';
+        
+        gain.gain.setValueAtTime(0.08, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.04);
+        
+        osc.start(audioContext.currentTime);
+        osc.stop(audioContext.currentTime + 0.04);
+    }
+
+    function playBellSound() {
+        if (!soundEnabled || !audioContext) return;
+        
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+        
+        osc.frequency.setValueAtTime(1200, audioContext.currentTime);
+        osc.type = 'sine';
+        
+        gain.gain.setValueAtTime(0.15, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.25);
+        
+        osc.start(audioContext.currentTime);
+        osc.stop(audioContext.currentTime + 0.25);
+    }
+
+    window.toggleSound = function() {
+        soundEnabled = !soundEnabled;
+        const toggle = document.getElementById('soundToggle');
+        const icon = document.getElementById('soundIcon');
+        
+        if (soundEnabled) {
+            toggle.classList.add('active');
+            icon.textContent = '🔊';
+            initAudio();
+        } else {
+            toggle.classList.remove('active');
+            icon.textContent = '🔇';
+        }
+    };
+
+    function isCodeMode(level) {
+        return ['python', 'javascript', 'html', 'sql'].includes(level);
+    }
+
+    window.handleLevelChange = function() {
+        currentLevel = document.getElementById('levelSelect').value;
+        const textDisplay = document.getElementById('textDisplay');
+        const codeLangBar = document.getElementById('codeLangBar');
+        
+        if (isCodeMode(currentLevel)) {
+            textDisplay.classList.add('code-mode');
+            codeLangBar.classList.add('show');
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === currentLevel);
+            });
+        } else {
+            textDisplay.classList.remove('code-mode');
+            codeLangBar.classList.remove('show');
+        }
+        
+        newParagraph();
+    };
+
+    window.setCodeLanguage = function(lang) {
+        document.getElementById('levelSelect').value = lang;
+        currentLevel = lang;
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+        newParagraph();
+    };
+
+    function getRandomParagraph() {
+        const level = currentLevel;
+        const texts = paragraphs[level] || paragraphs.medium;
+        return texts[Math.floor(Math.random() * texts.length)];
+    }
+
+    function renderText() {
+        const display = document.getElementById('textDisplay');
+        display.innerHTML = currentText.split('').map((char, i) => {
+            let className = 'char';
+            if (i < currentIndex) {
+                className += ' correct';
+            } else if (i === currentIndex) {
+                className += ' current';
+            } else {
+                className += ' pending';
+            }
+            // Handle special characters
+            let displayChar = char;
+            if (char === ' ') displayChar = ' ';
+            else if (char === '\n') displayChar = '↵\n';
+            else if (char === '<') displayChar = '&lt;';
+            else if (char === '>') displayChar = '&gt;';
+            
+            return `<span class="${className}">${displayChar}</span>`;
+        }).join('');
+    }
+
+    function updateStats() {
+        const elapsed = startTime ? (Date.now() - startTime) / 1000 / 60 : 0;
+        const wpm = elapsed > 0 ? Math.round((correctChars / 5) / elapsed) : 0;
+        const accuracy = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 100;
+
+        document.getElementById('wpmDisplay').textContent = wpm;
+        document.getElementById('accuracyDisplay').textContent = accuracy + '%';
+        document.getElementById('charsDisplay').textContent = correctChars;
+    }
+
+    window.startTest = function() {
+        initAudio();
+        currentLevel = document.getElementById('levelSelect').value;
+        currentText = getRandomParagraph();
+        currentIndex = 0;
+        totalChars = 0;
+        correctChars = 0;
+        errors = 0;
+        totalDuration = parseInt(document.getElementById('timeSelect').value);
+        timeRemaining = totalDuration;
+        startTime = null;
+        isRunning = true;
+
+        // Update UI for code mode
+        const textDisplay = document.getElementById('textDisplay');
+        const codeLangBar = document.getElementById('codeLangBar');
+        
+        if (isCodeMode(currentLevel)) {
+            textDisplay.classList.add('code-mode');
+            codeLangBar.classList.add('show');
+        } else {
+            textDisplay.classList.remove('code-mode');
+            codeLangBar.classList.remove('show');
+        }
+
+        renderText();
+        document.getElementById('timeDisplay').textContent = timeRemaining;
+        document.getElementById('typingInput').disabled = false;
+        document.getElementById('typingInput').value = '';
+        document.getElementById('typingInput').focus();
+        document.getElementById('startBtn').textContent = '⏸️ Running...';
+        document.getElementById('startBtn').disabled = true;
+    };
+
+    window.resetTest = function() {
+        if (timerInterval) clearInterval(timerInterval);
+        isRunning = false;
+        currentIndex = 0;
+        totalChars = 0;
+        correctChars = 0;
+        errors = 0;
+        startTime = null;
+        timeRemaining = parseInt(document.getElementById('timeSelect').value);
+
+        document.getElementById('timeDisplay').textContent = timeRemaining;
+        document.getElementById('wpmDisplay').textContent = '0';
+        document.getElementById('accuracyDisplay').textContent = '100%';
+        document.getElementById('charsDisplay').textContent = '0';
+        document.getElementById('typingInput').disabled = true;
+        document.getElementById('typingInput').value = '';
+        document.getElementById('startBtn').textContent = '▶️ Start Test';
+        document.getElementById('startBtn').disabled = false;
+
+        currentText = getRandomParagraph();
+        renderText();
+    };
+
+    window.newParagraph = function() {
+        currentText = getRandomParagraph();
+        currentIndex = 0;
+        renderText();
+        if (!isRunning) {
+            document.getElementById('typingInput').value = '';
+        }
+    };
+
+    function endTest() {
+        if (timerInterval) clearInterval(timerInterval);
+        isRunning = false;
+        document.getElementById('typingInput').disabled = true;
+        document.getElementById('startBtn').textContent = '▶️ Start Test';
+        document.getElementById('startBtn').disabled = false;
+
+        playBellSound();
+
+        // Calculate final stats
+        const elapsed = (Date.now() - startTime) / 1000 / 60;
+        const finalWpm = Math.round((correctChars / 5) / elapsed);
+        const finalAccuracy = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 100;
+
+        // Store pending score
+        pendingScore = {
+            wpm: finalWpm,
+            accuracy: finalAccuracy,
+            level: currentLevel,
+            duration: totalDuration,
+            total_characters: totalChars,
+            correct_characters: correctChars,
+            errors: errors
+        };
+
+        // Show results
+        document.getElementById('finalWpm').textContent = finalWpm;
+        document.getElementById('finalAccuracy').textContent = finalAccuracy + '%';
+        document.getElementById('finalChars').textContent = correctChars;
+        document.getElementById('finalErrors').textContent = errors;
+
+        // Set rank text
+        const rankEl = document.getElementById('resultRank');
+        if (finalWpm < 30) {
+            rankEl.textContent = '🌱 Beginner Typist';
+            rankEl.className = 'result-rank rank-beginner';
+        } else if (finalWpm < 50) {
+            rankEl.textContent = '📝 Average Typist';
+            rankEl.className = 'result-rank rank-average';
+        } else if (finalWpm < 70) {
+            rankEl.textContent = '⚡ Good Typist';
+            rankEl.className = 'result-rank rank-good';
+        } else if (finalWpm < 90) {
+            rankEl.textContent = '🚀 Fast Typist';
+            rankEl.className = 'result-rank rank-fast';
+        } else {
+            rankEl.textContent = '🏆 Expert Typist!';
+            rankEl.className = 'result-rank rank-expert';
+        }
+
+        // Show username modal
+        document.getElementById('savedRankInfo').style.display = 'none';
+        document.getElementById('usernameModal').classList.add('show');
+    }
+
+    window.closeUsernameModal = function() {
+        document.getElementById('usernameModal').classList.remove('show');
+        document.getElementById('resultsModal').classList.add('show');
+    };
+
+    window.submitScore = async function() {
+        const username = document.getElementById('usernameInput').value.trim() || 'Anonymous';
+        document.getElementById('usernameModal').classList.remove('show');
+        
+        if (pendingScore) {
+            pendingScore.username = username;
+            
+            try {
+                const response = await fetch('/api/typing-test/submit/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCsrfToken()
+                    },
+                    body: JSON.stringify(pendingScore)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('savedRankInfo').style.display = 'block';
+                    document.getElementById('savedRankNumber').textContent = `#${data.rank}`;
+                    loadLeaderboard();
+                }
+            } catch (e) {
+                console.error('Error saving score:', e);
+            }
+        }
+        
+        document.getElementById('resultsModal').classList.add('show');
+    };
+
+    function getCsrfToken() {
+        const cookie = document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='));
+        return cookie ? cookie.split('=')[1] : '';
+    }
+
+    window.closeResults = function() {
+        document.getElementById('resultsModal').classList.remove('show');
+        pendingScore = null;
+    };
+
+    window.toggleFaq = function(el) {
+        el.parentElement.classList.toggle('open');
+    };
+
+    window.loadLeaderboard = async function() {
+        const filter = document.getElementById('leaderboardFilter').value;
+        const tbody = document.getElementById('leaderboardBody');
+        
+        try {
+            const response = await fetch(`/api/typing-test/leaderboard/?level=${filter}&limit=15`);
+            const data = await response.json();
+            
+            if (data.success && data.leaderboard.length > 0) {
+                const medals = ['🥇', '🥈', '🥉'];
+                tbody.innerHTML = data.leaderboard.map((score, i) => `
+                    <tr>
+                        <td>${medals[i] || (i + 1)}</td>
+                        <td>${escapeHtml(score.username)}</td>
+                        <td><strong>${score.wpm}</strong></td>
+                        <td>${score.accuracy}%</td>
+                        <td>${score.level}</td>
+                    </tr>
+                `).join('');
+                
+                // Show user's rank if available
+                if (data.user_rank && data.user_best) {
+                    document.getElementById('yourRankBox').style.display = 'flex';
+                    document.getElementById('yourRankValue').textContent = `#${data.user_rank}`;
+                    document.getElementById('yourBestWpm').textContent = `(${data.user_best.wpm} WPM)`;
+                } else {
+                    document.getElementById('yourRankBox').style.display = 'none';
+                }
+            } else {
+                tbody.innerHTML = '<tr><td colspan="5" style="color: var(--color-text-secondary); padding: 2rem;">No scores yet. Be the first!</td></tr>';
+                document.getElementById('yourRankBox').style.display = 'none';
+            }
+        } catch (e) {
+            tbody.innerHTML = '<tr><td colspan="5" style="color: var(--color-text-secondary);">Error loading leaderboard</td></tr>';
+        }
+    };
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Input handling
+    document.getElementById('typingInput').addEventListener('input', function(e) {
+        if (!isRunning) return;
+
+        // Start timer on first keypress
+        if (!startTime) {
+            startTime = Date.now();
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                document.getElementById('timeDisplay').textContent = timeRemaining;
+                if (timeRemaining <= 0) {
+                    endTest();
+                }
+            }, 1000);
+        }
+
+        const typed = e.target.value;
+        const lastChar = typed[typed.length - 1];
+        const expectedChar = currentText[currentIndex];
+
+        if (lastChar === expectedChar) {
+            playKeySound(true);
+            correctChars++;
+            currentIndex++;
+        } else {
+            playKeySound(false);
+            errors++;
+        }
+        totalChars++;
+
+        e.target.value = '';
+        renderText();
+        updateStats();
+
+        // Check if completed text
+        if (currentIndex >= currentText.length) {
+            currentText = getRandomParagraph();
+            currentIndex = 0;
+            renderText();
+        }
+    });
+
+    // Handle special keys for newlines
+    document.getElementById('typingInput').addEventListener('keydown', function(e) {
+        if (!isRunning) return;
+        
+        if (e.key === 'Enter') {
+            const expectedChar = currentText[currentIndex];
+            if (expectedChar === '\n') {
+                e.preventDefault();
+                if (!startTime) {
+                    startTime = Date.now();
+                    timerInterval = setInterval(() => {
+                        timeRemaining--;
+                        document.getElementById('timeDisplay').textContent = timeRemaining;
+                        if (timeRemaining <= 0) endTest();
+                    }, 1000);
+                }
+                playKeySound(true);
+                correctChars++;
+                totalChars++;
+                currentIndex++;
+                renderText();
+                updateStats();
+            }
+        }
+    });
+
+    // Initialize
+    loadLeaderboard();
+    newParagraph();
+})();
+</script>
+{% endblock %}

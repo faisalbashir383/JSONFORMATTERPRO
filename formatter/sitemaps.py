@@ -78,7 +78,9 @@ class StaticViewSitemap(Sitemap):
             # Security Tools
             'password_generator_page',
             'url_encoder_page',
+            'typing_test_page',
         ]
+
 
     
     def location(self, item):

@@ -312,3 +312,48 @@ class MCQOptionAdmin(admin.ModelAdmin):
     short_option.short_description = 'Option'
 
 
+# ====================
+# Typing Speed Test Admin
+# ====================
+
+from .models import TypingScore
+
+
+@admin.register(TypingScore)
+class TypingScoreAdmin(admin.ModelAdmin):
+    list_display = ['username', 'wpm', 'accuracy', 'level', 'duration', 'created_at', 'is_verified']
+    list_filter = ['level', 'is_verified', 'created_at']
+    search_fields = ['username', 'ip_address', 'session_key']
+    list_editable = ['is_verified']
+    ordering = ['-wpm', '-accuracy']
+    date_hierarchy = 'created_at'
+    readonly_fields = ['session_key', 'ip_address', 'created_at']
+    
+    fieldsets = (
+        ('User Info', {
+            'fields': ('username', 'session_key', 'ip_address')
+        }),
+        ('Score', {
+            'fields': ('wpm', 'accuracy', 'level', 'duration')
+        }),
+        ('Details', {
+            'fields': ('total_characters', 'correct_characters', 'errors'),
+            'classes': ('collapse',)
+        }),
+        ('Admin', {
+            'fields': ('is_verified', 'created_at'),
+        }),
+    )
+    
+    actions = ['verify_scores', 'unverify_scores']
+    
+    def verify_scores(self, request, queryset):
+        updated = queryset.update(is_verified=True)
+        self.message_user(request, f'{updated} score(s) verified.')
+    verify_scores.short_description = 'Mark selected as verified'
+    
+    def unverify_scores(self, request, queryset):
+        updated = queryset.update(is_verified=False)
+        self.message_user(request, f'{updated} score(s) marked as suspicious.')
+    unverify_scores.short_description = 'Mark selected as suspicious'
+

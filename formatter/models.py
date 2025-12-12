@@ -566,3 +566,85 @@ class MCQOption(models.Model):
         correct = "✓" if self.is_correct else "✗"
         return f"{correct} {self.option_text[:50]}..."
 
+
+# ====================
+# Typing Speed Test
+# ====================
+
+class TypingScore(models.Model):
+    """Store typing test scores for global leaderboard"""
+    LEVEL_CHOICES = [
+        ('easy', 'Easy'),
+        ('medium', 'Medium'),
+        ('hard', 'Hard'),
+        ('expert', 'Expert'),
+        ('python', 'Python'),
+        ('javascript', 'JavaScript'),
+        ('html', 'HTML/CSS'),
+        ('sql', 'SQL'),
+    ]
+    
+    # User identification
+    username = models.CharField(max_length=50, help_text="Display name for leaderboard")
+    session_key = models.CharField(max_length=100, blank=True, null=True, help_text="Browser session identifier")
+    ip_address = models.GenericIPAddressField(blank=True, null=True)
+    
+    # Score data
+    wpm = models.IntegerField(help_text="Words per minute")
+    accuracy = models.DecimalField(max_digits=5, decimal_places=2, help_text="Accuracy percentage")
+    level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='medium')
+    duration = models.IntegerField(help_text="Test duration in seconds")
+    
+    # Additional stats
+    total_characters = models.IntegerField(default=0)
+    correct_characters = models.IntegerField(default=0)
+    errors = models.IntegerField(default=0)
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    # Flags
+    is_verified = models.BooleanField(default=True, help_text="Flag for potential cheating detection")
+    
+    class Meta:
+        ordering = ['-wpm', '-accuracy']
+        indexes = [
+            models.Index(fields=['-wpm']),
+            models.Index(fields=['level', '-wpm']),
+            models.Index(fields=['session_key']),
+            models.Index(fields=['-created_at']),
+        ]
+        verbose_name = "Typing Score"
+        verbose_name_plural = "Typing Scores"
+    
+    def __str__(self):
+        return f"{self.username} - {self.wpm} WPM ({self.level})"
+    
+    @classmethod
+    def get_rank(cls, wpm, level=None):
+        """Get rank for a given WPM score"""
+        query = cls.objects.filter(is_verified=True)
+        if level:
+            query = query.filter(level=level)
+        return query.filter(wpm__gt=wpm).count() + 1
+    
+    @classmethod
+    def get_top_scores(cls, limit=20, level=None):
+        """Get top scores for leaderboard"""
+        query = cls.objects.filter(is_verified=True)
+        if level and level != 'all':
+            query = query.filter(level=level)
+        return query.order_by('-wpm', '-accuracy')[:limit]
+    
+    @classmethod
+    def get_user_best(cls, session_key, level=None):
+        """Get user's best score"""
+        query = cls.objects.filter(session_key=session_key)
+        if level:
+            query = query.filter(level=level)
+        return query.order_by('-wpm').first()
+    
+    @classmethod
+    def get_user_scores(cls, session_key, limit=10):
+        """Get user's recent scores"""
+        return cls.objects.filter(session_key=session_key).order_by('-created_at')[:limit]

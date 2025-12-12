@@ -790,9 +790,143 @@ def url_encoder_page(request):
     return render(request, 'url-encoder.html')
 
 
+def typing_test_page(request):
+    """Render the Typing Speed Test page"""
+    return render(request, 'typing-test.html')
+
+
+# ====================
+# Typing Test API
+# ====================
+
+@api_view(['POST'])
+def submit_typing_score(request):
+    """
+    Submit a typing test score to the leaderboard.
+    Expected input: {
+        "username": "Player Name",
+        "wpm": 65,
+        "accuracy": 98.5,
+        "level": "medium",
+        "duration": 60,
+        "total_characters": 325,
+        "correct_characters": 320,
+        "errors": 5
+    }
+    """
+    from .models import TypingScore
+    
+    try:
+        username = request.data.get('username', 'Anonymous').strip()[:50]
+        wpm = int(request.data.get('wpm', 0))
+        accuracy = float(request.data.get('accuracy', 0))
+        level = request.data.get('level', 'medium')
+        duration = int(request.data.get('duration', 60))
+        total_chars = int(request.data.get('total_characters', 0))
+        correct_chars = int(request.data.get('correct_characters', 0))
+        errors = int(request.data.get('errors', 0))
+        
+        # Basic validation
+        if wpm < 0 or wpm > 300:  # World record is ~216 WPM
+            return Response({'success': False, 'error': 'Invalid WPM'}, status=400)
+        
+        if accuracy < 0 or accuracy > 100:
+            return Response({'success': False, 'error': 'Invalid accuracy'}, status=400)
+        
+        # Get session key for tracking
+        session_key = request.session.session_key
+        if not session_key:
+            request.session.create()
+            session_key = request.session.session_key
+        
+        # Get IP
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        ip = x_forwarded_for.split(',')[0] if x_forwarded_for else request.META.get('REMOTE_ADDR')
+        
+        # Create score record
+        score = TypingScore.objects.create(
+            username=username or 'Anonymous',
+            session_key=session_key,
+            ip_address=ip,
+            wpm=wpm,
+            accuracy=accuracy,
+            level=level,
+            duration=duration,
+            total_characters=total_chars,
+            correct_characters=correct_chars,
+            errors=errors
+        )
+        
+        # Get rank
+        rank = TypingScore.get_rank(wpm, level)
+        global_rank = TypingScore.get_rank(wpm)
+        
+        return Response({
+            'success': True,
+            'score_id': score.id,
+            'rank': rank,
+            'global_rank': global_rank,
+            'message': f'Score saved! You ranked #{rank} in {level} mode.'
+        })
+        
+    except Exception as e:
+        return Response({'success': False, 'error': str(e)}, status=500)
+
+
+@api_view(['GET'])
+def get_typing_leaderboard(request):
+    """
+    Get the global typing leaderboard.
+    Query params: level (optional), limit (default 20)
+    """
+    from .models import TypingScore
+    
+    try:
+        level = request.GET.get('level', 'all')
+        limit = min(int(request.GET.get('limit', 20)), 100)
+        
+        scores = TypingScore.get_top_scores(limit=limit, level=level if level != 'all' else None)
+        
+        leaderboard = [{
+            'rank': i + 1,
+            'username': score.username,
+            'wpm': score.wpm,
+            'accuracy': float(score.accuracy),
+            'level': score.level,
+            'date': score.created_at.strftime('%Y-%m-%d')
+        } for i, score in enumerate(scores)]
+        
+        # Get requester's best score if they have session
+        session_key = request.session.session_key
+        user_best = None
+        user_rank = None
+        
+        if session_key:
+            best_score = TypingScore.get_user_best(session_key, level if level != 'all' else None)
+            if best_score:
+                user_best = {
+                    'wpm': best_score.wpm,
+                    'accuracy': float(best_score.accuracy),
+                    'level': best_score.level
+                }
+                user_rank = TypingScore.get_rank(best_score.wpm, level if level != 'all' else None)
+        
+        return Response({
+            'success': True,
+            'leaderboard': leaderboard,
+            'user_best': user_best,
+            'user_rank': user_rank,
+            'total_scores': TypingScore.objects.filter(is_verified=True).count()
+        })
+        
+    except Exception as e:
+        return Response({'success': False, 'error': str(e)}, status=500)
+
+
 # ====================
 # Custom Error Handlers
 # ====================
+
 
 
 def custom_404(request, exception):

@@ -14,28 +14,31 @@
     </script>
     <!-- Event snippet for Page view conversion page -->
     <script>
-      gtag('event', 'conversion', {
-          'send_to': 'AW-17798621872/yr4PCNmqkNAbELDVhadC',
-          'value': 1.0,
-          'currency': 'INR'
-      });
+        gtag('event', 'conversion', {
+            'send_to': 'AW-17798621872/yr4PCNmqkNAbELDVhadC',
+            'value': 1.0,
+            'currency': 'INR'
+        });
     </script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VTYBYNG6G8"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-      gtag('config', 'G-VTYBYNG6G8');
+        gtag('config', 'G-VTYBYNG6G8');
     </script>
 
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-K5PPMJQD');</script>
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-K5PPMJQD');</script>
     <!-- End Google Tag Manager -->
 
     <meta charset="UTF-8">
@@ -578,6 +581,7 @@
                         <div class="dropdown-divider"></div>
                         <a href="/password-generator/" class="dropdown-item">🔐 Password Generator</a>
                         <a href="/url-encoder/" class="dropdown-item">🔗 URL Encoder/Decoder</a>
+                        <a href="/typing-test/" class="dropdown-item">⌨️ Typing Speed Test</a>
                     </div>
                 </div>
 
@@ -656,9 +660,9 @@
     <main class="main-container" {% block main_attrs %}{% endblock %}>
         {% block content %}
         <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K5PPMJQD"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K5PPMJQD" height="0" width="0"
+                style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
         <!-- Page content goes here -->
         {% endblock %}
     </main>

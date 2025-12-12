@@ -89,10 +89,14 @@ urlpatterns = [
     # Security Tools
     path('password-generator/', views.password_generator_page, name='password_generator_page'),
     path('url-encoder/', views.url_encoder_page, name='url_encoder_page'),
+    path('typing-test/', views.typing_test_page, name='typing_test_page'),
     
     # Code Tool API Endpoints
+
     path('api/qr-generator/', views.generate_qr_code, name='generate_qr_code'),
     path('api/domain-age/', views.domain_age_api, name='domain_age_api'),
+    path('api/typing-test/submit/', views.submit_typing_score, name='submit_typing_score'),
+    path('api/typing-test/leaderboard/', views.get_typing_leaderboard, name='get_typing_leaderboard'),
 
     
     path('robots.txt', views.robots_txt, name='robots_txt'),
