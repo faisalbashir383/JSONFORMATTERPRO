@@ -55,6 +55,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # WhiteNoise for static files with security headers
     'formatter.middleware.SecurityHeadersMiddleware',  # Security headers (CSP, etc.)
     'django.contrib.sessions.middleware.SessionMiddleware',
     'formatter.middleware.WWWRedirectMiddleware',  # WWW to non-WWW redirect
@@ -151,8 +152,12 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# Static files caching (for production with WhiteNoise)
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+# WhiteNoise for static file serving with compression and caching
+# This adds proper security headers to static files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# WhiteNoise settings
+WHITENOISE_MAX_AGE = 31536000  # 1 year for immutable assets
 
 # CORS settings - Allow all origins for development
 CORS_ALLOW_ALL_ORIGINS = True
