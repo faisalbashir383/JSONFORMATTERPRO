@@ -72,7 +72,14 @@ class StaticViewSitemap(Sitemap):
             'currency_calculator_page',
             'concrete_calculator_page',
             'graphing_calculator_page',
+            # Legal Pages
+            'terms_page',
+            'code_of_conduct_page',
+            # Security Tools
+            'password_generator_page',
+            'url_encoder_page',
         ]
+
     
     def location(self, item):
         return reverse(item)

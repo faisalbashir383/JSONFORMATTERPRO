@@ -82,9 +82,18 @@ urlpatterns = [
     path('concrete-calculator/', views.concrete_calculator_page, name='concrete_calculator_page'),
     path('graphing-calculator/', views.graphing_calculator_page, name='graphing_calculator_page'),
     
+    # Legal Pages
+    path('terms/', views.terms_page, name='terms_page'),
+    path('code-of-conduct/', views.code_of_conduct_page, name='code_of_conduct_page'),
+    
+    # Security Tools
+    path('password-generator/', views.password_generator_page, name='password_generator_page'),
+    path('url-encoder/', views.url_encoder_page, name='url_encoder_page'),
+    
     # Code Tool API Endpoints
     path('api/qr-generator/', views.generate_qr_code, name='generate_qr_code'),
     path('api/domain-age/', views.domain_age_api, name='domain_age_api'),
+
     
     path('robots.txt', views.robots_txt, name='robots_txt'),
     

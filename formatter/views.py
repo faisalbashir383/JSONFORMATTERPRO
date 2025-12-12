@@ -763,8 +763,37 @@ def graphing_calculator_page(request):
 
 
 # ====================
+# Legal Pages
+# ====================
+
+def terms_page(request):
+    """Render the Terms of Service page"""
+    return render(request, 'terms.html')
+
+
+def code_of_conduct_page(request):
+    """Render the Code of Conduct page"""
+    return render(request, 'code-of-conduct.html')
+
+
+# ====================
+# Security Tools
+# ====================
+
+def password_generator_page(request):
+    """Render the Password Generator page"""
+    return render(request, 'password-generator.html')
+
+
+def url_encoder_page(request):
+    """Render the URL Encoder/Decoder page"""
+    return render(request, 'url-encoder.html')
+
+
+# ====================
 # Custom Error Handlers
 # ====================
+
 
 def custom_404(request, exception):
     """
