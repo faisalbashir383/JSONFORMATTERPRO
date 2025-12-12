@@ -8,15 +8,15 @@
 {% block author %}JSON Formatters Pro{% endblock %}
 
 {% block og_type %}article{% endblock %}
-{% block og_url %}https://jsonformatterpro.com{% url 'blog_detail' post.slug %}{% endblock %}
+{% block og_url %}{{ SITE_URL }}{% url 'blog_detail' post.slug %}{% endblock %}
 {% block og_title %}{{ post.title }}{% endblock %}
 {% block og_description %}{{ post.excerpt }}{% endblock %}
 
-{% block twitter_url %}https://jsonformatterpro.com{% url 'blog_detail' post.slug %}{% endblock %}
+{% block twitter_url %}{{ SITE_URL }}{% url 'blog_detail' post.slug %}{% endblock %}
 {% block twitter_title %}{{ post.title }}{% endblock %}
 {% block twitter_description %}{{ post.excerpt }}{% endblock %}
 
-{% block canonical_url %}https://jsonformatterpro.com{% url 'blog_detail' post.slug %}{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}{% url 'blog_detail' post.slug %}{% endblock %}
 
 {% block structured_data %}
 <!-- Enhanced Article Schema -->
@@ -26,25 +26,25 @@
   "@type": "TechArticle",
   "headline": "{{ post.title|escapejs }}",
   "description": "{{ post.meta_description|escapejs }}",
-  "image": "https://jsonformatterpro.com/static/images/blog-default.png",
+  "image": "{{ SITE_URL }}/static/images/blog-default.png",
   "datePublished": "{{ post.published_at|date:'c' }}",
   "dateModified": "{{ post.updated_at|date:'c' }}",
   "author": {
     "@type": "Organization",
     "name": "JSON Formatters Pro",
-    "url": "https://jsonformatterpro.com"
+    "url": "{{ SITE_URL }}"
   },
   "publisher": {
     "@type": "Organization",
     "name": "JSON Formatter Pro",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://jsonformatterpro.com/static/images/logo.png"
+      "url": "{{ SITE_URL }}/static/images/logo.png"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://jsonformatterpro.com{% url 'blog_detail' post.slug %}"
+    "@id": "{{ SITE_URL }}{% url 'blog_detail' post.slug %}"
   },
   "articleSection": "{{ post.category.name|escapejs }}",
   "keywords": "{{ post.meta_keywords|escapejs }}",
@@ -64,25 +64,25 @@
       "@type": "ListItem",
       "position": 1,
       "name": "Home",
-      "item": "https://jsonformatterpro.com/"
+      "item": "{{ SITE_URL }}/"
     },
     {
       "@type": "ListItem",
       "position": 2,
       "name": "Articles",
-      "item": "https://jsonformatterpro.com/blog/"
+      "item": "{{ SITE_URL }}/blog/"
     },
     {
       "@type": "ListItem",
       "position": 3,
       "name": "{{ post.category.name|escapejs }}",
-      "item": "https://jsonformatterpro.com/blog/category/{{ post.category.slug }}/"
+      "item": "{{ SITE_URL }}/blog/category/{{ post.category.slug }}/"
     },
     {
       "@type": "ListItem",
       "position": 4,
       "name": "{{ post.title|escapejs }}",
-      "item": "https://jsonformatterpro.com{% url 'blog_detail' post.slug %}"
+      "item": "{{ SITE_URL }}{% url 'blog_detail' post.slug %}"
     }
   ]
 }
@@ -277,15 +277,15 @@
     <!-- Share Buttons -->
     <div class="share-buttons">
         <strong style="color: var(--color-text-secondary); font-size: 0.875rem; line-height: 2.5;">Share:</strong>
-        <a href="https://twitter.com/intent/tweet?text={{ post.title|urlencode }}&url=https://jsonformatterpro.com{% url 'blog_detail' post.slug %}"
+        <a href="https://twitter.com/intent/tweet?text={{ post.title|urlencode }}&url={{ SITE_URL }}{% url 'blog_detail' post.slug %}"
             target="_blank" rel="noopener" class="share-btn share-twitter">
             Twitter
         </a>
-        <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://jsonformatterpro.com{% url 'blog_detail' post.slug %}"
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ SITE_URL }}{% url 'blog_detail' post.slug %}"
             target="_blank" rel="noopener" class="share-btn share-linkedin">
             LinkedIn
         </a>
-        <a href="https://www.facebook.com/sharer/sharer.php?u=https://jsonformatterpro.com{% url 'blog_detail' post.slug %}"
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ SITE_URL }}{% url 'blog_detail' post.slug %}"
             target="_blank" rel="noopener" class="share-btn share-facebook">
             Facebook
         </a>

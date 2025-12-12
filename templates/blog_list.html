@@ -21,7 +21,7 @@ microservices{% endblock %}
 {% block og_description %}Learn programming with our comprehensive tutorials on Python, JavaScript, AI, Web Development,
 and more. Free code examples and step-by-step guides.{% endblock %}
 
-{% block canonical_url %}https://jsonformatterpro.com/blog/{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/blog/{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
@@ -30,13 +30,13 @@ and more. Free code examples and step-by-step guides.{% endblock %}
   "@type": "Blog",
   "name": "JSON Formatter Pro Articles",
   "description": "Programming tutorials, tech insights, and coding best practices",
-  "url": "https://jsonformatterpro.com/blog/",
+  "url": "{{ SITE_URL }}/blog/",
   "publisher": {
     "@type": "Organization",
     "name": "JSON Formatter Pro",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://jsonformatterpro.com/static/images/logo.png"
+      "url": "{{ SITE_URL }}/static/images/logo.png"
     }
   },
   "blogPost": [
@@ -45,7 +45,7 @@ and more. Free code examples and step-by-step guides.{% endblock %}
       "@type": "BlogPosting",
       "headline": "{{ post.title|escapejs }}",
       "description": "{{ post.excerpt|escapejs }}",
-      "url": "https://jsonformatterpro.com{% url 'blog_detail' post.slug %}",
+      "url": "{{ SITE_URL }}{% url 'blog_detail' post.slug %}",
       "datePublished": "{{ post.published_at|date:'c' }}",
       "dateModified": "{{ post.updated_at|date:'c' }}",
       "author": {
