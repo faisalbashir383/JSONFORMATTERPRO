@@ -1067,6 +1067,7 @@ programmer typing test, coding typing practice, type code faster{% endblock %}
         <h3>🏆 Save Your Score!</h3>
         <p style="color: var(--color-text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">Enter a name for the
             leaderboard:</p>
+        {% csrf_token %}
         <input type="text" id="usernameInput" placeholder="Your name..." maxlength="30">
         <div style="display: flex; gap: 0.5rem;">
             <button class="action-btn secondary" onclick="closeUsernameModal()" style="flex: 1;">Skip</button>
@@ -1074,6 +1075,7 @@ programmer typing test, coding typing practice, type code faster{% endblock %}
         </div>
     </div>
 </div>
+
 
 <!-- Results Modal -->
 <div class="results-overlay" id="resultsModal">
@@ -1118,390 +1120,390 @@ programmer typing test, coding typing practice, type code faster{% endblock %}
 
 {% block extra_js %}
 <script>
-(function() {
-    // Text paragraphs by difficulty
-    const paragraphs = {
-        easy: [
-            "The quick brown fox jumps over the lazy dog. A dog is a good pet. I like to run in the park.",
-            "I have a cat. She is soft and warm. We play every day. She likes to sleep on my bed.",
-            "Today is a good day. The sky is blue and the sun is out. I will go to the park.",
-            "My name is Sam. I live in a big house. I have a dog and a cat. They are my best friends."
-        ],
-        medium: [
-            "The ability to type quickly and accurately is an essential skill in today's digital world. Practice makes perfect when it comes to typing.",
-            "Touch typing is a technique where you type without looking at the keyboard. By memorizing the position of keys, you can achieve faster speeds.",
-            "Good posture is important for comfortable and efficient typing. Sit up straight, keep your feet flat on the floor.",
-            "A standard QWERTY keyboard layout has been used for over a century. Most people learn on QWERTY because it remains widely used."
-        ],
-        hard: [
-            "Cryptographic algorithms such as RSA and AES provide essential security mechanisms for protecting sensitive data in transit and at rest.",
-            "The implementation of microservices architecture requires careful consideration of inter-service communication patterns and deployment strategies.",
-            "Machine learning pipelines encompass data preprocessing, feature engineering, model training, and deployment infrastructure.",
-            "Distributed systems face inherent challenges including network partitions, consensus algorithms, and eventual consistency models."
-        ],
-        expert: [
-            "The juxtaposition of ephemeral phenomena with persistent architectural frameworks necessitates meticulous calibration of observability mechanisms.",
-            "Implementing Byzantine fault-tolerant consensus mechanisms in heterogeneous distributed environments requires sophisticated cryptographic primitives.",
-            "Contemporary software engineering paradigms emphasize infrastructure-as-code methodologies, immutable artifacts, and declarative configuration.",
-            "Neuromorphic computing architectures leverage event-driven processing and in-memory computation for unprecedented energy efficiency."
-        ],
-        python: [
-            "def calculate_sum(numbers):\n    return sum(numbers)\n\nresult = calculate_sum([1, 2, 3])",
-            "for i in range(10):\n    if i % 2 == 0:\n        print(f'Even: {i}')",
-            "class User:\n    def __init__(self, name):\n        self.name = name",
-            "import json\ndata = {'key': 'value'}\njson.dumps(data)"
-        ],
-        javascript: [
-            "const sum = (a, b) => a + b;\nconsole.log(sum(1, 2));",
-            "const arr = [1, 2, 3];\narr.map(x => x * 2);",
-            "async function fetchData(url) {\n  return await fetch(url);\n}",
-            "document.querySelector('#btn').addEventListener('click', () => {});"
-        ],
-        html: [
-            "<div class=\"container\">\n  <h1>Hello</h1>\n  <p>World</p>\n</div>",
-            "<button onclick=\"submit()\">\n  Click me\n</button>",
-            "<input type=\"text\" placeholder=\"Enter name\" />\n<button>Submit</button>",
-            "<style>\n  .box { display: flex; }\n</style>"
-        ],
-        sql: [
-            "SELECT * FROM users WHERE age > 18 ORDER BY name;",
-            "INSERT INTO products (name, price) VALUES ('Item', 99.99);",
-            "UPDATE orders SET status = 'shipped' WHERE id = 123;",
-            "SELECT COUNT(*) FROM logs GROUP BY date HAVING COUNT(*) > 10;"
-        ]
-    };
-
-    // State
-    let currentText = '';
-    let currentIndex = 0;
-    let startTime = null;
-    let timerInterval = null;
-    let timeRemaining = 60;
-    let totalDuration = 60;
-    let totalChars = 0;
-    let correctChars = 0;
-    let errors = 0;
-    let isRunning = false;
-    let soundEnabled = true;
-    let currentLevel = 'medium';
-    let pendingScore = null;
-
-    // Audio context
-    let audioContext = null;
-
-    function initAudio() {
-        if (!audioContext) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        }
-    }
-
-    function playKeySound(isCorrect = true) {
-        if (!soundEnabled || !audioContext) return;
-        
-        const osc = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-        
-        osc.connect(gain);
-        gain.connect(audioContext.destination);
-        
-        osc.frequency.setValueAtTime(isCorrect ? 800 : 200, audioContext.currentTime);
-        osc.type = 'square';
-        
-        gain.gain.setValueAtTime(0.08, audioContext.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.04);
-        
-        osc.start(audioContext.currentTime);
-        osc.stop(audioContext.currentTime + 0.04);
-    }
-
-    function playBellSound() {
-        if (!soundEnabled || !audioContext) return;
-        
-        const osc = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-        
-        osc.connect(gain);
-        gain.connect(audioContext.destination);
-        
-        osc.frequency.setValueAtTime(1200, audioContext.currentTime);
-        osc.type = 'sine';
-        
-        gain.gain.setValueAtTime(0.15, audioContext.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.25);
-        
-        osc.start(audioContext.currentTime);
-        osc.stop(audioContext.currentTime + 0.25);
-    }
-
-    window.toggleSound = function() {
-        soundEnabled = !soundEnabled;
-        const toggle = document.getElementById('soundToggle');
-        const icon = document.getElementById('soundIcon');
-        
-        if (soundEnabled) {
-            toggle.classList.add('active');
-            icon.textContent = '🔊';
-            initAudio();
-        } else {
-            toggle.classList.remove('active');
-            icon.textContent = '🔇';
-        }
-    };
-
-    function isCodeMode(level) {
-        return ['python', 'javascript', 'html', 'sql'].includes(level);
-    }
-
-    window.handleLevelChange = function() {
-        currentLevel = document.getElementById('levelSelect').value;
-        const textDisplay = document.getElementById('textDisplay');
-        const codeLangBar = document.getElementById('codeLangBar');
-        
-        if (isCodeMode(currentLevel)) {
-            textDisplay.classList.add('code-mode');
-            codeLangBar.classList.add('show');
-            // Update active button
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.lang === currentLevel);
-            });
-        } else {
-            textDisplay.classList.remove('code-mode');
-            codeLangBar.classList.remove('show');
-        }
-        
-        newParagraph();
-    };
-
-    window.setCodeLanguage = function(lang) {
-        document.getElementById('levelSelect').value = lang;
-        currentLevel = lang;
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.lang === lang);
-        });
-        newParagraph();
-    };
-
-    function getRandomParagraph() {
-        const level = currentLevel;
-        const texts = paragraphs[level] || paragraphs.medium;
-        return texts[Math.floor(Math.random() * texts.length)];
-    }
-
-    function renderText() {
-        const display = document.getElementById('textDisplay');
-        display.innerHTML = currentText.split('').map((char, i) => {
-            let className = 'char';
-            if (i < currentIndex) {
-                className += ' correct';
-            } else if (i === currentIndex) {
-                className += ' current';
-            } else {
-                className += ' pending';
-            }
-            // Handle special characters
-            let displayChar = char;
-            if (char === ' ') displayChar = ' ';
-            else if (char === '\n') displayChar = '↵\n';
-            else if (char === '<') displayChar = '&lt;';
-            else if (char === '>') displayChar = '&gt;';
-            
-            return `<span class="${className}">${displayChar}</span>`;
-        }).join('');
-    }
-
-    function updateStats() {
-        const elapsed = startTime ? (Date.now() - startTime) / 1000 / 60 : 0;
-        const wpm = elapsed > 0 ? Math.round((correctChars / 5) / elapsed) : 0;
-        const accuracy = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 100;
-
-        document.getElementById('wpmDisplay').textContent = wpm;
-        document.getElementById('accuracyDisplay').textContent = accuracy + '%';
-        document.getElementById('charsDisplay').textContent = correctChars;
-    }
-
-    window.startTest = function() {
-        initAudio();
-        currentLevel = document.getElementById('levelSelect').value;
-        currentText = getRandomParagraph();
-        currentIndex = 0;
-        totalChars = 0;
-        correctChars = 0;
-        errors = 0;
-        totalDuration = parseInt(document.getElementById('timeSelect').value);
-        timeRemaining = totalDuration;
-        startTime = null;
-        isRunning = true;
-
-        // Update UI for code mode
-        const textDisplay = document.getElementById('textDisplay');
-        const codeLangBar = document.getElementById('codeLangBar');
-        
-        if (isCodeMode(currentLevel)) {
-            textDisplay.classList.add('code-mode');
-            codeLangBar.classList.add('show');
-        } else {
-            textDisplay.classList.remove('code-mode');
-            codeLangBar.classList.remove('show');
-        }
-
-        renderText();
-        document.getElementById('timeDisplay').textContent = timeRemaining;
-        document.getElementById('typingInput').disabled = false;
-        document.getElementById('typingInput').value = '';
-        document.getElementById('typingInput').focus();
-        document.getElementById('startBtn').textContent = '⏸️ Running...';
-        document.getElementById('startBtn').disabled = true;
-    };
-
-    window.resetTest = function() {
-        if (timerInterval) clearInterval(timerInterval);
-        isRunning = false;
-        currentIndex = 0;
-        totalChars = 0;
-        correctChars = 0;
-        errors = 0;
-        startTime = null;
-        timeRemaining = parseInt(document.getElementById('timeSelect').value);
-
-        document.getElementById('timeDisplay').textContent = timeRemaining;
-        document.getElementById('wpmDisplay').textContent = '0';
-        document.getElementById('accuracyDisplay').textContent = '100%';
-        document.getElementById('charsDisplay').textContent = '0';
-        document.getElementById('typingInput').disabled = true;
-        document.getElementById('typingInput').value = '';
-        document.getElementById('startBtn').textContent = '▶️ Start Test';
-        document.getElementById('startBtn').disabled = false;
-
-        currentText = getRandomParagraph();
-        renderText();
-    };
-
-    window.newParagraph = function() {
-        currentText = getRandomParagraph();
-        currentIndex = 0;
-        renderText();
-        if (!isRunning) {
-            document.getElementById('typingInput').value = '';
-        }
-    };
-
-    function endTest() {
-        if (timerInterval) clearInterval(timerInterval);
-        isRunning = false;
-        document.getElementById('typingInput').disabled = true;
-        document.getElementById('startBtn').textContent = '▶️ Start Test';
-        document.getElementById('startBtn').disabled = false;
-
-        playBellSound();
-
-        // Calculate final stats
-        const elapsed = (Date.now() - startTime) / 1000 / 60;
-        const finalWpm = Math.round((correctChars / 5) / elapsed);
-        const finalAccuracy = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 100;
-
-        // Store pending score
-        pendingScore = {
-            wpm: finalWpm,
-            accuracy: finalAccuracy,
-            level: currentLevel,
-            duration: totalDuration,
-            total_characters: totalChars,
-            correct_characters: correctChars,
-            errors: errors
+    (function () {
+        // Text paragraphs by difficulty
+        const paragraphs = {
+            easy: [
+                "The quick brown fox jumps over the lazy dog. A dog is a good pet. I like to run in the park.",
+                "I have a cat. She is soft and warm. We play every day. She likes to sleep on my bed.",
+                "Today is a good day. The sky is blue and the sun is out. I will go to the park.",
+                "My name is Sam. I live in a big house. I have a dog and a cat. They are my best friends."
+            ],
+            medium: [
+                "The ability to type quickly and accurately is an essential skill in today's digital world. Practice makes perfect when it comes to typing.",
+                "Touch typing is a technique where you type without looking at the keyboard. By memorizing the position of keys, you can achieve faster speeds.",
+                "Good posture is important for comfortable and efficient typing. Sit up straight, keep your feet flat on the floor.",
+                "A standard QWERTY keyboard layout has been used for over a century. Most people learn on QWERTY because it remains widely used."
+            ],
+            hard: [
+                "Cryptographic algorithms such as RSA and AES provide essential security mechanisms for protecting sensitive data in transit and at rest.",
+                "The implementation of microservices architecture requires careful consideration of inter-service communication patterns and deployment strategies.",
+                "Machine learning pipelines encompass data preprocessing, feature engineering, model training, and deployment infrastructure.",
+                "Distributed systems face inherent challenges including network partitions, consensus algorithms, and eventual consistency models."
+            ],
+            expert: [
+                "The juxtaposition of ephemeral phenomena with persistent architectural frameworks necessitates meticulous calibration of observability mechanisms.",
+                "Implementing Byzantine fault-tolerant consensus mechanisms in heterogeneous distributed environments requires sophisticated cryptographic primitives.",
+                "Contemporary software engineering paradigms emphasize infrastructure-as-code methodologies, immutable artifacts, and declarative configuration.",
+                "Neuromorphic computing architectures leverage event-driven processing and in-memory computation for unprecedented energy efficiency."
+            ],
+            python: [
+                "def calculate_sum(numbers):\n    return sum(numbers)\n\nresult = calculate_sum([1, 2, 3])",
+                "for i in range(10):\n    if i % 2 == 0:\n        print(f'Even: {i}')",
+                "class User:\n    def __init__(self, name):\n        self.name = name",
+                "import json\ndata = {'key': 'value'}\njson.dumps(data)"
+            ],
+            javascript: [
+                "const sum = (a, b) => a + b;\nconsole.log(sum(1, 2));",
+                "const arr = [1, 2, 3];\narr.map(x => x * 2);",
+                "async function fetchData(url) {\n  return await fetch(url);\n}",
+                "document.querySelector('#btn').addEventListener('click', () => {});"
+            ],
+            html: [
+                "<div class=\"container\">\n  <h1>Hello</h1>\n  <p>World</p>\n</div>",
+                "<button onclick=\"submit()\">\n  Click me\n</button>",
+                "<input type=\"text\" placeholder=\"Enter name\" />\n<button>Submit</button>",
+                "<style>\n  .box { display: flex; }\n</style>"
+            ],
+            sql: [
+                "SELECT * FROM users WHERE age > 18 ORDER BY name;",
+                "INSERT INTO products (name, price) VALUES ('Item', 99.99);",
+                "UPDATE orders SET status = 'shipped' WHERE id = 123;",
+                "SELECT COUNT(*) FROM logs GROUP BY date HAVING COUNT(*) > 10;"
+            ]
         };
 
-        // Show results
-        document.getElementById('finalWpm').textContent = finalWpm;
-        document.getElementById('finalAccuracy').textContent = finalAccuracy + '%';
-        document.getElementById('finalChars').textContent = correctChars;
-        document.getElementById('finalErrors').textContent = errors;
+        // State
+        let currentText = '';
+        let currentIndex = 0;
+        let startTime = null;
+        let timerInterval = null;
+        let timeRemaining = 60;
+        let totalDuration = 60;
+        let totalChars = 0;
+        let correctChars = 0;
+        let errors = 0;
+        let isRunning = false;
+        let soundEnabled = true;
+        let currentLevel = 'medium';
+        let pendingScore = null;
 
-        // Set rank text
-        const rankEl = document.getElementById('resultRank');
-        if (finalWpm < 30) {
-            rankEl.textContent = '🌱 Beginner Typist';
-            rankEl.className = 'result-rank rank-beginner';
-        } else if (finalWpm < 50) {
-            rankEl.textContent = '📝 Average Typist';
-            rankEl.className = 'result-rank rank-average';
-        } else if (finalWpm < 70) {
-            rankEl.textContent = '⚡ Good Typist';
-            rankEl.className = 'result-rank rank-good';
-        } else if (finalWpm < 90) {
-            rankEl.textContent = '🚀 Fast Typist';
-            rankEl.className = 'result-rank rank-fast';
-        } else {
-            rankEl.textContent = '🏆 Expert Typist!';
-            rankEl.className = 'result-rank rank-expert';
-        }
+        // Audio context
+        let audioContext = null;
 
-        // Show username modal
-        document.getElementById('savedRankInfo').style.display = 'none';
-        document.getElementById('usernameModal').classList.add('show');
-    }
-
-    window.closeUsernameModal = function() {
-        document.getElementById('usernameModal').classList.remove('show');
-        document.getElementById('resultsModal').classList.add('show');
-    };
-
-    window.submitScore = async function() {
-        const username = document.getElementById('usernameInput').value.trim() || 'Anonymous';
-        document.getElementById('usernameModal').classList.remove('show');
-        
-        if (pendingScore) {
-            pendingScore.username = username;
-            
-            try {
-                const response = await fetch('/api/typing-test/submit/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCsrfToken()
-                    },
-                    body: JSON.stringify(pendingScore)
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    document.getElementById('savedRankInfo').style.display = 'block';
-                    document.getElementById('savedRankNumber').textContent = `#${data.rank}`;
-                    loadLeaderboard();
-                }
-            } catch (e) {
-                console.error('Error saving score:', e);
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
             }
         }
-        
-        document.getElementById('resultsModal').classList.add('show');
-    };
 
-    function getCsrfToken() {
-        const cookie = document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='));
-        return cookie ? cookie.split('=')[1] : '';
-    }
+        function playKeySound(isCorrect = true) {
+            if (!soundEnabled || !audioContext) return;
 
-    window.closeResults = function() {
-        document.getElementById('resultsModal').classList.remove('show');
-        pendingScore = null;
-    };
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
 
-    window.toggleFaq = function(el) {
-        el.parentElement.classList.toggle('open');
-    };
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
 
-    window.loadLeaderboard = async function() {
-        const filter = document.getElementById('leaderboardFilter').value;
-        const tbody = document.getElementById('leaderboardBody');
-        
-        try {
-            const response = await fetch(`/api/typing-test/leaderboard/?level=${filter}&limit=15`);
-            const data = await response.json();
-            
-            if (data.success && data.leaderboard.length > 0) {
-                const medals = ['🥇', '🥈', '🥉'];
-                tbody.innerHTML = data.leaderboard.map((score, i) => `
+            osc.frequency.setValueAtTime(isCorrect ? 800 : 200, audioContext.currentTime);
+            osc.type = 'square';
+
+            gain.gain.setValueAtTime(0.08, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.04);
+
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + 0.04);
+        }
+
+        function playBellSound() {
+            if (!soundEnabled || !audioContext) return;
+
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+
+            osc.frequency.setValueAtTime(1200, audioContext.currentTime);
+            osc.type = 'sine';
+
+            gain.gain.setValueAtTime(0.15, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.25);
+
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + 0.25);
+        }
+
+        window.toggleSound = function () {
+            soundEnabled = !soundEnabled;
+            const toggle = document.getElementById('soundToggle');
+            const icon = document.getElementById('soundIcon');
+
+            if (soundEnabled) {
+                toggle.classList.add('active');
+                icon.textContent = '🔊';
+                initAudio();
+            } else {
+                toggle.classList.remove('active');
+                icon.textContent = '🔇';
+            }
+        };
+
+        function isCodeMode(level) {
+            return ['python', 'javascript', 'html', 'sql'].includes(level);
+        }
+
+        window.handleLevelChange = function () {
+            currentLevel = document.getElementById('levelSelect').value;
+            const textDisplay = document.getElementById('textDisplay');
+            const codeLangBar = document.getElementById('codeLangBar');
+
+            if (isCodeMode(currentLevel)) {
+                textDisplay.classList.add('code-mode');
+                codeLangBar.classList.add('show');
+                // Update active button
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.lang === currentLevel);
+                });
+            } else {
+                textDisplay.classList.remove('code-mode');
+                codeLangBar.classList.remove('show');
+            }
+
+            newParagraph();
+        };
+
+        window.setCodeLanguage = function (lang) {
+            document.getElementById('levelSelect').value = lang;
+            currentLevel = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            newParagraph();
+        };
+
+        function getRandomParagraph() {
+            const level = currentLevel;
+            const texts = paragraphs[level] || paragraphs.medium;
+            return texts[Math.floor(Math.random() * texts.length)];
+        }
+
+        function renderText() {
+            const display = document.getElementById('textDisplay');
+            display.innerHTML = currentText.split('').map((char, i) => {
+                let className = 'char';
+                if (i < currentIndex) {
+                    className += ' correct';
+                } else if (i === currentIndex) {
+                    className += ' current';
+                } else {
+                    className += ' pending';
+                }
+                // Handle special characters
+                let displayChar = char;
+                if (char === ' ') displayChar = ' ';
+                else if (char === '\n') displayChar = '↵\n';
+                else if (char === '<') displayChar = '&lt;';
+                else if (char === '>') displayChar = '&gt;';
+
+                return `<span class="${className}">${displayChar}</span>`;
+            }).join('');
+        }
+
+        function updateStats() {
+            const elapsed = startTime ? (Date.now() - startTime) / 1000 / 60 : 0;
+            const wpm = elapsed > 0 ? Math.round((correctChars / 5) / elapsed) : 0;
+            const accuracy = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 100;
+
+            document.getElementById('wpmDisplay').textContent = wpm;
+            document.getElementById('accuracyDisplay').textContent = accuracy + '%';
+            document.getElementById('charsDisplay').textContent = correctChars;
+        }
+
+        window.startTest = function () {
+            initAudio();
+            currentLevel = document.getElementById('levelSelect').value;
+            currentText = getRandomParagraph();
+            currentIndex = 0;
+            totalChars = 0;
+            correctChars = 0;
+            errors = 0;
+            totalDuration = parseInt(document.getElementById('timeSelect').value);
+            timeRemaining = totalDuration;
+            startTime = null;
+            isRunning = true;
+
+            // Update UI for code mode
+            const textDisplay = document.getElementById('textDisplay');
+            const codeLangBar = document.getElementById('codeLangBar');
+
+            if (isCodeMode(currentLevel)) {
+                textDisplay.classList.add('code-mode');
+                codeLangBar.classList.add('show');
+            } else {
+                textDisplay.classList.remove('code-mode');
+                codeLangBar.classList.remove('show');
+            }
+
+            renderText();
+            document.getElementById('timeDisplay').textContent = timeRemaining;
+            document.getElementById('typingInput').disabled = false;
+            document.getElementById('typingInput').value = '';
+            document.getElementById('typingInput').focus();
+            document.getElementById('startBtn').textContent = '⏸️ Running...';
+            document.getElementById('startBtn').disabled = true;
+        };
+
+        window.resetTest = function () {
+            if (timerInterval) clearInterval(timerInterval);
+            isRunning = false;
+            currentIndex = 0;
+            totalChars = 0;
+            correctChars = 0;
+            errors = 0;
+            startTime = null;
+            timeRemaining = parseInt(document.getElementById('timeSelect').value);
+
+            document.getElementById('timeDisplay').textContent = timeRemaining;
+            document.getElementById('wpmDisplay').textContent = '0';
+            document.getElementById('accuracyDisplay').textContent = '100%';
+            document.getElementById('charsDisplay').textContent = '0';
+            document.getElementById('typingInput').disabled = true;
+            document.getElementById('typingInput').value = '';
+            document.getElementById('startBtn').textContent = '▶️ Start Test';
+            document.getElementById('startBtn').disabled = false;
+
+            currentText = getRandomParagraph();
+            renderText();
+        };
+
+        window.newParagraph = function () {
+            currentText = getRandomParagraph();
+            currentIndex = 0;
+            renderText();
+            if (!isRunning) {
+                document.getElementById('typingInput').value = '';
+            }
+        };
+
+        function endTest() {
+            if (timerInterval) clearInterval(timerInterval);
+            isRunning = false;
+            document.getElementById('typingInput').disabled = true;
+            document.getElementById('startBtn').textContent = '▶️ Start Test';
+            document.getElementById('startBtn').disabled = false;
+
+            playBellSound();
+
+            // Calculate final stats
+            const elapsed = (Date.now() - startTime) / 1000 / 60;
+            const finalWpm = Math.round((correctChars / 5) / elapsed);
+            const finalAccuracy = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 100;
+
+            // Store pending score
+            pendingScore = {
+                wpm: finalWpm,
+                accuracy: finalAccuracy,
+                level: currentLevel,
+                duration: totalDuration,
+                total_characters: totalChars,
+                correct_characters: correctChars,
+                errors: errors
+            };
+
+            // Show results
+            document.getElementById('finalWpm').textContent = finalWpm;
+            document.getElementById('finalAccuracy').textContent = finalAccuracy + '%';
+            document.getElementById('finalChars').textContent = correctChars;
+            document.getElementById('finalErrors').textContent = errors;
+
+            // Set rank text
+            const rankEl = document.getElementById('resultRank');
+            if (finalWpm < 30) {
+                rankEl.textContent = '🌱 Beginner Typist';
+                rankEl.className = 'result-rank rank-beginner';
+            } else if (finalWpm < 50) {
+                rankEl.textContent = '📝 Average Typist';
+                rankEl.className = 'result-rank rank-average';
+            } else if (finalWpm < 70) {
+                rankEl.textContent = '⚡ Good Typist';
+                rankEl.className = 'result-rank rank-good';
+            } else if (finalWpm < 90) {
+                rankEl.textContent = '🚀 Fast Typist';
+                rankEl.className = 'result-rank rank-fast';
+            } else {
+                rankEl.textContent = '🏆 Expert Typist!';
+                rankEl.className = 'result-rank rank-expert';
+            }
+
+            // Show username modal
+            document.getElementById('savedRankInfo').style.display = 'none';
+            document.getElementById('usernameModal').classList.add('show');
+        }
+
+        window.closeUsernameModal = function () {
+            document.getElementById('usernameModal').classList.remove('show');
+            document.getElementById('resultsModal').classList.add('show');
+        };
+
+        window.submitScore = async function () {
+            const username = document.getElementById('usernameInput').value.trim() || 'Anonymous';
+            document.getElementById('usernameModal').classList.remove('show');
+
+            if (pendingScore) {
+                pendingScore.username = username;
+
+                try {
+                    const response = await fetch('/api/typing-test/submit/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCsrfToken()
+                        },
+                        body: JSON.stringify(pendingScore)
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        document.getElementById('savedRankInfo').style.display = 'block';
+                        document.getElementById('savedRankNumber').textContent = `#${data.rank}`;
+                        loadLeaderboard();
+                    }
+                } catch (e) {
+                    console.error('Error saving score:', e);
+                }
+            }
+
+            document.getElementById('resultsModal').classList.add('show');
+        };
+
+        function getCsrfToken() {
+            const cookie = document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='));
+            return cookie ? cookie.split('=')[1] : '';
+        }
+
+        window.closeResults = function () {
+            document.getElementById('resultsModal').classList.remove('show');
+            pendingScore = null;
+        };
+
+        window.toggleFaq = function (el) {
+            el.parentElement.classList.toggle('open');
+        };
+
+        window.loadLeaderboard = async function () {
+            const filter = document.getElementById('leaderboardFilter').value;
+            const tbody = document.getElementById('leaderboardBody');
+
+            try {
+                const response = await fetch(`/api/typing-test/leaderboard/?level=${filter}&limit=15`);
+                const data = await response.json();
+
+                if (data.success && data.leaderboard.length > 0) {
+                    const medals = ['🥇', '🥈', '🥉'];
+                    tbody.innerHTML = data.leaderboard.map((score, i) => `
                     <tr>
                         <td>${medals[i] || (i + 1)}</td>
                         <td>${escapeHtml(score.username)}</td>
@@ -1510,101 +1512,101 @@ programmer typing test, coding typing practice, type code faster{% endblock %}
                         <td>${score.level}</td>
                     </tr>
                 `).join('');
-                
-                // Show user's rank if available
-                if (data.user_rank && data.user_best) {
-                    document.getElementById('yourRankBox').style.display = 'flex';
-                    document.getElementById('yourRankValue').textContent = `#${data.user_rank}`;
-                    document.getElementById('yourBestWpm').textContent = `(${data.user_best.wpm} WPM)`;
+
+                    // Show user's rank if available
+                    if (data.user_rank && data.user_best) {
+                        document.getElementById('yourRankBox').style.display = 'flex';
+                        document.getElementById('yourRankValue').textContent = `#${data.user_rank}`;
+                        document.getElementById('yourBestWpm').textContent = `(${data.user_best.wpm} WPM)`;
+                    } else {
+                        document.getElementById('yourRankBox').style.display = 'none';
+                    }
                 } else {
+                    tbody.innerHTML = '<tr><td colspan="5" style="color: var(--color-text-secondary); padding: 2rem;">No scores yet. Be the first!</td></tr>';
                     document.getElementById('yourRankBox').style.display = 'none';
                 }
-            } else {
-                tbody.innerHTML = '<tr><td colspan="5" style="color: var(--color-text-secondary); padding: 2rem;">No scores yet. Be the first!</td></tr>';
-                document.getElementById('yourRankBox').style.display = 'none';
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="5" style="color: var(--color-text-secondary);">Error loading leaderboard</td></tr>';
             }
-        } catch (e) {
-            tbody.innerHTML = '<tr><td colspan="5" style="color: var(--color-text-secondary);">Error loading leaderboard</td></tr>';
-        }
-    };
+        };
 
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    // Input handling
-    document.getElementById('typingInput').addEventListener('input', function(e) {
-        if (!isRunning) return;
-
-        // Start timer on first keypress
-        if (!startTime) {
-            startTime = Date.now();
-            timerInterval = setInterval(() => {
-                timeRemaining--;
-                document.getElementById('timeDisplay').textContent = timeRemaining;
-                if (timeRemaining <= 0) {
-                    endTest();
-                }
-            }, 1000);
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
-        const typed = e.target.value;
-        const lastChar = typed[typed.length - 1];
-        const expectedChar = currentText[currentIndex];
+        // Input handling
+        document.getElementById('typingInput').addEventListener('input', function (e) {
+            if (!isRunning) return;
 
-        if (lastChar === expectedChar) {
-            playKeySound(true);
-            correctChars++;
-            currentIndex++;
-        } else {
-            playKeySound(false);
-            errors++;
-        }
-        totalChars++;
+            // Start timer on first keypress
+            if (!startTime) {
+                startTime = Date.now();
+                timerInterval = setInterval(() => {
+                    timeRemaining--;
+                    document.getElementById('timeDisplay').textContent = timeRemaining;
+                    if (timeRemaining <= 0) {
+                        endTest();
+                    }
+                }, 1000);
+            }
 
-        e.target.value = '';
-        renderText();
-        updateStats();
-
-        // Check if completed text
-        if (currentIndex >= currentText.length) {
-            currentText = getRandomParagraph();
-            currentIndex = 0;
-            renderText();
-        }
-    });
-
-    // Handle special keys for newlines
-    document.getElementById('typingInput').addEventListener('keydown', function(e) {
-        if (!isRunning) return;
-        
-        if (e.key === 'Enter') {
+            const typed = e.target.value;
+            const lastChar = typed[typed.length - 1];
             const expectedChar = currentText[currentIndex];
-            if (expectedChar === '\n') {
-                e.preventDefault();
-                if (!startTime) {
-                    startTime = Date.now();
-                    timerInterval = setInterval(() => {
-                        timeRemaining--;
-                        document.getElementById('timeDisplay').textContent = timeRemaining;
-                        if (timeRemaining <= 0) endTest();
-                    }, 1000);
-                }
+
+            if (lastChar === expectedChar) {
                 playKeySound(true);
                 correctChars++;
-                totalChars++;
                 currentIndex++;
-                renderText();
-                updateStats();
+            } else {
+                playKeySound(false);
+                errors++;
             }
-        }
-    });
+            totalChars++;
 
-    // Initialize
-    loadLeaderboard();
-    newParagraph();
-})();
+            e.target.value = '';
+            renderText();
+            updateStats();
+
+            // Check if completed text
+            if (currentIndex >= currentText.length) {
+                currentText = getRandomParagraph();
+                currentIndex = 0;
+                renderText();
+            }
+        });
+
+        // Handle special keys for newlines
+        document.getElementById('typingInput').addEventListener('keydown', function (e) {
+            if (!isRunning) return;
+
+            if (e.key === 'Enter') {
+                const expectedChar = currentText[currentIndex];
+                if (expectedChar === '\n') {
+                    e.preventDefault();
+                    if (!startTime) {
+                        startTime = Date.now();
+                        timerInterval = setInterval(() => {
+                            timeRemaining--;
+                            document.getElementById('timeDisplay').textContent = timeRemaining;
+                            if (timeRemaining <= 0) endTest();
+                        }, 1000);
+                    }
+                    playKeySound(true);
+                    correctChars++;
+                    totalChars++;
+                    currentIndex++;
+                    renderText();
+                    updateStats();
+                }
+            }
+        });
+
+        // Initialize
+        loadLeaderboard();
+        newParagraph();
+    })();
 </script>
 {% endblock %}
