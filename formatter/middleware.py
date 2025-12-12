@@ -11,6 +11,54 @@ from user_agents import parse
 from formatter.models import VisitorLog, PageView
 
 
+class SecurityHeadersMiddleware(MiddlewareMixin):
+    """
+    Middleware to add security headers to all responses
+    Includes Content-Security-Policy and other security headers
+    """
+    
+    def process_response(self, request, response):
+        """Add security headers to response"""
+        
+        # Content-Security-Policy - Prevents XSS and other attacks
+        # This is a permissive policy that allows inline scripts/styles for development
+        # In production, you may want to use stricter policies with nonces
+        csp_policy = (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.google-analytics.com https://ajax.googleapis.com; "
+            "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; "
+            "img-src 'self' data: https: blob:; "
+            "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
+            "connect-src 'self' https://www.google-analytics.com https://ip-api.com https://pagead2.googlesyndication.com; "
+            "frame-src 'self' https://www.google.com https://pagead2.googlesyndication.com; "
+            "object-src 'none'; "
+            "base-uri 'self'; "
+            "form-action 'self'; "
+            "upgrade-insecure-requests"
+        )
+        response['Content-Security-Policy'] = csp_policy
+        
+        # Permissions-Policy - Controls browser features
+        response['Permissions-Policy'] = (
+            "accelerometer=(), camera=(), geolocation=(), gyroscope=(), "
+            "magnetometer=(), microphone=(), payment=(), usb=()"
+        )
+        
+        # X-Permitted-Cross-Domain-Policies
+        response['X-Permitted-Cross-Domain-Policies'] = 'none'
+        
+        # X-Download-Options (for IE)
+        response['X-Download-Options'] = 'noopen'
+        
+        # Cross-Origin-Embedder-Policy (not using require-corp as it may break images)
+        # response['Cross-Origin-Embedder-Policy'] = 'require-corp'
+        
+        # Cross-Origin-Resource-Policy
+        response['Cross-Origin-Resource-Policy'] = 'same-origin'
+        
+        return response
+
+
 class WWWRedirectMiddleware(MiddlewareMixin):
     """
     Middleware to redirect www to non-www version

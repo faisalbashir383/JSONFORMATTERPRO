@@ -55,6 +55,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'formatter.middleware.SecurityHeadersMiddleware',  # Security headers (CSP, etc.)
     'django.contrib.sessions.middleware.SessionMiddleware',
     'formatter.middleware.WWWRedirectMiddleware',  # WWW to non-WWW redirect
     'formatter.middleware.RedirectMiddleware',  # URL redirects (301/302)
@@ -170,3 +171,29 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+
+# ====================
+# Security Headers
+# ====================
+
+# HSTS (HTTP Strict Transport Security) - Forces HTTPS
+# Only enable in production with valid SSL certificate
+if os.getenv("env", "production") == "production":
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+# Referrer Policy - Prevents referrer leakage
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
+# X-Content-Type-Options - Prevents MIME type sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# X-Frame-Options - Already handled by XFrameOptionsMiddleware but explicitly set
+X_FRAME_OPTIONS = 'DENY'
+
+# Cross-Origin-Opener-Policy
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin'
