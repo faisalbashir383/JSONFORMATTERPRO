@@ -51,6 +51,27 @@ class StaticViewSitemap(Sitemap):
             'domain_age_page',
             # Data Format Tools
             'toon_converter_page',
+            # Calculators
+            'calculator_page',
+            'percentage_calculator_page',
+            'age_calculator_page',
+            'date_calculator_page',
+            'loan_calculator_page',
+            'mortgage_calculator_page',
+            'car_payment_calculator_page',
+            'sip_calculator_page',
+            'compound_interest_calculator_page',
+            'salary_calculator_page',
+            'bmi_calculator_page',
+            'calorie_calculator_page',
+            'time_calculator_page',
+            'gpa_calculator_page',
+            'unit_converter_page',
+            'discount_calculator_page',
+            'tip_calculator_page',
+            'currency_calculator_page',
+            'concrete_calculator_page',
+            'graphing_calculator_page',
         ]
     
     def location(self, item):

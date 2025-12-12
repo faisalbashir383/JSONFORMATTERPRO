@@ -1,0 +1,366 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Date Calculator - Days Between Dates Calculator | JSON Formatters Pro{% endblock %}
+{% block meta_title %}Date Calculator - Calculate Days Between Dates Free 2026{% endblock %}
+{% block meta_description %}Free online date calculator. Calculate days between dates, add or subtract days from a date,
+find weekday, and more. Perfect for planning and scheduling.{% endblock %}
+{% block meta_keywords %}date calculator, days between dates, date difference calculator, add days to date,
+subtract days from date, weekday calculator, date duration calculator, calendar calculator,
+date calculator 2026, best date calculator free 2026, how many days between,
+business days calculator, working days calculator, exclude weekends calculator,
+date counter, day counter, time between dates, weeks between dates, months between dates,
+due date calculator, deadline calculator, countdown calculator, date planner{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/date-calculator/{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .calculator-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .calc-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 2rem;
+        box-shadow: 0 8px 32px var(--color-shadow);
+    }
+
+    [data-theme="dark"] .calc-card {
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    .calc-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .input-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .input-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 0.9rem 1rem;
+        font-size: 1rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #3b82f6;
+    }
+
+    .input-row {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    .calc-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+        font-weight: 700;
+        color: white;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 300ms ease;
+    }
+
+    .calc-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    }
+
+    .result-box {
+        margin-top: 1.5rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+        border-radius: var(--radius-md);
+        text-align: center;
+        display: none;
+    }
+
+    .result-box.show {
+        display: block;
+        animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .result-value {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #3b82f6;
+        margin-bottom: 0.5rem;
+    }
+
+    .result-details {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+    }
+
+    .info-section,
+    .faq-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .faq-section {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));
+    }
+
+    .info-section h2,
+    .faq-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .faq-item {
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+        margin-bottom: 0.75rem;
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+    }
+
+    .faq-question {
+        padding: 1.25rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .faq-question:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .faq-toggle {
+        transition: transform 0.3s;
+    }
+
+    .faq-item.open .faq-toggle {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s;
+    }
+
+    .faq-item.open .faq-answer {
+        max-height: 300px;
+    }
+
+    .faq-answer-content {
+        padding: 0 1.25rem 1.25rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+    }
+
+    @media (max-width: 768px) {
+        .calculator-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>📅 Date Calculator</h1>
+    <p>Calculate days between dates, add or subtract days, and find specific dates for planning.</p>
+</div>
+
+<div class="calculator-grid">
+    <!-- Days Between Dates -->
+    <div class="calc-card">
+        <h2 class="calc-title">📆 Days Between Dates</h2>
+        <div class="input-group">
+            <label class="input-label">Start Date</label>
+            <input type="date" id="startDate1" class="input-field">
+        </div>
+        <div class="input-group">
+            <label class="input-label">End Date</label>
+            <input type="date" id="endDate1" class="input-field">
+        </div>
+        <button class="calc-btn" onclick="calculateDaysBetween()">Calculate Days</button>
+        <div class="result-box" id="result1">
+            <div class="result-value" id="daysBetween">0 days</div>
+            <div class="result-details" id="daysBetweenDetails"></div>
+        </div>
+    </div>
+
+    <!-- Add/Subtract Days -->
+    <div class="calc-card">
+        <h2 class="calc-title">➕ Add/Subtract Days</h2>
+        <div class="input-group">
+            <label class="input-label">Start Date</label>
+            <input type="date" id="startDate2" class="input-field">
+        </div>
+        <div class="input-group">
+            <label class="input-label">Days to Add (or negative to subtract)</label>
+            <input type="number" id="daysToAdd" class="input-field" placeholder="30" value="30">
+        </div>
+        <button class="calc-btn" onclick="addDays()">Calculate New Date</button>
+        <div class="result-box" id="result2">
+            <div class="result-value" id="newDate">--</div>
+            <div class="result-details" id="newDateDetails"></div>
+        </div>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>📚 About Date Calculations</h2>
+    <p>Use this calculator to find the exact number of days between two dates, or to add/subtract days from a specific
+        date. Perfect for planning deadlines, vacations, project timelines, and more.</p>
+</div>
+
+<div class="faq-section">
+    <h2 class="faq-title">❓ FAQ</h2>
+    <div class="faq-item">
+        <div class="faq-question"><span>How are days calculated?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">Days are calculated by finding the absolute difference between two dates in
+                milliseconds, then converting to days. This accounts for leap years and different month lengths.</div>
+        </div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question"><span>Does this include the end date?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">The calculation shows the number of days between the two dates. If you want
+                to include both start and end dates, add 1 to the result.</div>
+        </div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question"><span>Can I calculate business days only?</span><span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">Currently, this calculator counts all calendar days. For business days
+                (excluding weekends), you would need to subtract the weekends manually or use a specialized business day
+                calculator.</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    (function () {
+        // Set default dates
+        const today = new Date();
+        document.getElementById('startDate2').valueAsDate = today;
+
+        window.calculateDaysBetween = function () {
+            const start = new Date(document.getElementById('startDate1').value);
+            const end = new Date(document.getElementById('endDate1').value);
+
+            if (isNaN(start) || isNaN(end)) {
+                alert('Please select both dates');
+                return;
+            }
+
+            const diffMs = Math.abs(end - start);
+            const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const weeks = Math.floor(days / 7);
+            const months = Math.floor(days / 30.44);
+
+            document.getElementById('daysBetween').textContent = days + ' days';
+            document.getElementById('daysBetweenDetails').innerHTML =
+                `≈ ${weeks} weeks, ${days % 7} days<br>` +
+                `≈ ${months} months, ${Math.floor(days % 30.44)} days<br>` +
+                `= ${(days * 24).toLocaleString()} hours`;
+            document.getElementById('result1').classList.add('show');
+        };
+
+        window.addDays = function () {
+            const start = new Date(document.getElementById('startDate2').value);
+            const daysToAdd = parseInt(document.getElementById('daysToAdd').value);
+
+            if (isNaN(start) || isNaN(daysToAdd)) {
+                alert('Please enter valid date and days');
+                return;
+            }
+
+            const newDate = new Date(start);
+            newDate.setDate(newDate.getDate() + daysToAdd);
+
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('newDate').textContent = newDate.toLocaleDateString('en-US', options);
+            document.getElementById('newDateDetails').textContent =
+                `${daysToAdd >= 0 ? 'Adding' : 'Subtracting'} ${Math.abs(daysToAdd)} days from ${start.toLocaleDateString()}`;
+            document.getElementById('result2').classList.add('show');
+        };
+
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => item.classList.toggle('open'));
+        });
+    })();
+</script>
+{% endblock %}

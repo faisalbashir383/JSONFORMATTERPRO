@@ -60,6 +60,28 @@ urlpatterns = [
     path('toon-converter/', views.toon_converter_page, name='toon_converter_page'),
     path('domain-age/', views.domain_age_page, name='domain_age_page'),
     
+    # Calculator Pages
+    path('calculator/', views.calculator_page, name='calculator_page'),
+    path('percentage-calculator/', views.percentage_calculator_page, name='percentage_calculator_page'),
+    path('age-calculator/', views.age_calculator_page, name='age_calculator_page'),
+    path('date-calculator/', views.date_calculator_page, name='date_calculator_page'),
+    path('loan-calculator/', views.loan_calculator_page, name='loan_calculator_page'),
+    path('mortgage-calculator/', views.mortgage_calculator_page, name='mortgage_calculator_page'),
+    path('car-payment-calculator/', views.car_payment_calculator_page, name='car_payment_calculator_page'),
+    path('sip-calculator/', views.sip_calculator_page, name='sip_calculator_page'),
+    path('compound-interest-calculator/', views.compound_interest_calculator_page, name='compound_interest_calculator_page'),
+    path('salary-calculator/', views.salary_calculator_page, name='salary_calculator_page'),
+    path('bmi-calculator/', views.bmi_calculator_page, name='bmi_calculator_page'),
+    path('calorie-calculator/', views.calorie_calculator_page, name='calorie_calculator_page'),
+    path('time-calculator/', views.time_calculator_page, name='time_calculator_page'),
+    path('gpa-calculator/', views.gpa_calculator_page, name='gpa_calculator_page'),
+    path('unit-converter/', views.unit_converter_page, name='unit_converter_page'),
+    path('discount-calculator/', views.discount_calculator_page, name='discount_calculator_page'),
+    path('tip-calculator/', views.tip_calculator_page, name='tip_calculator_page'),
+    path('currency-calculator/', views.currency_calculator_page, name='currency_calculator_page'),
+    path('concrete-calculator/', views.concrete_calculator_page, name='concrete_calculator_page'),
+    path('graphing-calculator/', views.graphing_calculator_page, name='graphing_calculator_page'),
+    
     # Code Tool API Endpoints
     path('api/qr-generator/', views.generate_qr_code, name='generate_qr_code'),
     path('api/domain-age/', views.domain_age_api, name='domain_age_api'),

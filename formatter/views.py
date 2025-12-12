@@ -659,6 +659,110 @@ def lorem_ipsum_page(request):
 
 
 # ====================
+# Calculator Pages
+# ====================
+
+def calculator_page(request):
+    """Render the Simple Calculator page with Basic/Scientific modes"""
+    return render(request, 'calculator.html')
+
+
+def percentage_calculator_page(request):
+    """Render the Percentage Calculator page"""
+    return render(request, 'percentage-calculator.html')
+
+
+def age_calculator_page(request):
+    """Render the Age Calculator page"""
+    return render(request, 'age-calculator.html')
+
+
+def date_calculator_page(request):
+    """Render the Date Calculator page"""
+    return render(request, 'date-calculator.html')
+
+
+def loan_calculator_page(request):
+    """Render the Loan/EMI Calculator page"""
+    return render(request, 'loan-calculator.html')
+
+
+def mortgage_calculator_page(request):
+    """Render the Mortgage Calculator page"""
+    return render(request, 'mortgage-calculator.html')
+
+
+def car_payment_calculator_page(request):
+    """Render the Car Payment Calculator page"""
+    return render(request, 'car-payment-calculator.html')
+
+
+def sip_calculator_page(request):
+    """Render the SIP Calculator page"""
+    return render(request, 'sip-calculator.html')
+
+
+def compound_interest_calculator_page(request):
+    """Render the Compound Interest Calculator page"""
+    return render(request, 'compound-interest-calculator.html')
+
+
+def salary_calculator_page(request):
+    """Render the Salary Calculator page"""
+    return render(request, 'salary-calculator.html')
+
+
+def bmi_calculator_page(request):
+    """Render the BMI Calculator page"""
+    return render(request, 'bmi-calculator.html')
+
+
+def calorie_calculator_page(request):
+    """Render the Calorie Calculator page"""
+    return render(request, 'calorie-calculator.html')
+
+
+def time_calculator_page(request):
+    """Render the Time Calculator page"""
+    return render(request, 'time-calculator.html')
+
+
+def gpa_calculator_page(request):
+    """Render the GPA Calculator page"""
+    return render(request, 'gpa-calculator.html')
+
+
+def unit_converter_page(request):
+    """Render the Unit Converter page"""
+    return render(request, 'unit-converter.html')
+
+
+def discount_calculator_page(request):
+    """Render the Discount Calculator page"""
+    return render(request, 'discount-calculator.html')
+
+
+def tip_calculator_page(request):
+    """Render the Tip Calculator page"""
+    return render(request, 'tip-calculator.html')
+
+
+def currency_calculator_page(request):
+    """Render the Currency Converter page"""
+    return render(request, 'currency-calculator.html')
+
+
+def concrete_calculator_page(request):
+    """Render the Concrete Calculator page"""
+    return render(request, 'concrete-calculator.html')
+
+
+def graphing_calculator_page(request):
+    """Render the Graphing Calculator page"""
+    return render(request, 'graphing-calculator.html')
+
+
+# ====================
 # Custom Error Handlers
 # ====================
 

@@ -1,0 +1,341 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Calorie Calculator - Daily Calorie Needs Calculator | JSON Formatters Pro{% endblock %}
+{% block meta_title %}Calorie Calculator - Calculate Daily Calorie Needs Free 2026{% endblock %}
+{% block meta_description %}Free calorie calculator. Calculate your daily calorie needs based on age, weight, height,
+and activity level. Get personalized recommendations for weight loss or gain.{% endblock %}
+{% block meta_keywords %}calorie calculator, daily calorie calculator, calorie needs calculator, bmr calculator,
+tdee calculator, calorie intake calculator, calories per day calculator,
+calorie calculator 2026, best calorie calculator free, weight loss calorie calculator,
+maintenance calories calculator, calorie deficit calculator, calorie surplus calculator,
+basal metabolic rate, metabolic rate calculator, energy expenditure calculator{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/calorie-calculator/{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(245, 158, 11, 0.1) 50%, rgba(16, 185, 129, 0.1) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ef4444, #f59e0b, #10b981);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .calculator-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .calc-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 2rem;
+    }
+
+    [data-theme="dark"] .calc-card {
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    .calc-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .input-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 0.9rem;
+        font-size: 1rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #ef4444;
+    }
+
+    .gender-toggle {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .gender-btn {
+        flex: 1;
+        padding: 0.75rem;
+        font-weight: 600;
+        border: 2px solid var(--color-border);
+        background: var(--color-bg);
+        color: var(--color-text);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .gender-btn.active {
+        background: linear-gradient(135deg, #ef4444, #f59e0b);
+        color: white;
+        border-color: transparent;
+    }
+
+    .result-card {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(16, 185, 129, 0.1));
+        border: 2px solid rgba(239, 68, 68, 0.2);
+        display: none;
+    }
+
+    .result-card.show {
+        display: block;
+    }
+
+    .result-main {
+        text-align: center;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .result-value {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #ef4444;
+    }
+
+    .result-label {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+    }
+
+    .calorie-goals {
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .goal-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem;
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+    }
+
+    .goal-label {
+        color: var(--color-text-secondary);
+    }
+
+    .goal-value {
+        font-weight: 700;
+    }
+
+    .goal-value.loss {
+        color: #10b981;
+    }
+
+    .goal-value.gain {
+        color: #ef4444;
+    }
+
+    .calc-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+        font-weight: 700;
+        color: white;
+        background: linear-gradient(135deg, #ef4444, #f59e0b);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .calc-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+    }
+
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 900px) {
+        .calculator-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>🔥 Calorie Calculator</h1>
+    <p>Calculate your daily calorie needs based on your personal stats and activity level.</p>
+</div>
+
+<div class="calculator-layout">
+    <div class="calc-card">
+        <h2 class="calc-title">📝 Your Details</h2>
+
+        <div class="input-group">
+            <label class="input-label">Gender</label>
+            <div class="gender-toggle">
+                <button class="gender-btn active" id="maleBtn" onclick="setGender('male')">👨 Male</button>
+                <button class="gender-btn" id="femaleBtn" onclick="setGender('female')">👩 Female</button>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Age (years)</label>
+            <input type="number" id="age" class="input-field" value="30" min="15" max="100">
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Weight (kg)</label>
+            <input type="number" id="weight" class="input-field" value="70" min="30" max="300">
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Height (cm)</label>
+            <input type="number" id="height" class="input-field" value="170" min="100" max="250">
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Activity Level</label>
+            <select id="activity" class="input-field">
+                <option value="1.2">Sedentary (little or no exercise)</option>
+                <option value="1.375">Light (exercise 1-3 days/week)</option>
+                <option value="1.55" selected>Moderate (exercise 3-5 days/week)</option>
+                <option value="1.725">Active (exercise 6-7 days/week)</option>
+                <option value="1.9">Very Active (intense exercise daily)</option>
+            </select>
+        </div>
+
+        <button class="calc-btn" onclick="calculate()">🔥 Calculate Calories</button>
+    </div>
+
+    <div class="calc-card result-card" id="resultCard">
+        <h2 class="calc-title">📊 Your Daily Needs</h2>
+
+        <div class="result-main">
+            <div class="result-value" id="tdee">2,200</div>
+            <div class="result-label">Maintenance Calories (TDEE)</div>
+        </div>
+
+        <div class="calorie-goals">
+            <div class="goal-row">
+                <span class="goal-label">Mild Weight Loss (-0.25 kg/week)</span>
+                <span class="goal-value loss" id="mildLoss">1,950</span>
+            </div>
+            <div class="goal-row">
+                <span class="goal-label">Weight Loss (-0.5 kg/week)</span>
+                <span class="goal-value loss" id="loss">1,700</span>
+            </div>
+            <div class="goal-row">
+                <span class="goal-label">Weight Gain (+0.25 kg/week)</span>
+                <span class="goal-value gain" id="mildGain">2,450</span>
+            </div>
+            <div class="goal-row">
+                <span class="goal-label">Weight Gain (+0.5 kg/week)</span>
+                <span class="goal-value gain" id="gain">2,700</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>📚 Understanding Calories</h2>
+    <p><strong>BMR (Basal Metabolic Rate):</strong> Calories your body burns at rest to maintain basic functions like
+        breathing and circulation.</p>
+    <p><strong>TDEE (Total Daily Energy Expenditure):</strong> BMR × activity factor. This is how many calories you burn
+        in a day.</p>
+    <p><strong>Calorie Deficit/Surplus:</strong> To lose weight, eat fewer calories than TDEE. To gain weight, eat more.
+        A 500 calorie daily deficit ≈ 0.5 kg lost per week.</p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    (function () {
+        let gender = 'male';
+
+        window.setGender = function (g) {
+            gender = g;
+            document.getElementById('maleBtn').classList.toggle('active', g === 'male');
+            document.getElementById('femaleBtn').classList.toggle('active', g === 'female');
+        };
+
+        window.calculate = function () {
+            const age = parseFloat(document.getElementById('age').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const activity = parseFloat(document.getElementById('activity').value);
+
+            // Mifflin-St Jeor Equation
+            let bmr;
+            if (gender === 'male') {
+                bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+            } else {
+                bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+            }
+
+            const tdee = bmr * activity;
+
+            document.getElementById('tdee').textContent = Math.round(tdee).toLocaleString();
+            document.getElementById('mildLoss').textContent = Math.round(tdee - 250).toLocaleString();
+            document.getElementById('loss').textContent = Math.round(tdee - 500).toLocaleString();
+            document.getElementById('mildGain').textContent = Math.round(tdee + 250).toLocaleString();
+            document.getElementById('gain').textContent = Math.round(tdee + 500).toLocaleString();
+
+            document.getElementById('resultCard').classList.add('show');
+        };
+    })();
+</script>
+{% endblock %}

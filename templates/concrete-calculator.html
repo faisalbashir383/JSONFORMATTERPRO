@@ -1,0 +1,363 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Concrete Calculator - Calculate Concrete Needed | JSON Formatters Pro{% endblock %}
+{% block meta_title %}Concrete Calculator - Calculate Concrete Volume Free 2026{% endblock %}
+{% block meta_description %}Free concrete calculator. Calculate how much concrete you need for slabs, footings, columns,
+and more. Get accurate volume in cubic yards and bags.{% endblock %}
+{% block meta_keywords %}concrete calculator, cement calculator, concrete volume calculator, cubic yard calculator,
+how much concrete do i need, concrete slab calculator, footing calculator, concrete bags calculator,
+concrete calculator 2026, construction calculator, building material calculator{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/concrete-calculator/{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(107, 114, 128, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #6b7280, #f59e0b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .calculator-container {
+        max-width: 600px;
+        margin: 0 auto 2rem;
+    }
+
+    .calc-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 2rem;
+    }
+
+    [data-theme="dark"] .calc-card {
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    .shape-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .shape-tab {
+        flex: 1;
+        padding: 0.75rem;
+        font-weight: 600;
+        border: 2px solid var(--color-border);
+        background: var(--color-bg);
+        color: var(--color-text);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s;
+    }
+
+    .shape-tab.active {
+        background: linear-gradient(135deg, #6b7280, #f59e0b);
+        color: white;
+        border-color: transparent;
+    }
+
+    .input-group {
+        margin-bottom: 1rem;
+    }
+
+    .input-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-row {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .input-field {
+        flex: 1;
+        padding: 0.85rem;
+        font-size: 1rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        text-align: center;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #f59e0b;
+    }
+
+    .input-suffix {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        min-width: 50px;
+    }
+
+    .calc-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+        font-weight: 700;
+        color: white;
+        background: linear-gradient(135deg, #6b7280, #f59e0b);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: all 0.2s;
+    }
+
+    .calc-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .result-section {
+        margin-top: 1.5rem;
+        display: none;
+    }
+
+    .result-section.show {
+        display: block;
+    }
+
+    .result-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .result-card {
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+        padding: 1.25rem;
+        text-align: center;
+        border: 1px solid var(--color-border);
+    }
+
+    .result-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #f59e0b;
+    }
+
+    .result-label {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.25rem;
+    }
+
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>🧱 Concrete Calculator</h1>
+    <p>Calculate how much concrete you need for your project. Get volume in cubic yards and bags.</p>
+</div>
+
+<div class="calculator-container">
+    <div class="calc-card">
+        <div class="shape-tabs">
+            <button class="shape-tab active" data-shape="slab">📐 Slab</button>
+            <button class="shape-tab" data-shape="footing">🏗️ Footing</button>
+            <button class="shape-tab" data-shape="column">🔲 Column</button>
+        </div>
+
+        <div id="slabInputs">
+            <div class="input-group">
+                <label class="input-label">Length</label>
+                <div class="input-row">
+                    <input type="number" id="slabLength" class="input-field" value="10" min="0" step="0.1">
+                    <span class="input-suffix">feet</span>
+                </div>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Width</label>
+                <div class="input-row">
+                    <input type="number" id="slabWidth" class="input-field" value="10" min="0" step="0.1">
+                    <span class="input-suffix">feet</span>
+                </div>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Thickness</label>
+                <div class="input-row">
+                    <input type="number" id="slabThickness" class="input-field" value="4" min="0" step="0.5">
+                    <span class="input-suffix">inches</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="footingInputs" style="display: none;">
+            <div class="input-group">
+                <label class="input-label">Length</label>
+                <div class="input-row">
+                    <input type="number" id="footingLength" class="input-field" value="20" min="0" step="0.1">
+                    <span class="input-suffix">feet</span>
+                </div>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Width</label>
+                <div class="input-row">
+                    <input type="number" id="footingWidth" class="input-field" value="2" min="0" step="0.1">
+                    <span class="input-suffix">feet</span>
+                </div>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Depth</label>
+                <div class="input-row">
+                    <input type="number" id="footingDepth" class="input-field" value="1" min="0" step="0.1">
+                    <span class="input-suffix">feet</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="columnInputs" style="display: none;">
+            <div class="input-group">
+                <label class="input-label">Diameter</label>
+                <div class="input-row">
+                    <input type="number" id="columnDiameter" class="input-field" value="12" min="0" step="0.5">
+                    <span class="input-suffix">inches</span>
+                </div>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Height</label>
+                <div class="input-row">
+                    <input type="number" id="columnHeight" class="input-field" value="4" min="0" step="0.1">
+                    <span class="input-suffix">feet</span>
+                </div>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Number of Columns</label>
+                <div class="input-row">
+                    <input type="number" id="columnCount" class="input-field" value="4" min="1" step="1">
+                    <span class="input-suffix">units</span>
+                </div>
+            </div>
+        </div>
+
+        <button class="calc-btn" onclick="calculate()">🧱 Calculate Concrete</button>
+
+        <div class="result-section" id="results">
+            <div class="result-grid">
+                <div class="result-card">
+                    <div class="result-value" id="cubicYards">0</div>
+                    <div class="result-label">Cubic Yards</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-value" id="cubicFeet">0</div>
+                    <div class="result-label">Cubic Feet</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-value" id="bags60">0</div>
+                    <div class="result-label">60 lb Bags</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-value" id="bags80">0</div>
+                    <div class="result-label">80 lb Bags</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>📚 Concrete Tips</h2>
+    <p><strong>Add 10% extra:</strong> Always order 10% more concrete than calculated to account for waste, spillage,
+        and uneven surfaces.</p>
+    <p><strong>Bag coverage:</strong> A 60 lb bag covers about 0.45 cu ft. An 80 lb bag covers about 0.60 cu ft.</p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    (function () {
+        let currentShape = 'slab';
+
+        document.querySelectorAll('.shape-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.shape-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentShape = tab.dataset.shape;
+
+                document.getElementById('slabInputs').style.display = currentShape === 'slab' ? 'block' : 'none';
+                document.getElementById('footingInputs').style.display = currentShape === 'footing' ? 'block' : 'none';
+                document.getElementById('columnInputs').style.display = currentShape === 'column' ? 'block' : 'none';
+            });
+        });
+
+        window.calculate = function () {
+            let cubicFeet;
+
+            if (currentShape === 'slab') {
+                const length = parseFloat(document.getElementById('slabLength').value) || 0;
+                const width = parseFloat(document.getElementById('slabWidth').value) || 0;
+                const thickness = (parseFloat(document.getElementById('slabThickness').value) || 0) / 12;
+                cubicFeet = length * width * thickness;
+            } else if (currentShape === 'footing') {
+                const length = parseFloat(document.getElementById('footingLength').value) || 0;
+                const width = parseFloat(document.getElementById('footingWidth').value) || 0;
+                const depth = parseFloat(document.getElementById('footingDepth').value) || 0;
+                cubicFeet = length * width * depth;
+            } else {
+                const diameter = (parseFloat(document.getElementById('columnDiameter').value) || 0) / 12;
+                const height = parseFloat(document.getElementById('columnHeight').value) || 0;
+                const count = parseInt(document.getElementById('columnCount').value) || 1;
+                const radius = diameter / 2;
+                cubicFeet = Math.PI * radius * radius * height * count;
+            }
+
+            const cubicYards = cubicFeet / 27;
+            const bags60 = Math.ceil(cubicFeet / 0.45);
+            const bags80 = Math.ceil(cubicFeet / 0.60);
+
+            document.getElementById('cubicFeet').textContent = cubicFeet.toFixed(2);
+            document.getElementById('cubicYards').textContent = cubicYards.toFixed(2);
+            document.getElementById('bags60').textContent = bags60;
+            document.getElementById('bags80').textContent = bags80;
+            document.getElementById('results').classList.add('show');
+        };
+    })();
+</script>
+{% endblock %}

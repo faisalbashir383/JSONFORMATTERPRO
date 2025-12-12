@@ -1,0 +1,391 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Tip Calculator - Free Tip Calculator Online | JSON Formatters Pro{% endblock %}
+{% block meta_title %}Tip Calculator - Calculate Restaurant Tips & Split Bills Free 2026{% endblock %}
+{% block meta_description %}Free online tip calculator. Calculate tips for restaurants, split bills among friends, and
+find the perfect tip percentage. Works for any service industry.{% endblock %}
+{% block meta_keywords %}tip calculator, restaurant tip calculator, gratuity calculator, bill split calculator,
+how much to tip, tip percentage calculator, 15% tip calculator, 20% tip calculator,
+bill splitter, split bill calculator, dining calculator, meal tip calculator,
+tip calculator 2026, best tip calculator free 2026, easy tip calculator,
+service tip calculator, delivery tip calculator, bar tip calculator,
+tip guide, tipping etiquette, standard tip percentage{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/tip-calculator/{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #10b981, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .calculator-container {
+        max-width: 500px;
+        margin: 0 auto 2rem;
+    }
+
+    .calc-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 2rem;
+        box-shadow: 0 8px 32px var(--color-shadow);
+    }
+
+    [data-theme="dark"] .calc-card {
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    .input-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .input-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        text-align: center;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #10b981;
+    }
+
+    .tip-buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .tip-btn {
+        padding: 0.85rem;
+        font-size: 1rem;
+        font-weight: 600;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .tip-btn:hover {
+        border-color: #10b981;
+        color: #10b981;
+    }
+
+    .tip-btn.active {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        border-color: transparent;
+    }
+
+    .result-section {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1));
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .result-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .result-row:last-child {
+        border-bottom: none;
+    }
+
+    .result-row.highlight {
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
+    .result-row.highlight .result-value {
+        color: #10b981;
+    }
+
+    .result-label {
+        color: var(--color-text-secondary);
+    }
+
+    .result-value {
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    .people-counter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .counter-btn {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 2px solid var(--color-border);
+        background: var(--color-bg);
+        color: var(--color-text);
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .counter-btn:hover {
+        background: #10b981;
+        color: white;
+        border-color: transparent;
+    }
+
+    .counter-value {
+        font-size: 2rem;
+        font-weight: 700;
+        width: 60px;
+        text-align: center;
+    }
+
+    .info-section,
+    .faq-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .faq-section {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+    }
+
+    .info-section h2,
+    .faq-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .faq-item {
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+        margin-bottom: 0.75rem;
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+    }
+
+    .faq-question {
+        padding: 1.25rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .faq-question:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .faq-toggle {
+        transition: transform 0.3s;
+    }
+
+    .faq-item.open .faq-toggle {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s;
+    }
+
+    .faq-item.open .faq-answer {
+        max-height: 300px;
+    }
+
+    .faq-answer-content {
+        padding: 0 1.25rem 1.25rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>💳 Tip Calculator</h1>
+    <p>Calculate the perfect tip and split bills easily among friends. Quick and accurate.</p>
+</div>
+
+<div class="calculator-container">
+    <div class="calc-card">
+        <div class="input-group">
+            <label class="input-label">💵 Bill Amount</label>
+            <input type="number" id="billAmount" class="input-field" placeholder="0.00" step="0.01"
+                oninput="calculate()">
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">📊 Tip Percentage</label>
+            <div class="tip-buttons">
+                <button class="tip-btn" data-tip="10">10%</button>
+                <button class="tip-btn" data-tip="15">15%</button>
+                <button class="tip-btn active" data-tip="20">20%</button>
+                <button class="tip-btn" data-tip="25">25%</button>
+            </div>
+            <input type="number" id="customTip" class="input-field" placeholder="Custom %" min="0" max="100"
+                oninput="setCustomTip()">
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">👥 Split Between</label>
+            <div class="people-counter">
+                <button class="counter-btn" onclick="changePeople(-1)">−</button>
+                <span class="counter-value" id="peopleCount">1</span>
+                <button class="counter-btn" onclick="changePeople(1)">+</button>
+            </div>
+        </div>
+
+        <div class="result-section">
+            <div class="result-row">
+                <span class="result-label">Tip Amount</span>
+                <span class="result-value" id="tipAmount">$0.00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Total with Tip</span>
+                <span class="result-value" id="totalAmount">$0.00</span>
+            </div>
+            <div class="result-row highlight">
+                <span class="result-label">Each Person Pays</span>
+                <span class="result-value" id="perPerson">$0.00</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>📚 Tipping Guide</h2>
+    <p><strong>Restaurants:</strong> 15-20% for good service, 20-25% for excellent service.</p>
+    <p><strong>Delivery:</strong> 15-20% or minimum $3-5 for food delivery.</p>
+    <p><strong>Hair/Spa:</strong> 15-20% of the service cost.</p>
+    <p><strong>Hotels:</strong> $1-5 per bag for bellhops, $2-5 daily for housekeeping.</p>
+</div>
+
+<div class="faq-section">
+    <h2 class="faq-title">❓ FAQ</h2>
+    <div class="faq-item">
+        <div class="faq-question"><span>How much should I tip?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">Standard restaurant tip is 15-20%. For excellent service, 20-25% is
+                appropriate. Some countries have different customs.</div>
+        </div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question"><span>Should I tip on tax?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">Traditionally, tip is calculated on the pre-tax bill. However, many people
+                tip on the total including tax for simplicity.</div>
+        </div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question"><span>When is it okay not to tip?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">Tipping is optional when service is included (check your bill), at fast-food
+                restaurants, or for counter service. In some countries, tipping isn't customary.</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    (function () {
+        let tipPercent = 20;
+        let people = 1;
+
+        document.querySelectorAll('.tip-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tip-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                tipPercent = parseFloat(btn.dataset.tip);
+                document.getElementById('customTip').value = '';
+                calculate();
+            });
+        });
+
+        window.setCustomTip = function () {
+            const custom = parseFloat(document.getElementById('customTip').value);
+            if (!isNaN(custom) && custom >= 0) {
+                tipPercent = custom;
+                document.querySelectorAll('.tip-btn').forEach(b => b.classList.remove('active'));
+                calculate();
+            }
+        };
+
+        window.changePeople = function (delta) {
+            people = Math.max(1, people + delta);
+            document.getElementById('peopleCount').textContent = people;
+            calculate();
+        };
+
+        window.calculate = function () {
+            const bill = parseFloat(document.getElementById('billAmount').value) || 0;
+            const tip = bill * tipPercent / 100;
+            const total = bill + tip;
+            const perPerson = total / people;
+
+            document.getElementById('tipAmount').textContent = '$' + tip.toFixed(2);
+            document.getElementById('totalAmount').textContent = '$' + total.toFixed(2);
+            document.getElementById('perPerson').textContent = '$' + perPerson.toFixed(2);
+        };
+
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => item.classList.toggle('open'));
+        });
+    })();
+</script>
+{% endblock %}

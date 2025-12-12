@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Compound Interest Calculator - Free Investment Growth Calculator | JSON Formatters Pro{% endblock %}
+{% block meta_title %}Compound Interest Calculator - Calculate Investment Growth Free 2026{% endblock %}
+{% block meta_description %}Free compound interest calculator. See how your money grows with compound interest over
+time. Compare different compounding frequencies and investment scenarios.{% endblock %}
+{% block meta_keywords %}compound interest calculator, investment calculator, interest calculator, savings calculator,
+compound interest formula, daily compound interest, monthly compound interest, annual compound interest,
+compound interest calculator 2026, best compound interest calculator free,
+wealth growth calculator, money growth calculator, investment growth calculator,
+rule of 72 calculator, doubling time calculator, interest rate calculator{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/compound-interest-calculator/{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #10b981, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .calculator-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .calc-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 2rem;
+    }
+
+    [data-theme="dark"] .calc-card {
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    .calc-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .input-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 0.9rem;
+        font-size: 1rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #10b981;
+    }
+
+    select.input-field {
+        cursor: pointer;
+    }
+
+    .result-card {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(139, 92, 246, 0.1));
+        border: 2px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .result-display {
+        text-align: center;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .result-value {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #10b981, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .result-label {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.5rem;
+    }
+
+    .stat-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .stat-card {
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        text-align: center;
+        border: 1px solid var(--color-border);
+    }
+
+    .stat-value {
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.25rem;
+    }
+
+    .formula-box {
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 1.25rem;
+        margin: 1.5rem 0;
+        text-align: center;
+        font-family: monospace;
+    }
+
+    .formula-box span {
+        color: #10b981;
+        font-weight: 600;
+    }
+
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 900px) {
+        .calculator-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>💹 Compound Interest Calculator</h1>
+    <p>Watch your money grow with the power of compound interest. See how small amounts add up over time.</p>
+</div>
+
+<div class="calculator-layout">
+    <div class="calc-card">
+        <h2 class="calc-title">💰 Investment Details</h2>
+
+        <div class="input-group">
+            <label class="input-label">Initial Investment ($)</label>
+            <input type="number" id="principal" class="input-field" value="10000" min="0" oninput="calculate()">
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Monthly Contribution ($)</label>
+            <input type="number" id="monthly" class="input-field" value="500" min="0" oninput="calculate()">
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Annual Interest Rate (%)</label>
+            <input type="number" id="rate" class="input-field" value="8" min="0" step="0.1" oninput="calculate()">
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Time Period (Years)</label>
+            <input type="number" id="years" class="input-field" value="10" min="1" max="50" oninput="calculate()">
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Compound Frequency</label>
+            <select id="frequency" class="input-field" onchange="calculate()">
+                <option value="12">Monthly</option>
+                <option value="4">Quarterly</option>
+                <option value="2">Semi-annually</option>
+                <option value="1">Annually</option>
+                <option value="365">Daily</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="calc-card result-card">
+        <h2 class="calc-title">📊 Your Results</h2>
+
+        <div class="result-display">
+            <div class="result-value" id="futureValue">$102,421</div>
+            <div class="result-label">Future Value</div>
+        </div>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalDeposits" style="color: #3b82f6;">$70,000</div>
+                <div class="stat-label">Total Deposits</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalInterest" style="color: #10b981;">$32,421</div>
+                <div class="stat-label">Interest Earned</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>📚 The Power of Compound Interest</h2>
+    <p>Compound interest is interest calculated on both the initial principal and the accumulated interest. This creates
+        exponential growth over time, often called the "eighth wonder of the world."</p>
+
+    <div class="formula-box">
+        <span>A</span> = P(1 + r/n)^(nt) + PMT × ((1 + r/n)^(nt) - 1) / (r/n)
+    </div>
+
+    <p><strong>Rule of 72:</strong> Divide 72 by your interest rate to estimate how many years it takes to double your
+        money. At 8% interest, money doubles in about 9 years.</p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    (function () {
+        function formatCurrency(amount) {
+            return '$' + amount.toLocaleString('en-US', { maximumFractionDigits: 0 });
+        }
+
+        window.calculate = function () {
+            const P = parseFloat(document.getElementById('principal').value) || 0;
+            const PMT = parseFloat(document.getElementById('monthly').value) || 0;
+            const r = parseFloat(document.getElementById('rate').value) / 100 || 0;
+            const t = parseFloat(document.getElementById('years').value) || 1;
+            const n = parseFloat(document.getElementById('frequency').value);
+
+            // Compound interest with regular contributions
+            // FV = P(1 + r/n)^(nt) + PMT × ((1 + r/n)^(nt) - 1) / (r/n)
+            const rn = r / n;
+            const nt = n * t;
+
+            let futureValue;
+            if (r === 0) {
+                futureValue = P + PMT * 12 * t;
+            } else {
+                const compoundFactor = Math.pow(1 + rn, nt);
+                const principalGrowth = P * compoundFactor;
+                const contributionGrowth = PMT * ((compoundFactor - 1) / rn);
+                futureValue = principalGrowth + contributionGrowth;
+            }
+
+            const totalDeposits = P + (PMT * 12 * t);
+            const totalInterest = futureValue - totalDeposits;
+
+            document.getElementById('futureValue').textContent = formatCurrency(futureValue);
+            document.getElementById('totalDeposits').textContent = formatCurrency(totalDeposits);
+            document.getElementById('totalInterest').textContent = formatCurrency(totalInterest);
+        };
+
+        calculate();
+    })();
+</script>
+{% endblock %}

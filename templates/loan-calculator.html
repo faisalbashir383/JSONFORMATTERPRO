@@ -1,0 +1,444 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Loan Calculator - EMI Calculator Online Free | JSON Formatters Pro{% endblock %}
+{% block meta_title %}Loan Calculator - Calculate EMI, Interest & Amortization Free 2026{% endblock %}
+{% block meta_description %}Free online loan EMI calculator. Calculate monthly payments, total interest, and view
+amortization schedule for personal loans, home loans, and car loans.{% endblock %}
+{% block meta_keywords %}loan calculator, emi calculator, loan emi calculator, personal loan calculator, home loan
+calculator,
+car loan calculator, mortgage calculator, loan interest calculator, loan payment calculator,
+monthly payment calculator, emi calculation, emi formula, loan amortization calculator,
+loan calculator 2026, best loan calculator online free 2026, accurate emi calculator,
+loan repayment calculator, simple loan calculator, compound loan calculator,
+bank loan calculator, housing loan calculator, vehicle loan calculator,
+loan eligibility calculator, loan installment calculator, flat rate loan calculator,
+reducing balance loan calculator, annual percentage rate calculator, apr calculator,
+total interest calculator, principal interest calculator, loan term calculator,
+prepayment calculator, part payment calculator, loan closure calculator{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/loan-calculator/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Loan EMI Calculator",
+  "description": "Free online loan calculator to compute EMI, total interest, and amortization schedule",
+  "url": "{{ SITE_URL }}/loan-calculator/",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web Browser",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(239, 68, 68, 0.1) 50%, rgba(139, 92, 246, 0.1) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #f59e0b 0%, #ef4444 50%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .calculator-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .calc-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 2rem;
+        box-shadow: 0 8px 32px var(--color-shadow);
+    }
+
+    [data-theme="dark"] .calc-card {
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    .calc-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .input-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .input-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-value {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #f59e0b;
+    }
+
+    .input-slider {
+        width: 100%;
+        height: 8px;
+        -webkit-appearance: none;
+        background: var(--color-border);
+        border-radius: 4px;
+        outline: none;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f59e0b, #ef4444);
+        cursor: pointer;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 0.85rem 1rem;
+        font-size: 1rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        text-align: center;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #f59e0b;
+    }
+
+    /* Result Card */
+    .result-card {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        border: 2px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .emi-display {
+        text-align: center;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .emi-value {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #f59e0b, #ef4444);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1;
+    }
+
+    .emi-label {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.5rem;
+    }
+
+    .result-stats {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .stat-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem;
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+    }
+
+    .stat-label {
+        color: var(--color-text-secondary);
+    }
+
+    .stat-value {
+        font-weight: 700;
+        color: var(--color-text);
+    }
+
+    .stat-value.interest {
+        color: #ef4444;
+    }
+
+    .stat-value.total {
+        color: #8b5cf6;
+    }
+
+    .info-section,
+    .faq-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .faq-section {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+    }
+
+    .info-section h2,
+    .faq-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .formula-box {
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 1rem 1.5rem;
+        font-family: 'SF Mono', monospace;
+        margin: 1rem 0;
+        text-align: center;
+    }
+
+    .formula-box span {
+        color: #f59e0b;
+        font-weight: 600;
+    }
+
+    .faq-item {
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+        margin-bottom: 0.75rem;
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+    }
+
+    .faq-question {
+        padding: 1.25rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .faq-question:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .faq-toggle {
+        font-size: 1.25rem;
+        transition: transform 0.3s;
+    }
+
+    .faq-item.open .faq-toggle {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .faq-item.open .faq-answer {
+        max-height: 500px;
+    }
+
+    .faq-answer-content {
+        padding: 0 1.25rem 1.25rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+    }
+
+    @media (max-width: 900px) {
+        .calculator-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>💰 Loan EMI Calculator</h1>
+    <p>Calculate your monthly EMI, total interest, and amortization for any loan. Plan your finances with precision.</p>
+</div>
+
+<div class="calculator-layout">
+    <div class="calc-card">
+        <h2 class="calc-title">📝 Loan Details</h2>
+
+        <div class="input-group">
+            <div class="input-label">
+                <span>Loan Amount</span>
+                <span class="input-value" id="loanAmountValue">₹10,00,000</span>
+            </div>
+            <input type="range" class="input-slider" id="loanAmount" min="10000" max="10000000" value="1000000"
+                step="10000" oninput="updateLoan()">
+        </div>
+
+        <div class="input-group">
+            <div class="input-label">
+                <span>Interest Rate (% p.a.)</span>
+                <span class="input-value" id="interestRateValue">10%</span>
+            </div>
+            <input type="range" class="input-slider" id="interestRate" min="1" max="30" value="10" step="0.25"
+                oninput="updateLoan()">
+        </div>
+
+        <div class="input-group">
+            <div class="input-label">
+                <span>Loan Tenure (Years)</span>
+                <span class="input-value" id="tenureValue">5 years</span>
+            </div>
+            <input type="range" class="input-slider" id="tenure" min="1" max="30" value="5" step="1"
+                oninput="updateLoan()">
+        </div>
+    </div>
+
+    <div class="calc-card result-card">
+        <h2 class="calc-title">📊 Your EMI</h2>
+
+        <div class="emi-display">
+            <div class="emi-value" id="emiValue">₹21,247</div>
+            <div class="emi-label">Monthly EMI</div>
+        </div>
+
+        <div class="result-stats">
+            <div class="stat-row">
+                <span class="stat-label">Principal Amount</span>
+                <span class="stat-value" id="principalAmount">₹10,00,000</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Total Interest</span>
+                <span class="stat-value interest" id="totalInterest">₹2,74,823</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Total Amount Payable</span>
+                <span class="stat-value total" id="totalAmount">₹12,74,823</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>📚 Understanding EMI</h2>
+    <p>EMI (Equated Monthly Installment) is a fixed monthly payment made to repay a loan. Each EMI consists of two
+        parts: principal repayment and interest payment. In the early months, a larger portion goes toward interest;
+        later, more goes toward principal.</p>
+    <h3 style="margin-top: 1rem;">EMI Formula</h3>
+    <div class="formula-box"><span>EMI</span> = [P × r × (1+r)^n] / [(1+r)^n - 1]</div>
+    <p style="text-align: center; font-size: 0.9rem;">Where: P = Principal, r = Monthly interest rate (annual/12/100), n
+        = Number of months</p>
+</div>
+
+<div class="faq-section">
+    <h2 class="faq-title">❓ Frequently Asked Questions</h2>
+    <div class="faq-item">
+        <div class="faq-question"><span>What is EMI?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">EMI stands for Equated Monthly Installment. It's a fixed amount you pay
+                every month to repay your loan over a specified period. Each EMI includes both principal and interest
+                components.</div>
+        </div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question"><span>How is EMI calculated?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">EMI is calculated using the reducing balance method formula that considers
+                your loan amount, interest rate, and tenure. The formula ensures equal monthly payments throughout the
+                loan period.</div>
+        </div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question"><span>Can I reduce my EMI?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">Yes! You can reduce EMI by choosing a longer tenure, negotiating a lower
+                interest rate, or making a larger down payment. However, longer tenure means more total interest paid.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question"><span>What happens if I prepay my loan?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">Prepayment reduces your principal, which decreases total interest and can
+                shorten your tenure or reduce EMI. Some lenders charge prepayment penalties, so check your loan terms.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    (function () {
+        function formatCurrency(amount) {
+            return '₹' + amount.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+        }
+
+        window.updateLoan = function () {
+            const principal = parseFloat(document.getElementById('loanAmount').value);
+            const annualRate = parseFloat(document.getElementById('interestRate').value);
+            const years = parseFloat(document.getElementById('tenure').value);
+
+            document.getElementById('loanAmountValue').textContent = formatCurrency(principal);
+            document.getElementById('interestRateValue').textContent = annualRate + '%';
+            document.getElementById('tenureValue').textContent = years + ' years';
+
+            const monthlyRate = annualRate / 12 / 100;
+            const months = years * 12;
+
+            const emi = principal * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
+            const totalAmount = emi * months;
+            const totalInterest = totalAmount - principal;
+
+            document.getElementById('emiValue').textContent = formatCurrency(emi);
+            document.getElementById('principalAmount').textContent = formatCurrency(principal);
+            document.getElementById('totalInterest').textContent = formatCurrency(totalInterest);
+            document.getElementById('totalAmount').textContent = formatCurrency(totalAmount);
+        };
+
+        updateLoan();
+
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => item.classList.toggle('open'));
+        });
+    })();
+</script>
+{% endblock %}
