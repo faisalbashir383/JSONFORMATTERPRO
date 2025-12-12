@@ -826,6 +826,33 @@
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
 
+        // Dynamic favicon - always white
+        function updateFavicon() {
+            fetch("{% static 'images/logo.svg' %}")
+                .then(response => response.text())
+                .then(svgText => {
+                    // Replace all fill colors with white
+                    const modifiedSvg = svgText
+                        .replace(/fill="#[0-9a-fA-F]{6}"/g, 'fill="#ffffff"')
+                        .replace(/fill:#[0-9a-fA-F]{6}/g, 'fill:#ffffff')
+                        .replace(/fill="rgb\([^)]+\)"/g, 'fill="#ffffff"')
+                        .replace(/fill="[^"]+"/g, 'fill="#ffffff"');
+
+                    // Convert to data URL
+                    const encoded = encodeURIComponent(modifiedSvg);
+                    const dataUrl = `data:image/svg+xml,${encoded}`;
+
+                    // Update all favicon links
+                    document.querySelectorAll('link[rel*="icon"]').forEach(link => {
+                        link.href = dataUrl;
+                    });
+                })
+                .catch(err => console.log('Favicon update failed:', err));
+        }
+
+        // Update favicon on load
+        updateFavicon();
+
         const themeToggle = document.getElementById('themeToggle');
         const mobileThemeToggle = document.getElementById('mobileThemeToggle');
 
