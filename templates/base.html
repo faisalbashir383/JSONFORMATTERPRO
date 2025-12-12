@@ -47,6 +47,9 @@
     <meta name="google-site-verification" content="dUrxIJxdHg9iUeNbFzVFSycuVOgEENWBmwQRChJBbqk" />
     <meta name="google-adsense-account" content="ca-pub-6955346946355268">
 
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <!-- Primary Meta Tags -->
     <title>{% block title %}JSON Formatters Pro - Free Online JSON Tools{% endblock %}</title>
     <meta name="title" content="{% block meta_title %}JSON Formatters Pro - Free Online JSON Tools{% endblock %}">
@@ -257,6 +260,11 @@
             --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
+        /* Logo color inversion for dark theme */
+        [data-theme="dark"] .nav-logo {
+            filter: brightness(0) invert(1);
+        }
+
         *,
         *::before,
         *::after {
@@ -353,6 +361,9 @@
 </head>
 
 <body>
+    <!-- CSRF Token for AJAX requests -->
+    {% csrf_token %}
+
     <!-- JSON Page Loader -->
     <div id="pageLoader" class="page-loader">
         <div class="loader-content">
@@ -504,7 +515,8 @@
             <div class="nav-brand">
                 <a href="/"
                     style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
-                    <span class="brand-icon">{ }</span>
+                    <img src="{% static 'images/logo.svg' %}" alt="JSON Formatters Pro Logo" class="nav-logo"
+                        style="height: 40px; width: auto;">
                     <span class="brand-name">JSON Formatters Pro</span>
                 </a>
             </div>

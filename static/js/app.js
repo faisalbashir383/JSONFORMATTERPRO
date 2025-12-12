@@ -65,15 +65,22 @@ function initTheme() {
 // ====================
 
 function openFullscreen() {
-    const output = elements.outputJson.value.trim();
+    // Get output from CodeMirror or textarea
+    const output = window.outputEditor
+        ? window.outputEditor.getValue().trim()
+        : (elements.outputJson?.value?.trim() || '');
 
     if (!output) {
         showMessage('error', 'No Output', 'There is no output to display in fullscreen.');
         return;
     }
 
-    elements.fullscreenOutput.textContent = output;
-    elements.fullscreenModal.classList.add('active');
+    if (elements.fullscreenOutput) {
+        elements.fullscreenOutput.textContent = output;
+    }
+    if (elements.fullscreenModal) {
+        elements.fullscreenModal.classList.add('active');
+    }
     document.body.style.overflow = 'hidden';
 }
 
@@ -116,6 +123,12 @@ elements.fullscreenModal?.addEventListener('click', (e) => {
 // ====================
 
 function highlightError(errorMessage) {
+    // Guard against undefined error message
+    if (!errorMessage) {
+        console.error('highlightError called with undefined message');
+        return;
+    }
+
     // Parse error message to extract line and column
     // Common format: "Expecting property name enclosed in double quotes: line 3 column 5 (char 42)"
     const lineMatch = errorMessage.match(/line (\d+)/i);
@@ -212,8 +225,13 @@ function showMessage(type, title, text) {
 // ====================
 
 function updateCharCount() {
-    const inputLength = elements.inputJson.value.length;
-    const outputLength = elements.outputJson.value.length;
+    // Get values from CodeMirror if available, otherwise from textarea
+    const inputLength = window.inputEditor
+        ? window.inputEditor.getValue().length
+        : (elements.inputJson?.value?.length || 0);
+    const outputLength = window.outputEditor
+        ? window.outputEditor.getValue().length
+        : (elements.outputJson?.value?.length || 0);
 
     // Only update if elements exist (homepage has charCount, not inputCount/outputCount)
     if (elements.inputCount) {
@@ -238,13 +256,34 @@ async function makeApiCall(endpoint, data, loadingBtn) {
         // Clear any previous errors
         clearErrorHighlight();
 
-        // Add loading state
-        loadingBtn.classList.add('loading');
+        // Add loading state (with null check)
+        if (loadingBtn) {
+            loadingBtn.classList.add('loading');
+        }
+
+        // Get CSRF token from cookie or hidden input
+        let csrfToken = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('csrftoken='))
+            ?.split('=')[1];
+
+        // Fallback: try to get from hidden input
+        if (!csrfToken) {
+            const csrfInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+            csrfToken = csrfInput?.value || '';
+        }
+
+        // Fallback: try meta tag
+        if (!csrfToken) {
+            const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+            csrfToken = csrfMeta?.content || '';
+        }
 
         const response = await fetch(`${API_BASE}/api/${endpoint}/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken || '',
             },
             body: JSON.stringify({ data })
         });
@@ -252,11 +291,15 @@ async function makeApiCall(endpoint, data, loadingBtn) {
         const result = await response.json();
 
         // Remove loading state
-        loadingBtn.classList.remove('loading');
+        if (loadingBtn) {
+            loadingBtn.classList.remove('loading');
+        }
 
         return result;
     } catch (error) {
-        loadingBtn.classList.remove('loading');
+        if (loadingBtn) {
+            loadingBtn.classList.remove('loading');
+        }
         throw error;
     }
 }
@@ -266,7 +309,10 @@ async function makeApiCall(endpoint, data, loadingBtn) {
 // ====================
 
 async function formatJson() {
-    const input = elements.inputJson.value.trim();
+    // Use CodeMirror if available, fallback to textarea
+    const input = window.inputEditor
+        ? window.inputEditor.getValue().trim()
+        : elements.inputJson?.value?.trim() || '';
 
     if (!input) {
         showMessage('error', 'No Input', 'Please enter JSON data to format.');
@@ -277,7 +323,12 @@ async function formatJson() {
         const result = await makeApiCall('format', input, elements.formatBtn);
 
         if (result.success) {
-            elements.outputJson.value = result.formatted;
+            // Update output using CodeMirror or textarea
+            if (window.outputEditor) {
+                window.outputEditor.setValue(result.formatted);
+            } else if (elements.outputJson) {
+                elements.outputJson.value = result.formatted;
+            }
             currentOutputType = 'json';
             currentOperation = 'formatted';
             updateCharCount();
@@ -296,7 +347,9 @@ async function formatJson() {
 // ====================
 
 async function minifyJson() {
-    const input = elements.inputJson.value.trim();
+    const input = window.inputEditor
+        ? window.inputEditor.getValue().trim()
+        : elements.inputJson?.value?.trim() || '';
 
     if (!input) {
         showMessage('error', 'No Input', 'Please enter JSON data to minify.');
@@ -307,7 +360,11 @@ async function minifyJson() {
         const result = await makeApiCall('minify', input, elements.minifyBtn);
 
         if (result.success) {
-            elements.outputJson.value = result.minified;
+            if (window.outputEditor) {
+                window.outputEditor.setValue(result.minified);
+            } else if (elements.outputJson) {
+                elements.outputJson.value = result.minified;
+            }
             currentOutputType = 'json';
             currentOperation = 'minified';
             updateCharCount();
@@ -326,7 +383,9 @@ async function minifyJson() {
 // ====================
 
 async function validateJson() {
-    const input = elements.inputJson.value.trim();
+    const input = window.inputEditor
+        ? window.inputEditor.getValue().trim()
+        : elements.inputJson?.value?.trim() || '';
 
     if (!input) {
         showMessage('error', 'No Input', 'Please enter JSON data to validate.');
@@ -337,7 +396,12 @@ async function validateJson() {
         const result = await makeApiCall('validate', input, elements.validateBtn);
 
         if (result.valid) {
-            elements.outputJson.value = JSON.stringify(result.data, null, 2);
+            const formatted = JSON.stringify(result.data, null, 2);
+            if (window.outputEditor) {
+                window.outputEditor.setValue(formatted);
+            } else if (elements.outputJson) {
+                elements.outputJson.value = formatted;
+            }
             currentOutputType = 'json';
             currentOperation = 'validated';
             updateCharCount();
@@ -357,7 +421,9 @@ async function validateJson() {
 // ====================
 
 async function convertToXml() {
-    const input = elements.inputJson.value.trim();
+    const input = window.inputEditor
+        ? window.inputEditor.getValue().trim()
+        : elements.inputJson?.value?.trim() || '';
 
     if (!input) {
         showMessage('error', 'No Input', 'Please enter JSON data to convert to XML.');
@@ -368,7 +434,11 @@ async function convertToXml() {
         const result = await makeApiCall('convert/xml', input, elements.toXmlBtn);
 
         if (result.success) {
-            elements.outputJson.value = result.xml;
+            if (window.outputEditor) {
+                window.outputEditor.setValue(result.xml);
+            } else if (elements.outputJson) {
+                elements.outputJson.value = result.xml;
+            }
             currentOutputType = 'xml';
             currentOperation = 'converted';
             updateCharCount();
@@ -387,7 +457,9 @@ async function convertToXml() {
 // ====================
 
 async function convertToCsv() {
-    const input = elements.inputJson.value.trim();
+    const input = window.inputEditor
+        ? window.inputEditor.getValue().trim()
+        : elements.inputJson?.value?.trim() || '';
 
     if (!input) {
         showMessage('error', 'No Input', 'Please enter JSON data to convert to CSV.');
@@ -398,7 +470,11 @@ async function convertToCsv() {
         const result = await makeApiCall('convert/csv', input, elements.toCsvBtn);
 
         if (result.success) {
-            elements.outputJson.value = result.csv;
+            if (window.outputEditor) {
+                window.outputEditor.setValue(result.csv);
+            } else if (elements.outputJson) {
+                elements.outputJson.value = result.csv;
+            }
             currentOutputType = 'csv';
             currentOperation = 'converted';
             updateCharCount();
@@ -503,8 +579,19 @@ async function base64Decode() {
 // ====================
 
 function clearInputs() {
-    elements.inputJson.value = '';
-    elements.outputJson.value = '';
+    // Clear CodeMirror editors if available
+    if (window.inputEditor) {
+        window.inputEditor.setValue('');
+    } else if (elements.inputJson) {
+        elements.inputJson.value = '';
+    }
+
+    if (window.outputEditor) {
+        window.outputEditor.setValue('');
+    } else if (elements.outputJson) {
+        elements.outputJson.value = '';
+    }
+
     currentOutputType = 'json';
     currentOperation = 'formatted';
     clearErrorHighlight();
@@ -517,7 +604,10 @@ function clearInputs() {
 // ====================
 
 function downloadOutput() {
-    const output = elements.outputJson.value.trim();
+    // Get output from CodeMirror or textarea
+    const output = window.outputEditor
+        ? window.outputEditor.getValue().trim()
+        : (elements.outputJson?.value?.trim() || '');
 
     if (!output) {
         showMessage('error', 'No Output', 'There is no output to download.');
@@ -583,7 +673,12 @@ function handleFileUpload(file) {
     const reader = new FileReader();
 
     reader.onload = (e) => {
-        elements.inputJson.value = e.target.result;
+        // Use CodeMirror if available
+        if (window.inputEditor) {
+            window.inputEditor.setValue(e.target.result);
+        } else if (elements.inputJson) {
+            elements.inputJson.value = e.target.result;
+        }
         clearErrorHighlight();
         updateCharCount();
         showMessage('success', 'File Loaded', `${file.name} has been loaded successfully.`);
@@ -762,14 +857,319 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ====================
+// JSON Syntax Highlighting
+// ====================
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function highlightJson(json) {
+    if (!json || json.trim() === '') {
+        return '<span style="color: var(--color-text-secondary);">Formatted output will appear here...</span>';
+    }
+
+    try {
+        const parsed = JSON.parse(json);
+        const formatted = JSON.stringify(parsed, null, 2);
+
+        let html = '';
+        let inString = false;
+        let currentToken = '';
+
+        for (let i = 0; i < formatted.length; i++) {
+            const char = formatted[i];
+
+            if (char === '"' && formatted[i - 1] !== '\\') {
+                if (!inString) {
+                    inString = true;
+                    currentToken = '"';
+                } else {
+                    currentToken += '"';
+
+                    let j = i + 1;
+                    while (formatted[j] === ' ') j++;
+
+                    if (formatted[j] === ':') {
+                        html += `<span class="json-key">${escapeHtml(currentToken)}</span>`;
+                    } else {
+                        html += `<span class="json-string">${escapeHtml(currentToken)}</span>`;
+                    }
+                    currentToken = '';
+                    inString = false;
+                }
+            } else if (inString) {
+                currentToken += char;
+            } else if (char === '{' || char === '[') {
+                html += `<span class="json-bracket">${char}</span>`;
+            } else if (char === '}' || char === ']') {
+                html += `<span class="json-bracket">${char}</span>`;
+            } else if (char === ':') {
+                html += `<span class="json-colon">:</span>`;
+            } else if (char === ',') {
+                html += `<span class="json-comma">,</span>`;
+            } else if (/[0-9.\-]/.test(char) && !inString) {
+                let numStr = char;
+                while (/[0-9.eE\-+]/.test(formatted[i + 1])) {
+                    i++;
+                    numStr += formatted[i];
+                }
+                html += `<span class="json-number">${numStr}</span>`;
+            } else if (formatted.substring(i, i + 4) === 'true') {
+                html += `<span class="json-boolean">true</span>`;
+                i += 3;
+            } else if (formatted.substring(i, i + 5) === 'false') {
+                html += `<span class="json-boolean">false</span>`;
+                i += 4;
+            } else if (formatted.substring(i, i + 4) === 'null') {
+                html += `<span class="json-null">null</span>`;
+                i += 3;
+            } else {
+                html += char;
+            }
+        }
+
+        return html;
+    } catch (e) {
+        return `<span style="color: #e06c75;">${escapeHtml(json)}</span>`;
+    }
+}
+
+function updateOutputHighlight() {
+    const outputTextarea = document.getElementById('outputJson');
+    const outputHighlight = document.getElementById('outputHighlight');
+
+    if (outputTextarea && outputHighlight) {
+        outputHighlight.innerHTML = highlightJson(outputTextarea.value);
+    }
+}
+
+// ====================
+// Preview Modal
+// ====================
+
+function openPreviewModal() {
+    const outputHighlight = document.getElementById('outputHighlight');
+    const previewJson = document.getElementById('previewJson');
+    const previewModal = document.getElementById('previewModal');
+
+    if (outputHighlight && previewJson && previewModal) {
+        previewJson.innerHTML = outputHighlight.innerHTML;
+        previewModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closePreviewModal() {
+    const previewModal = document.getElementById('previewModal');
+    if (previewModal) {
+        previewModal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// ====================
+// Enhanced Drag and Drop
+// ====================
+
+function setupEnhancedDragDrop() {
+    const inputPanel = document.getElementById('inputPanel');
+    const fileInput = document.getElementById('fileInput');
+
+    if (!inputPanel) return;
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        inputPanel.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            inputPanel.classList.add('dragover');
+        });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        inputPanel.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            inputPanel.classList.remove('dragover');
+        });
+    });
+
+    inputPanel.addEventListener('drop', (e) => {
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFileUpload(files[0]);
+        }
+    });
+
+    // File input handler for header icon
+    if (fileInput) {
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileUpload(e.target.files[0]);
+            }
+        });
+    }
+}
+
+// ====================
+// Setup Preview Modal Events
+// ====================
+
+function setupPreviewModal() {
+    const previewBtn = document.getElementById('previewBtn');
+    const closePreviewBtn = document.getElementById('closePreview');
+    const previewModal = document.getElementById('previewModal');
+    const copyPreviewBtn = document.getElementById('copyPreview');
+
+    if (previewBtn) {
+        previewBtn.addEventListener('click', openPreviewModal);
+    }
+
+    if (closePreviewBtn) {
+        closePreviewBtn.addEventListener('click', closePreviewModal);
+    }
+
+    if (previewModal) {
+        previewModal.addEventListener('click', (e) => {
+            if (e.target === previewModal) {
+                closePreviewModal();
+            }
+        });
+    }
+
+    if (copyPreviewBtn) {
+        copyPreviewBtn.addEventListener('click', () => {
+            const outputTextarea = document.getElementById('outputJson');
+            if (outputTextarea && outputTextarea.value) {
+                navigator.clipboard.writeText(outputTextarea.value).then(() => {
+                    copyPreviewBtn.textContent = '✓';
+                    setTimeout(() => { copyPreviewBtn.textContent = '📋'; }, 1500);
+                });
+            }
+        });
+    }
+
+    // Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closePreviewModal();
+        }
+    });
+}
+
+// ====================
+// Output Highlight Watcher
+// ====================
+
+function setupOutputWatcher() {
+    const outputTextarea = document.getElementById('outputJson');
+
+    if (outputTextarea) {
+        // Initial update
+        updateOutputHighlight();
+        updateOutputLineNumbers();
+
+        // Watch for changes using polling (since textarea value changes don't fire events)
+        let lastValue = outputTextarea.value;
+        setInterval(() => {
+            if (outputTextarea.value !== lastValue) {
+                lastValue = outputTextarea.value;
+                updateOutputHighlight();
+                updateOutputLineNumbers();
+            }
+        }, 100);
+    }
+}
+
+// ====================
 // Initialize
 // ====================
 
+// Reinitialize elements (in case script loaded before DOM ready)
+function reinitElements() {
+    elements.inputJson = document.getElementById('inputJson');
+    elements.outputJson = document.getElementById('outputJson');
+    elements.formatBtn = document.getElementById('formatBtn');
+    elements.minifyBtn = document.getElementById('minifyBtn');
+    elements.validateBtn = document.getElementById('validateBtn');
+    elements.toXmlBtn = document.getElementById('toXmlBtn');
+    elements.toCsvBtn = document.getElementById('toCsvBtn');
+    elements.clearBtn = document.getElementById('clearBtn');
+    elements.downloadBtn = document.getElementById('downloadBtn');
+    elements.fileInput = document.getElementById('fileInput');
+    elements.messageContainer = document.getElementById('messageContainer');
+    elements.fullscreenBtn = document.getElementById('fullscreenBtn');
+    elements.fullscreenModal = document.getElementById('fullscreenModal');
+    elements.closeFullscreen = document.getElementById('closeFullscreen');
+    elements.fullscreenOutput = document.getElementById('fullscreenOutput');
+}
+
+// ====================
+// Line Numbers
+// ====================
+
+function updateLineNumbers(textarea, lineNumbersEl) {
+    if (!textarea || !lineNumbersEl) return;
+
+    const lines = (textarea.value || '').split('\n');
+    const lineCount = lines.length || 1;
+
+    let html = '';
+    for (let i = 1; i <= lineCount; i++) {
+        html += `<span>${i}</span>`;
+    }
+    lineNumbersEl.innerHTML = html;
+}
+
+function updateOutputLineNumbers() {
+    const outputHighlight = document.getElementById('outputHighlight');
+    const outputLineNumbers = document.getElementById('outputLineNumbers');
+
+    if (!outputHighlight || !outputLineNumbers) return;
+
+    const text = outputHighlight.textContent || '';
+    const lines = text.split('\n');
+    const lineCount = lines.length || 1;
+
+    let html = '';
+    for (let i = 1; i <= lineCount; i++) {
+        html += `<span>${i}</span>`;
+    }
+    outputLineNumbers.innerHTML = html;
+}
+
+function setupLineNumbers() {
+    const inputJson = document.getElementById('inputJson');
+    const inputLineNumbers = document.getElementById('inputLineNumbers');
+
+    if (inputJson && inputLineNumbers) {
+        // Update on input
+        inputJson.addEventListener('input', () => {
+            updateLineNumbers(inputJson, inputLineNumbers);
+        });
+
+        // Sync scroll
+        inputJson.addEventListener('scroll', () => {
+            inputLineNumbers.scrollTop = inputJson.scrollTop;
+        });
+
+        // Initial update
+        updateLineNumbers(inputJson, inputLineNumbers);
+    }
+}
+
 function init() {
+    reinitElements();
     initTheme();
     updateCharCount();
     setCurrentYear();
     setupNavMenuActions();
+    setupEnhancedDragDrop();
+    setupPreviewModal();
+    setupOutputWatcher();
+    setupLineNumbers();
 }
 
 // Run initialization when DOM is ready
