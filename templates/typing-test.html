@@ -1480,9 +1480,16 @@ programmer typing test, coding typing practice, type code faster{% endblock %}
         };
 
         function getCsrfToken() {
+            // First try to get from the hidden input added by {% csrf_token %}
+            const csrfInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+            if (csrfInput) {
+                return csrfInput.value;
+            }
+            // Fallback to cookie
             const cookie = document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='));
             return cookie ? cookie.split('=')[1] : '';
         }
+
 
         window.closeResults = function () {
             document.getElementById('resultsModal').classList.remove('show');
