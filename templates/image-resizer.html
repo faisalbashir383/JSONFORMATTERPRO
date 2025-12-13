@@ -1085,6 +1085,19 @@ deep learning background remover, browser background remover, no upload backgrou
             return (bytes / 1024 / 1024).toFixed(2) + ' MB';
         }
 
+        // CSP-safe function to convert data URL to Blob without fetch()
+        function dataURLtoBlob(dataURL) {
+            const parts = dataURL.split(',');
+            const mime = parts[0].match(/:(.*?);/)[1];
+            const bstr = atob(parts[1]);
+            let n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new Blob([u8arr], { type: mime });
+        }
+
         function getAspectRatioLabel(ratio) {
             if (Math.abs(ratio - 1) < 0.01) return '1:1 Square';
             if (Math.abs(ratio - 16 / 9) < 0.1) return '16:9';
@@ -1184,7 +1197,7 @@ deep learning background remover, browser background remover, no upload backgrou
 
                 const mimeType = 'image/' + format;
                 const dataUrl = canvas.toDataURL(mimeType, quality);
-                const blob = await (await fetch(dataUrl)).blob();
+                const blob = dataURLtoBlob(dataUrl);
 
                 resizedImages.push({
                     label: size.label,
@@ -1287,7 +1300,7 @@ deep learning background remover, browser background remover, no upload backgrou
             progressText.textContent = 'Loading AI model... This may take a moment.';
 
             try {
-                const imgBlob = await (await fetch(originalImageDataUrl)).blob();
+                const imgBlob = dataURLtoBlob(originalImageDataUrl);
 
                 progressFill.style.width = '30%';
                 progressText.textContent = 'Processing image with AI...';
