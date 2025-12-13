@@ -75,13 +75,13 @@ class BlogPost(models.Model):
     title = models.TextField(max_length=400)
     slug = models.SlugField(unique=True, max_length=250)
     category = models.ForeignKey(BlogCategory, on_delete=models.CASCADE, related_name='posts')
-    excerpt = models.TextField(max_length=300, help_text="Brief summary for SEO and listing pages")
+    excerpt = models.TextField(help_text="Brief summary for SEO and listing pages")
     content = models.TextField(help_text="Use <pre><code class='language-python'>your code</code></pre> for code blocks")
-    tags = models.TextField(max_length=200, help_text="Comma-separated tags", blank=True)
+    tags = models.TextField(help_text="Comma-separated tags", blank=True)
     
     # SEO fields
-    meta_description = models.TextField(max_length=160, help_text="SEO meta description")
-    meta_keywords = models.TextField(max_length=500, help_text="SEO keywords, comma-separated")
+    meta_description = models.TextField(help_text="SEO meta description")
+    meta_keywords = models.TextField(help_text="SEO keywords, comma-separated")
     
     # Timestamps
     published = models.BooleanField(default=False)
