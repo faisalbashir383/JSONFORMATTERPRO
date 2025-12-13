@@ -481,3 +481,35 @@ class JobApplicationAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         # Applications come from the website, not admin
         return False
+
+
+from .models import MockEndpoint
+
+
+@admin.register(MockEndpoint)
+class MockEndpointAdmin(admin.ModelAdmin):
+    list_display = ['endpoint_id', 'name', 'method', 'path', 'status_code', 'ip_restriction_enabled', 'request_count', 'created_at']
+    list_filter = ['method', 'ip_restriction_enabled', 'created_at']
+    search_fields = ['endpoint_id', 'name', 'path', 'allowed_ips', 'creator_ip']
+    readonly_fields = ['endpoint_id', 'created_at', 'updated_at', 'request_count', 'last_accessed', 'creator_ip']
+    ordering = ['-created_at']
+    date_hierarchy = 'created_at'
+    
+    fieldsets = (
+        ('Endpoint Configuration', {
+            'fields': ('endpoint_id', 'name', 'path', 'method', 'status_code')
+        }),
+        ('Response', {
+            'fields': ('response_body', 'content_type', 'custom_headers')
+        }),
+        ('Simulation', {
+            'fields': ('latency_ms', 'error_rate')
+        }),
+        ('IP Restriction', {
+            'fields': ('ip_restriction_enabled', 'allowed_ips')
+        }),
+        ('Metadata', {
+            'fields': ('creator_ip', 'request_count', 'last_accessed', 'expires_at', 'created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )

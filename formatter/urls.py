@@ -97,6 +97,17 @@ urlpatterns = [
     path('api/domain-age/', views.domain_age_api, name='domain_age_api'),
     path('api/typing-test/submit/', views.submit_typing_score, name='submit_typing_score'),
     path('api/typing-test/leaderboard/', views.get_typing_leaderboard, name='get_typing_leaderboard'),
+    
+    # Mock API Endpoints
+    path('api/my-ip/', views.get_client_ip_api, name='get_client_ip_api'),
+    path('api/mock/create/', views.create_mock_endpoint, name='create_mock_endpoint'),
+    path('api/mock/my-endpoints/', views.list_my_endpoints, name='list_my_endpoints'),
+    path('api/mock/<str:endpoint_id>/info/', views.get_mock_endpoint_info, name='get_mock_endpoint_info'),
+    path('api/mock/<str:endpoint_id>/update/', views.update_mock_endpoint, name='update_mock_endpoint'),
+    path('api/mock/<str:endpoint_id>/delete/', views.delete_mock_endpoint, name='delete_mock_endpoint'),
+    path('api/mock/<str:endpoint_id>/', views.serve_mock_endpoint, name='serve_mock_endpoint'),
+    path('api/mock/<str:endpoint_id>/<path:subpath>', views.serve_mock_endpoint, name='serve_mock_endpoint_subpath'),
+
 
     # Careers Pages
     path('careers/', views.careers_page, name='careers_page'),

@@ -1,19 +1,30 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Free Mock API Generator - Create Fake REST Endpoints Online | JSON Formatters Pro{% endblock %}
-{% block meta_title %}Free Mock API Generator - Create Fake REST API Endpoints Online | JSON Formatters Pro
+{% block title %}Free Custom Mock API Generator - Create Secure REST Endpoints Online | JSON Formatters
+Pro{% endblock %}
+{% block meta_title %}Free Custom Mock API Generator - Create Secure Fake REST API Endpoints Online
 {% endblock %}
-{% block meta_description %}Generate mock API endpoints instantly. Create fake REST APIs with custom JSON responses,
-latency simulation, error rates, and template variables. Perfect for frontend development, testing, and prototyping.
-Free online API mocking tool.{% endblock %}
-{% block meta_keywords %}mock api generator, fake api generator, api testing tool, mock rest api, api simulator,
-test api online, generate mock api endpoints, api mocking service, free mock api, json api generator, mock server,
-api prototyping, frontend testing, mock backend, rest api simulator, api response generator, fake json api,
-mock http server, api mock tool, test api responses, mock api free, api endpoint generator, fake rest api,
-mock api online, generate fake api, api testing online, mock web service, rest mock, json mock server, api faker,
-mock api 2026, best mock api 2026, api generator 2026, fake api 2026, mock rest api 2026, api simulator 2026,
-mock api tool 2026, free api mock 2026, mock api no signup, instant mock api{% endblock %}
+{% block meta_description %}Generate secure mock API endpoints with IP restriction, latency simulation, and dynamic
+data. Create fake REST APIs with custom JSON responses, template variables, and access control. Best free online API
+mocking tool for frontend development, QA testing, and prototyping. No signup required.{% endblock %}
+{% block meta_keywords %}mock api generator, free mock api, fake api generator, api testing tool, mock rest api, api
+simulator,
+test api online, generate mock api endpoints, api mocking service, json api generator, mock server online,
+api prototyping tool, frontend testing api, mock backend service, rest api simulator, api response generator,
+fake json api, mock http server, api mock tool, test api responses, mock api free online, api endpoint generator,
+fake rest api online, mock api online tool, generate fake api, api testing online free, mock web service generator,
+rest mock server, json mock server, api faker tool, ip restriction api, secure mock api, ip whitelist api,
+api access control, protected api endpoint, private mock api, ip based api security, mock api with authentication,
+server side mock api, persistent mock endpoints, saved mock api, reusable mock endpoints, dynamic mock data,
+template variables api, random data api, fake user data api, mock database api, api latency testing,
+slow api simulation, error rate testing, 500 error simulation, api timeout testing, network error simulation,
+mock api 2024, mock api 2025, mock api 2026, best mock api generator, top api mocking tool, free api mock service,
+mock api no signup, instant mock api, quick api generator, one click mock api, easy api mocking, simple api generator,
+developer tools api, frontend developer tools, backend mocking, api development tool, swagger mock alternative,
+postman mock alternative, free postman alternative, mock api for react, mock api for angular, mock api for vue,
+cors enabled mock api, cross origin mock api, ajax mock api, fetch mock api, axios mock api,
+custom response headers, custom status codes, http status mock, crud mock api, get post put delete mock{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/mock-api/{% endblock %}
 
 {% block structured_data %}
@@ -685,6 +696,39 @@ mock api tool 2026, free api mock 2026, mock api no signup, instant mock api{% e
             </div>
         </div>
 
+        <!-- IP Restriction Section -->
+        <div class="config-section"
+            style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(234, 179, 8, 0.05) 100%); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: var(--radius-md); padding: 1rem;">
+            <span class="section-label" style="color: #f59e0b;">🔒 IP Restriction (Optional)</span>
+
+            <div class="input-group" style="margin-top: 0.75rem;">
+                <label class="input-label">Your Public IP</label>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <input type="text" id="detectedIp" class="input-field" readonly placeholder="Detecting..."
+                        style="flex: 1;">
+                    <button id="addMyIpBtn"
+                        style="padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: 600; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: var(--radius-sm); cursor: pointer;">
+                        + Add My IP
+                    </button>
+                </div>
+            </div>
+
+            <div class="input-group" style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem;">
+                <input type="checkbox" id="ipRestrictionEnabled" style="width: 18px; height: 18px; cursor: pointer;">
+                <label for="ipRestrictionEnabled" style="font-size: 0.9rem; font-weight: 500; cursor: pointer;">Enable
+                    IP Restriction</label>
+            </div>
+
+            <div class="input-group" id="allowedIpsGroup" style="display: none;">
+                <label class="input-label">Allowed IPs (comma-separated)</label>
+                <textarea id="allowedIps" class="input-field" placeholder="192.168.1.1, 10.0.0.1"
+                    style="min-height: 60px; font-family: monospace;"></textarea>
+                <div style="font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.25rem;">
+                    Only these IPs can access the endpoint. Others get 403 Forbidden.
+                </div>
+            </div>
+        </div>
+
         <button id="generateBtn" class="generate-btn">
             <span>⚡</span> Generate Mock Response
         </button>
@@ -693,6 +737,28 @@ mock api tool 2026, free api mock 2026, mock api no signup, instant mock api{% e
             style="margin-top: 0.75rem; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
             <span>🧪</span> Test Endpoint
         </button>
+
+        <button id="createServerEndpointBtn" class="generate-btn"
+            style="margin-top: 0.75rem; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+            <span>🔐</span> Create Server Endpoint
+        </button>
+
+        <!-- Created Endpoint Display -->
+        <div id="createdEndpointSection"
+            style="display: none; margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(34, 197, 94, 0.1) 100%); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md);">
+            <div style="font-size: 0.85rem; font-weight: 600; color: #10b981; margin-bottom: 0.5rem;">✅ Server Endpoint
+                Created!</div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <input type="text" id="createdEndpointUrl" class="input-field" readonly
+                    style="flex: 1; font-family: monospace; font-size: 0.8rem;">
+                <button id="copyCreatedUrlBtn"
+                    style="padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: 600; background: var(--color-primary); color: white; border: none; border-radius: var(--radius-sm); cursor: pointer;">
+                    Copy
+                </button>
+            </div>
+            <div id="createdEndpointInfo"
+                style="font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.5rem;"></div>
+        </div>
     </div>
 
     <!-- Main Panel -->
@@ -835,8 +901,107 @@ mock api tool 2026, free api mock 2026, mock api no signup, instant mock api{% e
                 <div class="empty-history">No requests yet. Generate and test an endpoint to see history.</div>
             </div>
         </div>
+
+        <!-- My Saved Endpoints -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <h2 class="panel-title">💾 My Saved Endpoints</h2>
+                <div class="panel-actions">
+                    <button id="refreshEndpointsBtn" class="action-btn">🔄 Refresh</button>
+                </div>
+            </div>
+            <div class="history-list" id="savedEndpointsList" style="max-height: 300px;">
+                <div class="empty-history">Loading your saved endpoints...</div>
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- Modern Confirmation Modal -->
+<div id="confirmModal" class="modal-overlay"
+    style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center;">
+    <div class="modal-content"
+        style="background: var(--color-surface); border-radius: var(--radius-lg); padding: 2rem; max-width: 400px; width: 90%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: slideIn 200ms ease;">
+        <div style="text-align: center;">
+            <div
+                style="width: 60px; height: 60px; background: rgba(239, 68, 68, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                <span style="font-size: 1.75rem;">🗑️</span>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Delete Endpoint?</h3>
+            <p id="confirmModalMessage"
+                style="color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">This action cannot
+                be undone. The endpoint will be permanently deleted.</p>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+            <button id="confirmModalCancel"
+                style="flex: 1; padding: 0.75rem 1rem; font-size: 0.95rem; font-weight: 600; background: var(--color-surface-alt); color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--radius-md); cursor: pointer; transition: all 200ms;">Cancel</button>
+            <button id="confirmModalDelete"
+                style="flex: 1; padding: 0.75rem 1rem; font-size: 0.95rem; font-weight: 600; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; border: none; border-radius: var(--radius-md); cursor: pointer; transition: all 200ms;">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Endpoint Modal -->
+<div id="editModal" class="modal-overlay"
+    style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; overflow-y: auto; padding: 2rem;">
+    <div class="modal-content"
+        style="background: var(--color-surface); border-radius: var(--radius-lg); padding: 2rem; max-width: 500px; width: 90%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: slideIn 200ms ease;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 700;">✏️ Edit Endpoint</h3>
+            <button id="editModalClose"
+                style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--color-text-secondary);">×</button>
+        </div>
+        <input type="hidden" id="editEndpointId">
+
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">Endpoint
+                Name</label>
+            <input type="text" id="editEndpointName"
+                style="width: 100%; padding: 0.75rem; font-size: 0.9rem; background: var(--color-bg); color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--radius-md);">
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">Allowed IPs
+                (comma-separated)</label>
+            <textarea id="editAllowedIps"
+                style="width: 100%; padding: 0.75rem; font-size: 0.9rem; font-family: monospace; background: var(--color-bg); color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--radius-md); min-height: 80px;"
+                placeholder="192.168.1.1, 10.0.0.1, your.ip.here"></textarea>
+            <div style="font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.25rem;">Enter multiple IPs
+                separated by commas. Leave empty for no restriction.</div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+            <input type="checkbox" id="editIpRestriction" style="width: 18px; height: 18px;">
+            <label for="editIpRestriction" style="font-size: 0.9rem; font-weight: 500;">Enable IP Restriction</label>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem;">
+            <button id="editModalCancelBtn"
+                style="flex: 1; padding: 0.75rem 1rem; font-size: 0.95rem; font-weight: 600; background: var(--color-surface-alt); color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--radius-md); cursor: pointer;">Cancel</button>
+            <button id="editModalSaveBtn"
+                style="flex: 1; padding: 0.75rem 1rem; font-size: 0.95rem; font-weight: 600; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: var(--radius-md); cursor: pointer;">Save
+                Changes</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes slideIn {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .modal-overlay.active {
+        display: flex !important;
+    }
+</style>
 
 <!-- Information Section -->
 <div class="info-section">
@@ -886,8 +1051,161 @@ mock api tool 2026, free api mock 2026, mock api no signup, instant mock api{% e
                 <code>{{isoDate}}</code> → "2024-01-15T10:30:00Z"
             </p>
         </div>
+
+        <div class="info-card">
+            <h3>🔒 IP Restriction</h3>
+            <ul>
+                <li><strong>Enable IP Restriction</strong> to limit access to specific IPs</li>
+                <li>Your public IP is auto-detected on page load</li>
+                <li>Click "Add My IP" to whitelist your current IP</li>
+                <li>Non-whitelisted IPs get <code>403 Forbidden</code></li>
+                <li>Perfect for secure API testing</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h3>🔐 Server Endpoints</h3>
+            <p>
+                Click "Create Server Endpoint" to generate a <strong>real API URL</strong> that persists on our server.
+                Share this URL with your team or use it in your app. Server endpoints support:
+            </p>
+            <ul style="margin-top: 0.5rem;">
+                <li>IP restriction for security</li>
+                <li>Latency simulation</li>
+                <li>Error rate simulation</li>
+                <li>Template variables</li>
+            </ul>
+        </div>
+
+        <div class="info-card"
+            style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border: 1px solid rgba(99, 102, 241, 0.3);">
+            <h3>📖 Complete Guide</h3>
+            <p>
+                Learn everything about using the Mock API Generator with our comprehensive guide:
+            </p>
+            <ul style="margin-top: 0.5rem;">
+                <li>Step-by-step tutorials</li>
+                <li>Template variable reference</li>
+                <li>Response examples</li>
+                <li>IP restriction best practices</li>
+            </ul>
+            <a href="/blog/mock-api-generator-guide-ip-restriction/"
+                style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; text-decoration: none; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.85rem;">
+                Read the Guide →
+            </a>
+        </div>
     </div>
 </div>
+
+<!-- FAQ Section -->
+<div class="faq-section"
+    style="margin-top: 2.5rem; padding: 2rem; background: var(--color-surface); border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+    <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; text-align: center;">❓ Frequently Asked
+        Questions</h2>
+
+    <div class="faq-item" style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"
+            style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600;">
+            <span>What is a Mock API Generator?</span>
+            <span class="icon" style="font-size: 1.25rem; transition: transform 200ms;">+</span>
+        </div>
+        <div class="faq-answer"
+            style="display: none; padding-top: 0.75rem; color: var(--color-text-secondary); line-height: 1.7;">
+            A Mock API Generator creates simulated REST API endpoints that return fake but realistic data. It's
+            essential for frontend developers who need to build and test applications before the real backend is ready.
+        </div>
+    </div>
+
+    <div class="faq-item" style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"
+            style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600;">
+            <span>Is this tool completely free to use?</span>
+            <span class="icon" style="font-size: 1.25rem; transition: transform 200ms;">+</span>
+        </div>
+        <div class="faq-answer"
+            style="display: none; padding-top: 0.75rem; color: var(--color-text-secondary); line-height: 1.7;">
+            Yes, 100% free! You can create unlimited mock endpoints, use all features including IP restriction, and
+            there's no signup required. Your endpoints persist on our server for testing.
+        </div>
+    </div>
+
+    <div class="faq-item" style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"
+            style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600;">
+            <span>How does IP restriction work?</span>
+            <span class="icon" style="font-size: 1.25rem; transition: transform 200ms;">+</span>
+        </div>
+        <div class="faq-answer"
+            style="display: none; padding-top: 0.75rem; color: var(--color-text-secondary); line-height: 1.7;">
+            When you enable IP restriction, only requests from whitelisted IP addresses can access your mock endpoint.
+            Other IPs receive a 403 Forbidden response. Your IP is auto-detected and you can add it with one click.
+        </div>
+    </div>
+
+    <div class="faq-item" style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"
+            style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600;">
+            <span>How do I generate multiple records?</span>
+            <span class="icon" style="font-size: 1.25rem; transition: transform 200ms;">+</span>
+        </div>
+        <div class="faq-answer"
+            style="display: none; padding-top: 0.75rem; color: var(--color-text-secondary); line-height: 1.7;">
+            Set the "Number of Records" field before creating your endpoint. If your response template has a "data"
+            array, each request will generate that many unique records with different random values for template
+            variables like {{firstName}}, {{email}}, etc.
+        </div>
+    </div>
+
+    <div class="faq-item" style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"
+            style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600;">
+            <span>Can I see my saved endpoints after refreshing the page?</span>
+            <span class="icon" style="font-size: 1.25rem; transition: transform 200ms;">+</span>
+        </div>
+        <div class="faq-answer"
+            style="display: none; padding-top: 0.75rem; color: var(--color-text-secondary); line-height: 1.7;">
+            Yes! Your created server endpoints are automatically loaded when you visit the page. They are tracked by
+            your IP address, so you'll see all endpoints you've created from the same network.
+        </div>
+    </div>
+
+    <div class="faq-item" style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"
+            style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600;">
+            <span>What are template variables?</span>
+            <span class="icon" style="font-size: 1.25rem; transition: transform 200ms;">+</span>
+        </div>
+        <div class="faq-answer"
+            style="display: none; padding-top: 0.75rem; color: var(--color-text-secondary); line-height: 1.7;">
+            Template variables like {{firstName}}, {{email}}, {{uuid}} are placeholders that get replaced with realistic
+            random data each time your endpoint is called. This makes your mock data dynamic and realistic.
+        </div>
+    </div>
+
+    <div class="faq-item" style="padding: 1rem 0;">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"
+            style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600;">
+            <span>How do I test latency and error handling?</span>
+            <span class="icon" style="font-size: 1.25rem; transition: transform 200ms;">+</span>
+        </div>
+        <div class="faq-answer"
+            style="display: none; padding-top: 0.75rem; color: var(--color-text-secondary); line-height: 1.7;">
+            Use the Latency slider to add a delay (up to 5 seconds) to simulate slow network conditions. Use the Error
+            Rate slider to randomly return 500 errors a percentage of the time - perfect for testing your app's error
+            handling.
+        </div>
+    </div>
+</div>
+
+<style>
+    .faq-item.open .faq-answer {
+        display: block !important;
+    }
+
+    .faq-item.open .icon {
+        transform: rotate(45deg);
+    }
+</style>
 {% endverbatim %}
 {% endblock %}
 
@@ -1335,6 +1653,274 @@ mock api tool 2026, free api mock 2026, mock api no signup, instant mock api{% e
                 insertVariable(chip.dataset.var);
             });
         });
+
+        // ==================== IP Restriction Functionality ====================
+        const detectedIpInput = document.getElementById('detectedIp');
+        const addMyIpBtn = document.getElementById('addMyIpBtn');
+        const ipRestrictionEnabled = document.getElementById('ipRestrictionEnabled');
+        const allowedIpsGroup = document.getElementById('allowedIpsGroup');
+        const allowedIpsInput = document.getElementById('allowedIps');
+        const createServerEndpointBtn = document.getElementById('createServerEndpointBtn');
+        const createdEndpointSection = document.getElementById('createdEndpointSection');
+        const createdEndpointUrl = document.getElementById('createdEndpointUrl');
+        const createdEndpointInfo = document.getElementById('createdEndpointInfo');
+        const copyCreatedUrlBtn = document.getElementById('copyCreatedUrlBtn');
+
+        // Detect user's IP on page load
+        async function detectUserIp() {
+            try {
+                const response = await fetch('/api/my-ip/');
+                const data = await response.json();
+                if (data.success && data.ip) {
+                    detectedIpInput.value = data.ip;
+                }
+            } catch (e) {
+                detectedIpInput.value = 'Could not detect';
+            }
+        }
+        detectUserIp();
+
+        // Add My IP button
+        addMyIpBtn.addEventListener('click', () => {
+            const currentIp = detectedIpInput.value;
+            if (!currentIp || currentIp === 'Detecting...' || currentIp === 'Could not detect') {
+                alert('IP not detected yet');
+                return;
+            }
+
+            const existingIps = allowedIpsInput.value.split(',').map(ip => ip.trim()).filter(ip => ip);
+            if (!existingIps.includes(currentIp)) {
+                existingIps.push(currentIp);
+                allowedIpsInput.value = existingIps.join(', ');
+            }
+
+            // Auto-enable IP restriction
+            ipRestrictionEnabled.checked = true;
+            allowedIpsGroup.style.display = 'block';
+        });
+
+        // Toggle allowed IPs visibility
+        ipRestrictionEnabled.addEventListener('change', () => {
+            allowedIpsGroup.style.display = ipRestrictionEnabled.checked ? 'block' : 'none';
+        });
+
+        // Create Server Endpoint
+        createServerEndpointBtn.addEventListener('click', async () => {
+            const path = endpointPath.value || '/api/users';
+            const method = httpMethod.value;
+            const status = parseInt(statusCode.value);
+            const latency = parseInt(latencySlider.value);
+            const errorRate = parseInt(errorRateSlider.value);
+            const ipEnabled = ipRestrictionEnabled.checked;
+            const allowedIps = allowedIpsInput.value.trim();
+            const responseBody = generatedResponse.value || responseTemplate.value;
+
+            if (!responseBody.trim()) {
+                alert('Please generate a response first or enter a response template');
+                return;
+            }
+
+            createServerEndpointBtn.disabled = true;
+            createServerEndpointBtn.innerHTML = '<span>⏳</span> Creating...';
+
+            try {
+                const response = await fetch('/api/mock/create/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: 'Mock Endpoint',
+                        path: path,
+                        method: method,
+                        status_code: status,
+                        response_body: responseBody,
+                        latency_ms: latency,
+                        error_rate: errorRate,
+                        record_count: parseInt(recordCount.value) || 5,
+                        ip_restriction_enabled: ipEnabled,
+                        allowed_ips: allowedIps
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    createdEndpointUrl.value = data.endpoint_url;
+                    createdEndpointInfo.innerHTML = `
+                        <strong>Method:</strong> ${data.method} | 
+                        <strong>IP Restricted:</strong> ${data.ip_restriction_enabled ? 'Yes (' + data.allowed_ips.join(', ') + ')' : 'No'} |
+                        <strong>Created:</strong> ${new Date(data.created_at).toLocaleString()}
+                    `;
+                    createdEndpointSection.style.display = 'block';
+
+                    // Update the endpoint display
+                    endpointUrlDisplay.textContent = data.endpoint_url;
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to create endpoint'));
+                }
+            } catch (e) {
+                alert('Network error: ' + e.message);
+            }
+
+            createServerEndpointBtn.disabled = false;
+            createServerEndpointBtn.innerHTML = '<span>🔐</span> Create Server Endpoint';
+        });
+
+        // Copy created endpoint URL
+        copyCreatedUrlBtn.addEventListener('click', () => {
+            createdEndpointUrl.select();
+            document.execCommand('copy');
+            const originalText = copyCreatedUrlBtn.textContent;
+            copyCreatedUrlBtn.textContent = 'Copied!';
+            setTimeout(() => { copyCreatedUrlBtn.textContent = originalText; }, 1500);
+        });
+
+        // ==================== Saved Endpoints Functionality ====================
+        const savedEndpointsList = document.getElementById('savedEndpointsList');
+        const refreshEndpointsBtn = document.getElementById('refreshEndpointsBtn');
+
+        // Modal elements
+        const confirmModal = document.getElementById('confirmModal');
+        const confirmModalCancel = document.getElementById('confirmModalCancel');
+        const confirmModalDelete = document.getElementById('confirmModalDelete');
+        const editModal = document.getElementById('editModal');
+        const editModalClose = document.getElementById('editModalClose');
+        const editModalCancelBtn = document.getElementById('editModalCancelBtn');
+        const editModalSaveBtn = document.getElementById('editModalSaveBtn');
+
+        let pendingDeleteId = null;
+
+        async function loadSavedEndpoints() {
+            try {
+                const response = await fetch('/api/mock/my-endpoints/');
+                const data = await response.json();
+
+                if (data.success && data.endpoints.length > 0) {
+                    savedEndpointsList.innerHTML = data.endpoints.map(ep => `
+                        <div class="history-item" style="flex-direction: column; align-items: flex-start; gap: 0.5rem; padding: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem; width: 100%;">
+                                <span class="method-badge ${ep.method.toLowerCase()}">${ep.method}</span>
+                                <span style="flex: 1; font-family: monospace; font-size: 0.8rem; word-break: break-all;">${ep.endpoint_url}</span>
+                                <span class="history-status ${ep.is_expired ? 'error' : 'success'}">${ep.is_expired ? 'Expired' : ep.request_count + ' hits'}</span>
+                            </div>
+                            ${ep.ip_restriction_enabled ? `<div style="font-size: 0.7rem; color: #f59e0b;">🔒 IP Restricted</div>` : ''}
+                            <div style="display: flex; gap: 0.5rem; width: 100%;">
+                                <button onclick="navigator.clipboard.writeText('${ep.endpoint_url}').then(() => this.textContent = 'Copied!').catch(() => {}); setTimeout(() => this.textContent = 'Copy', 1000);" style="flex: 1; padding: 0.4rem 0.5rem; font-size: 0.75rem; background: var(--color-primary); color: white; border: none; border-radius: var(--radius-sm); cursor: pointer;">Copy</button>
+                                <button onclick="openEditModal('${ep.endpoint_id}', '${ep.name || ''}', '${ep.ip_restriction_enabled}', '${(ep.allowed_ips || []).join(', ')}')" style="flex: 1; padding: 0.4rem 0.5rem; font-size: 0.75rem; background: #3b82f6; color: white; border: none; border-radius: var(--radius-sm); cursor: pointer;">Edit</button>
+                                <button onclick="showDeleteConfirm('${ep.endpoint_id}')" style="padding: 0.4rem 0.75rem; font-size: 0.75rem; background: #ef4444; color: white; border: none; border-radius: var(--radius-sm); cursor: pointer;">🗑️</button>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    savedEndpointsList.innerHTML = '<div class="empty-history">No saved endpoints yet. Create one to see it here.</div>';
+                }
+            } catch (e) {
+                savedEndpointsList.innerHTML = '<div class="empty-history">Could not load endpoints.</div>';
+            }
+        }
+
+        // Show delete confirmation modal
+        window.showDeleteConfirm = function (endpointId) {
+            pendingDeleteId = endpointId;
+            confirmModal.classList.add('active');
+        };
+
+        // Cancel delete
+        confirmModalCancel.addEventListener('click', () => {
+            confirmModal.classList.remove('active');
+            pendingDeleteId = null;
+        });
+
+        // Confirm delete
+        confirmModalDelete.addEventListener('click', async () => {
+            if (pendingDeleteId) {
+                try {
+                    await fetch(`/api/mock/${pendingDeleteId}/delete/`, { method: 'DELETE' });
+                    loadSavedEndpoints();
+                } catch (e) {
+                    console.error('Failed to delete endpoint');
+                }
+            }
+            confirmModal.classList.remove('active');
+            pendingDeleteId = null;
+        });
+
+        // Open edit modal
+        window.openEditModal = function (endpointId, name, ipRestricted, allowedIps) {
+            document.getElementById('editEndpointId').value = endpointId;
+            document.getElementById('editEndpointName').value = name || '';
+            document.getElementById('editIpRestriction').checked = ipRestricted === 'true';
+            document.getElementById('editAllowedIps').value = allowedIps || '';
+            editModal.classList.add('active');
+        };
+
+        // Close edit modal
+        editModalClose.addEventListener('click', () => editModal.classList.remove('active'));
+        editModalCancelBtn.addEventListener('click', () => editModal.classList.remove('active'));
+
+        // Save endpoint changes
+        editModalSaveBtn.addEventListener('click', async () => {
+            const endpointId = document.getElementById('editEndpointId').value;
+            const name = document.getElementById('editEndpointName').value;
+            const ipRestriction = document.getElementById('editIpRestriction').checked;
+            const allowedIps = document.getElementById('editAllowedIps').value.trim();
+
+            editModalSaveBtn.textContent = 'Saving...';
+            editModalSaveBtn.disabled = true;
+
+            try {
+                const response = await fetch(`/api/mock/${endpointId}/update/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: name,
+                        ip_restriction_enabled: ipRestriction,
+                        allowed_ips: allowedIps
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    editModal.classList.remove('active');
+                    loadSavedEndpoints();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to update'));
+                }
+            } catch (e) {
+                alert('Network error');
+            }
+
+            editModalSaveBtn.textContent = 'Save Changes';
+            editModalSaveBtn.disabled = false;
+        });
+
+        // Close modals on backdrop click
+        confirmModal.addEventListener('click', (e) => {
+            if (e.target === confirmModal) {
+                confirmModal.classList.remove('active');
+                pendingDeleteId = null;
+            }
+        });
+        editModal.addEventListener('click', (e) => {
+            if (e.target === editModal) editModal.classList.remove('active');
+        });
+
+        // Delete endpoint function (legacy fallback)
+        window.deleteEndpoint = async function (endpointId) {
+            try {
+                await fetch(`/api/mock/${endpointId}/delete/`, { method: 'DELETE' });
+                loadSavedEndpoints();
+            } catch (e) {
+                alert('Failed to delete endpoint');
+            }
+        };
+
+        // Refresh button
+        refreshEndpointsBtn.addEventListener('click', loadSavedEndpoints);
+
+        // Load endpoints on page load
+        loadSavedEndpoints();
 
         // Initial display update
         updateEndpointDisplay();

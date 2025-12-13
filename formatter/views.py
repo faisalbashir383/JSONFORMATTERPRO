@@ -1618,3 +1618,430 @@ def tutorial_detail(request, slug):
     
     return render(request, 'tutorial-detail.html', context)
 
+
+# ====================
+# Mock API Endpoints
+# ====================
+
+import time
+import random
+import re
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from .models import MockEndpoint
+
+
+def get_client_ip(request):
+    """Get the real client IP from request headers"""
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0].strip()
+    else:
+        ip = (
+            request.META.get('HTTP_X_REAL_IP') or
+            request.META.get('HTTP_CF_CONNECTING_IP') or
+            request.META.get('REMOTE_ADDR')
+        )
+    return ip
+
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def get_client_ip_api(request):
+    """Return the client's public IP address"""
+    client_ip = get_client_ip(request)
+    return JsonResponse({
+        'success': True,
+        'ip': client_ip,
+        'message': 'Your public IP address'
+    })
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def create_mock_endpoint(request):
+    """
+    Create a new mock API endpoint.
+    
+    Expected JSON body:
+    {
+        "path": "/api/users",
+        "method": "GET",
+        "status_code": 200,
+        "response_body": "{...}",
+        "latency_ms": 0,
+        "error_rate": 0,
+        "ip_restriction_enabled": false,
+        "allowed_ips": "1.2.3.4,5.6.7.8",
+        "name": "My Endpoint",
+        "custom_headers": {}
+    }
+    """
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'success': False,
+            'error': 'Invalid JSON in request body'
+        }, status=400)
+    
+    # Validate required fields
+    response_body = data.get('response_body', '')
+    if not response_body:
+        return JsonResponse({
+            'success': False,
+            'error': 'response_body is required'
+        }, status=400)
+    
+    # Create the endpoint
+    try:
+        endpoint = MockEndpoint.objects.create(
+            name=data.get('name', ''),
+            path=data.get('path', '/api/mock'),
+            method=data.get('method', 'GET').upper(),
+            status_code=int(data.get('status_code', 200)),
+            response_body=response_body,
+            latency_ms=int(data.get('latency_ms', 0)),
+            error_rate=int(data.get('error_rate', 0)),
+            record_count=int(data.get('record_count', 1)),
+            ip_restriction_enabled=bool(data.get('ip_restriction_enabled', False)),
+            allowed_ips=data.get('allowed_ips', ''),
+            custom_headers=json.dumps(data.get('custom_headers', {})),
+            creator_ip=get_client_ip(request)
+        )
+        
+        # Build the full endpoint URL
+        site_url = request.build_absolute_uri('/').rstrip('/')
+        endpoint_url = f"{site_url}/api/mock/{endpoint.endpoint_id}/"
+        
+        return JsonResponse({
+            'success': True,
+            'endpoint_id': endpoint.endpoint_id,
+            'endpoint_url': endpoint_url,
+            'method': endpoint.method,
+            'path': endpoint.path,
+            'ip_restriction_enabled': endpoint.ip_restriction_enabled,
+            'allowed_ips': endpoint.get_allowed_ips_list(),
+            'created_at': endpoint.created_at.isoformat(),
+            'message': 'Mock endpoint created successfully'
+        }, status=201)
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        }, status=500)
+
+
+def process_template_variables(template_str):
+    """Process template variables like {{uuid}}, {{firstName}}, etc."""
+    import secrets
+    import string
+    from datetime import datetime, timedelta
+    
+    # Fake data
+    first_names = ['James', 'Emma', 'Liam', 'Olivia', 'Noah', 'Ava', 'Ethan', 'Sophia', 'Mason', 'Isabella']
+    last_names = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez']
+    companies = ['TechCorp', 'Innovate Inc', 'Digital Dynamics', 'CloudFirst', 'DataDriven', 'NetSolutions']
+    job_titles = ['Software Engineer', 'Product Manager', 'UX Designer', 'Data Scientist', 'DevOps Engineer']
+    cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'San Francisco', 'Seattle']
+    countries = ['United States', 'Canada', 'United Kingdom', 'Germany', 'France', 'Australia', 'Japan']
+    
+    def gen_uuid():
+        return str(secrets.token_hex(4)) + '-' + str(secrets.token_hex(2)) + '-4' + str(secrets.token_hex(1))[1:] + '-' + str(secrets.token_hex(2)) + '-' + str(secrets.token_hex(6))
+    
+    def gen_email():
+        fn = random.choice(first_names).lower()
+        ln = random.choice(last_names).lower()
+        domains = ['gmail.com', 'yahoo.com', 'outlook.com', 'example.com']
+        return f"{fn}.{ln}@{random.choice(domains)}"
+    
+    def gen_phone():
+        return f"+1 {random.randint(200,999)}-{random.randint(200,999)}-{random.randint(1000,9999)}"
+    
+    result = template_str
+    result = re.sub(r'\{\{uuid\}\}', lambda m: gen_uuid(), result)
+    result = re.sub(r'\{\{firstName\}\}', lambda m: random.choice(first_names), result)
+    result = re.sub(r'\{\{lastName\}\}', lambda m: random.choice(last_names), result)
+    result = re.sub(r'\{\{fullName\}\}', lambda m: f"{random.choice(first_names)} {random.choice(last_names)}", result)
+    result = re.sub(r'\{\{email\}\}', lambda m: gen_email(), result)
+    result = re.sub(r'\{\{phone\}\}', lambda m: gen_phone(), result)
+    result = re.sub(r'\{\{company\}\}', lambda m: random.choice(companies), result)
+    result = re.sub(r'\{\{jobTitle\}\}', lambda m: random.choice(job_titles), result)
+    result = re.sub(r'\{\{city\}\}', lambda m: random.choice(cities), result)
+    result = re.sub(r'\{\{country\}\}', lambda m: random.choice(countries), result)
+    result = re.sub(r'\{\{isoDate\}\}', lambda m: (datetime.now() - timedelta(days=random.randint(0, 365))).isoformat(), result)
+    result = re.sub(r'\{\{boolean\}\}', lambda m: str(random.choice([True, False])).lower(), result)
+    result = re.sub(r'\{\{number:(\d+)\}\}', lambda m: str(random.randint(0, int(m.group(1)))), result)
+    result = re.sub(r'\{\{avatar\}\}', lambda m: f"https://i.pravatar.cc/150?img={random.randint(1,70)}", result)
+    result = re.sub(r'\{\{imageUrl\}\}', lambda m: f"https://picsum.photos/seed/{random.randint(1,1000)}/400/300", result)
+    result = re.sub(r'\{\{zipCode\}\}', lambda m: str(random.randint(10000, 99999)), result)
+    
+    return result
+
+
+@csrf_exempt
+def serve_mock_endpoint(request, endpoint_id, subpath=''):
+    """
+    Serve the mock endpoint response.
+    Handles IP restriction, latency simulation, and error rate.
+    """
+    try:
+        endpoint = MockEndpoint.objects.get(endpoint_id=endpoint_id)
+    except MockEndpoint.DoesNotExist:
+        return JsonResponse({
+            'error': 'Not Found',
+            'message': 'Mock endpoint does not exist or has been deleted',
+            'status': 404
+        }, status=404)
+    
+    # Check if expired
+    if endpoint.is_expired():
+        return JsonResponse({
+            'error': 'Gone',
+            'message': 'This mock endpoint has expired',
+            'status': 410
+        }, status=410)
+    
+    # Check IP restriction
+    client_ip = get_client_ip(request)
+    if not endpoint.is_ip_allowed(client_ip):
+        return JsonResponse({
+            'error': 'Forbidden',
+            'message': 'Your IP address is not authorized to access this endpoint',
+            'your_ip': client_ip,
+            'allowed_ips': endpoint.get_allowed_ips_list(),
+            'status': 403
+        }, status=403)
+    
+    # Check method
+    if request.method != endpoint.method:
+        return JsonResponse({
+            'error': 'Method Not Allowed',
+            'message': f'This endpoint only accepts {endpoint.method} requests',
+            'status': 405
+        }, status=405)
+    
+    # Apply latency simulation
+    if endpoint.latency_ms > 0:
+        time.sleep(endpoint.latency_ms / 1000.0)
+    
+    # Check error rate simulation
+    if endpoint.error_rate > 0 and random.randint(1, 100) <= endpoint.error_rate:
+        return JsonResponse({
+            'error': 'Internal Server Error',
+            'message': 'Simulated server error (based on configured error rate)',
+            'status': 500
+        }, status=500)
+    
+    # Increment request count
+    endpoint.increment_request_count()
+    
+    # Process template variables and generate N records
+    try:
+        record_count = max(1, endpoint.record_count)
+        
+        # Check if response has an array that should be multiplied
+        response_template = endpoint.response_body
+        
+        # If template contains "data": [...], generate multiple items
+        if '"data":' in response_template and '[' in response_template:
+            # Try to parse and detect the array structure
+            try:
+                template_parsed = json.loads(response_template)
+                if 'data' in template_parsed and isinstance(template_parsed['data'], list) and len(template_parsed['data']) > 0:
+                    # Get the first item as template
+                    item_template = template_parsed['data'][0]
+                    item_template_str = json.dumps(item_template)
+                    
+                    # Generate N records
+                    generated_items = []
+                    for _ in range(record_count):
+                        processed_item = process_template_variables(item_template_str)
+                        generated_items.append(json.loads(processed_item))
+                    
+                    # Replace data array with generated items
+                    template_parsed['data'] = generated_items
+                    
+                    # Process any remaining template variables in other parts
+                    remaining_str = json.dumps(template_parsed)
+                    remaining_str = process_template_variables(remaining_str)
+                    response_data = json.loads(remaining_str)
+                else:
+                    # No data array, process normally
+                    processed_body = process_template_variables(response_template)
+                    response_data = json.loads(processed_body)
+            except:
+                # Fallback to simple processing
+                processed_body = process_template_variables(response_template)
+                response_data = json.loads(processed_body)
+        else:
+            # Simple response without array
+            processed_body = process_template_variables(response_template)
+            response_data = json.loads(processed_body)
+            
+    except json.JSONDecodeError:
+        # Return as plain text if not valid JSON
+        response_data = {'raw_response': process_template_variables(endpoint.response_body)}
+    
+    response = JsonResponse(response_data, status=endpoint.status_code, safe=False)
+    
+    # Add custom headers
+    try:
+        custom_headers = json.loads(endpoint.custom_headers)
+        for key, value in custom_headers.items():
+            response[key] = value
+    except:
+        pass
+    
+    # Add CORS headers for accessibility
+    response['Access-Control-Allow-Origin'] = '*'
+    response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+    response['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    
+    return response
+
+
+@csrf_exempt
+@require_http_methods(["DELETE", "POST"])
+def delete_mock_endpoint(request, endpoint_id):
+    """Delete a mock endpoint (only by creator IP)"""
+    try:
+        endpoint = MockEndpoint.objects.get(endpoint_id=endpoint_id)
+    except MockEndpoint.DoesNotExist:
+        return JsonResponse({
+            'success': False,
+            'error': 'Endpoint not found'
+        }, status=404)
+    
+    # Only allow deletion by creator IP
+    client_ip = get_client_ip(request)
+    if endpoint.creator_ip and endpoint.creator_ip != client_ip:
+        return JsonResponse({
+            'success': False,
+            'error': 'You can only delete endpoints you created'
+        }, status=403)
+    
+    endpoint.delete()
+    return JsonResponse({
+        'success': True,
+        'message': 'Endpoint deleted successfully'
+    })
+
+
+@csrf_exempt
+@require_http_methods(["POST", "PUT", "PATCH"])
+def update_mock_endpoint(request, endpoint_id):
+    """Update an existing mock endpoint (only by creator IP)"""
+    try:
+        endpoint = MockEndpoint.objects.get(endpoint_id=endpoint_id)
+    except MockEndpoint.DoesNotExist:
+        return JsonResponse({
+            'success': False,
+            'error': 'Endpoint not found'
+        }, status=404)
+    
+    # Only allow update by creator IP
+    client_ip = get_client_ip(request)
+    if endpoint.creator_ip and endpoint.creator_ip != client_ip:
+        return JsonResponse({
+            'success': False,
+            'error': 'You can only edit endpoints you created'
+        }, status=403)
+    
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'success': False,
+            'error': 'Invalid JSON in request body'
+        }, status=400)
+    
+    # Update allowed fields
+    if 'name' in data:
+        endpoint.name = data['name']
+    if 'allowed_ips' in data:
+        endpoint.allowed_ips = data['allowed_ips']
+    if 'ip_restriction_enabled' in data:
+        endpoint.ip_restriction_enabled = bool(data['ip_restriction_enabled'])
+    
+    endpoint.save()
+    
+    site_url = request.build_absolute_uri('/').rstrip('/')
+    
+    return JsonResponse({
+        'success': True,
+        'endpoint_id': endpoint.endpoint_id,
+        'endpoint_url': f"{site_url}/api/mock/{endpoint.endpoint_id}/",
+        'name': endpoint.name,
+        'ip_restriction_enabled': endpoint.ip_restriction_enabled,
+        'allowed_ips': endpoint.get_allowed_ips_list(),
+        'message': 'Endpoint updated successfully'
+    })
+
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def get_mock_endpoint_info(request, endpoint_id):
+    """Get information about a mock endpoint"""
+    try:
+        endpoint = MockEndpoint.objects.get(endpoint_id=endpoint_id)
+    except MockEndpoint.DoesNotExist:
+        return JsonResponse({
+            'success': False,
+            'error': 'Endpoint not found'
+        }, status=404)
+    
+    site_url = request.build_absolute_uri('/').rstrip('/')
+    
+    return JsonResponse({
+        'success': True,
+        'endpoint_id': endpoint.endpoint_id,
+        'endpoint_url': f"{site_url}/api/mock/{endpoint.endpoint_id}/",
+        'name': endpoint.name,
+        'path': endpoint.path,
+        'method': endpoint.method,
+        'status_code': endpoint.status_code,
+        'latency_ms': endpoint.latency_ms,
+        'error_rate': endpoint.error_rate,
+        'ip_restriction_enabled': endpoint.ip_restriction_enabled,
+        'request_count': endpoint.request_count,
+        'created_at': endpoint.created_at.isoformat(),
+        'last_accessed': endpoint.last_accessed.isoformat() if endpoint.last_accessed else None,
+        'is_expired': endpoint.is_expired()
+    })
+
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def list_my_endpoints(request):
+    """List all mock endpoints created by the current user (based on IP)"""
+    client_ip = get_client_ip(request)
+    
+    endpoints = MockEndpoint.objects.filter(creator_ip=client_ip).order_by('-created_at')[:20]
+    
+    site_url = request.build_absolute_uri('/').rstrip('/')
+    
+    endpoints_list = []
+    for ep in endpoints:
+        endpoints_list.append({
+            'endpoint_id': ep.endpoint_id,
+            'endpoint_url': f"{site_url}/api/mock/{ep.endpoint_id}/",
+            'name': ep.name,
+            'path': ep.path,
+            'method': ep.method,
+            'status_code': ep.status_code,
+            'ip_restriction_enabled': ep.ip_restriction_enabled,
+            'allowed_ips': ep.get_allowed_ips_list(),
+            'request_count': ep.request_count,
+            'created_at': ep.created_at.isoformat(),
+            'is_expired': ep.is_expired()
+        })
+    
+    return JsonResponse({
+        'success': True,
+        'count': len(endpoints_list),
+        'endpoints': endpoints_list,
+        'your_ip': client_ip
+    })

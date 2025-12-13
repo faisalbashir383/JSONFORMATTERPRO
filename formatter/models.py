@@ -910,3 +910,107 @@ class JobApplication(models.Model):
     
     def __str__(self):
         return f"{self.full_name} - {self.job.title} ({self.get_status_display()})"
+
+
+class MockEndpoint(models.Model):
+    """
+    Stores user-created mock API endpoints with optional IP restriction.
+    These endpoints can be accessed via /api/mock/{endpoint_id}/
+    """
+    
+    HTTP_METHODS = [
+        ('GET', 'GET'),
+        ('POST', 'POST'),
+        ('PUT', 'PUT'),
+        ('PATCH', 'PATCH'),
+        ('DELETE', 'DELETE'),
+    ]
+    
+    # Unique identifier for the endpoint (short URL-safe ID)
+    endpoint_id = models.CharField(max_length=12, unique=True, db_index=True)
+    
+    # Endpoint configuration
+    name = models.CharField(max_length=100, blank=True, help_text="Optional name for this endpoint")
+    path = models.CharField(max_length=200, default="/api/users", help_text="API path e.g., /api/users")
+    method = models.CharField(max_length=10, choices=HTTP_METHODS, default='GET')
+    status_code = models.IntegerField(default=200)
+    response_body = models.TextField(help_text="JSON response body (can include template variables)")
+    content_type = models.CharField(max_length=100, default='application/json')
+    
+    # Simulation settings
+    latency_ms = models.IntegerField(default=0, help_text="Response delay in milliseconds")
+    error_rate = models.IntegerField(default=0, help_text="Percentage chance of returning 500 error")
+    record_count = models.IntegerField(default=1, help_text="Number of records to generate in array responses")
+    
+    # IP Restriction
+    ip_restriction_enabled = models.BooleanField(default=False, help_text="Only allow requests from specified IPs")
+    allowed_ips = models.TextField(blank=True, help_text="Comma-separated list of allowed IP addresses")
+    
+    # Custom headers (JSON)
+    custom_headers = models.TextField(blank=True, default='{}', help_text="Custom response headers as JSON")
+    
+    # Metadata
+    creator_ip = models.GenericIPAddressField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    expires_at = models.DateTimeField(null=True, blank=True, help_text="Endpoint expires after this time")
+    request_count = models.IntegerField(default=0)
+    last_accessed = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['endpoint_id']),
+            models.Index(fields=['-created_at']),
+            models.Index(fields=['expires_at']),
+        ]
+        verbose_name = "Mock Endpoint"
+        verbose_name_plural = "Mock Endpoints"
+    
+    def __str__(self):
+        return f"{self.method} {self.path} ({self.endpoint_id})"
+    
+    def save(self, *args, **kwargs):
+        if not self.endpoint_id:
+            self.endpoint_id = self.generate_endpoint_id()
+        super().save(*args, **kwargs)
+    
+    @staticmethod
+    def generate_endpoint_id():
+        """Generate a unique 8-character endpoint ID"""
+        import secrets
+        import string
+        chars = string.ascii_lowercase + string.digits
+        while True:
+            endpoint_id = ''.join(secrets.choice(chars) for _ in range(8))
+            if not MockEndpoint.objects.filter(endpoint_id=endpoint_id).exists():
+                return endpoint_id
+    
+    def is_expired(self):
+        """Check if the endpoint has expired"""
+        if self.expires_at is None:
+            return False
+        return timezone.now() > self.expires_at
+    
+    def is_ip_allowed(self, client_ip):
+        """Check if a client IP is allowed to access this endpoint"""
+        if not self.ip_restriction_enabled:
+            return True
+        
+        if not self.allowed_ips:
+            return False
+        
+        allowed_list = [ip.strip() for ip in self.allowed_ips.split(',') if ip.strip()]
+        return client_ip in allowed_list
+    
+    def increment_request_count(self):
+        """Increment the request counter and update last_accessed"""
+        self.request_count += 1
+        self.last_accessed = timezone.now()
+        self.save(update_fields=['request_count', 'last_accessed'])
+    
+    def get_allowed_ips_list(self):
+        """Return allowed IPs as a list"""
+        if not self.allowed_ips:
+            return []
+        return [ip.strip() for ip in self.allowed_ips.split(',') if ip.strip()]
