@@ -970,9 +970,28 @@ custom response headers, custom status codes, http status mock, crud mock api, g
                 separated by commas. Leave empty for no restriction.</div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
             <input type="checkbox" id="editIpRestriction" style="width: 18px; height: 18px;">
             <label for="editIpRestriction" style="font-size: 0.9rem; font-weight: 500;">Enable IP Restriction</label>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">Number of
+                Records</label>
+            <input type="number" id="editRecordCount" min="1" max="100" value="5"
+                style="width: 100%; padding: 0.75rem; font-size: 0.9rem; background: var(--color-bg); color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--radius-md);">
+            <div style="font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.25rem;">How many items to
+                generate in the response array (1-100)</div>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">Response Body
+                (JSON)</label>
+            <textarea id="editResponseBody"
+                style="width: 100%; padding: 0.75rem; font-size: 0.85rem; font-family: monospace; background: var(--color-bg); color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--radius-md); min-height: 150px; resize: vertical;"
+                placeholder='{"success": true, "data": [{"id": "{{uuid}}", "name": "{{fullName}}"}]}'></textarea>
+            <div style="font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.25rem;">Use template
+                variables like {{uuid}}, {{firstName}}, {{email}}</div>
         </div>
 
         <div style="display: flex; gap: 0.75rem;">
@@ -1797,23 +1816,34 @@ custom response headers, custom status codes, http status mock, crud mock api, g
                 const data = await response.json();
 
                 if (data.success && data.endpoints.length > 0) {
-                    savedEndpointsList.innerHTML = data.endpoints.map(ep => `
+                    // Show limit header
+                    const limitHtml = `<div style="padding: 0.5rem 0.75rem; background: var(--color-surface-alt); border-radius: var(--radius-sm); margin-bottom: 0.5rem; font-size: 0.8rem; display: flex; justify-content: space-between;">
+                        <span>📊 ${data.count}/${data.limit} endpoints used</span>
+                        <span style="color: ${data.remaining > 0 ? '#10b981' : '#ef4444'};">${data.remaining} remaining</span>
+                    </div>`;
+
+                    savedEndpointsList.innerHTML = limitHtml + data.endpoints.map(ep => {
+                        // Escape response_body for passing to JS function
+                        const escapedResponse = btoa(encodeURIComponent(ep.response_body || ''));
+                        return `
                         <div class="history-item" style="flex-direction: column; align-items: flex-start; gap: 0.5rem; padding: 0.75rem;">
                             <div style="display: flex; align-items: center; gap: 0.75rem; width: 100%;">
                                 <span class="method-badge ${ep.method.toLowerCase()}">${ep.method}</span>
                                 <span style="flex: 1; font-family: monospace; font-size: 0.8rem; word-break: break-all;">${ep.endpoint_url}</span>
                                 <span class="history-status ${ep.is_expired ? 'error' : 'success'}">${ep.is_expired ? 'Expired' : ep.request_count + ' hits'}</span>
                             </div>
-                            ${ep.ip_restriction_enabled ? `<div style="font-size: 0.7rem; color: #f59e0b;">🔒 IP Restricted</div>` : ''}
+                            <div style="font-size: 0.7rem; color: var(--color-text-secondary);">
+                                ${ep.ip_restriction_enabled ? '🔒 IP Restricted | ' : ''}📦 ${ep.record_count} records
+                            </div>
                             <div style="display: flex; gap: 0.5rem; width: 100%;">
                                 <button onclick="navigator.clipboard.writeText('${ep.endpoint_url}').then(() => this.textContent = 'Copied!').catch(() => {}); setTimeout(() => this.textContent = 'Copy', 1000);" style="flex: 1; padding: 0.4rem 0.5rem; font-size: 0.75rem; background: var(--color-primary); color: white; border: none; border-radius: var(--radius-sm); cursor: pointer;">Copy</button>
-                                <button onclick="openEditModal('${ep.endpoint_id}', '${ep.name || ''}', '${ep.ip_restriction_enabled}', '${(ep.allowed_ips || []).join(', ')}')" style="flex: 1; padding: 0.4rem 0.5rem; font-size: 0.75rem; background: #3b82f6; color: white; border: none; border-radius: var(--radius-sm); cursor: pointer;">Edit</button>
+                                <button onclick="openEditModal('${ep.endpoint_id}', '${(ep.name || '').replace(/'/g, "\\'")}', '${ep.ip_restriction_enabled}', '${(ep.allowed_ips || []).join(', ')}', ${ep.record_count}, '${escapedResponse}')" style="flex: 1; padding: 0.4rem 0.5rem; font-size: 0.75rem; background: #3b82f6; color: white; border: none; border-radius: var(--radius-sm); cursor: pointer;">Edit</button>
                                 <button onclick="showDeleteConfirm('${ep.endpoint_id}')" style="padding: 0.4rem 0.75rem; font-size: 0.75rem; background: #ef4444; color: white; border: none; border-radius: var(--radius-sm); cursor: pointer;">🗑️</button>
                             </div>
                         </div>
-                    `).join('');
+                    `}).join('');
                 } else {
-                    savedEndpointsList.innerHTML = '<div class="empty-history">No saved endpoints yet. Create one to see it here.</div>';
+                    savedEndpointsList.innerHTML = `<div style="padding: 0.5rem 0.75rem; background: var(--color-surface-alt); border-radius: var(--radius-sm); margin-bottom: 0.5rem; font-size: 0.8rem;">📊 0/5 endpoints used | <span style="color: #10b981;">5 remaining</span></div><div class="empty-history">No saved endpoints yet. Create one to see it here.</div>`;
                 }
             } catch (e) {
                 savedEndpointsList.innerHTML = '<div class="empty-history">Could not load endpoints.</div>';
@@ -1847,11 +1877,17 @@ custom response headers, custom status codes, http status mock, crud mock api, g
         });
 
         // Open edit modal
-        window.openEditModal = function (endpointId, name, ipRestricted, allowedIps) {
+        window.openEditModal = function (endpointId, name, ipRestricted, allowedIps, recordCount, encodedResponseBody) {
             document.getElementById('editEndpointId').value = endpointId;
             document.getElementById('editEndpointName').value = name || '';
             document.getElementById('editIpRestriction').checked = ipRestricted === 'true';
             document.getElementById('editAllowedIps').value = allowedIps || '';
+            document.getElementById('editRecordCount').value = recordCount || 5;
+            try {
+                document.getElementById('editResponseBody').value = decodeURIComponent(atob(encodedResponseBody || ''));
+            } catch (e) {
+                document.getElementById('editResponseBody').value = '';
+            }
             editModal.classList.add('active');
         };
 
@@ -1865,6 +1901,8 @@ custom response headers, custom status codes, http status mock, crud mock api, g
             const name = document.getElementById('editEndpointName').value;
             const ipRestriction = document.getElementById('editIpRestriction').checked;
             const allowedIps = document.getElementById('editAllowedIps').value.trim();
+            const recordCount = parseInt(document.getElementById('editRecordCount').value) || 5;
+            const responseBody = document.getElementById('editResponseBody').value.trim();
 
             editModalSaveBtn.textContent = 'Saving...';
             editModalSaveBtn.disabled = true;
@@ -1876,7 +1914,9 @@ custom response headers, custom status codes, http status mock, crud mock api, g
                     body: JSON.stringify({
                         name: name,
                         ip_restriction_enabled: ipRestriction,
-                        allowed_ips: allowedIps
+                        allowed_ips: allowedIps,
+                        record_count: recordCount,
+                        response_body: responseBody
                     })
                 });
 

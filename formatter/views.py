@@ -1694,6 +1694,17 @@ def create_mock_endpoint(request):
             'error': 'response_body is required'
         }, status=400)
     
+    # Check endpoint limit (5 per IP)
+    client_ip = get_client_ip(request)
+    existing_count = MockEndpoint.objects.filter(creator_ip=client_ip).count()
+    if existing_count >= 5:
+        return JsonResponse({
+            'success': False,
+            'error': 'You have reached the maximum limit of 5 endpoints. Please delete an existing endpoint to create a new one.',
+            'limit': 5,
+            'current_count': existing_count
+        }, status=400)
+    
     # Create the endpoint
     try:
         endpoint = MockEndpoint.objects.create(
@@ -1965,6 +1976,10 @@ def update_mock_endpoint(request, endpoint_id):
         endpoint.allowed_ips = data['allowed_ips']
     if 'ip_restriction_enabled' in data:
         endpoint.ip_restriction_enabled = bool(data['ip_restriction_enabled'])
+    if 'record_count' in data:
+        endpoint.record_count = int(data['record_count'])
+    if 'response_body' in data and data['response_body'].strip():
+        endpoint.response_body = data['response_body']
     
     endpoint.save()
     
@@ -1977,6 +1992,7 @@ def update_mock_endpoint(request, endpoint_id):
         'name': endpoint.name,
         'ip_restriction_enabled': endpoint.ip_restriction_enabled,
         'allowed_ips': endpoint.get_allowed_ips_list(),
+        'record_count': endpoint.record_count,
         'message': 'Endpoint updated successfully'
     })
 
@@ -2032,6 +2048,8 @@ def list_my_endpoints(request):
             'path': ep.path,
             'method': ep.method,
             'status_code': ep.status_code,
+            'record_count': ep.record_count,
+            'response_body': ep.response_body,
             'ip_restriction_enabled': ep.ip_restriction_enabled,
             'allowed_ips': ep.get_allowed_ips_list(),
             'request_count': ep.request_count,
@@ -2042,6 +2060,8 @@ def list_my_endpoints(request):
     return JsonResponse({
         'success': True,
         'count': len(endpoints_list),
+        'limit': 5,
+        'remaining': max(0, 5 - len(endpoints_list)),
         'endpoints': endpoints_list,
         'your_ip': client_ip
     })
