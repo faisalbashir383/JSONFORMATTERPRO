@@ -34,7 +34,7 @@ class SecurityHeadersMiddleware(MiddlewareMixin):
                 "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; "
                 "img-src 'self' data: https: blob:; "
                 "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
-                "connect-src 'self' https://www.google-analytics.com https://ip-api.com https://pagead2.googlesyndication.com https://cdnjs.cloudflare.com https://www.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net; "
+                "connect-src 'self' https: wss: https://www.google-analytics.com https://ip-api.com https://pagead2.googlesyndication.com https://cdnjs.cloudflare.com https://www.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net; "
                 "frame-src 'self' https://www.google.com https://pagead2.googlesyndication.com https://www.googletagmanager.com; "
                 "worker-src 'self' blob: data:; "
                 "object-src 'none'; "
