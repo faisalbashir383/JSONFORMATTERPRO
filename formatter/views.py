@@ -653,9 +653,15 @@ def swagger_viewer_page(request):
     return render(request, 'swagger-viewer.html')
 
 
+
 def lorem_ipsum_page(request):
     """Render the Lorem Ipsum Generator page"""
     return render(request, 'lorem-ipsum.html')
+
+
+def resume_builder(request):
+    """Render the Resume Builder page"""
+    return render(request, 'resume-builder.html')
 
 
 # ====================

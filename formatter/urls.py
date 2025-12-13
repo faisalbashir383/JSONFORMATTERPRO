@@ -59,6 +59,7 @@ urlpatterns = [
     path('image-resizer/', views.image_resizer_page, name='image_resizer_page'),
     path('toon-converter/', views.toon_converter_page, name='toon_converter_page'),
     path('domain-age/', views.domain_age_page, name='domain_age_page'),
+    path('resume-builder/', views.resume_builder, name='resume_builder'),
     
     # Calculator Pages
     path('calculator/', views.calculator_page, name='calculator_page'),

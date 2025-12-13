@@ -50,6 +50,7 @@ class StaticViewSitemap(Sitemap):
             'lorem_ipsum_page',
             'image_resizer_page',
             'domain_age_page',
+            'resume_builder',
             # Data Format Tools
             'toon_converter_page',
             # Calculators
