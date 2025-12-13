@@ -9,8 +9,10 @@
 XML/CSV. Fix errors instantly. Client-side, secure, no signup.{% endblock %}
 
 {% block meta_keywords %}json formatter pro, json formatter 2026, free json formatter pro, json formatter for mac, json
-formatter for windows, json, json 2026, python, django, api, ad free json formatter, secure json formatter, client side json,
-json validator, json beautifier, json minifier, json editor, json viewer, ad free json tools, professional json formatter,
+formatter for windows, json, json 2026, python, django, api, ad free json formatter, secure json formatter, client side
+json,
+json validator, json beautifier, json minifier, json editor, json viewer, ad free json tools, professional json
+formatter,
 jsonlint, json lint, online json formatter, free json formatter, format json online, validate json, beautify json, json
 parser, json checker, json pretty print, json syntax checker, json error checker, online json validator, json to xml,
 json to csv, json to yaml, json converter, minify json, compact json, json tree view, json debugging, fix json errors,
@@ -279,14 +281,52 @@ processing. No signup required.{% endblock %}
   <link rel="stylesheet" href="{% static 'css/fullscreen.css' %}">
 </noscript>
 
-<!-- Monaco Editor Loader -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+<!-- Monaco Editor Loader - Deferred for non-blocking -->
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
 
-<!-- Font Awesome Icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- Font Awesome Icons - Preload for performance -->
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style"
+  onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</noscript>
 
 <!-- Editor Styles -->
 <style>
+  /* Screen reader only class for accessibility */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Improved contrast for content sections */
+  .content-section {
+    color: var(--color-text);
+  }
+
+  .content-section strong {
+    color: var(--color-text);
+  }
+
+  .benefits-list li {
+    color: var(--color-text);
+  }
+
+  .benefits-list li strong {
+    color: #6366f1;
+  }
+
+  [data-theme="dark"] .benefits-list li strong {
+    color: #a5b4fc;
+  }
+
   /* Panel Header - Teal theme */
   .panel-header {
     background: linear-gradient(135deg, #2c7a7b 0%, #319795 100%);
@@ -983,7 +1023,8 @@ processing. No signup required.{% endblock %}
   </div>
 
   <div class="editor-container" id="editorContainer">
-    <textarea id="jsonEditor"></textarea>
+    <label for="jsonEditor" class="sr-only">JSON Editor - Enter your JSON code here</label>
+    <textarea id="jsonEditor" aria-label="JSON Editor"></textarea>
   </div>
 </div>
 

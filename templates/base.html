@@ -47,8 +47,12 @@
     <meta name="google-site-verification" content="dUrxIJxdHg9iUeNbFzVFSycuVOgEENWBmwQRChJBbqk" />
     <meta name="google-adsense-account" content="ca-pub-6955346946355268">
 
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Font Awesome Icons - Preload for performance -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    </noscript>
 
     <!-- Primary Meta Tags -->
     <title>{% block title %}JSON Formatters Pro - Free Online JSON Tools{% endblock %}</title>
