@@ -1705,11 +1705,15 @@ def create_mock_endpoint(request):
             'current_count': existing_count
         }, status=400)
     
-    # Create the endpoint
+    # Create the endpoint (endpoint_id is always auto-generated)
     try:
+        user_path = data.get('path', '/api/users').strip()
+        # Ensure path doesn't start/end with slash for consistent URL building
+        user_path = user_path.strip('/')
+        
         endpoint = MockEndpoint.objects.create(
             name=data.get('name', ''),
-            path=data.get('path', '/api/mock'),
+            path=user_path,  # Store the normalized user path
             method=data.get('method', 'GET').upper(),
             status_code=int(data.get('status_code', 200)),
             response_body=response_body,
@@ -1719,19 +1723,19 @@ def create_mock_endpoint(request):
             ip_restriction_enabled=bool(data.get('ip_restriction_enabled', False)),
             allowed_ips=data.get('allowed_ips', ''),
             custom_headers=json.dumps(data.get('custom_headers', {})),
-            creator_ip=get_client_ip(request)
+            creator_ip=client_ip
         )
         
-        # Build the full endpoint URL
+        # Build the full endpoint URL using user's path
         site_url = request.build_absolute_uri('/').rstrip('/')
-        endpoint_url = f"{site_url}/api/mock/{endpoint.endpoint_id}/"
+        endpoint_url = f"{site_url}/{user_path}/{endpoint.endpoint_id}/"
         
         return JsonResponse({
             'success': True,
             'endpoint_id': endpoint.endpoint_id,
             'endpoint_url': endpoint_url,
             'method': endpoint.method,
-            'path': endpoint.path,
+            'path': f"/{user_path}",
             'ip_restriction_enabled': endpoint.ip_restriction_enabled,
             'allowed_ips': endpoint.get_allowed_ips_list(),
             'created_at': endpoint.created_at.isoformat(),
@@ -1793,13 +1797,48 @@ def process_template_variables(template_str):
 
 
 @csrf_exempt
+def serve_path_mock_endpoint(request, user_path='', endpoint_id=''):
+    """
+    Serve mock endpoint via path-based URL: /{user_path}/{endpoint_id}/
+    Examples: /api/users/abc123/, /api/employees/xyz789/
+    The endpoint_id is extracted from the URL path.
+    """
+    if not endpoint_id:
+        return JsonResponse({
+            'error': 'Missing endpoint_id in URL path',
+            'message': 'URL format should be /{path}/{endpoint_id}/',
+            'user_path': user_path
+        }, status=400)
+    
+    # Convert UUID object to string for database query
+    endpoint_id_str = str(endpoint_id)
+    
+    # Validate that the path matches the endpoint's stored path (optional check)
+    try:
+        endpoint = MockEndpoint.objects.get(endpoint_id=endpoint_id_str)
+        # Path validation is optional - we allow any path for flexibility
+    except MockEndpoint.DoesNotExist:
+        return JsonResponse({
+            'error': 'Endpoint not found',
+            'endpoint_id': endpoint_id_str,
+            'path': user_path
+        }, status=404)
+    
+    # Delegate to the main serve_mock_endpoint function
+    return serve_mock_endpoint(request, endpoint_id_str, subpath='')
+
+
+@csrf_exempt
 def serve_mock_endpoint(request, endpoint_id, subpath=''):
     """
     Serve the mock endpoint response.
     Handles IP restriction, latency simulation, and error rate.
     """
+    # Convert UUID object to string if needed
+    endpoint_id_str = str(endpoint_id)
+    
     try:
-        endpoint = MockEndpoint.objects.get(endpoint_id=endpoint_id)
+        endpoint = MockEndpoint.objects.get(endpoint_id=endpoint_id_str)
     except MockEndpoint.DoesNotExist:
         return JsonResponse({
             'error': 'Not Found',
@@ -1852,49 +1891,116 @@ def serve_mock_endpoint(request, endpoint_id, subpath=''):
     # Process template variables and generate N records
     try:
         record_count = max(1, endpoint.record_count)
-        
-        # Check if response has an array that should be multiplied
         response_template = endpoint.response_body
         
-        # If template contains "data": [...], generate multiple items
-        if '"data":' in response_template and '[' in response_template:
-            # Try to parse and detect the array structure
+        # Try to detect if we have a data array structure
+        has_data_array = '"data"' in response_template and '[' in response_template
+        
+        if has_data_array:
             try:
-                template_parsed = json.loads(response_template)
-                if 'data' in template_parsed and isinstance(template_parsed['data'], list) and len(template_parsed['data']) > 0:
-                    # Get the first item as template
-                    item_template = template_parsed['data'][0]
-                    item_template_str = json.dumps(item_template)
+                # Step 1: Replace template vars with placeholders to make parseable JSON
+                import re
+                # Find all template patterns like {{varName}} or {{varName:param}}
+                template_vars = re.findall(r'\{\{[^}]+\}\}', response_template)
+                temp_template = response_template
+                var_map = {}
+                for i, var in enumerate(template_vars):
+                    placeholder = f'"__PLACEHOLDER_{i}__"'
+                    var_map[placeholder] = var
+                    # Replace only in non-string contexts or as string values
+                    temp_template = temp_template.replace(f'"{var}"', placeholder)
+                    temp_template = temp_template.replace(var, f'"__PLACEHOLDER_{i}__"')
+                
+                # Parse the JSON with placeholders
+                parsed = json.loads(temp_template)
+                
+                if 'data' in parsed and isinstance(parsed['data'], list) and len(parsed['data']) > 0:
+                    # Get the first item as our template
+                    item_template = parsed['data'][0]
                     
                     # Generate N records
                     generated_items = []
                     for _ in range(record_count):
-                        processed_item = process_template_variables(item_template_str)
-                        generated_items.append(json.loads(processed_item))
+                        # Deep copy the item template
+                        new_item = json.loads(json.dumps(item_template))
+                        # Replace placeholders with fresh processed values
+                        item_str = json.dumps(new_item)
+                        for placeholder, var in var_map.items():
+                            clean_placeholder = placeholder.strip('"')
+                            if clean_placeholder in item_str:
+                                processed_val = process_template_variables(var)
+                                item_str = item_str.replace(f'"{clean_placeholder}"', processed_val if processed_val.startswith('"') or processed_val.isdigit() or processed_val in ['true', 'false', 'null'] else f'"{processed_val}"')
+                        generated_items.append(json.loads(item_str))
                     
-                    # Replace data array with generated items
-                    template_parsed['data'] = generated_items
+                    # Replace data array
+                    parsed['data'] = generated_items
                     
-                    # Process any remaining template variables in other parts
-                    remaining_str = json.dumps(template_parsed)
-                    remaining_str = process_template_variables(remaining_str)
-                    response_data = json.loads(remaining_str)
+                    # Process remaining template vars in other parts (like meta)
+                    result_str = json.dumps(parsed)
+                    for placeholder, var in var_map.items():
+                        clean_placeholder = placeholder.strip('"')
+                        if clean_placeholder in result_str:
+                            processed_val = process_template_variables(var)
+                            result_str = result_str.replace(f'"{clean_placeholder}"', processed_val if processed_val.startswith('"') or processed_val.isdigit() or processed_val in ['true', 'false', 'null'] else f'"{processed_val}"')
+                    
+                    response_data = json.loads(result_str)
                 else:
-                    # No data array, process normally
+                    # No data array found, process normally
                     processed_body = process_template_variables(response_template)
                     response_data = json.loads(processed_body)
-            except:
-                # Fallback to simple processing
+                    
+            except Exception as e:
+                # Fallback: just process template variables directly
                 processed_body = process_template_variables(response_template)
-                response_data = json.loads(processed_body)
+                try:
+                    response_data = json.loads(processed_body)
+                except:
+                    response_data = {'raw_response': processed_body, 'error': str(e)}
         else:
-            # Simple response without array
+            # No data array structure, simple processing
             processed_body = process_template_variables(response_template)
             response_data = json.loads(processed_body)
             
     except json.JSONDecodeError:
         # Return as plain text if not valid JSON
         response_data = {'raw_response': process_template_variables(endpoint.response_body)}
+    
+    # Handle query parameter filtering (e.g., ?id=123, ?email=test@example.com)
+    query_params = request.GET
+    if query_params and isinstance(response_data, dict) and 'data' in response_data and isinstance(response_data['data'], list):
+        # Check for id param first (most common use case)
+        param_id = query_params.get('id')
+        if param_id:
+            # Find matching record by id field
+            matching = None
+            for item in response_data['data']:
+                if isinstance(item, dict):
+                    # Check various id field names
+                    item_id = item.get('id') or item.get('_id') or item.get('uuid') or item.get('ID')
+                    if str(item_id) == str(param_id):
+                        matching = item
+                        break
+            
+            if matching:
+                response_data = {'success': True, 'data': matching}
+            else:
+                # Generate a new record with the specified ID
+                if response_data['data']:
+                    matching = response_data['data'][0].copy() if isinstance(response_data['data'][0], dict) else {}
+                    matching['id'] = param_id
+                    response_data = {'success': True, 'data': matching}
+                else:
+                    response_data = {'success': False, 'error': 'Record not found', 'id': param_id}
+        else:
+            # Check for other filter params
+            for key, value in query_params.items():
+                if key not in ['format', 'callback', '_']:  # Ignore common non-filter params
+                    filtered = [item for item in response_data['data'] 
+                               if isinstance(item, dict) and str(item.get(key, '')).lower() == str(value).lower()]
+                    if filtered:
+                        response_data['data'] = filtered
+                        response_data['filtered_by'] = {key: value}
+                        break
     
     response = JsonResponse(response_data, status=endpoint.status_code, safe=False)
     
@@ -1918,8 +2024,9 @@ def serve_mock_endpoint(request, endpoint_id, subpath=''):
 @require_http_methods(["DELETE", "POST"])
 def delete_mock_endpoint(request, endpoint_id):
     """Delete a mock endpoint (only by creator IP)"""
+    endpoint_id_str = str(endpoint_id)
     try:
-        endpoint = MockEndpoint.objects.get(endpoint_id=endpoint_id)
+        endpoint = MockEndpoint.objects.get(endpoint_id=endpoint_id_str)
     except MockEndpoint.DoesNotExist:
         return JsonResponse({
             'success': False,
@@ -1945,8 +2052,9 @@ def delete_mock_endpoint(request, endpoint_id):
 @require_http_methods(["POST", "PUT", "PATCH"])
 def update_mock_endpoint(request, endpoint_id):
     """Update an existing mock endpoint (only by creator IP)"""
+    endpoint_id_str = str(endpoint_id)
     try:
-        endpoint = MockEndpoint.objects.get(endpoint_id=endpoint_id)
+        endpoint = MockEndpoint.objects.get(endpoint_id=endpoint_id_str)
     except MockEndpoint.DoesNotExist:
         return JsonResponse({
             'success': False,
@@ -2001,8 +2109,9 @@ def update_mock_endpoint(request, endpoint_id):
 @require_http_methods(["GET"])
 def get_mock_endpoint_info(request, endpoint_id):
     """Get information about a mock endpoint"""
+    endpoint_id_str = str(endpoint_id)
     try:
-        endpoint = MockEndpoint.objects.get(endpoint_id=endpoint_id)
+        endpoint = MockEndpoint.objects.get(endpoint_id=endpoint_id_str)
     except MockEndpoint.DoesNotExist:
         return JsonResponse({
             'success': False,
@@ -2041,11 +2150,13 @@ def list_my_endpoints(request):
     
     endpoints_list = []
     for ep in endpoints:
+        # Build path-based URL: /{path}/{endpoint_id}/
+        user_path = ep.path.strip('/') if ep.path else 'api/mock'
         endpoints_list.append({
             'endpoint_id': ep.endpoint_id,
-            'endpoint_url': f"{site_url}/api/mock/{ep.endpoint_id}/",
+            'endpoint_url': f"{site_url}/{user_path}/{ep.endpoint_id}/",
             'name': ep.name,
-            'path': ep.path,
+            'path': f"/{user_path}",
             'method': ep.method,
             'status_code': ep.status_code,
             'record_count': ep.record_count,

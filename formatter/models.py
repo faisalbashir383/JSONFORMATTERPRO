@@ -926,8 +926,8 @@ class MockEndpoint(models.Model):
         ('DELETE', 'DELETE'),
     ]
     
-    # Unique identifier for the endpoint (short URL-safe ID)
-    endpoint_id = models.CharField(max_length=12, unique=True, db_index=True)
+    # Unique identifier for the endpoint (UUID format)
+    endpoint_id = models.CharField(max_length=36, unique=True, db_index=True)
     
     # Endpoint configuration
     name = models.CharField(max_length=100, blank=True, help_text="Optional name for this endpoint")
@@ -977,14 +977,9 @@ class MockEndpoint(models.Model):
     
     @staticmethod
     def generate_endpoint_id():
-        """Generate a unique 8-character endpoint ID"""
-        import secrets
-        import string
-        chars = string.ascii_lowercase + string.digits
-        while True:
-            endpoint_id = ''.join(secrets.choice(chars) for _ in range(8))
-            if not MockEndpoint.objects.filter(endpoint_id=endpoint_id).exists():
-                return endpoint_id
+        """Generate a unique UUID endpoint ID"""
+        import uuid
+        return str(uuid.uuid4())
     
     def is_expired(self):
         """Check if the endpoint has expired"""

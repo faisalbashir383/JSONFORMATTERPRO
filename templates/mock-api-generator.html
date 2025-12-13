@@ -125,6 +125,8 @@ custom response headers, custom status codes, http status mock, crud mock api, g
 {% endblock %}
 
 {% block extra_css %}
+<!-- Prism.js CSS for syntax highlighting -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 <style>
     .tool-header {
         text-align: center;
@@ -772,8 +774,15 @@ custom response headers, custom status codes, http status mock, crud mock api, g
                     <button id="resetBtn" class="action-btn">Reset</button>
                 </div>
             </div>
-            <textarea id="responseTemplate" class="response-textarea"
-                placeholder="Enter your JSON response template...">{
+            <div class="code-editor-container"
+                style="position: relative; height: 350px; border-radius: var(--radius-md); overflow: hidden;">
+                <!-- Highlighted Backdrop -->
+                <pre class="code-highlight-backdrop"
+                    style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding: 1rem; overflow: auto; background: #2d2d2d; border: 1px solid var(--color-border); border-radius: var(--radius-md); pointer-events: none;"><code id="highlightedCode" class="language-json" style="font-family: 'Fira Code', 'Monaco', 'Consolas', monospace; font-size: 0.875rem; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word;"></code></pre>
+                <!-- Editable Textarea -->
+                <textarea id="responseTemplate" class="response-textarea code-editor-textarea"
+                    style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding: 1rem; width: 100%; height: 100%; resize: none; background: transparent; color: transparent; caret-color: white; font-family: 'Fira Code', 'Monaco', 'Consolas', monospace; font-size: 0.875rem; line-height: 1.6; border: 1px solid transparent; border-radius: var(--radius-md); outline: none; overflow: auto; white-space: pre-wrap; word-wrap: break-word;"
+                    spellcheck="false" placeholder="Enter your JSON response template...">{
   "success": true,
   "data": [
     {
@@ -791,6 +800,7 @@ custom response headers, custom status codes, http status mock, crud mock api, g
     "limit": 10
   }
 }</textarea>
+            </div>
         </div>
 
         <!-- Template Variables -->
@@ -1003,6 +1013,112 @@ custom response headers, custom status codes, http status mock, crud mock api, g
         </div>
     </div>
 </div>
+
+<!-- Toast Notification Container -->
+<div id="toastContainer"
+    style="position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px;">
+</div>
+
+<style>
+    /* Toast Notification Styles */
+    .toast {
+        min-width: 300px;
+        max-width: 400px;
+        padding: 1rem 1.25rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        animation: toastSlideIn 0.3s ease-out;
+        backdrop-filter: blur(10px);
+    }
+
+    .toast.error {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.95) 0%, rgba(220, 38, 38, 0.95) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .toast.success {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.95) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .toast.warning {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.95) 0%, rgba(217, 119, 6, 0.95) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .toast.info {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.95) 0%, rgba(37, 99, 235, 0.95) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .toast-icon {
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+
+    .toast-content {
+        flex: 1;
+    }
+
+    .toast-title {
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .toast-message {
+        font-size: 0.85rem;
+        opacity: 0.9;
+        line-height: 1.4;
+    }
+
+    .toast-close {
+        background: none;
+        border: none;
+        color: white;
+        opacity: 0.7;
+        cursor: pointer;
+        padding: 0;
+        font-size: 1.25rem;
+        line-height: 1;
+        transition: opacity 0.2s;
+    }
+
+    .toast-close:hover {
+        opacity: 1;
+    }
+
+    @keyframes toastSlideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes toastSlideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+</style>
 
 <style>
     @keyframes slideIn {
@@ -1256,6 +1372,44 @@ custom response headers, custom status codes, http status mock, crud mock api, g
         const endpointUrlDisplay = document.getElementById('endpointUrlDisplay');
         const historyList = document.getElementById('historyList');
         const variableGrid = document.getElementById('variableGrid');
+        const toastContainer = document.getElementById('toastContainer');
+
+        // Toast notification function
+        function showToast(message, type = 'error', title = null) {
+            const icons = {
+                error: '❌',
+                success: '✅',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+            const titles = {
+                error: 'Error',
+                success: 'Success',
+                warning: 'Warning',
+                info: 'Info'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${icons[type]}</span>
+                <div class="toast-content">
+                    <div class="toast-title">${title || titles[type]}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.style.animation = 'toastSlideOut 0.3s ease-out forwards';
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 5000);
+        }
 
         // Fake Data Generators
         const fakeData = {
@@ -1489,7 +1643,7 @@ custom response headers, custom status codes, http status mock, crud mock api, g
                 const parsed = JSON.parse(responseTemplate.value);
                 responseTemplate.value = JSON.stringify(parsed, null, 2);
             } catch (e) {
-                alert('Invalid JSON. Please fix syntax errors first.');
+                showToast('Invalid JSON. Please fix syntax errors first.', 'error', 'Syntax Error');
             }
         }
 
@@ -1527,7 +1681,7 @@ custom response headers, custom status codes, http status mock, crud mock api, g
         // Download JSON
         function downloadJSON() {
             const content = generatedResponse.value;
-            if (!content) return alert('No response to download');
+            if (!content) return showToast('No response to download', 'warning');
 
             const blob = new Blob([content], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -1622,11 +1776,11 @@ custom response headers, custom status codes, http status mock, crud mock api, g
             const value = customVarValue.value.trim();
 
             if (!name) {
-                alert('Please enter a variable name');
+                showToast('Please enter a variable name', 'warning');
                 return;
             }
             if (!value) {
-                alert('Please enter a value or values');
+                showToast('Please enter a value or values', 'warning');
                 return;
             }
 
@@ -1703,7 +1857,7 @@ custom response headers, custom status codes, http status mock, crud mock api, g
         addMyIpBtn.addEventListener('click', () => {
             const currentIp = detectedIpInput.value;
             if (!currentIp || currentIp === 'Detecting...' || currentIp === 'Could not detect') {
-                alert('IP not detected yet');
+                showToast('IP not detected yet', 'info');
                 return;
             }
 
@@ -1735,7 +1889,7 @@ custom response headers, custom status codes, http status mock, crud mock api, g
             const responseBody = generatedResponse.value || responseTemplate.value;
 
             if (!responseBody.trim()) {
-                alert('Please generate a response first or enter a response template');
+                showToast('Please generate a response first or enter a response template', 'warning');
                 return;
             }
 
@@ -1743,23 +1897,25 @@ custom response headers, custom status codes, http status mock, crud mock api, g
             createServerEndpointBtn.innerHTML = '<span>⏳</span> Creating...';
 
             try {
+                const payload = {
+                    name: 'Mock Endpoint',
+                    path: path,
+                    method: method,
+                    status_code: status,
+                    response_body: responseBody,
+                    latency_ms: latency,
+                    error_rate: errorRate,
+                    record_count: parseInt(recordCount.value) || 5,
+                    ip_restriction_enabled: ipEnabled,
+                    allowed_ips: allowedIps
+                };
+
                 const response = await fetch('/api/mock/create/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        name: 'Mock Endpoint',
-                        path: path,
-                        method: method,
-                        status_code: status,
-                        response_body: responseBody,
-                        latency_ms: latency,
-                        error_rate: errorRate,
-                        record_count: parseInt(recordCount.value) || 5,
-                        ip_restriction_enabled: ipEnabled,
-                        allowed_ips: allowedIps
-                    })
+                    body: JSON.stringify(payload)
                 });
 
                 const data = await response.json();
@@ -1776,10 +1932,10 @@ custom response headers, custom status codes, http status mock, crud mock api, g
                     // Update the endpoint display
                     endpointUrlDisplay.textContent = data.endpoint_url;
                 } else {
-                    alert('Error: ' + (data.error || 'Failed to create endpoint'));
+                    showToast(data.error || 'Failed to create endpoint', 'error');
                 }
             } catch (e) {
-                alert('Network error: ' + e.message);
+                showToast('Network error: ' + e.message, 'error');
             }
 
             createServerEndpointBtn.disabled = false;
@@ -1925,10 +2081,10 @@ custom response headers, custom status codes, http status mock, crud mock api, g
                     editModal.classList.remove('active');
                     loadSavedEndpoints();
                 } else {
-                    alert('Error: ' + (data.error || 'Failed to update'));
+                    showToast(data.error || 'Failed to update', 'error');
                 }
             } catch (e) {
-                alert('Network error');
+                showToast('Network error', 'error');
             }
 
             editModalSaveBtn.textContent = 'Save Changes';
@@ -1952,7 +2108,7 @@ custom response headers, custom status codes, http status mock, crud mock api, g
                 await fetch(`/api/mock/${endpointId}/delete/`, { method: 'DELETE' });
                 loadSavedEndpoints();
             } catch (e) {
-                alert('Failed to delete endpoint');
+                showToast('Failed to delete endpoint', 'error');
             }
         };
 
@@ -1964,7 +2120,62 @@ custom response headers, custom status codes, http status mock, crud mock api, g
 
         // Initial display update
         updateEndpointDisplay();
+
+        // === Prism.js Syntax Highlighting ===
+        const highlightedCode = document.getElementById('highlightedCode');
+
+        function updateHighlighting() {
+            const code = responseTemplate.value;
+            // Escape HTML entities and highlight template variables
+            let escaped = code
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+
+            // Highlight {{variable}} patterns with special color
+            escaped = escaped.replace(/(\{\{[^}]+\}\})/g, '<span style="color: #f59e0b; font-weight: 600;">$1</span>');
+
+            highlightedCode.innerHTML = escaped;
+
+            // Apply Prism highlighting if available
+            if (window.Prism) {
+                Prism.highlightElement(highlightedCode);
+            }
+        }
+
+        // Sync highlighting on input
+        responseTemplate.addEventListener('input', updateHighlighting);
+        responseTemplate.addEventListener('scroll', function () {
+            const backdrop = document.querySelector('.code-highlight-backdrop');
+            if (backdrop) {
+                backdrop.scrollTop = this.scrollTop;
+                backdrop.scrollLeft = this.scrollLeft;
+            }
+        });
+
+        // Initial highlight
+        updateHighlighting();
     })();
+</script>
+
+<!-- Prism.js for syntax highlighting -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script>
+    // Re-highlight after Prism.js loads
+    if (window.Prism) {
+        const highlightedCode = document.getElementById('highlightedCode');
+        const responseTemplate = document.getElementById('responseTemplate');
+        if (highlightedCode && responseTemplate) {
+            let escaped = responseTemplate.value
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/(\{\{[^}]+\}\})/g, '<span style="color: #f59e0b; font-weight: 600;">$1</span>');
+            highlightedCode.innerHTML = escaped;
+            Prism.highlightElement(highlightedCode);
+        }
+    }
 </script>
 {% endverbatim %}
 {% endblock %}
