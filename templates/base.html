@@ -3,15 +3,6 @@
 <html lang="en">
 
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VTYBYNG6G8"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-VTYBYNG6G8');
-    </script>
     <!-- Event snippet for Page view conversion page -->
     <script>
         gtag('event', 'conversion', {
@@ -47,9 +38,38 @@
     <meta name="google-site-verification" content="dUrxIJxdHg9iUeNbFzVFSycuVOgEENWBmwQRChJBbqk" />
     <meta name="google-adsense-account" content="ca-pub-6955346946355268">
 
-    <!-- Font Awesome Icons - Preload for performance -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
+    <!-- Font Awesome font-display override - MUST be before loading the CSS -->
+    <style>
+        /* Override font-display for ALL Font Awesome font faces to optional */
+        /* optional = use fallback immediately, only swap if font loads very fast */
+        @font-face {
+            font-family: 'Font Awesome 6 Brands';
+            font-display: optional;
+        }
+
+        @font-face {
+            font-family: 'Font Awesome 6 Free';
+            font-display: optional;
+        }
+
+        @font-face {
+            font-family: 'fa-brands-400';
+            font-display: optional;
+        }
+
+        @font-face {
+            font-family: 'fa-regular-400';
+            font-display: optional;
+        }
+
+        @font-face {
+            font-family: 'fa-solid-900';
+            font-display: optional;
+        }
+    </style>
+    <!-- Font Awesome CSS - Non-blocking load -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        media="print" onload="this.media='all'">
     <noscript>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     </noscript>
@@ -231,8 +251,15 @@
     <!-- Fallback for browsers that don't support PNG favicons -->
     <link rel="icon" href="{% static 'images/logo.svg' %}" type="image/x-icon">
 
-    <!-- PWA Manifest (optional) -->
-    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <!-- PWA Manifest - Deferred to avoid blocking critical path -->
+    <script>
+        window.addEventListener('load', function () {
+            var link = document.createElement('link');
+            link.rel = 'manifest';
+            link.href = '{% static "manifest.json" %}';
+            document.head.appendChild(link);
+        });
+    </script>
 
     <!-- Additional Head Content -->
     {% block extra_head %}{% endblock %}
@@ -339,10 +366,23 @@
             width: 100%;
         }
 
-        /* Hide content until full CSS loads to prevent FOUC */
-        .nav-menu,
-        .dropdown-content {
-            visibility: hidden;
+        /* Main container to prevent CLS */
+        .main-container {
+            flex: 1;
+            width: 100%;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Editor panel placeholder to prevent CLS */
+        .single-editor-panel {
+            background: #ffffff;
+            border-radius: 16px;
+            min-height: 100vh;
+            margin-bottom: 2rem;
+        }
+
+        [data-theme="dark"] .single-editor-panel {
+            background: #1e1e2e;
         }
     </style>
 
@@ -368,150 +408,7 @@
     <!-- CSRF Token for AJAX requests -->
     {% csrf_token %}
 
-    <!-- JSON Page Loader -->
-    <div id="pageLoader" class="page-loader">
-        <div class="loader-content">
-            <div class="json-animation">
-                <span class="json-bracket">{</span>
-                <div class="json-lines">
-                    <div class="json-line"><span class="json-key">"loading"</span>: <span class="json-value">true</span>
-                    </div>
-                    <div class="json-line"><span class="json-key">"progress"</span>: <span class="json-dots">...</span>
-                    </div>
-                </div>
-                <span class="json-bracket">}</span>
-            </div>
-            <div class="loader-text">JSON Formatters Pro</div>
-        </div>
-    </div>
-    <style>
-        .page-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
-        }
-
-        .page-loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loader-content {
-            text-align: center;
-        }
-
-        .json-animation {
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 1.2rem;
-            color: #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.25rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .json-bracket {
-            font-size: 2.5rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #6366f1, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: pulse 1s ease-in-out infinite;
-        }
-
-        .json-lines {
-            padding: 0.5rem 0;
-        }
-
-        .json-line {
-            opacity: 0;
-            animation: fadeSlide 0.5s ease forwards;
-        }
-
-        .json-line:nth-child(1) {
-            animation-delay: 0.2s;
-        }
-
-        .json-line:nth-child(2) {
-            animation-delay: 0.4s;
-        }
-
-        .json-key {
-            color: #a78bfa;
-        }
-
-        .json-value {
-            color: #4ade80;
-        }
-
-        .json-dots {
-            color: #fbbf24;
-            animation: dots 1s steps(3, end) infinite;
-        }
-
-        .loader-text {
-            font-size: 1rem;
-            color: #64748b;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            animation: fadeIn 0.5s ease 0.6s forwards;
-            opacity: 0;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-        }
-
-        @keyframes fadeSlide {
-            from {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes dots {
-            0% {
-                content: '.';
-            }
-
-            33% {
-                content: '..';
-            }
-
-            66% {
-                content: '...';
-            }
-        }
-    </style>
+    <!-- Preloader removed to improve CLS score -->
 
     <!-- Navigation Bar -->
     <nav class="navbar">
@@ -910,29 +807,7 @@
             });
         });
 
-        // Show navigation menu after CSS has loaded (remove FOUC prevention)
-        document.querySelectorAll('.nav-menu, .dropdown-content').forEach(el => {
-            el.style.visibility = 'visible';
-        });
-
-        // Hide page loader when page is ready
-        const pageLoader = document.getElementById('pageLoader');
-        if (pageLoader) {
-            // Minimum display time for smooth UX (300ms - quick but smooth)
-            const minDisplayTime = 300;
-            const startTime = performance.now();
-
-            window.addEventListener('load', () => {
-                const elapsed = performance.now() - startTime;
-                const remaining = Math.max(0, minDisplayTime - elapsed);
-
-                setTimeout(() => {
-                    pageLoader.classList.add('hidden');
-                    // Remove from DOM after transition
-                    setTimeout(() => pageLoader.remove(), 400);
-                }, remaining);
-            });
-        }
+        // FOUC prevention and preloader removed to improve CLS score
     </script>
 
     <!-- Typing Test Popup -->

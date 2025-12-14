@@ -27,6 +27,7 @@ class Command(BaseCommand):
             {'name': 'Database', 'description': 'SQL, NoSQL, database design and optimization'},
             {'name': 'Mobile Development', 'description': 'iOS, Android, and cross-platform development'},
             {'name': 'Cloud Computing', 'description': 'AWS, Azure, GCP, and cloud architecture'},
+            {'name': 'JSON', 'description': 'JSON syntax, parsing, validation, and error troubleshooting'},
         ]
         
         categories = {}
@@ -54,6 +55,7 @@ class Command(BaseCommand):
         all_posts.extend(DATABASE_POSTS)
         all_posts.extend(MOBILE_POSTS)
         all_posts.extend(CLOUD_POSTS)
+        all_posts.extend(JSON_POSTS)
         
         # Create all blog posts
         created_count = 0
@@ -3585,6 +3587,843 @@ def stream_response(prompt):
         'tags': 'LLM cost optimization, AI cost reduction, token optimization, efficient AI',
         'meta_description': 'Reduce LLM costs with optimization strategies. Learn prompt engineering, caching, and model selection.',
         'meta_keywords': 'llm cost optimization, reduce ai costs, token optimization, efficient ai'
+    },
+]
+
+# JSON Error Troubleshooting Posts (5 posts)
+JSON_POSTS = [
+    {
+        'category': 'JSON',
+        'title': 'JSON Parse Error: What It Means and How to Fix It',
+        'excerpt': 'Learn what causes JSON parse errors and how to quickly fix them. Common causes include syntax issues, encoding problems, and malformed data.',
+        'content': '''
+<p>A JSON parse error occurs when your application or browser cannot interpret a string as valid JSON. This is one of the most common errors developers encounter when working with APIs, configuration files, or data storage. This guide will help you understand the causes and fix them quickly.</p>
+
+<h2>What is a JSON Parse Error?</h2>
+<p>JSON (JavaScript Object Notation) has strict syntax rules. When data violates these rules, parsers throw a parse error. The error message usually looks like one of these:</p>
+
+<pre><code class="language-text">
+SyntaxError: Unexpected token < in JSON at position 0
+JSON.parse: unexpected character at line 1 column 1
+JSON Parse error: Unrecognized token
+ValueError: Expecting property name: line 1 column 2
+</code></pre>
+
+<h2>Common Causes of JSON Parse Errors</h2>
+
+<h3>1. Receiving HTML Instead of JSON</h3>
+<p>The most common cause is receiving an HTML error page instead of JSON data:</p>
+
+<pre><code class="language-javascript">
+// This happens when API returns HTML (like a 404 page)
+fetch('/api/data')
+  .then(res => res.json())  // Fails if response is HTML
+  .catch(err => console.error('Parse error:', err));
+
+// Solution: Check response before parsing
+fetch('/api/data')
+  .then(res => {
+    if (!res.ok) throw new Error('HTTP error ' + res.status);
+    const contentType = res.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Response is not JSON');
+    }
+    return res.json();
+  });
+</code></pre>
+
+<h3>2. Empty Response</h3>
+<pre><code class="language-javascript">
+// Empty string causes parse error
+JSON.parse('');  // SyntaxError
+
+// Solution: Check for empty response
+const data = responseText ? JSON.parse(responseText) : null;
+</code></pre>
+
+<h3>3. Single Quotes Instead of Double Quotes</h3>
+<pre><code class="language-javascript">
+// Invalid: single quotes
+{'name': 'John'}  // Parse error
+
+// Valid: double quotes
+{"name": "John"}
+</code></pre>
+
+<h3>4. Trailing Commas</h3>
+<pre><code class="language-javascript">
+// Invalid: trailing comma
+{"name": "John", "age": 30,}
+
+// Valid: no trailing comma
+{"name": "John", "age": 30}
+</code></pre>
+
+<h3>5. Unquoted Keys</h3>
+<pre><code class="language-javascript">
+// Invalid: unquoted keys
+{name: "John"}
+
+// Valid: quoted keys
+{"name": "John"}
+</code></pre>
+
+<h2>How to Debug JSON Parse Errors</h2>
+
+<p><strong>Use our <a href="/">JSON formatter online</a> to validate and fix your JSON instantly.</strong> Paste your JSON into the formatter above and it will highlight exactly where the error is located.</p>
+
+<pre><code class="language-javascript">
+// Debug approach
+try {
+  const data = JSON.parse(jsonString);
+} catch (error) {
+  console.log('Failed to parse:', jsonString.substring(0, 100));
+  console.log('Error:', error.message);
+}
+</code></pre>
+
+<h2>Fixing JSON in Different Languages</h2>
+
+<h3>Python</h3>
+<pre><code class="language-python">
+import json
+
+try:
+    data = json.loads(json_string)
+except json.JSONDecodeError as e:
+    print(f"JSON error at line {e.lineno}, column {e.colno}: {e.msg}")
+</code></pre>
+
+<h3>JavaScript</h3>
+<pre><code class="language-javascript">
+function safeJsonParse(str) {
+  try {
+    return { data: JSON.parse(str), error: null };
+  } catch (e) {
+    return { data: null, error: e.message };
+  }
+}
+</code></pre>
+
+<h2>Prevention Tips</h2>
+<ul>
+    <li>Always validate JSON before storing or transmitting</li>
+    <li>Use a JSON formatter tool to check syntax</li>
+    <li>Set proper Content-Type headers in API responses</li>
+    <li>Handle parsing errors gracefully in your code</li>
+</ul>
+
+<p>To quickly validate your JSON data, <a href="/">use our JSON formatter online</a> which shows errors in real-time as you type.</p>
+        ''',
+        'tags': 'json parse error, json syntax error, fix json, json troubleshooting',
+        'meta_description': 'Learn what causes JSON parse errors and how to quickly fix them. Common causes and solutions explained.',
+        'meta_keywords': 'json parse error, json syntax error, fix json error, json troubleshooting, json validation'
+    },
+    {
+        'category': 'JSON',
+        'title': 'Trailing Comma in JSON: Why It Breaks Your Data',
+        'excerpt': 'Understand why trailing commas cause JSON errors and how to remove them. Learn the difference between JSON and JavaScript object syntax.',
+        'content': '''
+<p>A trailing comma is one of the most frequent causes of JSON parse errors. While JavaScript and many programming languages allow trailing commas, JSON does not. This guide explains why and shows you how to fix it.</p>
+
+<h2>What is a Trailing Comma?</h2>
+<p>A trailing comma is a comma after the last element in an array or the last property in an object:</p>
+
+<pre><code class="language-javascript">
+// INVALID JSON - trailing comma in object
+{
+  "name": "John",
+  "age": 30,    // <- This comma breaks JSON
+}
+
+// INVALID JSON - trailing comma in array
+[
+  "apple",
+  "banana",
+  "orange",    // <- This comma breaks JSON
+]
+</code></pre>
+
+<h2>Why JSON Does Not Allow Trailing Commas</h2>
+<p>JSON is a strict data format based on a subset of JavaScript. The JSON specification (RFC 8259) explicitly forbids trailing commas to keep parsing simple and unambiguous.</p>
+
+<pre><code class="language-javascript">
+// This is valid JavaScript but INVALID JSON
+const jsObject = {
+  name: "John",
+  age: 30,  // OK in JavaScript
+};
+
+// Valid JSON requires no trailing comma
+{"name": "John", "age": 30}
+</code></pre>
+
+<h2>Common Scenarios That Create Trailing Commas</h2>
+
+<h3>1. Copy-Paste from Code</h3>
+<pre><code class="language-javascript">
+// Developer copies JavaScript object and forgets to clean it
+const config = {
+  debug: true,
+  port: 3000,  // Trailing comma - valid in JS
+};
+
+// When saved as config.json, this breaks
+</code></pre>
+
+<h3>2. Removing Last Item</h3>
+<pre><code class="language-json">
+// After removing "cherry", developer forgets to remove comma
+{
+  "fruits": [
+    "apple",
+    "banana",   // <- Now a trailing comma!
+  ]
+}
+</code></pre>
+
+<h3>3. Auto-Generated JSON</h3>
+<pre><code class="language-python">
+# Poor code that generates trailing commas
+items = ["a", "b", "c"]
+json_str = "{" + ", ".join([f'"{i}"' for i in items]) + ",}"  # Wrong!
+
+# Correct approach
+import json
+json_str = json.dumps({"items": items})
+</code></pre>
+
+<h2>How to Find and Fix Trailing Commas</h2>
+
+<p><strong>Paste your JSON into our <a href="/">JSON formatter online</a></strong> and it will instantly highlight trailing comma errors with the exact line number.</p>
+
+<h3>Manual Fix</h3>
+<pre><code class="language-json">
+// Before (invalid)
+{
+  "name": "John",
+  "email": "john@example.com",
+}
+
+// After (valid)
+{
+  "name": "John",
+  "email": "john@example.com"
+}
+</code></pre>
+
+<h3>Regex to Find Trailing Commas</h3>
+<pre><code class="language-javascript">
+// Find trailing commas before closing brackets
+const trailingCommaRegex = /,\s*([}\]])/g;
+const fixed = jsonString.replace(trailingCommaRegex, '$1');
+</code></pre>
+
+<h3>Python Script to Fix</h3>
+<pre><code class="language-python">
+import re
+
+def remove_trailing_commas(json_str):
+    # Remove trailing commas before } or ]
+    pattern = r',\s*([}\]])'
+    return re.sub(pattern, r'\1', json_str)
+
+# Usage
+fixed_json = remove_trailing_commas(broken_json)
+</code></pre>
+
+<h2>Editor Settings to Prevent Trailing Commas</h2>
+
+<h3>VS Code</h3>
+<pre><code class="language-json">
+// settings.json
+{
+  "json.format.enable": true,
+  "editor.formatOnSave": true
+}
+</code></pre>
+
+<h3>ESLint (for JavaScript)</h3>
+<pre><code class="language-json">
+{
+  "rules": {
+    "comma-dangle": ["error", "never"]
+  }
+}
+</code></pre>
+
+<h2>Key Takeaways</h2>
+<ul>
+    <li>JSON never allows trailing commas</li>
+    <li>JavaScript allows them, causing confusion</li>
+    <li>Always validate JSON before using in production</li>
+    <li>Use a formatter to catch errors instantly</li>
+</ul>
+
+<p>Use our <a href="/">JSON formatter online</a> to validate your JSON and automatically format it correctly.</p>
+        ''',
+        'tags': 'trailing comma json, json comma error, fix json comma, json syntax',
+        'meta_description': 'Learn why trailing commas break JSON and how to remove them. Understand JSON vs JavaScript syntax differences.',
+        'meta_keywords': 'trailing comma json, json comma error, remove trailing comma, json validation'
+    },
+    {
+        'category': 'JSON',
+        'title': 'Invalid Character in JSON String: How to Resolve It',
+        'excerpt': 'Fix invalid character errors in JSON strings. Learn about escape sequences, special characters, and encoding issues.',
+        'content': '''
+<p>Invalid character errors in JSON occur when special characters are not properly escaped or when encoding issues corrupt your data. This guide covers all common causes and solutions.</p>
+
+<h2>Understanding JSON String Rules</h2>
+<p>JSON strings have specific rules about which characters are allowed and how special characters must be escaped:</p>
+
+<pre><code class="language-text">
+JSON strings must:
+- Be wrapped in double quotes (")
+- Escape special characters with backslash (\\)
+- Use Unicode escapes for control characters
+</code></pre>
+
+<h2>Characters That Must Be Escaped</h2>
+
+<pre><code class="language-javascript">
+// These characters MUST be escaped in JSON strings:
+\\"  - Double quote
+\\\\  - Backslash
+\\/   - Forward slash (optional but recommended)
+\\b  - Backspace
+\\f  - Form feed
+\\n  - Newline
+\\r  - Carriage return
+\\t  - Tab
+\\uXXXX - Unicode character
+</code></pre>
+
+<h2>Common Invalid Character Errors</h2>
+
+<h3>1. Unescaped Quotes</h3>
+<pre><code class="language-javascript">
+// INVALID: unescaped quote inside string
+{"message": "He said "hello""}
+
+// VALID: escaped quotes
+{"message": "He said \\"hello\\""}
+</code></pre>
+
+<h3>2. Unescaped Backslash</h3>
+<pre><code class="language-javascript">
+// INVALID: unescaped backslash
+{"path": "C:\\Users\\name"}
+
+// VALID: escaped backslashes
+{"path": "C:\\\\Users\\\\name"}
+</code></pre>
+
+<h3>3. Raw Newlines</h3>
+<pre><code class="language-javascript">
+// INVALID: actual newline in string
+{"text": "Line 1
+Line 2"}
+
+// VALID: escaped newline
+{"text": "Line 1\\nLine 2"}
+</code></pre>
+
+<h3>4. Control Characters</h3>
+<pre><code class="language-javascript">
+// INVALID: tab character (ASCII 9)
+{"text": "Hello\tWorld"}  // Actual tab character
+
+// VALID: escaped tab
+{"text": "Hello\\tWorld"}
+</code></pre>
+
+<h3>5. Non-UTF-8 Characters</h3>
+<pre><code class="language-python">
+# INVALID: non-UTF-8 bytes
+b'{"name": "Caf\xe9"}'  # Latin-1 encoding
+
+# VALID: proper UTF-8 or Unicode escape
+'{"name": "Cafe"}'
+'{"name": "Caf\\u00e9"}'
+</code></pre>
+
+<h2>How to Fix Invalid Characters</h2>
+
+<p><strong>Use our <a href="/">JSON formatter online</a></strong> to paste your JSON and it will highlight exactly where invalid characters are located.</p>
+
+<h3>JavaScript Solution</h3>
+<pre><code class="language-javascript">
+// Properly escape a string for JSON
+function escapeJsonString(str) {
+  return str
+    .replace(/\\\\/g, '\\\\\\\\')
+    .replace(/"/g, '\\\\"')
+    .replace(/\\n/g, '\\\\n')
+    .replace(/\\r/g, '\\\\r')
+    .replace(/\\t/g, '\\\\t');
+}
+
+// Or simply use JSON.stringify
+const obj = { message: 'He said "hello"' };
+const json = JSON.stringify(obj);
+// Result: {"message":"He said \\"hello\\""}
+</code></pre>
+
+<h3>Python Solution</h3>
+<pre><code class="language-python">
+import json
+
+# Let Python handle escaping
+data = {"message": 'He said "hello"'}
+json_str = json.dumps(data)
+# Result: {"message": "He said \\"hello\\""}
+
+# Handle encoding issues
+with open('data.json', 'r', encoding='utf-8') as f:
+    data = json.load(f)
+</code></pre>
+
+<h3>Fixing Encoding Issues</h3>
+<pre><code class="language-python">
+# Convert to UTF-8
+def fix_encoding(byte_string):
+    # Try common encodings
+    for encoding in ['utf-8', 'latin-1', 'cp1252']:
+        try:
+            return byte_string.decode(encoding)
+        except UnicodeDecodeError:
+            continue
+    return byte_string.decode('utf-8', errors='ignore')
+</code></pre>
+
+<h2>Prevention Best Practices</h2>
+<ul>
+    <li>Always use JSON.stringify() or json.dumps() to create JSON</li>
+    <li>Ensure files are saved with UTF-8 encoding</li>
+    <li>Validate JSON before storing or transmitting</li>
+    <li>Use a proper JSON library instead of string concatenation</li>
+</ul>
+
+<p>To quickly validate and fix your JSON, paste it into our <a href="/">JSON formatter online</a> which will identify problematic characters.</p>
+        ''',
+        'tags': 'json invalid character, json escape, json encoding, special characters json',
+        'meta_description': 'Fix invalid character errors in JSON. Learn about escape sequences, special characters, and encoding solutions.',
+        'meta_keywords': 'json invalid character, json escape characters, json encoding, fix json string'
+    },
+    {
+        'category': 'JSON',
+        'title': 'End of JSON Input Error: Causes and Solutions',
+        'excerpt': 'Understand and fix "unexpected end of JSON input" errors. Common causes include truncated data, empty responses, and incomplete objects.',
+        'content': '''
+<p>The "Unexpected end of JSON input" error occurs when the JSON parser reaches the end of the data before finding a complete, valid JSON structure. This guide explains why it happens and how to fix it.</p>
+
+<h2>What Does This Error Mean?</h2>
+<p>This error indicates that your JSON is incomplete. The parser was expecting more data but reached the end of the string:</p>
+
+<pre><code class="language-javascript">
+// Error examples
+JSON.parse('');           // Unexpected end of JSON input
+JSON.parse('{"name":');   // Unexpected end of JSON input
+JSON.parse('[1, 2,');     // Unexpected end of JSON input
+JSON.parse('{"a":');      // Unexpected end of JSON input
+</code></pre>
+
+<h2>Common Causes</h2>
+
+<h3>1. Empty Response from API</h3>
+<pre><code class="language-javascript">
+// API returns empty body
+fetch('/api/data')
+  .then(res => res.text())  // Empty string
+  .then(text => JSON.parse(text))  // Error!
+
+// Solution: Check for empty response
+fetch('/api/data')
+  .then(res => res.text())
+  .then(text => {
+    if (!text) return null;
+    return JSON.parse(text);
+  });
+</code></pre>
+
+<h3>2. Truncated Response</h3>
+<pre><code class="language-javascript">
+// Network timeout cuts off the response
+// Received: {"users":[{"name":"John"},{"name":"Ja
+// Missing: ne"}]}
+
+// Solution: Verify Content-Length matches body
+fetch('/api/data')
+  .then(res => {
+    const contentLength = res.headers.get('content-length');
+    return res.text().then(text => {
+      if (contentLength && text.length < parseInt(contentLength)) {
+        throw new Error('Response truncated');
+      }
+      return JSON.parse(text);
+    });
+  });
+</code></pre>
+
+<h3>3. File Read Issues</h3>
+<pre><code class="language-python">
+# File was not fully written
+import json
+
+# Problem: File ends abruptly
+# {"config": {
+#   "debug": true,
+#   "port": 30   <- File ends here
+
+# Solution: Validate JSON structure
+def safe_load_json(filepath):
+    try:
+        with open(filepath, 'r') as f:
+            return json.load(f)
+    except json.JSONDecodeError as e:
+        print(f"Invalid JSON: {e}")
+        return None
+</code></pre>
+
+<h3>4. Database Text Truncation</h3>
+<pre><code class="language-sql">
+-- VARCHAR too short truncates JSON
+CREATE TABLE configs (
+  data VARCHAR(100)  -- Too short!
+);
+
+-- JSON gets cut off at 100 characters
+-- Solution: Use TEXT or JSON column type
+CREATE TABLE configs (
+  data TEXT  -- Or JSON in PostgreSQL/MySQL
+);
+</code></pre>
+
+<h3>5. Logging Truncation</h3>
+<pre><code class="language-python">
+# Log systems often truncate long strings
+import logging
+
+# This might get truncated
+logging.info(f"Response: {large_json_string}")
+
+# Solution: Log to file or use structured logging
+</code></pre>
+
+<h2>How to Debug</h2>
+
+<p><strong>Paste your JSON into our <a href="/">JSON formatter online</a></strong> to see exactly where it is incomplete and what is missing.</p>
+
+<pre><code class="language-javascript">
+// Debug helper
+function debugJson(str) {
+  console.log('Length:', str.length);
+  console.log('First 50 chars:', str.substring(0, 50));
+  console.log('Last 50 chars:', str.substring(str.length - 50));
+  
+  // Check for balanced brackets
+  const opens = (str.match(/[{\[]/g) || []).length;
+  const closes = (str.match(/[}\]]/g) || []).length;
+  console.log(`Brackets: ${opens} opening, ${closes} closing`);
+  
+  try {
+    JSON.parse(str);
+    console.log('Valid JSON');
+  } catch (e) {
+    console.log('Error:', e.message);
+  }
+}
+</code></pre>
+
+<h2>Prevention Strategies</h2>
+
+<h3>Always Validate Before Parsing</h3>
+<pre><code class="language-javascript">
+function safeJsonParse(str) {
+  if (!str || typeof str !== 'string') {
+    return { error: 'Input is empty or not a string', data: null };
+  }
+  
+  const trimmed = str.trim();
+  if (!trimmed) {
+    return { error: 'Input is empty after trimming', data: null };
+  }
+  
+  // Basic structure check
+  if (!(trimmed.startsWith('{') || trimmed.startsWith('['))) {
+    return { error: 'Does not start with { or [', data: null };
+  }
+  
+  try {
+    return { error: null, data: JSON.parse(trimmed) };
+  } catch (e) {
+    return { error: e.message, data: null };
+  }
+}
+</code></pre>
+
+<h2>Key Takeaways</h2>
+<ul>
+    <li>Always check for empty responses before parsing</li>
+    <li>Use proper column types in databases for JSON</li>
+    <li>Handle network timeouts gracefully</li>
+    <li>Validate JSON structure before storing</li>
+</ul>
+
+<p>Use our <a href="/">JSON formatter online</a> to validate your JSON and identify what is missing or incomplete.</p>
+        ''',
+        'tags': 'end of json input, json error, incomplete json, truncated json',
+        'meta_description': 'Fix unexpected end of JSON input errors. Learn causes like truncated data, empty responses, and solutions.',
+        'meta_keywords': 'end of json input, json error, incomplete json, fix json error'
+    },
+    {
+        'category': 'JSON',
+        'title': 'Missing Comma or Bracket in JSON: How to Debug',
+        'excerpt': 'Debug missing comma and bracket errors in JSON. Learn systematic approaches to find and fix structural issues in your JSON data.',
+        'content': '''
+<p>Missing commas and brackets are the most common structural errors in JSON. These errors can be frustrating to find in large files. This guide shows you systematic ways to locate and fix them.</p>
+
+<h2>Understanding the Error</h2>
+<p>When you see errors like "Expected comma" or "Expected closing bracket", it means your JSON structure is broken:</p>
+
+<pre><code class="language-text">
+SyntaxError: Expected ',' or '}' after property value
+JSON.parse: expected ',' or ']' after array element
+ValueError: Expecting ',' delimiter: line 5 column 3
+</code></pre>
+
+<h2>Common Missing Comma Errors</h2>
+
+<h3>1. Between Object Properties</h3>
+<pre><code class="language-json">
+// INVALID: missing comma between properties
+{
+  "name": "John"
+  "age": 30
+}
+
+// VALID
+{
+  "name": "John",
+  "age": 30
+}
+</code></pre>
+
+<h3>2. Between Array Elements</h3>
+<pre><code class="language-json">
+// INVALID: missing comma between elements
+[
+  "apple"
+  "banana"
+  "cherry"
+]
+
+// VALID
+[
+  "apple",
+  "banana",
+  "cherry"
+]
+</code></pre>
+
+<h3>3. After Nested Objects</h3>
+<pre><code class="language-json">
+// INVALID: missing comma after nested object
+{
+  "user": {
+    "name": "John"
+  }
+  "settings": {
+    "theme": "dark"
+  }
+}
+
+// VALID
+{
+  "user": {
+    "name": "John"
+  },
+  "settings": {
+    "theme": "dark"
+  }
+}
+</code></pre>
+
+<h2>Common Missing Bracket Errors</h2>
+
+<h3>1. Unclosed Object</h3>
+<pre><code class="language-json">
+// INVALID: missing closing }
+{
+  "name": "John",
+  "address": {
+    "city": "NYC"
+  }
+
+// VALID: added closing }
+{
+  "name": "John",
+  "address": {
+    "city": "NYC"
+  }
+}
+</code></pre>
+
+<h3>2. Unclosed Array</h3>
+<pre><code class="language-json">
+// INVALID: missing closing ]
+{
+  "items": [
+    "one",
+    "two",
+    "three"
+}
+
+// VALID: added closing ]
+{
+  "items": [
+    "one",
+    "two",
+    "three"
+  ]
+}
+</code></pre>
+
+<h3>3. Mixed Bracket Types</h3>
+<pre><code class="language-json">
+// INVALID: wrong closing bracket type
+{
+  "data": [
+    {"id": 1}
+  }
+}
+
+// VALID: correct bracket type
+{
+  "data": [
+    {"id": 1}
+  ]
+}
+</code></pre>
+
+<h2>Systematic Debugging Approach</h2>
+
+<p><strong>The easiest way is to paste your JSON into our <a href="/">JSON formatter online</a></strong>. It will highlight the exact line and position of the error.</p>
+
+<h3>Method 1: Bracket Counting</h3>
+<pre><code class="language-javascript">
+function countBrackets(json) {
+  let openBraces = 0, closeBraces = 0;
+  let openBrackets = 0, closeBrackets = 0;
+  
+  for (const char of json) {
+    if (char === '{') openBraces++;
+    if (char === '}') closeBraces++;
+    if (char === '[') openBrackets++;
+    if (char === ']') closeBrackets++;
+  }
+  
+  console.log(`Braces: ${openBraces} { vs ${closeBraces} }`);
+  console.log(`Brackets: ${openBrackets} [ vs ${closeBrackets} ]`);
+  
+  return openBraces === closeBraces && openBrackets === closeBrackets;
+}
+</code></pre>
+
+<h3>Method 2: Binary Search</h3>
+<pre><code class="language-javascript">
+function findErrorPosition(json) {
+  let start = 0;
+  let end = json.length;
+  
+  while (start < end) {
+    const mid = Math.floor((start + end) / 2);
+    const partial = json.substring(0, mid);
+    
+    // Count open brackets
+    const opens = (partial.match(/[{\[]/g) || []).length;
+    const closes = (partial.match(/[}\]]/g) || []).length;
+    
+    if (opens >= closes) {
+      start = mid + 1;
+    } else {
+      end = mid;
+    }
+  }
+  
+  return start;
+}
+</code></pre>
+
+<h3>Method 3: Line-by-Line Validation</h3>
+<pre><code class="language-python">
+import json
+
+def find_json_error_line(json_string):
+    lines = json_string.split('\n')
+    
+    for i in range(len(lines), 0, -1):
+        partial = '\n'.join(lines[:i])
+        # Try to complete the JSON
+        test = partial + '}' * 10 + ']' * 10
+        
+        try:
+            json.loads(test)
+            return None  # Valid
+        except json.JSONDecodeError as e:
+            if e.lineno <= i:
+                return e.lineno, e.colno, e.msg
+    
+    return 1, 1, "Invalid JSON"
+</code></pre>
+
+<h2>Using Code Editors</h2>
+
+<h3>VS Code</h3>
+<pre><code class="language-text">
+1. Open JSON file
+2. Press Ctrl+Shift+P (Cmd+Shift+P on Mac)
+3. Type "Format Document"
+4. Errors will be underlined in red
+</code></pre>
+
+<h3>Online Validators</h3>
+<p>Use our <a href="/">JSON formatter online</a> to instantly validate and format your JSON. It shows errors with exact line numbers and suggestions.</p>
+
+<h2>Prevention Tips</h2>
+<ul>
+    <li>Use a JSON-aware editor with syntax highlighting</li>
+    <li>Format JSON after every edit</li>
+    <li>Use programmatic JSON generation instead of manual editing</li>
+    <li>Enable auto-formatting on save in your editor</li>
+</ul>
+
+<pre><code class="language-python">
+# Always use json library to generate JSON
+import json
+
+data = {
+    "name": "John",
+    "items": ["a", "b", "c"]
+}
+
+# This will never have missing commas or brackets
+json_string = json.dumps(data, indent=2)
+</code></pre>
+
+<h2>Key Takeaways</h2>
+<ul>
+    <li>Missing commas usually occur between properties or array elements</li>
+    <li>Missing brackets often happen with nested structures</li>
+    <li>Use bracket counting to identify imbalances</li>
+    <li>A good JSON formatter is your best debugging tool</li>
+</ul>
+
+<p>Paste your JSON into our <a href="/">JSON formatter online</a> to instantly find and fix structural errors.</p>
+        ''',
+        'tags': 'json missing comma, json bracket error, debug json, json syntax error',
+        'meta_description': 'Debug missing comma and bracket errors in JSON. Learn systematic approaches to find and fix structural issues.',
+        'meta_keywords': 'json missing comma, json bracket error, debug json, json validation, fix json'
     },
 ]
 

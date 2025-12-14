@@ -8,7 +8,8 @@
 {% block meta_description %}Free JSON formatter online to beautify, validate, minify, and convert JSON.
 Handle large files, API responses, and escaped JSON easily.{% endblock %}
 
-{% block meta_keywords %}JSON Formatter Online, ad free JSON Formatter Online, json viewer online, json viewer for python,
+{% block meta_keywords %}JSON Formatter Online, ad free JSON Formatter Online, json viewer online, json viewer for
+python,
 json formatter for python, json formatter for django, json formatter for javascript, json formatter for api,
 json formatter for php, json formatter for java, json formatter for node.js, json formatter for react,
 json formatter for large files, json formatter for developers, json formatter for api response,
@@ -273,15 +274,11 @@ processing. No signup required.{% endblock %}
   <link rel="stylesheet" href="{% static 'css/fullscreen.css' %}">
 </noscript>
 
+
 <!-- Monaco Editor Loader - Deferred for non-blocking -->
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
 
-<!-- Font Awesome Icons - Preload for performance -->
-<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style"
-  onload="this.onload=null;this.rel='stylesheet'">
-<noscript>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</noscript>
+<!-- Font Awesome loaded from base.html after page render -->
 
 <!-- Editor Styles -->
 <style>
