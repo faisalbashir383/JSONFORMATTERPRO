@@ -772,42 +772,148 @@ DEVOPS_POSTS = [
         'title': 'Docker Basics: Complete Guide to Containerization',
         'excerpt': 'Master Docker containers from basics to production. Learn Dockerfile syntax, container management, Docker Compose, and deployment best practices.',
         'content': '''
-<p>Docker makes it easy to create, deploy, and run applications in containers, ensuring consistency across environments.</p>
+<p>Docker makes it easy to create, deploy, and run applications in containers, ensuring consistency across environments. This guide covers everything you need to master Docker.</p>
 
-<h2>Basic Dockerfile</h2>
+<h2>What is Docker?</h2>
+<p>Docker is a platform that uses OS-level virtualization to deliver software in packages called containers. Containers are isolated from each other and bundle their own software, libraries, and configuration files.</p>
+
+<h3>Why Use Docker?</h3>
+<ul>
+    <li><strong>Consistency</strong> - Same environment from development to production</li>
+    <li><strong>Isolation</strong> - Applications run independently</li>
+    <li><strong>Portability</strong> - Run anywhere Docker is installed</li>
+    <li><strong>Efficiency</strong> - Lightweight compared to virtual machines</li>
+</ul>
+
+<h2>Installing Docker</h2>
+<pre><code class="language-bash">
+# Ubuntu/Debian
+sudo apt update
+sudo apt install docker.io docker-compose
+sudo systemctl enable docker
+sudo usermod -aG docker $USER
+
+# macOS and Windows
+# Download Docker Desktop from docker.com
+
+# Verify installation
+docker --version
+docker run hello-world
+</code></pre>
+
+<h2>Docker Images</h2>
+<p>Images are read-only templates used to create containers. They contain the application code, runtime, libraries, and dependencies.</p>
+
+<pre><code class="language-bash">
+# Pull an image
+docker pull nginx:latest
+docker pull python:3.11-slim
+
+# List images
+docker images
+
+# Remove an image
+docker rmi nginx:latest
+
+# Build an image
+docker build -t myapp:1.0 .
+
+# Tag an image
+docker tag myapp:1.0 username/myapp:1.0
+
+# Push to Docker Hub
+docker login
+docker push username/myapp:1.0
+</code></pre>
+
+<h2>Docker Containers</h2>
+<p>Containers are running instances of images. They are isolated environments where your application runs.</p>
+
+<pre><code class="language-bash">
+# Run a container
+docker run -d -p 8080:80 --name webserver nginx
+
+# Run with environment variables
+docker run -d -e DB_HOST=localhost -e DB_PORT=5432 myapp
+
+# Run interactively
+docker run -it ubuntu:22.04 /bin/bash
+
+# List running containers
+docker ps
+
+# List all containers
+docker ps -a
+
+# Stop a container
+docker stop webserver
+
+# Start a stopped container
+docker start webserver
+
+# Remove a container
+docker rm webserver
+
+# View logs
+docker logs -f webserver
+
+# Execute command in container
+docker exec -it webserver /bin/bash
+</code></pre>
+
+<h2>Writing Dockerfiles</h2>
+<p>A Dockerfile is a text document containing instructions to build a Docker image.</p>
+
 <pre><code class="language-dockerfile">
-FROM python:3.9
+# Basic Python Application
+FROM python:3.11-slim
 
+# Set working directory
 WORKDIR /app
 
+# Copy requirements first for caching
 COPY requirements.txt .
-RUN pip install -r requirements.txt
 
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
 COPY . .
 
+# Expose port
+EXPOSE 8000
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+
+# Run the application
 CMD ["python", "app.py"]
 </code></pre>
 
-<h2>Essential Docker Commands</h2>
-<pre><code class="language-bash">
-# Build image
-docker build -t myapp:latest .
+<h3>Multi-Stage Builds</h3>
+<p>Multi-stage builds create smaller production images by using multiple FROM statements.</p>
 
-# Run container
-docker run -d -p 8000:8000 myapp:latest
+<pre><code class="language-dockerfile">
+# Build stage
+FROM node:18 AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
 
-# List containers
-docker ps
-
-# Stop container
-docker stop container_id
-
-# Remove container
-docker rm container_id
+# Production stage
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
 </code></pre>
 
 <h2>Docker Compose</h2>
+<p>Docker Compose defines and runs multi-container applications using a YAML file.</p>
+
 <pre><code class="language-yaml">
+# docker-compose.yml
 version: '3.8'
 
 services:
@@ -819,33 +925,650 @@ services:
       - .:/app
     environment:
       - DEBUG=1
+      - DATABASE_URL=postgres://user:pass@db:5432/mydb
+    depends_on:
+      - db
+      - redis
   
   db:
-    image: postgres:13
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=secret
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=mydb
+  
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
+</code></pre>
+
+<pre><code class="language-bash">
+# Docker Compose commands
+docker-compose up -d
+docker-compose down
+docker-compose logs -f
+docker-compose ps
+docker-compose exec web bash
+docker-compose build --no-cache
+</code></pre>
+
+<h2>Docker Volumes</h2>
+<p>Volumes persist data outside containers and allow data sharing between containers.</p>
+
+<pre><code class="language-bash">
+# Create a volume
+docker volume create mydata
+
+# Run with volume
+docker run -v mydata:/app/data myapp
+
+# Bind mount (development)
+docker run -v $(pwd):/app myapp
+
+# List volumes
+docker volume ls
+
+# Remove volume
+docker volume rm mydata
+</code></pre>
+
+<h2>Docker Networking</h2>
+<pre><code class="language-bash">
+# Create a network
+docker network create mynetwork
+
+# Run container on network
+docker run -d --network mynetwork --name api myapi
+
+# Connect existing container
+docker network connect mynetwork container_name
+
+# List networks
+docker network ls
 </code></pre>
 
 <h2>Best Practices</h2>
-<pre><code class="language-dockerfile">
-# Multi-stage build for smaller images
-FROM python:3.9 AS builder
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install --user -r requirements.txt
+<ul>
+    <li>Use specific image tags, not :latest</li>
+    <li>Use multi-stage builds for smaller images</li>
+    <li>Order Dockerfile commands from least to most frequently changed</li>
+    <li>Use .dockerignore to exclude unnecessary files</li>
+    <li>Run containers as non-root users</li>
+    <li>Scan images for vulnerabilities</li>
+</ul>
 
-FROM python:3.9-slim
-WORKDIR /app
-COPY --from=builder /root/.local /root/.local
-COPY . .
+<pre><code class="language-dockerfile">
+# Security best practices
+FROM python:3.11-slim
+
+# Create non-root user
+RUN useradd --create-home appuser
+WORKDIR /home/appuser/app
+
+# Copy as root, then change ownership
+COPY --chown=appuser:appuser . .
+
+# Switch to non-root user
+USER appuser
+
 CMD ["python", "app.py"]
 </code></pre>
 
-<p>Docker ensures your app runs the same everywhere!</p>
+<p>Docker ensures your app runs the same everywhere. Master these fundamentals for reliable deployments!</p>
         ''',
         'tags': 'docker, devops, containers, deployment, dockerfile',
         'meta_description': 'Complete Docker guide for beginners. Learn containers, Dockerfile, and Docker Compose.',
         'meta_keywords': 'docker tutorial, containers, devops, dockerfile, docker compose'
+    },
+    {
+        'category': 'DevOps',
+        'title': 'Git Commands Every Developer Needs',
+        'excerpt': 'Master essential Git commands for version control. Learn branching, merging, rebasing, and team collaboration workflows.',
+        'content': '''
+<p>Git is the most widely used version control system. This guide covers the essential commands every developer needs to master for effective code management and team collaboration.</p>
+
+<h2>Getting Started with Git</h2>
+<p>Before using Git, you need to configure your identity and understand the basic workflow.</p>
+
+<pre><code class="language-bash">
+# Configure your identity
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+
+# Check configuration
+git config --list
+
+# Set default branch name
+git config --global init.defaultBranch main
+
+# Set default editor
+git config --global core.editor "code --wait"
+</code></pre>
+
+<h2>Repository Basics</h2>
+<pre><code class="language-bash">
+# Initialize a new repository
+git init
+
+# Clone an existing repository
+git clone https://github.com/user/repo.git
+git clone git@github.com:user/repo.git
+
+# Clone specific branch
+git clone -b develop https://github.com/user/repo.git
+
+# Check repository status
+git status
+</code></pre>
+
+<h2>Staging and Committing</h2>
+<pre><code class="language-bash">
+# Stage specific files
+git add file.py
+git add folder/
+
+# Stage all changes
+git add .
+git add -A
+
+# Stage parts of a file interactively
+git add -p file.py
+
+# Unstage files
+git reset HEAD file.py
+
+# Commit with message
+git commit -m "Add user authentication feature"
+
+# Commit all tracked changes
+git commit -am "Update configuration"
+
+# Amend last commit
+git commit --amend -m "Corrected commit message"
+</code></pre>
+
+<h2>Viewing History</h2>
+<pre><code class="language-bash">
+# View commit history
+git log
+
+# View compact history
+git log --oneline
+
+# View history with graph
+git log --oneline --graph --all
+
+# View specific file history
+git log --follow -p file.py
+
+# View changes in a commit
+git show commit_hash
+
+# View differences
+git diff
+git diff --staged
+git diff branch1..branch2
+</code></pre>
+
+<h2>Branching and Merging</h2>
+<pre><code class="language-bash">
+# List branches
+git branch
+git branch -a  # Include remote branches
+
+# Create a new branch
+git branch feature/login
+
+# Switch to a branch
+git checkout feature/login
+git switch feature/login  # Modern syntax
+
+# Create and switch
+git checkout -b feature/signup
+git switch -c feature/signup
+
+# Delete a branch
+git branch -d feature/login
+git branch -D feature/login  # Force delete
+
+# Merge a branch
+git checkout main
+git merge feature/login
+
+# Abort a merge
+git merge --abort
+</code></pre>
+
+<h2>Remote Repositories</h2>
+<pre><code class="language-bash">
+# View remotes
+git remote -v
+
+# Add a remote
+git remote add origin https://github.com/user/repo.git
+
+# Remove a remote
+git remote remove origin
+
+# Fetch changes from remote
+git fetch origin
+
+# Pull changes (fetch and merge)
+git pull origin main
+
+# Push changes
+git push origin main
+
+# Push new branch and set upstream
+git push -u origin feature/login
+
+# Delete remote branch
+git push origin --delete feature/old
+</code></pre>
+
+<h2>Stashing Changes</h2>
+<pre><code class="language-bash">
+# Stash current changes
+git stash
+
+# Stash with message
+git stash save "Work in progress on login"
+
+# List stashes
+git stash list
+
+# Apply most recent stash
+git stash pop
+
+# Apply specific stash
+git stash apply stash@{2}
+
+# Delete a stash
+git stash drop stash@{0}
+
+# Clear all stashes
+git stash clear
+</code></pre>
+
+<h2>Rebasing</h2>
+<pre><code class="language-bash">
+# Rebase current branch onto main
+git checkout feature/login
+git rebase main
+
+# Interactive rebase (edit last 3 commits)
+git rebase -i HEAD~3
+
+# Abort a rebase
+git rebase --abort
+
+# Continue after resolving conflicts
+git rebase --continue
+</code></pre>
+
+<h2>Undoing Changes</h2>
+<pre><code class="language-bash">
+# Discard changes in working directory
+git checkout -- file.py
+git restore file.py
+
+# Unstage a file
+git reset HEAD file.py
+git restore --staged file.py
+
+# Undo last commit (keep changes)
+git reset --soft HEAD~1
+
+# Undo last commit (discard changes)
+git reset --hard HEAD~1
+
+# Revert a commit (creates new commit)
+git revert commit_hash
+
+# Reset to specific commit
+git reset --hard commit_hash
+</code></pre>
+
+<h2>Working with Tags</h2>
+<pre><code class="language-bash">
+# List tags
+git tag
+
+# Create a tag
+git tag v1.0.0
+
+# Create annotated tag
+git tag -a v1.0.0 -m "Release version 1.0.0"
+
+# Push tags
+git push origin v1.0.0
+git push origin --tags
+
+# Delete a tag
+git tag -d v1.0.0
+git push origin --delete v1.0.0
+</code></pre>
+
+<h2>Useful Workflows</h2>
+<pre><code class="language-bash">
+# Feature branch workflow
+git checkout main
+git pull origin main
+git checkout -b feature/new-feature
+# ... make changes ...
+git add .
+git commit -m "Implement new feature"
+git push -u origin feature/new-feature
+# Create pull request on GitHub
+
+# Sync fork with upstream
+git remote add upstream https://github.com/original/repo.git
+git fetch upstream
+git checkout main
+git merge upstream/main
+git push origin main
+</code></pre>
+
+<h2>Tips and Best Practices</h2>
+<ul>
+    <li>Write clear, descriptive commit messages</li>
+    <li>Commit often, push regularly</li>
+    <li>Use branches for features and fixes</li>
+    <li>Pull before pushing to avoid conflicts</li>
+    <li>Review changes before committing</li>
+    <li>Keep commits focused and atomic</li>
+</ul>
+
+<p>Master these Git commands to become a more efficient developer and team collaborator!</p>
+        ''',
+        'tags': 'git, version control, github, devops, developer tools',
+        'meta_description': 'Essential Git commands for developers. Learn branching, merging, and version control workflows.',
+        'meta_keywords': 'git commands, git tutorial, version control, github, git workflow'
+    },
+    {
+        'category': 'DevOps',
+        'title': 'CI/CD Pipeline with GitHub Actions',
+        'excerpt': 'Build automated CI/CD pipelines using GitHub Actions. Learn workflow syntax, jobs, deployment strategies, and best practices.',
+        'content': '''
+<p>GitHub Actions enables you to automate your software development workflows directly in your repository. This guide covers building complete CI/CD pipelines from testing to deployment.</p>
+
+<h2>What is CI/CD?</h2>
+<p>Continuous Integration (CI) automatically builds and tests code changes. Continuous Deployment (CD) automatically deploys code to production after passing tests.</p>
+
+<h3>Benefits of CI/CD</h3>
+<ul>
+    <li><strong>Faster Releases</strong> - Automate the release process</li>
+    <li><strong>Early Bug Detection</strong> - Catch issues before production</li>
+    <li><strong>Consistent Builds</strong> - Eliminate "it works on my machine"</li>
+    <li><strong>Team Productivity</strong> - Less manual deployment work</li>
+</ul>
+
+<h2>Workflow Basics</h2>
+<p>Workflows are defined in YAML files in the .github/workflows directory:</p>
+
+<pre><code class="language-yaml">
+# .github/workflows/ci.yml
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Run tests
+        run: |
+          pytest tests/ -v
+</code></pre>
+
+<h2>Workflow Triggers</h2>
+<pre><code class="language-yaml">
+# Multiple triggers
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * *'  # Daily at midnight
+  workflow_dispatch:  # Manual trigger
+</code></pre>
+
+<h2>Matrix Builds</h2>
+<p>Test across multiple versions and platforms:</p>
+
+<pre><code class="language-yaml">
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.9', '3.10', '3.11']
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Run tests
+        run: pytest
+</code></pre>
+
+<h2>Caching Dependencies</h2>
+<pre><code class="language-yaml">
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+</code></pre>
+
+<h2>Complete CI/CD Example</h2>
+<pre><code class="language-yaml">
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install flake8 black
+      - run: flake8 src/
+      - run: black --check src/
+
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: pytest tests/ -v --cov=src
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build Docker image
+        run: |
+          docker build -t myapp:${{ github.sha }} .
+      
+      - name: Push to registry
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker push myapp:${{ github.sha }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    steps:
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production server..."
+</code></pre>
+
+<h2>Using Secrets</h2>
+<pre><code class="language-yaml">
+steps:
+  - name: Deploy
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+    run: |
+      ./deploy.sh
+</code></pre>
+
+<h2>Artifacts and Outputs</h2>
+<pre><code class="language-yaml">
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Get version
+        id: version
+        run: echo "version=$(cat package.json | jq -r .version)" >> $GITHUB_OUTPUT
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: dist/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+      
+      - name: Use version
+        run: echo "Deploying version ${{ needs.build.outputs.version }}"
+</code></pre>
+
+<h2>Reusable Workflows</h2>
+<pre><code class="language-yaml">
+# .github/workflows/reusable-deploy.yml
+name: Reusable Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      deploy_key:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Deploy
+        run: ./deploy.sh
+        env:
+          DEPLOY_KEY: ${{ secrets.deploy_key }}
+</code></pre>
+
+<pre><code class="language-yaml">
+# Call the reusable workflow
+name: Production Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/reusable-deploy.yml
+    with:
+      environment: production
+    secrets:
+      deploy_key: ${{ secrets.PRODUCTION_KEY }}
+</code></pre>
+
+<h2>Best Practices</h2>
+<ul>
+    <li>Keep workflows simple and focused</li>
+    <li>Use caching to speed up builds</li>
+    <li>Store secrets securely in GitHub Secrets</li>
+    <li>Use environment protection rules for production</li>
+    <li>Set timeouts to prevent runaway jobs</li>
+    <li>Use reusable workflows to reduce duplication</li>
+</ul>
+
+<p>GitHub Actions makes CI/CD accessible and powerful. Start with simple workflows and expand as your needs grow!</p>
+        ''',
+        'tags': 'ci/cd, github actions, devops, automation, deployment',
+        'meta_description': 'Build CI/CD pipelines with GitHub Actions. Learn workflows, jobs, and deployment automation.',
+        'meta_keywords': 'github actions, ci/cd, devops, automation, continuous integration'
     },
 ]
 
