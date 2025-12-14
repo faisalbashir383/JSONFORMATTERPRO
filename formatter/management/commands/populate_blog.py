@@ -772,261 +772,469 @@ DEVOPS_POSTS = [
     {
         'category': 'DevOps',
         'title': 'Docker Basics: Complete Guide to Containerization',
-        'excerpt': 'Master Docker containers from basics to production. Learn Dockerfile syntax, container management, Docker Compose, and deployment best practices.',
+        'excerpt': 'Master Docker containers from basics to production. Learn Dockerfile syntax, container management, Docker Compose, networking, volumes, security best practices and deployment strategies.',
         'content': '''
-<p>Docker makes it easy to create, deploy, and run applications in containers, ensuring consistency across environments. This guide covers everything you need to master Docker.</p>
+<p>Docker has revolutionized how developers build, ship, and run applications by introducing containerization technology. This comprehensive guide covers everything from Docker basics to advanced production deployment strategies, helping you master containerization for modern software development.</p>
 
-<h2>What is Docker?</h2>
-<p>Docker is a platform that uses OS-level virtualization to deliver software in packages called containers. Containers are isolated from each other and bundle their own software, libraries, and configuration files.</p>
+<h2>What is Docker and Why Should You Use It?</h2>
+<p>Docker is an open-source platform that automates the deployment of applications using containerization. Unlike traditional virtual machines that require a full operating system, Docker containers share the host OS kernel, making them incredibly lightweight and fast to start. A typical Docker container starts in milliseconds compared to minutes for virtual machines.</p>
 
-<h3>Why Use Docker?</h3>
+<p>Docker solves the infamous "it works on my machine" problem by ensuring that applications run identically across development, testing, staging, and production environments. This consistency dramatically reduces deployment failures and debugging time.</p>
+
+<h3>Key Benefits of Docker</h3>
 <ul>
-    <li><strong>Consistency</strong> - Same environment from development to production</li>
-    <li><strong>Isolation</strong> - Applications run independently</li>
-    <li><strong>Portability</strong> - Run anywhere Docker is installed</li>
-    <li><strong>Efficiency</strong> - Lightweight compared to virtual machines</li>
+    <li><strong>Consistency Across Environments</strong> - Applications run the same way everywhere, eliminating environment-specific bugs</li>
+    <li><strong>Process Isolation</strong> - Each container runs in its own isolated environment with dedicated resources</li>
+    <li><strong>Portability</strong> - Containers can run on any system with Docker installed, from laptops to cloud servers</li>
+    <li><strong>Resource Efficiency</strong> - Containers share the host OS kernel, using far less memory than VMs</li>
+    <li><strong>Rapid Deployment</strong> - Containers start in seconds, enabling faster scaling and rollbacks</li>
+    <li><strong>Microservices Architecture</strong> - Perfect for breaking monolithic applications into smaller services</li>
+    <li><strong>DevOps Integration</strong> - Seamlessly integrates with CI/CD pipelines for automated deployments</li>
 </ul>
 
-<h2>Installing Docker</h2>
+<h2>Installing Docker on Different Platforms</h2>
+<p>Docker installation varies by operating system. Here is how to install Docker on the most common platforms used by developers worldwide.</p>
+
 <pre><code class="language-bash">
-# Ubuntu/Debian
+# Ubuntu/Debian Installation
 sudo apt update
-sudo apt install docker.io docker-compose
+sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 sudo systemctl enable docker
 sudo usermod -aG docker $USER
 
-# macOS and Windows
-# Download Docker Desktop from docker.com
+# CentOS/RHEL Installation
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install -y docker-ce docker-ce-cli containerd.io
+sudo systemctl start docker && sudo systemctl enable docker
+
+# macOS and Windows: Download Docker Desktop from docker.com
 
 # Verify installation
 docker --version
 docker run hello-world
+docker info
 </code></pre>
 
-<h2>Docker Images</h2>
-<p>Images are read-only templates used to create containers. They contain the application code, runtime, libraries, and dependencies.</p>
+<h2>Understanding Docker Images</h2>
+<p>Docker images are read-only templates that contain everything needed to run an application: code, runtime, system tools, libraries, and settings. Images are built in layers, where each layer represents a change from the previous layer. This layered architecture enables efficient storage and fast image transfers.</p>
 
+<h3>Working with Docker Images</h3>
 <pre><code class="language-bash">
-# Pull an image
+# Pull images from Docker Hub
 docker pull nginx:latest
 docker pull python:3.11-slim
+docker pull node:18-alpine
+docker pull postgres:15
 
-# List images
+# List all local images
 docker images
+docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
 
 # Remove an image
 docker rmi nginx:latest
+docker rmi -f $(docker images -q)  # Remove all images
 
-# Build an image
+# Build an image from Dockerfile
 docker build -t myapp:1.0 .
+docker build -t myapp:1.0 -f Dockerfile.prod .
+docker build --no-cache -t myapp:1.0 .
 
-# Tag an image
+# Tag an image for registry
 docker tag myapp:1.0 username/myapp:1.0
+docker tag myapp:1.0 ghcr.io/username/myapp:1.0
 
-# Push to Docker Hub
+# Push to Docker Hub or other registries
 docker login
 docker push username/myapp:1.0
+docker push ghcr.io/username/myapp:1.0
+
+# Inspect image details
+docker inspect nginx:latest
+docker history nginx:latest
 </code></pre>
 
-<h2>Docker Containers</h2>
-<p>Containers are running instances of images. They are isolated environments where your application runs.</p>
+<h2>Managing Docker Containers</h2>
+<p>Containers are running instances of images. They provide isolated environments where your applications execute. Understanding container lifecycle management is crucial for effective Docker usage in both development and production environments.</p>
 
 <pre><code class="language-bash">
-# Run a container
+# Run a container in detached mode
 docker run -d -p 8080:80 --name webserver nginx
 
 # Run with environment variables
-docker run -d -e DB_HOST=localhost -e DB_PORT=5432 myapp
+docker run -d -e DB_HOST=localhost -e DB_PORT=5432 -e DB_NAME=mydb myapp
 
-# Run interactively
+# Run interactively with terminal
 docker run -it ubuntu:22.04 /bin/bash
+docker run -it --rm python:3.11 python
 
-# List running containers
-docker ps
+# Run with resource limits
+docker run -d --memory=512m --cpus=1.5 --name limited-app myapp
 
-# List all containers
-docker ps -a
+# Run with restart policy
+docker run -d --restart=unless-stopped --name always-running myapp
 
-# Stop a container
+# List containers
+docker ps                    # Running containers
+docker ps -a                 # All containers
+docker ps -q                 # Only IDs
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+
+# Container lifecycle commands
 docker stop webserver
-
-# Start a stopped container
 docker start webserver
+docker restart webserver
+docker pause webserver
+docker unpause webserver
 
-# Remove a container
+# Remove containers
 docker rm webserver
+docker rm -f webserver       # Force remove running container
+docker rm $(docker ps -aq)   # Remove all containers
 
-# View logs
-docker logs -f webserver
+# View container logs
+docker logs webserver
+docker logs -f webserver     # Follow log output
+docker logs --tail 100 webserver
+docker logs --since 2h webserver
 
-# Execute command in container
+# Execute commands in running container
 docker exec -it webserver /bin/bash
+docker exec webserver nginx -t
+docker exec -u root webserver apt update
+
+# Copy files between host and container
+docker cp webserver:/etc/nginx/nginx.conf ./nginx.conf
+docker cp ./myfile.txt webserver:/tmp/
+
+# Get container stats
+docker stats webserver
+docker top webserver
 </code></pre>
 
-<h2>Writing Dockerfiles</h2>
-<p>A Dockerfile is a text document containing instructions to build a Docker image.</p>
+<h2>Writing Effective Dockerfiles</h2>
+<p>A Dockerfile contains instructions for building a Docker image. Writing efficient Dockerfiles is essential for creating small, secure, and fast-building images. Each instruction creates a new layer, so optimizing the order and content of instructions significantly impacts image size and build time.</p>
 
+<h3>Basic Python Application Dockerfile</h3>
 <pre><code class="language-dockerfile">
-# Basic Python Application
+# Use specific version for reproducibility
 FROM python:3.11-slim
+
+# Set labels for metadata
+LABEL maintainer="developer@example.com"
+LABEL version="1.0"
+LABEL description="Production Python Application"
 
 # Set working directory
 WORKDIR /app
 
-# Copy requirements first for caching
-COPY requirements.txt .
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# Install dependencies
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy and install Python dependencies first (for layer caching)
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY . .
 
-# Expose port
+# Create non-root user for security
+RUN useradd --create-home --shell /bin/bash appuser && \
+    chown -R appuser:appuser /app
+USER appuser
+
+# Expose application port
 EXPOSE 8000
 
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
 
 # Run the application
-CMD ["python", "app.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "app:app"]
 </code></pre>
 
-<h3>Multi-Stage Builds</h3>
-<p>Multi-stage builds create smaller production images by using multiple FROM statements.</p>
+<h3>Multi-Stage Builds for Smaller Images</h3>
+<p>Multi-stage builds dramatically reduce final image size by separating build-time dependencies from runtime requirements. This technique is especially powerful for compiled languages and frontend applications.</p>
 
 <pre><code class="language-dockerfile">
-# Build stage
-FROM node:18 AS builder
+# Build stage for Node.js application
+FROM node:18-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --only=production
 COPY . .
 RUN npm run build
 
-# Production stage
-FROM nginx:alpine
+# Production stage with minimal footprint
+FROM nginx:alpine AS production
+RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 </code></pre>
 
-<h2>Docker Compose</h2>
-<p>Docker Compose defines and runs multi-container applications using a YAML file.</p>
+<h2>Docker Compose for Multi-Container Applications</h2>
+<p>Docker Compose simplifies managing multi-container applications by defining all services, networks, and volumes in a single YAML file. This is essential for local development environments and simple production deployments.</p>
 
 <pre><code class="language-yaml">
-# docker-compose.yml
+# docker-compose.yml - Complete Application Stack
 version: '3.8'
 
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
     ports:
       - "8000:8000"
     volumes:
-      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
     environment:
-      - DEBUG=1
+      - DEBUG=0
+      - SECRET_KEY=${SECRET_KEY}
       - DATABASE_URL=postgres://user:pass@db:5432/mydb
+      - REDIS_URL=redis://redis:6379/0
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - app-network
   
   db:
-    image: postgres:15
+    image: postgres:15-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=pass
       - POSTGRES_DB=mydb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d mydb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
   
   redis:
     image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+  
+  nginx:
+    image: nginx:alpine
     ports:
-      - "6379:6379"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - static_volume:/static:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - web
+    networks:
+      - app-network
+
+  celery:
+    build: .
+    command: celery -A tasks worker --loglevel=info
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+    networks:
+      - app-network
 
 volumes:
   postgres_data:
+  redis_data:
+  static_volume:
+  media_volume:
+
+networks:
+  app-network:
+    driver: bridge
 </code></pre>
 
 <pre><code class="language-bash">
-# Docker Compose commands
-docker-compose up -d
-docker-compose down
-docker-compose logs -f
-docker-compose ps
-docker-compose exec web bash
-docker-compose build --no-cache
+# Essential Docker Compose commands
+docker compose up -d              # Start all services
+docker compose down               # Stop and remove containers
+docker compose down -v            # Also remove volumes
+docker compose logs -f web        # Follow specific service logs
+docker compose ps                 # List running services
+docker compose exec web bash      # Execute command in service
+docker compose build --no-cache   # Rebuild all images
+docker compose pull               # Update all images
+docker compose restart web        # Restart specific service
+docker compose config             # Validate compose file
 </code></pre>
 
-<h2>Docker Volumes</h2>
-<p>Volumes persist data outside containers and allow data sharing between containers.</p>
+<h2>Docker Volumes and Data Persistence</h2>
+<p>Volumes are the preferred mechanism for persisting data generated by and used by Docker containers. Unlike bind mounts, volumes are managed entirely by Docker and work on both Linux and Windows containers.</p>
 
 <pre><code class="language-bash">
-# Create a volume
+# Create and manage named volumes
 docker volume create mydata
+docker volume ls
+docker volume inspect mydata
+docker volume rm mydata
+docker volume prune              # Remove unused volumes
 
-# Run with volume
+# Run container with named volume
 docker run -v mydata:/app/data myapp
 
-# Bind mount (development)
-docker run -v $(pwd):/app myapp
+# Bind mounts for development
+docker run -v $(pwd)/src:/app/src myapp
+docker run -v ${PWD}/src:/app/src myapp  # Windows PowerShell
 
-# List volumes
-docker volume ls
+# Read-only volumes
+docker run -v mydata:/app/data:ro myapp
 
-# Remove volume
-docker volume rm mydata
+# Tmpfs mounts for sensitive data
+docker run --tmpfs /tmp:rw,noexec,nosuid,size=100m myapp
 </code></pre>
 
-<h2>Docker Networking</h2>
+<h2>Docker Networking Deep Dive</h2>
+<p>Docker networking enables containers to communicate with each other and the outside world. Understanding network types and configurations is essential for microservices architecture and secure deployments.</p>
+
 <pre><code class="language-bash">
-# Create a network
+# Network management commands
 docker network create mynetwork
-
-# Run container on network
-docker run -d --network mynetwork --name api myapi
-
-# Connect existing container
-docker network connect mynetwork container_name
-
-# List networks
+docker network create --driver bridge --subnet 172.20.0.0/16 custom-network
 docker network ls
+docker network inspect mynetwork
+docker network rm mynetwork
+
+# Run container on specific network
+docker run -d --network mynetwork --name api myapi
+docker run -d --network mynetwork --ip 172.20.0.10 --name db postgres
+
+# Connect/disconnect containers
+docker network connect mynetwork container_name
+docker network disconnect mynetwork container_name
+
+# Container-to-container communication
+docker run -d --network mynetwork --name web nginx
+docker run -it --network mynetwork alpine ping web  # Uses container name as hostname
 </code></pre>
 
-<h2>Best Practices</h2>
-<ul>
-    <li>Use specific image tags, not :latest</li>
-    <li>Use multi-stage builds for smaller images</li>
-    <li>Order Dockerfile commands from least to most frequently changed</li>
-    <li>Use .dockerignore to exclude unnecessary files</li>
-    <li>Run containers as non-root users</li>
-    <li>Scan images for vulnerabilities</li>
-</ul>
+<h2>Docker Security Best Practices</h2>
+<p>Security should be a primary concern when running containers in production. Following these best practices helps minimize attack surface and protect your applications.</p>
 
 <pre><code class="language-dockerfile">
-# Security best practices
-FROM python:3.11-slim
+# Security-focused Dockerfile
+FROM python:3.11-slim AS base
+
+# Update base image and remove unnecessary packages
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get autoremove -y && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
-RUN useradd --create-home appuser
-WORKDIR /home/appuser/app
+RUN groupadd -r appgroup && useradd -r -g appgroup appuser
 
-# Copy as root, then change ownership
-COPY --chown=appuser:appuser . .
+# Set secure file permissions
+WORKDIR /app
+COPY --chown=appuser:appgroup . .
 
-# Switch to non-root user
+# Drop all capabilities and run as non-root
 USER appuser
 
+# Use read-only filesystem where possible
 CMD ["python", "app.py"]
 </code></pre>
 
-<p>Docker ensures your app runs the same everywhere. Master these fundamentals for reliable deployments!</p>
+<h3>Additional Security Measures</h3>
+<ul>
+    <li><strong>Scan images for vulnerabilities</strong> - Use tools like Trivy, Snyk, or Docker Scout</li>
+    <li><strong>Use minimal base images</strong> - Alpine or distroless images reduce attack surface</li>
+    <li><strong>Never run as root</strong> - Always create and use non-root users</li>
+    <li><strong>Limit container capabilities</strong> - Use --cap-drop and --cap-add flags</li>
+    <li><strong>Use secrets management</strong> - Never hardcode secrets in images</li>
+    <li><strong>Enable content trust</strong> - Verify image signatures with Docker Content Trust</li>
+    <li><strong>Implement resource limits</strong> - Prevent container resource exhaustion</li>
+</ul>
+
+<h2>Docker in CI/CD Pipelines</h2>
+<p>Docker integrates seamlessly with continuous integration and continuous deployment pipelines, enabling automated testing and deployment workflows.</p>
+
+<pre><code class="language-yaml">
+# GitHub Actions workflow example
+name: Build and Deploy
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Build Docker image
+        run: docker build -t myapp:${{ github.sha }} .
+      
+      - name: Run tests in container
+        run: docker run --rm myapp:${{ github.sha }} pytest
+      
+      - name: Push to registry
+        run: |
+          docker tag myapp:${{ github.sha }} ghcr.io/${{ github.repository }}:latest
+          docker push ghcr.io/${{ github.repository }}:latest
+</code></pre>
+
+<h2>Troubleshooting Common Docker Issues</h2>
+<pre><code class="language-bash">
+# Debug container issues
+docker logs container_name --tail 100
+docker inspect container_name
+docker exec -it container_name /bin/sh
+
+# Check resource usage
+docker stats
+docker system df
+
+# Clean up Docker resources
+docker system prune -a           # Remove all unused data
+docker image prune -a            # Remove unused images
+docker container prune           # Remove stopped containers
+docker volume prune              # Remove unused volumes
+docker network prune             # Remove unused networks
+
+# Export and import containers
+docker export container_name > container.tar
+docker import container.tar myimage:tag
+</code></pre>
+
+<p>Docker has become an essential tool for modern software development and deployment. By mastering these containerization concepts and best practices, you can build more reliable, scalable, and portable applications. Start with the basics, practice regularly, and gradually incorporate advanced techniques into your workflow for maximum efficiency.</p>
         ''',
-        'tags': 'docker, devops, containers, deployment, dockerfile',
-        'meta_description': 'Complete Docker guide for beginners. Learn containers, Dockerfile, and Docker Compose.',
-        'meta_keywords': 'docker tutorial, containers, devops, dockerfile, docker compose'
+        'tags': 'docker, devops, containers, deployment, dockerfile, docker compose, containerization, microservices, kubernetes',
+        'meta_description': 'Complete Docker tutorial covering containers, Dockerfile, Docker Compose, volumes, networking, security and CI/CD integration for beginners to advanced users.',
+        'meta_keywords': 'docker tutorial for beginners, how to install docker on ubuntu, docker compose multiple containers, docker container vs virtual machine, dockerfile best practices 2024, docker volume persistent storage, docker networking bridge host, docker security best practices, docker multi stage build example, docker ci cd pipeline github actions, containerization with docker step by step, docker production deployment guide, learning docker for devops engineers, docker image optimization techniques, docker troubleshooting common errors'
     },
     {
         'category': 'DevOps',
