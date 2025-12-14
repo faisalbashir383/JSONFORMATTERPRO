@@ -260,20 +260,7 @@ processing. No signup required.{% endblock %}
 {% endblock %}
 
 {% block extra_head %}
-<!-- Preload Homepage CSS -->
-<link rel="preload" href="{% static 'css/homepage.css' %}" as="style">
-<link rel="preload" href="{% static 'css/fullscreen.css' %}" as="style">
-
-<!-- Homepage specific CSS - Non-blocking -->
-<link rel="stylesheet" href="{% static 'css/homepage.css' %}" media="print" onload="this.media='all'">
-<noscript>
-  <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
-</noscript>
-<link rel="stylesheet" href="{% static 'css/fullscreen.css' %}" media="print" onload="this.media='all'">
-<noscript>
-  <link rel="stylesheet" href="{% static 'css/fullscreen.css' %}">
-</noscript>
-
+<!-- CSS now loaded as bundle.min.css from base.html -->
 
 <!-- Monaco Editor Loader - Deferred for non-blocking -->
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
@@ -906,7 +893,7 @@ processing. No signup required.{% endblock %}
 
 <!-- Preconnect for Performance -->
 <link rel="dns-prefetch" href="//fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 {% endblock %}
 
 {% block navigation %}
@@ -1275,7 +1262,7 @@ processing. No signup required.{% endblock %}
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/app.js' %}" defer></script>
+<script src="{% static 'js/app.min.js' %}" defer></script>
 <script>
   // Single Monaco Editor instance
   let jsonEditor, previewEditor;
