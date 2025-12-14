@@ -1,35 +1,35 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}JSON Formatters Pro - Format, Validate, Minify, Convert JSON & ad free{% endblock %}
+{% block title %}JSON Formatter Online - Format, Validate & Beautify JSON Free [2025]{% endblock %}
 
-{% block meta_title %}JSON Formatters Pro - Format, Validate, Minify, Convert JSON & ad free{% endblock %}
+{% block meta_title %}JSON Formatter Online - Free JSON Validator & Beautifier [2025]{% endblock %}
 
-{% block meta_description %}Free JSON Formatters online to beautify, validate, minify, and convert JSON.
-Handle large files, API responses, and escaped JSON easily.{% endblock %}
+{% block meta_description %}Free JSON formatter online to beautify, validate, minify & convert JSON instantly. Large
+file support, syntax highlighting, error detection. No signup - try now!{% endblock %}
 
-{% block meta_keywords %}ad free json Formatter, free json validator, json beautifier, json minifier, json converter{% endblock %}
+{% block meta_keywords %}json formatter, json beautifier, json validator, json minifier, json online{% endblock %}
 
 {% block meta_robots %}index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1{% endblock %}
 
 {% block author %}JSON Formatters Pro - Professional JSON Tools{% endblock %}
 
 {% block og_type %}website{% endblock %}
-{% block og_title %}JSON Formatterss Pro - Online JSON Validator & Editor{% endblock %}
-{% block og_description %}Free JSON Formatters, validator, beautifier & minifier. Format, validate, convert JSON to
-XML/CSV. Fix errors instantly. Client-side, secure, no signup.{% endblock %}
+{% block og_title %}JSON Formatter Online - Free JSON Validator & Beautifier{% endblock %}
+{% block og_description %}Free JSON formatter to beautify, validate, minify & convert JSON. Large file support, error
+detection. No signup required.{% endblock %}
 
-{% block twitter_title %}JSON Formatterss Pro - Online JSON Validator{% endblock %}
-{% block twitter_description %}Free JSON Formatters, validator & minifier. Format, validate, convert JSON. Client-side
-processing. No signup required.{% endblock %}
+{% block twitter_title %}JSON Formatter Online - Free JSON Validator{% endblock %}
+{% block twitter_description %}Free JSON formatter to beautify, validate & convert JSON. Syntax highlighting, error
+detection. No signup - try now!{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "JSON Formatterss Pro",
-  "description": "Professional online JSON Formatters, validator, beautifier, minifier, and converter tool",
+  "name": "JSON Formatter Online",
+  "description": "Free online JSON formatter, validator, beautifier, minifier, and converter tool",
   "url": "{{ SITE_URL }}",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web Browser",
@@ -235,7 +235,7 @@ processing. No signup required.{% endblock %}
       "@type": "HowToStep",
       "position": 1,
       "name": "Open JSON Formatters Pro",
-      "text": "Navigate to jsonFormattersspro.com in your web browser."
+      "text": "Navigate to jsonformatterspro.com in your web browser."
     },
     {
       "@type": "HowToStep",
@@ -381,52 +381,6 @@ processing. No signup required.{% endblock %}
     background: #fff;
   }
 
-  /* Editor container */
-  .editor-container {
-    position: relative;
-    flex: 1;
-    min-height: 450px;
-    border: 1px solid #e0e0e0;
-    border-top: none;
-    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-    overflow: hidden;
-  }
-
-  /* Monaco Editor Container - CRITICAL: must have explicit height */
-  .monaco-editor-container {
-    width: 100%;
-    height: 450px;
-    /* Explicit height is required for Monaco */
-    min-height: 450px;
-    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-    overflow: hidden;
-    background: #1e1e2e;
-    position: relative;
-    z-index: 10;
-  }
-
-  .editor-container .monaco-editor-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: auto;
-    z-index: 10;
-  }
-
-  /* Hide textareas when Monaco is loaded */
-  .editor-container.monaco-loaded textarea {
-    < !-- display: none !important;
-    -->visibility: hidden !important;
-    pointer-events: none !important;
-    position: absolute;
-    z-index: -1;
-    width: 0;
-    height: 0;
-  }
-
-  /* Single Editor Panel - Full Width */
   .single-editor-panel {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
@@ -435,8 +389,59 @@ processing. No signup required.{% endblock %}
     box-shadow: 0 4px 20px var(--color-shadow);
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 600px;
     margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Editor container */
+  .editor-container {
+    position: relative !important;
+    display: block !important;
+    flex: 1;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 500px !important;
+    border: 1px solid #e0e0e0;
+    border-top: none;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    background: #1e1e2e;
+  }
+
+  /* Monaco Editor Container */
+  .monaco-editor-container {
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    background: #1e1e2e;
+    z-index: 20 !important;
+    pointer-events: auto !important;
+  }
+
+  .editor-container .monaco-editor-container {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100% !important;
+    width: 100% !important;
+    z-index: 20 !important;
+    pointer-events: auto !important;
+  }
+
+  /* Always hide textarea since we use Monaco */
+  #jsonEditor {
+    display: none !important;
+  }
+
+  /* Legacy rule (backup) */
+  .editor-container.monaco-loaded textarea {
+    /* display: none !important; */
+    /* visibility: hidden !important; */
   }
 
   .single-editor-panel .panel-header {
@@ -1026,11 +1031,11 @@ processing. No signup required.{% endblock %}
 <header class="header" style="text-align: center; margin-bottom: 1.5rem;">
   <h1
     style="font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem;">
-    JSON Formatters Pro - Advanced Monaco Editor with Dark/Light Theme
+    JSON Formatter Online - Format, Validate & Beautify JSON Free
   </h1>
   <p style="color: var(--color-text-secondary); font-size: 1rem; max-width: 700px; margin: 0 auto;">
-    Professional JSON Editor with Find/Replace, Zoom, Syntax Highlighting, Auto-Format on Paste & Theme Toggle - 100%
-    Free
+    The best free JSON formatter, validator, and beautifier. Format, minify, convert JSON to CSV/XML/YAML. Large file
+    support with syntax highlighting - 100% free, no signup.
   </p>
   <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-top: 1rem;">
     <span
@@ -1059,14 +1064,45 @@ processing. No signup required.{% endblock %}
 <!-- SEO Content Section -->
 <article class="seo-content">
   <section class="content-section">
-    <h2>Professional JSON Formatters & Validator Tool</h2>
+    <h2>Free JSON Formatter & Validator Online</h2>
     <p>
-      JSON Formatters Pro is the most advanced free online tool for formatting, validating, and converting JSON
-      data.
-      Whether you're a developer working with APIs, a data scientist analyzing JSON datasets, or anyone dealing
-      with
-      JSON files, our tool provides instant, accurate results with a beautiful interface.
+      The most advanced free online JSON formatter, validator, and beautifier. Format, minify, and convert JSON to CSV,
+      XML, or YAML instantly. Whether you're a developer working with APIs, a data scientist analyzing JSON datasets, or
+      anyone dealing with JSON files, our tool provides instant, accurate results with syntax highlighting and error
+      detection.
     </p>
+  </section>
+
+  <!-- JSON Pretty Print Section - Target: "json pretty print", "prettify json" -->
+  <section class="content-section"
+    style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%); padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem;">
+    <h2>JSON Pretty Print - Beautify Minified JSON</h2>
+    <p>
+      Transform compact, minified JSON into readable, properly indented format with our <strong>JSON pretty
+        print</strong> tool. Perfect for debugging API responses, reading configuration files, or making JSON data
+      human-readable.
+    </p>
+    <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+      <li><strong>Auto-indent:</strong> Proper indentation with 2 or 4 spaces</li>
+      <li><strong>Syntax highlighting:</strong> Color-coded keys, values, and brackets</li>
+      <li><strong>One-click beautify:</strong> Paste minified JSON, get formatted output instantly</li>
+    </ul>
+  </section>
+
+  <!-- Fix JSON Errors Section - Target: "fix json syntax errors", "json validation error" -->
+  <section class="content-section"
+    style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%); padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem;">
+    <h2>Fix JSON Syntax Errors Instantly</h2>
+    <p>
+      Our <strong>JSON validator</strong> detects and highlights syntax errors with exact line numbers. Common errors we
+      help you fix:
+    </p>
+    <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+      <li><strong>Missing commas:</strong> Forgotten commas between properties</li>
+      <li><strong>Unclosed brackets:</strong> Missing <code>]</code> or <code>}</code></li>
+      <li><strong>Incorrect quotes:</strong> Single quotes instead of double quotes</li>
+      <li><strong>Trailing commas:</strong> Extra comma after last element</li>
+    </ul>
   </section>
 
   <section class="features-grid">
@@ -1225,13 +1261,15 @@ processing. No signup required.{% endblock %}
     </div>
     <div class="faq-item">
       <h3>How do I format large JSON files online?</h3>
-      <p>JSON Formatters Pro handles large JSON files up to 10MB efficiently. Simply drag and drop your file or paste the
+      <p>JSON Formatters Pro handles large JSON files up to 10MB efficiently. Simply drag and drop your file or paste
+        the
         content. The Monaco Editor processes it locally in your browser without uploading to any server, ensuring fast
         performance even with massive datasets.</p>
     </div>
     <div class="faq-item">
       <h3>What is the best JSON Formatters for developers?</h3>
-      <p>JSON Formatters Pro is the best choice for developers because it uses VS Code's Monaco Editor with features like
+      <p>JSON Formatters Pro is the best choice for developers because it uses VS Code's Monaco Editor with features
+        like
         IntelliSense, multi-cursor editing, find & replace with regex, code folding, and syntax highlighting. It's free,
         works offline after loading, and processes data locally for security.</p>
     </div>

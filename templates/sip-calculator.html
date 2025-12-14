@@ -1,48 +1,123 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}SIP Calculator - Systematic Investment Plan Calculator Online | JSON Formatters Pro{% endblock %}
-{% block meta_title %}SIP Calculator - Calculate SIP Returns & Maturity Amount Free 2026{% endblock %}
-{% block meta_description %}Free online SIP calculator. Calculate your SIP returns, maturity amount, and wealth creation
-through systematic investment plans. Plan your mutual fund investments with ease.{% endblock %}
-{% block meta_keywords %}sip calculator, systematic investment plan calculator, sip return calculator, mutual fund sip
-calculator,
-sip maturity calculator, sip investment calculator, monthly sip calculator, sip calculator india,
-sip calculator with step up, sip lumpsum calculator, sip wealth calculator, sip goal calculator,
-calculate sip returns, sip interest calculator, sip growth calculator, sip corpus calculator,
-best sip calculator 2026, free sip calculator online 2026, accurate sip calculator,
-mutual fund calculator, mf calculator, investment calculator, monthly investment calculator,
-sip amount calculator, sip value calculator, future value sip, projected sip returns,
-elss sip calculator, equity sip calculator, debt fund sip calculator,
-annual sip calculator, quarterly sip calculator, weekly sip calculator,
-sip vs lumpsum calculator, sip vs fd calculator, sip vs rd calculator,
-wealth creation calculator, retirement planning calculator, goal based sip calculator,
-sip top up calculator, inflation adjusted sip calculator, real return sip calculator,
-power of compounding calculator, compound interest sip calculator,
-how much to invest in sip, sip for beginners, sip planning tool{% endblock %}
+{% block title %}SIP Calculator - Calculate SIP Returns & Growth [2025]{% endblock %}
+{% block meta_title %}SIP Calculator - Systematic Investment Plan Returns Free{% endblock %}
+{% block meta_description %}Free SIP Calculator. Estimate the future value of your monthly mutual fund investments.
+Visual growth charts, inflation-adjusted returns, and detailed wealth breakdown.{% endblock %}
+{% block meta_keywords %}sip calculator, systematic investment plan, mutual fund calculator, sip returns calculator,
+monthly investment calculator, compound interest calculator, wealth creation tool{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/sip-calculator/{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "SIP Calculator",
-  "description": "Free online Systematic Investment Plan calculator for mutual fund investments",
+  "@type": "SoftwareApplication",
+  "name": "SIP Calculator Pro",
+  "description": "Calculate future value of Systematic Investment Plan (SIP) investments.",
   "url": "{{ SITE_URL }}/sip-calculator/",
   "applicationCategory": "FinanceApplication",
-  "operatingSystem": "Web Browser",
+  "operatingSystem": "Any",
   "offers": {
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD"
   },
   "featureList": [
-    "Calculate SIP maturity amount",
-    "Estimate SIP returns",
-    "Visual investment growth chart",
-    "Compare different scenarios",
-    "Support for step-up SIP"
+    "Visual Growth Charts",
+    "Instant Maturity Calculation",
+    "Invested vs Returns Breakdown",
+    "Step-up SIP Support",
+    "Inflation Adjustment"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a SIP calculator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A SIP calculator is a tool that helps you estimate the future value of your Systematic Investment Plan investments. By inputting your monthly investment amount, expected return rate, and investment period, you can see how much wealth you can potentially create."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is SIP return calculated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "SIP returns are calculated using the compound interest formula adapted for periodic investments. Each monthly investment grows at the expected rate of return for its remaining investment period."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a good SIP amount to start with?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can start a SIP with as little as ₹500 per month. However, the ideal amount depends on your financial goals. A general rule is to invest 15-20% of your monthly income."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What returns can I expect from SIP?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "SIP returns depend on the fund type. Equity funds have historically given 10-15% annual returns over the long term (10+ years), while debt funds typically return 6-9%."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is SIP better than lump sum investment?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "SIP is generally better for most investors as it reduces timing risk through rupee cost averaging. Lump sum investing requires market timing and capital upfront."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I stop or pause my SIP anytime?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, SIPs offer complete flexibility. You can pause, stop, or modify your SIP anytime without penalty. Your existing investments remain invested and continue to grow."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is Step-up SIP?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Step-up SIP involves automatically increasing your SIP amount periodically, usually by a fixed percentage annually, to match your growing income and accelerate wealth creation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are SIP investments tax-free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Taxation depends on the fund. ELSS funds offer tax deductions under Section 80C. Long-term capital gains from equity funds above ₹1 lakh are taxed at 10%."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long should I continue SIP?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For equity funds, a minimum horizon of 5-7 years is recommended to mitigate market volatility. For long-term goals like retirement, 15-25 years is ideal."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this calculator accurate?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This calculator provides estimates based on assumed constant returns. Actual market returns fluctuate. It serves as a planning tool, not a guarantee."
+      }
+    }
   ]
 }
 </script>
@@ -56,6 +131,8 @@ how much to invest in sip, sip for beginners, sip planning tool{% endblock %}
         padding: 3rem 2rem;
         background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 50%, rgba(16, 185, 129, 0.1) 100%);
         border-radius: var(--radius-lg);
+        position: relative;
+        overflow: hidden;
     }
 
     .tool-header h1 {
@@ -64,7 +141,6 @@ how much to invest in sip, sip for beginners, sip planning tool{% endblock %}
         background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 50%, #10b981 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        background-clip: text;
         margin-bottom: 0.75rem;
     }
 
@@ -88,6 +164,11 @@ how much to invest in sip, sip for beginners, sip planning tool{% endblock %}
         border: 1px solid var(--color-border);
         padding: 2rem;
         box-shadow: 0 8px 32px var(--color-shadow);
+        transition: all 0.3s ease;
+    }
+
+    .calc-card:hover {
+        transform: translateY(-2px);
     }
 
     [data-theme="dark"] .calc-card {
@@ -278,25 +359,77 @@ how much to invest in sip, sip for beginners, sip planning tool{% endblock %}
         color: var(--color-text);
     }
 
-    /* Info Section */
-    .info-section {
+    /* New Common Sections */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
         margin-top: 3rem;
+    }
+
+    .info-section,
+    .faq-section {
         padding: 2rem;
         background: var(--color-surface);
         border-radius: var(--radius-lg);
         border: 1px solid var(--color-border);
     }
 
-    .info-section h2 {
+    .section-title,
+    .faq-title {
         font-size: 1.5rem;
         font-weight: 700;
         margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
-    .info-section p {
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
         color: var(--color-text-secondary);
-        line-height: 1.8;
-        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #8b5cf6;
+        font-weight: bold;
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tool-link {
+        display: block;
+        padding: 1rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tool-link:hover {
+        border-color: #8b5cf6;
+        transform: translateY(-2px);
     }
 
     .formula-box {
@@ -317,15 +450,10 @@ how much to invest in sip, sip for beginners, sip planning tool{% endblock %}
     /* FAQ Section */
     .faq-section {
         margin-top: 2rem;
-        padding: 2rem;
         background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--color-border);
     }
 
     .faq-title {
-        font-size: 1.5rem;
-        font-weight: 700;
         margin-bottom: 1.5rem;
     }
 
@@ -353,6 +481,7 @@ how much to invest in sip, sip for beginners, sip planning tool{% endblock %}
     .faq-toggle {
         font-size: 1.25rem;
         transition: transform 0.3s;
+        color: #8b5cf6;
     }
 
     .faq-item.open .faq-toggle {
@@ -362,17 +491,19 @@ how much to invest in sip, sip for beginners, sip planning tool{% endblock %}
     .faq-answer {
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s ease;
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
     }
 
     .faq-item.open .faq-answer {
         max-height: 500px;
+        transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
     }
 
     .faq-answer-content {
         padding: 0 1.25rem 1.25rem;
         color: var(--color-text-secondary);
         line-height: 1.7;
+        border-top: 1px solid var(--color-border);
     }
 
     @media (max-width: 900px) {
@@ -382,6 +513,10 @@ how much to invest in sip, sip for beginners, sip planning tool{% endblock %}
 
         .tool-header h1 {
             font-size: 1.85rem;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
         }
     }
 </style>
@@ -484,175 +619,165 @@ how much to invest in sip, sip for beginners, sip planning tool{% endblock %}
 </div>
 
 <!-- Info Section -->
-<div class="info-section">
-    <h2>📚 Understanding SIP (Systematic Investment Plan)</h2>
-    <p>
-        A Systematic Investment Plan (SIP) is a disciplined way of investing in mutual funds. Instead of investing
-        a lump sum, you invest a fixed amount at regular intervals (usually monthly). This approach helps you
-        benefit from rupee cost averaging and the power of compounding.
-    </p>
-
-    <h3 style="margin-top: 1.5rem; margin-bottom: 1rem;">SIP Formula</h3>
-    <div class="formula-box">
-        <span>M</span> = P × ({[1 + r]^n - 1} / r) × (1 + r)
+<div class="info-grid">
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-star"></i> Tool Features</h2>
+        <ul class="feature-list">
+            <li><strong>Visual Growth Charts:</strong> See your wealth compound with intuitive donut charts.</li>
+            <li><strong>Instant Updates:</strong> Real-time calculation as you adjust sliders.</li>
+            <li><strong>Detailed Breakdown:</strong> Clear separation of invested amount vs. profit.</li>
+            <li><strong>Wealth Ratio:</strong> Understand your money's multiplication factor.</li>
+        </ul>
     </div>
-    <p style="text-align: center; font-size: 0.9rem;">
-        Where: M = Maturity amount, P = Monthly investment, r = Monthly rate of return (annual rate/12), n = Number of
-        months
-    </p>
 
-    <h3 style="margin-top: 1.5rem; margin-bottom: 1rem;">Benefits of SIP</h3>
-    <p>
-        <strong>1. Rupee Cost Averaging:</strong> When markets are low, you buy more units; when high, fewer units. This
-        averages out your purchase cost.<br>
-        <strong>2. Power of Compounding:</strong> Your returns earn returns, leading to exponential wealth growth over
-        time.<br>
-        <strong>3. Disciplined Investing:</strong> Regular investments build a habit and reduce the temptation to time
-        the market.<br>
-        <strong>4. Flexibility:</strong> Start with low amounts, increase as income grows, and pause or stop anytime.
-    </p>
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-chart-line"></i> Understanding SIP</h2>
+        <p>A Systematic Investment Plan (SIP) is a disciplined way of investing in mutual funds. By investing a fixed
+            amount regularly, you benefit from rupee cost averaging and the power of compounding.</p>
+
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1.1rem;">SIP Formula</h3>
+        <div class="formula-box">M = P × ({[1 + r]^n - 1} / r) × (1 + r)</div>
+    </div>
 </div>
 
-<!-- FAQ Section -->
+<!-- Related Tools -->
+<div class="info-section" style="margin-top: 2rem;">
+    <h2 class="section-title"><i class="fas fa-tools"></i> Related Calculators</h2>
+    <div class="related-tools">
+        <a href="/loan-calculator/" class="tool-link"><i class="fas fa-university"></i> Loan Calculator</a>
+        <a href="/percentage-calculator/" class="tool-link"><i class="fas fa-percentage"></i> Percentage Calculator</a>
+        <a href="/date-calculator/" class="tool-link"><i class="fas fa-calendar-alt"></i> Date Calculator</a>
+    </div>
+</div>
+
 <div class="faq-section">
     <h2 class="faq-title">❓ Frequently Asked Questions</h2>
-
-    <div class="faq-item">
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <div class="faq-question">
-            <span>What is a SIP calculator?</span>
+            <span itemprop="name">What is a SIP calculator?</span>
             <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
                 A SIP calculator is a tool that helps you estimate the future value of your Systematic Investment Plan
                 investments. By inputting your monthly investment amount, expected return rate, and investment period,
                 you can see how much wealth you can potentially create.
             </div>
         </div>
     </div>
-
-    <div class="faq-item">
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <div class="faq-question">
-            <span>How is SIP return calculated?</span>
+            <span itemprop="name">How is SIP return calculated?</span>
             <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
                 SIP returns are calculated using the compound interest formula adapted for periodic investments. Each
                 monthly investment grows at the expected rate of return for its remaining investment period. The total
                 maturity value is the sum of all these individually compounded investments.
             </div>
         </div>
     </div>
-
-    <div class="faq-item">
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <div class="faq-question">
-            <span>What is a good SIP amount to start with?</span>
+            <span itemprop="name">What is a good SIP amount to start with?</span>
             <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
                 You can start a SIP with as little as ₹500 per month. However, the ideal amount depends on your
                 financial goals and income. A general rule is to invest 15-20% of your monthly income. As your income
                 grows, you can increase your SIP amount through step-up SIPs.
             </div>
         </div>
     </div>
-
-    <div class="faq-item">
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <div class="faq-question">
-            <span>What returns can I expect from SIP?</span>
+            <span itemprop="name">What returns can I expect from SIP?</span>
             <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
                 SIP returns depend on the type of mutual fund. Equity funds have historically given 10-15% annual
                 returns over the long term (10+ years). Debt funds typically return 6-9%. However, past performance
-                doesn't guarantee future results. The calculator shows estimates, not guaranteed returns.
+                doesn't guarantee future results.
             </div>
         </div>
     </div>
-
-    <div class="faq-item">
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <div class="faq-question">
-            <span>Is SIP better than lump sum investment?</span>
+            <span itemprop="name">Is SIP better than lump sum investment?</span>
             <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
                 SIP is generally better for most investors because it reduces timing risk through rupee cost averaging.
                 Lump sum can outperform in a rising market, but requires capital upfront and carries higher timing risk.
-                SIP is recommended for steady wealth building, especially for beginners.
+                SIP is recommended for steady wealth building.
             </div>
         </div>
     </div>
-
-    <div class="faq-item">
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <div class="faq-question">
-            <span>Can I stop or pause my SIP anytime?</span>
+            <span itemprop="name">Can I stop or pause my SIP anytime?</span>
             <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
                 Yes, SIPs offer complete flexibility. You can pause, stop, or modify your SIP anytime without any
                 penalty. Your existing investments remain invested and continue to grow. However, staying invested for
-                the long term typically yields better results due to compounding.
+                the long term typically yields better results.
             </div>
         </div>
     </div>
-
-    <div class="faq-item">
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <div class="faq-question">
-            <span>What is Step-up SIP?</span>
+            <span itemprop="name">What is Step-up SIP?</span>
             <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
                 Step-up SIP (or Top-up SIP) automatically increases your SIP amount periodically, usually by a fixed
                 percentage annually. This helps you invest more as your income grows and can significantly boost your
-                wealth creation. A 10% annual step-up can nearly double your corpus over 20 years.
+                wealth creation.
             </div>
         </div>
     </div>
-
-    <div class="faq-item">
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <div class="faq-question">
-            <span>Are SIP investments tax-free?</span>
+            <span itemprop="name">Are SIP investments tax-free?</span>
             <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
                 Tax treatment depends on the fund type. ELSS (Equity Linked Savings Scheme) SIPs offer tax deduction
                 under Section 80C up to ₹1.5 lakh. For equity funds, long-term capital gains above ₹1 lakh are taxed at
-                10%. Debt funds have different tax rules. Always consult a tax advisor.
+                10%. Debt funds have different tax rules.
             </div>
         </div>
     </div>
-
-    <div class="faq-item">
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <div class="faq-question">
-            <span>How long should I continue SIP?</span>
+            <span itemprop="name">How long should I continue SIP?</span>
             <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
                 The longer you continue SIP, the more you benefit from compounding. For equity funds, a minimum of 5-7
-                years is recommended to ride out market volatility. For goals like retirement or children's education,
-                15-25 year SIPs can create substantial wealth. Match your SIP duration to your goal timeline.
+                years is recommended to ride out market volatility. For goals like retirement, 15-25 year SIPs can
+                create substantial wealth.
             </div>
         </div>
     </div>
-
-    <div class="faq-item">
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <div class="faq-question">
-            <span>Is this calculator accurate?</span>
+            <span itemprop="name">Is this calculator accurate?</span>
             <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
                 This calculator provides estimates based on assumed constant returns. Actual mutual fund returns
-                fluctuate over time. Use this as a planning tool, not a guarantee. For more accurate projections,
-                consider consulting a financial advisor who can factor in your specific situation and goals.
+                fluctuate over time. Use this as a planning tool, not a guarantee.
             </div>
         </div>
     </div>

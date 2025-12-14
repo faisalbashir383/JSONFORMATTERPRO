@@ -1,17 +1,71 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Tip Calculator - Free Tip Calculator Online | JSON Formatters Pro{% endblock %}
-{% block meta_title %}Tip Calculator - Calculate Restaurant Tips & Split Bills Free 2026{% endblock %}
-{% block meta_description %}Free online tip calculator. Calculate tips for restaurants, split bills among friends, and
-find the perfect tip percentage. Works for any service industry.{% endblock %}
-{% block meta_keywords %}tip calculator, restaurant tip calculator, gratuity calculator, bill split calculator,
-how much to tip, tip percentage calculator, 15% tip calculator, 20% tip calculator,
-bill splitter, split bill calculator, dining calculator, meal tip calculator,
-tip calculator 2026, best tip calculator free 2026, easy tip calculator,
-service tip calculator, delivery tip calculator, bar tip calculator,
-tip guide, tipping etiquette, standard tip percentage{% endblock %}
+{% block title %}Tip Calculator - Calculate Gratuity & Split Bill [2025]{% endblock %}
+{% block meta_title %}Tip Calculator - Restaurant Gratuity & Bill Splitter{% endblock %}
+{% block meta_description %}Free Tip Calculator. Instantly calculate tip amount, split the bill evenly among friends,
+and see total cost per person. Perfect for dining out.{% endblock %}
+{% block meta_keywords %}tip calculator, gratuity calculator, bill splitter, restaurant tip calculator, tipping guide,
+split bill calculator, tip percentage{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/tip-calculator/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Tip Calculator Pro",
+  "description": "Calculate restaurant tips and split bills instantly.",
+  "url": "{{ SITE_URL }}/tip-calculator/",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Instant Tip Calculation",
+    "Bill Splitting Feature",
+    "Custom Tip Percentages",
+    "Total per Person",
+    "Global Tipping Guide"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much should I tip?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Standard restaurant tip is 15-20% in the US. For excellent service, 20-25% is appropriate. In other countries, rules vary check our tipping guide."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I calculate tip on tax?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Etiquette suggests calculating tip on the pre-tax subtotal. However, many people tip on the total for simplicity."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I split the bill?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Simply enter the total bill amount (including tip) and divide by the number of people. Our calculator does this automatically for you."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -21,6 +75,8 @@ tip guide, tipping etiquette, standard tip percentage{% endblock %}
         padding: 3rem 2rem;
         background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
         border-radius: var(--radius-lg);
+        position: relative;
+        overflow: hidden;
     }
 
     .tool-header h1 {
@@ -29,7 +85,6 @@ tip guide, tipping etiquette, standard tip percentage{% endblock %}
         background: linear-gradient(135deg, #10b981, #3b82f6);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        background-clip: text;
         margin-bottom: 0.75rem;
     }
 
@@ -51,6 +106,11 @@ tip guide, tipping etiquette, standard tip percentage{% endblock %}
         border: 1px solid var(--color-border);
         padding: 2rem;
         box-shadow: 0 8px 32px var(--color-shadow);
+        transition: all 0.3s ease;
+    }
+
+    .calc-card:hover {
+        transform: translateY(-2px);
     }
 
     [data-theme="dark"] .calc-card {
@@ -183,30 +243,97 @@ tip guide, tipping etiquette, standard tip percentage{% endblock %}
         text-align: center;
     }
 
+    /* Info & FAQ */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
     .info-section,
     .faq-section {
-        margin-top: 2rem;
         padding: 2rem;
         background: var(--color-surface);
         border-radius: var(--radius-lg);
         border: 1px solid var(--color-border);
     }
 
-    .faq-section {
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
-    }
-
-    .info-section h2,
+    .section-title,
     .faq-title {
         font-size: 1.5rem;
         font-weight: 700;
         margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .section-title i {
+        color: #10b981;
     }
 
     .info-section p {
         color: var(--color-text-secondary);
         line-height: 1.8;
         margin-bottom: 1rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #10b981;
+        font-weight: bold;
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tool-link {
+        display: block;
+        padding: 1rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tool-link:hover {
+        border-color: #10b981;
+        transform: translateY(-2px);
+    }
+
+    /* FAQ */
+    .faq-section {
+        margin-top: 2rem;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+    }
+
+    .faq-title {
+        margin-bottom: 1.5rem;
     }
 
     .faq-item {
@@ -223,6 +350,7 @@ tip guide, tipping etiquette, standard tip percentage{% endblock %}
         cursor: pointer;
         display: flex;
         justify-content: space-between;
+        align-items: center;
     }
 
     .faq-question:hover {
@@ -230,7 +358,9 @@ tip guide, tipping etiquette, standard tip percentage{% endblock %}
     }
 
     .faq-toggle {
+        font-size: 1.25rem;
         transition: transform 0.3s;
+        color: #10b981;
     }
 
     .faq-item.open .faq-toggle {
@@ -240,17 +370,25 @@ tip guide, tipping etiquette, standard tip percentage{% endblock %}
     .faq-answer {
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s;
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
     }
 
     .faq-item.open .faq-answer {
         max-height: 300px;
+        transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
     }
 
     .faq-answer-content {
         padding: 0 1.25rem 1.25rem;
         color: var(--color-text-secondary);
         line-height: 1.7;
+        border-top: 1px solid var(--color-border);
+    }
+
+    @media (max-width: 768px) {
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
     }
 </style>
 {% endblock %}
@@ -307,35 +445,73 @@ tip guide, tipping etiquette, standard tip percentage{% endblock %}
     </div>
 </div>
 
-<div class="info-section">
-    <h2>📚 Tipping Guide</h2>
-    <p><strong>Restaurants:</strong> 15-20% for good service, 20-25% for excellent service.</p>
-    <p><strong>Delivery:</strong> 15-20% or minimum $3-5 for food delivery.</p>
-    <p><strong>Hair/Spa:</strong> 15-20% of the service cost.</p>
-    <p><strong>Hotels:</strong> $1-5 per bag for bellhops, $2-5 daily for housekeeping.</p>
+<div class="info-grid">
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-star"></i> Tool Features</h2>
+        <ul class="feature-list">
+            <li><strong>Quick Percentages:</strong> Single-click buttons for standard tip rates (10%, 15%, 20%).</li>
+            <li><strong>Split Bill:</strong> Easily divide the total among any number of people.</li>
+            <li><strong>Custom Rate:</strong> Enter any specific tip percentage you prefer.</li>
+            <li><strong>Real-time:</strong> All math happens instantly as you type.</li>
+        </ul>
+    </div>
+
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-hand-holding-usd"></i> Tipping Guide</h2>
+        <p><strong><i class="fas fa-utensils"></i> Restaurants:</strong> 15-20% for good service, 20-25% for excellent.
+        </p>
+        <p><strong><i class="fas fa-motorcycle"></i> Delivery:</strong> 15-20% or minimum $3-5.</p>
+        <p><strong><i class="fas fa-cut"></i> Hair/Spa:</strong> 15-20% of service cost.</p>
+        <p><strong><i class="fas fa-concierge-bell"></i> Hotels:</strong> $2-5 for housekeeping, $1-5 for bellhops.</p>
+    </div>
+</div>
+
+<!-- Related Tools -->
+<div class="info-section" style="margin-top: 2rem;">
+    <h2 class="section-title"><i class="fas fa-tools"></i> Related Calculators</h2>
+    <div class="related-tools">
+        <a href="/discount-calculator/" class="tool-link"><i class="fas fa-tag"></i> Discount Calculator</a>
+        <a href="/percentage-calculator/" class="tool-link"><i class="fas fa-percentage"></i> Percentage Calculator</a>
+        <a href="/time-calculator/" class="tool-link"><i class="fas fa-clock"></i> Time Calculator</a>
+    </div>
 </div>
 
 <div class="faq-section">
-    <h2 class="faq-title">❓ FAQ</h2>
-    <div class="faq-item">
-        <div class="faq-question"><span>How much should I tip?</span><span class="faq-toggle">+</span></div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">Standard restaurant tip is 15-20%. For excellent service, 20-25% is
-                appropriate. Some countries have different customs.</div>
+    <h2 class="faq-title">❓ Frequently Asked Questions</h2>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">How much should I tip?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Standard restaurant tip is 15-20%. For excellent service, 20-25% is appropriate. Some countries have
+                different customs.
+            </div>
         </div>
     </div>
-    <div class="faq-item">
-        <div class="faq-question"><span>Should I tip on tax?</span><span class="faq-toggle">+</span></div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">Traditionally, tip is calculated on the pre-tax bill. However, many people
-                tip on the total including tax for simplicity.</div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Should I tip on tax?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Traditionally, tip is calculated on the pre-tax bill (subtotal). However, many people tip on the total
+                including tax for simplicity.
+            </div>
         </div>
     </div>
-    <div class="faq-item">
-        <div class="faq-question"><span>When is it okay not to tip?</span><span class="faq-toggle">+</span></div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">Tipping is optional when service is included (check your bill), at fast-food
-                restaurants, or for counter service. In some countries, tipping isn't customary.</div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">When is it okay not to tip?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Tipping is optional when service is included (check your bill), at fast-food restaurants, or for counter
+                service. In some countries like Japan, tipping is not customary.
+            </div>
         </div>
     </div>
 </div>
@@ -383,6 +559,7 @@ tip guide, tipping etiquette, standard tip percentage{% endblock %}
             document.getElementById('perPerson').textContent = '$' + perPerson.toFixed(2);
         };
 
+        // FAQ Toggle
         document.querySelectorAll('.faq-item').forEach(item => {
             item.querySelector('.faq-question').addEventListener('click', () => item.classList.toggle('open'));
         });

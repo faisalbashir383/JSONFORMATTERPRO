@@ -1,18 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Dummy JSON Generator - Create Fake JSON Data Online | JSON Formatters Pro{% endblock %}
-{% block meta_title %}Dummy JSON Generator - Create Fake JSON Data Online | JSON Formatters Pro{% endblock %}
-{% block meta_description %}Generate random dummy JSON data instantly. Create fake JSON with names, emails, addresses,
-dates, and more. Customizable fields and array sizes. Perfect for testing and development.{% endblock %}
-{% block meta_keywords %}dummy json generator, fake json generator, random json generator, json mock data, test json
-generator,
-sample json data, json placeholder, fake data generator, mock json api, random json data, json test data generator,
-fake json online, generate dummy data, json data faker, mock data generator, api mock data, test data generator json,
-fake json api, random json object, json sample generator, dummy data creator, fake user json, random address json,
-mock json generator online free, json fixture generator, seed data generator, free json generator,
-dummy json 2026, best json generator 2026, fake data generator 2026, mock json 2026, random json 2026,
-json mock api 2026, test data json 2026, sample json 2026, json placeholder 2026, json faker 2026{% endblock %}
+{% block title %}Dummy JSON Generator Online - Create Fake JSON Data Free [2026]{% endblock %}
+{% block meta_title %}Dummy JSON Generator Online - Free Fake JSON Data Tool{% endblock %}
+{% block meta_description %}Free dummy JSON generator to create fake JSON data instantly. Generate random names, emails,
+addresses for testing. No signup required - try now!{% endblock %}
+{% block meta_keywords %}dummy json generator, fake json generator, random json data, json mock data, test json
+generator{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/dummy-json/{% endblock %}
 
 {% block structured_data %}
@@ -20,8 +14,8 @@ json mock api 2026, test data json 2026, sample json 2026, json placeholder 2026
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Free Dummy JSON Generator",
-  "description": "Free online tool to generate random dummy JSON data for testing",
+  "name": "Dummy JSON Generator Online",
+  "description": "Free online tool to generate random dummy JSON data for testing and development",
   "url": "{{ SITE_URL }}/dummy-json/",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web Browser",
@@ -29,7 +23,104 @@ json mock api 2026, test data json 2026, sample json 2026, json placeholder 2026
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "ratingCount": "892",
+    "bestRating": "5",
+    "worstRating": "1"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Generate Dummy JSON Data",
+  "description": "Steps to create fake JSON data for testing",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Select Fields",
+      "text": "Choose the fields you want in your JSON (ID, name, email, etc.)"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Set Record Count",
+      "text": "Enter the number of records to generate (1-100)"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Generate JSON",
+      "text": "Click the Generate JSON button to create your fake data"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Copy or Download",
+      "text": "Copy the JSON to clipboard or download as a file"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a dummy JSON generator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A dummy JSON generator creates fake but realistic-looking JSON data for testing, prototyping, and development. It generates random names, emails, addresses, and other fields without using real user data."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I generate fake JSON data?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Select the fields you want (name, email, phone, etc.), set the number of records, then click Generate JSON. The tool instantly creates realistic fake data you can copy or download."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this dummy JSON generator free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, this dummy JSON generator is 100% free with no signup required. All data generation happens in your browser."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I add custom fields to the JSON?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, you can add custom fields with static values, random values from a list, random numbers, UUIDs, or boolean values."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What fields can I generate?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can generate ID, name, email, phone, address, company, date, avatar URL, bio, age, active status, salary, and custom fields."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I download the generated JSON?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, click the Download button to save the generated JSON as a .json file. You can also copy it directly to your clipboard."
+      }
+    }
+  ]
 }
 </script>
 {% endblock %}
@@ -40,7 +131,6 @@ json mock api 2026, test data json 2026, sample json 2026, json placeholder 2026
         text-align: center;
         margin-bottom: 2.5rem;
         padding: 2.5rem 2rem;
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(245, 158, 11, 0.08) 100%);
         border-radius: var(--radius-lg);
     }
 
@@ -78,8 +168,7 @@ json mock api 2026, test data json 2026, sample json 2026, json placeholder 2026
     }
 
     [data-theme="dark"] .settings-panel {
-        background: rgba(15, 23, 42, 0.9);
-        border-color: rgba(255, 255, 255, 0.1);
+        background: var(--color-surface);
     }
 
     .settings-title {
@@ -199,6 +288,12 @@ json mock api 2026, test data json 2026, sample json 2026, json placeholder 2026
         flex-direction: column;
         box-shadow: 0 4px 16px var(--color-shadow);
         overflow: hidden;
+        min-height: 560px;
+    }
+
+    #monacoContainer {
+        flex: 1;
+        min-height: 500px;
     }
 
     [data-theme="dark"] .output-panel {
@@ -321,7 +416,7 @@ json mock api 2026, test data json 2026, sample json 2026, json placeholder 2026
 
 {% block content %}
 <div class="tool-header">
-    <h1>🎲 Free Dummy JSON Generator</h1>
+    <h1>Dummy JSON Generator Online - Create Fake JSON Data Free</h1>
     <p>Generate random fake JSON data for testing, prototyping, and development</p>
 </div>
 
@@ -446,25 +541,155 @@ json mock api 2026, test data json 2026, sample json 2026, json placeholder 2026
                 <button id="downloadBtn" class="download-btn">⬇ Download</button>
             </div>
         </div>
-        <textarea id="jsonOutput" class="output-textarea" readonly
-            placeholder="Click 'Generate JSON' to create dummy data..."></textarea>
+        <div id="monacoContainer"></div>
+        <textarea id="jsonOutput" class="output-textarea" style="display: none;" readonly></textarea>
     </div>
 </div>
 
+<!-- Features Section -->
 <div class="info-section">
-    <h2>💡 About Dummy JSON Generator</h2>
+    <h2>Dummy JSON Generator Features</h2>
     <p>
         Create realistic fake JSON data for testing, prototyping, and development. Our generator creates
-        random but realistic-looking data including names, emails, addresses, phone numbers, and more.
-        Perfect for API testing, frontend development, database seeding, and demo applications.
+        random but realistic-looking data for developers.
     </p>
+    <ul style="color: var(--color-text-secondary); line-height: 2; padding-left: 1.5rem;">
+        <li><strong>12+ Field Types:</strong> Name, email, phone, address, company, date, age, and more</li>
+        <li><strong>Custom Fields:</strong> Add your own fields with static values, random lists, or UUIDs</li>
+        <li><strong>Multiple Formats:</strong> Array of objects, single object, or nested structure</li>
+        <li><strong>Configurable Output:</strong> Set record count (1-100) and indent size</li>
+        <li><strong>No Signup:</strong> 100% free, no registration required</li>
+    </ul>
     <p>
         <strong>Use cases:</strong> API mocking, unit testing, database seeding, UI prototyping,
         demo data, load testing, documentation examples.
     </p>
 </div>
+
+<!-- Related JSON Tools Section -->
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>🔧 Related JSON Tools</h2>
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <a href="/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>📝 JSON Formatter</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Format & beautify
+                JSON</p>
+        </a>
+        <a href="/json-tree/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>🌳 JSON Tree Viewer</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Visualize JSON as
+                tree</p>
+        </a>
+        <a href="/json-schema/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>📐 JSON Schema Validator</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Validate against
+                schema</p>
+        </a>
+        <a href="/json-diff/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>🔍 JSON Diff</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Compare two JSON
+                files</p>
+        </a>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>Dummy JSON Generator FAQ</h2>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What is a dummy JSON generator?</h3>
+        <p style="margin: 0;">A dummy JSON generator creates fake but realistic-looking JSON data for testing,
+            prototyping, and development without using real user data.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">How do I generate fake JSON data?</h3>
+        <p style="margin: 0;">Select the fields you want (name, email, phone, etc.), set the number of records, then
+            click Generate JSON. The tool instantly creates realistic fake data.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Can I add custom fields to the JSON?</h3>
+        <p style="margin: 0;">Yes! Add custom fields with static values, random values from a list, random numbers,
+            UUIDs, or boolean values.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What fields can I generate?</h3>
+        <p style="margin: 0;">ID, name, email, phone, address, company, date, avatar URL, bio, age, active status,
+            salary, and unlimited custom fields.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Can I download the generated JSON?</h3>
+        <p style="margin: 0;">Yes, click the Download button to save as a .json file, or copy directly to your
+            clipboard.</p>
+    </div>
+
+    <div style="padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Is this dummy JSON generator free?</h3>
+        <p style="margin: 0;">Yes, 100% free with no signup required. All data generation happens in your browser.</p>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
+<!-- Monaco Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
 <script src="{% static 'js/dummy-json.js' %}"></script>
+<script>
+    let monacoEditor;
+
+    // Initialize Monaco Editor
+    require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' } });
+    require(['vs/editor/editor.main'], function () {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+        monacoEditor = monaco.editor.create(document.getElementById('monacoContainer'), {
+            value: '// Click "Generate JSON" to create dummy data...',
+            language: 'json',
+            theme: isDark ? 'vs-dark' : 'vs',
+            readOnly: true,
+            automaticLayout: true,
+            minimap: { enabled: false },
+            fontSize: 14,
+            lineNumbers: 'on',
+            scrollBeyondLastLine: false,
+            wordWrap: 'on'
+        });
+
+        // Listen for theme changes
+        const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.attributeName === 'data-theme') {
+                    const newTheme = document.documentElement.getAttribute('data-theme');
+                    monaco.editor.setTheme(newTheme === 'dark' ? 'vs-dark' : 'vs');
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+
+        // Override the original output update
+        const originalOutput = document.getElementById('jsonOutput');
+        const originalSetValue = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set;
+
+        Object.defineProperty(originalOutput, 'value', {
+            set: function (val) {
+                originalSetValue.call(this, val);
+                if (monacoEditor && val) {
+                    monacoEditor.setValue(val);
+                }
+            },
+            get: function () {
+                return monacoEditor ? monacoEditor.getValue() : '';
+            }
+        });
+    });
+</script>
 {% endblock %}

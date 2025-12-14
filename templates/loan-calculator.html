@@ -1,34 +1,68 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Loan Calculator - EMI Calculator Online Free | JSON Formatters Pro{% endblock %}
-{% block meta_title %}Loan Calculator - Calculate EMI, Interest & Amortization Free 2026{% endblock %}
-{% block meta_description %}Free online loan EMI calculator. Calculate monthly payments, total interest, and view
-amortization schedule for personal loans, home loans, and car loans.{% endblock %}
-{% block meta_keywords %}loan calculator, emi calculator, loan emi calculator, personal loan calculator, home loan
-calculator,
-car loan calculator, mortgage calculator, loan interest calculator, loan payment calculator,
-monthly payment calculator, emi calculation, emi formula, loan amortization calculator,
-loan calculator 2026, best loan calculator online free 2026, accurate emi calculator,
-loan repayment calculator, simple loan calculator, compound loan calculator,
-bank loan calculator, housing loan calculator, vehicle loan calculator,
-loan eligibility calculator, loan installment calculator, flat rate loan calculator,
-reducing balance loan calculator, annual percentage rate calculator, apr calculator,
-total interest calculator, principal interest calculator, loan term calculator,
-prepayment calculator, part payment calculator, loan closure calculator{% endblock %}
+{% block title %}Loan EMI Calculator - Calculate Monthly Payments [2025]{% endblock %}
+{% block meta_title %}Loan Calculator - Calculate EMI, Interest & Total Payment Free{% endblock %}
+{% block meta_description %}Free online loan calculator. Calculate monthly EMI, total interest payable, and final
+repayment amount for personal, home, and car loans.{% endblock %}
+{% block meta_keywords %}loan calculator, emi calculator, personal loan calculator, home loan emi, calculate monthly
+payments, loan interest calculator, emi formula{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/loan-calculator/{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Loan EMI Calculator",
-  "description": "Free online loan calculator to compute EMI, total interest, and amortization schedule",
+  "@type": "SoftwareApplication",
+  "name": "Loan EMI Calculator Pro",
+  "description": "Calculate monthly loan EMI, total interest, and repayment amount.",
   "url": "{{ SITE_URL }}/loan-calculator/",
   "applicationCategory": "FinanceApplication",
-  "operatingSystem": "Web Browser",
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Instant EMI Calculation",
+    "Total Interest Breakdown",
+    "Visual Slider Inputs",
+    "Principal vs Interest Analysis",
+    "Supports High Loan Amounts"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is EMI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EMI (Equated Monthly Installment) is a fixed payment amount made by a borrower to a lender at a specified date each calendar month. Equated monthly installments are used to pay off both interest and principal each month like other loans."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is loan EMI calculated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EMI is calculated using the formula: P x R x (1+R)^N / [(1+R)^N-1], where P is Principal Loan Amount, R is Monthly Interest Rate, and N is Loan Tenure in months."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this work for home loans?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, this calculator works for home loans, personal loans, car loans, and education loans. Just input your specific loan amount and interest rate."
+      }
+    }
+  ]
 }
 </script>
 {% endblock %}
@@ -41,6 +75,8 @@ prepayment calculator, part payment calculator, loan closure calculator{% endblo
         padding: 3rem 2rem;
         background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(239, 68, 68, 0.1) 50%, rgba(139, 92, 246, 0.1) 100%);
         border-radius: var(--radius-lg);
+        position: relative;
+        overflow: hidden;
     }
 
     .tool-header h1 {
@@ -49,7 +85,6 @@ prepayment calculator, part payment calculator, loan closure calculator{% endblo
         background: linear-gradient(135deg, #f59e0b 0%, #ef4444 50%, #8b5cf6 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        background-clip: text;
         margin-bottom: 0.75rem;
     }
 
@@ -73,6 +108,11 @@ prepayment calculator, part payment calculator, loan closure calculator{% endblo
         border: 1px solid var(--color-border);
         padding: 2rem;
         box-shadow: 0 8px 32px var(--color-shadow);
+        transition: all 0.3s ease;
+    }
+
+    .calc-card:hover {
+        transform: translateY(-2px);
     }
 
     [data-theme="dark"] .calc-card {
@@ -123,22 +163,6 @@ prepayment calculator, part payment calculator, loan closure calculator{% endblo
         border-radius: 50%;
         background: linear-gradient(135deg, #f59e0b, #ef4444);
         cursor: pointer;
-    }
-
-    .input-field {
-        width: 100%;
-        padding: 0.85rem 1rem;
-        font-size: 1rem;
-        background: var(--color-bg);
-        color: var(--color-text);
-        border: 2px solid var(--color-border);
-        border-radius: var(--radius-md);
-        text-align: center;
-    }
-
-    .input-field:focus {
-        outline: none;
-        border-color: #f59e0b;
     }
 
     /* Result Card */
@@ -199,30 +223,52 @@ prepayment calculator, part payment calculator, loan closure calculator{% endblo
         color: #8b5cf6;
     }
 
+    /* New Common Sections */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
     .info-section,
     .faq-section {
-        margin-top: 2rem;
         padding: 2rem;
         background: var(--color-surface);
         border-radius: var(--radius-lg);
         border: 1px solid var(--color-border);
     }
 
-    .faq-section {
-        background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
-    }
-
-    .info-section h2,
+    .section-title,
     .faq-title {
         font-size: 1.5rem;
         font-weight: 700;
         margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
-    .info-section p {
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
         color: var(--color-text-secondary);
-        line-height: 1.8;
-        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #f59e0b;
+        font-weight: bold;
     }
 
     .formula-box {
@@ -238,6 +284,41 @@ prepayment calculator, part payment calculator, loan closure calculator{% endblo
     .formula-box span {
         color: #f59e0b;
         font-weight: 600;
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tool-link {
+        display: block;
+        padding: 1rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tool-link:hover {
+        border-color: #f59e0b;
+        transform: translateY(-2px);
+    }
+
+    /* FAQ Section */
+    .faq-section {
+        margin-top: 2rem;
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+    }
+
+    .faq-title {
+        margin-bottom: 1.5rem;
     }
 
     .faq-item {
@@ -264,6 +345,7 @@ prepayment calculator, part payment calculator, loan closure calculator{% endblo
     .faq-toggle {
         font-size: 1.25rem;
         transition: transform 0.3s;
+        color: #f59e0b;
     }
 
     .faq-item.open .faq-toggle {
@@ -273,21 +355,27 @@ prepayment calculator, part payment calculator, loan closure calculator{% endblo
     .faq-answer {
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s ease;
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
     }
 
     .faq-item.open .faq-answer {
         max-height: 500px;
+        transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
     }
 
     .faq-answer-content {
         padding: 0 1.25rem 1.25rem;
         color: var(--color-text-secondary);
         line-height: 1.7;
+        border-top: 1px solid var(--color-border);
     }
 
     @media (max-width: 900px) {
         .calculator-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .info-grid {
             grid-template-columns: 1fr;
         }
     }
@@ -357,48 +445,83 @@ prepayment calculator, part payment calculator, loan closure calculator{% endblo
     </div>
 </div>
 
-<div class="info-section">
-    <h2>📚 Understanding EMI</h2>
-    <p>EMI (Equated Monthly Installment) is a fixed monthly payment made to repay a loan. Each EMI consists of two
-        parts: principal repayment and interest payment. In the early months, a larger portion goes toward interest;
-        later, more goes toward principal.</p>
-    <h3 style="margin-top: 1rem;">EMI Formula</h3>
-    <div class="formula-box"><span>EMI</span> = [P × r × (1+r)^n] / [(1+r)^n - 1]</div>
-    <p style="text-align: center; font-size: 0.9rem;">Where: P = Principal, r = Monthly interest rate (annual/12/100), n
-        = Number of months</p>
+<div class="info-grid">
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-star"></i> Tool Features</h2>
+        <ul class="feature-list">
+            <li><strong>Instant EMI:</strong> Get real-time updates as you adjust the sliders.</li>
+            <li><strong>Total Breakdown:</strong> See exactly how much interest you'll pay over the loan term.</li>
+            <li><strong>Compounding:</strong> Accurately calculates monthly reducing balance.</li>
+            <li><strong>Visual:</strong> Clean, easy-to-read layout for better financial planning.</li>
+        </ul>
+    </div>
+
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-calculator"></i> Understanding EMI</h2>
+        <p>EMI (Equated Monthly Installment) is a fixed monthly payment made to repay a loan. Each EMI consists of two
+            parts: principal repayment and interest payment.</p>
+        <div class="formula-box"><span>EMI</span> = [P × r × (1+r)^n] / [(1+r)^n - 1]</div>
+        <p style="font-size: 0.9rem;">Where: P = Principal, r = Monthly Interest Rate, n = Months</p>
+    </div>
+</div>
+
+<!-- Related Tools -->
+<div class="info-section" style="margin-top: 2rem;">
+    <h2 class="section-title"><i class="fas fa-tools"></i> Related Calculators</h2>
+    <div class="related-tools">
+        <a href="/percentage-calculator/" class="tool-link"><i class="fas fa-percentage"></i> Percentage Calculator</a>
+        <a href="/discount-calculator/" class="tool-link"><i class="fas fa-tag"></i> Discount Calculator</a>
+        <a href="/tip-calculator/" class="tool-link"><i class="fas fa-hand-holding-usd"></i> Tip Calculator</a>
+    </div>
 </div>
 
 <div class="faq-section">
     <h2 class="faq-title">❓ Frequently Asked Questions</h2>
-    <div class="faq-item">
-        <div class="faq-question"><span>What is EMI?</span><span class="faq-toggle">+</span></div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">EMI stands for Equated Monthly Installment. It's a fixed amount you pay
-                every month to repay your loan over a specified period. Each EMI includes both principal and interest
-                components.</div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">What is EMI?</span>
+            <span class="faq-toggle">+</span>
         </div>
-    </div>
-    <div class="faq-item">
-        <div class="faq-question"><span>How is EMI calculated?</span><span class="faq-toggle">+</span></div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">EMI is calculated using the reducing balance method formula that considers
-                your loan amount, interest rate, and tenure. The formula ensures equal monthly payments throughout the
-                loan period.</div>
-        </div>
-    </div>
-    <div class="faq-item">
-        <div class="faq-question"><span>Can I reduce my EMI?</span><span class="faq-toggle">+</span></div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">Yes! You can reduce EMI by choosing a longer tenure, negotiating a lower
-                interest rate, or making a larger down payment. However, longer tenure means more total interest paid.
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                EMI stands for Equated Monthly Installment. It's a fixed amount you pay every month to repay your loan
+                over a specified period. Each EMI includes both principal and interest components.
             </div>
         </div>
     </div>
-    <div class="faq-item">
-        <div class="faq-question"><span>What happens if I prepay my loan?</span><span class="faq-toggle">+</span></div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">Prepayment reduces your principal, which decreases total interest and can
-                shorten your tenure or reduce EMI. Some lenders charge prepayment penalties, so check your loan terms.
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">How is EMI calculated?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                EMI is calculated using the reducing balance method formula: E = P x r x (1+r)^n / ((1+r)^n - 1). This
+                ensures your loan is paid off completely by the end of the tenure.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Can I reduce my EMI?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Yes! You can reduce EMI by choosing a longer tenure, negotiating a lower interest rate, or making a
+                larger down payment. However, keep in mind that a longer tenure increases the total interest you pay.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">What happens if I prepay my loan?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Prepayment reduces your outstanding principal, which in turn decreases the total interest payable. You
+                can choose to either reduce your EMI amount or shorten the loan tenure after a prepayment.
             </div>
         </div>
     </div>

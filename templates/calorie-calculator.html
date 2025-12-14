@@ -1,16 +1,87 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Calorie Calculator - Daily Calorie Needs Calculator | JSON Formatters Pro{% endblock %}
-{% block meta_title %}Calorie Calculator - Calculate Daily Calorie Needs Free 2026{% endblock %}
-{% block meta_description %}Free calorie calculator. Calculate your daily calorie needs based on age, weight, height,
-and activity level. Get personalized recommendations for weight loss or gain.{% endblock %}
-{% block meta_keywords %}calorie calculator, daily calorie calculator, calorie needs calculator, bmr calculator,
-tdee calculator, calorie intake calculator, calories per day calculator,
-calorie calculator 2026, best calorie calculator free, weight loss calorie calculator,
-maintenance calories calculator, calorie deficit calculator, calorie surplus calculator,
-basal metabolic rate, metabolic rate calculator, energy expenditure calculator{% endblock %}
+{% block title %}Calorie Calculator - Daily Calorie Needs & TDEE [2025]{% endblock %}
+{% block meta_title %}Calorie Calculator - Calculate Calories for Weight Loss & Gain{% endblock %}
+{% block meta_description %}Free Calorie Calculator. Accurately calculate your daily calorie needs (TDEE) and BMR. Get
+personalized plans for weight loss, maintenance, or muscle gain.{% endblock %}
+{% block meta_keywords %}calorie calculator, daily calorie needs, tdee calculator, bmr calculator, weight loss
+calculator, calorie deficit calculator, maintenance calories, macro calculator{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/calorie-calculator/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Calorie Calculator Pro",
+  "description": "Calculate daily calorie needs for weight loss, maintenance, or gain.",
+  "url": "{{ SITE_URL }}/calorie-calculator/",
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Mifflin-St Jeor Accuracy",
+    "Personalized Weight Loss Plans",
+    "BMR & TDEE Calculation",
+    "Activity Level Adjustment",
+    "Muscle Gain Recommendations"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How many calories should I eat to lose weight?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To lose weight safely (about 0.5kg per week), you should ideally consume 500 calories less than your Total Daily Energy Expenditure (TDEE). This creates a sustainable calorie deficit without starving your body."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between BMR and TDEE?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "BMR (Basal Metabolic Rate) is the calories you burn at complete rest just to keep your organs functioning. TDEE (Total Daily Energy Expenditure) is your BMR plus the calories you burn through daily movement and exercise. TDEE is the number you need to eat to maintain your current weight."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the Mifflin-St Jeor formula accurate?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, the Mifflin-St Jeor equation is widely considered the most accurate formula for estimating calorie needs in clinical settings. It varies by about +/- 10% for most individuals."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "should I eat back my exercise calories?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Generally, no. If you selected an activity level like 'Moderate' or 'Active', your exercise calories are already accounted for in your TDEE. Eating them back would lead to double-counting and stall weight loss."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a safe rate of weight loss?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A safe and sustainable rate of weight loss is 0.5 kg to 1.0 kg (1-2 lbs) per week. Losing weight faster than this can lead to muscle loss and nutritional deficiencies."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -20,6 +91,8 @@ basal metabolic rate, metabolic rate calculator, energy expenditure calculator{%
         padding: 3rem 2rem;
         background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(245, 158, 11, 0.1) 50%, rgba(16, 185, 129, 0.1) 100%);
         border-radius: var(--radius-lg);
+        position: relative;
+        overflow: hidden;
     }
 
     .tool-header h1 {
@@ -50,6 +123,12 @@ basal metabolic rate, metabolic rate calculator, energy expenditure calculator{%
         border-radius: var(--radius-lg);
         border: 1px solid var(--color-border);
         padding: 2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 32px var(--color-shadow);
+    }
+
+    .calc-card:hover {
+        transform: translateY(-2px);
     }
 
     [data-theme="dark"] .calc-card {
@@ -60,6 +139,9 @@ basal metabolic rate, metabolic rate calculator, energy expenditure calculator{%
         font-size: 1.25rem;
         font-weight: 700;
         margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     .input-group {
@@ -119,23 +201,41 @@ basal metabolic rate, metabolic rate calculator, energy expenditure calculator{%
 
     .result-card.show {
         display: block;
+        animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .result-main {
         text-align: center;
         padding: 1.5rem;
         margin-bottom: 1rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
     }
 
     .result-value {
         font-size: 3rem;
         font-weight: 800;
         color: #ef4444;
+        margin-bottom: 0.5rem;
     }
 
     .result-label {
         font-size: 0.9rem;
         color: var(--color-text-secondary);
+        font-weight: 600;
     }
 
     .calorie-goals {
@@ -150,14 +250,17 @@ basal metabolic rate, metabolic rate calculator, energy expenditure calculator{%
         background: var(--color-bg);
         border-radius: var(--radius-md);
         border: 1px solid var(--color-border);
+        align-items: center;
     }
 
     .goal-label {
         color: var(--color-text-secondary);
+        font-size: 0.9rem;
     }
 
     .goal-value {
         font-weight: 700;
+        font-size: 1.1rem;
     }
 
     .goal-value.loss {
@@ -186,28 +289,144 @@ basal metabolic rate, metabolic rate calculator, energy expenditure calculator{%
         box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
     }
 
-    .info-section {
-        margin-top: 2rem;
+    /* New Common Sections */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .info-section,
+    .faq-section {
         padding: 2rem;
         background: var(--color-surface);
         border-radius: var(--radius-lg);
         border: 1px solid var(--color-border);
     }
 
-    .info-section h2 {
+    .section-title,
+    .faq-title {
         font-size: 1.5rem;
         font-weight: 700;
         margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
-    .info-section p {
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
         color: var(--color-text-secondary);
-        line-height: 1.8;
-        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #ef4444;
+        font-weight: bold;
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tool-link {
+        display: block;
+        padding: 1rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tool-link:hover {
+        border-color: #ef4444;
+        transform: translateY(-2px);
+    }
+
+    /* FAQ Section */
+    .faq-section {
+        margin-top: 2rem;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%);
+    }
+
+    .faq-title {
+        margin-bottom: 1.5rem;
+    }
+
+    .faq-item {
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+        margin-bottom: 0.75rem;
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+    }
+
+    .faq-question {
+        padding: 1.25rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .faq-question:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .faq-toggle {
+        font-size: 1.25rem;
+        transition: transform 0.3s;
+        color: #ef4444;
+    }
+
+    .faq-item.open .faq-toggle {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+    }
+
+    .faq-item.open .faq-answer {
+        max-height: 500px;
+        transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
+    }
+
+    .faq-answer-content {
+        padding: 0 1.25rem 1.25rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        border-top: 1px solid var(--color-border);
     }
 
     @media (max-width: 900px) {
         .calculator-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .info-grid {
             grid-template-columns: 1fr;
         }
     }
@@ -217,7 +436,7 @@ basal metabolic rate, metabolic rate calculator, energy expenditure calculator{%
 {% block content %}
 <div class="tool-header">
     <h1>🔥 Calorie Calculator</h1>
-    <p>Calculate your daily calorie needs based on your personal stats and activity level.</p>
+    <p>Calculate your daily calorie needs based on your personal stats, activity level, and goals.</p>
 </div>
 
 <div class="calculator-layout">
@@ -290,14 +509,92 @@ basal metabolic rate, metabolic rate calculator, energy expenditure calculator{%
     </div>
 </div>
 
-<div class="info-section">
-    <h2>📚 Understanding Calories</h2>
-    <p><strong>BMR (Basal Metabolic Rate):</strong> Calories your body burns at rest to maintain basic functions like
-        breathing and circulation.</p>
-    <p><strong>TDEE (Total Daily Energy Expenditure):</strong> BMR × activity factor. This is how many calories you burn
-        in a day.</p>
-    <p><strong>Calorie Deficit/Surplus:</strong> To lose weight, eat fewer calories than TDEE. To gain weight, eat more.
-        A 500 calorie daily deficit ≈ 0.5 kg lost per week.</p>
+<div class="info-grid">
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-star"></i> Tool Features</h2>
+        <ul class="feature-list">
+            <li><strong>Scientifically Accurate:</strong> Uses the Mifflin-St Jeor equation, the gold standard in
+                calorie estimation.</li>
+            <li><strong>Personalized Goals:</strong> Get specific numbers for mild or standard weight loss paths.</li>
+            <li><strong>Activity Adjustment:</strong> Accounts for your unique lifestyle and exercise habits.</li>
+            <li><strong>Complete Picture:</strong> See numbers for loss, maintenance, and gain in one view.</li>
+        </ul>
+    </div>
+
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-book-medical"></i> Understanding Calories</h2>
+        <p><strong>BMR (Basal Metabolic Rate):</strong> Calories your body burns at rest to maintain basic functions
+            like breathing and circulation.</p>
+        <p><strong>TDEE (Total Daily Energy Expenditure):</strong> Your TDEE is how many calories you burn in a typical
+            day including activity. This is your "Maintenance Level".</p>
+        <p><strong>The Math of Weight Loss:</strong> To lose 1kg of fat, you need a deficit of roughly 7,700 calories. A
+            daily deficit of 500 calories leads to roughly 0.5kg weight loss per week.</p>
+    </div>
+</div>
+
+<!-- Related Tools -->
+<div class="info-section" style="margin-top: 2rem;">
+    <h2 class="section-title"><i class="fas fa-tools"></i> Related Calculators</h2>
+    <div class="related-tools">
+        <a href="/bmi-calculator/" class="tool-link"><i class="fas fa-weight"></i> BMI Calculator</a>
+        <a href="/age-calculator/" class="tool-link"><i class="fas fa-birthday-cake"></i> Age Calculator</a>
+        <a href="/percentage-calculator/" class="tool-link"><i class="fas fa-percentage"></i> Percentage Calculator</a>
+    </div>
+</div>
+
+<div class="faq-section">
+    <h2 class="faq-title">❓ Frequently Asked Questions</h2>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">How many calories should I eat to lose weight?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                To lose weight safely (about 0.5kg per week), you should ideally consume 500 calories less than your
+                Total Daily Energy Expenditure (TDEE). This creates a sustainable calorie deficit without starving your
+                body.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">What is the difference between BMR and TDEE?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                BMR (Basal Metabolic Rate) is the calories you burn at complete rest just to keep your organs
+                functioning. TDEE (Total Daily Energy Expenditure) is your BMR plus the calories you burn through daily
+                movement and exercise. TDEE is the number you need to eat to maintain your current weight.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Is the Mifflin-St Jeor formula accurate?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Yes, the Mifflin-St Jeor equation is widely considered the most accurate formula for estimating calorie
+                needs in clinical settings. It varies by about +/- 10% for most individuals.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Should I eat back my exercise calories?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Generally, no. If you selected an activity level like 'Moderate' or 'Active', your exercise calories are
+                already accounted for in your TDEE. Eating them back would lead to double-counting and stall weight
+                loss.
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -318,6 +615,8 @@ basal metabolic rate, metabolic rate calculator, energy expenditure calculator{%
             const height = parseFloat(document.getElementById('height').value);
             const activity = parseFloat(document.getElementById('activity').value);
 
+            if (!age || !weight || !height) return;
+
             // Mifflin-St Jeor Equation
             let bmr;
             if (gender === 'male') {
@@ -335,7 +634,13 @@ basal metabolic rate, metabolic rate calculator, energy expenditure calculator{%
             document.getElementById('gain').textContent = Math.round(tdee + 500).toLocaleString();
 
             document.getElementById('resultCard').classList.add('show');
+            document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
         };
+
+        // FAQ Toggle
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => item.classList.toggle('open'));
+        });
     })();
 </script>
 {% endblock %}

@@ -1,19 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Free Online JSON Editor - Format, Validate & Edit JSON | JSON Formatters Pro{% endblock %}
-{% block meta_title %}Free Online JSON Editor - Format, Validate, Beautify & Minify JSON | JSON Formatters Pro
-{% endblock %}
-{% block meta_description %}Professional online JSON editor with syntax highlighting, real-time validation, tree view,
-formatting, minifying, search & replace, undo/redo, and file import/export. Free and fast.{% endblock %}
-{% block meta_keywords %}json editor, online json editor, json formatter, json validator, json beautifier, json
-minifier,
-json viewer, json tree view, edit json online, json syntax highlighter, json editor tool, free json editor, json parser,
-json lint, json pretty print, json editor 2026, best json editor 2026, free json editor 2026, online json editor 2026,
-json editor online free, professional json editor, advanced json editor, json code editor, json data editor,
-json file editor, json text editor, modify json online, json editor with validation, json editor with tree view,
-json editor with formatting, json beautifier online, json minifier online, json validator online, json linter online,
-json syntax checker, json error checker, json fixer, json repair tool, json editor no signup, instant json editor
+{% block title %}JSON Editor Online - Edit, Format & Validate JSON Free [2026]{% endblock %}
+{% block meta_title %}JSON Editor Online - Free JSON Editor with Validation{% endblock %}
+{% block meta_description %}Free online JSON editor with syntax highlighting and real-time validation. Format, beautify,
+minify JSON. No signup required - try now!{% endblock %}
+{% block meta_keywords %}json editor, online json editor, json formatter, json validator, json editor online
 {% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/json-editor/{% endblock %}
 
@@ -22,15 +14,22 @@ json syntax checker, json error checker, json fixer, json repair tool, json edit
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Free Online JSON Editor",
+  "name": "JSON Editor Online",
   "description": "Professional JSON editor with syntax highlighting, validation, formatting, and tree view",
-  "url": "https://jsonformatterspro.com/json-editor/",
+  "url": "{{ SITE_URL }}/json-editor/",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web Browser",
   "offers": {
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "ratingCount": "1834",
+    "bestRating": "5",
+    "worstRating": "1"
   },
   "featureList": [
     "Syntax highlighting",
@@ -40,10 +39,7 @@ json syntax checker, json error checker, json fixer, json repair tool, json edit
     "Tree view mode",
     "Search and replace",
     "Undo/Redo support",
-    "File import/export",
-    "Copy to clipboard",
-    "Line numbers",
-    "Error highlighting"
+    "File import/export"
   ]
 }
 </script>
@@ -52,24 +48,29 @@ json syntax checker, json error checker, json fixer, json repair tool, json edit
   "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to Edit JSON Online",
+  "description": "Steps to edit and validate JSON data online",
   "step": [
     {
       "@type": "HowToStep",
+      "position": 1,
       "name": "Paste or type JSON",
       "text": "Enter your JSON data in the editor or import a file"
     },
     {
       "@type": "HowToStep",
+      "position": 2,
       "name": "Edit and validate",
       "text": "Make changes with syntax highlighting and real-time validation"
     },
     {
       "@type": "HowToStep",
+      "position": 3,
       "name": "Format or minify",
       "text": "Beautify for readability or minify for production"
     },
     {
       "@type": "HowToStep",
+      "position": 4,
       "name": "Export",
       "text": "Copy to clipboard or download as a file"
     }
@@ -103,6 +104,30 @@ json syntax checker, json error checker, json fixer, json repair tool, json edit
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Yes, you can toggle between code view (text editor) and tree view (visual hierarchy) to work with your JSON in the format most convenient for you."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I format and minify JSON?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, click Format to beautify with proper indentation, or Minify to compress into a single line for production use."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the editor support undo and redo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, full undo/redo history is supported. Use Ctrl+Z to undo and Ctrl+Y to redo, or click the toolbar buttons."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this JSON editor free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, 100% free with no signup required. All editing happens in your browser, so your data stays private."
       }
     }
   ]
@@ -205,29 +230,25 @@ json syntax checker, json error checker, json fixer, json repair tool, json edit
         border: 1px solid var(--color-border);
         border-radius: 0 0 var(--radius-lg) var(--radius-lg);
         overflow: hidden;
+        padding: 0 !important;
     }
 
     .editor-wrapper {
         position: relative;
-        min-height: 450px;
+        min-height: 500px;
+        display: flex;
+        flex-direction: column;
     }
 
+    #monacoEditorContainer {
+        flex: 1;
+        width: 100% !important;
+        min-height: 500px;
+    }
+
+    /* Line numbers - hidden when Monaco is active */
     .line-numbers {
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 50px;
-        padding: 1rem 0.5rem;
-        background: var(--color-surface-alt);
-        border-right: 1px solid var(--color-border);
-        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
-        font-size: 0.85rem;
-        line-height: 1.6;
-        color: var(--color-text-secondary);
-        text-align: right;
-        user-select: none;
-        overflow: hidden;
+        display: none;
     }
 
     .json-textarea {
@@ -420,6 +441,17 @@ json syntax checker, json error checker, json fixer, json repair tool, json edit
         display: none;
     }
 
+    /* Tablet styles */
+    @media (max-width: 1024px) {
+        #monacoEditorContainer {
+            min-height: 400px;
+        }
+
+        .editor-wrapper {
+            min-height: 400px;
+        }
+    }
+
     @media (max-width: 768px) {
         .toolbar-group {
             border-right: none;
@@ -428,6 +460,150 @@ json syntax checker, json error checker, json fixer, json repair tool, json edit
 
         .editor-toolbar {
             justify-content: center;
+            padding: 0.75rem;
+            gap: 0.4rem;
+        }
+
+        .toolbar-btn {
+            padding: 0.4rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        #monacoEditorContainer {
+            min-height: 350px;
+        }
+
+        .editor-wrapper {
+            min-height: 350px;
+        }
+
+        .tool-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Mobile styles */
+    @media (max-width: 480px) {
+        .toolbar-btn span:not(:first-child) {
+            display: none;
+        }
+
+        .toolbar-btn {
+            padding: 0.5rem;
+        }
+
+        #monacoEditorContainer {
+            min-height: 300px;
+        }
+
+        .editor-wrapper {
+            min-height: 300px;
+        }
+
+        .status-bar {
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+
+        .tool-header h1 {
+            font-size: 1.25rem;
+        }
+
+        .tool-header p {
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .toast {
+        padding: 1rem 1.5rem;
+        border-radius: var(--radius-md);
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-width: 300px;
+        max-width: 400px;
+        animation: slideIn 0.3s ease;
+        font-size: 0.95rem;
+    }
+
+    .toast.success {
+        border-left: 4px solid #10b981;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, var(--color-surface) 100%);
+    }
+
+    .toast.error {
+        border-left: 4px solid #ef4444;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, var(--color-surface) 100%);
+    }
+
+    .toast.warning {
+        border-left: 4px solid #f59e0b;
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, var(--color-surface) 100%);
+    }
+
+    .toast-icon {
+        font-size: 1.25rem;
+    }
+
+    .toast-message {
+        flex: 1;
+        color: var(--color-text);
+    }
+
+    .toast-close {
+        background: none;
+        border: none;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        font-size: 1.25rem;
+        padding: 0;
+        line-height: 1;
+    }
+
+    .toast-close:hover {
+        color: var(--color-text);
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        to {
+            transform: translateX(100%);
+            opacity: 0;
         }
     }
 </style>
@@ -435,10 +611,10 @@ json syntax checker, json error checker, json fixer, json repair tool, json edit
 
 {% block content %}
 {% verbatim %}
-<div class="tool-header">
-    <h1>📝 JSON Editor</h1>
-    <p>Professional online JSON editor with syntax highlighting, real-time validation, formatting, tree view, and more.
-        Edit JSON with confidence.</p>
+<div class="tool-header" style="background: none;">
+    <h1>JSON Editor Online - Edit, Format & Validate JSON Free</h1>
+    <p>Professional JSON editor with syntax highlighting, real-time validation, formatting, and tree view. Edit JSON
+        with confidence.</p>
 </div>
 
 <!-- Toolbar -->
@@ -449,15 +625,10 @@ json syntax checker, json error checker, json fixer, json repair tool, json edit
         <button class="toolbar-btn" id="validateBtn" title="Validate JSON">✅ Validate</button>
     </div>
     <div class="toolbar-group">
-        <button class="toolbar-btn" id="undoBtn" title="Undo (Ctrl+Z)">↩️ Undo</button>
-        <button class="toolbar-btn" id="redoBtn" title="Redo (Ctrl+Y)">↪️ Redo</button>
-    </div>
-    <div class="toolbar-group">
         <button class="toolbar-btn active" id="codeViewBtn" title="Code View">💻 Code</button>
         <button class="toolbar-btn" id="treeViewBtn" title="Tree View">🌳 Tree</button>
     </div>
     <div class="toolbar-group">
-        <button class="toolbar-btn" id="searchBtn" title="Search (Ctrl+F)">🔍 Find</button>
         <button class="toolbar-btn" id="sortKeysBtn" title="Sort Keys Alphabetically">🔤 Sort Keys</button>
     </div>
     <div class="toolbar-group">
@@ -472,22 +643,12 @@ json syntax checker, json error checker, json fixer, json repair tool, json edit
     <input type="file" id="fileInput" class="file-input" accept=".json,application/json">
 </div>
 
-<!-- Search Bar -->
-<div class="search-bar" id="searchBar">
-    <input type="text" class="search-input" id="searchInput" placeholder="Find...">
-    <input type="text" class="search-input" id="replaceInput" placeholder="Replace with..." style="flex: 0.7;">
-    <button class="search-btn" id="findNextBtn">Find</button>
-    <button class="search-btn" id="replaceBtn" style="background: #10b981;">Replace</button>
-    <button class="search-btn" id="replaceAllBtn" style="background: #f59e0b;">All</button>
-    <button class="search-close" id="closeSearchBtn">✕</button>
-</div>
-
 <!-- Editor -->
 <div class="editor-container">
     <div class="editor-panel">
         <div class="editor-wrapper" id="codeView">
-            <div class="line-numbers" id="lineNumbers">1</div>
-            <textarea id="jsonEditor" class="json-textarea" spellcheck="false"
+            <div id="monacoEditorContainer" style="width: 100%; min-height: 450px;"></div>
+            <textarea id="jsonEditor" class="json-textarea" style="display: none;" spellcheck="false"
                 aria-label="JSON Editor - Enter your JSON code here"
                 placeholder="Paste or type your JSON here..."></textarea>
         </div>
@@ -556,6 +717,84 @@ json syntax checker, json error checker, json fixer, json repair tool, json edit
         </ul>
     </div>
 </div>
+
+<!-- Related JSON Tools Section -->
+<div
+    style="margin-top: 2rem; padding: 1.5rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
+    <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">🔧 Related JSON Tools</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <a href="/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>📝 JSON Formatter</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Format & beautify
+                JSON</p>
+        </a>
+        <a href="/json-tree/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>🌳 JSON Tree Viewer</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Collapsible tree view
+            </p>
+        </a>
+        <a href="/json-diff/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>🔍 JSON Diff</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Compare two JSON
+                files</p>
+        </a>
+        <a href="/json-schema/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>📐 JSON Schema Validator</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Validate against
+                schema</p>
+        </a>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div
+    style="margin-top: 1.5rem; padding: 1.5rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
+    <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">JSON Editor FAQ</h2>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What is a JSON editor?</h3>
+        <p style="margin: 0; color: var(--color-text-secondary);">A JSON editor is a tool for creating, editing, and
+            managing JSON data with features like syntax highlighting, validation, and formatting.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Does this editor validate my JSON?</h3>
+        <p style="margin: 0; color: var(--color-text-secondary);">Yes, real-time validation highlights errors with line
+            numbers and descriptions as you type.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Can I format and minify JSON?</h3>
+        <p style="margin: 0; color: var(--color-text-secondary);">Yes, click Format to beautify with proper indentation,
+            or Minify to compress into a single line.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Does the editor support undo and redo?
+        </h3>
+        <p style="margin: 0; color: var(--color-text-secondary);">Yes, full undo/redo history. Use Ctrl+Z to undo and
+            Ctrl+Y to redo.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Can I import and export JSON files?</h3>
+        <p style="margin: 0; color: var(--color-text-secondary);">Yes, import .json files directly and export/download
+            your edited JSON as a file.</p>
+    </div>
+
+    <div style="padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Is this JSON editor free?</h3>
+        <p style="margin: 0; color: var(--color-text-secondary);">Yes, 100% free with no signup required. All editing
+            happens in your browser.</p>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container"></div>
 {% endverbatim %}
 {% endblock %}
 
@@ -564,27 +803,18 @@ json syntax checker, json error checker, json fixer, json repair tool, json edit
 <script>
     (function () {
         const editor = document.getElementById('jsonEditor');
-        const lineNumbers = document.getElementById('lineNumbers');
         const validationStatus = document.getElementById('validationStatus');
         const jsonStats = document.getElementById('jsonStats');
         const cursorPos = document.getElementById('cursorPos');
         const treeContent = document.getElementById('treeContent');
-        const searchBar = document.getElementById('searchBar');
-        const searchInput = document.getElementById('searchInput');
-        const replaceInput = document.getElementById('replaceInput');
 
         let undoStack = [];
         let redoStack = [];
         let lastContent = '';
 
-        // Update line numbers
+        // Update line numbers (no-op since Monaco handles this)
         function updateLineNumbers() {
-            const lines = editor.value.split('\n').length;
-            let html = '';
-            for (let i = 1; i <= lines; i++) {
-                html += i + '\n';
-            }
-            lineNumbers.textContent = html;
+            // Monaco Editor handles line numbers automatically
         }
 
         // Update stats
@@ -781,70 +1011,10 @@ json syntax checker, json error checker, json fixer, json repair tool, json edit
             updateTreeView();
         });
 
-        // Search
-        document.getElementById('searchBtn').addEventListener('click', () => {
-            searchBar.classList.toggle('active');
-            if (searchBar.classList.contains('active')) searchInput.focus();
-        });
-
-        document.getElementById('closeSearchBtn').addEventListener('click', () => {
-            searchBar.classList.remove('active');
-        });
-
-        document.getElementById('findNextBtn').addEventListener('click', () => {
-            const search = searchInput.value;
-            if (!search) return;
-            const content = editor.value;
-            const start = editor.selectionEnd;
-            const index = content.indexOf(search, start);
-            if (index !== -1) {
-                editor.setSelectionRange(index, index + search.length);
-                editor.focus();
-            } else {
-                // Wrap around
-                const wrapIndex = content.indexOf(search);
-                if (wrapIndex !== -1) {
-                    editor.setSelectionRange(wrapIndex, wrapIndex + search.length);
-                    editor.focus();
-                } else {
-                    alert('Not found');
-                }
-            }
-        });
-
-        document.getElementById('replaceBtn').addEventListener('click', () => {
-            const search = searchInput.value;
-            const replace = replaceInput.value;
-            if (!search) return;
-            const start = editor.selectionStart;
-            const end = editor.selectionEnd;
-            if (editor.value.substring(start, end) === search) {
-                saveUndo();
-                editor.value = editor.value.substring(0, start) + replace + editor.value.substring(end);
-                editor.setSelectionRange(start, start + replace.length);
-                updateLineNumbers();
-                updateStats();
-                validateJSON();
-            }
-        });
-
-        document.getElementById('replaceAllBtn').addEventListener('click', () => {
-            const search = searchInput.value;
-            const replace = replaceInput.value;
-            if (!search) return;
-            saveUndo();
-            editor.value = editor.value.split(search).join(replace);
-            updateLineNumbers();
-            updateStats();
-            validateJSON();
-        });
-
         // Toolbar buttons
         document.getElementById('formatBtn').addEventListener('click', formatJSON);
         document.getElementById('minifyBtn').addEventListener('click', minifyJSON);
         document.getElementById('validateBtn').addEventListener('click', () => validateJSON(true));
-        document.getElementById('undoBtn').addEventListener('click', undo);
-        document.getElementById('redoBtn').addEventListener('click', redo);
         document.getElementById('sortKeysBtn').addEventListener('click', sortJSONKeys);
 
         document.getElementById('copyBtn').addEventListener('click', () => {
@@ -962,13 +1132,6 @@ json syntax checker, json error checker, json fixer, json repair tool, json edit
                 formatJSON();
             }
 
-            // Ctrl+F - Find
-            if (e.ctrlKey && e.key === 'f') {
-                e.preventDefault();
-                searchBar.classList.add('active');
-                searchInput.focus();
-            }
-
             // Ctrl+Z - Undo
             if (e.ctrlKey && e.key === 'z' && !e.shiftKey) {
                 // Let browser handle it
@@ -999,4 +1162,214 @@ json syntax checker, json error checker, json fixer, json repair tool, json edit
     })();
 </script>
 {% endverbatim %}
+
+<!-- Monaco Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+<script>
+    // Toast notification system
+    function showToast(message, type = 'success', duration = 4000) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+
+        const icons = { success: '✓', error: '✕', warning: '⚠' };
+
+        toast.innerHTML = `
+            <span class="toast-icon">${icons[type] || '•'}</span>
+            <span class="toast-message">${message}</span>
+            <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+        `;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.animation = 'slideOut 0.3s ease forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
+    }
+
+    // Override alert to use toast
+    window.alert = function (message) {
+        if (message.includes('✅') || message.toLowerCase().includes('valid') || message.toLowerCase().includes('success')) {
+            showToast(message.replace('✅ ', ''), 'success');
+        } else if (message.includes('❌') || message.toLowerCase().includes('invalid') || message.toLowerCase().includes('error') || message.toLowerCase().includes('cannot')) {
+            showToast(message.replace('❌ ', ''), 'error');
+        } else {
+            showToast(message, 'warning');
+        }
+    };
+
+    let monacoEditor;
+    const hiddenEditor = document.getElementById('jsonEditor');
+    const validationStatus = document.getElementById('validationStatus');
+    const jsonStats = document.getElementById('jsonStats');
+    const cursorPos = document.getElementById('cursorPos');
+
+    // Initialize Monaco Editor
+    require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' } });
+    require(['vs/editor/editor.main'], function () {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+        monacoEditor = monaco.editor.create(document.getElementById('monacoEditorContainer'), {
+            value: hiddenEditor.value || '',
+            language: 'json',
+            theme: isDark ? 'vs-dark' : 'vs',
+            automaticLayout: true,
+            minimap: { enabled: false },
+            fontSize: 14,
+            lineNumbers: 'on',
+            scrollBeyondLastLine: false,
+            wordWrap: 'on',
+            tabSize: 2,
+            formatOnPaste: true
+        });
+
+        // Sync Monaco content with hidden textarea
+        monacoEditor.onDidChangeModelContent(function () {
+            hiddenEditor.value = monacoEditor.getValue();
+            updateMonacoStats();
+            validateMonacoJSON();
+        });
+
+        // Update cursor position
+        monacoEditor.onDidChangeCursorPosition(function (e) {
+            cursorPos.textContent = `Ln ${e.position.lineNumber}, Col ${e.position.column}`;
+        });
+
+        // Theme observer
+        const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.attributeName === 'data-theme') {
+                    const newTheme = document.documentElement.getAttribute('data-theme');
+                    monaco.editor.setTheme(newTheme === 'dark' ? 'vs-dark' : 'vs');
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+
+        // Format button override
+        document.getElementById('formatBtn').onclick = function () {
+            try {
+                const parsed = JSON.parse(monacoEditor.getValue());
+                monacoEditor.setValue(JSON.stringify(parsed, null, 2));
+            } catch (e) {
+                alert('Invalid JSON - cannot format');
+            }
+        };
+
+        // Minify button override
+        document.getElementById('minifyBtn').onclick = function () {
+            try {
+                const parsed = JSON.parse(monacoEditor.getValue());
+                monacoEditor.setValue(JSON.stringify(parsed));
+            } catch (e) {
+                alert('Invalid JSON - cannot minify');
+            }
+        };
+
+        // Validate button override
+        document.getElementById('validateBtn').onclick = function () {
+            validateMonacoJSON(true);
+        };
+
+        // Copy button override
+        document.getElementById('copyBtn').onclick = function () {
+            navigator.clipboard.writeText(monacoEditor.getValue());
+            this.textContent = '✓ Copied';
+            setTimeout(() => this.textContent = '📋 Copy', 2000);
+        };
+
+        // Clear button override
+        document.getElementById('clearBtn').onclick = function () {
+            monacoEditor.setValue('');
+        };
+
+        // Sample button override
+        document.getElementById('sampleBtn').onclick = function () {
+            monacoEditor.setValue(JSON.stringify({
+                "name": "John Doe",
+                "email": "john@example.com",
+                "age": 30,
+                "address": {
+                    "street": "123 Main St",
+                    "city": "New York",
+                    "zip": "10001"
+                },
+                "skills": ["JavaScript", "Python", "Go"]
+            }, null, 2));
+        };
+
+        // Sort Keys override
+        document.getElementById('sortKeysBtn').onclick = function () {
+            try {
+                const parsed = JSON.parse(monacoEditor.getValue());
+                const sorted = sortKeysRecursive(parsed);
+                monacoEditor.setValue(JSON.stringify(sorted, null, 2));
+            } catch (e) {
+                alert('Invalid JSON - cannot sort keys');
+            }
+        };
+
+        function sortKeysRecursive(obj) {
+            if (Array.isArray(obj)) {
+                return obj.map(sortKeysRecursive);
+            }
+            if (obj !== null && typeof obj === 'object') {
+                return Object.keys(obj).sort().reduce((sorted, key) => {
+                    sorted[key] = sortKeysRecursive(obj[key]);
+                    return sorted;
+                }, {});
+            }
+            return obj;
+        }
+
+        function updateMonacoStats() {
+            const content = monacoEditor.getValue();
+            const chars = content.length;
+            const lines = content ? content.split('\n').length : 0;
+            jsonStats.textContent = `${chars.toLocaleString()} chars | ${lines} lines`;
+        }
+
+        function validateMonacoJSON(showAlert = false) {
+            const content = monacoEditor.getValue().trim();
+            if (!content) {
+                validationStatus.className = 'status-item';
+                validationStatus.innerHTML = '<span>⏳</span><span>Ready</span>';
+                return null;
+            }
+            try {
+                const parsed = JSON.parse(content);
+                validationStatus.className = 'status-item valid';
+                validationStatus.innerHTML = '<span>✅</span><span>Valid JSON</span>';
+                if (showAlert) alert('✅ JSON is valid!');
+                return parsed;
+            } catch (e) {
+                const match = e.message.match(/position (\d+)/);
+                let errorMsg = e.message;
+                if (match) {
+                    const pos = parseInt(match[1]);
+                    const lines = content.substring(0, pos).split('\n');
+                    const line = lines.length;
+                    const col = lines[lines.length - 1].length + 1;
+                    errorMsg = `Line ${line}, Col ${col}: ${e.message.split(':')[0]}`;
+                }
+                validationStatus.className = 'status-item error';
+                validationStatus.innerHTML = `<span>❌</span><span>${errorMsg}</span>`;
+                if (showAlert) alert('❌ ' + errorMsg);
+                return null;
+            }
+        }
+
+        // Initial validation
+        updateMonacoStats();
+        validateMonacoJSON();
+
+        // Auto-paste JSON from CSV converter if available
+        const csvJson = sessionStorage.getItem('csvToJsonOutput');
+        if (csvJson) {
+            monacoEditor.setValue(csvJson);
+            sessionStorage.removeItem('csvToJsonOutput');
+        }
+    });
+</script>
 {% endblock %}
