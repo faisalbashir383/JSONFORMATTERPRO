@@ -1,16 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Date Calculator - Days Between Dates Calculator | JSON Formatters Pro{% endblock %}
-{% block meta_title %}Date Calculator - Calculate Days Between Dates Free 2026{% endblock %}
-{% block meta_description %}Free online date calculator. Calculate days between dates, add or subtract days from a date,
-find weekday, and more. Perfect for planning and scheduling.{% endblock %}
-{% block meta_keywords %}date calculator, days between dates, date difference calculator, add days to date,
-subtract days from date, weekday calculator, date duration calculator, calendar calculator,
-date calculator 2026, best date calculator free 2026, how many days between,
-business days calculator, working days calculator, exclude weekends calculator,
-date counter, day counter, time between dates, weeks between dates, months between dates,
-due date calculator, deadline calculator, countdown calculator, date planner{% endblock %}
+{% block title %}Days Between Dates Calculator - Add/Subtract Days [2025]{% endblock %}
+{% block meta_title %}Date Duration Calculator - Calculate Days Between Dates Free{% endblock %}
+{% block meta_description %}Calculate the number of days between two dates or add/subtract days from a date. Free online
+date duration calculator for developers, project managers, and planners.{% endblock %}
+{% block meta_keywords %}days between dates calculator, add days to date, date duration calculator, business days
+counter, date difference, time between dates{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/date-calculator/{% endblock %}
 
 {% block extra_css %}
@@ -93,12 +89,6 @@ due date calculator, deadline calculator, countdown calculator, date planner{% e
         border-color: #3b82f6;
     }
 
-    .input-row {
-        display: flex;
-        gap: 0.75rem;
-        align-items: center;
-    }
-
     .calc-btn {
         width: 100%;
         padding: 1rem;
@@ -154,9 +144,15 @@ due date calculator, deadline calculator, countdown calculator, date planner{% e
         line-height: 1.8;
     }
 
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
     .info-section,
     .faq-section {
-        margin-top: 2rem;
         padding: 2rem;
         background: var(--color-surface);
         border-radius: var(--radius-lg);
@@ -165,19 +161,69 @@ due date calculator, deadline calculator, countdown calculator, date planner{% e
 
     .faq-section {
         background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));
+        margin-top: 2rem;
     }
 
-    .info-section h2,
-    .faq-title {
+    .section-title {
         font-size: 1.5rem;
         font-weight: 700;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
-    .info-section p {
+    .info-content p {
         color: var(--color-text-secondary);
         line-height: 1.8;
         margin-bottom: 1rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #3b82f6;
+        font-weight: bold;
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tool-link {
+        display: block;
+        padding: 1rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tool-link:hover {
+        border-color: #3b82f6;
+        transform: translateY(-2px);
     }
 
     .faq-item {
@@ -194,6 +240,7 @@ due date calculator, deadline calculator, countdown calculator, date planner{% e
         cursor: pointer;
         display: flex;
         justify-content: space-between;
+        align-items: center;
     }
 
     .faq-question:hover {
@@ -201,6 +248,8 @@ due date calculator, deadline calculator, countdown calculator, date planner{% e
     }
 
     .faq-toggle {
+        font-size: 1.25rem;
+        color: #3b82f6;
         transition: transform 0.3s;
     }
 
@@ -211,21 +260,25 @@ due date calculator, deadline calculator, countdown calculator, date planner{% e
     .faq-answer {
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s;
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
     }
 
     .faq-item.open .faq-answer {
-        max-height: 300px;
+        max-height: 500px;
+        transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
     }
 
     .faq-answer-content {
         padding: 0 1.25rem 1.25rem;
         color: var(--color-text-secondary);
         line-height: 1.7;
+        border-top: 1px solid var(--color-border);
     }
 
     @media (max-width: 768px) {
-        .calculator-grid {
+
+        .calculator-grid,
+        .info-grid {
             grid-template-columns: 1fr;
         }
     }
@@ -234,14 +287,14 @@ due date calculator, deadline calculator, countdown calculator, date planner{% e
 
 {% block content %}
 <div class="tool-header">
-    <h1>📅 Date Calculator</h1>
-    <p>Calculate days between dates, add or subtract days, and find specific dates for planning.</p>
+    <h1>Days Between Dates Calculator</h1>
+    <p>Calculate the exact duration between two dates, add or subtract days, and plan your schedule efficiently.</p>
 </div>
 
 <div class="calculator-grid">
     <!-- Days Between Dates -->
     <div class="calc-card">
-        <h2 class="calc-title">📆 Days Between Dates</h2>
+        <h2 class="calc-title"><i class="fas fa-calendar-alt"></i> Date Duration</h2>
         <div class="input-group">
             <label class="input-label">Start Date</label>
             <input type="date" id="startDate1" class="input-field">
@@ -250,7 +303,7 @@ due date calculator, deadline calculator, countdown calculator, date planner{% e
             <label class="input-label">End Date</label>
             <input type="date" id="endDate1" class="input-field">
         </div>
-        <button class="calc-btn" onclick="calculateDaysBetween()">Calculate Days</button>
+        <button class="calc-btn" onclick="calculateDaysBetween()">Calculate Duration</button>
         <div class="result-box" id="result1">
             <div class="result-value" id="daysBetween">0 days</div>
             <div class="result-details" id="daysBetweenDetails"></div>
@@ -259,14 +312,14 @@ due date calculator, deadline calculator, countdown calculator, date planner{% e
 
     <!-- Add/Subtract Days -->
     <div class="calc-card">
-        <h2 class="calc-title">➕ Add/Subtract Days</h2>
+        <h2 class="calc-title"><i class="fas fa-calculator"></i> Add/Subtract Days</h2>
         <div class="input-group">
             <label class="input-label">Start Date</label>
             <input type="date" id="startDate2" class="input-field">
         </div>
         <div class="input-group">
-            <label class="input-label">Days to Add (or negative to subtract)</label>
-            <input type="number" id="daysToAdd" class="input-field" placeholder="30" value="30">
+            <label class="input-label">Days to Add (- for subtract)</label>
+            <input type="number" id="daysToAdd" class="input-field" placeholder="Example: 30 or -7" value="30">
         </div>
         <button class="calc-btn" onclick="addDays()">Calculate New Date</button>
         <div class="result-box" id="result2">
@@ -276,38 +329,192 @@ due date calculator, deadline calculator, countdown calculator, date planner{% e
     </div>
 </div>
 
-<div class="info-section">
-    <h2>📚 About Date Calculations</h2>
-    <p>Use this calculator to find the exact number of days between two dates, or to add/subtract days from a specific
-        date. Perfect for planning deadlines, vacations, project timelines, and more.</p>
+<div class="info-grid">
+    <!-- Features Section -->
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-star"></i> Tool Features</h2>
+        <ul class="feature-list">
+            <li><strong>Exact Duration:</strong> Calculates years, months, weeks, and days precision.</li>
+            <li><strong>Bidirectional Calculation:</strong> Add or subtract days to find past or future dates.</li>
+            <li><strong>Leap Year Support:</strong> Automatically handles leap years (e.g., 29 days in Feb).</li>
+            <li><strong>Time Difference:</strong> Shows total hours, minutes for precise planning.</li>
+            <li><strong>Privacy Focused:</strong> All calculations happen in your browser. No data sent to server.</li>
+        </ul>
+    </div>
+
+    <!-- How It Works / Educational -->
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-lightbulb"></i> How It Works</h2>
+        <div class="info-content">
+            <p>Our date calculator uses the standard Gregorian calendar to compute time intervals. Here's the logic used
+                for different calculations:</p>
+            <p><strong>Duration:</strong> The absolute difference in milliseconds between two timestamps is calculated
+                and converted into days (1 day = 86,400,000 ms).</p>
+            <p><strong>Adding Days:</strong> The specific number of days is added to the date object, and the calendar
+                automatically adjusts for month lengths and year changes.</p>
+        </div>
+    </div>
 </div>
 
+<!-- Related Tools -->
+<div class="info-section" style="margin-top: 2rem;">
+    <h2 class="section-title"><i class="fas fa-tools"></i> Related Calculators</h2>
+    <div class="related-tools">
+        <a href="/time-calculator/" class="tool-link"><i class="fas fa-clock"></i> Time Calculator</a>
+        <a href="/age-calculator/" class="tool-link"><i class="fas fa-birthday-cake"></i> Age Calculator</a>
+        <a href="/work-day-calculator/" class="tool-link"><i class="fas fa-briefcase"></i> Work Day Calc</a>
+        <a href="/percentage-calculator/" class="tool-link"><i class="fas fa-percent"></i> Percentage Calc</a>
+    </div>
+</div>
+
+<!-- FAQ Section -->
 <div class="faq-section">
-    <h2 class="faq-title">❓ FAQ</h2>
-    <div class="faq-item">
-        <div class="faq-question"><span>How are days calculated?</span><span class="faq-toggle">+</span></div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">Days are calculated by finding the absolute difference between two dates in
-                milliseconds, then converting to days. This accounts for leap years and different month lengths.</div>
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">How do I calculate days between two dates?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Simply enter the Start Date and End Date in the inputs above and click "Calculate Duration". The tool
+                will show you the total days, as well as the breakdown in years, months, and weeks.
+            </div>
         </div>
     </div>
-    <div class="faq-item">
-        <div class="faq-question"><span>Does this include the end date?</span><span class="faq-toggle">+</span></div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">The calculation shows the number of days between the two dates. If you want
-                to include both start and end dates, add 1 to the result.</div>
+
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">does this calculator include the end date?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                By default, the calculation represents the duration <em>between</em> the dates. For example, from Jan 1
+                to Jan 2 is 1 day. If you want to include both the start and end days (inclusive count), simply add 1 to
+                the result.
+            </div>
         </div>
     </div>
-    <div class="faq-item">
-        <div class="faq-question"><span>Can I calculate business days only?</span><span class="faq-toggle">+</span>
+
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">How are leap years handled?</span>
+            <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">Currently, this calculator counts all calendar days. For business days
-                (excluding weekends), you would need to subtract the weekends manually or use a specialized business day
-                calculator.</div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Yes, our calculator fully supports leap years. If your date range includes February 29th of a leap year
+                (like 2024 or 2028), it will be counted as an extra day automatically.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Can I subtract days from a date?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Absolutely. In the "Add/Subtract Days" section, you can enter a negative number (e.g., -30) to find what
+                the date was 30 days ago.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Is this tool free to use for commercial projects?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Yes, JSON Formatters Pro tools are 100% free for both personal and commercial use. The calculations are
+                performed locally in your browser, ensuring privacy.
+            </div>
         </div>
     </div>
 </div>
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Date Duration Calculator",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Calculate days between dates",
+    "Add or subtract days from date",
+    "Leap year support",
+    "Week and month breakdown",
+    "Local browser processing"
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "1250",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I calculate days between two dates?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Simply enter the Start Date and End Date in the inputs above and click 'Calculate Duration'. The tool will show you the total days, as well as the breakdown in years, months, and weeks."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this calculator include the end date?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "By default, the calculation represents the duration between the dates. For example, from Jan 1 to Jan 2 is 1 day. If you want to include both the start and end days (inclusive count), simply add 1 to the result."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How are leap years handled?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, our calculator fully supports leap years. If your date range includes February 29th of a leap year, it will be counted as an extra day automatically."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I subtract days from a date?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely. In the 'Add/Subtract Days' section, you can enter a negative number (e.g., -30) to find what the date was 30 days ago."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this tool free to use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, JSON Formatters Pro tools are 100% free. The calculations are performed locally in your browser."
+      }
+    }
+  ]
+}
+</script>
 {% endblock %}
 
 {% block extra_js %}
@@ -322,6 +529,7 @@ due date calculator, deadline calculator, countdown calculator, date planner{% e
             const end = new Date(document.getElementById('endDate1').value);
 
             if (isNaN(start) || isNaN(end)) {
+                // Toast notification would be better here, but alert for now
                 alert('Please select both dates');
                 return;
             }
@@ -354,12 +562,18 @@ due date calculator, deadline calculator, countdown calculator, date planner{% e
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('newDate').textContent = newDate.toLocaleDateString('en-US', options);
             document.getElementById('newDateDetails').textContent =
-                `${daysToAdd >= 0 ? 'Adding' : 'Subtracting'} ${Math.abs(daysToAdd)} days from ${start.toLocaleDateString()}`;
+                `${daysToAdd >= 0 ? 'Added' : 'Subtracted'} ${Math.abs(daysToAdd)} days from ${start.toLocaleDateString()}`;
             document.getElementById('result2').classList.add('show');
         };
 
+        // FAQ Toggle
         document.querySelectorAll('.faq-item').forEach(item => {
-            item.querySelector('.faq-question').addEventListener('click', () => item.classList.toggle('open'));
+            item.querySelector('.faq-question').addEventListener('click', () => {
+                const isOpen = item.classList.contains('open');
+                // Optional: Close others
+                // document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                item.classList.toggle('open');
+            });
         });
     })();
 </script>

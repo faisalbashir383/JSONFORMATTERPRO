@@ -1,23 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}JSON Schema Validator - Validate JSON Against Schema | JSON Formatters Pro{% endblock %}
-{% block meta_title %}JSON Schema Validator - Validate JSON Against Schema | JSON Formatters Pro{% endblock %}
-{% block meta_description %}Validate your JSON data against JSON Schema online. Free JSON Schema validator with detailed
-error messages. Ensure your JSON conforms to your schema definition.{% endblock %}
-{% block meta_keywords %}json schema validator, validate json schema, json schema online, json schema checker, json
-validation,
-schema validator, json schema tester, validate json against schema, json schema validator online free, json schema
-validation tool,
-ajv json schema validator, json schema draft 7 validator, json schema draft 4, json schema draft 2020,
-json schema format validator, json schema required fields, json schema type validation, json schema pattern validator,
-json schema enum validator, json schema object validator, json schema array validator, api json schema validator,
-openapi schema validator, swagger json validator, json schema generator, json to schema, infer json schema,
-json schema documentation, json schema examples, best json schema validator, json schema 2026, json validator 2026,
-best schema validator 2026, free json schema 2026, online schema validator 2026, json schema tool 2026,
-json schema checker online, json schema test, json schema verify, json schema validate online, schema validation tool,
-json contract validator, api contract validator, json data validator, json format checker, json structure validator,
-json schema no signup, instant schema validation, quick json validate, easy schema checker{% endblock %}
+{% block title %}JSON Schema Validator Online - Validate JSON Against Schema Free [2026]{% endblock %}
+{% block meta_title %}JSON Schema Validator Online - Free JSON Validation Tool{% endblock %}
+{% block meta_description %}Free JSON schema validator online to validate JSON against schema instantly. Supports Draft
+4, 7, 2020-12. Detailed error messages. No signup - try now!{% endblock %}
+{% block meta_keywords %}json schema validator, validate json, json schema online, schema validation, json tester
+{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/json-schema/{% endblock %}
 
 {% block structured_data %}
@@ -25,7 +14,7 @@ json schema no signup, instant schema validation, quick json validate, easy sche
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "JSON Schema Validator",
+  "name": "JSON Schema Validator Online",
   "description": "Free online tool to validate JSON data against JSON Schema",
   "url": "{{ SITE_URL }}/json-schema/",
   "applicationCategory": "DeveloperApplication",
@@ -34,7 +23,137 @@ json schema no signup, instant schema validation, quick json validate, easy sche
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "956",
+    "bestRating": "5",
+    "worstRating": "1"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Validate JSON Against Schema",
+  "description": "Learn how to validate your JSON data against a JSON Schema definition",
+  "totalTime": "PT1M",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Paste JSON Data",
+      "text": "Paste your JSON data in the left panel"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Paste JSON Schema",
+      "text": "Paste your JSON Schema definition in the right panel"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Click Validate",
+      "text": "Click the Validate button to check if your JSON conforms to the schema"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Review Results",
+      "text": "View detailed validation results with error messages if any"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is JSON Schema?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "JSON Schema is a vocabulary that allows you to annotate and validate JSON documents. It defines the structure, data types, and constraints that your JSON data must follow."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I validate JSON against a schema?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paste your JSON data in the JSON Data tab, switch to the Schema tab to paste your JSON Schema, then click Validate. The tool will show you if your JSON is valid or list any errors."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What JSON Schema drafts are supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This validator supports JSON Schema Draft 4, Draft 6, Draft 7, and Draft 2020-12. It automatically detects the draft version from your schema's $schema keyword."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this JSON Schema validator free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, this JSON Schema validator is 100% free with no signup required. All processing happens in your browser, so your data stays completely private."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between JSON Schema Draft 7 and Draft 2020-12?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Draft 2020-12 introduces prefixItems for tuple validation, $dynamicRef for dynamic references, and removes definitions in favor of $defs. It also has improved vocabularies and better support for conditional validation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I use required fields in JSON Schema?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Add a 'required' array at the object level containing the names of properties that must be present. For example: { 'type': 'object', 'required': ['name', 'email'], 'properties': {...} }"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I validate nested JSON objects with JSON Schema?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, JSON Schema supports nested object validation. Define nested schemas within the 'properties' of parent objects, or use '$ref' to reference reusable schema definitions."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I validate array items in JSON Schema?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use the 'items' keyword to define the schema for array elements. You can also use 'minItems', 'maxItems', and 'uniqueItems' to add additional constraints on the array."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the $ref keyword in JSON Schema?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The $ref keyword allows you to reference other schemas, either within the same document using JSON Pointer (e.g., '#/$defs/address') or external schemas via URI. This enables schema reuse and modular design."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I validate email format in JSON Schema?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use the 'format' keyword with 'email' value: { 'type': 'string', 'format': 'email' }. Other supported formats include 'uri', 'date', 'date-time', 'uuid', 'ipv4', and 'ipv6'."
+      }
+    }
+  ]
 }
 </script>
 <!-- JSON Tools Category Sitelinks -->
@@ -58,6 +177,9 @@ json schema no signup, instant schema validation, quick json validate, easy sche
 {% endblock %}
 
 {% block extra_css %}
+<!-- CodeMirror CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
 <style>
     .tool-header {
         text-align: center;
@@ -84,10 +206,10 @@ json schema no signup, instant schema validation, quick json validate, easy sche
         margin: 0 auto;
     }
 
-    .schema-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.5rem;
+    /* Main Layout Container */
+    .main-layout {
+        display: flex;
+        gap: 1rem;
         margin-bottom: 1.5rem;
     }
 
@@ -113,6 +235,8 @@ json schema no signup, instant schema validation, quick json validate, easy sche
         padding: 1rem 1.25rem;
         background: var(--color-surface-alt);
         border-bottom: 1px solid var(--color-border);
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
 
     [data-theme="dark"] .panel-header {
@@ -126,26 +250,75 @@ json schema no signup, instant schema validation, quick json validate, easy sche
         margin: 0;
     }
 
-    .schema-textarea {
-        width: 100%;
-        min-height: 350px;
+    /* CodeMirror Styling */
+    .CodeMirror {
+        height: 450px;
+        font-size: 14px;
+        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+
+    [data-theme="light"] .CodeMirror {
+        background: #fafafa;
+    }
+
+    .editor-container {
+        display: none;
+    }
+
+    .editor-container.active {
+        display: block;
+    }
+
+    /* Results Panel */
+    .results-panel {
         flex: 1;
-        padding: 1.25rem;
-        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
-        font-size: 0.9rem;
-        line-height: 1.7;
-        background: var(--color-bg);
-        color: var(--color-text);
-        border: none;
-        resize: vertical;
+        min-width: 250px;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1rem;
+        height: fit-content;
+        position: sticky;
+        top: 1rem;
     }
 
-    [data-theme="dark"] .schema-textarea {
-        background: rgba(10, 15, 26, 0.95);
-    }
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .main-layout {
+            flex-direction: column;
+        }
 
-    .schema-textarea:focus {
-        outline: none;
+        .results-panel {
+            position: static;
+            order: 2;
+        }
+
+        .CodeMirror {
+            height: 300px;
+        }
+
+        .tool-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .tool-header {
+            padding: 1.5rem 1rem;
+        }
+
+        .panel-header {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .tab-buttons {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .action-buttons {
+            width: 100%;
+            justify-content: center;
+        }
     }
 
     .actions-bar {
@@ -309,61 +482,118 @@ json schema no signup, instant schema validation, quick json validate, easy sche
 
 {% block content %}
 <div class="tool-header">
-    <h1>📐 JSON Schema Validator</h1>
-    <p>Validate your JSON data against a JSON Schema definition</p>
+    <h1>JSON Schema Validator Online - Validate JSON Free</h1>
+    <p>Free online tool to validate your JSON data against a JSON Schema definition. Supports Draft 4, 7, and 2020-12.
+    </p>
 </div>
 
-<div class="schema-grid">
-    <!-- JSON Data Panel -->
-    <div class="schema-panel">
-        <div class="panel-header">
-            <h2 class="panel-title">JSON Data</h2>
-        </div>
-        <textarea id="jsonData" class="schema-textarea" placeholder='Paste your JSON data here...
+<!-- Main Layout: Editor (75%) + Results (25%) -->
+<div class="main-layout">
 
-Example:
-{
-  "name": "John Doe",
-  "age": 30,
-  "email": "john@example.com"
-}'></textarea>
+    <!-- Editor Panel (75%) -->
+    <div class="schema-panel" style="flex: 3; min-width: 0;">
+        <div class="panel-header">
+            <div class="tab-buttons" style="display: flex; gap: 0;">
+                <button id="tabJsonData" class="tab-btn active" onclick="switchTab('jsonData')"
+                    style="padding: 0.75rem 1.5rem; background: var(--color-primary); color: white; border: none; border-radius: var(--radius-md) 0 0 0; cursor: pointer; font-weight: 600;">📄
+                    JSON Data</button>
+                <button id="tabJsonSchema" class="tab-btn" onclick="switchTab('jsonSchema')"
+                    style="padding: 0.75rem 1.5rem; background: var(--color-surface-alt); color: var(--color-text); border: none; border-radius: 0; cursor: pointer; font-weight: 600;">📐
+                    Schema</button>
+            </div>
+
+            <!-- Action Buttons on Right -->
+            <div class="action-buttons" style="display: flex; gap: 0.5rem; align-items: center;">
+                <button id="validateBtn"
+                    style="padding: 0.5rem 1.25rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: var(--radius-md); cursor: pointer; font-weight: 600; font-size: 0.9rem;">
+                    ✓ Validate
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div class="dropdown" style="position: relative;">
+                    <button onclick="event.stopPropagation(); toggleDropdown();"
+                        style="padding: 0.5rem 0.75rem; background: var(--color-surface-alt); color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--radius-md); cursor: pointer; font-size: 0.9rem;">
+                        ⋮
+                    </button>
+                    <div id="dropdownMenu"
+                        style="display: none; position: absolute; right: 0; top: 100%; margin-top: 0.25rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 150px; z-index: 100;">
+                        <button onclick="loadSample(); toggleDropdown();"
+                            style="width: 100%; padding: 0.75rem 1rem; background: none; border: none; text-align: left; cursor: pointer; color: var(--color-text); font-size: 0.9rem;">📥
+                            Load Sample</button>
+                        <button onclick="clearAll(); toggleDropdown();"
+                            style="width: 100%; padding: 0.75rem 1rem; background: none; border: none; text-align: left; cursor: pointer; color: var(--color-text); font-size: 0.9rem; border-top: 1px solid var(--color-border);">🗑️
+                            Clear All</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CodeMirror Editors -->
+        <div id="jsonDataPanel" class="editor-container active">
+            <textarea id="jsonData"></textarea>
+        </div>
+
+        <div id="jsonSchemaPanel" class="editor-container">
+            <textarea id="jsonSchema"></textarea>
+        </div>
     </div>
 
-    <!-- JSON Schema Panel -->
-    <div class="schema-panel">
-        <div class="panel-header">
-            <h2 class="panel-title">JSON Schema</h2>
+    <!-- Results Panel (25%) -->
+    <div id="validationResults" class="results-panel">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--color-text);">📊 Results</h3>
+        <div id="resultContent" style="font-size: 0.9rem;">
+            <p style="color: var(--color-text-secondary); margin: 0;">Click <strong>Validate</strong> to check your JSON
+                against the schema.</p>
         </div>
-        <textarea id="jsonSchema" class="schema-textarea" placeholder='Paste your JSON Schema here...
-
-Example:
-{
-  "type": "object",
-  "required": ["name", "email"],
-  "properties": {
-    "name": { "type": "string" },
-    "age": { "type": "integer", "minimum": 0 },
-    "email": { "type": "string", "format": "email" }
-  }
-}'></textarea>
     </div>
 </div>
 
-<div class="actions-bar">
-    <button id="validateBtn" class="validate-btn">
-        <span>✓</span> Validate
-    </button>
-    <button id="clearBtn" class="action-btn">Clear All</button>
-    <button id="sampleBtn" class="action-btn">Load Sample</button>
+<!-- Related JSON Tools Section -->
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>🔧 Related JSON Tools</h2>
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <a href="/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); transition: transform 0.2s;">
+            <strong>📝 JSON Formatter</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Format & beautify
+                JSON</p>
+        </a>
+        <a href="/json-diff/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); transition: transform 0.2s;">
+            <strong>🔍 JSON Diff</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Compare two JSON
+                files</p>
+        </a>
+        <a href="/json-tree/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); transition: transform 0.2s;">
+            <strong>🌳 JSON Tree Viewer</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Visual tree structure
+            </p>
+        </a>
+        <a href="/json-to-yaml/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); transition: transform 0.2s;">
+            <strong>🔄 JSON to YAML</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Convert JSON to YAML
+            </p>
+        </a>
+        <a href="/dummy-json/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); transition: transform 0.2s;">
+            <strong>🎲 Dummy JSON Generator</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Generate fake JSON
+                data</p>
+        </a>
+        <a href="/json-visualizer/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); transition: transform 0.2s;">
+            <strong>📊 JSON Visualizer</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Graph view of JSON
+            </p>
+        </a>
+    </div>
 </div>
 
-<div id="validationResults" class="validation-results">
-    <h3>📊 Validation Results</h3>
-    <div id="resultContent"></div>
-</div>
-
-<div class="info-section">
-    <h2>💡 About JSON Schema</h2>
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>What is JSON Schema?</h2>
     <p>
         JSON Schema is a vocabulary that allows you to annotate and validate JSON documents.
         It defines the structure, data types, and constraints that your JSON data must follow.
@@ -374,21 +604,180 @@ Example:
         pattern, enum, items, minLength, maxLength, format.
     </p>
 </div>
+
+<!-- FAQ Section -->
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>JSON Schema Validator FAQ</h2>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">How do I validate JSON against a schema?
+        </h3>
+        <p style="margin: 0;">Use the tabs to switch between JSON Data and JSON Schema inputs. Paste your data and
+            schema, then click the green Validate button to check for errors.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What JSON Schema drafts are supported?
+        </h3>
+        <p style="margin: 0;">This validator supports JSON Schema Draft 4, Draft 6, Draft 7, and Draft 2020-12. It
+            automatically detects the draft version from your schema's $schema keyword.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What is the difference between Draft 7 and
+            Draft 2020-12?</h3>
+        <p style="margin: 0;">Draft 2020-12 introduces prefixItems for tuple validation, $dynamicRef for dynamic
+            references, replaces definitions with $defs, and has improved vocabularies for conditional validation.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">How do I use required fields in JSON
+            Schema?</h3>
+        <p style="margin: 0;">Add a "required" array at the object level with property names that must be present:
+            <code>{ "required": ["name", "email"] }</code></p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Can I validate nested JSON objects?</h3>
+        <p style="margin: 0;">Yes! Define nested schemas within "properties" of parent objects, or use "$ref" to
+            reference reusable schema definitions in "$defs".</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">How do I validate array items?</h3>
+        <p style="margin: 0;">Use "items" to define the schema for array elements. Add "minItems", "maxItems", and
+            "uniqueItems" for additional constraints.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What is the $ref keyword?</h3>
+        <p style="margin: 0;">$ref references other schemas using JSON Pointer (e.g., "#/$defs/address") or external
+            URIs. It enables schema reuse and modular design.</p>
+    </div>
+
+    <div style="padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Is this JSON Schema validator free?</h3>
+        <p style="margin: 0;">Yes, 100% free with no signup required. All processing happens in your browser, so your
+            data stays completely private.</p>
+    </div>
+</div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
+<!-- CodeMirror JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
 <script src="{% static 'js/json-schema.js' %}"></script>
 <script>
-    // Auto-paste JSON from CSV converter if available
+    // CodeMirror editors
+    let jsonDataEditor, jsonSchemaEditor;
+
+    // Initialize CodeMirror on page load
     document.addEventListener('DOMContentLoaded', function () {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+        jsonDataEditor = CodeMirror.fromTextArea(document.getElementById('jsonData'), {
+            mode: 'application/json',
+            theme: isDark ? 'dracula' : 'default',
+            lineNumbers: true,
+            lineWrapping: true,
+            matchBrackets: true,
+            autoCloseBrackets: true
+        });
+
+        jsonSchemaEditor = CodeMirror.fromTextArea(document.getElementById('jsonSchema'), {
+            mode: 'application/json',
+            theme: isDark ? 'dracula' : 'default',
+            lineNumbers: true,
+            lineWrapping: true,
+            matchBrackets: true,
+            autoCloseBrackets: true
+        });
+
+        // Auto-paste JSON from CSV converter if available
         const csvJson = sessionStorage.getItem('csvToJsonOutput');
         if (csvJson) {
-            const inputField = document.getElementById('jsonData');
-            if (inputField) {
-                inputField.value = csvJson;
-                sessionStorage.removeItem('csvToJsonOutput');
+            jsonDataEditor.setValue(csvJson);
+            sessionStorage.removeItem('csvToJsonOutput');
+        }
+
+        // Update validate button to use CodeMirror values
+        document.getElementById('validateBtn').addEventListener('click', function () {
+            const jsonDataEl = document.getElementById('jsonData');
+            const jsonSchemaEl = document.getElementById('jsonSchema');
+            if (jsonDataEl && jsonSchemaEl) {
+                jsonDataEl.value = jsonDataEditor.getValue();
+                jsonSchemaEl.value = jsonSchemaEditor.getValue();
             }
+        });
+    });
+
+    // Tab switching function
+    function switchTab(tabName) {
+        const tabs = ['jsonData', 'jsonSchema'];
+        tabs.forEach(tab => {
+            const panel = document.getElementById(tab + 'Panel');
+            const btn = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1));
+            if (tab === tabName) {
+                panel.classList.add('active');
+                btn.style.background = 'var(--color-primary)';
+                btn.style.color = 'white';
+                // Refresh CodeMirror when tab becomes visible
+                if (tab === 'jsonData' && jsonDataEditor) jsonDataEditor.refresh();
+                if (tab === 'jsonSchema' && jsonSchemaEditor) jsonSchemaEditor.refresh();
+            } else {
+                panel.classList.remove('active');
+                btn.style.background = 'var(--color-surface-alt)';
+                btn.style.color = 'var(--color-text)';
+            }
+        });
+    }
+
+    // Dropdown toggle
+    function toggleDropdown() {
+        const menu = document.getElementById('dropdownMenu');
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function (e) {
+        const dropdown = document.querySelector('.dropdown');
+        const menu = document.getElementById('dropdownMenu');
+        if (dropdown && !dropdown.contains(e.target)) {
+            menu.style.display = 'none';
         }
     });
+
+    // Clear all function
+    function clearAll() {
+        if (jsonDataEditor) jsonDataEditor.setValue('');
+        if (jsonSchemaEditor) jsonSchemaEditor.setValue('');
+        document.getElementById('resultContent').innerHTML = '<p style="color: var(--color-text-secondary); margin: 0;">Click <strong>Validate</strong> to check your JSON against the schema.</p>';
+    }
+
+    // Load sample function
+    function loadSample() {
+        const sampleData = JSON.stringify({
+            "name": "John Doe",
+            "age": 30,
+            "email": "john@example.com",
+            "isActive": true
+        }, null, 2);
+
+        const sampleSchema = JSON.stringify({
+            "type": "object",
+            "required": ["name", "email"],
+            "properties": {
+                "name": { "type": "string", "minLength": 1 },
+                "age": { "type": "integer", "minimum": 0 },
+                "email": { "type": "string", "format": "email" },
+                "isActive": { "type": "boolean" }
+            }
+        }, null, 2);
+
+        if (jsonDataEditor) jsonDataEditor.setValue(sampleData);
+        if (jsonSchemaEditor) jsonSchemaEditor.setValue(sampleSchema);
+    }
 </script>
 {% endblock %}

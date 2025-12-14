@@ -2391,6 +2391,284 @@ body {
     .btn {
         width: 100%;
     }
+}
+
+/* ====================
+   HOW-TO STEPS SECTION
+   ==================== */
+
+.how-to-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.step-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--backdrop-blur);
+    -webkit-backdrop-filter: var(--backdrop-blur);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--glass-border);
+    padding: 2rem;
+    text-align: center;
+    transition: all 300ms ease;
+    position: relative;
+}
+
+.step-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--glass-hover-shadow);
+    border-color: var(--color-primary);
+}
+
+.step-number {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 auto 1rem;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.step-card h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--color-text);
+}
+
+.step-card p {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+/* ====================
+   RELATED TOOLS GRID
+   ==================== */
+
+.related-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.tool-link-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--backdrop-blur);
+    -webkit-backdrop-filter: var(--backdrop-blur);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--glass-border);
+    padding: 1.5rem;
+    text-decoration: none;
+    transition: all 300ms ease;
+    display: block;
+}
+
+.tool-link-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: var(--glass-hover-shadow);
+    border-color: var(--color-primary);
+}
+
+.tool-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.tool-link-card h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+}
+
+.tool-link-card p {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* ====================
+   TRUST SIGNALS SECTION
+   ==================== */
+
+.trust-section {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
+}
+
+.trust-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 2rem 1rem;
+    background: var(--glass-bg);
+    backdrop-filter: var(--backdrop-blur);
+    -webkit-backdrop-filter: var(--backdrop-blur);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--glass-border);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.trust-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.trust-badges .badge {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    color: var(--color-text);
+    font-weight: 500;
+    transition: all 300ms ease;
+}
+
+.trust-badges .badge:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+/* ====================
+   COMPARISON TABLE
+   ==================== */
+
+.comparison-table-wrapper {
+    overflow-x: auto;
+    margin-top: 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--color-surface);
+    min-width: 600px;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 1rem 1.25rem;
+    text-align: center;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.comparison-table th {
+    background: var(--color-surface-alt);
+    font-weight: 600;
+    color: var(--color-text);
+    font-size: 0.95rem;
+}
+
+.comparison-table th:first-child,
+.comparison-table td:first-child {
+    text-align: left;
+    font-weight: 500;
+}
+
+.comparison-table tbody tr:hover {
+    background: var(--color-surface-alt);
+}
+
+.comparison-table td.yes {
+    color: #10b981;
+    font-size: 1.25rem;
+}
+
+.comparison-table td.no {
+    color: #ef4444;
+    font-size: 1.25rem;
+}
+
+.comparison-table td.partial {
+    color: #f59e0b;
+    font-size: 1rem;
+}
+
+/* FAQ Internal Links */
+.faq-item a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 200ms ease;
+}
+
+.faq-item a:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+}
+
+/* ====================
+   RESPONSIVE - NEW SECTIONS
+   ==================== */
+
+@media (max-width: 768px) {
+    .how-to-steps {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    .trust-badges {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .trust-badges .badge {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .how-to-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .trust-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .related-tools-grid {
+        grid-template-columns: 1fr;
+    }
 }/* ====================
    Fullscreen Modal Styles
    ==================== */

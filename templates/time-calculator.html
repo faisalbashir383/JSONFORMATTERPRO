@@ -1,14 +1,71 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Time Calculator - Time Duration & Time Addition Calculator | JSON Formatters Pro{% endblock %}
-{% block meta_title %}Time Calculator - Add Subtract Time Duration Free 2026{% endblock %}
-{% block meta_description %}Free time calculator. Add or subtract hours, minutes, and seconds. Calculate time duration
-between two times. Perfect for tracking work hours.{% endblock %}
-{% block meta_keywords %}time calculator, time duration calculator, add time, subtract time, hours calculator,
-time difference calculator, time calculator 2026, work hours calculator,
-hours minutes seconds calculator, elapsed time calculator, time span calculator{% endblock %}
+{% block title %}Time Duration Calculator - Add & Subtract Hours/Minutes [2025]{% endblock %}
+{% block meta_title %}Time Calculator - Calculate Duration & Add Time Free{% endblock %}
+{% block meta_description %}Free time calculator. Add or subtract hours and minutes, calculate duration between two
+times. Perfect for timesheets, work hours, and payroll.{% endblock %}
+{% block meta_keywords %}time calculator, time duration calculator, calculate hours worked, add time calculator, time
+difference, subtract time, work time calculator{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/time-calculator/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Time Calculator Pro",
+  "description": "Online tool to add or subtract time and calculate time duration between two points.",
+  "url": "{{ SITE_URL }}/time-calculator/",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Add hours, minutes, seconds",
+    "Subtract time durations",
+    "Calculate time difference",
+    "Works with 24-hour format",
+    "Instant local calculation"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How to calculate time duration?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To calculate duration, subtract the start time from the end time. If the end time is on the next day, add 24 hours to the end time before subtracting."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How to add hours to a time?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Add the hours to the current hour, minutes to minutes, and seconds to seconds. If minutes exceed 60, convert to hours. Our calculator handles this automatically."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I calculate work hours?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, use the 'Time Difference' mode. Enter your start time and end time to get the total hours and minutes worked."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -18,12 +75,14 @@ hours minutes seconds calculator, elapsed time calculator, time span calculator{
         padding: 3rem 2rem;
         background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
         border-radius: var(--radius-lg);
+        position: relative;
+        overflow: hidden;
     }
 
     .tool-header h1 {
         font-size: 2.5rem;
         font-weight: 800;
-        background: linear-gradient(135deg, #f59e0b, #3b82f6);
+        background: linear-gradient(135deg, #f59e0b 0%, #3b82f6 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 0.75rem;
@@ -48,6 +107,13 @@ hours minutes seconds calculator, elapsed time calculator, time span calculator{
         border-radius: var(--radius-lg);
         border: 1px solid var(--color-border);
         padding: 2rem;
+        box-shadow: 0 4px 20px var(--color-shadow);
+        transition: all 0.3s ease;
+    }
+
+    .calc-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px var(--color-shadow);
     }
 
     [data-theme="dark"] .calc-card {
@@ -58,6 +124,9 @@ hours minutes seconds calculator, elapsed time calculator, time span calculator{
         font-size: 1.15rem;
         font-weight: 700;
         margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     .time-inputs {
@@ -76,6 +145,7 @@ hours minutes seconds calculator, elapsed time calculator, time span calculator{
         color: var(--color-text);
         border: 2px solid var(--color-border);
         border-radius: var(--radius-md);
+        transition: border-color 0.2s;
     }
 
     .time-input:focus {
@@ -100,40 +170,57 @@ hours minutes seconds calculator, elapsed time calculator, time span calculator{
         border-radius: var(--radius-md);
         cursor: pointer;
         transition: all 0.2s;
+        margin-top: 1rem;
     }
 
     .calc-btn:hover {
         transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
     }
 
     .result-box {
-        margin-top: 1rem;
+        margin-top: 1.5rem;
         padding: 1.25rem;
         background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(59, 130, 246, 0.1));
         border-radius: var(--radius-md);
         text-align: center;
         display: none;
+        border: 1px solid rgba(245, 158, 11, 0.2);
     }
 
     .result-box.show {
         display: block;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .result-value {
-        font-size: 1.75rem;
+        font-size: 2rem;
+        /* Increased size */
         font-weight: 700;
         color: #f59e0b;
+        margin-bottom: 0.5rem;
     }
 
     .result-detail {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         color: var(--color-text-secondary);
-        margin-top: 0.5rem;
     }
 
     .op-toggle {
         display: flex;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
     }
 
     .op-btn {
@@ -144,6 +231,7 @@ hours minutes seconds calculator, elapsed time calculator, time span calculator{
         background: var(--color-bg);
         color: var(--color-text);
         cursor: pointer;
+        transition: all 0.2s;
     }
 
     .op-btn:first-child {
@@ -163,9 +251,153 @@ hours minutes seconds calculator, elapsed time calculator, time span calculator{
 
     .input-label {
         display: block;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         color: var(--color-text-secondary);
         margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    /* Common Info Sections (Reused) */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .info-section,
+    .faq-section {
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .faq-section {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(59, 130, 246, 0.05));
+        margin-top: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #f59e0b;
+        /* Amber checkmark */
+        font-weight: bold;
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tool-link {
+        display: block;
+        padding: 1rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tool-link:hover {
+        border-color: #f59e0b;
+        transform: translateY(-2px);
+    }
+
+    .faq-item {
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+        margin-bottom: 0.75rem;
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+    }
+
+    .faq-question {
+        padding: 1.25rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .faq-question:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .faq-toggle {
+        font-size: 1.25rem;
+        color: #f59e0b;
+        transition: transform 0.3s;
+    }
+
+    .faq-item.open .faq-toggle {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+    }
+
+    .faq-item.open .faq-answer {
+        max-height: 500px;
+        transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
+    }
+
+    .faq-answer-content {
+        padding: 0 1.25rem 1.25rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        border-top: 1px solid var(--color-border);
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.85rem;
+        }
+
+        .calculator-grid,
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .time-inputs {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
     }
 </style>
 {% endblock %}
@@ -173,7 +405,8 @@ hours minutes seconds calculator, elapsed time calculator, time span calculator{
 {% block content %}
 <div class="tool-header">
     <h1>⏱️ Time Calculator</h1>
-    <p>Add or subtract time durations, calculate time differences, and convert between time formats.</p>
+    <p>Add or subtract time durations, calculate time differences, and convert between time formats. Ideal for tracking
+        hours.</p>
 </div>
 
 <div class="calculator-grid">
@@ -204,7 +437,7 @@ hours minutes seconds calculator, elapsed time calculator, time span calculator{
             <input type="number" id="s2" class="time-input" placeholder="SS" min="0" value="30">
         </div>
 
-        <button class="calc-btn" onclick="calculateAddSub()">Calculate</button>
+        <button class="calc-btn" onclick="calculateAddSub()">Calculate Result</button>
         <div class="result-box" id="result1">
             <div class="result-value" id="addSubResult">4:15:30</div>
             <div class="result-detail" id="addSubDetail"></div>
@@ -213,16 +446,16 @@ hours minutes seconds calculator, elapsed time calculator, time span calculator{
 
     <!-- Time Difference -->
     <div class="calc-card">
-        <h2 class="calc-title">🕐 Time Difference</h2>
+        <h2 class="calc-title">🕐 Calculate Duration (Time Difference)</h2>
 
-        <label class="input-label">Start Time</label>
+        <label class="input-label">Start Time (24h)</label>
         <div class="time-inputs">
-            <input type="number" id="start_h" class="time-input" placeholder="HH" min="0" max="23" value="9">
+            <input type="number" id="start_h" class="time-input" placeholder="HH" min="0" max="23" value="09">
             <span class="time-sep">:</span>
-            <input type="number" id="start_m" class="time-input" placeholder="MM" min="0" max="59" value="0">
+            <input type="number" id="start_m" class="time-input" placeholder="MM" min="0" max="59" value="00">
         </div>
 
-        <label class="input-label">End Time</label>
+        <label class="input-label">End Time (24h)</label>
         <div class="time-inputs">
             <input type="number" id="end_h" class="time-input" placeholder="HH" min="0" max="23" value="17">
             <span class="time-sep">:</span>
@@ -236,11 +469,107 @@ hours minutes seconds calculator, elapsed time calculator, time span calculator{
         </div>
     </div>
 </div>
+
+<div class="info-grid">
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-star"></i> Tool Features</h2>
+        <ul class="feature-list">
+            <li><strong>Time Addition:</strong> Easily add hours, minutes, and seconds to any timestamp.</li>
+            <li><strong>Time Subtraction:</strong> Calculate elapsed time by subtracting inputs.</li>
+            <li><strong>Duration Calculator:</strong> Find the exact gap between two times (e.g., 9:00 to 17:00).</li>
+            <li><strong>Intelligent:</strong> Automatically handles dates wrapping to the next day.</li>
+        </ul>
+    </div>
+
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-clock"></i> How It Works</h2>
+        <p>This calculator performs modulus arithmetic on time units. It converts all inputs to seconds or minutes,
+            performs the addition or subtraction, and then converts the result back into Hours:Minutes:Seconds format.
+        </p>
+        <p>for time difference, we simply subtract the start timestamp from the end timestamp, accounting for day
+            boundaries.</p>
+    </div>
+</div>
+
+<!-- Related Tools -->
+<div class="info-section" style="margin-top: 2rem;">
+    <h2 class="section-title"><i class="fas fa-tools"></i> Related Calculators</h2>
+    <div class="related-tools">
+        <a href="/date-calculator/" class="tool-link"><i class="fas fa-calendar-alt"></i> Date Calculator</a>
+        <a href="/age-calculator/" class="tool-link"><i class="fas fa-birthday-cake"></i> Age Calculator</a>
+        <a href="/percentage-calculator/" class="tool-link"><i class="fas fa-percentage"></i> Percentage Calculator</a>
+    </div>
+</div>
+
+<div class="faq-section">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">How do I calculate time duration?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                To calculate duration, subtract the start time from the end time. If the end time is on the next day,
+                add 24 hours to the end time before subtracting.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">How to add hours to a time?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Add the hours to the current hour, minutes to minutes, and seconds to seconds. If minutes exceed 60,
+                convert to hours. Our calculator handles this automatically.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Can I calculate work hours?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Yes, use the 'Time Difference' mode. Enter your start time and end time to get the total hours and
+                minutes worked.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Does it handle seconds?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Yes, the Add/Subtract mode supports seconds precision. The Duration mode primarily focuses on Hours and
+                Minutes for standard use cases.
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
     (function () {
+        // FAQ Toggle
+        document.querySelectorAll('.faq-item').forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                item.classList.toggle('open');
+            });
+        });
+
+        // ... Existing JS preserved ...
         let operation = 'add';
 
         window.setOp = function (op) {
@@ -248,7 +577,7 @@ hours minutes seconds calculator, elapsed time calculator, time span calculator{
             document.getElementById('addBtn').classList.toggle('active', op === 'add');
             document.getElementById('subBtn').classList.toggle('active', op === 'subtract');
         };
-
+        // ... rest of JS ...
         window.calculateAddSub = function () {
             const h1 = parseInt(document.getElementById('h1').value) || 0;
             const m1 = parseInt(document.getElementById('m1').value) || 0;

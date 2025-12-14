@@ -1,43 +1,24 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Percentage Calculator - Free Online Percent Calculator | JSON Formatters Pro{% endblock %}
-{% block meta_title %}Percentage Calculator - Calculate Percentages Online Free 2026{% endblock %}
-{% block meta_description %}Free online percentage calculator. Calculate X% of Y, percentage increase/decrease, what
-percent is X of Y, and more. Instant results with step-by-step explanations.{% endblock %}
-{% block meta_keywords %}percentage calculator, percent calculator, calculate percentage, how to calculate percentage,
-percentage increase calculator, percentage decrease calculator, percentage difference calculator,
-what is percent of, percent of number, find percentage, calculate percent,
-percentage change calculator, percent change, percentage growth, percentage decline,
-percentage off calculator, sale price calculator, discount percentage calculator,
-percentage formula, percentage calculation, percentage equation, percentage math,
-x percent of y, what percent is x of y, percentage between two numbers,
-percentage calculator 2026, best percentage calculator online free 2026,
-online percentage calculator, free percent calculator, quick percentage calculator,
-percentage finder, percentage solver, percentage tool, percentage converter,
-how to find percentage of a number, calculate percentage of total,
-percentage increase formula, percentage decrease formula, percentage change formula,
-grade percentage calculator, test percentage calculator, score percentage calculator,
-tip percentage calculator, sales percentage calculator, profit percentage calculator,
-loss percentage calculator, markup percentage calculator, margin percentage calculator,
-compound percentage calculator, simple percentage calculator, basic percentage calculator,
-reverse percentage calculator, original price calculator, percentage to decimal,
-decimal to percentage, fraction to percentage, percentage to fraction,
-percentage points, basis points calculator, parts per hundred,
-percentage error calculator, percentage yield calculator, percentage composition,
-body fat percentage calculator, percentage of completion, completion percentage{% endblock %}
+{% block title %}Percentage Calculator - Calculate Increase & Change Formula [2025]{% endblock %}
+{% block meta_title %}Percentage Calculator - Calculate Percent Change & Increase Free{% endblock %}
+{% block meta_description %}Free percentage calculator with step-by-step formulas. Calculate X% of Y, percentage
+increase/decrease, reverse percentage, and more.{% endblock %}
+{% block meta_keywords %}percentage calculator, percent change formula, calculate percentage increase, percentage
+difference, what percent is x of y, reverse percentage calculator{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/percentage-calculator/{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Percentage Calculator",
-  "description": "Free online percentage calculator with multiple calculation modes",
+  "@type": "SoftwareApplication",
+  "name": "Percentage Calculator Pro",
+  "description": "Comprehensive online percentage calculator for calculating increases, decreases, fractions, and reverse percentages.",
   "url": "{{ SITE_URL }}/percentage-calculator/",
-  "applicationCategory": "UtilityApplication",
-  "operatingSystem": "Web Browser",
+  "applicationCategory": "MathApplication",
+  "operatingSystem": "Any",
   "offers": {
     "@type": "Offer",
     "price": "0",
@@ -45,11 +26,10 @@ body fat percentage calculator, percentage of completion, completion percentage{
   },
   "featureList": [
     "Calculate X% of Y",
-    "Find what percent X is of Y",
-    "Calculate percentage increase",
-    "Calculate percentage decrease",
-    "Reverse percentage calculation",
-    "Step-by-step explanations"
+    "Calculate what percent X is of Y",
+    "Calculate percentage increase/decrease",
+    "Add or subtract percentage",
+    "Step-by-step formulas"
   ]
 }
 </script>
@@ -60,26 +40,42 @@ body fat percentage calculator, percentage of completion, completion percentage{
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "How do I calculate a percentage of a number?",
+      "name": "How to calculate percentage increase?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "To calculate X% of Y, multiply Y by X and divide by 100. For example, 20% of 150 = 150 × 20 ÷ 100 = 30. Our calculator does this instantly for you."
+        "text": "To calculate percentage increase: First, subtract the original value from the new value. Then, divide the result by the original value. Finally, multiply by 100. Formula: ((New - Old) / Old) * 100."
       }
     },
     {
       "@type": "Question",
-      "name": "How do I calculate percentage increase?",
+      "name": "How to find X% of Y?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Percentage increase = ((New Value - Original Value) / Original Value) × 100. For example, if a price goes from $50 to $65: ((65-50)/50) × 100 = 30% increase."
+        "text": "Multiply number Y by the percentage X, then divide by 100. For example, 20% of 50 is (50 * 20) / 100 = 10."
       }
     },
     {
       "@type": "Question",
-      "name": "How do I find what percent X is of Y?",
+      "name": "How to calculate percentage decrease?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "To find what percent X is of Y, divide X by Y and multiply by 100. For example, what percent is 25 of 200? (25/200) × 100 = 12.5%."
+        "text": "To calculate percentage decrease: Subtract the new value from the original value to find the difference. Divide the difference by the original value, then multiply by 100."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the reverse percentage formula?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To find the original value before a percentage increase, divide the final value by (1 + percentage/100). To find it before a decrease, divide by (1 - percentage/100)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this percentage calculator free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, this tool is completely free and runs in your browser for privacy."
       }
     }
   ]
@@ -89,6 +85,7 @@ body fat percentage calculator, percentage of completion, completion percentage{
 
 {% block extra_css %}
 <style>
+    /* ... Existing CSS preserved and augmented ... */
     .tool-header {
         text-align: center;
         margin-bottom: 2.5rem;
@@ -105,7 +102,6 @@ body fat percentage calculator, percentage of completion, completion percentage{
         background: linear-gradient(135deg, #10b981 0%, #3b82f6 50%, #8b5cf6 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        background-clip: text;
         margin-bottom: 0.75rem;
     }
 
@@ -133,20 +129,18 @@ body fat percentage calculator, percentage of completion, completion percentage{
     }
 
     .calc-card:hover {
-        box-shadow: 0 8px 30px var(--color-shadow);
         transform: translateY(-2px);
+        box-shadow: 0 8px 30px var(--color-shadow);
     }
 
     [data-theme="dark"] .calc-card {
         background: rgba(15, 23, 42, 0.95);
-        border-color: rgba(255, 255, 255, 0.08);
     }
 
     .calc-card-title {
         font-size: 1.1rem;
         font-weight: 700;
         margin-bottom: 1.25rem;
-        color: var(--color-text);
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -174,14 +168,12 @@ body fat percentage calculator, percentage of completion, completion percentage{
         color: var(--color-text);
         border: 2px solid var(--color-border);
         border-radius: var(--radius-md);
-        transition: all 200ms ease;
         text-align: center;
     }
 
     .calc-input:focus {
         outline: none;
-        border-color: var(--color-primary);
-        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        border-color: #10b981;
     }
 
     .input-label {
@@ -198,18 +190,11 @@ body fat percentage calculator, percentage of completion, completion percentage{
         border: none;
         border-radius: var(--radius-md);
         cursor: pointer;
-        transition: all 300ms ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-    }
-
-    .calc-btn.primary {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        transition: all 0.3s ease;
     }
 
-    .calc-btn.primary:hover {
+    .calc-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
     }
@@ -255,63 +240,81 @@ body fat percentage calculator, percentage of completion, completion percentage{
         line-height: 1.6;
     }
 
-    .result-explanation strong {
-        color: var(--color-text);
+    /* Common Info Sections */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
     }
 
-    /* Info Section */
-    .info-section {
-        margin-top: 3rem;
+    .info-section,
+    .faq-section {
         padding: 2rem;
         background: var(--color-surface);
         border-radius: var(--radius-lg);
         border: 1px solid var(--color-border);
     }
 
-    .info-section h2 {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        color: var(--color-text);
-    }
-
-    .info-section p {
-        color: var(--color-text-secondary);
-        line-height: 1.8;
-        margin-bottom: 1rem;
-    }
-
-    .formula-box {
-        background: var(--color-bg);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
-        padding: 1rem 1.5rem;
-        font-family: 'SF Mono', 'Consolas', monospace;
-        font-size: 1rem;
-        color: var(--color-text);
-        margin: 1rem 0;
-        text-align: center;
-    }
-
-    .formula-box span {
-        color: #10b981;
-        font-weight: 600;
-    }
-
-    /* FAQ Section */
     .faq-section {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(59, 130, 246, 0.05));
         margin-top: 2rem;
-        padding: 2rem;
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--color-border);
     }
 
-    .faq-title {
+    .section-title {
         font-size: 1.5rem;
         font-weight: 700;
         margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #10b981;
+        font-weight: bold;
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tool-link {
+        display: block;
+        padding: 1rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
         color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tool-link:hover {
+        border-color: #10b981;
+        transform: translateY(-2px);
     }
 
     .faq-item {
@@ -325,12 +328,10 @@ body fat percentage calculator, percentage of completion, completion percentage{
     .faq-question {
         padding: 1.25rem;
         font-weight: 600;
-        color: var(--color-text);
         cursor: pointer;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        transition: background 0.2s;
     }
 
     .faq-question:hover {
@@ -339,6 +340,7 @@ body fat percentage calculator, percentage of completion, completion percentage{
 
     .faq-toggle {
         font-size: 1.25rem;
+        color: #10b981;
         transition: transform 0.3s;
     }
 
@@ -349,17 +351,19 @@ body fat percentage calculator, percentage of completion, completion percentage{
     .faq-answer {
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s ease;
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
     }
 
     .faq-item.open .faq-answer {
         max-height: 500px;
+        transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
     }
 
     .faq-answer-content {
         padding: 0 1.25rem 1.25rem;
         color: var(--color-text-secondary);
         line-height: 1.7;
+        border-top: 1px solid var(--color-border);
     }
 
     @media (max-width: 768px) {
@@ -367,7 +371,8 @@ body fat percentage calculator, percentage of completion, completion percentage{
             font-size: 1.85rem;
         }
 
-        .calculator-grid {
+        .calculator-grid,
+        .info-grid {
             grid-template-columns: 1fr;
         }
 
@@ -385,9 +390,9 @@ body fat percentage calculator, percentage of completion, completion percentage{
 
 {% block content %}
 <div class="tool-header">
-    <h1>📊 Percentage Calculator</h1>
-    <p>Calculate percentages instantly with step-by-step explanations. Perfect for discounts, tips, grades, and more.
-    </p>
+    <h1>Percentage Calculator</h1>
+    <p>Perform any percentage calculation instantly: increase, decrease, percentage of a number, and more. Includes
+        step-by-step formulas.</p>
 </div>
 
 <div class="calculator-grid">
@@ -501,162 +506,102 @@ body fat percentage calculator, percentage of completion, completion percentage{
     </div>
 </div>
 
-<!-- Info Section -->
-<div class="info-section">
-    <h2>📚 How to Calculate Percentages</h2>
-    <p>
-        A percentage is a way of expressing a number as a fraction of 100. The word "percent" comes from the Latin
-        "per centum" meaning "by the hundred." Understanding percentages is essential for everyday tasks like
-        calculating discounts, tips, tax, grades, and financial calculations.
-    </p>
-
-    <h3 style="margin-top: 1.5rem; margin-bottom: 1rem;">Common Percentage Formulas</h3>
-
-    <div class="formula-box">
-        <span>X% of Y</span> = Y × (X ÷ 100)
+<div class="info-grid">
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-star"></i> Tool Features</h2>
+        <ul class="feature-list">
+            <li><strong>Multiple Modes:</strong> Increase, decrease, X of Y, Y in X.</li>
+            <li><strong>Step-by-Step:</strong> Shows the exact formula used for every calculation.</li>
+            <li><strong>Financial Ready:</strong> Perfect for discounts, taxes, tips, and interest.</li>
+            <li><strong>Reverse Logic:</strong> Calculate value before a percentage change.</li>
+            <li><strong>Privacy:</strong> No server uploads. instant local processing.</li>
+        </ul>
     </div>
 
-    <div class="formula-box">
-        <span>What % is X of Y</span> = (X ÷ Y) × 100
-    </div>
-
-    <div class="formula-box">
-        <span>Percentage Change</span> = ((New - Old) ÷ Old) × 100
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-lightbulb"></i> Understanding Percentages</h2>
+        <p>A percentage is simply a ratio expressed as a fraction of 100. It is a universal way to compare quantities.
+        </p>
+        <p><strong>Basic Formula:</strong> <code>(Part / Whole) × 100 = Percentage</code></p>
+        <p><strong>Example:</strong> If you have 2 apples out of 10 fruits, that is <code>(2/10)*100 = 20%</code>.</p>
     </div>
 </div>
 
-<!-- FAQ Section -->
+<!-- Related Tools -->
+<div class="info-section" style="margin-top: 2rem;">
+    <h2 class="section-title"><i class="fas fa-tools"></i> Related Calculators</h2>
+    <div class="related-tools">
+        <a href="/discount-calculator/" class="tool-link"><i class="fas fa-tags"></i> Discount Calculator</a>
+        <a href="/tip-calculator/" class="tool-link"><i class="fas fa-coins"></i> Tip Calculator</a>
+        <a href="/date-calculator/" class="tool-link"><i class="fas fa-calendar"></i> Date Calculator</a>
+        <a href="/loan-calculator/" class="tool-link"><i class="fas fa-home"></i> Loan Calculator</a>
+    </div>
+</div>
+
 <div class="faq-section">
-    <h2 class="faq-title">❓ Frequently Asked Questions</h2>
+    <h2 class="section-title">Frequently Asked Questions</h2>
 
-    <div class="faq-item">
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <div class="faq-question">
-            <span>How do I calculate a percentage of a number?</span>
+            <span itemprop="name">How do I calculate a percentage of a number?</span>
             <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
                 To calculate X% of Y, multiply Y by X and divide by 100. For example, to find 20% of 150: 150 × 20 ÷ 100
-                = 30. This means 20% of 150 is 30.
+                = 30.
             </div>
         </div>
     </div>
 
-    <div class="faq-item">
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <div class="faq-question">
-            <span>How do I calculate percentage increase between two numbers?</span>
+            <span itemprop="name">How do I calculate percentage increase between two numbers?</span>
             <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
                 Use the formula: ((New Value - Original Value) ÷ Original Value) × 100. For example, if a price
-                increases from $50 to $65: ((65 - 50) ÷ 50) × 100 = 30%. The price increased by 30%.
+                increases from $50 to $65: ((65 - 50) ÷ 50) × 100 = 30%.
             </div>
         </div>
     </div>
 
-    <div class="faq-item">
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <div class="faq-question">
-            <span>What is the difference between percentage change and percentage points?</span>
+            <span itemprop="name">What is the difference between percentage change and percentage points?</span>
             <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
                 Percentage points measure the absolute difference between two percentages, while percentage change
-                measures the relative change. For example, if interest rates go from 5% to 7%, that's a 2 percentage
-                point increase, but a 40% percentage increase ((7-5)/5 × 100).
+                measures the relative change. For example, moving from 5% to 7% is a 2 percentage point increase, but a
+                40% percentage increase.
             </div>
         </div>
     </div>
 
-    <div class="faq-item">
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <div class="faq-question">
-            <span>How do I calculate the original price before a discount?</span>
+            <span itemprop="name">How do I calculate the original price before a discount?</span>
             <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
                 To find the original price before a X% discount, divide the sale price by (1 - X/100). For example, if
-                an item costs $80 after a 20% discount: $80 ÷ (1 - 0.20) = $80 ÷ 0.80 = $100 original price.
+                an item costs $80 after a 20% discount: $80 ÷ (1 - 0.20) = $100.
             </div>
         </div>
     </div>
 
-    <div class="faq-item">
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <div class="faq-question">
-            <span>How do I convert a fraction to a percentage?</span>
+            <span itemprop="name">How do I convert a fraction to a percentage?</span>
             <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
-                To convert a fraction to a percentage, divide the numerator by the denominator and multiply by 100. For
-                example, 3/4 = 0.75 × 100 = 75%. Similarly, 1/5 = 0.20 × 100 = 20%.
-            </div>
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">
-            <span>How do I calculate percentage for grades?</span>
-            <span class="faq-toggle">+</span>
-        </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
-                Divide the points earned by the total possible points and multiply by 100. For example, if you scored 85
-                out of 100 points: (85 ÷ 100) × 100 = 85%. This gives you your grade percentage.
-            </div>
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">
-            <span>What does "percent off" mean?</span>
-            <span class="faq-toggle">+</span>
-        </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
-                "Percent off" means a reduction from the original price. For example, "25% off" means you pay 75% of the
-                original price. If an item is $100 with 25% off, you pay $100 × 0.75 = $75.
-            </div>
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">
-            <span>How do I calculate tip percentage?</span>
-            <span class="faq-toggle">+</span>
-        </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
-                Multiply the bill amount by the tip percentage and divide by 100. For a 15% tip on a $50 bill: $50 × 15
-                ÷ 100 = $7.50 tip. The total with tip would be $57.50.
-            </div>
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">
-            <span>How do I calculate compound percentage?</span>
-            <span class="faq-toggle">+</span>
-        </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
-                For compound percentage growth, use the formula: Final = Initial × (1 + rate)^periods. For example,
-                $1000 growing at 5% for 3 years: $1000 × (1.05)³ = $1157.63. This accounts for interest on interest.
-            </div>
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question">
-            <span>Is this calculator accurate?</span>
-            <span class="faq-toggle">+</span>
-        </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">
-                Yes! Our calculator uses JavaScript's high-precision arithmetic to provide accurate results. All
-                calculations are performed locally in your browser, and we show step-by-step explanations so you can
-                verify the math.
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Divide the numerator by the denominator and multiply by 100. For example, 3/4 = 0.75 × 100 = 75%.
             </div>
         </div>
     </div>

@@ -1,39 +1,68 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Age Calculator - Free Online Age Calculator | JSON Formatters Pro{% endblock %}
-{% block meta_title %}Age Calculator - Calculate Your Exact Age Online Free 2026{% endblock %}
-{% block meta_description %}Free online age calculator. Calculate your exact age in years, months, days, hours, and
-minutes. Find age between two dates, birthdays calculator, and more.{% endblock %}
-{% block meta_keywords %}age calculator, calculate age, how old am i, age calculator online, exact age calculator,
-birthday calculator, date of birth calculator, dob calculator, age in days calculator,
-age difference calculator, time between dates, days between dates, years between dates,
-age calculator 2026, best age calculator free 2026, accurate age calculator,
-chronological age calculator, age in months, age in weeks, age in hours, age in minutes,
-retirement age calculator, life expectancy calculator, age calculator from birthday,
-korean age calculator, chinese age calculator, lunar age calculator,
-how many days old am i, how many weeks old am i, how many months old am i,
-next birthday calculator, days until birthday, birthday countdown, age on date,
-pet age calculator, dog years calculator, cat years calculator,
-pregnancy age calculator, baby age calculator, child age calculator,
-age at date, age as of today, age at specific date, historical age calculator{% endblock %}
+{% block title %}Age Calculator - Calculate Exact Age & Next Birthday [2025]{% endblock %}
+{% block meta_title %}Age Calculator - Calculate Your Exact Age Online Free{% endblock %}
+{% block meta_description %}Free age calculator. Calculate your exact age in years, months, days, and even minutes. Find
+out your next birthday countdown.{% endblock %}
+{% block meta_keywords %}age calculator, exact age calculator, chronological age, days until birthday, birthday
+countdown, how old am i, date of birth calculator{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/age-calculator/{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Age Calculator",
-  "description": "Free online calculator to find your exact age in years, months, and days",
+  "@type": "SoftwareApplication",
+  "name": "Age Calculator Pro",
+  "description": "Calculate exact age from date of birth, next birthday countdown, and total days lived.",
   "url": "{{ SITE_URL }}/age-calculator/",
   "applicationCategory": "UtilityApplication",
-  "operatingSystem": "Web Browser",
+  "operatingSystem": "Any",
   "offers": {
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD"
-  }
+  },
+  "featureList": [
+    "Exact age in years, months, days",
+    "Next birthday countdown",
+    "Total days/hours lived",
+    "Age at specific date",
+    "Leap year support"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How does this age calculator work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This calculator finds the difference between your birth date and the target date. It accounts for leap years and varying month lengths to give you a precise age."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I calculate age between two dates?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Simply change the 'Calculate Age As Of' date to any future or past date to see how old you were or will be at that time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is chronological age?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Chronological age is the amount of time that has passed from your birth to the given date. It is your age measured in years, months, and days."
+      }
+    }
+  ]
 }
 </script>
 {% endblock %}
@@ -46,6 +75,8 @@ age at date, age as of today, age at specific date, historical age calculator{% 
         padding: 3rem 2rem;
         background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(139, 92, 246, 0.1) 50%, rgba(59, 130, 246, 0.1) 100%);
         border-radius: var(--radius-lg);
+        position: relative;
+        overflow: hidden;
     }
 
     .tool-header h1 {
@@ -54,7 +85,6 @@ age at date, age as of today, age at specific date, historical age calculator{% 
         background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        background-clip: text;
         margin-bottom: 0.75rem;
     }
 
@@ -76,6 +106,11 @@ age at date, age as of today, age at specific date, historical age calculator{% 
         border: 1px solid var(--color-border);
         padding: 2rem;
         box-shadow: 0 8px 32px var(--color-shadow);
+        transition: all 0.3s ease;
+    }
+
+    .calc-card:hover {
+        transform: translateY(-2px);
     }
 
     [data-theme="dark"] .calc-card {
@@ -159,6 +194,7 @@ age at date, age as of today, age at specific date, historical age calculator{% 
         background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
         border-radius: var(--radius-lg);
         margin-bottom: 1.5rem;
+        border: 1px solid rgba(236, 72, 153, 0.2);
     }
 
     .age-main {
@@ -219,6 +255,7 @@ age at date, age as of today, age at specific date, historical age calculator{% 
         background: var(--color-surface-alt);
         border-radius: var(--radius-md);
         text-align: center;
+        border: 1px solid var(--color-border);
     }
 
     .birthday-text {
@@ -230,10 +267,16 @@ age at date, age as of today, age at specific date, historical age calculator{% 
         color: #ec4899;
     }
 
-    /* Info and FAQ sections */
+    /* New Common Sections */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
     .info-section,
     .faq-section {
-        margin-top: 2rem;
         padding: 2rem;
         background: var(--color-surface);
         border-radius: var(--radius-lg);
@@ -241,20 +284,66 @@ age at date, age as of today, age at specific date, historical age calculator{% 
     }
 
     .faq-section {
+        margin-top: 2rem;
         background: linear-gradient(135deg, rgba(236, 72, 153, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
     }
 
-    .info-section h2,
+    .section-title,
     .faq-title {
         font-size: 1.5rem;
         font-weight: 700;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
-    .info-section p {
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
         color: var(--color-text-secondary);
-        line-height: 1.8;
-        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #ec4899;
+        /* Pink check */
+        font-weight: bold;
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tool-link {
+        display: block;
+        padding: 1rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tool-link:hover {
+        border-color: #ec4899;
+        transform: translateY(-2px);
     }
 
     .faq-item {
@@ -280,6 +369,7 @@ age at date, age as of today, age at specific date, historical age calculator{% 
 
     .faq-toggle {
         font-size: 1.25rem;
+        color: #ec4899;
         transition: transform 0.3s;
     }
 
@@ -290,17 +380,19 @@ age at date, age as of today, age at specific date, historical age calculator{% 
     .faq-answer {
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s ease;
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
     }
 
     .faq-item.open .faq-answer {
         max-height: 500px;
+        transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
     }
 
     .faq-answer-content {
         padding: 0 1.25rem 1.25rem;
         color: var(--color-text-secondary);
         line-height: 1.7;
+        border-top: 1px solid var(--color-border);
     }
 
     @media (max-width: 600px) {
@@ -318,7 +410,7 @@ age at date, age as of today, age at specific date, historical age calculator{% 
 {% block content %}
 <div class="tool-header">
     <h1>🎂 Age Calculator</h1>
-    <p>Calculate your exact age in years, months, days, hours, and more. Find out how old you are today!</p>
+    <p>Calculate your exact age in years, months, days, and hours. See your next birthday countdown instantly.</p>
 </div>
 
 <div class="calculator-container">
@@ -378,52 +470,84 @@ age at date, age as of today, age at specific date, historical age calculator{% 
     </div>
 </div>
 
-<div class="info-section">
-    <h2>📚 How Age is Calculated</h2>
-    <p>Your age is calculated by finding the difference between your birthdate and today's date (or a specified date).
-        The result is broken down into years, months, and days for a precise age calculation.</p>
+<div class="info-grid">
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-star"></i> Tool Features</h2>
+        <ul class="feature-list">
+            <li><strong>Precision:</strong> Calculate age down to the day and hour.</li>
+            <li><strong>Flexible:</strong> "Age As Of" feature lets you calculate age for past or future dates.</li>
+            <li><strong>Countdown:</strong> Shows exactly how many days until your next birthday.</li>
+            <li><strong>Breakdown:</strong> See how many total weeks, days, or hours you've lived.</li>
+        </ul>
+    </div>
+
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-info-circle"></i> How Age is Calculated</h2>
+        <p>Your age is calculated by finding the difference between your birthdate and today's date (or a specified
+            date). The result is broken down into years, months, and days for a precise chronological age.</p>
+        <p>This tool accounts for variations in month lengths and leap years to ensure accuracy.</p>
+    </div>
+</div>
+
+<!-- Related Tools -->
+<div class="info-section" style="margin-top: 2rem;">
+    <h2 class="section-title"><i class="fas fa-tools"></i> Related Calculators</h2>
+    <div class="related-tools">
+        <a href="/date-calculator/" class="tool-link"><i class="fas fa-calendar-alt"></i> Date Calculator</a>
+        <a href="/time-calculator/" class="tool-link"><i class="fas fa-clock"></i> Time Calculator</a>
+        <a href="/percentage-calculator/" class="tool-link"><i class="fas fa-percentage"></i> Percentage Calculator</a>
+    </div>
 </div>
 
 <div class="faq-section">
     <h2 class="faq-title">❓ Frequently Asked Questions</h2>
 
-    <div class="faq-item">
-        <div class="faq-question"><span>How does this age calculator work?</span><span class="faq-toggle">+</span></div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">This calculator finds the difference between your birth date and the target
-                date (default: today). It calculates your exact age in years, months, and days, plus totals in months,
-                weeks, days, and hours.</div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">How does this age calculator work?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                This calculator finds the difference between your birth date and the target date (default: today). It
+                calculates your exact age in years, months, and days, plus totals in months, weeks, days, and hours.
+            </div>
         </div>
     </div>
-    <div class="faq-item">
-        <div class="faq-question"><span>Is this calculator accurate for all dates?</span><span
-                class="faq-toggle">+</span></div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">Yes! It accounts for leap years and varying month lengths to give you an
-                accurate age calculation for any valid date combination.</div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Is this calculator accurate for all dates?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Yes! It accounts for leap years and varying month lengths to give you an accurate age calculation for
+                any valid date combination.
+            </div>
         </div>
     </div>
-    <div class="faq-item">
-        <div class="faq-question"><span>Can I calculate age between two specific dates?</span><span
-                class="faq-toggle">+</span></div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">Yes! Simply change the "Calculate Age As Of" date to any date you want. This
-                lets you find your age at any point in time, past or future.</div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Can I calculate age between two specific dates?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Yes! Simply change the "Calculate Age As Of" date to any date you want. This lets you find your age at
+                any point in time, past or future.
+            </div>
         </div>
     </div>
-    <div class="faq-item">
-        <div class="faq-question"><span>How many days until my next birthday?</span><span class="faq-toggle">+</span>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">What is chronological age?</span>
+            <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">After calculating your age, the result will show information about your next
-                birthday, including how many days remain until your next birthday celebration.</div>
-        </div>
-    </div>
-    <div class="faq-item">
-        <div class="faq-question"><span>What is chronological age?</span><span class="faq-toggle">+</span></div>
-        <div class="faq-answer">
-            <div class="faq-answer-content">Chronological age is your actual age measured in years, months, and days
-                from your date of birth. This calculator gives you your exact chronological age.</div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Chronological age is your actual age measured in years, months, and days from your date of birth. It is
+                distinct from biological age which measures health status.
+            </div>
         </div>
     </div>
 </div>

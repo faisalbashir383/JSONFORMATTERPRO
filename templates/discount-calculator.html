@@ -1,14 +1,71 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Discount Calculator - Sale Price Calculator Online | JSON Formatters Pro{% endblock %}
-{% block meta_title %}Discount Calculator - Calculate Sale Price & Savings Free 2026{% endblock %}
-{% block meta_description %}Free discount calculator. Calculate sale price, savings amount, and final price after
-discount. Works for any percentage off.{% endblock %}
-{% block meta_keywords %}discount calculator, sale price calculator, percent off calculator, savings calculator,
-discount calculator 2026, price after discount, how much will i save, markdown calculator,
-clearance calculator, promotion calculator, coupon calculator{% endblock %}
+{% block title %}Discount Calculator - Calculate Sale Price & Savings [2025]{% endblock %}
+{% block meta_title %}Discount Calculator - Percent Off & Sale Price Calculator{% endblock %}
+{% block meta_description %}Free Discount Calculator. Calculate final sale price and exactly how much you save. Works
+for percentage off, fixed amount off, and double discounts.{% endblock %}
+{% block meta_keywords %}discount calculator, sale price calculator, percent off calculator, shopping calculator,
+calculate discount, price after discount, markdown calculator{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/discount-calculator/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Discount Calculator Pro",
+  "description": "Calculate final price and savings with percentage discounts.",
+  "url": "{{ SITE_URL }}/discount-calculator/",
+  "applicationCategory": "ShoppingApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Instant Sale Price Calculation",
+    "Exact Savings amount",
+    "Quick Percentage Presets",
+    "Double Discount Support",
+    "Mobile Friendly"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I calculate a discount?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To calculate a discount, multiply the original price by the discount percentage (as a decimal). Subtract this result from the original price to get the final sale price."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is 20% off 100?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "20% off 100 is 80. You save 20. Calculation: 100 * 0.20 = 20 (savings). 100 - 20 = 80 (final price)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I calculate percentage off?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Formula: Savings = Original Price × (Discount% / 100). Final Price = Original Price - Savings."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -18,6 +75,8 @@ clearance calculator, promotion calculator, coupon calculator{% endblock %}
         padding: 3rem 2rem;
         background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
         border-radius: var(--radius-lg);
+        position: relative;
+        overflow: hidden;
     }
 
     .tool-header h1 {
@@ -46,6 +105,12 @@ clearance calculator, promotion calculator, coupon calculator{% endblock %}
         border-radius: var(--radius-lg);
         border: 1px solid var(--color-border);
         padding: 2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 32px var(--color-shadow);
+    }
+
+    .calc-card:hover {
+        transform: translateY(-2px);
     }
 
     [data-theme="dark"] .calc-card {
@@ -96,6 +161,7 @@ clearance calculator, promotion calculator, coupon calculator{% endblock %}
         border-radius: var(--radius-md);
         cursor: pointer;
         transition: all 0.2s;
+        flex: 1;
     }
 
     .preset-btn:hover,
@@ -144,6 +210,174 @@ clearance calculator, promotion calculator, coupon calculator{% endblock %}
         text-align: center;
         border-radius: var(--radius-lg);
     }
+
+    /* Info & FAQ */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .info-section,
+    .faq-section {
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .section-title,
+    .faq-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #ef4444;
+        font-weight: bold;
+    }
+
+    .step-list {
+        list-style: none;
+        padding: 0;
+        counter-reset: step-counter;
+    }
+
+    .step-list li {
+        position: relative;
+        padding-left: 2rem;
+        margin-bottom: 1rem;
+        color: var(--color-text-secondary);
+    }
+
+    .step-list li::before {
+        counter-increment: step-counter;
+        content: counter(step-counter);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1.5rem;
+        height: 1.5rem;
+        background: #ef4444;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 1.5rem;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tool-link {
+        display: block;
+        padding: 1rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tool-link:hover {
+        border-color: #ef4444;
+        transform: translateY(-2px);
+    }
+
+    /* FAQ */
+    .faq-section {
+        margin-top: 2rem;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+    }
+
+    .faq-title {
+        margin-bottom: 1.5rem;
+    }
+
+    .faq-item {
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+        margin-bottom: 0.75rem;
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+    }
+
+    .faq-question {
+        padding: 1.25rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .faq-question:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .faq-toggle {
+        font-size: 1.25rem;
+        transition: transform 0.3s;
+        color: #ef4444;
+    }
+
+    .faq-item.open .faq-toggle {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+    }
+
+    .faq-item.open .faq-answer {
+        max-height: 500px;
+        transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
+    }
+
+    .faq-answer-content {
+        padding: 0 1.25rem 1.25rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        border-top: 1px solid var(--color-border);
+    }
+
+    @media (max-width: 768px) {
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -188,6 +422,79 @@ clearance calculator, promotion calculator, coupon calculator{% endblock %}
         </div>
     </div>
 </div>
+
+<div class="info-grid">
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-star"></i> Tool Features</h2>
+        <ul class="feature-list">
+            <li><strong>Instant Savings:</strong> See exactly how much money you keep in your pocket.</li>
+            <li><strong>Double Check:</strong> Verify sale prices at the store.</li>
+            <li><strong>Quick Buttons:</strong> Use presets for common discount rates like 20% or 50%.</li>
+            <li><strong>Tax Ready:</strong> Know the pre-tax sales price instantly.</li>
+        </ul>
+    </div>
+
+    <div class="info-section">
+        <h2 class="section-title"><i class="fas fa-calculator"></i> How to Calculate Discount</h2>
+        <p>Calculating a discount is simple. Here is the step-by-step formula:</p>
+        <ul class="step-list">
+            <li><strong>Step 1:</strong> Convert the percentage to a decimal (e.g., 20% = 0.20).</li>
+            <li><strong>Step 2:</strong> Multiply the original price by the decimal (100 × 0.20 = 20).</li>
+            <li><strong>Step 3:</strong> Subtract the result from the original price (100 - 20 = 80).</li>
+        </ul>
+        <p><strong>Formula:</strong> Price - (Price × Discount%) = Sale Price</p>
+    </div>
+</div>
+
+<!-- Related Tools -->
+<div class="info-section" style="margin-top: 2rem;">
+    <h2 class="section-title"><i class="fas fa-tools"></i> Related Calculators</h2>
+    <div class="related-tools">
+        <a href="/percentage-calculator/" class="tool-link"><i class="fas fa-percentage"></i> Percentage Calculator</a>
+        <a href="/tip-calculator/" class="tool-link"><i class="fas fa-hand-holding-usd"></i> Tip Calculator</a>
+        <a href="/loan-calculator/" class="tool-link"><i class="fas fa-university"></i> Loan Calculator</a>
+    </div>
+</div>
+
+<div class="faq-section">
+    <h2 class="faq-title">❓ Frequently Asked Questions</h2>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">How do I calculate 20% off?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                To calculate 20% off, simply multiply the original price by 0.20. That is your savings amount. Subtract
+                that from the original price to get the final cost. For example, 20% off $50 is $10 savings, making the
+                final price $40.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Can I calculate double discounts?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Yes, but do it sequentially. If you have "20% off plus an extra 10% off", first calculate the price with
+                20% off. Then take 10% off that NEW price. It is NOT the same as 30% off!
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">What is the formula for sale price?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                The formula is: Sale Price = Original Price - (Original Price × Discount Rate).
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
@@ -211,6 +518,11 @@ clearance calculator, promotion calculator, coupon calculator{% endblock %}
             document.getElementById('savings').textContent = '$' + savings.toFixed(2);
             document.getElementById('finalPrice').textContent = '$' + finalPrice.toFixed(2);
         };
+
+        // FAQ Toggle
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => item.classList.toggle('open'));
+        });
     })();
 </script>
 {% endblock %}

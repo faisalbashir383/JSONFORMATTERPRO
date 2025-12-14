@@ -1,22 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}JSON Diff Tool - Compare JSON Online Free | JSON Formatters Pro{% endblock %}
-{% block meta_title %}JSON Diff Tool - Compare JSON Online Free | JSON Formatters Pro{% endblock %}
-{% block meta_description %}Compare two JSON objects and find differences instantly. Free online JSON diff tool with
-visual highlighting. Identify additions, deletions, and changes in JSON data.{% endblock %}
-{% block meta_keywords %}json diff, json compare, compare json, json difference, json comparison tool, diff json online,
-json diff viewer, compare two json, json compare online free, json delta, json diff tool, json comparator, json file
-compare,
-compare json objects, json diff checker, json comparison online, find difference in json, json merge diff, json patch
-diff,
-side by side json compare, json diff api, visual json diff, json diff npm, deep json compare, json object diff,
-compare json files online free, json diff javascript, json structure compare, api response diff, json change detector,
-json diff highlighter, best json diff tool, json diff 2026, best json compare 2026, json comparison 2026,
-free json diff 2026, online json diff 2026, json comparator 2026, json diff tool 2026,
-json difference finder, json change finder, json modification detector, json update checker, json version compare,
-json config diff, json settings compare, json data diff, json response compare, json api diff,
-json diff no signup, instant json diff, quick json compare, easy json diff, simple json comparison{% endblock %}
+{% block title %}JSON Diff Online - Compare JSON Files Free [2026]{% endblock %}
+{% block meta_title %}JSON Diff Online - Free JSON Comparison Tool{% endblock %}
+{% block meta_description %}Free JSON diff tool to compare two JSON files online. Visual highlighting shows additions,
+removals, and changes instantly. No signup required - try now!{% endblock %}
+{% block meta_keywords %}json diff, compare json, json compare online, json difference, json comparison tool
+{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/json-diff/{% endblock %}
 
 {% block structured_data %}
@@ -279,11 +269,12 @@ json diff no signup, instant json diff, quick json compare, easy json diff, simp
         position: relative;
         flex: 1;
         min-height: 350px;
+        display: flex;
     }
 
     .diff-textarea {
         width: 100%;
-        height: 100%;
+        flex: 1;
         min-height: 350px;
         padding: 1.25rem;
         font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
@@ -292,9 +283,7 @@ json diff no signup, instant json diff, quick json compare, easy json diff, simp
         background: var(--color-bg);
         color: var(--color-text);
         border: none;
-        resize: vertical;
-        position: relative;
-        z-index: 2;
+        resize: none;
     }
 
     [data-theme="dark"] .diff-textarea {
@@ -521,13 +510,101 @@ json diff no signup, instant json diff, quick json compare, easy json diff, simp
             min-height: 250px;
         }
     }
+
+    /* Toast Notifications */
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .toast {
+        padding: 1rem 1.5rem;
+        border-radius: var(--radius-md);
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-width: 300px;
+        max-width: 400px;
+        animation: slideIn 0.3s ease;
+        font-size: 0.95rem;
+    }
+
+    .toast.success {
+        border-left: 4px solid #10b981;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, var(--color-surface) 100%);
+    }
+
+    .toast.error {
+        border-left: 4px solid #ef4444;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, var(--color-surface) 100%);
+    }
+
+    .toast.warning {
+        border-left: 4px solid #f59e0b;
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, var(--color-surface) 100%);
+    }
+
+    .toast-icon {
+        font-size: 1.25rem;
+    }
+
+    .toast-message {
+        flex: 1;
+        color: var(--color-text);
+    }
+
+    .toast-close {
+        background: none;
+        border: none;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        font-size: 1.25rem;
+        padding: 0;
+        line-height: 1;
+    }
+
+    .toast-close:hover {
+        color: var(--color-text);
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="tool-header">
-    <h1>🔍 JSON Diff Tool</h1>
-    <p>Compare two JSON objects and identify differences with visual highlighting</p>
+    <h1>JSON Diff Online - Compare JSON Files Free</h1>
+    <p>Free online tool to compare two JSON objects and visualize differences with highlighting</p>
 </div>
 
 <!-- Legend -->
@@ -554,13 +631,7 @@ json diff no signup, instant json diff, quick json compare, easy json diff, simp
             <button class="action-btn" id="editLeftBtn" style="display:none;">✏️ Edit</button>
         </div>
         <div class="editor-wrapper">
-            <textarea id="jsonLeft" class="diff-textarea" placeholder='Paste original JSON here...
-
-Example:
-{
-  "name": "John",
-  "age": 30
-}'></textarea>
+            <textarea id="jsonLeft" class="diff-textarea" placeholder='Paste original JSON here...'></textarea>
             <div id="highlightLeft" class="highlight-view"></div>
         </div>
     </div>
@@ -572,14 +643,7 @@ Example:
             <button class="action-btn" id="editRightBtn" style="display:none;">✏️ Edit</button>
         </div>
         <div class="editor-wrapper">
-            <textarea id="jsonRight" class="diff-textarea" placeholder='Paste modified JSON here...
-
-Example:
-{
-  "name": "John Doe",
-  "age": 31,
-  "city": "NYC"
-}'></textarea>
+            <textarea id="jsonRight" class="diff-textarea" placeholder='Paste modified JSON here...'></textarea>
             <div id="highlightRight" class="highlight-view"></div>
         </div>
     </div>
@@ -601,23 +665,147 @@ Example:
     <span class="stat-badge stat-changed" id="statChanged">~ 0 Changed</span>
 </div>
 
+<!-- Features Section -->
 <div class="info-section">
-    <h2>💡 About JSON Diff</h2>
+    <h2>JSON Diff Features</h2>
     <p>
         JSON Diff compares two JSON objects and shows you exactly what changed between them.
-        This is useful for debugging API responses, comparing configuration files, tracking data changes,
-        and reviewing JSON modifications.
+        Essential for debugging API responses, comparing configurations, and tracking data changes.
     </p>
-    <p>
-        <strong>Tip:</strong> Hover over highlighted areas to see what type of change occurred.
-        Click "Edit" to modify the JSON and compare again.
-    </p>
+    <ul style="color: var(--color-text-secondary); line-height: 2; padding-left: 1.5rem;">
+        <li><strong>Side-by-Side Comparison:</strong> View both JSON files next to each other</li>
+        <li><strong>Visual Highlighting:</strong> Green for additions, red for removed, yellow for changed</li>
+        <li><strong>Deep Nested Support:</strong> Compare deeply nested objects and arrays</li>
+        <li><strong>Swap Panels:</strong> One-click swap left and right panels</li>
+        <li><strong>No Signup:</strong> 100% free, no registration required</li>
+    </ul>
 </div>
+
+<!-- Related JSON Tools Section -->
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>🔧 Related JSON Tools</h2>
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <a href="/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>📝 JSON Formatter</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Format & beautify
+                JSON</p>
+        </a>
+        <a href="/json-tree/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>🌳 JSON Tree Viewer</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Visualize JSON as
+                tree</p>
+        </a>
+        <a href="/json-schema/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>📐 JSON Schema Validator</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Validate against
+                schema</p>
+        </a>
+        <a href="/json-visualizer/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>📊 JSON Visualizer</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Graph view of JSON
+            </p>
+        </a>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>JSON Diff FAQ</h2>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">How do I compare two JSON files online?
+        </h3>
+        <p style="margin: 0;">Paste your original JSON in the left panel and the modified JSON in the right panel. Click
+            "Compare JSON" to see differences highlighted with colors.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What is JSON diff?</h3>
+        <p style="margin: 0;">JSON diff is the process of comparing two JSON objects to identify what was added,
+            removed, or changed between them. It's essential for debugging APIs and tracking data changes.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What do the highlight colors mean?</h3>
+        <p style="margin: 0;">Green = Added (only in right JSON), Red = Removed (only in left JSON), Yellow = Changed
+            (values differ between both).</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Can I compare nested JSON objects?</h3>
+        <p style="margin: 0;">Yes! This tool performs deep comparison of nested objects and arrays, highlighting
+            differences at any depth level.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Can I swap the left and right JSON?</h3>
+        <p style="margin: 0;">Yes, click the "⇄ Swap" button to exchange the contents of the left and right panels
+            instantly.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">How do I use this for API debugging?</h3>
+        <p style="margin: 0;">Paste the expected API response on the left and the actual response on the right. The diff
+            will show exactly which fields are missing, extra, or have different values.</p>
+    </div>
+
+    <div style="padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Is the JSON comparison tool free?</h3>
+        <p style="margin: 0;">Yes, 100% free with no signup required. All comparison happens in your browser, so your
+            data stays private.</p>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container"></div>
 {% endblock %}
 
 {% block extra_js %}
 <script src="{% static 'js/json-diff.js' %}"></script>
 <script>
+    // Toast notification system
+    function showToast(message, type = 'success', duration = 4000) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+
+        const icons = {
+            success: '✓',
+            error: '✕',
+            warning: '⚠'
+        };
+
+        toast.innerHTML = `
+            <span class="toast-icon">${icons[type] || '•'}</span>
+            <span class="toast-message">${message}</span>
+            <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+        `;
+
+        container.appendChild(toast);
+
+        // Auto remove after duration
+        setTimeout(() => {
+            toast.style.animation = 'slideOut 0.3s ease forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
+    }
+
+    // Override alert to use toast
+    window.alert = function (message) {
+        if (message.includes('✓') || message.toLowerCase().includes('identical') || message.toLowerCase().includes('success')) {
+            showToast(message.replace('✓ ', ''), 'success');
+        } else if (message.toLowerCase().includes('error') || message.toLowerCase().includes('invalid')) {
+            showToast(message.replace('Error: ', ''), 'error');
+        } else {
+            showToast(message, 'warning');
+        }
+    };
+
     // Auto-paste JSON from CSV converter if available (to left panel)
     document.addEventListener('DOMContentLoaded', function () {
         const csvJson = sessionStorage.getItem('csvToJsonOutput');
