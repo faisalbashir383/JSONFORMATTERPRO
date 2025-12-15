@@ -33,7 +33,21 @@ what is my dns, dns lookup free, instant dns lookup, quick dns check, easy dns l
   }
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What is DNS?", "acceptedAnswer": { "@type": "Answer", "text": "DNS (Domain Name System) translates human-readable domain names like 'google.com' into IP addresses that computers use to communicate." } },
+    { "@type": "Question", "name": "What are A records?", "acceptedAnswer": { "@type": "Answer", "text": "A records map a domain name to an IPv4 address. They're the most common DNS record type and essential for website hosting." } },
+    { "@type": "Question", "name": "What are MX records?", "acceptedAnswer": { "@type": "Answer", "text": "MX (Mail Exchange) records specify the mail servers responsible for receiving email for a domain. They include a priority value for backup servers." } },
+    { "@type": "Question", "name": "What are TXT records used for?", "acceptedAnswer": { "@type": "Answer", "text": "TXT records store text data for various purposes including SPF (email authentication), DKIM signatures, domain verification, and custom configurations." } },
+    { "@type": "Question", "name": "How long does DNS propagation take?", "acceptedAnswer": { "@type": "Answer", "text": "DNS propagation typically takes 24-48 hours globally, though some records may update in minutes. TTL (Time To Live) values affect how quickly changes spread." } }
+  ]
+}
+</script>
 {% endblock %}
+
 
 {% block extra_css %}
 <style>
@@ -376,6 +390,38 @@ what is my dns, dns lookup free, instant dns lookup, quick dns check, easy dns l
         <strong>NS Record:</strong> Nameserver records<br>
         <strong>CNAME Record:</strong> Canonical name (alias)
     </p>
+</div>
+
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>❓ Frequently Asked Questions</h2>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What is DNS?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">DNS (Domain Name System) translates
+            human-readable domain names like 'google.com' into IP addresses that computers use to communicate.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What are A records?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">A records map a domain name to an IPv4
+            address. They're the most common DNS record type and essential for website hosting.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What are MX records?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">MX (Mail Exchange) records specify the mail
+            servers responsible for receiving email for a domain. They include a priority value for backup servers.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What are TXT records used for?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">TXT records store text data for various
+            purposes including SPF (email authentication), DKIM signatures, domain verification, and custom
+            configurations.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">How long does DNS propagation take?
+        </summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">DNS propagation typically takes 24-48 hours
+            globally, though some records may update in minutes. TTL (Time To Live) values affect how quickly changes
+            spread.</p>
+    </details>
 </div>
 {% endblock %}
 

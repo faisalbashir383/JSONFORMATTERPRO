@@ -51,7 +51,21 @@ cors inspector, cors troubleshooter, cors diagnostic tool, cross origin test, co
   ]
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What is CORS?", "acceptedAnswer": { "@type": "Answer", "text": "CORS (Cross-Origin Resource Sharing) is a security mechanism that allows web pages to make requests to a different domain than the one that served the page. It uses HTTP headers to control access." } },
+    { "@type": "Question", "name": "Why am I getting a CORS error?", "acceptedAnswer": { "@type": "Answer", "text": "CORS errors occur when the server doesn't include the Access-Control-Allow-Origin header or doesn't allow your origin. Configure the server to include proper CORS headers." } },
+    { "@type": "Question", "name": "What is a preflight request?", "acceptedAnswer": { "@type": "Answer", "text": "A preflight request is an OPTIONS request sent before the actual request to check if the server allows the cross-origin request. It's required for requests with custom headers or non-simple methods." } },
+    { "@type": "Question", "name": "How do I fix CORS in my API?", "acceptedAnswer": { "@type": "Answer", "text": "Add Access-Control-Allow-Origin header to your server responses. Set it to '*' for public APIs or to specific origins for restricted access." } },
+    { "@type": "Question", "name": "Is using '*' for Access-Control-Allow-Origin safe?", "acceptedAnswer": { "@type": "Answer", "text": "Using '*' allows any origin, which is fine for public APIs without authentication. For APIs with credentials, you must specify exact origins instead of '*'." } }
+  ]
+}
+</script>
 {% endblock %}
+
 
 {% block extra_css %}
 <style>
@@ -361,6 +375,41 @@ cors inspector, cors troubleshooter, cors diagnostic tool, cross origin test, co
         <strong>Common CORS Errors:</strong> "No 'Access-Control-Allow-Origin' header present" - This means
         the server hasn't enabled CORS for your origin.
     </p>
+</div>
+
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>❓ Frequently Asked Questions</h2>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What is CORS?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">CORS (Cross-Origin Resource Sharing) is a
+            security mechanism that allows web pages to make requests to a different domain than the one that served the
+            page. It uses HTTP headers to control access.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">Why am I getting a CORS error?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">CORS errors occur when the server doesn't
+            include the Access-Control-Allow-Origin header or doesn't allow your origin. Configure the server to include
+            proper CORS headers.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What is a preflight request?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">A preflight request is an OPTIONS request sent
+            before the actual request to check if the server allows the cross-origin request. It's required for requests
+            with custom headers or non-simple methods like PUT/DELETE.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">How do I fix CORS in my API?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">Add Access-Control-Allow-Origin header to your
+            server responses. Set it to '*' for public APIs or to specific origins for restricted access. Most
+            frameworks have CORS middleware available.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">Is using '*' for
+            Access-Control-Allow-Origin safe?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">Using '*' allows any origin, which is fine for
+            public APIs without authentication. For APIs with credentials (cookies, authorization headers), you must
+            specify exact origins instead of '*'.</p>
+    </details>
 </div>
 {% endblock %}
 

@@ -50,7 +50,21 @@ cache header checker, content header viewer, http header decoder online, header 
   ]
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What are HTTP headers?", "acceptedAnswer": { "@type": "Answer", "text": "HTTP headers are key-value pairs sent between clients and servers during HTTP requests and responses. They carry metadata about content type, caching, security, and more." } },
+    { "@type": "Question", "name": "What is Content-Type header?", "acceptedAnswer": { "@type": "Answer", "text": "Content-Type specifies the media type of the resource (e.g., application/json, text/html). It tells the browser how to interpret the response body." } },
+    { "@type": "Question", "name": "What is Cache-Control?", "acceptedAnswer": { "@type": "Answer", "text": "Cache-Control directs caching behavior. Common values include max-age (seconds to cache), no-cache (revalidate), and no-store (don't cache)." } },
+    { "@type": "Question", "name": "What security headers should I use?", "acceptedAnswer": { "@type": "Answer", "text": "Essential security headers include X-Frame-Options, Content-Security-Policy, Strict-Transport-Security (HSTS), and X-Content-Type-Options." } },
+    { "@type": "Question", "name": "What is X-Frame-Options?", "acceptedAnswer": { "@type": "Answer", "text": "X-Frame-Options prevents clickjacking by controlling whether the page can be embedded in iframes. Values are DENY, SAMEORIGIN, or ALLOW-FROM." } }
+  ]
+}
+</script>
 {% endblock %}
+
 
 {% block extra_css %}
 <style>
@@ -419,6 +433,37 @@ Access-Control-Allow-Origin: *"></textarea>
         Access-Control-Allow-Headers<br>
         <strong>Content:</strong> Content-Type, Content-Length, Content-Encoding
     </p>
+</div>
+
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>❓ Frequently Asked Questions</h2>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What are HTTP headers?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">HTTP headers are key-value pairs sent between
+            clients and servers during HTTP requests and responses. They carry metadata about content type, caching,
+            security, and more.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What is Content-Type header?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">Content-Type specifies the media type of the
+            resource (e.g., application/json, text/html). It tells the browser how to interpret the response body.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What is Cache-Control?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">Cache-Control directs caching behavior. Common
+            values include max-age (seconds to cache), no-cache (revalidate), and no-store (don't cache).</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What security headers should I use?
+        </summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">Essential security headers include
+            X-Frame-Options, Content-Security-Policy, Strict-Transport-Security (HSTS), and X-Content-Type-Options.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What is X-Frame-Options?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">X-Frame-Options prevents clickjacking by
+            controlling whether the page can be embedded in iframes. Values are DENY, SAMEORIGIN, or ALLOW-FROM.</p>
+    </details>
 </div>
 {% endblock %}
 

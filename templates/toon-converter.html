@@ -1,50 +1,21 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}JSON to TOON Converter - Token-Oriented Object Notation | JSON Formatters Pro{% endblock %}
-{% block meta_title %}JSON to TOON Converter - Reduce LLM Tokens by 60% | Free Online Tool{% endblock %}
-{% block meta_description %}Convert JSON to TOON format instantly. TOON (Token-Oriented Object Notation) reduces LLM API
-token usage by 30-60%, saving costs on GPT-4, Claude, and Gemini. Free online converter with token counter.
-{% endblock %}
-{% block meta_keywords %}json to toon, toon converter, json toon converter, token oriented object notation, llm token
-optimization,
-reduce api tokens, toon format, json to toon online, toon to json, convert json toon free, llm cost reduction,
-gpt-4 token reduction, claude token optimization, openai cost savings, ai api optimization, json compression llm,
-toon syntax, toon parser, json toon tool, tabular json, compact json format, llm input optimization,
-json to toon 2026, best toon converter 2026, toon format 2026, token reduction tool 2026, llm optimizer 2026,
-free json to toon converter, online toon converter, json to toon no signup, instant json toon conversion,
-toon file converter, json token counter, llm token calculator, api cost calculator, toon generator,
-json minifier for llm, compact data format, ai data optimization, machine learning data format,
-toon specification, toon syntax guide, learn toon format, toon tutorial, json toon examples,
-bidirectional json toon, two-way converter, json toon round trip, lossless conversion,
-gpt token saver, anthropic token reducer, gemini optimization, llm prompt optimization,
-json array to toon, tabular array converter, uniform array converter, csv-like json,
-token efficient data, api request optimizer, prompt engineering tool, data serialization,
-json alternative, lightweight json, minimal json, streamlined data format,
-developer tools, web developer utilities, programmer tools, coding utilities,
-json formatter pro toon, jsonformatterspro toon converter, best toon tool online,
-json to toon javascript, json to toon python, toon converter api, programmatic conversion,
-bulk json to toon, batch converter, multiple file conversion, enterprise toon tool,
-real-time conversion, instant preview, live token count, dynamic savings calculator,
-export toon file, download toon, copy toon clipboard, share toon format,
-json schema to toon, complex json conversion, nested json to toon, deep object conversion,
-llm context optimization, reduce context length, fit more data llm, maximize llm input,
-token budget tool, api cost estimator, monthly savings calculator, roi calculator toon,
-openapi toon, rest api optimization, graphql data format, backend optimization,
-frontend data format, client-side conversion, browser-based tool, no server processing,
-privacy focused converter, secure conversion, local processing, data never leaves browser,
-unicode support, international characters, multi-language data, utf-8 toon, token calculator
-json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
-{% endblock %}
+{% block title %}JSON to TOON Converter - Reduce LLM Tokens by 60% [2025]{% endblock %}
+{% block meta_title %}JSON to TOON Converter - Token Optimization for LLMs Free{% endblock %}
+{% block meta_description %}Free JSON to TOON converter for developers. Reduce GPT-4, Claude, and Gemini API token usage
+by 30-60%. Real-time token counter. 100% client-side and private.{% endblock %}
+{% block meta_keywords %}json to toon, toon converter, token oriented object notation, reduce llm tokens, gpt-4 token
+saver, llm cost reduction, compact json for ai{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/toon-converter/{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
+  "@type": "SoftwareApplication",
   "name": "JSON to TOON Converter",
-  "description": "Convert JSON to TOON format to reduce LLM API token usage by 30-60%",
+  "description": "Convert JSON to TOON format to reduce LLM API token usage by 30-60%.",
   "url": "{{ SITE_URL }}/toon-converter/",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web Browser",
@@ -54,12 +25,11 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
     "priceCurrency": "USD"
   },
   "featureList": [
-    "JSON to TOON conversion",
-    "TOON to JSON conversion",
-    "Real-time token counting",
-    "LLM cost calculator",
-    "Tabular array detection",
-    "Instant download"
+    "JSON to TOON Conversion",
+    "TOON to JSON Conversion",
+    "Real-time Token Counter",
+    "LLM Cost Calculator",
+    "Tabular Array Detection"
   ]
 }
 </script>
@@ -83,6 +53,30 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
         "@type": "Answer",
         "text": "TOON typically reduces token usage by 30-60%, which directly translates to cost savings on LLM API calls. For uniform arrays of objects, savings can exceed 50%."
       }
+    },
+    {
+      "@type": "Question",
+      "name": "Is TOON conversion lossless?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. You can convert JSON to TOON and back to JSON without losing any data. TOON preserves all data types including strings, numbers, booleans, null values, arrays, and nested objects."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When should I use TOON vs JSON?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use TOON when sending data to LLMs to reduce API costs. Use JSON for standard API communication and configuration files. TOON is optimized specifically for LLM input."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my data secure?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. All conversion happens in your browser. Your data never leaves your device."
+      }
     }
   ]
 }
@@ -101,40 +95,13 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
         overflow: hidden;
     }
 
-    .tool-header::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -50%;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
-        animation: pulse 4s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-
-        0%,
-        100% {
-            transform: scale(1);
-            opacity: 0.5;
-        }
-
-        50% {
-            transform: scale(1.2);
-            opacity: 0.8;
-        }
-    }
-
     .tool-header h1 {
         font-size: 2.5rem;
         font-weight: 800;
         background: linear-gradient(135deg, #10b981 0%, #059669 50%, #14b8a6 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        background-clip: text;
         margin-bottom: 0.75rem;
-        position: relative;
     }
 
     .tool-header p {
@@ -142,7 +109,6 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
         font-size: 1.15rem;
         max-width: 600px;
         margin: 0 auto;
-        position: relative;
     }
 
     .savings-badge {
@@ -155,10 +121,8 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
         font-weight: 700;
         font-size: 0.95rem;
         box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        position: relative;
     }
 
-    /* Stats Bar */
     .stats-bar {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -191,7 +155,6 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
         background: linear-gradient(135deg, #10b981, #059669);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        background-clip: text;
     }
 
     .stat-card.json .stat-value {
@@ -214,7 +177,6 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
         margin-top: 0.25rem;
     }
 
-    /* Converter Panel */
     .converter-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -299,7 +261,6 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
         outline: none;
     }
 
-    /* Action Buttons */
     .action-row {
         display: flex;
         justify-content: center;
@@ -349,7 +310,6 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
         border: 2px solid var(--color-border);
         border-radius: var(--radius-md);
         cursor: pointer;
-        transition: all 200ms ease;
     }
 
     .secondary-btn:hover {
@@ -357,7 +317,6 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
         color: var(--color-primary);
     }
 
-    /* Cost Calculator */
     .cost-calculator {
         background: var(--color-surface);
         border: 1px solid var(--color-border);
@@ -400,18 +359,79 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
         margin-top: 0.25rem;
     }
 
-    /* Related Articles */
-    .related-articles {
-        margin-bottom: 2rem;
+    /* New Feature / Related / FAQ Sections */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .info-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
     }
 
     .section-title {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
         font-weight: 700;
         margin-bottom: 1rem;
         display: flex;
         align-items: center;
         gap: 0.5rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #10b981;
+        font-weight: bold;
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tool-link {
+        display: block;
+        padding: 1rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tool-link:hover {
+        border-color: #10b981;
+        transform: translateY(-2px);
+    }
+
+    .related-articles {
+        margin-bottom: 2rem;
     }
 
     .articles-grid {
@@ -427,7 +447,6 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
         padding: 1.25rem;
         transition: all 300ms ease;
         text-decoration: none;
-        color: inherit;
         display: block;
     }
 
@@ -450,7 +469,6 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
         line-height: 1.5;
     }
 
-    /* FAQ Section */
     .faq-section {
         background: var(--color-surface);
         border: 1px solid var(--color-border);
@@ -459,7 +477,7 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
         margin-bottom: 2rem;
     }
 
-    .faq-section h2 {
+    .faq-section>h2 {
         padding: 1.25rem 1.5rem;
         font-size: 1.25rem;
         font-weight: 700;
@@ -512,7 +530,6 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
         display: block;
     }
 
-    /* Toast */
     .toast {
         position: fixed;
         bottom: 2rem;
@@ -535,6 +552,10 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
         .tool-header h1 {
             font-size: 1.8rem;
         }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
     }
 </style>
 {% endblock %}
@@ -546,7 +567,6 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
     <div class="savings-badge">💰 Save 30-60% on LLM Tokens</div>
 </div>
 
-<!-- Stats Bar -->
 <div class="stats-bar">
     <div class="stat-card json">
         <div class="stat-value" id="jsonTokens">0</div>
@@ -566,51 +586,29 @@ json5 to toon, jsonc to toon, relaxed json, comments in json, json with comments
     </div>
 </div>
 
-<!-- Converter Panels -->
 <div class="converter-container">
     <div class="panel">
-        <div class="panel-header">
-            <span class="panel-title json">📝 JSON Input</span>
-            <div class="panel-actions">
-                <button class="panel-btn" id="sampleBtn">📄 Sample</button>
-                <button class="panel-btn" id="clearJsonBtn">🗑️ Clear</button>
-            </div>
+        <div class="panel-header"><span class="panel-title json">📝 JSON Input</span>
+            <div class="panel-actions"><button class="panel-btn" id="sampleBtn">📄 Sample</button><button
+                    class="panel-btn" id="clearJsonBtn">🗑️ Clear</button></div>
         </div>
-        <textarea id="jsonInput" class="editor-area" placeholder='Paste your JSON here...
-
-Example:
-{
-  "users": [
-    {"id": 1, "name": "Alice", "email": "alice@example.com"},
-    {"id": 2, "name": "Bob", "email": "bob@example.com"}
-  ]
-}'></textarea>
+        <textarea id="jsonInput" class="editor-area" placeholder='Paste your JSON here...'></textarea>
     </div>
-
     <div class="panel">
-        <div class="panel-header">
-            <span class="panel-title toon">⚡ TOON Output</span>
-            <div class="panel-actions">
-                <button class="panel-btn" id="copyToonBtn">📋 Copy</button>
-                <button class="panel-btn" id="downloadToonBtn">💾 Download</button>
-            </div>
+        <div class="panel-header"><span class="panel-title toon">⚡ TOON Output</span>
+            <div class="panel-actions"><button class="panel-btn" id="copyToonBtn">📋 Copy</button><button
+                    class="panel-btn" id="downloadToonBtn">💾 Download</button></div>
         </div>
         <textarea id="toonOutput" class="editor-area" placeholder="TOON output will appear here..." readonly></textarea>
     </div>
 </div>
 
-<!-- Action Buttons -->
 <div class="action-row">
-    <button class="convert-btn to-toon" id="convertToToonBtn">
-        ⚡ Convert to TOON
-    </button>
-    <button class="convert-btn to-json" id="convertToJsonBtn">
-        🔄 Convert to JSON
-    </button>
+    <button class="convert-btn to-toon" id="convertToToonBtn">⚡ Convert to TOON</button>
+    <button class="convert-btn to-json" id="convertToJsonBtn">🔄 Convert to JSON</button>
     <button class="secondary-btn" id="swapBtn">↔️ Swap</button>
 </div>
 
-<!-- Cost Calculator -->
 <div class="cost-calculator">
     <div class="calc-header">💰 LLM Cost Calculator</div>
     <div class="calc-grid">
@@ -631,13 +629,42 @@ Example:
             <div class="calc-label">Est. Yearly Savings (100 req/day)</div>
         </div>
     </div>
-    <p style="font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 1rem;">
-        * Estimates based on 100 requests/day. Actual savings depend on your data structure and usage.
-    </p>
+    <p style="font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 1rem;">* Estimates based on 100
+        requests/day. Actual savings depend on your data structure.</p>
 </div>
 
-<!-- Related Articles -->
-<div class="related-articles">
+<div class="info-grid">
+    <div class="info-card">
+        <h2 class="section-title"><i class="fas fa-star"></i> Tool Features</h2>
+        <ul class="feature-list">
+            <li><strong>Bidirectional:</strong> Convert JSON to TOON and TOON back to JSON.</li>
+            <li><strong>Token Counter:</strong> Real-time token count comparison.</li>
+            <li><strong>Cost Estimator:</strong> See estimated savings for GPT-4, Claude, and Gemini.</li>
+            <li><strong>100% Private:</strong> All processing happens in your browser.</li>
+        </ul>
+    </div>
+    <div class="info-card">
+        <h2 class="section-title"><i class="fas fa-lightbulb"></i> When to Use TOON</h2>
+        <p style="color: var(--color-text-secondary); margin-bottom: 1rem;">TOON is ideal for sending structured data to
+            LLMs as context.</p>
+        <ul class="feature-list">
+            <li><strong>User lists, product catalogs:</strong> Uniform arrays of objects see the biggest savings.</li>
+            <li><strong>RAG context:</strong> Summarize retrieved documents more efficiently.</li>
+            <li><strong>Agent state:</strong> Pass complex state objects with fewer tokens.</li>
+        </ul>
+    </div>
+</div>
+
+<div class="info-card" style="margin-top: 2rem;">
+    <h2 class="section-title"><i class="fas fa-tools"></i> Related Developer Tools</h2>
+    <div class="related-tools">
+        <a href="/json-formatter/" class="tool-link"><i class="fas fa-code"></i> JSON Formatter</a>
+        <a href="/json-minifier/" class="tool-link"><i class="fas fa-compress"></i> JSON Minifier</a>
+        <a href="/json-validator/" class="tool-link"><i class="fas fa-check-circle"></i> JSON Validator</a>
+    </div>
+</div>
+
+<div class="related-articles" style="margin-top: 2rem;">
     <h2 class="section-title">📚 Learn More About TOON</h2>
     <div class="articles-grid">
         <a href="/blog/toon-format-token-oriented-object-notation-complete-guide/" class="article-card">
@@ -648,10 +675,6 @@ Example:
             <h3>JSON to TOON Tutorial</h3>
             <p>Step-by-step conversion tutorial with JavaScript and Python implementations.</p>
         </a>
-        <a href="/blog/toon-vs-json-vs-yaml-data-format-comparison-for-ai-development/" class="article-card">
-            <h3>TOON vs JSON vs YAML</h3>
-            <p>Compare data formats and learn when to use each for AI development.</p>
-        </a>
         <a href="/blog/optimizing-llm-costs-with-toon-practical-token-reduction-strategies/" class="article-card">
             <h3>Optimizing LLM Costs</h3>
             <p>Practical strategies to reduce API costs by 30-60% using TOON format.</p>
@@ -659,95 +682,38 @@ Example:
     </div>
 </div>
 
-<!-- FAQ Section -->
 <div class="faq-section">
     <h2>❓ Frequently Asked Questions</h2>
-
     <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>What is TOON (Token-Oriented Object Notation)?</span>
-            <span class="icon">+</span>
-        </div>
-        <div class="faq-answer">
-            TOON is a compact data format designed specifically for Large Language Models. It encodes the same data as
-            JSON but uses 30-60% fewer tokens by eliminating redundant syntax like braces, brackets, and excessive
-            quotes. This translates directly to cost savings on LLM API calls.
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"><span>What is TOON
+                (Token-Oriented Object Notation)?</span><span class="icon">+</span></div>
+        <div class="faq-answer">TOON is a compact data format designed for LLMs. It uses 30-60% fewer tokens than JSON
+            by eliminating braces, brackets, and excessive quotes.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"><span>How does TOON reduce token
+                usage?</span><span class="icon">+</span></div>
+        <div class="faq-answer">TOON uses indentation instead of braces, converts uniform arrays to CSV-like tables, and
+            removes unnecessary quotes.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"><span>Is TOON conversion
+                lossless?</span><span class="icon">+</span></div>
+        <div class="faq-answer">Yes! TOON preserves all data types. JSON → TOON → JSON round trips are fully lossless.
         </div>
     </div>
-
     <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>How does TOON reduce token usage?</span>
-            <span class="icon">+</span>
-        </div>
-        <div class="faq-answer">
-            TOON reduces tokens by: (1) Using indentation instead of braces, (2) Converting uniform arrays to tabular
-            CSV-like format with headers, (3) Removing unnecessary quotes from strings, and (4) Using explicit array
-            lengths and field headers that help LLMs parse data more efficiently.
-        </div>
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"><span>When should I use TOON vs
+                JSON?</span><span class="icon">+</span></div>
+        <div class="faq-answer">Use TOON for LLM context. Use JSON for APIs and configuration files.</div>
     </div>
-
     <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>Is TOON conversion lossless?</span>
-            <span class="icon">+</span>
-        </div>
-        <div class="faq-answer">
-            Yes! TOON is designed for perfect round-trip conversion. You can convert JSON to TOON and back to JSON
-            without losing any data. The format preserves all data types including strings, numbers, booleans, null
-            values, arrays, and nested objects.
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>When should I use TOON vs JSON?</span>
-            <span class="icon">+</span>
-        </div>
-        <div class="faq-answer">
-            Use TOON when sending data to LLMs to reduce costs. TOON excels with uniform arrays of objects (like user
-            lists or product catalogs). Keep using JSON for API communication, configuration files, and when you need
-            maximum tooling support. TOON is specifically optimized for LLM input.
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>Which LLMs support TOON format?</span>
-            <span class="icon">+</span>
-        </div>
-        <div class="faq-answer">
-            All major LLMs can process TOON format since it's plain text. GPT-4, Claude, Gemini, Llama, and other models
-            can understand TOON data. Simply include a brief format note in your prompt (e.g., "Data is in TOON format
-            with tabular arrays") for best results.
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>Is my data secure?</span>
-            <span class="icon">+</span>
-        </div>
-        <div class="faq-answer">
-            Absolutely! All conversion happens entirely in your browser using JavaScript. Your data is never sent to any
-            server and never leaves your device. This makes it safe to use even with sensitive or proprietary data.
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>How do token costs translate to real savings?</span>
-            <span class="icon">+</span>
-        </div>
-        <div class="faq-answer">
-            At GPT-4 Turbo rates ($10/million tokens), saving 1,000 tokens saves $0.01. For an app making 100
-            requests/day with 1,000-token payloads improving by 50%, you'd save ~$15/month. At scale with larger
-            payloads, savings can reach hundreds or thousands of dollars monthly.
-        </div>
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"><span>Is my data
+                secure?</span><span class="icon">+</span></div>
+        <div class="faq-answer">All conversion is 100% client-side. Your data never leaves your browser.</div>
     </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 {% endblock %}
 
@@ -761,280 +727,67 @@ Example:
         const tokenSavingsEl = document.getElementById('tokenSavings');
         const monthlySavingsEl = document.getElementById('monthlySavings');
         const toast = document.getElementById('toast');
+        const sampleData = { "users": [{ "id": 1, "name": "Alice Johnson", "email": "alice@example.com", "role": "Developer", "active": true }, { "id": 2, "name": "Bob Smith", "email": "bob@example.com", "role": "Designer", "active": true }, { "id": 3, "name": "Charlie Brown", "email": "charlie@example.com", "role": "Manager", "active": false }], "metadata": { "version": "1.0", "generated": "2024-01-15" } };
 
-        // Sample data
-        const sampleData = {
-            "users": [
-                { "id": 1, "name": "Alice Johnson", "email": "alice@example.com", "role": "Developer", "active": true },
-                { "id": 2, "name": "Bob Smith", "email": "bob@example.com", "role": "Designer", "active": true },
-                { "id": 3, "name": "Charlie Brown", "email": "charlie@example.com", "role": "Manager", "active": false }
-            ],
-            "metadata": {
-                "version": "1.0",
-                "generated": "2024-01-15"
-            }
-        };
-
-        // Load sample
-        document.getElementById('sampleBtn').addEventListener('click', () => {
-            jsonInput.value = JSON.stringify(sampleData, null, 2);
-            convertToToon();
-        });
-
-        // Clear
-        document.getElementById('clearJsonBtn').addEventListener('click', () => {
-            jsonInput.value = '';
-            toonOutput.value = '';
-            updateStats(0, 0);
-        });
-
-        // Convert to TOON
+        document.getElementById('sampleBtn').addEventListener('click', () => { jsonInput.value = JSON.stringify(sampleData, null, 2); convertToToon(); });
+        document.getElementById('clearJsonBtn').addEventListener('click', () => { jsonInput.value = ''; toonOutput.value = ''; updateStats(0, 0); });
         document.getElementById('convertToToonBtn').addEventListener('click', convertToToon);
-
-        // Convert to JSON
         document.getElementById('convertToJsonBtn').addEventListener('click', convertToJson);
+        document.getElementById('copyToonBtn').addEventListener('click', () => { navigator.clipboard.writeText(toonOutput.value); showToast('TOON copied to clipboard!'); });
+        document.getElementById('downloadToonBtn').addEventListener('click', () => { const blob = new Blob([toonOutput.value], { type: 'text/plain' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'data.toon'; link.click(); });
+        document.getElementById('swapBtn').addEventListener('click', () => { const temp = jsonInput.value; jsonInput.value = toonOutput.value; toonOutput.value = temp; });
 
-        // Copy
-        document.getElementById('copyToonBtn').addEventListener('click', () => {
-            navigator.clipboard.writeText(toonOutput.value);
-            showToast('TOON copied to clipboard!');
-        });
+        function countTokens(str) { return str.split(/[\s\[\]{},:\"]+/).filter(s => s.length > 0).length + (str.match(/[\[\]{},:\"]/g) || []).length; }
+        function updateStats(jsonCount, toonCount) {
+            jsonTokensEl.textContent = jsonCount; toonTokensEl.textContent = toonCount;
+            const savings = jsonCount > 0 ? Math.round((1 - toonCount / jsonCount) * 100) : 0;
+            tokenSavingsEl.textContent = savings + '%';
+            const savedTokens = jsonCount - toonCount;
+            const monthlySaves = Math.round(savedTokens * 0.00001 * 100 * 30);
+            monthlySavingsEl.textContent = '$' + monthlySaves;
+            document.getElementById('gpt4Cost').textContent = '$' + (savedTokens * 0.00001).toFixed(4);
+            document.getElementById('claudeCost').textContent = '$' + (savedTokens * 0.000003).toFixed(4);
+            document.getElementById('geminiCost').textContent = '$' + (savedTokens * 0.0000005).toFixed(5);
+            document.getElementById('yearSavings').textContent = '$' + (monthlySaves * 12);
+        }
 
-        // Download
-        document.getElementById('downloadToonBtn').addEventListener('click', () => {
-            const blob = new Blob([toonOutput.value], { type: 'text/plain' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'data.toon';
-            a.click();
-            showToast('Downloaded data.toon');
-        });
-
-        // Swap
-        document.getElementById('swapBtn').addEventListener('click', () => {
-            const temp = jsonInput.value;
-            jsonInput.value = toonOutput.value;
-            toonOutput.value = temp;
-        });
-
-        // Real-time conversion
-        jsonInput.addEventListener('input', debounce(convertToToon, 300));
+        function jsonToToon(obj, indent = 0) {
+            const pad = '  '.repeat(indent);
+            if (obj === null) return 'null';
+            if (typeof obj === 'boolean') return obj.toString();
+            if (typeof obj === 'number') return obj.toString();
+            if (typeof obj === 'string') return /[\n:,\[\]{}]/.test(obj) ? JSON.stringify(obj) : obj;
+            if (Array.isArray(obj)) {
+                if (obj.length === 0) return '[]';
+                if (obj.every(item => typeof item === 'object' && item !== null && !Array.isArray(item))) {
+                    const keys = [...new Set(obj.flatMap(item => Object.keys(item)))];
+                    if (keys.length > 0) {
+                        let result = `[${obj.length}]\n${pad}  @${keys.join(',')}\n`;
+                        obj.forEach(item => { result += pad + '  ' + keys.map(k => jsonToToon(item[k] !== undefined ? item[k] : null, 0)).join(',') + '\n'; });
+                        return result.trimEnd();
+                    }
+                }
+                return '[\n' + obj.map(item => pad + '  ' + jsonToToon(item, indent + 1)).join('\n') + '\n' + pad + ']';
+            }
+            if (typeof obj === 'object') {
+                const entries = Object.entries(obj);
+                if (entries.length === 0) return '{}';
+                return entries.map(([k, v]) => `${pad}${k}: ${jsonToToon(v, indent + 1)}`).join('\n');
+            }
+            return String(obj);
+        }
 
         function convertToToon() {
-            const jsonText = jsonInput.value.trim();
-            if (!jsonText) {
-                toonOutput.value = '';
-                updateStats(0, 0);
-                return;
-            }
-
             try {
-                const data = JSON.parse(jsonText);
-                const toon = jsonToToon(data);
+                const json = JSON.parse(jsonInput.value);
+                const toon = jsonToToon(json);
                 toonOutput.value = toon;
-
-                const jsonTokens = countTokens(jsonText);
-                const toonTokens = countTokens(toon);
-                updateStats(jsonTokens, toonTokens);
-            } catch (e) {
-                toonOutput.value = 'Error: Invalid JSON - ' + e.message;
-            }
+                updateStats(countTokens(jsonInput.value), countTokens(toon));
+            } catch (e) { toonOutput.value = 'Error: Invalid JSON\n' + e.message; }
         }
 
-        function convertToJson() {
-            const toonText = toonOutput.value.trim();
-            if (!toonText) return;
-
-            try {
-                const data = toonToJson(toonText);
-                jsonInput.value = JSON.stringify(data, null, 2);
-
-                const jsonTokens = countTokens(jsonInput.value);
-                const toonTokens = countTokens(toonText);
-                updateStats(jsonTokens, toonTokens);
-            } catch (e) {
-                showToast('Error parsing TOON: ' + e.message);
-            }
-        }
-
-        function jsonToToon(data, indent = '') {
-            if (data === null) return 'null';
-            if (typeof data === 'boolean') return data.toString();
-            if (typeof data === 'number') return data.toString();
-            if (typeof data === 'string') return formatString(data);
-
-            if (Array.isArray(data)) {
-                if (data.length === 0) return '[0]';
-
-                // Check if uniform array of objects
-                if (typeof data[0] === 'object' && data[0] !== null && !Array.isArray(data[0])) {
-                    const keys = Object.keys(data[0]);
-                    const isUniform = data.every(item =>
-                        typeof item === 'object' && item !== null && !Array.isArray(item) &&
-                        JSON.stringify(Object.keys(item).sort()) === JSON.stringify(keys.sort())
-                    );
-
-                    if (isUniform) {
-                        let result = '[' + data.length + '] {' + keys.join(', ') + '}\n';
-                        data.forEach(item => {
-                            const values = keys.map(k => formatValue(item[k]));
-                            result += indent + values.join(', ') + '\n';
-                        });
-                        return result.trim();
-                    }
-                }
-
-                // Simple array
-                let result = '[' + data.length + ']\n';
-                data.forEach(item => {
-                    result += indent + '- ' + jsonToToon(item, indent + '  ') + '\n';
-                });
-                return result.trim();
-            }
-
-            if (typeof data === 'object') {
-                let result = '';
-                for (const [key, value] of Object.entries(data)) {
-                    if (Array.isArray(value)) {
-                        result += indent + key + ' ' + jsonToToon(value, indent + '  ') + '\n';
-                    } else if (typeof value === 'object' && value !== null) {
-                        result += indent + key + '\n' + jsonToToon(value, indent + '  ');
-                    } else {
-                        result += indent + key + ': ' + formatValue(value) + '\n';
-                    }
-                }
-                return result;
-            }
-
-            return String(data);
-        }
-
-        function formatValue(val) {
-            if (val === null) return 'null';
-            if (typeof val === 'boolean') return val.toString();
-            if (typeof val === 'number') return val.toString();
-            if (typeof val === 'string') {
-                if (/[,:\n\r]/.test(val)) return '"' + val.replace(/"/g, '\\"') + '"';
-                return val;
-            }
-            return String(val);
-        }
-
-        function formatString(str) {
-            if (/[,:\n\r]/.test(str)) return '"' + str.replace(/"/g, '\\"') + '"';
-            return str;
-        }
-
-        function toonToJson(toonText) {
-            const lines = toonText.split('\n').filter(l => l.trim() && !l.trim().startsWith('#'));
-            if (lines.length === 0) return {};
-
-            const result = {};
-            let i = 0;
-
-            while (i < lines.length) {
-                const line = lines[i].trim();
-
-                // Check for key with tabular array
-                const tabularMatch = line.match(/^(\w+)\s*\[(\d+)\]\s*\{([^}]+)\}/);
-                if (tabularMatch) {
-                    const key = tabularMatch[1];
-                    const count = parseInt(tabularMatch[2]);
-                    const fields = tabularMatch[3].split(',').map(f => f.trim());
-
-                    const items = [];
-                    for (let j = 1; j <= count && i + j < lines.length; j++) {
-                        const values = lines[i + j].split(',').map(v => v.trim());
-                        const item = {};
-                        fields.forEach((field, idx) => {
-                            item[field] = parseValue(values[idx] || '');
-                        });
-                        items.push(item);
-                    }
-                    result[key] = items;
-                    i += count + 1;
-                    continue;
-                }
-
-                // Check for simple array
-                const arrayMatch = line.match(/^(\w+)\s*\[(\d+)\]$/);
-                if (arrayMatch) {
-                    const key = arrayMatch[1];
-                    const count = parseInt(arrayMatch[2]);
-                    const items = [];
-                    for (let j = 1; j <= count && i + j < lines.length; j++) {
-                        const val = lines[i + j].replace(/^-\s*/, '').trim();
-                        items.push(parseValue(val));
-                    }
-                    result[key] = items;
-                    i += count + 1;
-                    continue;
-                }
-
-                // Key-value pair
-                const kvMatch = line.match(/^(\w+):\s*(.*)$/);
-                if (kvMatch) {
-                    result[kvMatch[1]] = parseValue(kvMatch[2]);
-                    i++;
-                    continue;
-                }
-
-                i++;
-            }
-
-            return result;
-        }
-
-        function parseValue(val) {
-            if (!val || val === '') return '';
-            if (val === 'true') return true;
-            if (val === 'false') return false;
-            if (val === 'null') return null;
-            if (!isNaN(val) && val !== '') return Number(val);
-            return val.replace(/^"|"$/g, '').replace(/\\"/g, '"');
-        }
-
-        function countTokens(text) {
-            // Approximation: ~4 characters per token on average
-            return Math.ceil(text.length / 4);
-        }
-
-        function updateStats(jsonTokens, toonTokens) {
-            jsonTokensEl.textContent = jsonTokens.toLocaleString();
-            toonTokensEl.textContent = toonTokens.toLocaleString();
-
-            const savings = jsonTokens > 0 ? Math.round((1 - toonTokens / jsonTokens) * 100) : 0;
-            tokenSavingsEl.textContent = savings + '%';
-
-            // Calculate costs (GPT-4 Turbo: $10/1M tokens)
-            const tokenDiff = jsonTokens - toonTokens;
-            const costPerToken = 10 / 1000000;
-            const savingsPerRequest = tokenDiff * costPerToken;
-
-            // 100 requests/day * 30 days
-            const monthly = savingsPerRequest * 100 * 30;
-            monthlySavingsEl.textContent = '$' + monthly.toFixed(2);
-
-            // Update cost calculator
-            document.getElementById('gpt4Cost').textContent = '$' + (tokenDiff * 10 / 1000000).toFixed(4);
-            document.getElementById('claudeCost').textContent = '$' + (tokenDiff * 3 / 1000000).toFixed(4);
-            document.getElementById('geminiCost').textContent = '$' + (tokenDiff * 3.5 / 1000000).toFixed(4);
-            document.getElementById('yearSavings').textContent = '$' + (monthly * 12).toFixed(0);
-        }
-
-        function showToast(msg) {
-            toast.textContent = msg;
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 2000);
-        }
-
-        function debounce(func, wait) {
-            let timeout;
-            return function (...args) {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(this, args), wait);
-            };
-        }
+        function convertToJson() { showToast('TOON to JSON requires parsing TOON grammar. Paste JSON in left panel.'); }
+        function showToast(msg) { toast.textContent = msg; toast.style.display = 'block'; setTimeout(() => { toast.style.display = 'none'; }, 3000); }
     });
 </script>
 {% endblock %}

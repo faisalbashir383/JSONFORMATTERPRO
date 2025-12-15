@@ -8,42 +8,40 @@
 {% block meta_description %}Build your professional resume for free with our online resume builder. Multiple templates,
 ATS-optimized, PDF export. No signup required. 100% client-side and private.{% endblock %}
 
-{% block meta_keywords %}resume builder, free resume builder, online resume maker, cv builder, resume creator,
-professional resume, resume template, resume generator, free resume maker online, resume builder no signup, resume
-builder free, resume builder online free no sign up, best free resume builder 2026, resume builder 2026, resume builder
-2025, resume builder 2026, developer resume, software engineer resume, tech resume builder, software developer resume
-builder, web developer resume maker, frontend developer resume template, backend developer resume format, full stack
-developer resume builder, mobile developer resume, android developer resume, ios developer resume, react developer
-resume, angular developer resume, vue developer resume, node developer resume, python developer resume, java developer
-resume, javascript resume, typescript resume, golang developer resume, rust developer resume, php developer resume, ruby
-developer resume, c++ developer resume, dotnet developer resume, scala developer resume, kotlin developer resume, data
-scientist resume, machine learning resume, ai engineer resume, data analyst resume, data engineer resume, business
-analyst resume, devops engineer resume, cloud engineer resume, sre resume, aws engineer resume, azure engineer resume,
-gcp engineer resume, kubernetes engineer resume, docker resume, infrastructure engineer resume, security engineer
-resume, cybersecurity resume, network engineer resume, system administrator resume, database administrator resume, qa
-engineer resume, test engineer resume, automation engineer resume, ats resume builder, ats friendly resume, ats
-optimized resume, applicant tracking system resume, resume parser friendly, ats compatible resume, resume that passes
-ats, ats resume checker, ats resume scanner, ats resume format, ats resume template free, resume pdf download, resume
-json export, resume docx download, download resume as pdf, print resume, save resume online, export resume to word,
-resume file download, resume format download, modern resume template, minimalist resume, creative resume, professional
-resume template, classic resume design, elegant resume, simple resume template, clean resume design, stylish resume, one
-page resume, two page resume, single column resume, two column resume, infographic resume, visual resume, resume format,
-resume format for freshers, resume format for experienced, resume format for job, resume format pdf, resume format word,
-resume format 2026, latest resume format, new resume format, chronological resume, functional resume, combination
-resume, hybrid resume format, targeted resume, master resume, resume builder for freshers, fresher resume maker, first
-job resume, entry level resume builder, graduate resume maker, student resume, college student resume, internship resume
-builder, campus placement resume, resume builder for experienced, senior professional resume, executive resume builder,
-manager resume template, director resume, ceo resume, cto resume, cfo resume, vp resume template, linkedin resume,
-github resume, portfolio resume, online resume, digital resume, web resume, interactive resume builder, live preview
-resume, real time resume preview, wysiwyg resume builder, drag and drop resume builder, easy resume maker, quick resume
-builder, professional cv, curriculum vitae builder, cv maker online free, academic cv builder, research cv, professor cv
-template, phd resume, postdoc resume, academic resume builder, resume writing tool, resume editor online, resume
-formatter, resume designer, resume customizer, personalized resume builder, custom resume maker, tailored resume
-builder, job specific resume, resume builder without registration, anonymous resume builder, privacy focused resume,
-client side resume builder, no upload resume, secure resume builder, private resume maker, offline resume builder,
-resume builder no account required, instant resume builder, resume builder india, resume builder usa, resume builder uk,
-resume builder canada, resume builder australia, international resume, global resume format, european cv builder,
-europass cv maker{% endblock %}
+{% block meta_keywords %}resume builder, free resume builder, developer resume, software engineer resume, ats resume
+builder, resume builder no signup, tech resume builder, pdf resume maker{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/resume-builder/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Free Resume Builder for Developers",
+  "description": "Build ATS-friendly developer resumes with GitHub/LinkedIn integration. PDF export. 100% client-side.",
+  "url": "{{ SITE_URL }}/resume-builder/",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Web Browser",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "featureList": ["4 Templates (Modern, Professional, Developer, Creative)", "ATS-Optimized Output", "PDF Export", "GitHub & LinkedIn Links", "100% Client-Side", "Auto-Save to Browser"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Is this resume builder really free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, 100% free! No hidden fees, no premium plans, no watermarks. Create unlimited resumes and download as PDF without any cost." } },
+    { "@type": "Question", "name": "Do I need to create an account?", "acceptedAnswer": { "@type": "Answer", "text": "No! Start building immediately without signing up. Your data is saved locally in your browser." } },
+    { "@type": "Question", "name": "Is my data secure and private?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely! All data stays in your browser - we never upload or store your personal information on any server." } },
+    { "@type": "Question", "name": "What is an ATS-friendly resume?", "acceptedAnswer": { "@type": "Answer", "text": "ATS (Applicant Tracking System) is software employers use to scan resumes. Our templates use clean formatting that ATS systems can easily read and parse." } },
+    { "@type": "Question", "name": "Can I add GitHub and LinkedIn links?", "acceptedAnswer": { "@type": "Answer", "text": "Yes! Our tool has dedicated fields for GitHub, LinkedIn, and personal portfolio links - perfect for developer resumes." } }
+  ]
+}
+</script>
+{% endblock %}
+
+
 
 {% block extra_css %}
 <style>
