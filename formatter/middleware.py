@@ -163,8 +163,12 @@ class VisitorTrackingMiddleware(MiddlewareMixin):
         user_agent_string = request.META.get('HTTP_USER_AGENT', '')
         user_agent = parse(user_agent_string)
         
-        # Check if bot
-        is_bot = self.is_bot(user_agent_string)
+        # Get device type and browser first
+        device_type = self.get_device_type(user_agent)
+        browser = user_agent.browser.family
+        
+        # Check if bot - also check browser name and device type
+        is_bot = self.is_bot(user_agent_string, browser, device_type)
         
         # Get or create visitor log
         visitor_log, created = VisitorLog.objects.get_or_create(
@@ -172,9 +176,9 @@ class VisitorTrackingMiddleware(MiddlewareMixin):
             defaults={
                 'session_key': session_key,
                 'user_agent': user_agent_string,
-                'browser': user_agent.browser.family,
+                'browser': browser,
                 'browser_version': user_agent.browser.version_string,
-                'device_type': self.get_device_type(user_agent),
+                'device_type': device_type,
                 'os': user_agent.os.family,
                 'os_version': user_agent.os.version_string,
                 'is_bot': is_bot,
@@ -247,10 +251,30 @@ class VisitorTrackingMiddleware(MiddlewareMixin):
         else:
             return 'Unknown'
     
-    def is_bot(self, user_agent_string):
-        """Check if user agent is a bot"""
+    def is_bot(self, user_agent_string, browser='', device_type=''):
+        """
+        Check if user agent is a bot
+        Detects bots by:
+        1. User agent string containing known bot keywords
+        2. Browser name containing 'bot' or 'spider'
+        3. Device type being 'Unknown'
+        """
         user_agent_lower = user_agent_string.lower()
-        return any(bot in user_agent_lower for bot in self.BOT_USER_AGENTS)
+        browser_lower = browser.lower() if browser else ''
+        
+        # Check user agent for known bot patterns
+        if any(bot in user_agent_lower for bot in self.BOT_USER_AGENTS):
+            return True
+        
+        # Check if browser name contains 'bot' or 'spider'
+        if 'bot' in browser_lower or 'spider' in browser_lower:
+            return True
+        
+        # Mark as bot if device type is Unknown
+        if device_type == 'Unknown':
+            return True
+        
+        return False
     
     def get_page_title(self, request):
         """Extract page title from path"""
