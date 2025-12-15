@@ -50,7 +50,21 @@ ip country lookup, ip region lookup, ip city finder, ip location checker, ip no 
   ]
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What is an IP address?", "acceptedAnswer": { "@type": "Answer", "text": "An IP (Internet Protocol) address is a unique identifier assigned to every device connected to the internet. IPv4 uses 32-bit addresses (e.g., 8.8.8.8), while IPv6 uses 128-bit." } },
+    { "@type": "Question", "name": "How accurate is IP geolocation?", "acceptedAnswer": { "@type": "Answer", "text": "IP geolocation is typically accurate to the city level (about 80% accuracy). It can identify country with 99% accuracy but may not pinpoint exact street addresses." } },
+    { "@type": "Question", "name": "What is my public IP address?", "acceptedAnswer": { "@type": "Answer", "text": "Your public IP is the address assigned by your ISP that identifies you on the internet. Use our 'My IP' button to instantly discover your current public IP." } },
+    { "@type": "Question", "name": "What is an ISP?", "acceptedAnswer": { "@type": "Answer", "text": "ISP (Internet Service Provider) is the company that provides your internet connection. Examples include Comcast, AT&T, Verizon, and regional providers." } },
+    { "@type": "Question", "name": "Can IP addresses reveal my exact location?", "acceptedAnswer": { "@type": "Answer", "text": "No. IP addresses typically reveal city-level location, not exact addresses. For precise location, websites need GPS or explicit permission from your device." } }
+  ]
+}
+</script>
 {% endblock %}
+
 
 {% block extra_css %}
 <style>
@@ -407,6 +421,41 @@ ip country lookup, ip region lookup, ip city finder, ip location checker, ip no 
         <strong>Use cases:</strong> Security analysis, fraud detection, geo-targeting, troubleshooting network issues,
         understanding user location, and verifying VPN connections.
     </p>
+</div>
+
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>❓ Frequently Asked Questions</h2>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What is an IP address?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">An IP (Internet Protocol) address is a unique
+            identifier assigned to every device connected to the internet. IPv4 uses 32-bit addresses (e.g., 8.8.8.8),
+            while IPv6 uses 128-bit.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">How accurate is IP geolocation?
+        </summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">IP geolocation is typically accurate to the
+            city level (about 80% accuracy). It can identify country with 99% accuracy but may not pinpoint exact street
+            addresses.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What is my public IP address?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">Your public IP is the address assigned by your
+            ISP that identifies you on the internet. Use our 'My IP' button to instantly discover your current public
+            IP.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What is an ISP?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">ISP (Internet Service Provider) is the company
+            that provides your internet connection. Examples include Comcast, AT&T, Verizon, and regional providers.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">Can IP addresses reveal my exact
+            location?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">No. IP addresses typically reveal city-level
+            location, not exact addresses. For precise location, websites need GPS or explicit permission from your
+            device.</p>
+    </details>
 </div>
 {% endblock %}
 

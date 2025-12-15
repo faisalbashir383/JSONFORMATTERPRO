@@ -1,47 +1,22 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Free Push Notification Tester - Send FCM & OneSignal Notifications Online | JSON Formatters Pro
-{% endblock %}
-{% block meta_title %}Free Push Notification Tester - Firebase FCM & OneSignal API Testing | JSON Formatters Pro
-{% endblock %}
-{% block meta_description %}Test push notifications via Firebase Cloud Messaging (FCM), OneSignal, or browser
-notifications. Send real notifications to devices, preview content, and debug your notification setup. Free online
-tool.{% endblock %}
-{% block meta_keywords %}push notification tester, fcm push notification, firebase cloud messaging test, onesignal api
-test, android push notification, ios push notification, free push notification tool,
-send push notification online, firebase notification tester, onesignal notification sender, web push test,
-mobile push notification, fcm api tester, notification debugger, fcm tester, push notification,
-push notification 2026, fcm tester 2026, firebase notification 2026, onesignal test 2026, web push 2026,
-push notification online, send web push, browser notification test, fcm notification online, onesignal push,
-mobile push tester, app notification test, push message sender, notification api test, push no signup,
-free fcm tester, free onesignal tester, push notification tool free, send test notification,
-firebase push notification tester online, fcm http v1, fcm legacy api, fcm server key test,
-push notification debugger, notification testing tool, mobile notification tester,
-android fcm test, ios apns test, web push notification sender, chrome notification test,
-free push notification service test, onesignal player id test, onesignal segment test,
-notification preview, push notification simulator, firebase messaging test,
-client side push notification, secure notification tester, private notification test,
-no data storage push tester, browser based fcm tester, instant push notification,
-unlimited push notification test, free unlimited notifications, ad free notification tester,
-push notification without signup, push notification no login, quick push test,
-fcm device token test, fcm topic notification, onesignal rest api test,
-push notification payload builder, notification json builder, fcm json generator,
-push notification developer tool, mobile app notification test, react native push test,
-flutter push notification test, android studio fcm test, xcode push notification,
-push notification for developers, notification testing platform 2026, fcm v1 api tester,
-firebase cloud messaging v1, google fcm api, push notification api online,
-test push notification free online, send push message online free, notification sender tool{% endblock %}
+{% block title %}Push Notification Tester - Send FCM & Web Push Free [2025]{% endblock %}
+{% block meta_title %}Push Notification Tester - Test Firebase FCM & OneSignal Online Free{% endblock %}
+{% block meta_description %}Free online push notification tester for developers. Test Firebase Cloud Messaging (FCM),
+OneSignal API, and browser Web Push. Debug instantly without signup.{% endblock %}
+{% block meta_keywords %}push notification tester, fcm tester, firebase push notification test, onesignal api test, web
+push test, send test notification, browser notification api{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/push-notification-tester/{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Push Notification Tester - FCM & OneSignal",
-  "description": "Send real push notifications via Firebase Cloud Messaging, OneSignal, or browser API",
-  "url": "https://jsonformatterspro.com/push-notification-tester/",
+  "@type": "SoftwareApplication",
+  "name": "Push Notification Tester",
+  "description": "Test and debug push notifications via FCM, OneSignal, or native browser API.",
+  "url": "{{ SITE_URL }}/push-notification-tester/",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web Browser",
   "offers": {
@@ -50,11 +25,59 @@ test push notification free online, send push message online free, notification 
     "priceCurrency": "USD"
   },
   "featureList": [
-    "Firebase Cloud Messaging (FCM) integration",
-    "OneSignal push notification API",
-    "Browser notification testing",
-    "Real-time notification delivery",
-    "Custom notification content"
+    "Firebase Cloud Messaging (FCM) Legacy API",
+    "OneSignal REST API Integration",
+    "Native Browser Notification API",
+    "100% Client-Side - No Data Storage",
+    "Custom Payload Builder"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I test FCM push notifications?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To test FCM, you need your Server Key (from Firebase Console > Project Settings > Cloud Messaging) and a target device token or topic. Enter these credentials and your notification content, then click send. The response will show if delivery was successful."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my FCM Server Key secure using this tool?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. This tool runs 100% in your browser. Your API keys are never stored on our servers. They are sent directly to the FCM or OneSignal API endpoints from your browser."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between FCM v1 and Legacy API?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "FCM Legacy API uses a simple Server Key for authentication. FCM HTTP v1 requires OAuth 2.0 tokens from a Service Account, which needs server-side processing due to browser CORS limitations. This tool currently supports the Legacy API."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I find my OneSignal Player ID?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The Player ID is assigned to each subscribed device. You can find it in your OneSignal Dashboard under Audience > All Users, or via your app's SDK callback when the user subscribes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why isn't my browser notification showing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Check if notification permission is 'Granted' in your browser. If it's denied, you'll need to reset permissions in your browser settings. Also, some browsers suppress notifications if you have 'Focus Assist' or 'Do Not Disturb' mode enabled."
+      }
+    }
   ]
 }
 </script>
@@ -165,7 +188,6 @@ test push notification free online, send push message online free, notification 
     .panel-title {
         font-size: 1rem;
         font-weight: 600;
-        color: var(--color-text);
         margin: 0;
         display: flex;
         align-items: center;
@@ -196,7 +218,6 @@ test push notification free online, send push message online free, notification 
         color: var(--color-text);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-md);
-        transition: border-color 200ms ease;
     }
 
     .input-field:focus {
@@ -207,7 +228,6 @@ test push notification free online, send push message online free, notification 
     textarea.input-field {
         min-height: 80px;
         resize: vertical;
-        font-family: inherit;
     }
 
     .input-hint {
@@ -216,7 +236,6 @@ test push notification free online, send push message online free, notification 
         margin-top: 0.25rem;
     }
 
-    /* Credential Section */
     .credential-section {
         background: rgba(245, 158, 11, 0.05);
         border: 1px solid rgba(245, 158, 11, 0.2);
@@ -233,14 +252,12 @@ test push notification free online, send push message online free, notification 
     .credential-title {
         font-size: 0.85rem;
         font-weight: 600;
-        color: var(--color-text);
         margin-bottom: 0.75rem;
         display: flex;
         align-items: center;
         gap: 0.5rem;
     }
 
-    /* Send Button */
     .send-btn {
         width: 100%;
         padding: 1rem;
@@ -285,13 +302,12 @@ test push notification free online, send push message online free, notification 
         box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
     }
 
-    /* Response Panel */
     .response-panel {
         background: var(--color-bg);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-md);
         padding: 1rem;
-        font-family: 'SF Mono', 'Monaco', monospace;
+        font-family: 'SF Mono', monospace;
         font-size: 0.85rem;
         min-height: 120px;
         max-height: 250px;
@@ -310,54 +326,12 @@ test push notification free online, send push message online free, notification 
         background: rgba(239, 68, 68, 0.05);
     }
 
-    /* Two Column Layout */
     .two-col {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1.5rem;
     }
 
-    /* Info Cards */
-    .info-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1rem;
-        margin-top: 2rem;
-    }
-
-    .info-card {
-        background: var(--color-surface);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-lg);
-        padding: 1.25rem;
-    }
-
-    .info-card h3 {
-        font-size: 1rem;
-        font-weight: 600;
-        margin-bottom: 0.75rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .info-card p,
-    .info-card li {
-        color: var(--color-text-secondary);
-        line-height: 1.6;
-        font-size: 0.9rem;
-    }
-
-    .info-card ul {
-        margin: 0;
-        padding-left: 1.25rem;
-    }
-
-    .info-card li {
-        margin-bottom: 0.35rem;
-    }
-
-    /* Permission Status */
     .permission-status {
         display: flex;
         align-items: center;
@@ -395,8 +369,139 @@ test push notification free online, send push message online free, notification 
         margin-left: auto;
     }
 
+    /* New Sections */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .info-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #f59e0b;
+        font-weight: bold;
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tool-link {
+        display: block;
+        padding: 1rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tool-link:hover {
+        border-color: #f59e0b;
+        transform: translateY(-2px);
+    }
+
+    /* FAQ */
+    .faq-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .faq-item {
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+        margin-bottom: 0.75rem;
+        border: 1px solid var(--color-border);
+    }
+
+    .faq-question {
+        padding: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .faq-question:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .faq-toggle {
+        transition: transform 0.2s;
+        color: #f59e0b;
+    }
+
+    .faq-item.open .faq-toggle {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+    }
+
+    .faq-item.open .faq-answer {
+        max-height: 300px;
+        transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
+    }
+
+    .faq-answer-content {
+        padding: 0 1rem 1rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        border-top: 1px solid var(--color-border);
+    }
+
     @media (max-width: 900px) {
         .two-col {
+            grid-template-columns: 1fr;
+        }
+
+        .info-grid {
             grid-template-columns: 1fr;
         }
     }
@@ -419,17 +524,15 @@ test push notification free online, send push message online free, notification 
 <div class="tool-header">
     <h1>🔔 Push Notification Tester</h1>
     <p>Send real push notifications via Firebase Cloud Messaging (FCM), OneSignal API, or test browser notifications
-        locally.</p>
+        locally. 100% client-side and secure.</p>
 </div>
 
-<!-- Tabs -->
 <div class="tabs-container">
     <button class="tab-btn browser active" data-tab="browser">🌐 Browser Notification</button>
     <button class="tab-btn fcm" data-tab="fcm">🔥 Firebase (FCM)</button>
     <button class="tab-btn onesignal" data-tab="onesignal">📱 OneSignal</button>
 </div>
 
-<!-- Browser Notification Tab -->
 <div class="tab-content active" id="tab-browser">
     <div class="two-col">
         <div class="panel-card">
@@ -437,32 +540,17 @@ test push notification free online, send push message online free, notification 
                 <h2 class="panel-title">🌐 Browser Notification</h2>
             </div>
             <div class="panel-body">
-                <div class="permission-status default" id="permissionStatus">
-                    <span>⏳</span>
-                    <span>Checking permission...</span>
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Title *</label>
-                    <input type="text" id="browserTitle" class="input-field" value="Hello from JSON Formatters Pro!">
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Body *</label>
-                    <textarea id="browserBody" class="input-field">This is a test push notification!</textarea>
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Icon URL (optional)</label>
-                    <input type="text" id="browserIcon" class="input-field" placeholder="https://example.com/icon.png">
-                </div>
-
-                <button id="sendBrowserBtn" class="send-btn browser">
-                    🔔 Send Browser Notification
-                </button>
+                <div class="permission-status default" id="permissionStatus"><span>⏳</span><span>Checking
+                        permission...</span></div>
+                <div class="input-group"><label class="input-label">Title *</label><input type="text" id="browserTitle"
+                        class="input-field" value="Hello from JSON Formatters Pro!"></div>
+                <div class="input-group"><label class="input-label">Body *</label><textarea id="browserBody"
+                        class="input-field">This is a test push notification!</textarea></div>
+                <div class="input-group"><label class="input-label">Icon URL (optional)</label><input type="text"
+                        id="browserIcon" class="input-field" placeholder="https://example.com/icon.png"></div>
+                <button id="sendBrowserBtn" class="send-btn browser">🔔 Send Browser Notification</button>
             </div>
         </div>
-
         <div class="panel-card">
             <div class="panel-header">
                 <h2 class="panel-title">📋 Response</h2>
@@ -474,7 +562,6 @@ test push notification free online, send push message online free, notification 
     </div>
 </div>
 
-<!-- Firebase FCM Tab -->
 <div class="tab-content" id="tab-fcm">
     <div class="two-col">
         <div class="panel-card">
@@ -484,47 +571,30 @@ test push notification free online, send push message online free, notification 
             <div class="panel-body">
                 <div class="credential-section">
                     <div class="credential-title">🔑 FCM Credentials</div>
-                    <div class="input-group">
-                        <label class="input-label">Server Key *</label>
-                        <input type="password" id="fcmServerKey" class="input-field" placeholder="AAAA...">
+                    <div class="input-group"><label class="input-label">Server Key *</label><input type="password"
+                            id="fcmServerKey" class="input-field" placeholder="AAAA...">
                         <div class="input-hint">Find in Firebase Console → Project Settings → Cloud Messaging</div>
                     </div>
-                    <div class="input-group" style="margin-bottom: 0;">
-                        <label class="input-label">Device Token / Topic *</label>
-                        <input type="text" id="fcmToken" class="input-field"
+                    <div class="input-group" style="margin-bottom: 0;"><label class="input-label">Device Token / Topic
+                            *</label><input type="text" id="fcmToken" class="input-field"
                             placeholder="Device token or /topics/your-topic">
                         <div class="input-hint">FCM registration token or topic name (e.g., /topics/news)</div>
                     </div>
                 </div>
-
-                <div class="input-group">
-                    <label class="input-label">Notification Title *</label>
-                    <input type="text" id="fcmTitle" class="input-field" value="Hello from FCM!">
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Notification Body *</label>
-                    <textarea id="fcmBody"
+                <div class="input-group"><label class="input-label">Notification Title *</label><input type="text"
+                        id="fcmTitle" class="input-field" value="Hello from FCM!"></div>
+                <div class="input-group"><label class="input-label">Notification Body *</label><textarea id="fcmBody"
                         class="input-field">This is a test notification sent via Firebase Cloud Messaging.</textarea>
                 </div>
-
-                <div class="input-group">
-                    <label class="input-label">Click Action URL (optional)</label>
-                    <input type="text" id="fcmClickAction" class="input-field" placeholder="https://example.com/page">
+                <div class="input-group"><label class="input-label">Click Action URL (optional)</label><input
+                        type="text" id="fcmClickAction" class="input-field" placeholder="https://example.com/page">
                 </div>
-
-                <div class="input-group">
-                    <label class="input-label">Custom Data (JSON, optional)</label>
-                    <textarea id="fcmData" class="input-field" style="min-height: 60px;"
-                        placeholder='{"key": "value"}'></textarea>
-                </div>
-
-                <button id="sendFcmBtn" class="send-btn">
-                    🔥 Send FCM Notification
-                </button>
+                <div class="input-group"><label class="input-label">Custom Data (JSON, optional)</label><textarea
+                        id="fcmData" class="input-field" style="min-height: 60px;"
+                        placeholder='{"key": "value"}'></textarea></div>
+                <button id="sendFcmBtn" class="send-btn">🔥 Send FCM Notification</button>
             </div>
         </div>
-
         <div class="panel-card">
             <div class="panel-header">
                 <h2 class="panel-title">📋 API Response</h2>
@@ -537,7 +607,6 @@ test push notification free online, send push message online free, notification 
     </div>
 </div>
 
-<!-- OneSignal Tab -->
 <div class="tab-content" id="tab-onesignal">
     <div class="two-col">
         <div class="panel-card">
@@ -547,61 +616,38 @@ test push notification free online, send push message online free, notification 
             <div class="panel-body">
                 <div class="credential-section onesignal">
                     <div class="credential-title">🔑 OneSignal Credentials</div>
-                    <div class="input-group">
-                        <label class="input-label">App ID *</label>
-                        <input type="text" id="osAppId" class="input-field"
-                            placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+                    <div class="input-group"><label class="input-label">App ID *</label><input type="text" id="osAppId"
+                            class="input-field" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
                         <div class="input-hint">Find in OneSignal Dashboard → Settings → Keys & IDs</div>
                     </div>
-                    <div class="input-group" style="margin-bottom: 0;">
-                        <label class="input-label">REST API Key *</label>
-                        <input type="password" id="osApiKey" class="input-field" placeholder="Your REST API Key">
+                    <div class="input-group" style="margin-bottom: 0;"><label class="input-label">REST API Key
+                            *</label><input type="password" id="osApiKey" class="input-field"
+                            placeholder="Your REST API Key">
                         <div class="input-hint">Keep this key secure!</div>
                     </div>
                 </div>
-
-                <div class="input-group">
-                    <label class="input-label">Target</label>
-                    <select id="osTarget" class="input-field">
+                <div class="input-group"><label class="input-label">Target</label><select id="osTarget"
+                        class="input-field">
                         <option value="all">All Subscribed Users</option>
                         <option value="segment">Specific Segment</option>
                         <option value="player">Specific Player ID</option>
-                    </select>
+                    </select></div>
+                <div class="input-group" id="osSegmentGroup" style="display: none;"><label class="input-label">Segment
+                        Name</label><input type="text" id="osSegment" class="input-field" placeholder="Active Users">
                 </div>
-
-                <div class="input-group" id="osSegmentGroup" style="display: none;">
-                    <label class="input-label">Segment Name</label>
-                    <input type="text" id="osSegment" class="input-field" placeholder="Active Users">
-                </div>
-
-                <div class="input-group" id="osPlayerGroup" style="display: none;">
-                    <label class="input-label">Player ID</label>
-                    <input type="text" id="osPlayerId" class="input-field"
-                        placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Notification Title *</label>
-                    <input type="text" id="osTitle" class="input-field" value="Hello from OneSignal!">
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Notification Message *</label>
-                    <textarea id="osMessage"
-                        class="input-field">This is a test notification sent via OneSignal API.</textarea>
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Launch URL (optional)</label>
-                    <input type="text" id="osUrl" class="input-field" placeholder="https://example.com">
-                </div>
-
-                <button id="sendOsBtn" class="send-btn onesignal">
-                    📱 Send OneSignal Notification
-                </button>
+                <div class="input-group" id="osPlayerGroup" style="display: none;"><label class="input-label">Player
+                        ID</label><input type="text" id="osPlayerId" class="input-field"
+                        placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"></div>
+                <div class="input-group"><label class="input-label">Notification Title *</label><input type="text"
+                        id="osTitle" class="input-field" value="Hello from OneSignal!"></div>
+                <div class="input-group"><label class="input-label">Notification Message *</label><textarea
+                        id="osMessage"
+                        class="input-field">This is a test notification sent via OneSignal API.</textarea></div>
+                <div class="input-group"><label class="input-label">Launch URL (optional)</label><input type="text"
+                        id="osUrl" class="input-field" placeholder="https://example.com"></div>
+                <button id="sendOsBtn" class="send-btn onesignal">📱 Send OneSignal Notification</button>
             </div>
         </div>
-
         <div class="panel-card">
             <div class="panel-header">
                 <h2 class="panel-title">📋 API Response</h2>
@@ -614,80 +660,78 @@ test push notification free online, send push message online free, notification 
     </div>
 </div>
 
-<!-- Info Cards -->
 <div class="info-grid">
     <div class="info-card">
-        <h3>🌐 Browser Notifications</h3>
-        <p>Test browser's native Notification API. Works locally without any external service. Great for testing
-            notification appearance and permissions.</p>
-    </div>
-
-    <div class="info-card">
-        <h3>🔥 Firebase Cloud Messaging</h3>
-        <ul>
-            <li>Send to specific device tokens</li>
-            <li>Send to topics (e.g., /topics/news)</li>
-            <li>Include custom data payload</li>
-            <li>Uses Legacy HTTP API (Server Key)</li>
-            <li>Free for all Firebase projects</li>
+        <h2 class="section-title"><i class="fas fa-star"></i> Tool Features</h2>
+        <ul class="feature-list">
+            <li><strong>Multi-Platform:</strong> Test FCM, OneSignal, and native browser Web Push.</li>
+            <li><strong>100% Client-Side:</strong> Your API keys never touch our servers.</li>
+            <li><strong>Instant Debugging:</strong> See API responses in real-time.</li>
+            <li><strong>No Signup:</strong> Use immediately without any registration.</li>
         </ul>
     </div>
-
     <div class="info-card">
-        <h3>📱 OneSignal</h3>
-        <ul>
-            <li>Send to all subscribers</li>
-            <li>Target specific segments</li>
-            <li>Target individual player IDs</li>
-            <li>Free tier: 10,000 subscribers</li>
-        </ul>
-    </div>
-
-    <div class="info-card">
-        <h3>🔒 100% Client-Side & Private</h3>
-        <p>All processing happens in your browser. Your API keys, tokens, and credentials are <strong>never sent to our
-                servers</strong>. They go directly to Firebase/OneSignal APIs. We don't store any data.</p>
+        <h2 class="section-title"><i class="fas fa-shield-alt"></i> Security & Privacy</h2>
+        <p style="color: var(--color-text-secondary);">All API calls are made directly from your browser to the
+            FCM/OneSignal endpoints. We do not log, store, or process your credentials. You can verify this by opening
+            your browser's DevTools and inspecting network requests.</p>
     </div>
 </div>
 
-<!-- Privacy & Free Usage Section -->
-<div class="info-grid" style="margin-top: 1rem;">
-    <div class="info-card">
-        <h3>✨ Free & Unlimited</h3>
-        <ul>
-            <li>No signup or registration required</li>
-            <li>Unlimited API calls - no daily limits</li>
-            <li>No ads or interruptions</li>
-            <li>Use as many times as you need</li>
-            <li>Works on mobile, tablet & desktop</li>
-        </ul>
+<div class="info-card" style="margin-top: 2rem;">
+    <h2 class="section-title"><i class="fas fa-tools"></i> Related Developer Tools</h2>
+    <div class="related-tools">
+        <a href="/json-formatter/" class="tool-link"><i class="fas fa-code"></i> JSON Formatter</a>
+        <a href="/http-headers/" class="tool-link"><i class="fas fa-server"></i> HTTP Headers</a>
+        <a href="/cors-checker/" class="tool-link"><i class="fas fa-globe"></i> CORS Checker</a>
     </div>
+</div>
 
-    <div class="info-card">
-        <h3>🛡️ Your Data Stays Private</h3>
-        <ul>
-            <li>Keys never stored in our database</li>
-            <li>No server-side logging</li>
-            <li>No analytics on your credentials</li>
-            <li>Direct API calls to providers</li>
-            <li>Open browser DevTools to verify!</li>
-        </ul>
+<div class="faq-section">
+    <h2 class="section-title">❓ Frequently Asked Questions</h2>
+    <div class="faq-item">
+        <div class="faq-question"><span>How do I test FCM push notifications?</span><span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">You need your Server Key (from Firebase Console > Project Settings > Cloud
+                Messaging) and a device token or topic. Enter these and your message content, then click send. The API
+                response will tell you if the notification was delivered.</div>
+        </div>
     </div>
-
-    <div class="info-card">
-        <h3>⚠️ FCM API Versions</h3>
-        <p><strong>This tool uses FCM Legacy HTTP API</strong> with Server Key authentication.</p>
-        <p style="margin-top: 0.5rem;">For <strong>FCM HTTP v1 API</strong> (using Service Account JSON), you need
-            server-side OAuth2 token generation which isn't possible purely in-browser due to CORS restrictions.</p>
+    <div class="faq-item">
+        <div class="faq-question"><span>Is my FCM Server Key secure using this tool?</span><span
+                class="faq-toggle">+</span></div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">Yes. This tool runs 100% in your browser. Your API keys are never stored on
+                our servers. They are sent directly to the FCM or OneSignal API endpoints from your browser.</div>
+        </div>
     </div>
-
-    <div class="info-card">
-        <h3>📋 Where to Find Your Keys</h3>
-        <ul>
-            <li><strong>FCM Server Key:</strong> Firebase Console → Project Settings → Cloud Messaging → Server Key</li>
-            <li><strong>Device Token:</strong> Your app's FCM registration callback</li>
-            <li><strong>OneSignal Keys:</strong> OneSignal Dashboard → Settings → Keys & IDs</li>
-        </ul>
+    <div class="faq-item">
+        <div class="faq-question"><span>What is the difference between FCM v1 and Legacy API?</span><span
+                class="faq-toggle">+</span></div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">FCM Legacy API uses a simple Server Key for authentication. FCM HTTP v1
+                requires OAuth 2.0 tokens from a Service Account, which needs server-side processing due to browser CORS
+                limitations. This tool currently supports the Legacy API.</div>
+        </div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question"><span>How do I find my OneSignal Player ID?</span><span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">The Player ID is assigned to each subscribed device. You can find it in your
+                OneSignal Dashboard under Audience > All Users, or via your app's SDK callback when the user subscribes.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question"><span>Why isn't my browser notification showing?</span><span
+                class="faq-toggle">+</span></div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">Check if notification permission is 'Granted' in your browser. If it's
+                denied, you'll need to reset permissions in your browser settings. Also, some browsers suppress
+                notifications if you have 'Focus Assist' or 'Do Not Disturb' mode enabled.</div>
+        </div>
     </div>
 </div>
 {% endverbatim %}
@@ -698,18 +742,12 @@ test push notification free online, send push message online free, notification 
 <script>
     (function () {
         // Tab switching
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabBtns.forEach(btn => {
+        document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                const target = btn.dataset.tab;
-
-                tabBtns.forEach(b => b.classList.remove('active'));
-                tabContents.forEach(c => c.classList.remove('active'));
-
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                 btn.classList.add('active');
-                document.getElementById('tab-' + target).classList.add('active');
+                document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
             });
         });
 
@@ -717,16 +755,14 @@ test push notification free online, send push message online free, notification 
         const permissionStatus = document.getElementById('permissionStatus');
         const sendBrowserBtn = document.getElementById('sendBrowserBtn');
         const browserResponse = document.getElementById('browserResponse');
-        const notificationsSupported = 'Notification' in window;
 
         function updatePermissionStatus() {
-            if (!notificationsSupported) {
+            if (!('Notification' in window)) {
                 permissionStatus.className = 'permission-status denied';
                 permissionStatus.innerHTML = '<span>❌</span><span>Notifications not supported</span>';
                 sendBrowserBtn.disabled = true;
                 return;
             }
-
             const perm = Notification.permission;
             if (perm === 'granted') {
                 permissionStatus.className = 'permission-status granted';
@@ -739,9 +775,7 @@ test push notification free online, send push message online free, notification 
             } else {
                 permissionStatus.className = 'permission-status default';
                 permissionStatus.innerHTML = '<span>❓</span><span>Permission required</span><button class="request-btn" id="reqPermBtn">Request</button>';
-                document.getElementById('reqPermBtn').addEventListener('click', () => {
-                    Notification.requestPermission().then(updatePermissionStatus);
-                });
+                document.getElementById('reqPermBtn').addEventListener('click', () => Notification.requestPermission().then(updatePermissionStatus));
                 sendBrowserBtn.disabled = true;
             }
         }
@@ -750,13 +784,10 @@ test push notification free online, send push message online free, notification 
             const title = document.getElementById('browserTitle').value.trim();
             const body = document.getElementById('browserBody').value.trim();
             const icon = document.getElementById('browserIcon').value.trim();
-
             if (!title) { alert('Please enter a title'); return; }
-
             try {
                 const notif = new Notification(title, { body, icon: icon || undefined });
                 notif.onclick = () => { window.focus(); notif.close(); };
-
                 browserResponse.className = 'response-panel success';
                 browserResponse.textContent = '✅ Notification sent successfully!\n\nTitle: ' + title + '\nBody: ' + body;
             } catch (e) {
@@ -764,7 +795,6 @@ test push notification free online, send push message online free, notification 
                 browserResponse.textContent = '❌ Error: ' + e.message;
             }
         });
-
         updatePermissionStatus();
 
         // ==================== Firebase Cloud Messaging ====================
@@ -788,71 +818,36 @@ test push notification free online, send push message online free, notification 
             fcmResponse.className = 'response-panel';
             fcmResponse.textContent = 'Sending notification...';
 
-            const payload = {
-                notification: { title, body },
-            };
-
-            if (token.startsWith('/topics/')) {
-                payload.to = token;
-            } else {
-                payload.to = token;
-            }
-
-            if (clickAction) {
-                payload.notification.click_action = clickAction;
-            }
-
-            if (customData) {
-                try {
-                    payload.data = JSON.parse(customData);
-                } catch (e) {
-                    fcmResponse.className = 'response-panel error';
-                    fcmResponse.textContent = '❌ Invalid JSON in custom data field';
-                    sendFcmBtn.disabled = false;
-                    sendFcmBtn.innerHTML = '🔥 Send FCM Notification';
-                    return;
-                }
-            }
+            const payload = { to: token, notification: { title, body } };
+            if (clickAction) payload.notification.click_action = clickAction;
+            if (customData) { try { payload.data = JSON.parse(customData); } catch (e) { /* ignore */ } }
 
             try {
-                const response = await fetch('https://fcm.googleapis.com/fcm/send', {
+                const res = await fetch('https://fcm.googleapis.com/fcm/send', {
                     method: 'POST',
-                    headers: {
-                        'Authorization': 'key=' + serverKey,
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'key=' + serverKey },
                     body: JSON.stringify(payload)
                 });
-
-                const data = await response.json();
-
-                if (response.ok && data.success >= 1) {
-                    fcmResponse.className = 'response-panel success';
-                    fcmResponse.textContent = '✅ Notification sent successfully!\n\n' + JSON.stringify(data, null, 2);
-                } else {
-                    fcmResponse.className = 'response-panel error';
-                    fcmResponse.textContent = '❌ FCM Error:\n\n' + JSON.stringify(data, null, 2);
-                }
+                const data = await res.json();
+                fcmResponse.className = 'response-panel ' + (data.success ? 'success' : 'error');
+                fcmResponse.textContent = JSON.stringify(data, null, 2);
             } catch (e) {
                 fcmResponse.className = 'response-panel error';
-                fcmResponse.textContent = '❌ Network Error: ' + e.message + '\n\nNote: FCM may block browser requests due to CORS. Use a backend for production.';
+                fcmResponse.textContent = '❌ Error: ' + e.message;
             }
-
             sendFcmBtn.disabled = false;
             sendFcmBtn.innerHTML = '🔥 Send FCM Notification';
         });
 
         // ==================== OneSignal ====================
         const osTarget = document.getElementById('osTarget');
-        const osSegmentGroup = document.getElementById('osSegmentGroup');
-        const osPlayerGroup = document.getElementById('osPlayerGroup');
+        osTarget.addEventListener('change', () => {
+            document.getElementById('osSegmentGroup').style.display = osTarget.value === 'segment' ? 'block' : 'none';
+            document.getElementById('osPlayerGroup').style.display = osTarget.value === 'player' ? 'block' : 'none';
+        });
+
         const sendOsBtn = document.getElementById('sendOsBtn');
         const osResponse = document.getElementById('osResponse');
-
-        osTarget.addEventListener('change', () => {
-            osSegmentGroup.style.display = osTarget.value === 'segment' ? 'block' : 'none';
-            osPlayerGroup.style.display = osTarget.value === 'player' ? 'block' : 'none';
-        });
 
         sendOsBtn.addEventListener('click', async () => {
             const appId = document.getElementById('osAppId').value.trim();
@@ -864,62 +859,40 @@ test push notification free online, send push message online free, notification 
 
             if (!appId) { alert('Please enter OneSignal App ID'); return; }
             if (!apiKey) { alert('Please enter OneSignal REST API Key'); return; }
-            if (!title) { alert('Please enter notification title'); return; }
-            if (!message) { alert('Please enter notification message'); return; }
+            if (!title || !message) { alert('Please enter title and message'); return; }
 
             sendOsBtn.disabled = true;
             sendOsBtn.innerHTML = '⏳ Sending...';
             osResponse.className = 'response-panel';
             osResponse.textContent = 'Sending notification...';
 
-            const payload = {
-                app_id: appId,
-                headings: { en: title },
-                contents: { en: message }
-            };
+            const payload = { app_id: appId, headings: { en: title }, contents: { en: message } };
+            if (url) payload.url = url;
 
-            if (url) {
-                payload.url = url;
-            }
-
-            if (target === 'all') {
-                payload.included_segments = ['All'];
-            } else if (target === 'segment') {
-                const segment = document.getElementById('osSegment').value.trim();
-                if (!segment) { alert('Please enter segment name'); sendOsBtn.disabled = false; sendOsBtn.innerHTML = '📱 Send OneSignal Notification'; return; }
-                payload.included_segments = [segment];
-            } else if (target === 'player') {
-                const playerId = document.getElementById('osPlayerId').value.trim();
-                if (!playerId) { alert('Please enter player ID'); sendOsBtn.disabled = false; sendOsBtn.innerHTML = '📱 Send OneSignal Notification'; return; }
-                payload.include_player_ids = [playerId];
-            }
+            if (target === 'all') payload.included_segments = ['Subscribed Users'];
+            else if (target === 'segment') payload.included_segments = [document.getElementById('osSegment').value.trim()];
+            else if (target === 'player') payload.include_player_ids = [document.getElementById('osPlayerId').value.trim()];
 
             try {
-                const response = await fetch('https://onesignal.com/api/v1/notifications', {
+                const res = await fetch('https://onesignal.com/api/v1/notifications', {
                     method: 'POST',
-                    headers: {
-                        'Authorization': 'Basic ' + apiKey,
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Basic ' + apiKey },
                     body: JSON.stringify(payload)
                 });
-
-                const data = await response.json();
-
-                if (response.ok && data.id) {
-                    osResponse.className = 'response-panel success';
-                    osResponse.textContent = '✅ Notification sent successfully!\n\n' + JSON.stringify(data, null, 2);
-                } else {
-                    osResponse.className = 'response-panel error';
-                    osResponse.textContent = '❌ OneSignal Error:\n\n' + JSON.stringify(data, null, 2);
-                }
+                const data = await res.json();
+                osResponse.className = 'response-panel ' + (data.id ? 'success' : 'error');
+                osResponse.textContent = JSON.stringify(data, null, 2);
             } catch (e) {
                 osResponse.className = 'response-panel error';
-                osResponse.textContent = '❌ Network Error: ' + e.message + '\n\nNote: OneSignal may block browser requests due to CORS. Use a backend for production.';
+                osResponse.textContent = '❌ Error: ' + e.message;
             }
-
             sendOsBtn.disabled = false;
             sendOsBtn.innerHTML = '📱 Send OneSignal Notification';
+        });
+
+        // FAQ Toggle
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => item.classList.toggle('open'));
         });
     })();
 </script>
