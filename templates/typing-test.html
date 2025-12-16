@@ -1268,6 +1268,53 @@ per minute calculator, touch typing test, programming typing practice{% endblock
             muscle memory more efficient, letting you focus on logic rather than finding keys.
         </div>
     </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            <span>How can I improve my coding speed?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <strong>1. Master Your IDE:</strong> Learn keyboard shortcuts for your editor. Navigating without a mouse
+            saves significant time.<br>
+            <strong>2. Practice Touch Typing:</strong> Use this tool! Regular practice with code-specific symbols like
+            <code>{}</code>, <code>[]</code>, <code>()</code>, and <code>=></code> builds muscle memory.<br>
+            <strong>3. Learn Code Snippets:</strong> Typing <code>log</code> and expanding to <code>console.log()</code>
+            is faster than typing the whole thing.<br>
+            <strong>4. Read Code Daily:</strong> Familiarity with common patterns means you'll type them
+            instinctively.<br>
+            <strong>5. Focus on Accuracy First:</strong> Speed comes naturally once you stop making errors.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            <span>Why should I increase my coding speed?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <strong>Stay in Flow:</strong> The less you struggle with the keyboard, the more you can focus on
+            problem-solving.<br>
+            <strong>Ship Features Faster:</strong> Quicker coding means quicker delivery.<br>
+            <strong>Reduce Mental Fatigue:</strong> Slow, error-prone typing is exhausting. Efficiency lets you work
+            longer.<br>
+            <strong>Ace Technical Interviews:</strong> Many coding interviews are timed—speed gives you an edge.<br>
+            <strong>Impress Your Team:</strong> Watching someone fly through code builds credibility.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            <span>What's the average WPM for a programmer?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            Most developers type between <strong>40-60 WPM</strong> during regular work. For familiar boilerplate code,
+            this can reach <strong>60-80 WPM</strong>. On pure typing tests like this one, developers often hit
+            <strong>70-100+ WPM</strong>. The goal isn't maximum speed—it's to be fast <em>enough</em> that your
+            keyboard never slows your thoughts. Aim for <strong>60+ WPM with 95%+ accuracy</strong> as a solid baseline.
+        </div>
+    </div>
 </div>
 
 <div class="info-card" style="margin-top: 2rem;">
@@ -1974,31 +2021,31 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         };
 
         modal.classList.add('active');
-        
+
         // UI Defaults
         const saveBtn = document.getElementById('saveBtn');
         const skipBtn = document.getElementById('skipBtn');
         const usernameInput = document.getElementById('usernameInput');
-        
+
         // Reset state
         saveBtn.style.display = 'block';
         skipBtn.textContent = 'Skip';
         usernameInput.style.display = 'block';
         document.querySelector('#saveScoreModal h2').textContent = 'Test Complete! 🎉';
-        
+
         // Check for personal best
         (async () => {
             try {
                 const res = await fetch(`/api/typing-test/leaderboard/?limit=1&level=${level}`);
                 const data = await res.json();
-                
+
                 if (data.user_best && data.user_best.wpm >= wpm) {
                     // Current score is worse or equal to personal best
                     saveBtn.style.display = 'none';
                     skipBtn.textContent = 'Try Again';
                     skipBtn.classList.replace('secondary', 'primary'); // Make it prominent
                     usernameInput.style.display = 'none';
-                    
+
                     document.querySelector('#saveScoreModal h2').textContent = 'Nice Try! 👍';
                     document.querySelector('#saveScoreModal p').textContent = `Your personal best is ${data.user_best.wpm} WPM. Keep practicing!`;
                 } else {
