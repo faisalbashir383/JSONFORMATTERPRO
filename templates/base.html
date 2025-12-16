@@ -29,6 +29,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="google-site-verification" content="dUrxIJxdHg9iUeNbFzVFSycuVOgEENWBmwQRChJBbqk" />
     <meta name="google-adsense-account" content="ca-pub-6955346946355268">
+    <meta name="application-name" content="JSON Formatters Pro">
 
     <!-- Font Awesome font-display override - MUST be before loading the CSS -->
     <style>
@@ -106,6 +107,17 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="{% block canonical_url %}{{ SITE_URL }}/{% endblock %}">
 
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "{{ SITE_URL }}#website",
+      "url": "{{ SITE_URL }}",
+      "name": "JSON Formatters Pro",
+      "alternateName": ["JSONFormattersPro", "JSON Formatter Pro"]
+    }
+</script>
+
     <!-- Structured Data -->
     {% block structured_data %}
     <script type="application/ld+json">
@@ -137,121 +149,15 @@
     }
     </script>
 
-    <!-- Website Schema with Sitelinks Search Box -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "JSON Formatters Pro",
-      "alternateName": ["JSONFormattersPro", "JSON Formatter Pro"],
-      "url": "{{ SITE_URL }}",
-      "description": "Free online JSON formatter, validator, minifier, and converter tools for developers",
-      "publisher": {
-        "@type": "Organization",
-        "name": "JSON Formatters Pro",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "{{ SITE_URL }}/static/images/logo.svg"
-        }
-      }
-    }
-    </script>
-
-    <!-- Organization Schema - Helps Google show brand name instead of domain -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "JSON Formatters Pro",
-      "alternateName": ["JSONFormattersPro", "JSON Formatter Pro"],
-      "url": "{{ SITE_URL }}",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "{{ SITE_URL }}/static/images/logo.svg",
-        "width": 512,
-        "height": 512
-      },
-      "image": "{{ SITE_URL }}/static/images/logo.svg",
-      "description": "Free online JSON formatter, validator, and developer tools",
-      "foundingDate": "2024",
-      "sameAs": []
-    }
-    </script>
-
-    <!-- Site Navigation Elements for Sitelinks - Core Pages Only -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "itemListElement": [
-        {
-          "@type": "SiteNavigationElement",
-          "position": 1,
-          "name": "JSON Formatter",
-          "description": "Format and beautify JSON online",
-          "url": "{{ SITE_URL }}/"
-        },
-        {
-          "@type": "SiteNavigationElement",
-          "position": 2,
-          "name": "JSON Validator",
-          "description": "Validate JSON syntax and schema",
-          "url": "{{ SITE_URL }}/json-schema/"
-        },
-        {
-          "@type": "SiteNavigationElement",
-          "position": 3,
-          "name": "JSON to YAML",
-          "description": "Convert JSON to YAML format",
-          "url": "{{ SITE_URL }}/json-to-yaml/"
-        },
-        {
-          "@type": "SiteNavigationElement",
-          "position": 4,
-          "name": "Base64 Encoder",
-          "description": "Encode and decode Base64",
-          "url": "{{ SITE_URL }}/base64/"
-        },
-        {
-          "@type": "SiteNavigationElement",
-          "position": 5,
-          "name": "JSON Diff",
-          "description": "Compare JSON documents",
-          "url": "{{ SITE_URL }}/json-diff/"
-        },
-        {
-          "@type": "SiteNavigationElement",
-          "position": 6,
-          "name": "JSON Tree Viewer",
-          "description": "View JSON as tree structure",
-          "url": "{{ SITE_URL }}/json-tree/"
-        }
-      ]
-    }
-    </script>
     {% endblock %}
 
-    <!-- Favicon - Multiple sizes for better compatibility -->
-    <!-- Google Search recommends 48x48 minimum -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/logo.svg' %}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/logo.svg' %}">
-    <link rel="icon" type="image/png" sizes="48x48" href="{% static 'images/logo.svg' %}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'images/logo.svg' %}">
-    <link rel="icon" type="image/png" sizes="512x512" href="{% static 'images/logo.svg' %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/logo.svg' %}">
-    <link rel="shortcut icon" href="{% static 'images/logo.svg' %}">
-    <!-- Fallback for browsers that don't support PNG favicons -->
-    <link rel="icon" href="{% static 'images/logo.svg' %}" type="image/x-icon">
+    <!-- Google-compatible favicon setup -->
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" sizes="any">
+    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'images/favicon-96.png' %}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'images/favicon-192.png' %}">
+    <link rel="apple-touch-icon" sizes="192x192" href="{% static 'images/favicon-192.png' %}">
 
-    <!-- PWA Manifest - Deferred to avoid blocking critical path -->
-    <script>
-        window.addEventListener('load', function () {
-            var link = document.createElement('link');
-            link.rel = 'manifest';
-            link.href = '{% static "manifest.json" %}';
-            document.head.appendChild(link);
-        });
-    </script>
+    <link rel="manifest" href="{% static 'manifest.json' %}">
 
     <!-- Additional Head Content -->
     {% block extra_head %}{% endblock %}
@@ -407,7 +313,7 @@
             <div class="nav-brand">
                 <a href="/"
                     style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
-                    <img src="{% static 'images/logo.svg' %}" alt="JSON Formatters Pro Logo" class="nav-logo"
+                    <img src="{% static 'images/logo.png' %}" alt="JSON Formatters Pro Logo" class="nav-logo"
                         style="height: 40px; width: auto;">
                     <span class="brand-name">Json Formatters Pro</span>
                 </a>
@@ -691,33 +597,6 @@
         // Theme management
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
-
-        // Dynamic favicon - always white
-        function updateFavicon() {
-            fetch("{% static 'images/logo.svg' %}")
-                .then(response => response.text())
-                .then(svgText => {
-                    // Replace all fill colors with white
-                    const modifiedSvg = svgText
-                        .replace(/fill="#[0-9a-fA-F]{6}"/g, 'fill="#ffffff"')
-                        .replace(/fill:#[0-9a-fA-F]{6}/g, 'fill:#ffffff')
-                        .replace(/fill="rgb\([^)]+\)"/g, 'fill="#ffffff"')
-                        .replace(/fill="[^"]+"/g, 'fill="#ffffff"');
-
-                    // Convert to data URL
-                    const encoded = encodeURIComponent(modifiedSvg);
-                    const dataUrl = `data:image/svg+xml,${encoded}`;
-
-                    // Update all favicon links
-                    document.querySelectorAll('link[rel*="icon"]').forEach(link => {
-                        link.href = dataUrl;
-                    });
-                })
-                .catch(err => console.log('Favicon update failed:', err));
-        }
-
-        // Update favicon on load
-        updateFavicon();
 
         const themeToggle = document.getElementById('themeToggle');
         const mobileThemeToggle = document.getElementById('mobileThemeToggle');
