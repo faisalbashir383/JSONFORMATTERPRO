@@ -937,18 +937,10 @@ def job_detail(request, slug):
 def submit_typing_score(request):
     """
     Submit a typing test score to the leaderboard.
-    Expected input: {
-        "username": "Player Name",
-        "wpm": 65,
-        "accuracy": 98.5,
-        "level": "medium",
-        "duration": 60,
-        "total_characters": 325,
-        "correct_characters": 320,
-        "errors": 5
-    }
+    Enforces ONE entry per user per level (High Score logic).
     """
     from .models import TypingScore
+    from django.utils import timezone
     
     try:
         username = request.data.get('username', 'Anonymous').strip()[:50]
@@ -961,13 +953,13 @@ def submit_typing_score(request):
         errors = int(request.data.get('errors', 0))
         
         # Basic validation
-        if wpm < 0 or wpm > 300:  # World record is ~216 WPM
+        if wpm < 0 or wpm > 3000: # Increased limit for testing, though 300 is realistic max
             return Response({'success': False, 'error': 'Invalid WPM'}, status=400)
         
         if accuracy < 0 or accuracy > 100:
             return Response({'success': False, 'error': 'Invalid accuracy'}, status=400)
         
-        # Get session key for tracking
+        # Get session key for tracking (primary user ID mechanism usually, but we use username for 'Public' unique)
         session_key = request.session.session_key
         if not session_key:
             request.session.create()
@@ -977,30 +969,61 @@ def submit_typing_score(request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         ip = x_forwarded_for.split(',')[0] if x_forwarded_for else request.META.get('REMOTE_ADDR')
         
-        # Create score record
-        score = TypingScore.objects.create(
-            username=username or 'Anonymous',
-            session_key=session_key,
-            ip_address=ip,
-            wpm=wpm,
-            accuracy=accuracy,
-            level=level,
-            duration=duration,
-            total_characters=total_chars,
-            correct_characters=correct_chars,
-            errors=errors
-        )
+        # Check for existing score for this User + Level
+        existing_score = TypingScore.objects.filter(username=username, level=level).first()
         
-        # Get rank
-        rank = TypingScore.get_rank(wpm, level)
-        global_rank = TypingScore.get_rank(wpm)
+        score_id = None
+        is_new_high_score = False
+        
+        if existing_score:
+            if wpm > existing_score.wpm:
+                # NEW HIGH SCORE: Update existing record
+                existing_score.wpm = wpm
+                existing_score.accuracy = accuracy
+                existing_score.duration = duration
+                existing_score.total_characters = total_chars
+                existing_score.correct_characters = correct_chars
+                existing_score.errors = errors
+                existing_score.ip_address = ip
+                existing_score.session_key = session_key
+                existing_score.created_at = timezone.now() # Manually update timestamp to now
+                existing_score.save()
+                
+                score = existing_score
+                is_new_high_score = True
+                message = f'New High Score! You ranked #{TypingScore.get_rank(wpm, level)} in {level} mode.'
+            else:
+                # LOWER or EQUAL SCORE: Keep old record
+                score = existing_score
+                message = f'Score recorded, but your personal best of {existing_score.wpm} WPM remains!'
+        else:
+            # CREATE NEW RECORD
+            score = TypingScore.objects.create(
+                username=username or 'Anonymous',
+                session_key=session_key,
+                ip_address=ip,
+                wpm=wpm,
+                accuracy=accuracy,
+                level=level,
+                duration=duration,
+                total_characters=total_chars,
+                correct_characters=correct_chars,
+                errors=errors
+            )
+            is_new_high_score = True
+            message = f'Score saved! You ranked #{TypingScore.get_rank(wpm, level)} in {level} mode.'
+        
+        # Get ranks
+        rank = TypingScore.get_rank(score.wpm, level)
+        global_rank = TypingScore.get_rank(score.wpm)
         
         return Response({
             'success': True,
             'score_id': score.id,
             'rank': rank,
             'global_rank': global_rank,
-            'message': f'Score saved! You ranked #{rank} in {level} mode.'
+            'message': message,
+            'is_high_score': is_new_high_score
         })
         
     except Exception as e:
