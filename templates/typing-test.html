@@ -657,6 +657,325 @@ per minute calculator, touch typing test, programming typing practice{% endblock
             grid-template-columns: 1fr;
         }
     }
+
+    /* Leaderboard Styles */
+    .leaderboard-section {
+        margin-top: 3rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+    }
+
+    .leaderboard-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--color-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .leaderboard-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .leaderboard-filters {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .filter-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+        border: 1px solid var(--color-border);
+        background: var(--color-bg);
+        color: var(--color-text-secondary);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+        background: var(--typewriter-accent);
+        color: white;
+        border-color: var(--typewriter-accent);
+    }
+
+    .leaderboard-table-container {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .leaderboard-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .leaderboard-table th,
+    .leaderboard-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .leaderboard-table th {
+        background: var(--color-bg);
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .leaderboard-table tr:hover {
+        background: var(--color-bg);
+    }
+
+    .rank-cell {
+        font-weight: 700;
+        color: var(--typewriter-accent);
+        width: 60px;
+        text-align: center !important;
+    }
+
+    .rank-1 {
+        color: #f1c40f;
+    }
+
+    .rank-2 {
+        color: #95a5a6;
+    }
+
+    .rank-3 {
+        color: #e67e22;
+    }
+
+    .wpm-cell {
+        font-weight: 700;
+        color: var(--typewriter-correct);
+    }
+
+    /* Save Score Modal */
+    .save-score-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        backdrop-filter: blur(5px);
+    }
+
+    .save-score-modal.active {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .save-card {
+        background: var(--color-surface);
+        padding: 2rem;
+        border-radius: var(--radius-lg);
+        width: 90%;
+        max-width: 450px;
+        text-align: center;
+        border: 1px solid var(--color-border);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .score-summary {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin: 1.5rem 0;
+    }
+
+    .score-box .val {
+        font-size: 2.5rem;
+        font-weight: 800;
+        font-family: 'Courier New', monospace;
+    }
+
+    .score-box .lbl {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        color: var(--color-text-secondary);
+    }
+
+    .save-input {
+        width: 100%;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        background: var(--color-bg);
+        color: var(--color-text);
+        font-size: 1.1rem;
+    }
+
+    .typing-input {
+        width: 100%;
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        border: none;
+        border-top: 1px solid var(--color-border);
+        background: var(--color-surface);
+        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        font-family: 'Courier New', monospace;
+        resize: none;
+        /* simple input look */
+        height: 60px;
+        /* fixed height for input bar */
+        overflow: hidden;
+    }
+
+    .code-mode .typing-input {
+        background: #2d2d2d;
+        color: white;
+        border-top: 1px solid #333;
+        font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    }
+
+    .typing-input:focus {
+        outline: none;
+        background: var(--color-bg);
+    }
+
+    .code-mode .typing-input:focus {
+        background: #3c3c3c;
+    }
+
+    .editor-title-bar.show {
+        display: flex;
+    }
+
+    .line-numbers.show {
+        display: block;
+    }
+
+    /* Rank Highlight */
+    .user-rank-info {
+        background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(46, 204, 113, 0.1));
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        border: 1px solid rgba(39, 174, 96, 0.3);
+        color: var(--typewriter-correct);
+        font-weight: 600;
+        text-align: center;
+        display: none;
+        /* Show if user has rank */
+    }
+
+    .leaderboard-table tr.highlight-user {
+        background: rgba(192, 57, 43, 0.1);
+        border-left: 3px solid var(--typewriter-accent);
+    }
+
+    /* Header & Controls */
+    .editor-title-bar {
+        background: #1e1e1e;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #333;
+        display: none;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .editor-title-bar.show {
+        display: flex;
+    }
+
+    .window-controls {
+        display: flex;
+        gap: 8px;
+    }
+
+    .editor-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-left: 1.5rem;
+    }
+
+    .lang-pill {
+        padding: 2px 10px;
+        font-size: 0.75rem;
+        color: #9aa0a6;
+        background: transparent;
+        border-radius: 12px;
+        cursor: pointer;
+        font-family: 'Segoe UI', sans-serif;
+        border: 1px solid #333;
+        transition: all 0.2s;
+    }
+
+    .lang-pill:hover {
+        background: #333;
+        color: white;
+    }
+
+    .lang-pill.active {
+        background: #3d9dfc;
+        color: #fff;
+        border-color: #3d9dfc;
+        font-weight: 600;
+    }
+
+    /* Perfect Alignment for Editor */
+    .code-editor-view {
+        position: relative;
+        background: #1e1e1e;
+        display: flex;
+        align-items: flex-start;
+        /* Ensure top alignment */
+    }
+
+    .line-numbers {
+        background: #1e1e1e;
+        color: #5c6370;
+        padding: 1.5rem 1rem 1.5rem 0.5rem;
+        text-align: right;
+        font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+        font-size: 15px;
+        /* Fixed px for precision */
+        line-height: 24px;
+        /* Fixed px line height */
+        border-right: 1px solid #333;
+        user-select: none;
+        display: none;
+        min-width: 3.5rem;
+    }
+
+    .line-numbers.show {
+        display: block;
+    }
+
+    .text-display.code-active {
+        background: #1e1e1e !important;
+        color: #d4d4d4;
+        font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+        font-size: 15px !important;
+        /* Match line numbers */
+        line-height: 24px !important;
+        /* Match line numbers */
+        padding: 1.5rem 1.5rem;
+        /* Match vertical padding */
+        white-space: pre-wrap;
+        /* Preserve newlines properly */
+        width: 100%;
+        border: none;
+        border-radius: 0;
+    }
 </style>
 {% endblock %}
 
@@ -700,13 +1019,21 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         </button>
     </div>
 
-    <div class="typewriter-card">
-        <div class="code-language-bar" id="codeLangBar">
-            <button class="lang-btn active" onclick="setCodeLang('python')">Python</button>
-            <button class="lang-btn" onclick="setCodeLang('javascript')">JavaScript</button>
-            <button class="lang-btn" onclick="setCodeLang('html')">HTML</button>
-            <button class="lang-btn" onclick="setCodeLang('css')">CSS</button>
-            <button class="lang-btn" onclick="setCodeLang('sql')">SQL</button>
+    <div class="typewriter-card" id="typewriterCard">
+        <!-- Editor Top Bar -->
+        <div class="editor-title-bar" id="editorTitleBar">
+            <div class="window-controls">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <div class="editor-tabs">
+                <div class="lang-pill active" onclick="setCodeLang('python')">Python</div>
+                <div class="lang-pill" onclick="setCodeLang('javascript')">JavaScript</div>
+                <div class="lang-pill" onclick="setCodeLang('html')">HTML</div>
+                <div class="lang-pill" onclick="setCodeLang('css')">CSS</div>
+                <div class="lang-pill" onclick="setCodeLang('sql')">SQL</div>
+            </div>
         </div>
 
         <div class="stats-bar">
@@ -724,25 +1051,95 @@ per minute calculator, touch typing test, programming typing practice{% endblock
             </div>
         </div>
 
-        <div class="text-display" id="textDisplay" onclick="focusInput()">
-            Loading text...
+        <div class="code-editor-view">
+            <div class="line-numbers" id="lineNumbers"></div>
+            <div class="text-display" id="textDisplay" onclick="focusInput()">
+                Loading text...
+            </div>
         </div>
 
         <div class="input-area">
-            <input type="text" class="typing-input" id="typingInput" placeholder="Start typing here..."
-                autocomplete="off" spellcheck="false" oninput="processInput()" onblur="handleBlur()"
-                onfocus="handleFocus()">
+            <textarea class="typing-input" id="typingInput" placeholder="Start typing here..." autocomplete="off"
+                spellcheck="false" oninput="processInput()"></textarea>
         </div>
 
         <div class="action-buttons">
+            <button class="action-btn secondary" onclick="changeText()">
+                📝 Change Text
+            </button>
             <button class="action-btn primary" onclick="resetTest()">
                 🔄 Restart Test
             </button>
-            <!--
-            <button class="action-btn secondary" onclick="showLeaderboard()">
-                🏆 Leaderboard
-            </button>
-            -->
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Leaderboard Section -->
+<div class="typing-container">
+    <div class="leaderboard-section">
+        <div class="leaderboard-header">
+            <div class="leaderboard-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h12v16H6V4zm4 12h4v2h-4v-2zm-2-4h8v2H8v-2zm0-4h8v2H8V8z" />
+                </svg>
+                Top Typists
+            </div>
+            <div class="leaderboard-filters">
+                <button class="filter-btn active" onclick="loadLeaderboard('all')">All</button>
+                <button class="filter-btn" onclick="loadLeaderboard('easy')">Easy</button>
+                <button class="filter-btn" onclick="loadLeaderboard('medium')">Medium</button>
+                <button class="filter-btn" onclick="loadLeaderboard('hard')">Hard</button>
+                <button class="filter-btn" onclick="loadLeaderboard('python')">Code</button>
+            </div>
+        </div>
+        <div class="leaderboard-table-container">
+            <div id="userRankInfo" class="user-rank-info"></div>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th class="rank-cell">#</th>
+                        <th>Name</th>
+                        <th>WPM</th>
+                        <th>Accuracy</th>
+                        <th>Mode</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <tr>
+                        <td colspan="6" style="text-align:center;">Loading scores...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Save Score Modal -->
+<div id="saveScoreModal" class="save-score-modal">
+    <div class="save-card">
+        <h2 style="margin-bottom: 0.5rem;">Test Complete! 🎉</h2>
+        <p style="color: var(--color-text-secondary);">Great job! Submit your score to the leaderboard.</p>
+
+        <div class="score-summary">
+            <div class="score-box">
+                <div class="val" id="finalWpm" style="color: var(--typewriter-correct);">0</div>
+                <div class="lbl">WPM</div>
+            </div>
+            <div class="score-box">
+                <div class="val" id="finalAcc" style="color: var(--typewriter-accent);">0%</div>
+                <div class="lbl">Accuracy</div>
+            </div>
+        </div>
+
+        <input type="text" id="usernameInput" class="save-input" placeholder="Enter your name" maxlength="30"
+            autocomplete="off">
+
+        <div class="action-buttons" style="padding: 0; background: none;">
+            <button class="action-btn secondary" onclick="closeSaveModal()">Skip</button>
+            <button class="action-btn primary" onclick="submitScore()">Save Score</button>
         </div>
     </div>
 </div>
@@ -818,12 +1215,12 @@ per minute calculator, touch typing test, programming typing practice{% endblock
                 d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z" />
         </svg> Related Tools</h2>
     <div class="related-tools">
-        <a href="/json-formatter/" class="tool-link"><svg class="tool-icon" width="16" height="16" viewBox="0 0 24 24"
+        <a href="/" class="tool-link"><svg class="tool-icon" width="16" height="16" viewBox="0 0 24 24"
                 fill="currentColor">
                 <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z" />
             </svg> JSON Formatter</a>
-        <a href="/code-diff-checker/" class="tool-link"><svg class="tool-icon" width="16" height="16"
-                viewBox="0 0 24 24" fill="currentColor">
+        <a href="/json-diff" class="tool-link"><svg class="tool-icon" width="16" height="16" viewBox="0 0 24 24"
+                fill="currentColor">
                 <path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z" />
             </svg> Code Diff Checker</a>
         <a href="/lorem-ipsum/" class="tool-link"><svg class="tool-icon" width="16" height="16" viewBox="0 0 24 24"
@@ -897,25 +1294,256 @@ per minute calculator, touch typing test, programming typing practice{% endblock
     let correctChars = 0;
 
     // Sample texts
-    const texts = {
-        text: "The quick brown fox jumps over the lazy dog. Programming is the art of telling another human what one wants the computer to do. Clean code always looks like it was written by someone who cares.",
-        code: "def hello_world():\n    print('Hello World')\n    return True",
-        words: "apple banana cherry date elderberry fig grape honeydew kiwi lemon mango nectarine orange papaya quince raspberry strawberry tangerine ugli vanilla watermelon xigua yuzu zucchini"
+    // Sample texts - EXPANDED
+    const textData = {
+        text: {
+            easy: [
+                "simple words and short sentences are best for starting out practice makes perfect keep typing",
+                "the sun runs fast across the sky and the clouds float by so high above the green grass",
+                "open your eyes and see the world is full of nice things just waiting for you to find them",
+                "fish swim in the deep blue sea while birds fly high in the air above the trees",
+                "run fast and do not look back because the finish line is just around the corner",
+                "eat an apple a day to keep the doctor away and stay healthy for a long time",
+                "cats are soft and dogs are loyal but both make great pets for any home",
+                "read a book to learn new things and expand your mind with knowledge and wisdom",
+                "write your name on the paper with a pen so we know who you are properly",
+                "music makes the world go round and brings joy to every heart that listens",
+                "jump high and touch the sky if you can reach it with your hands up",
+                "walk the path less traveled and you might find something new and exciting",
+                "time waits for no one so make the most of every single day you have"
+            ],
+            medium: [
+                "The quick brown fox jumps over the lazy dog. Programming is the art of telling another human what one wants the computer to do. Clean code always looks like it was written by someone who cares.",
+                "To be or not to be, that is the question. Whether 'tis nobler in the mind to suffer the slings and arrows of outrageous fortune, or to take arms against a sea of troubles.",
+                "Success is not final, failure is not fatal: it is the courage to continue that counts. Believe you can and you're halfway there.",
+                "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
+                "In the beginning God created the heaven and the earth. And the earth was without form, and void; and darkness was upon the face of the deep.",
+                "Call me Ishmael. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would sail about a little.",
+                "All happy families are alike; each unhappy family is unhappy in its own way. It was the best of times, it was the worst of times.",
+                "The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle.",
+                "Life is what happens when you're busy making other plans. The future belongs to those who believe in the beauty of their dreams.",
+                "Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.",
+                "Innovation distinguishes between a leader and a follower. Your time is limited, so don't waste it living someone else's life.",
+                "The greatest glory in living lies not in never falling, but in rising every time we fall.",
+                "If you set your goals ridiculously high and it's a failure, you will fail above everyone else's success."
+            ],
+            hard: [
+                "Th3 qu!ck br0wn f0x juMp$ 0v3r 7h3 l@zy d0g. P$yCh0l0gy & C0d1ng: 2 s1d3s 0f th3 s@m3 c01n; {Complexi+y} is the enemy of execu+ion.",
+                "Quantum_Mechanics(State *psi) { return (H_hat * psi) == (i * h_bar * d_psi_dt); } // Schrodinger's Equation vs. Heisenberg's Matrix!",
+                "Crypt0graphy 1s ess3nt1@l f0r $ecur1ty. AES-256 uses 14 rounds for 256-bit keys; RSA relies on prime factorization.",
+                "The Riemann Zeta function is defined as the analytic continuation of the sum from n=1 to infinity of 1/(n^s). It plays a pivotal role in analytic number theory.",
+                "In thermodynamics, entropy (S) is a measure of the number of specific ways in which a thermodynamic system may be arranged, commonly understood as a measure of disorder.",
+                "Neuroplasticity refers to the brain's ability to reorganize itself by forming new neural connections throughout life. Neurogenesis is the creation of new neurons.",
+                "Epistemology is the branch of philosophy concerned with the theory of knowledge. It studies the nature, origin, and scope of knowledge, justification, and the rationality of belief.",
+                "Photosynthesis: 6CO2 + 6H2O + light energy -> C6H12O6 + 6O2. This process occurs in the chloroplasts of plant cells.",
+                "The Navier-Stokes equations describe the motion of viscous fluid substances. They arise from applying Newton's second law to fluid motion.",
+                "In computer science, Big O notation is used to classify algorithms according to how their run time or space requirements grow as the input size grows.",
+                "A monad is just a monoid in the category of endofunctors, what's the problem? Haskell developers love to say this.",
+                "Regular expressions (regex) are sequences of characters that define a search pattern. ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$ matches an email.",
+                "Dichlorodifluoromethane (R-12), a chlorofluorocarbon (CFC) halomethane, was used as a refrigerant and aerosol spray propellant."
+            ]
+        },
+        code: {
+            python: [
+                "def hello_world():\n    print('Hello World')\n    return True",
+                "class Dog:\n    def __init__(self, name):\n        self.name = name\n    def bark(self):\n        return 'Woof!'",
+                "numbers = [x for x in range(10) if x % 2 == 0]\nprint(f'Evens: {numbers}')",
+                "def fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)",
+                "import json\n\ndata = {'key': 'value'}\njson_str = json.dumps(data)\nparsed = json.loads(json_str)",
+                "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print('Cannot divide by zero!')\nfinally:\n    print('Done.')",
+                "with open('file.txt', 'r') as f:\n    content = f.read()\n    print(len(content.splitlines()))"
+            ],
+            javascript: [
+                "const greeting = 'Hello World';\nconsole.log(greeting);\nlet x = 10;",
+                "function debounce(func, wait) {\n  let timeout;\n  return function(...args) {\n    clearTimeout(timeout);\n    timeout = setTimeout(() => func.apply(this, args), wait);\n  };\n}",
+                "const map = new Map();\nmap.set('key', 'value');\nfor (const [k, v] of map) {\n  console.log(k, v);\n}",
+                "document.getElementById('btn').addEventListener('click', () => {\n  alert('Clicked!');\n});",
+                "const promise = new Promise((resolve, reject) => {\n  setTimeout(() => resolve('Done!'), 1000);\n});",
+                "async function fetchData() {\n  const res = await fetch('/api/data');\n  const json = await res.json();\n  return json;\n}",
+                "const arr = [1, 2, 3];\nconst doubled = arr.map(x => x * 2);\nconsole.log(doubled);"
+            ],
+            html: [
+                "<div class=\"container\">\n    <h1>Hello World</h1>\n</div>",
+                "<form action=\"/submit\" method=\"POST\">\n  <label for=\"name\">Name:</label>\n  <input type=\"text\" id=\"name\" required />\n  <button type=\"submit\">Send</button>\n</form>",
+                "<ul>\n  <li>Item 1</li>\n  <li>Item 2</li>\n  <li>Item 3</li>\n</ul>",
+                "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Document</title>\n</head>\n<body></body>\n</html>",
+                "<a href=\"https://example.com\" target=\"_blank\">Visit Link</a>",
+                "<img src=\"image.jpg\" alt=\"Description\" width=\"300\" />"
+            ],
+            css: [
+                ".container {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}",
+                "@media (max-width: 768px) {\n  .sidebar {\n    display: none;\n  }\n  .main {\n    width: 100%;\n  }\n}",
+                ":root {\n  --primary: #ff0000;\n  --secondary: #00ff00;\n}\nbody {\n  background: var(--primary);\n}",
+                ".card {\n  box-shadow: 0 4px 8px rgba(0,0,0,0.1);\n  transition: 0.3s;\n}\n.card:hover {\n  box-shadow: 0 8px 16px rgba(0,0,0,0.2);\n}",
+                "header {\n  position: sticky;\n  top: 0;\n  z-index: 100;\n  background-color: white;\n}"
+            ],
+            sql: [
+                "SELECT * FROM users\nWHERE active = 1\nORDER BY created_at DESC;",
+                "UPDATE products\nSET stock = stock - 1\nWHERE id = 105 AND stock > 0;",
+                "SELECT u.name, o.total\nFROM users u\nJOIN orders o ON u.id = o.user_id\nGROUP BY u.name;",
+                "INSERT INTO logs (level, message)\nVALUES ('ERROR', 'Something went wrong');",
+                "CREATE TABLE students (\n  id INT PRIMARY KEY,\n  name VARCHAR(100),\n  grade INT\n);",
+                "DELETE FROM sessions\nWHERE last_active < NOW() - INTERVAL '30 days';"
+            ]
+        },
+        words: {
+            easy: [
+                "cat dog bat rat hat sat mat pat tap nap cap map lap gap zap",
+                "red blue green gold pink grey cyan lime teal navy plum rose",
+                "one two three four five six seven eight nine ten zero",
+                "hot cold warm cool wet dry big small fast slow up down"
+            ],
+            medium: [
+                "apple banana cherry date grape kiwi lemon mango orange peach pear plum",
+                "piano guitar flute violin cello drums banjo harp organ siren gong oboe",
+                "london paris tokyo berlin rome dubai york sydney cairo delhi",
+                "summer winter autumn spring rain snow wind storm hail sunny cloud"
+            ],
+            hard: [
+                "xylophone quintessence juxtapose quixotic zaftig blitzkrieg sphinx wow",
+                "mnemonic phlegm rhythm sphinx zephyr pterodactyl gnarly knapsack",
+                "schadenfreude onomatopoeia synecdoche idiosyncratic sesquipedalian"
+            ]
+        }
     };
 
-    let currentText = texts.text;
+    let currentMode = 'text';
+    let difficulty = 'medium';
+    let currentCodeLang = 'python';
+    // Initialize with random
+    let currentText = getRandomText('text', 'medium');
+    let soundEnabled = true;
+
+    function getRandomText(mode, subKey) {
+        let options;
+        if (mode === 'text') options = textData.text[subKey];
+        else if (mode === 'code') options = textData.code[subKey];
+        else if (mode === 'words') options = textData.words[subKey];
+
+        // Fallback
+        if (!options) return "Error loading text.";
+
+        const text = options[Math.floor(Math.random() * options.length)];
+
+        if (mode === 'words') {
+            return (text + " ").repeat(5).trim();
+        }
+        return text;
+    }
+
+    // Web Audio API for Typewriter Sound
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTypewriterSound() {
+        if (!soundEnabled) return;
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        // Simulated click sound
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.05);
+
+        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.06);
+    }
+
+    function toggleSound() {
+        soundEnabled = !soundEnabled;
+        const btn = document.querySelector('.sound-toggle');
+        if (soundEnabled) {
+            btn.classList.add('active');
+            btn.innerHTML = '🔊 Sound On';
+            playTypewriterSound(); // Feedback
+        } else {
+            btn.classList.remove('active');
+            btn.innerHTML = '🔇 Sound Off';
+        }
+    }
+
+    function setDifficulty(diff) {
+        difficulty = diff;
+        updateText();
+    }
+
+    function changeText() {
+        updateText();
+    }
+
+    function setCodeLang(lang) {
+        currentCodeLang = lang;
+
+        // Update Pills
+        document.querySelectorAll('.lang-pill').forEach(pill => {
+            const pillText = pill.innerText.toLowerCase();
+            if (pillText === lang) pill.classList.add('active');
+            else pill.classList.remove('active');
+        });
+
+        updateText();
+    }
 
     function setMode(mode) {
-        document.querySelectorAll('.control-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
+        currentMode = mode;
+
+        // Update Active Button
+        document.querySelectorAll('.control-btn').forEach(btn => {
+            if (btn.textContent.trim().toLowerCase() === mode) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        const diffSelect = document.getElementById('difficultySelect');
+        const editorTitleBar = document.getElementById('editorTitleBar');
+        const lineNumbers = document.getElementById('lineNumbers');
+        const textDisplay = document.getElementById('textDisplay');
+        const card = document.getElementById('typewriterCard');
 
         if (mode === 'code') {
-            document.getElementById('codeLangBar').classList.add('show');
-            currentText = texts.code;
+            diffSelect.parentElement.style.display = 'none';
+
+            // Enable Code Editor UI
+            editorTitleBar.classList.add('show');
+            lineNumbers.classList.add('show');
+            textDisplay.classList.add('code-active');
+            card.classList.add('code-mode');
+
         } else {
-            document.getElementById('codeLangBar').classList.remove('show');
-            currentText = texts[mode] || texts.text;
+            diffSelect.parentElement.style.display = 'flex';
+
+            // Disable Code Editor UI
+            editorTitleBar.classList.remove('show');
+            lineNumbers.classList.remove('show');
+            textDisplay.classList.remove('code-active');
+            card.classList.remove('code-mode');
         }
+
+        updateText();
+    }
+
+    function updateText() {
+        let subKey = difficulty;
+        if (currentMode === 'code') subKey = currentCodeLang;
+
+        currentText = getRandomText(currentMode, subKey);
+
+        // Update line numbers if in code mode
+        if (currentMode === 'code') {
+            const lines = currentText.split('\n').length;
+            const lineNumbers = document.getElementById('lineNumbers');
+            lineNumbers.innerHTML = Array(lines).fill(0).map((_, i) => `<div>${i + 1}</div>`).join('');
+        }
+
         resetTest();
     }
 
@@ -953,9 +1581,14 @@ per minute calculator, touch typing test, programming typing practice{% endblock
             // Note: This is a simplified logic for the demo. 
             // Real typing tests handle backspaces and full strings differently.
 
-            // Actually, let's just use the input length to match indices
+            // Determine indexes
             const arrayQuote = textDisplay.querySelectorAll('span');
             const arrayValue = input.split('');
+
+            // Play sound for new characters (simplified check)
+            if (input.length > charIndex) {
+                playTypewriterSound();
+            }
 
             correctChars = 0;
             arrayQuote.forEach((characterSpan, index) => {
@@ -1010,6 +1643,29 @@ per minute calculator, touch typing test, programming typing practice{% endblock
 
         document.getElementById('resWpm').innerText = wpmDisplay.innerText;
         document.getElementById('resAcc').innerText = accDisplay.innerText;
+
+        // Use wpmDisplay value for stats
+        const finalWpm = parseInt(wpmDisplay.innerText) || 0;
+        const finalAcc = parseFloat(accDisplay.innerText.replace('%', '')) || 0;
+
+        // Simple stats object (since exact char counts might be tricky to get from simplified logic)
+        // We will approximate correct/total from WPM/Accuracy if needed, or rely on what processInput calculated.
+
+        // Recalculate based on input length
+        const totalChars = inputField.value.length;
+        const correct = Math.round(totalChars * (finalAcc / 100));
+        const errs = totalChars - correct;
+
+        const stats = {
+            total: totalChars,
+            correct: correct,
+            errors: errs
+        };
+
+        // Call leaderboard modal
+        testComplete(finalWpm, finalAcc, stats);
+
+        // Also show the results overlay (original behavior)
         document.getElementById('resultsModal').classList.add('show');
     }
 
@@ -1043,5 +1699,264 @@ per minute calculator, touch typing test, programming typing practice{% endblock
             e.preventDefault();
         }
     });
+
+    // Smart Enter & Tab for Code Mode
+    inputField.addEventListener('keydown', function (e) {
+        if (currentMode !== 'code') return;
+
+        if (e.key === 'Enter') {
+            e.preventDefault();
+
+            // Check if we assume correct typing or if we just want to act smart
+            // Let's implement auto-indentation if the user is at the right spot
+
+            const val = inputField.value;
+            // Only auto-indent if we are matching the text so far? 
+            // Or just always auto-indent?
+            // Let's align with the target text 'currentText'
+
+            // We need to verify if the NEXT Expected Character is indeed a newline
+            // But usually in typing tests, if you type Enter, you mean newline.
+
+            // Find indentation of the next line in TARGET text
+            // We assume the user has typed correctly up to this point or close to it.
+            // But we can just check what the current line indentation is in the target text.
+
+            // Allow the newline
+            let toInsert = '\n';
+
+            // Look ahead in currentText for indentation
+            // We need to know current progress?
+            // charIndex tracks correct characters. But input length might be different if errors.
+            // Let's assume we want to match the target structure.
+
+            // Only auto-indent if the next char in target is indeed \n (or we are at the end of a line)
+            // But simple logic: just append \n.
+
+            // Auto-indent logic:
+            // 1. Get the target text line we are supposedly on or moving to.
+            // Actually, simplified: Look at the target text corresponding to where we are inserting.
+
+            // If the user presses Enter, we append \n.
+            // Then check: does the target text have spaces following this \n position?
+            // If so, append them too.
+
+            // This relies on inputField.value.length being roughly in sync with currentText charIndex logic
+            // But charIndex is strictly correct chars. 
+            // Let's use inputField.value.length as the cursor "attempt".
+
+            const currentPos = inputField.value.length;
+
+            // Check if target text has \n at this pos (approx)
+            // Or just check if the target substring starting at currentPos is \n + spaces
+
+            if (currentText[currentPos] === '\n') {
+                // Determine how many spaces after \n in target
+                let spaces = '';
+                let i = currentPos + 1;
+                while (i < currentText.length && currentText[i] === ' ') {
+                    spaces += ' ';
+                    i++;
+                }
+                toInsert += spaces;
+            }
+
+            // Insert
+            const start = inputField.selectionStart;
+            const end = inputField.selectionEnd;
+            inputField.value = val.substring(0, start) + toInsert + val.substring(end);
+            inputField.selectionStart = inputField.selectionEnd = start + toInsert.length;
+
+            // Trigger processInput to validate and play sound
+            processInput();
+        }
+
+        // Tab Support (Optional but good for code)
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            const start = inputField.selectionStart;
+            const end = inputField.selectionEnd;
+            const val = inputField.value;
+            inputField.value = val.substring(0, start) + '    ' + val.substring(end);
+            inputField.selectionStart = inputField.selectionEnd = start + 4;
+            processInput();
+        }
+    });
+
+    // --- Leaderboard Logic ---
+    document.addEventListener('DOMContentLoaded', () => {
+        // Enforce Default State: Text Mode, Easy Difficulty
+        document.getElementById('difficultySelect').value = 'easy';
+        difficulty = 'easy'; // Updating global var if exists
+        setMode('text'); // This will also ensure correct UI visibility
+
+        loadLeaderboard('all');
+        const savedName = localStorage.getItem('typingUserName');
+        if (savedName && document.getElementById('usernameInput')) {
+            document.getElementById('usernameInput').value = savedName;
+        }
+    });
+
+    async function loadLeaderboard(level) {
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.textContent.toLowerCase().includes(level === 'python' ? 'code' : level));
+            if (level === 'all' && btn.textContent === 'All') btn.classList.add('active');
+        });
+
+        const tbody = document.getElementById('leaderboardBody');
+        if (!tbody) return;
+
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Loading...</td></tr>';
+
+        try {
+            const res = await fetch(`/api/typing-test/leaderboard/?limit=50&level=${level}`);
+            const data = await res.json();
+
+            if (data.success) {
+                if (data.leaderboard.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem; color: var(--color-text-secondary);">No scores yet for this mode. Be the first!</td></tr>';
+                    return;
+                }
+
+                // Check if we have user rank info
+                if (data.user_rank) {
+                    const infoDiv = document.getElementById('userRankInfo');
+                    infoDiv.style.display = 'block';
+                    infoDiv.innerHTML = `🏆 Your Best Rank: #${data.user_rank} in ${level === 'all' ? 'globally' : level}`;
+                }
+
+                const savedName = localStorage.getItem('typingUserName');
+
+                tbody.innerHTML = data.leaderboard.map(score => {
+                    const isUser = savedName && score.username === savedName;
+                    return `
+                    <tr class="${isUser ? 'highlight-user' : ''}">
+                        <td class="rank-cell rank-${score.rank}">${score.rank}</td>
+                        <td>${escapeHtml(score.username)} ${isUser ? '(You)' : ''}</td>
+                        <td class="wpm-cell">${score.wpm}</td>
+                        <td>${score.accuracy}%</td>
+                        <td><span style="text-transform:capitalize; font-size: 0.85rem; padding: 2px 6px; background: var(--color-bg); border-radius: 4px;">${score.level}</span></td>
+                        <td style="color: var(--color-text-secondary); font-size: 0.9rem;">${score.date}</td>
+                    </tr>
+                `}).join('');
+            }
+        } catch (e) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color: var(--typewriter-wrong);">Failed to load leaderboard.</td></tr>';
+            console.error(e);
+        }
+    }
+
+    function testComplete(wpm, accuracy, stats) {
+        const modal = document.getElementById('saveScoreModal');
+        if (!modal) return;
+
+        document.getElementById('finalWpm').textContent = wpm;
+        document.getElementById('finalAcc').textContent = accuracy + '%';
+
+        // Determine difficulty/level
+        const mode = document.querySelector('.control-btn.active').textContent.toLowerCase();
+        let level = 'medium';
+        if (mode === 'code') {
+            const langBtn = document.querySelector('.lang-pill.active');
+            level = langBtn ? langBtn.textContent.toLowerCase() : 'python';
+        } else {
+            // Assuming difficulty select exists
+            const diffSelect = document.getElementById('difficultySelect');
+            level = diffSelect ? diffSelect.value : 'medium';
+        }
+
+        window.currentStats = {
+            wpm: wpm,
+            accuracy: accuracy,
+            level: level,
+            duration: parseInt(document.getElementById('timeSelect').value) || 60,
+            total_characters: stats.total,
+            correct_characters: stats.correct,
+            errors: stats.errors
+        };
+
+        modal.classList.add('active');
+        setTimeout(() => {
+            const input = document.getElementById('usernameInput');
+            if (input) input.focus();
+        }, 100);
+    }
+
+    function closeSaveModal() {
+        const modal = document.getElementById('saveScoreModal');
+        if (modal) modal.classList.remove('active');
+    }
+
+    async function submitScore() {
+        const input = document.getElementById('usernameInput');
+        const username = input.value.trim();
+        if (!username) {
+            alert('Please enter a name!');
+            return;
+        }
+
+        localStorage.setItem('typingUserName', username);
+
+        const payload = {
+            username: username,
+            ...window.currentStats
+        };
+
+        try {
+            const btn = document.querySelector('#saveScoreModal .action-btn.primary');
+            const originalText = btn.textContent;
+            btn.textContent = 'Saving...';
+            btn.disabled = true;
+
+            const res = await fetch('/api/typing-test/submit/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                closeSaveModal();
+                loadLeaderboard('all');
+                alert(data.message || 'Score saved!');
+            } else {
+                alert(data.error || 'Failed to save score.');
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Error submitting score. Please try again.');
+        } finally {
+            const btn = document.querySelector('#saveScoreModal .action-btn.primary');
+            if (btn) {
+                btn.textContent = 'Save Score';
+                btn.disabled = false;
+            }
+        }
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 </script>
 {% endblock %}
