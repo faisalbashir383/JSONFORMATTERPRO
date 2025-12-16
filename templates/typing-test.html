@@ -262,7 +262,6 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         max-height: 300px;
         overflow-y: auto;
         position: relative;
-        background: var(--typewriter-paper);
         word-wrap: break-word;
         overflow-wrap: break-word;
     }
@@ -273,10 +272,6 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         line-height: 1.8;
         background: #1e1e1e;
         color: #d4d4d4;
-    }
-
-    [data-theme="dark"] .text-display {
-        background: #0f172a;
     }
 
     .char {
@@ -975,6 +970,50 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         width: 100%;
         border: none;
         border-radius: 0;
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        z-index: 10000;
+        pointer-events: none;
+    }
+
+    .toast {
+        background: #1e1e1e;
+        color: #fff;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-width: 300px;
+        border-left: 4px solid #3d9dfc;
+        transform: translateX(120%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        pointer-events: auto;
+    }
+
+    .toast.show {
+        transform: translateX(0);
+    }
+
+    .toast.success {
+        border-left-color: #2ecc71;
+    }
+
+    .toast.error {
+        border-left-color: #e74c3c;
+    }
+
+    .toast-icon {
+        font-size: 1.25rem;
     }
 </style>
 {% endblock %}
@@ -1783,6 +1822,42 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         }
     });
 
+    // --- Toast Notification Logic ---
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer') || createToastContainer();
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+
+        const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+
+        toast.innerHTML = `
+            <span class="toast-icon">${icon}</span>
+            <span>${message}</span>
+        `;
+
+        container.appendChild(toast);
+
+        // Trigger animation
+        requestAnimationFrame(() => {
+            toast.classList.add('show');
+        });
+
+        // Auto dismiss
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 4000);
+    }
+
+    function createToastContainer() {
+        const div = document.createElement('div');
+        div.id = 'toastContainer';
+        div.className = 'toast-container';
+        document.body.appendChild(div);
+        return div;
+    }
+
     // --- Leaderboard Logic ---
     document.addEventListener('DOMContentLoaded', () => {
         // Enforce Default State: Text Mode, Easy Difficulty
@@ -1922,13 +1997,13 @@ per minute calculator, touch typing test, programming typing practice{% endblock
             if (data.success) {
                 closeSaveModal();
                 loadLeaderboard('all');
-                alert(data.message || 'Score saved!');
+                showToast(data.message || 'Score saved successfully!', 'success');
             } else {
-                alert(data.error || 'Failed to save score.');
+                showToast(data.error || 'Failed to save score.', 'error');
             }
         } catch (e) {
             console.error(e);
-            alert('Error submitting score. Please try again.');
+            showToast('Error submitting score. Please try again.', 'error');
         } finally {
             const btn = document.querySelector('#saveScoreModal .action-btn.primary');
             if (btn) {
