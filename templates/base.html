@@ -31,41 +31,7 @@
     <meta name="google-adsense-account" content="ca-pub-6955346946355268">
     <meta name="application-name" content="JSON Formatters Pro">
 
-    <!-- Font Awesome font-display override - MUST be before loading the CSS -->
-    <style>
-        /* Override font-display for ALL Font Awesome font faces to optional */
-        /* optional = use fallback immediately, only swap if font loads very fast */
-        @font-face {
-            font-family: 'Font Awesome 6 Brands';
-            font-display: optional;
-        }
-
-        @font-face {
-            font-family: 'Font Awesome 6 Free';
-            font-display: optional;
-        }
-
-        @font-face {
-            font-family: 'fa-brands-400';
-            font-display: optional;
-        }
-
-        @font-face {
-            font-family: 'fa-regular-400';
-            font-display: optional;
-        }
-
-        @font-face {
-            font-family: 'fa-solid-900';
-            font-display: optional;
-        }
-    </style>
-    <!-- Font Awesome CSS - Non-blocking load -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        media="print" onload="this.media='all'">
-    <noscript>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    </noscript>
+    <!-- FontAwesome removed - using inline SVGs for faster page loads -->
 
     <!-- Primary Meta Tags -->
     <title>{% block title %}JSON Formatters Pro - Free Online JSON Tools{% endblock %}</title>
@@ -315,7 +281,7 @@
                     style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
                     <img src="{% static 'images/logo.png' %}" alt="JSON Formatters Pro Logo" class="nav-logo"
                         style="height: 40px; width: auto;">
-                    <span class="brand-name">Json Formatters Pro</span>
+<!--                    <span class="brand-name">Json Formatters Pro</span>-->
                 </a>
             </div>
 
