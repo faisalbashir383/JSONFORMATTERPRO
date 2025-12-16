@@ -1199,8 +1199,8 @@ per minute calculator, touch typing test, programming typing practice{% endblock
             autocomplete="off">
 
         <div class="action-buttons" style="padding: 0; background: none;">
-            <button class="action-btn secondary" onclick="closeSaveModal()">Skip</button>
-            <button class="action-btn primary" onclick="submitScore()">Save Score</button>
+            <button id="skipBtn" class="action-btn secondary" onclick="closeSaveModal()">Skip</button>
+            <button id="saveBtn" class="action-btn primary" onclick="submitScore()">Save Score</button>
         </div>
     </div>
 </div>
@@ -1740,6 +1740,7 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         accDisplay.innerText = '100%';
         isRunning = false;
         initText();
+        document.getElementById('resultsModal').classList.remove('show');
     }
 
     function closeResults() {
@@ -1973,10 +1974,45 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         };
 
         modal.classList.add('active');
-        setTimeout(() => {
-            const input = document.getElementById('usernameInput');
-            if (input) input.focus();
-        }, 100);
+        
+        // UI Defaults
+        const saveBtn = document.getElementById('saveBtn');
+        const skipBtn = document.getElementById('skipBtn');
+        const usernameInput = document.getElementById('usernameInput');
+        
+        // Reset state
+        saveBtn.style.display = 'block';
+        skipBtn.textContent = 'Skip';
+        usernameInput.style.display = 'block';
+        document.querySelector('#saveScoreModal h2').textContent = 'Test Complete! 🎉';
+        
+        // Check for personal best
+        (async () => {
+            try {
+                const res = await fetch(`/api/typing-test/leaderboard/?limit=1&level=${level}`);
+                const data = await res.json();
+                
+                if (data.user_best && data.user_best.wpm >= wpm) {
+                    // Current score is worse or equal to personal best
+                    saveBtn.style.display = 'none';
+                    skipBtn.textContent = 'Try Again';
+                    skipBtn.classList.replace('secondary', 'primary'); // Make it prominent
+                    usernameInput.style.display = 'none';
+                    
+                    document.querySelector('#saveScoreModal h2').textContent = 'Nice Try! 👍';
+                    document.querySelector('#saveScoreModal p').textContent = `Your personal best is ${data.user_best.wpm} WPM. Keep practicing!`;
+                } else {
+                    // New High Score or First Time
+                    skipBtn.classList.replace('primary', 'secondary');
+                    document.querySelector('#saveScoreModal p').textContent = 'Great job! Submit your new high score!';
+                    setTimeout(() => {
+                        if (usernameInput) usernameInput.focus();
+                    }, 100);
+                }
+            } catch (e) {
+                console.error("Failed to check personal best", e);
+            }
+        })();
     }
 
     function closeSaveModal() {
@@ -1987,10 +2023,6 @@ per minute calculator, touch typing test, programming typing practice{% endblock
     async function submitScore() {
         const input = document.getElementById('usernameInput');
         const username = input.value.trim();
-        if (!username) {
-            alert('Please enter a name!');
-            return;
-        }
 
         localStorage.setItem('typingUserName', username);
 
