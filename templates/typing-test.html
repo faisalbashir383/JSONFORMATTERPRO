@@ -197,7 +197,6 @@ per minute calculator, touch typing test, programming typing practice{% endblock
     }
 
     .typewriter-card {
-        background: var(--typewriter-paper);
         border-radius: var(--radius-lg);
         border: 3px solid var(--color-border);
         padding: 0;
@@ -205,16 +204,11 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     }
 
-    [data-theme="dark"] .typewriter-card {
-        background: var(--typewriter-paper);
-    }
-
     .stats-bar {
         display: flex;
         justify-content: space-around;
         flex-wrap: wrap;
         padding: 1.25rem;
-        background: linear-gradient(135deg, #2c3e50, #34495e);
         color: white;
         gap: 0.5rem;
     }
@@ -815,7 +809,39 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         border-radius: var(--radius-md);
         background: var(--color-bg);
         color: var(--color-text);
-        font-size: 1.1rem;
+        font-size: 1rem;
+    }
+
+    /* Revised Controls Bar */
+    .controls-bar {
+        background: #1e1e1e00;
+        border: 1px solid #333;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        padding: 0;
+        /* Reset */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .controls-main {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .controls-bottom {
+        border-top: 1px solid #333;
+        padding: 0.75rem 1rem;
+        display: none;
+        /* Hidden by default */
+        gap: 0.5rem;
+    }
+
+    .controls-bottom.show {
+        display: flex;
     }
 
     .typing-input {
@@ -929,7 +955,6 @@ per minute calculator, touch typing test, programming typing practice{% endblock
     /* Perfect Alignment for Editor */
     .code-editor-view {
         position: relative;
-        background: #1e1e1e;
         display: flex;
         align-items: flex-start;
         /* Ensure top alignment */
@@ -1026,55 +1051,52 @@ per minute calculator, touch typing test, programming typing practice{% endblock
 
 <div class="typing-container">
     <div class="controls-bar">
-        <div class="control-group">
-            <span class="control-label">Mode:</span>
-            <button class="control-btn active" onclick="setMode('text')">Text</button>
-            <button class="control-btn" onclick="setMode('code')">Code</button>
-            <button class="control-btn" onclick="setMode('words')">Words</button>
+        <div class="controls-main">
+            <div class="control-group">
+                <span class="control-label">Mode:</span>
+                <button class="control-btn active" onclick="setMode('text')">Text</button>
+                <button class="control-btn" onclick="setMode('code')">Code</button>
+                <button class="control-btn" onclick="setMode('words')">Words</button>
+            </div>
+
+            <div class="control-group">
+                <span class="control-label">Time:</span>
+                <select id="timeSelect" class="control-select" onchange="setTime(this.value)">
+                    <option value="15">15s</option>
+                    <option value="30">30s</option>
+                    <option value="60" selected>1 min</option>
+                    <option value="120">2 min</option>
+                    <option value="300">5 min</option>
+                </select>
+
+                <span class="control-label" style="margin-left: 1rem;">Diff:</span>
+                <select id="difficultySelect" class="control-select" onchange="setDifficulty(this.value)">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <button class="control-btn sound-btn active" onclick="toggleSound()">
+                    🔊 Sound On
+                </button>
+            </div>
         </div>
 
-        <div class="control-group">
-            <span class="control-label">Time:</span>
-            <select id="timeSelect" class="control-select" onchange="setTime(this.value)">
-                <option value="15">15s</option>
-                <option value="30">30s</option>
-                <option value="60" selected>1 min</option>
-                <option value="120">2 min</option>
-                <option value="300">5 min</option>
-            </select>
+        <!-- Language Pills - Bottom Section -->
+        <div class="controls-bottom" id="codeLangBar">
+            <div class="code-lbl" style="color: #666; font-size: 0.9rem; margin-right: 0.5rem;">Language:</div>
+            <div class="lang-pill active" onclick="setCodeLang('python')">Python</div>
+            <div class="lang-pill" onclick="setCodeLang('javascript')">JavaScript</div>
+            <div class="lang-pill" onclick="setCodeLang('html')">HTML</div>
+            <div class="lang-pill" onclick="setCodeLang('css')">CSS</div>
+            <div class="lang-pill" onclick="setCodeLang('sql')">SQL</div>
         </div>
-
-        <div class="control-group">
-            <span class="control-label">Diff:</span>
-            <select id="difficultySelect" class="control-select" onchange="setDifficulty(this.value)">
-                <option value="easy">Easy</option>
-                <option value="medium" selected>Medium</option>
-                <option value="hard">Hard</option>
-            </select>
-        </div>
-
-        <button class="sound-toggle active" onclick="toggleSound()">
-            🔊 Sound On
-        </button>
     </div>
 
+    <!-- Code Editor View with just stats now -->
     <div class="typewriter-card" id="typewriterCard">
-        <!-- Editor Top Bar -->
-        <div class="editor-title-bar" id="editorTitleBar">
-            <div class="window-controls">
-                <div class="dot red"></div>
-                <div class="dot yellow"></div>
-                <div class="dot green"></div>
-            </div>
-            <div class="editor-tabs">
-                <div class="lang-pill active" onclick="setCodeLang('python')">Python</div>
-                <div class="lang-pill" onclick="setCodeLang('javascript')">JavaScript</div>
-                <div class="lang-pill" onclick="setCodeLang('html')">HTML</div>
-                <div class="lang-pill" onclick="setCodeLang('css')">CSS</div>
-                <div class="lang-pill" onclick="setCodeLang('sql')">SQL</div>
-            </div>
-        </div>
-
         <div class="stats-bar">
             <div class="stat-item">
                 <div class="stat-value wpm" id="wpm">0</div>
@@ -1543,28 +1565,28 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         });
 
         const diffSelect = document.getElementById('difficultySelect');
-        const editorTitleBar = document.getElementById('editorTitleBar');
+        const codeLangBar = document.getElementById('codeLangBar');
         const lineNumbers = document.getElementById('lineNumbers');
         const textDisplay = document.getElementById('textDisplay');
         const card = document.getElementById('typewriterCard');
 
         if (mode === 'code') {
             diffSelect.parentElement.style.display = 'none';
+            codeLangBar.classList.add('show');
 
             // Enable Code Editor UI
-            editorTitleBar.classList.add('show');
             lineNumbers.classList.add('show');
             textDisplay.classList.add('code-active');
-            card.classList.add('code-mode');
+            if (card) card.classList.add('code-mode');
 
         } else {
             diffSelect.parentElement.style.display = 'flex';
+            codeLangBar.classList.remove('show');
 
             // Disable Code Editor UI
-            editorTitleBar.classList.remove('show');
             lineNumbers.classList.remove('show');
             textDisplay.classList.remove('code-active');
-            card.classList.remove('code-mode');
+            if (card) card.classList.remove('code-mode');
         }
 
         updateText();
