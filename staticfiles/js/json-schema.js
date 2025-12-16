@@ -207,44 +207,48 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Clear button handler
-    clearBtn.addEventListener('click', function () {
-        jsonData.value = '';
-        jsonSchema.value = '';
-        validationResults.classList.remove('active');
-        resultContent.innerHTML = '';
-    });
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function () {
+            jsonData.value = '';
+            jsonSchema.value = '';
+            validationResults.classList.remove('active');
+            resultContent.innerHTML = '';
+        });
+    }
 
     // Sample button handler
-    sampleBtn.addEventListener('click', function () {
-        jsonData.value = JSON.stringify({
-            "name": "John Doe",
-            "age": 30,
-            "email": "john@example.com",
-            "role": "developer"
-        }, null, 2);
+    if (sampleBtn) {
+        sampleBtn.addEventListener('click', function () {
+            jsonData.value = JSON.stringify({
+                "name": "John Doe",
+                "age": 30,
+                "email": "john@example.com",
+                "role": "developer"
+            }, null, 2);
 
-        jsonSchema.value = JSON.stringify({
-            "type": "object",
-            "required": ["name", "email"],
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "minLength": 1
-                },
-                "age": {
-                    "type": "integer",
-                    "minimum": 0,
-                    "maximum": 150
-                },
-                "email": {
-                    "type": "string",
-                    "format": "email"
-                },
-                "role": {
-                    "type": "string",
-                    "enum": ["admin", "developer", "designer", "manager"]
+            jsonSchema.value = JSON.stringify({
+                "type": "object",
+                "required": ["name", "email"],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "age": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 150
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": ["admin", "developer", "designer", "manager"]
+                    }
                 }
-            }
-        }, null, 2);
-    });
+            }, null, 2);
+        });
+    }
 });
