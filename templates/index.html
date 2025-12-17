@@ -950,7 +950,6 @@ detection. No signup - try now!{% endblock %}
 <div class="single-editor-panel">
   <div class="panel-header">
     <div class="panel-title-group">
-      <h2 class="panel-title">JSON Editor</h2>
 
       <!-- Actions Dropdown -->
       <div class="actions-dropdown" id="actionsDropdown">
@@ -2310,8 +2309,22 @@ detection. No signup - try now!{% endblock %}
     });
   }
 
-  document.readyState === 'loading'
-    ? document.addEventListener('DOMContentLoaded', initMonaco)
-    : initMonaco();
+  // Initialize Monaco with priority management
+  const startMonaco = () => {
+    // Small delay to ensure paint has occurred
+    setTimeout(() => {
+      if (window.requestIdleCallback) {
+        requestIdleCallback(() => initMonaco(), { timeout: 2000 });
+      } else {
+        setTimeout(initMonaco, 100);
+      }
+    }, 100);
+  };
+
+  if (document.readyState === 'complete') {
+    startMonaco();
+  } else {
+    window.addEventListener('load', startMonaco);
+  }
 </script>
 {% endblock %}
