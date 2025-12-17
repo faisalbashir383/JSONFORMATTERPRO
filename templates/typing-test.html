@@ -252,9 +252,9 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         font-size: 1.25rem;
         line-height: 2.2;
         font-family: 'Georgia', serif;
-        min-height: 180px;
-        max-height: 300px;
-        overflow-y: auto;
+        < !-- min-height: 180px;
+        -->< !-- max-height: 300px;
+        -->overflow-y: auto;
         position: relative;
         word-wrap: break-word;
         overflow-wrap: break-word;
@@ -695,6 +695,140 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         background: var(--typewriter-accent);
         color: white;
         border-color: var(--typewriter-accent);
+    }
+
+    /* Leaderboard Tabs (All Time / Daily / Weekly) */
+    .leaderboard-tabs {
+        display: flex;
+        border-bottom: 2px solid var(--color-border);
+    }
+
+    .tab-btn {
+        flex: 1;
+        padding: 1rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        background: transparent;
+        color: var(--color-text-secondary);
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+    }
+
+    .tab-btn:hover {
+        color: var(--color-text);
+        background: var(--color-bg);
+    }
+
+    .tab-btn.active {
+        color: var(--typewriter-accent);
+    }
+
+    .tab-btn.active::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--typewriter-accent);
+    }
+
+    /* Duration Filters */
+    .leaderboard-duration-filters {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        background: var(--color-bg);
+        border-bottom: 1px solid var(--color-border);
+        flex-wrap: wrap;
+    }
+
+    .filter-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        margin-right: 0.5rem;
+    }
+
+    .duration-btn {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: 1px solid var(--color-border);
+        background: var(--color-surface);
+        color: var(--color-text-secondary);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .duration-btn:hover {
+        border-color: var(--typewriter-accent);
+        color: var(--typewriter-accent);
+    }
+
+    .duration-btn.active {
+        background: var(--typewriter-accent);
+        color: white;
+        border-color: var(--typewriter-accent);
+    }
+
+    /* Mode Filters */
+    .leaderboard-filters {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--color-border);
+        flex-wrap: wrap;
+    }
+
+    /* Pagination */
+    .leaderboard-pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        border-top: 1px solid var(--color-border);
+        background: var(--color-bg);
+    }
+
+    .page-btn {
+        padding: 0.5rem 0.85rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border: 1px solid var(--color-border);
+        background: var(--color-surface);
+        color: var(--color-text);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .page-btn:hover:not(:disabled) {
+        border-color: var(--typewriter-accent);
+        color: var(--typewriter-accent);
+    }
+
+    .page-btn.active {
+        background: var(--typewriter-accent);
+        color: white;
+        border-color: var(--typewriter-accent);
+    }
+
+    .page-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .page-info {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        margin: 0 0.5rem;
     }
 
     .leaderboard-table-container {
@@ -1147,14 +1281,35 @@ per minute calculator, touch typing test, programming typing practice{% endblock
                 </svg>
                 Top Typists
             </div>
-            <div class="leaderboard-filters">
-                <button class="filter-btn active" onclick="loadLeaderboard('all')">All</button>
-                <button class="filter-btn" onclick="loadLeaderboard('easy')">Easy</button>
-                <button class="filter-btn" onclick="loadLeaderboard('medium')">Medium</button>
-                <button class="filter-btn" onclick="loadLeaderboard('hard')">Hard</button>
-                <button class="filter-btn" onclick="loadLeaderboard('python')">Code</button>
-            </div>
         </div>
+
+        <!-- Time Period Tabs -->
+        <div class="leaderboard-tabs">
+            <button class="tab-btn active" data-period="all" onclick="setLeaderboardPeriod('all')">All Time</button>
+            <button class="tab-btn" data-period="daily" onclick="setLeaderboardPeriod('daily')">Daily</button>
+            <button class="tab-btn" data-period="weekly" onclick="setLeaderboardPeriod('weekly')">Weekly</button>
+        </div>
+
+        <!-- Duration Filters -->
+        <div class="leaderboard-duration-filters">
+            <span class="filter-label">Duration:</span>
+            <button class="duration-btn active" data-duration="all" onclick="setLeaderboardDuration('all')">All</button>
+            <button class="duration-btn" data-duration="15" onclick="setLeaderboardDuration('15')">15s</button>
+            <button class="duration-btn" data-duration="30" onclick="setLeaderboardDuration('30')">30s</button>
+            <button class="duration-btn" data-duration="60" onclick="setLeaderboardDuration('60')">60s</button>
+            <button class="duration-btn" data-duration="120" onclick="setLeaderboardDuration('120')">120s</button>
+        </div>
+
+        <!-- Mode Filters -->
+        <div class="leaderboard-filters">
+            <span class="filter-label">Mode:</span>
+            <button class="filter-btn active" data-level="all" onclick="setLeaderboardLevel('all')">All</button>
+            <button class="filter-btn" data-level="easy" onclick="setLeaderboardLevel('easy')">Easy</button>
+            <button class="filter-btn" data-level="medium" onclick="setLeaderboardLevel('medium')">Medium</button>
+            <button class="filter-btn" data-level="hard" onclick="setLeaderboardLevel('hard')">Hard</button>
+            <button class="filter-btn" data-level="python" onclick="setLeaderboardLevel('python')">Code</button>
+        </div>
+
         <div class="leaderboard-table-container">
             <div id="userRankInfo" class="user-rank-info"></div>
             <table class="leaderboard-table">
@@ -1175,11 +1330,17 @@ per minute calculator, touch typing test, programming typing practice{% endblock
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination -->
+        <div class="leaderboard-pagination" id="leaderboardPagination">
+            <!-- Pagination will be populated by JavaScript -->
+        </div>
     </div>
 </div>
 
 <!-- Save Score Modal -->
 <div id="saveScoreModal" class="save-score-modal">
+    {% csrf_token %}
     <div class="save-card">
         <h2 style="margin-bottom: 0.5rem;">Test Complete! 🎉</h2>
         <p style="color: var(--color-text-secondary);">Great job! Submit your score to the leaderboard.</p>
@@ -1401,116 +1562,139 @@ per minute calculator, touch typing test, programming typing practice{% endblock
     let errors = 0;
     let correctChars = 0;
 
-    // Sample texts
-    // Sample texts - EXPANDED
+    // Sample texts - EXPANDED (15 per level, varied types)
     const textData = {
         text: {
+            // EASY: 25+ words each (15 samples: stories, punctuation, questions, motivation)
             easy: [
-                "simple words and short sentences are best for starting out practice makes perfect keep typing",
-                "the sun runs fast across the sky and the clouds float by so high above the green grass",
-                "open your eyes and see the world is full of nice things just waiting for you to find them",
-                "fish swim in the deep blue sea while birds fly high in the air above the trees",
-                "run fast and do not look back because the finish line is just around the corner",
-                "eat an apple a day to keep the doctor away and stay healthy for a long time",
-                "cats are soft and dogs are loyal but both make great pets for any home",
-                "read a book to learn new things and expand your mind with knowledge and wisdom",
-                "write your name on the paper with a pen so we know who you are properly",
-                "music makes the world go round and brings joy to every heart that listens",
-                "jump high and touch the sky if you can reach it with your hands up",
-                "walk the path less traveled and you might find something new and exciting",
-                "time waits for no one so make the most of every single day you have"
+                // Stories
+                "The little cat sat on the warm mat near the window. She watched the birds fly by in the blue sky. The sun was bright and made her feel sleepy and happy.",
+                "Tom went to the park with his dog Max. They played fetch with a red ball until the sun started to set. It was a perfect day for both of them.",
+                "Every morning, the baker wakes up early to make fresh bread. The smell fills the whole street and makes everyone smile. People line up waiting to buy it.",
+                "A small fish swam in the big blue sea. It found a cave with pretty shells inside. The fish made the cave its new home and felt very safe there.",
+                "The train moved slowly through the green hills. People looked out the windows at the farms and cows. Children waved at the farmers working in the fields below.",
+                // Punctuation practice
+                "Hello, my name is Alex. I live in a small town near the mountains. Every day, I walk to school with my best friend, Sarah. We talk about our dreams.",
+                "Do you like pizza? I think it is the best food in the world. My favorite toppings are cheese, tomatoes, and basil. What toppings do you prefer on yours?",
+                "Wow! That was an amazing goal. The crowd cheered so loud that I could barely hear myself think. The team won five to three. It was their best game yet!",
+                // Questions
+                "Have you ever seen a rainbow after the rain? The colors are so bright and beautiful. Red, orange, yellow, green, blue, and purple stretch across the sky in a perfect arc.",
+                "What is your favorite color? Mine is blue because it reminds me of the ocean and the sky. The color blue makes me feel calm and at peace with everything.",
+                "Where do birds go when winter comes? Some fly to warmer places far away. They travel many miles to find food and sunshine. Then they come back in spring.",
+                // Motivation
+                "Every day is a new chance to learn something new. Keep trying and never give up on your dreams. Small steps lead to big changes over time if you stay focused.",
+                "You are stronger than you think. Even when things get hard, you can push through. Believe in yourself and keep moving forward. Success comes to those who persist.",
+                "Practice makes perfect, so keep working hard every single day. The more you try, the better you will become at anything you set your mind to achieve.",
+                "Dreams come true when you work hard and stay focused on your goals. Every expert was once a beginner who never gave up no matter what challenges came their way."
             ],
+            // MEDIUM: 35+ words each (15 samples)
             medium: [
-                "The quick brown fox jumps over the lazy dog. Programming is the art of telling another human what one wants the computer to do. Clean code always looks like it was written by someone who cares.",
-                "To be or not to be, that is the question. Whether 'tis nobler in the mind to suffer the slings and arrows of outrageous fortune, or to take arms against a sea of troubles.",
-                "Success is not final, failure is not fatal: it is the courage to continue that counts. Believe you can and you're halfway there.",
-                "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
-                "In the beginning God created the heaven and the earth. And the earth was without form, and void; and darkness was upon the face of the deep.",
-                "Call me Ishmael. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would sail about a little.",
-                "All happy families are alike; each unhappy family is unhappy in its own way. It was the best of times, it was the worst of times.",
-                "The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle.",
-                "Life is what happens when you're busy making other plans. The future belongs to those who believe in the beauty of their dreams.",
-                "Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.",
-                "Innovation distinguishes between a leader and a follower. Your time is limited, so don't waste it living someone else's life.",
-                "The greatest glory in living lies not in never falling, but in rising every time we fall.",
-                "If you set your goals ridiculously high and it's a failure, you will fail above everyone else's success."
+                // Stories
+                "The old lighthouse stood tall on the rocky cliff, its beam cutting through the thick fog every night. Sailors had relied on its steady light for over a hundred years. The keeper climbed the spiral stairs each evening, ensuring the lamp was lit before darkness fell.",
+                "In the heart of the forest, there lived a wise old owl who gave advice to all the woodland creatures. Animals came from miles around to seek her wisdom. She always listened carefully before sharing her thoughts, never rushing to judgment about any problem brought to her.",
+                "The mystery of the missing cookies puzzled everyone in the household. Detective Mom searched every room for clues, finding crumbs leading to the garden shed. There, hiding behind the old lawn mower, sat the family dog with chocolate on his whiskers and a guilty expression.",
+                "Every summer, the village held a grand festival celebrating the harvest moon. Musicians played traditional songs while dancers twirled in colorful costumes. Children ran between the stalls, their pockets full of sweets, while elders shared stories of festivals past under the starlit sky.",
+                "The young scientist worked late into the night, determined to finish her experiment before the deadline. Her hypothesis was bold and unconventional, but the data was starting to support her theory. If successful, her discovery would change how the world understood climate patterns forever.",
+                // Punctuation
+                "What an incredible journey it has been! From the highest mountain peaks to the deepest ocean trenches, humanity's quest for exploration knows no bounds. We have walked on the moon, sent probes to distant planets, and mapped the human genome. Yet so much remains undiscovered.",
+                "The recipe is simple: first, gather all your ingredients; second, preheat the oven to three hundred and fifty degrees; third, mix the dry ingredients in one bowl and the wet in another. Finally, combine everything and bake for exactly forty-five minutes until golden brown.",
+                "Life is full of surprises, isn't it? One moment, you're following your carefully planned path; the next, you're embarking on an unexpected adventure. The key is to embrace change, adapt to new circumstances, and remember that some of the best experiences come unplanned.",
+                // Questions
+                "Why do we dream when we sleep at night? Scientists believe dreams help our brains process emotions and consolidate memories. Some cultures view dreams as messages from the spirit world. Whatever the truth may be, dreams remain one of humanity's most fascinating mysteries.",
+                "How many stars exist in our galaxy alone? Astronomers estimate there are between one hundred billion and four hundred billion stars in the Milky Way. And our galaxy is just one of billions in the observable universe! The scale is almost impossible to comprehend.",
+                // Motivation
+                "Success is not a destination but a continuous journey of growth and self-improvement. Every setback teaches valuable lessons; every achievement builds confidence for greater challenges ahead. The most successful people are those who view failures as stepping stones rather than roadblocks on their path.",
+                "The only way to do great work is to love what you do. If you haven't found it yet, keep looking and don't settle for less. Your passion is waiting for you somewhere, and when you find it, your work will feel less like obligation and more like purpose.",
+                "Every expert was once a beginner who refused to give up. The difference between successful people and others is not a lack of strength or knowledge but rather a lack of will. Stay persistent, remain curious, and never stop learning from both victories and defeats.",
+                "Your potential is limitless when you believe in yourself and commit to continuous improvement. The mind achieves what the heart believes, so nurture positive thoughts and surround yourself with people who encourage your growth. You are capable of extraordinary things if you dare to try.",
+                "Progress is not always linear, and that is perfectly okay. Some days will feel like giant leaps forward while others might seem like steps backward. What matters most is that you keep moving, keep growing, and keep pushing beyond your comfort zone into new possibilities."
             ],
+            // HARD: 40+ words each (15 samples)
             hard: [
-                "Th3 qu!ck br0wn f0x juMp$ 0v3r 7h3 l@zy d0g. P$yCh0l0gy & C0d1ng: 2 s1d3s 0f th3 s@m3 c01n; {Complexi+y} is the enemy of execu+ion.",
-                "Quantum_Mechanics(State *psi) { return (H_hat * psi) == (i * h_bar * d_psi_dt); } // Schrodinger's Equation vs. Heisenberg's Matrix!",
-                "Crypt0graphy 1s ess3nt1@l f0r $ecur1ty. AES-256 uses 14 rounds for 256-bit keys; RSA relies on prime factorization.",
-                "The Riemann Zeta function is defined as the analytic continuation of the sum from n=1 to infinity of 1/(n^s). It plays a pivotal role in analytic number theory.",
-                "In thermodynamics, entropy (S) is a measure of the number of specific ways in which a thermodynamic system may be arranged, commonly understood as a measure of disorder.",
-                "Neuroplasticity refers to the brain's ability to reorganize itself by forming new neural connections throughout life. Neurogenesis is the creation of new neurons.",
-                "Epistemology is the branch of philosophy concerned with the theory of knowledge. It studies the nature, origin, and scope of knowledge, justification, and the rationality of belief.",
-                "Photosynthesis: 6CO2 + 6H2O + light energy -> C6H12O6 + 6O2. This process occurs in the chloroplasts of plant cells.",
-                "The Navier-Stokes equations describe the motion of viscous fluid substances. They arise from applying Newton's second law to fluid motion.",
-                "In computer science, Big O notation is used to classify algorithms according to how their run time or space requirements grow as the input size grows.",
-                "A monad is just a monoid in the category of endofunctors, what's the problem? Haskell developers love to say this.",
-                "Regular expressions (regex) are sequences of characters that define a search pattern. ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$ matches an email.",
-                "Dichlorodifluoromethane (R-12), a chlorofluorocarbon (CFC) halomethane, was used as a refrigerant and aerosol spray propellant."
+                // Complex stories
+                "The quantum physicist gazed at her calculations, bewildered by the implications of her findings. If her theory was correct, the fundamental nature of reality was far stranger than anyone had imagined. Particles could exist in multiple states simultaneously, time could flow differently depending on one's perspective, and the act of observation itself could alter the outcome of experiments. She knew publishing these ideas would invite scrutiny, but science demanded courage.",
+                "The archaeological expedition had uncovered something unprecedented: an ancient library containing manuscripts written in a language that predated all known civilizations by at least ten thousand years. The symbols bore no resemblance to any alphabet in the historical record. Dr. Vasquez carefully photographed each page, knowing that deciphering these texts could rewrite everything humanity believed about its own origins and the development of written communication.",
+                "In the labyrinthine corridors of the international space station, Commander Chen monitored the life support systems with meticulous attention to detail. A microbial contamination in the water recycling unit had triggered multiple cascade failures. With supplies limited and the next resupply mission three months away, every decision she made could mean the difference between survival and catastrophe for her six-person crew floating in the void.",
+                // Technical content
+                "Cryptographic algorithms rely on mathematical functions that are computationally easy to perform in one direction but practically impossible to reverse without specific keys. RSA encryption, for example, depends on the difficulty of factoring very large prime numbers. A 2048-bit key would take classical computers billions of years to crack, though quantum computers using Shor's algorithm could theoretically accomplish this in hours, necessitating the development of post-quantum cryptographic standards.",
+                "Neural networks are computational systems inspired by biological brains, consisting of interconnected nodes that process information through weighted connections. Deep learning extends this concept with multiple hidden layers, enabling the extraction of hierarchical features from raw data. Backpropagation algorithms adjust weights by calculating gradients of error, while techniques like dropout and batch normalization prevent overfitting during training on large datasets.",
+                "The Navier-Stokes equations describe the motion of viscous fluid substances, representing conservation of momentum and mass. These partial differential equations remain unsolved in the general three-dimensional case, constituting one of the seven Millennium Prize Problems. Turbulence, with its chaotic vortices across multiple scales, emerges from these equations yet defies complete analytical understanding despite centuries of mathematical investigation.",
+                // Philosophical
+                "Epistemology, the philosophical study of knowledge, grapples with fundamental questions about what we can truly know and how we can know it. Rationalists argue that reason is the primary source of knowledge, while empiricists maintain that all knowledge derives from sensory experience. Kant attempted to synthesize these positions, arguing that while experience triggers knowledge, the mind's innate structures shape how we interpret that experience.",
+                "The trolley problem illustrates the tension between consequentialist and deontological ethical frameworks. A consequentialist might argue that diverting the trolley to kill one person instead of five produces the best outcome, while a deontologist could maintain that actively causing someone's death, even to save others, violates moral imperatives. These thought experiments reveal the complexity of moral intuitions and the challenges of constructing coherent ethical theories.",
+                // Scientific
+                "Mitochondrial DNA provides a unique window into human evolutionary history because it is inherited exclusively from the maternal line. By analyzing mutations that accumulate over generations, scientists have traced the most recent common ancestor of all living humans to a woman who lived in Africa approximately two hundred thousand years ago. This so-called 'Mitochondrial Eve' was not the only woman alive at that time but simply the one from whom all current maternal lineages descend.",
+                "The double-slit experiment demonstrates the wave-particle duality fundamental to quantum mechanics. When particles such as electrons are fired at a barrier containing two slits, they create an interference pattern suggesting wave-like behavior. However, when detectors are added to determine which slit each particle passes through, the interference pattern disappears and particles behave like classical objects. This observer effect remains one of the most philosophically troubling aspects of modern physics.",
+                // Technical jargon
+                "Implementing a distributed consensus algorithm like Raft or Paxos requires careful consideration of network partitions, message delays, and node failures. Leader election must handle split-brain scenarios while maintaining linearizability for client operations. Log replication ensures that committed entries persist across majority quorums, enabling fault tolerance without sacrificing consistency. Byzantine fault-tolerant variants address malicious actors but introduce significant communication overhead and complexity.",
+                "The halting problem, proven undecidable by Alan Turing in 1936, demonstrates fundamental limits of computation. No algorithm can exist that determines whether an arbitrary program will eventually halt or run forever. This proof by contradiction constructs a hypothetical machine that leads to logical paradoxes, establishing that certain problems are inherently unsolvable regardless of computational resources or algorithmic ingenuity.",
+                // Mixed complexity
+                "Synesthesia is a fascinating neurological phenomenon where stimulation of one sensory or cognitive pathway leads to involuntary experiences in another. Some synesthetes perceive letters as having inherent colors, while others taste shapes or hear music as visual patterns. Research suggests these cross-modal connections arise from unusual neural wiring, possibly involving reduced pruning of synaptic connections during brain development. Approximately four percent of the population experiences some form of synesthesia.",
+                "The Fermi Paradox asks: if the universe is so vast and ancient, containing billions of potentially habitable planets, why have we detected no evidence of extraterrestrial civilizations? Proposed solutions range from the Great Filter hypothesis, suggesting most civilizations destroy themselves before achieving interstellar capability, to the Zoo hypothesis, proposing that advanced aliens deliberately avoid contact. Each explanation carries profound implications for humanity's future among the stars.",
+                "Gödel's incompleteness theorems revolutionized mathematics and philosophy by proving that any consistent formal system powerful enough to express basic arithmetic contains statements that are true but unprovable within that system. Furthermore, such a system cannot demonstrate its own consistency. These results shattered Hilbert's program to establish mathematics on a complete and consistent axiomatic foundation, revealing fundamental limitations in formal reasoning itself."
             ]
         },
         code: {
+            // All code snippets: max 20 lines each
             python: [
-                "def hello_world():\n    print('Hello World')\n    return True",
-                "class Dog:\n    def __init__(self, name):\n        self.name = name\n    def bark(self):\n        return 'Woof!'",
-                "numbers = [x for x in range(10) if x % 2 == 0]\nprint(f'Evens: {numbers}')",
-                "def fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)",
-                "import json\n\ndata = {'key': 'value'}\njson_str = json.dumps(data)\nparsed = json.loads(json_str)",
-                "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print('Cannot divide by zero!')\nfinally:\n    print('Done.')",
-                "with open('file.txt', 'r') as f:\n    content = f.read()\n    print(len(content.splitlines()))"
+                "def binary_search(arr, target):\n    \"\"\"Binary search implementation.\"\"\"\n    left, right = 0, len(arr) - 1\n    \n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    \n    return -1\n\n# Test the function\nnums = [1, 3, 5, 7, 9, 11]\nresult = binary_search(nums, 7)\nprint(f\"Found at index: {result}\")",
+
+                "class Stack:\n    def __init__(self):\n        self.items = []\n    \n    def push(self, item):\n        self.items.append(item)\n    \n    def pop(self):\n        if not self.is_empty():\n            return self.items.pop()\n        return None\n    \n    def peek(self):\n        if not self.is_empty():\n            return self.items[-1]\n        return None\n    \n    def is_empty(self):\n        return len(self.items) == 0",
+
+                "def fibonacci(n):\n    \"\"\"Generate fibonacci sequence.\"\"\"\n    if n <= 0:\n        return []\n    elif n == 1:\n        return [0]\n    \n    fib = [0, 1]\n    for i in range(2, n):\n        fib.append(fib[i-1] + fib[i-2])\n    \n    return fib\n\n# Generate first 10 numbers\nsequence = fibonacci(10)\nfor i, num in enumerate(sequence):\n    print(f\"F({i}) = {num}\")",
+
+                "def quick_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    \n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    \n    return quick_sort(left) + middle + quick_sort(right)\n\n# Example usage\nnumbers = [64, 34, 25, 12, 22, 11, 90]\nsorted_nums = quick_sort(numbers)\nprint(f\"Sorted: {sorted_nums}\")",
+
+                "from typing import Dict, List\n\ndef word_count(text: str) -> Dict[str, int]:\n    \"\"\"Count word occurrences.\"\"\"\n    words = text.lower().split()\n    counts: Dict[str, int] = {}\n    \n    for word in words:\n        word = word.strip('.,!?')\n        counts[word] = counts.get(word, 0) + 1\n    \n    return counts\n\n# Test it\ntext = \"Hello world hello Python\"\nresult = word_count(text)\nprint(result)"
             ],
             javascript: [
-                "const greeting = 'Hello World';\nconsole.log(greeting);\nlet x = 10;",
-                "function debounce(func, wait) {\n  let timeout;\n  return function(...args) {\n    clearTimeout(timeout);\n    timeout = setTimeout(() => func.apply(this, args), wait);\n  };\n}",
-                "const map = new Map();\nmap.set('key', 'value');\nfor (const [k, v] of map) {\n  console.log(k, v);\n}",
-                "document.getElementById('btn').addEventListener('click', () => {\n  alert('Clicked!');\n});",
-                "const promise = new Promise((resolve, reject) => {\n  setTimeout(() => resolve('Done!'), 1000);\n});",
-                "async function fetchData() {\n  const res = await fetch('/api/data');\n  const json = await res.json();\n  return json;\n}",
-                "const arr = [1, 2, 3];\nconst doubled = arr.map(x => x * 2);\nconsole.log(doubled);"
+                "function debounce(func, delay) {\n    let timeoutId;\n    \n    return function(...args) {\n        clearTimeout(timeoutId);\n        timeoutId = setTimeout(() => {\n            func.apply(this, args);\n        }, delay);\n    };\n}\n\n// Usage example\nconst search = debounce((query) => {\n    console.log('Searching:', query);\n}, 300);\n\nsearch('hello');\nsearch('world');",
+
+                "class EventEmitter {\n    constructor() {\n        this.events = {};\n    }\n\n    on(event, callback) {\n        if (!this.events[event]) {\n            this.events[event] = [];\n        }\n        this.events[event].push(callback);\n    }\n\n    emit(event, data) {\n        if (this.events[event]) {\n            this.events[event].forEach(cb => cb(data));\n        }\n    }\n}\n\nconst emitter = new EventEmitter();",
+
+                "async function fetchData(url) {\n    try {\n        const response = await fetch(url);\n        if (!response.ok) {\n            throw new Error('Network error');\n        }\n        const data = await response.json();\n        return data;\n    } catch (error) {\n        console.error('Fetch failed:', error);\n        return null;\n    }\n}\n\n// Usage\nconst data = await fetchData('/api/users');\nconsole.log(data);",
+
+                "const throttle = (func, limit) => {\n    let inThrottle;\n    \n    return function(...args) {\n        if (!inThrottle) {\n            func.apply(this, args);\n            inThrottle = true;\n            setTimeout(() => {\n                inThrottle = false;\n            }, limit);\n        }\n    };\n};\n\n// Usage\nconst handleScroll = throttle(() => {\n    console.log('Scroll event');\n}, 100);",
+
+                "function deepClone(obj) {\n    if (obj === null) return null;\n    if (typeof obj !== 'object') return obj;\n    \n    if (Array.isArray(obj)) {\n        return obj.map(item => deepClone(item));\n    }\n    \n    const cloned = {};\n    for (const key in obj) {\n        cloned[key] = deepClone(obj[key]);\n    }\n    return cloned;\n}\n\nconst original = { a: 1, b: { c: 2 } };\nconst copy = deepClone(original);"
             ],
             html: [
-                "<div class=\"container\">\n    <h1>Hello World</h1>\n</div>",
-                "<form action=\"/submit\" method=\"POST\">\n  <label for=\"name\">Name:</label>\n  <input type=\"text\" id=\"name\" required />\n  <button type=\"submit\">Send</button>\n</form>",
-                "<ul>\n  <li>Item 1</li>\n  <li>Item 2</li>\n  <li>Item 3</li>\n</ul>",
-                "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Document</title>\n</head>\n<body></body>\n</html>",
-                "<a href=\"https://example.com\" target=\"_blank\">Visit Link</a>",
-                "<img src=\"image.jpg\" alt=\"Description\" width=\"300\" />"
+                "<html><head><title>Test</title></head><body><h1>Hello</h1><p>Paragraph text.</p><div class=\"container\"><span>Content</span></div></body></html>",
+                "<form action=\"/submit\" method=\"post\"><label for=\"name\">Name:</label><input type=\"text\" id=\"name\" name=\"name\" required><button type=\"submit\">Submit</button></form>",
+                "<nav><ul><li><a href=\"/\">Home</a></li><li><a href=\"/about\">About</a></li><li><a href=\"/contact\">Contact</a></li></ul></nav>"
             ],
             css: [
-                ".container {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}",
-                "@media (max-width: 768px) {\n  .sidebar {\n    display: none;\n  }\n  .main {\n    width: 100%;\n  }\n}",
-                ":root {\n  --primary: #ff0000;\n  --secondary: #00ff00;\n}\nbody {\n  background: var(--primary);\n}",
-                ".card {\n  box-shadow: 0 4px 8px rgba(0,0,0,0.1);\n  transition: 0.3s;\n}\n.card:hover {\n  box-shadow: 0 8px 16px rgba(0,0,0,0.2);\n}",
-                "header {\n  position: sticky;\n  top: 0;\n  z-index: 100;\n  background-color: white;\n}"
+                ".container { display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0 auto; max-width: 1200px; background: #f5f5f5; }",
+                ".button { display: inline-block; padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 5px; cursor: pointer; transition: all 0.3s; }",
+                "@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } .fade { animation: fadeIn 0.5s ease-in-out; }"
             ],
             sql: [
-                "SELECT * FROM users\nWHERE active = 1\nORDER BY created_at DESC;",
-                "UPDATE products\nSET stock = stock - 1\nWHERE id = 105 AND stock > 0;",
-                "SELECT u.name, o.total\nFROM users u\nJOIN orders o ON u.id = o.user_id\nGROUP BY u.name;",
-                "INSERT INTO logs (level, message)\nVALUES ('ERROR', 'Something went wrong');",
-                "CREATE TABLE students (\n  id INT PRIMARY KEY,\n  name VARCHAR(100),\n  grade INT\n);",
-                "DELETE FROM sessions\nWHERE last_active < NOW() - INTERVAL '30 days';"
+                "SELECT u.id, u.name, COUNT(o.id) as orders FROM users u LEFT JOIN orders o ON u.id = o.user_id GROUP BY u.id HAVING COUNT(o.id) > 0 ORDER BY orders DESC LIMIT 10;",
+                "CREATE TABLE users (id SERIAL PRIMARY KEY, username VARCHAR(50) NOT NULL, email VARCHAR(255) UNIQUE, created_at TIMESTAMP DEFAULT NOW());",
+                "UPDATE products SET stock = stock - 1, updated_at = NOW() WHERE id = 123 AND stock > 0 RETURNING id, name, stock;"
             ]
         },
         words: {
             easy: [
-                "cat dog bat rat hat sat mat pat tap nap cap map lap gap zap",
-                "red blue green gold pink grey cyan lime teal navy plum rose",
-                "one two three four five six seven eight nine ten zero",
-                "hot cold warm cool wet dry big small fast slow up down"
+                "cat dog bat rat hat sat mat pat tap nap cap map lap gap zap sap rap dap",
+                "red blue green gold pink grey cyan lime teal navy plum rose beige tan",
+                "one two three four five six seven eight nine ten zero each all some many",
+                "hot cold warm cool wet dry big small fast slow up down left right near far",
+                "eat run jump walk talk read write play work rest stop start move stay go"
             ],
             medium: [
-                "apple banana cherry date grape kiwi lemon mango orange peach pear plum",
-                "piano guitar flute violin cello drums banjo harp organ siren gong oboe",
-                "london paris tokyo berlin rome dubai york sydney cairo delhi",
-                "summer winter autumn spring rain snow wind storm hail sunny cloud"
+                "apple banana cherry date grape kiwi lemon mango orange peach pear plum melon berry fig",
+                "piano guitar flute violin cello drums banjo harp organ oboe trumpet tuba",
+                "london paris tokyo berlin rome dubai sydney cairo delhi mumbai seattle boston chicago",
+                "summer winter autumn spring sunrise sunset rainbow thunder lightning breeze",
+                "laptop tablet desktop monitor keyboard mouse printer scanner speaker router modem"
             ],
             hard: [
-                "xylophone quintessence juxtapose quixotic zaftig blitzkrieg sphinx wow",
-                "mnemonic phlegm rhythm sphinx zephyr pterodactyl gnarly knapsack",
-                "schadenfreude onomatopoeia synecdoche idiosyncratic sesquipedalian"
+                "algorithm complexity recursion abstraction polymorphism inheritance encapsulation",
+                "xylophone quintessence juxtapose quixotic zaftig kaleidoscope labyrinth",
+                "mnemonic phlegm rhythm sphinx zephyr pterodactyl cacophony labyrinthine",
+                "schadenfreude onomatopoeia synecdoche idiosyncratic sesquipedalian ubiquitous",
+                "cryptocurrency blockchain decentralized cryptographic authentication authorization"
             ]
         }
     };
@@ -1664,8 +1848,28 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         textDisplay.innerHTML = '';
         currentText.split('').forEach(char => {
             const span = document.createElement('span');
-            span.innerText = char;
             span.classList.add('char');
+
+            // Handle newlines specially for proper display
+            if (char === '\n') {
+                span.innerHTML = '<br>';
+                span.setAttribute('data-char', '\n');
+            } else if (char === ' ') {
+                span.innerHTML = '&nbsp;';
+                span.setAttribute('data-char', ' ');
+            } else if (char === '<') {
+                span.innerHTML = '&lt;';
+                span.setAttribute('data-char', '<');
+            } else if (char === '>') {
+                span.innerHTML = '&gt;';
+                span.setAttribute('data-char', '>');
+            } else if (char === '&') {
+                span.innerHTML = '&amp;';
+                span.setAttribute('data-char', '&');
+            } else {
+                span.innerText = char;
+            }
+
             textDisplay.appendChild(span);
         });
         textDisplay.firstChild.classList.add('current');
@@ -1680,34 +1884,36 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         const input = inputField.value;
         const chars = textDisplay.querySelectorAll('.char');
 
+
         // Handle current character
         if (charIndex < chars.length) {
             const currentChar = chars[charIndex];
             const typedChar = input.slice(-1);
+        }
 
-            // Basic logic: check last typed char against target
-            // Note: This is a simplified logic for the demo. 
-            // Real typing tests handle backspaces and full strings differently.
+        // Determine indexes
+        const arrayQuote = textDisplay.querySelectorAll('span');
+        const arrayValue = input.split('');
 
-            // Determine indexes
-            const arrayQuote = textDisplay.querySelectorAll('span');
-            const arrayValue = input.split('');
+        // Play sound for new characters
+        if (input.length > charIndex) {
+            playTypewriterSound();
+        }
 
-            // Play sound for new characters (simplified check)
-            if (input.length > charIndex) {
-                playTypewriterSound();
-            }
+        correctChars = 0;
+        arrayQuote.forEach((characterSpan, index) => {
+            const character = arrayValue[index];
 
-            correctChars = 0;
-            arrayQuote.forEach((characterSpan, index) => {
-                const character = arrayValue[index];
+            if (character == null) {
+                characterSpan.classList.remove('correct');
+                characterSpan.classList.remove('incorrect');
+                characterSpan.classList.remove('current');
+                if (index === arrayValue.length) characterSpan.classList.add('current');
+            } else {
+                // Get the original character - use data-char for special chars, innerText for regular
+                const expectedChar = characterSpan.getAttribute('data-char') || characterSpan.innerText;
 
-                if (character == null) {
-                    characterSpan.classList.remove('correct');
-                    characterSpan.classList.remove('incorrect');
-                    characterSpan.classList.remove('current');
-                    if (index === arrayValue.length) characterSpan.classList.add('current');
-                } else if (character === characterSpan.innerText) {
+                if (character === expectedChar) {
                     characterSpan.classList.add('correct');
                     characterSpan.classList.remove('incorrect');
                     characterSpan.classList.remove('current');
@@ -1717,19 +1923,19 @@ per minute calculator, touch typing test, programming typing practice{% endblock
                     characterSpan.classList.add('incorrect');
                     characterSpan.classList.remove('current');
                 }
-            });
-
-            // Update Stats - accuracy based on total text length (not just typed chars)
-            const accuracy = Math.round((correctChars / currentText.length) * 100) || 0;
-            accDisplay.innerText = accuracy + '%';
-
-            const wpm = Math.round(((correctChars / 5) / ((timeLimit - timeLeft) / 60))) || 0;
-            if (wpm !== Infinity) wpmDisplay.innerText = wpm;
-
-            // Check end
-            if (input.length >= currentText.length) {
-                endTest();
             }
+        });
+
+        // Update Stats - accuracy based on total text length (not just typed chars)
+        const accuracy = Math.round((correctChars / currentText.length) * 100) || 0;
+        accDisplay.innerText = accuracy + '%';
+
+        const wpm = Math.round(((correctChars / 5) / ((timeLimit - timeLeft) / 60))) || 0;
+        if (wpm !== Infinity) wpmDisplay.innerText = wpm;
+
+        // Check end
+        if (input.length >= currentText.length) {
+            endTest();
         }
     }
 
@@ -1752,28 +1958,15 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         document.getElementById('resWpm').innerText = wpmDisplay.innerText;
         document.getElementById('resAcc').innerText = accDisplay.innerText;
 
-        // Use wpmDisplay value for stats
         const finalWpm = parseInt(wpmDisplay.innerText) || 0;
         const finalAcc = parseFloat(accDisplay.innerText.replace('%', '')) || 0;
 
-        // Simple stats object (since exact char counts might be tricky to get from simplified logic)
-        // We will approximate correct/total from WPM/Accuracy if needed, or rely on what processInput calculated.
-
-        // Recalculate based on input length
         const totalChars = inputField.value.length;
         const correct = Math.round(totalChars * (finalAcc / 100));
         const errs = totalChars - correct;
+        const stats = { total: totalChars, correct: correct, errors: errs };
 
-        const stats = {
-            total: totalChars,
-            correct: correct,
-            errors: errs
-        };
-
-        // Call leaderboard modal
         testComplete(finalWpm, finalAcc, stats);
-
-        // Also show the results overlay (original behavior)
         document.getElementById('resultsModal').classList.add('show');
     }
 
@@ -1815,52 +2008,11 @@ per minute calculator, touch typing test, programming typing practice{% endblock
 
         if (e.key === 'Enter') {
             e.preventDefault();
-
-            // Check if we assume correct typing or if we just want to act smart
-            // Let's implement auto-indentation if the user is at the right spot
-
             const val = inputField.value;
-            // Only auto-indent if we are matching the text so far? 
-            // Or just always auto-indent?
-            // Let's align with the target text 'currentText'
-
-            // We need to verify if the NEXT Expected Character is indeed a newline
-            // But usually in typing tests, if you type Enter, you mean newline.
-
-            // Find indentation of the next line in TARGET text
-            // We assume the user has typed correctly up to this point or close to it.
-            // But we can just check what the current line indentation is in the target text.
-
-            // Allow the newline
             let toInsert = '\n';
-
-            // Look ahead in currentText for indentation
-            // We need to know current progress?
-            // charIndex tracks correct characters. But input length might be different if errors.
-            // Let's assume we want to match the target structure.
-
-            // Only auto-indent if the next char in target is indeed \n (or we are at the end of a line)
-            // But simple logic: just append \n.
-
-            // Auto-indent logic:
-            // 1. Get the target text line we are supposedly on or moving to.
-            // Actually, simplified: Look at the target text corresponding to where we are inserting.
-
-            // If the user presses Enter, we append \n.
-            // Then check: does the target text have spaces following this \n position?
-            // If so, append them too.
-
-            // This relies on inputField.value.length being roughly in sync with currentText charIndex logic
-            // But charIndex is strictly correct chars. 
-            // Let's use inputField.value.length as the cursor "attempt".
-
             const currentPos = inputField.value.length;
 
-            // Check if target text has \n at this pos (approx)
-            // Or just check if the target substring starting at currentPos is \n + spaces
-
             if (currentText[currentPos] === '\n') {
-                // Determine how many spaces after \n in target
                 let spaces = '';
                 let i = currentPos + 1;
                 while (i < currentText.length && currentText[i] === ' ') {
@@ -1870,17 +2022,13 @@ per minute calculator, touch typing test, programming typing practice{% endblock
                 toInsert += spaces;
             }
 
-            // Insert
             const start = inputField.selectionStart;
             const end = inputField.selectionEnd;
             inputField.value = val.substring(0, start) + toInsert + val.substring(end);
             inputField.selectionStart = inputField.selectionEnd = start + toInsert.length;
-
-            // Trigger processInput to validate and play sound
             processInput();
         }
 
-        // Tab Support (Optional but good for code)
         if (e.key === 'Tab') {
             e.preventDefault();
             const start = inputField.selectionStart;
@@ -1895,12 +2043,9 @@ per minute calculator, touch typing test, programming typing practice{% endblock
     // --- Toast Notification Logic ---
     function showToast(message, type = 'info') {
         const container = document.getElementById('toastContainer') || createToastContainer();
-
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
-
         const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
-
         toast.innerHTML = `
             <span class="toast-icon">${icon}</span>
             <span>${message}</span>
@@ -1935,18 +2080,62 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         difficulty = 'easy'; // Updating global var if exists
         setMode('text'); // This will also ensure correct UI visibility
 
-        loadLeaderboard('all');
+        loadLeaderboard();
         const savedName = localStorage.getItem('typingUserName');
         if (savedName && document.getElementById('usernameInput')) {
             document.getElementById('usernameInput').value = savedName;
         }
     });
 
-    async function loadLeaderboard(level) {
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.textContent.toLowerCase().includes(level === 'python' ? 'code' : level));
-            if (level === 'all' && btn.textContent === 'All') btn.classList.add('active');
+    // Leaderboard state
+    const leaderboardState = {
+        period: 'all',
+        duration: 'all',
+        level: 'all',
+        page: 1
+    };
+
+    function setLeaderboardPeriod(period) {
+        leaderboardState.period = period;
+        leaderboardState.page = 1;
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.period === period);
         });
+        loadLeaderboard();
+    }
+
+    function setLeaderboardDuration(duration) {
+        leaderboardState.duration = duration;
+        leaderboardState.page = 1;
+        document.querySelectorAll('.duration-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.duration === duration);
+        });
+        loadLeaderboard();
+    }
+
+    function setLeaderboardLevel(level) {
+        leaderboardState.level = level;
+        leaderboardState.page = 1;
+        document.querySelectorAll('.filter-btn[data-level]').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.level === level);
+        });
+        loadLeaderboard();
+    }
+
+    function setLeaderboardPage(page) {
+        leaderboardState.page = page;
+        loadLeaderboard();
+    }
+
+    function getRankIcon(rank) {
+        if (rank === 1) return '🥇';
+        if (rank === 2) return '🥈';
+        if (rank === 3) return '🥉';
+        return rank;
+    }
+
+    async function loadLeaderboard() {
+        const { period, duration, level, page } = leaderboardState;
 
         const tbody = document.getElementById('leaderboardBody');
         if (!tbody) return;
@@ -1954,41 +2143,101 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Loading...</td></tr>';
 
         try {
-            const res = await fetch(`/api/typing-test/leaderboard/?limit=50&level=${level}`);
+            let url = `/api/typing-test/leaderboard/?limit=20&page=${page}&period=${period}&level=${level}`;
+            if (duration !== 'all') {
+                url += `&duration=${duration}`;
+            }
+
+            const res = await fetch(url);
             const data = await res.json();
 
             if (data.success) {
                 if (data.leaderboard.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem; color: var(--color-text-secondary);">No scores yet for this mode. Be the first!</td></tr>';
+                    tbody.innerHTML = `<tr>
+            <td colspan="6" style="text-align:center; padding: 2rem; color: var(--color-text-secondary);">
+                No scores yet for this filter. Be the first!
+            </td>
+        </tr>`;
+                    document.getElementById('leaderboardPagination').innerHTML = '';
                     return;
                 }
 
                 // Check if we have user rank info
+                const infoDiv = document.getElementById('userRankInfo');
                 if (data.user_rank) {
-                    const infoDiv = document.getElementById('userRankInfo');
                     infoDiv.style.display = 'block';
-                    infoDiv.innerHTML = `🏆 Your Best Rank: #${data.user_rank} in ${level === 'all' ? 'globally' : level}`;
+                    const periodLabel = period === 'all' ? 'All Time' : period.charAt(0).toUpperCase() + period.slice(1);
+                    infoDiv.innerHTML = `🏆 Your Rank: #${data.user_rank} (${periodLabel})`;
+                } else {
+                    infoDiv.style.display = 'none';
                 }
 
                 const savedName = localStorage.getItem('typingUserName');
 
                 tbody.innerHTML = data.leaderboard.map(score => {
                     const isUser = savedName && score.username === savedName;
-                    return `
-                    <tr class="${isUser ? 'highlight-user' : ''}">
-                        <td class="rank-cell rank-${score.rank}">${score.rank}</td>
-                        <td>${escapeHtml(score.username)} ${isUser ? '(You)' : ''}</td>
+                    const rankDisplay = getRankIcon(score.rank);
+                    const rankClass = score.rank <= 3 ? `rank-${score.rank}` : '';
+                    return `<tr class="${isUser ? 'highlight-user' : ''}">
+                        <td class="rank-cell ${rankClass}">${rankDisplay}</td>
+                        <td>${escapeHtml(score.username)} ${isUser ? '<span style="color: var(--typewriter-accent);">(You)</span>' : ''}</td>
                         <td class="wpm-cell">${score.wpm}</td>
                         <td>${score.accuracy}%</td>
                         <td><span style="text-transform:capitalize; font-size: 0.85rem; padding: 2px 6px; background: var(--color-bg); border-radius: 4px;">${score.level}</span></td>
                         <td style="color: var(--color-text-secondary); font-size: 0.9rem;">${score.date}</td>
-                    </tr>
-                `}).join('');
+                    </tr>`;
+                }).join('');
+
+                // Render pagination
+                renderPagination(data.page, data.total_pages, data.total_scores);
             }
         } catch (e) {
             tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color: var(--typewriter-wrong);">Failed to load leaderboard.</td></tr>';
             console.error(e);
         }
+    }
+
+    function renderPagination(currentPage, totalPages, totalScores) {
+        const container = document.getElementById('leaderboardPagination');
+        if (!container || totalPages <= 1) {
+            if (container) container.innerHTML = `<span class="page-info">${totalScores} total scores</span>`;
+            return;
+        }
+
+        let html = '';
+
+        // Previous button
+        html += `<button class="page-btn" onclick="setLeaderboardPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>← Prev</button>`;
+
+        // Page numbers
+        const maxVisible = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+        if (endPage - startPage < maxVisible - 1) {
+            startPage = Math.max(1, endPage - maxVisible + 1);
+        }
+
+        if (startPage > 1) {
+            html += `<button class="page-btn" onclick="setLeaderboardPage(1)">1</button>`;
+            if (startPage > 2) html += `<span class="page-info">...</span>`;
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="setLeaderboardPage(${i})">${i}</button>`;
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) html += `<span class="page-info">...</span>`;
+            html += `<button class="page-btn" onclick="setLeaderboardPage(${totalPages})">${totalPages}</button>`;
+        }
+
+        // Next button
+        html += `<button class="page-btn" onclick="setLeaderboardPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next →</button>`;
+
+        html += `<span class="page-info">(${totalScores} scores)</span>`;
+
+        container.innerHTML = html;
     }
 
     function testComplete(wpm, accuracy, stats) {
@@ -2047,7 +2296,8 @@ per minute calculator, touch typing test, programming typing practice{% endblock
                     usernameInput.style.display = 'none';
 
                     document.querySelector('#saveScoreModal h2').textContent = 'Nice Try! 👍';
-                    document.querySelector('#saveScoreModal p').textContent = `Your personal best is ${data.user_best.wpm} WPM. Keep practicing!`;
+                    document.querySelector('#saveScoreModal p').textContent = `Your personal best is
+                            ${data.user_best.wpm} WPM. Keep practicing!`;
                 } else {
                     // New High Score or First Time
                     skipBtn.classList.replace('primary', 'secondary');
@@ -2097,7 +2347,7 @@ per minute calculator, touch typing test, programming typing practice{% endblock
 
             if (data.success) {
                 closeSaveModal();
-                loadLeaderboard('all');
+                loadLeaderboard();
                 showToast(data.message || 'Score saved successfully!', 'success');
             } else {
                 showToast(data.error || 'Failed to save score.', 'error');
@@ -2131,8 +2381,6 @@ per minute calculator, touch typing test, programming typing practice{% endblock
 
     function escapeHtml(text) {
         const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-</script>
+        div.textContent = text; return div.innerHTML;
+    } </script>
 {% endblock %}

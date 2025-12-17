@@ -528,9 +528,22 @@ def blog_detail(request, slug):
     # Get related posts
     related_posts = post.get_related_posts()
     
+    # Get previous and next posts for navigation
+    previous_post = BlogPost.objects.filter(
+        published=True,
+        published_at__lt=post.published_at
+    ).order_by('-published_at').first()
+    
+    next_post = BlogPost.objects.filter(
+        published=True,
+        published_at__gt=post.published_at
+    ).order_by('published_at').first()
+    
     context = {
         'post': post,
         'related_posts': related_posts,
+        'previous_post': previous_post,
+        'next_post': next_post,
     }
     
     return render(request, 'blog_detail.html', context)
@@ -1033,23 +1046,68 @@ def submit_typing_score(request):
 @api_view(['GET'])
 def get_typing_leaderboard(request):
     """
-    Get the global typing leaderboard.
-    Query params: level (optional), limit (default 20)
+    Get the global typing leaderboard with filters.
+    Query params:
+        - level: filter by difficulty level (easy, medium, hard, etc.)
+        - period: 'all' (default), 'daily', 'weekly'
+        - duration: filter by test duration in seconds (15, 30, 60, 120, etc.)
+        - limit: max results per page (default 20, max 100)
+        - page: page number for pagination (default 1)
     """
     from .models import TypingScore
+    from django.utils import timezone
+    from datetime import timedelta
     
     try:
         level = request.GET.get('level', 'all')
+        period = request.GET.get('period', 'all')
+        duration = request.GET.get('duration', None)
         limit = min(int(request.GET.get('limit', 20)), 100)
+        page = max(int(request.GET.get('page', 1)), 1)
         
-        scores = TypingScore.get_top_scores(limit=limit, level=level if level != 'all' else None)
+        # Base query
+        queryset = TypingScore.objects.filter(is_verified=True)
+        
+        # Filter by level/difficulty
+        if level and level != 'all':
+            queryset = queryset.filter(level=level)
+        
+        # Filter by time period
+        now = timezone.now()
+        if period == 'daily':
+            start_of_day = now.replace(hour=0, minute=0, second=0, microsecond=0)
+            queryset = queryset.filter(created_at__gte=start_of_day)
+        elif period == 'weekly':
+            start_of_week = now - timedelta(days=now.weekday())
+            start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
+            queryset = queryset.filter(created_at__gte=start_of_week)
+        
+        # Filter by test duration
+        if duration:
+            try:
+                duration_int = int(duration)
+                queryset = queryset.filter(duration=duration_int)
+            except ValueError:
+                pass
+        
+        # Get total count before pagination
+        total_count = queryset.count()
+        total_pages = max(1, (total_count + limit - 1) // limit)
+        
+        # Order by WPM (descending), then accuracy (descending)
+        queryset = queryset.order_by('-wpm', '-accuracy')
+        
+        # Pagination
+        offset = (page - 1) * limit
+        scores = queryset[offset:offset + limit]
         
         leaderboard = [{
-            'rank': i + 1,
+            'rank': offset + i + 1,
             'username': score.username,
             'wpm': score.wpm,
             'accuracy': float(score.accuracy),
             'level': score.level,
+            'duration': score.duration,
             'date': score.created_at.strftime('%Y-%m-%d')
         } for i, score in enumerate(scores)]
         
@@ -1059,21 +1117,41 @@ def get_typing_leaderboard(request):
         user_rank = None
         
         if session_key:
-            best_score = TypingScore.get_user_best(session_key, level if level != 'all' else None)
+            # Build filter for user's best in same conditions
+            user_query = TypingScore.objects.filter(session_key=session_key, is_verified=True)
+            if level and level != 'all':
+                user_query = user_query.filter(level=level)
+            if duration:
+                try:
+                    user_query = user_query.filter(duration=int(duration))
+                except ValueError:
+                    pass
+            
+            best_score = user_query.order_by('-wpm').first()
             if best_score:
                 user_best = {
                     'wpm': best_score.wpm,
                     'accuracy': float(best_score.accuracy),
-                    'level': best_score.level
+                    'level': best_score.level,
+                    'duration': best_score.duration
                 }
-                user_rank = TypingScore.get_rank(best_score.wpm, level if level != 'all' else None)
+                # Calculate rank
+                user_rank = queryset.filter(wpm__gt=best_score.wpm).count() + 1
         
         return Response({
             'success': True,
             'leaderboard': leaderboard,
             'user_best': user_best,
             'user_rank': user_rank,
-            'total_scores': TypingScore.objects.filter(is_verified=True).count()
+            'total_scores': total_count,
+            'page': page,
+            'total_pages': total_pages,
+            'limit': limit,
+            'filters': {
+                'level': level,
+                'period': period,
+                'duration': duration
+            }
         })
         
     except Exception as e:

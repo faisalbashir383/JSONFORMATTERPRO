@@ -202,15 +202,6 @@
 </style>
 {% endblock %}
 
-{% block navigation %}
-<!-- Simplified navigation for blog pages -->
-<button id="hamburgerBtn" class="hamburger-btn" aria-label="Toggle menu">
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
-</button>
-{% endblock %}
-
 {% block nav_actions %}
 <a href="/" class="btn btn-secondary" style="text-decoration: none;">JSON Tools</a>
 <a href="/base64/" class="btn btn-secondary" style="text-decoration: none;">Base64</a>
@@ -290,6 +281,48 @@
             Facebook
         </a>
     </div>
+
+    <!-- Previous / Next Article Navigation -->
+    {% if previous_post or next_post %}
+    <nav class="article-navigation"
+        style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--color-border);">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {% if previous_post %}
+            <a href="{% url 'blog_detail' previous_post.slug %}"
+                style="display: block; padding: 1.25rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); text-decoration: none; transition: all 0.2s;"
+                onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'"
+                onmouseout="this.style.borderColor='var(--color-border)'; this.style.transform=''">
+                <span
+                    style="display: block; font-size: 0.75rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">
+                    ← Previous Article
+                </span>
+                <span
+                    style="display: block; font-size: 0.95rem; font-weight: 600; color: var(--color-text); line-height: 1.4;">
+                    {{ previous_post.title|truncatewords:10 }}
+                </span>
+            </a>
+            {% else %}
+            <div></div>
+            {% endif %}
+
+            {% if next_post %}
+            <a href="{% url 'blog_detail' next_post.slug %}"
+                style="display: block; padding: 1.25rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); text-decoration: none; text-align: right; transition: all 0.2s;"
+                onmouseover="this.style.borderColor='var(--color-primary)'; this.style.transform='translateY(-2px)'"
+                onmouseout="this.style.borderColor='var(--color-border)'; this.style.transform=''">
+                <span
+                    style="display: block; font-size: 0.75rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">
+                    Next Article →
+                </span>
+                <span
+                    style="display: block; font-size: 0.95rem; font-weight: 600; color: var(--color-text); line-height: 1.4;">
+                    {{ next_post.title|truncatewords:10 }}
+                </span>
+            </a>
+            {% endif %}
+        </div>
+    </nav>
+    {% endif %}
 </article>
 
 <!-- Related Posts -->
