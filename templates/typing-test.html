@@ -1719,8 +1719,8 @@ per minute calculator, touch typing test, programming typing practice{% endblock
                 }
             });
 
-            // Update Stats
-            const accuracy = Math.round((correctChars / input.length) * 100) || 100;
+            // Update Stats - accuracy based on total text length (not just typed chars)
+            const accuracy = Math.round((correctChars / currentText.length) * 100) || 0;
             accDisplay.innerText = accuracy + '%';
 
             const wpm = Math.round(((correctChars / 5) / ((timeLimit - timeLeft) / 60))) || 0;
