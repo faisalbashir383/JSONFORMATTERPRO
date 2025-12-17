@@ -95,6 +95,10 @@ class BlogPost(models.Model):
     # Reading time (auto-calculated)
     reading_time = models.IntegerField(default=5, help_text="Estimated reading time in minutes")
     
+    # Author Details
+    author_name = models.CharField(max_length=100, default="JSON Formatters Pro", help_text="Name of the article author")
+    author_profile_url = models.URLField(blank=True, help_text="Link to author's profile (e.g., dev.to, github, twitter)")
+    
     class Meta:
         ordering = ['-published_at']
         indexes = [

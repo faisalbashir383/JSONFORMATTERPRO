@@ -5,7 +5,7 @@
 {% block meta_title %}{{ post.title }} - {{ post.category.name }} Tutorial | JSON Formatters Pro{% endblock %}
 {% block meta_description %}{{ post.meta_description }}{% endblock %}
 {% block meta_keywords %}{{ post.meta_keywords }}{% endblock %}
-{% block author %}JSON Formatters Pro{% endblock %}
+{% block author %}{{ post.author_name }}{% endblock %}
 
 {% block og_type %}article{% endblock %}
 {% block og_url %}{{ SITE_URL }}{% url 'blog_detail' post.slug %}{% endblock %}
@@ -30,9 +30,9 @@
   "datePublished": "{{ post.published_at|date:'c' }}",
   "dateModified": "{{ post.updated_at|date:'c' }}",
   "author": {
-    "@type": "Organization",
-    "name": "JSON Formatters Pro",
-    "url": "{{ SITE_URL }}"
+    "@type": "Person",
+    "name": "{{ post.author_name }}",
+    "url": "{{ post.author_profile_url|default:SITE_URL }}"
   },
   "publisher": {
     "@type": "Organization",
@@ -231,6 +231,12 @@
         <div
             style="display: flex; gap: 2rem; color: var(--color-text-secondary); font-size: 0.875rem; flex-wrap: wrap;">
             <span>📅 {{ post.published_at|date:"F d, Y" }}</span>
+            <span class="article-author">
+                ✍️ {% if post.author_profile_url %}<a href="{{ post.author_profile_url }}" target="_blank"
+                    rel="noopener"
+                    style="color: inherit; text-decoration: none; border-bottom: 1px dotted currentColor;">
+                {{post.author_name }}</a>{% else %}{{ post.author_name }}{% endif %}
+            </span>
             <span>⏱️ {{ post.reading_time }} min read</span>
             <span>👁️ {{ post.views }} views</span>
             <span>🏷️ {{ post.category.name }}</span>

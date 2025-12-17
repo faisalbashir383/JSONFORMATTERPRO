@@ -49,6 +49,9 @@ class BlogPostAdmin(admin.ModelAdmin):
         ('Basic Information', {
             'fields': ('title', 'slug', 'category', 'excerpt', 'content')
         }),
+        ('Author Details', {
+            'fields': ('author_name', 'author_profile_url')
+        }),
         ('Meta & Tags', {
             'fields': ('tags', 'meta_description', 'meta_keywords')
         }),
