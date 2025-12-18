@@ -592,73 +592,108 @@
     </div>
 </div>
 
+<!-- What Is JSON Schema Section -->
 <div class="info-section" style="margin-top: 1.5rem;">
     <h2>What is JSON Schema?</h2>
     <p>
-        JSON Schema is a vocabulary that allows you to annotate and validate JSON documents.
-        It defines the structure, data types, and constraints that your JSON data must follow.
-        This is essential for API validation, configuration file validation, and data quality assurance.
+        JSON Schema is a declarative language for defining the structure and constraints of JSON data. It acts as a
+        contract between systems, specifying what properties are allowed, their data types, required fields, and
+        acceptable value ranges.
     </p>
     <p>
-        <strong>Common schema keywords:</strong> type, properties, required, minimum, maximum,
-        pattern, enum, items, minLength, maxLength, format.
+        Developers use JSON Schema primarily for three purposes: validating API request and response payloads, enforcing
+        configuration file formats, and documenting data structures in a machine-readable way. When you define a schema,
+        any JSON document can be checked against it to ensure compliance before processing.
+    </p>
+    <p>
+        The schema itself is written in JSON, making it easy to parse, generate, and integrate into existing toolchains.
+        Common keywords include <code>type</code>, <code>properties</code>, <code>required</code>, <code>minimum</code>,
+        <code>maximum</code>, <code>pattern</code>, and <code>format</code>.
     </p>
 </div>
 
-<!-- FAQ Section -->
+<!-- JSON Schema Validation Examples Section -->
 <div class="info-section" style="margin-top: 1.5rem;">
-    <h2>JSON Schema Validator FAQ</h2>
+    <h2>JSON Schema Validation Examples</h2>
+
+    <p style="margin-bottom: 1rem;">Below is a simple schema that requires a <code>name</code> (string) and
+        <code>age</code> (integer, minimum 0).</p>
+
+    <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Schema
+        Definition</h4>
+    <pre
+        style="background: var(--color-surface-alt); padding: 1rem; border-radius: var(--radius-md); overflow-x: auto; font-size: 0.875rem; margin-bottom: 1.5rem;"><code>{
+  "type": "object",
+  "required": ["name", "age"],
+  "properties": {
+    "name": { "type": "string", "minLength": 1 },
+    "age": { "type": "integer", "minimum": 0 }
+  }
+}</code></pre>
+
+    <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; color: #10b981;">✓ Valid JSON</h4>
+    <pre
+        style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: var(--radius-md); overflow-x: auto; font-size: 0.875rem; border: 1px solid #10b981; margin-bottom: 1.5rem;"><code>{
+  "name": "Alice",
+  "age": 28
+}</code></pre>
+    <p style="margin-bottom: 1.5rem; font-size: 0.9rem;">This passes because both required fields are present with
+        correct types and <code>age</code> meets the minimum constraint.</p>
+
+    <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; color: #ef4444;">✗ Invalid JSON</h4>
+    <pre
+        style="background: rgba(239, 68, 68, 0.1); padding: 1rem; border-radius: var(--radius-md); overflow-x: auto; font-size: 0.875rem; border: 1px solid #ef4444; margin-bottom: 1rem;"><code>{
+  "name": "Bob",
+  "age": -5
+}</code></pre>
+    <p style="font-size: 0.9rem;">This fails validation because <code>age</code> is below the minimum value of 0 defined
+        in the schema.</p>
+</div>
+
+<!-- JSON Schema Validator FAQs Section -->
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>JSON Schema Validator FAQs</h2>
 
     <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
-        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">How do I validate JSON against a schema?
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Is this JSON Schema validator free to use?
         </h3>
-        <p style="margin: 0;">Use the tabs to switch between JSON Data and JSON Schema inputs. Paste your data and
-            schema, then click the green Validate button to check for errors.</p>
+        <p style="margin: 0;">Yes, this tool is completely free with no registration required. You can validate as many
+            schemas as needed without any usage limits or hidden costs.</p>
     </div>
 
     <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
-        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What JSON Schema drafts are supported?
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Is my JSON data secure when validating
+            schemas?</h3>
+        <p style="margin: 0;">All validation happens locally in your browser. Your JSON data never leaves your machine
+            or gets transmitted to any server, ensuring complete privacy.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Can I validate large JSON Schema files?
         </h3>
-        <p style="margin: 0;">This validator supports JSON Schema Draft 4, Draft 6, Draft 7, and Draft 2020-12. It
-            automatically detects the draft version from your schema's $schema keyword.</p>
+        <p style="margin: 0;">The validator handles reasonably large schemas and JSON documents efficiently. For
+            extremely large files, performance depends on your browser's memory and processing capabilities.</p>
     </div>
 
     <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
-        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What is the difference between Draft 7 and
-            Draft 2020-12?</h3>
-        <p style="margin: 0;">Draft 2020-12 introduces prefixItems for tuple validation, $dynamicRef for dynamic
-            references, replaces definitions with $defs, and has improved vocabularies for conditional validation.</p>
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What JSON Schema versions are supported?
+        </h3>
+        <p style="margin: 0;">This validator supports Draft 4, Draft 6, Draft 7, and Draft 2020-12. The version is
+            auto-detected from the <code>$schema</code> keyword in your schema definition.</p>
     </div>
 
     <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
-        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">How do I use required fields in JSON
-            Schema?</h3>
-        <p style="margin: 0;">Add a "required" array at the object level with property names that must be present:
-            <code>{ "required": ["name", "email"] }</code></p>
-    </div>
-
-    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
-        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Can I validate nested JSON objects?</h3>
-        <p style="margin: 0;">Yes! Define nested schemas within "properties" of parent objects, or use "$ref" to
-            reference reusable schema definitions in "$defs".</p>
-    </div>
-
-    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
-        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">How do I validate array items?</h3>
-        <p style="margin: 0;">Use "items" to define the schema for array elements. Add "minItems", "maxItems", and
-            "uniqueItems" for additional constraints.</p>
-    </div>
-
-    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
-        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What is the $ref keyword?</h3>
-        <p style="margin: 0;">$ref references other schemas using JSON Pointer (e.g., "#/$defs/address") or external
-            URIs. It enables schema reuse and modular design.</p>
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What errors can a JSON Schema validator
+            detect?</h3>
+        <p style="margin: 0;">It detects type mismatches, missing required properties, values outside defined ranges,
+            pattern violations, invalid formats, and structural issues like incorrect nesting or array constraints.</p>
     </div>
 
     <div style="padding: 1rem 0;">
-        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Is this JSON Schema validator free?</h3>
-        <p style="margin: 0;">Yes, 100% free with no signup required. All processing happens in your browser, so your
-            data stays completely private.</p>
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">How do I validate JSON against a schema
+            online?</h3>
+        <p style="margin: 0;">Paste your JSON data in the JSON Data tab, switch to the Schema tab and paste your schema,
+            then click Validate. Results appear instantly in the panel on the right.</p>
     </div>
 </div>
 </div>
