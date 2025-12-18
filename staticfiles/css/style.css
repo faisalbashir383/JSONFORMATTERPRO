@@ -199,6 +199,17 @@ body {
   pointer-events: none; /* Prevent blocking other elements when hidden */
 }
 
+/* Invisible bridge area to prevent dropdown from closing when moving mouse */
+.dropdown-content::before {
+  content: '';
+  position: absolute;
+  top: -0.75rem; /* Bridge the gap between trigger and dropdown */
+  left: 0;
+  right: 0;
+  height: 0.75rem;
+  background: transparent;
+}
+
 /* Wide dropdown - 2 column grid layout */
 .dropdown-content.wide {
   min-width: 420px;
