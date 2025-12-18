@@ -124,6 +124,7 @@ urlpatterns = [
     path('blog/', views.blog_list, name='blog_list'),
     path('blog/<slug:slug>/', views.blog_detail, name='blog_detail'),
     path('blog/category/<slug:slug>/', views.blog_category, name='blog_category'),
+    path('api/blogs/', views.blog_api, name='blog_api'),
     
     # Tutorial URLs
     path('tutorials/', views.tutorials_list, name='tutorials_list'),

@@ -1066,6 +1066,36 @@ detection. No signup - try now!{% endblock %}
 </div>
 
 
+  <!-- JSON Blogs Bento Grid Section -->
+  <section class="content-section bento-blogs-section" id="bentoBlogsSection">
+    <div class="bento-header">
+      <h2>Explore JSON Tutorials & Guides</h2>
+      <p>From formatting basics to advanced API integration, discover expert articles crafted for developers at every
+        level.</p>
+    </div>
+
+    <!-- Bento Grid Container -->
+    <div class="bento-grid" id="bentoGrid">
+      <!-- Loading State -->
+      <div class="bento-loading" id="bentoLoading">
+        <div class="bento-loading-spinner"></div>
+        <span>Loading articles...</span>
+      </div>
+    </div>
+
+    <!-- View All Link -->
+    <div class="bento-footer">
+      <a href="/blog/" class="bento-view-all">
+        <span>Browse All Articles</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
+        </svg>
+      </a>
+    </div>
+  </section>
+
+
+
 <!-- Main H1 Header for SEO -->
 <header class="header" style="text-align: center; margin-bottom: 1.5rem;">
   <h1
@@ -1164,216 +1194,353 @@ detection. No signup - try now!{% endblock %}
     </ul>
   </section>
 
-  <section class="features-grid">
-    <div class="feature-card">
-      <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M7.5 5.6L10 7 8.6 4.5 10 2 7.5 3.4 5 2l1.4 2.5L5 7zm12 9.8L17 14l1.4 2.5L17 19l2.5-1.4L22 19l-1.4-2.5L22 14zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5zm-7.63 5.29a.996.996 0 0 0-1.41 0L1.29 18.96a.996.996 0 0 0 0 1.41l2.34 2.34c.39.39 1.02.39 1.41 0L16.7 11.05c.39-.39.39-1.02 0-1.41l-2.33-2.35z" />
-        </svg></div>
-      <h3>Auto-Format on Paste</h3>
-      <p>Paste JSON and it automatically formats instantly. No need to click any button - smart detection beautifies
-        your code.
-      </p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-        </svg></div>
-      <h3>Inline Validation</h3>
-      <p>Real-time validation shows status right in the header. Know instantly if your JSON is valid or has errors.
-      </p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M4 9h4v4H4V9zm16 0h-4v4h4V9zm-4-7h4v4h-4V2zM4 2h4v4H4V2zm0 14h4v4H4v-4zm16 0h-4v4h4v-4zM8 12.5h8v-1H8v1z" />
-        </svg></div>
-      <h3>JSON Minification</h3>
-      <p>Compress JSON by removing whitespace and reducing file size for production deployment and API
-        optimization.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M16.01 11H4v2h12.01v3L20 12l-3.99-4zM8 17H20v-2H8v-3L4 16l4 4z" />
-        </svg></div>
-      <h3>Format Conversion</h3>
-      <p>Convert JSON to XML, CSV, or YAML formats seamlessly for data interchange and integration purposes.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" />
-        </svg></div>
-      <h3>Dark/Light Theme</h3>
-      <p>Toggle between dark and light themes instantly. Editor syncs automatically with your preference for comfortable
-        coding.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
-        </svg></div>
-      <h3>Find & Replace</h3>
-      <p>Press Ctrl+F to find, Ctrl+H to replace. Search with regex support and replace across your entire JSON
-        document.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14zm.5-7h-1v2.5H6.5v1h2.5V13h1v-2.5h2.5v-1H10V7z" />
-        </svg></div>
-      <h3>Ctrl+Zoom</h3>
-      <p>Hold Ctrl and scroll to zoom in/out of the editor. Perfect for presentations or when working with dense JSON
-        data.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z" />
-        </svg></div>
-      <h3>Monaco Editor</h3>
-      <p>Powered by VS Code's Monaco Editor with IntelliSense, bracket matching, code folding, and multi-cursor support.
-      </p>
-    </div>
-  </section>
 
-  <section class="content-section">
-    <h2>Why Choose JSON Formatter Pro?</h2>
-    <ul class="benefits-list">
-      <li><strong>Monaco Editor Powered:</strong> Same editor as VS Code with IntelliSense and advanced features</li>
-      <li><strong>Auto-Format on Paste:</strong> Just paste your JSON and it beautifies automatically</li>
-      <li><strong>Theme Toggle:</strong> Switch between dark and light themes with one click</li>
-      <li><strong>Find & Replace:</strong> Ctrl+F to search, Ctrl+H to replace with regex support</li>
-      <li><strong>Ctrl+Zoom:</strong> Scroll to zoom in/out for better readability</li>
-      <li><strong>Command Palette:</strong> Press F1 for VS Code-like command palette</li>
-      <li><strong>Multi-Cursor:</strong> Alt+Click for multiple cursors, edit multiple lines at once</li>
-      <li><strong>Bracket Matching:</strong> Automatic bracket pair colorization and matching</li>
-      <li><strong>Code Folding:</strong> Collapse/expand JSON objects and arrays easily</li>
-      <li><strong>Fullscreen Preview:</strong> Open JSON in fullscreen with all editor features</li>
-      <li><strong>Client-Side Processing:</strong> Your sensitive JSON data stays on your device</li>
-      <li><strong>100% Free:</strong> All features are completely free with no hidden costs</li>
-    </ul>
-  </section>
+  <style>
+    /* Bento Blogs Section - Modern Aesthetic */
+    .bento-blogs-section {
+      background: linear-gradient(180deg, #f8f6f3 0%, #f1ede6 100%);
+      padding: 4rem 3rem;
+      border-radius: 24px;
+      margin-bottom: 3rem;
+    }
 
-  <section class="content-section">
-    <h2>Common Use Cases for JSON Formatting</h2>
-    <div class="use-cases">
-      <div class="use-case">
-        <h4>🔧 API Development</h4>
-        <p>Format and validate API responses, test REST API endpoints, and debug JSON payloads during
-          development.</p>
-      </div>
-      <div class="use-case">
-        <h4>📊 Data Analysis</h4>
-        <p>Clean and structure JSON data for analysis, convert to CSV for spreadsheet tools, visualize data
-          structures.</p>
-      </div>
-      <div class="use-case">
-        <h4>🐛 Debugging</h4>
-        <p>Quickly identify and fix JSON syntax errors, missing brackets, misplaced commas, and formatting
-          issues.</p>
-      </div>
-      <div class="use-case">
-        <h4>📝 Documentation</h4>
-        <p>Create readable JSON examples for technical documentation, tutorials, and code samples with proper
-          formatting.</p>
-      </div>
-    </div>
-  </section>
+    [data-theme="dark"] .bento-blogs-section {
+      background: linear-gradient(180deg, #1a1a1a 0%, #252522 100%);
+    }
 
-  <section class="content-section faq-section">
-    <h2>Frequently Asked Questions</h2>
-    <div class="faq-item">
-      <h3>What is JSON?</h3>
-      <p>JSON (JavaScript Object Notation) is a lightweight data interchange format that's easy for humans to read
-        and write, and easy for machines to parse and generate. It's widely used for APIs, configuration files,
-        and data storage.</p>
-    </div>
-    <div class="faq-item">
-      <h3>How does auto-format on paste work?</h3>
-      <p>Simply paste your JSON into the editor and it automatically detects and formats it with proper indentation.
-        No clicking required - our smart paste detection beautifies your JSON instantly and shows a "Formatted" status.
-      </p>
-    </div>
-    <div class="faq-item">
-      <h3>What is the Monaco Editor?</h3>
-      <p>Monaco Editor is the same powerful code editor that powers VS Code. It provides IntelliSense, syntax
-        highlighting,
-        bracket matching, code folding, find & replace, multi-cursor support, and many other professional-grade
-        features.</p>
-    </div>
-    <div class="faq-item">
-      <h3>How do I switch between dark and light themes?</h3>
-      <p>Click the theme toggle button (moon/sun icon) in the navigation bar or preview modal. The editor theme changes
-        instantly to match. Your preference works across both the main editor and fullscreen preview.</p>
-    </div>
-    <div class="faq-item">
-      <h3>What keyboard shortcuts are available?</h3>
-      <p>Ctrl+F for Find, Ctrl+H for Replace, Ctrl+G for Go to Line, F1 for Command Palette, Alt+Click for multi-cursor,
-        Ctrl+Mouse Wheel for zoom, Ctrl+/ for toggle comment, and Escape to close modals. All VS Code shortcuts work!
-      </p>
-    </div>
-    <div class="faq-item">
-      <h3>How do I zoom in/out of the editor?</h3>
-      <p>Hold Ctrl (Cmd on Mac) and scroll with your mouse wheel to zoom in or out. This is perfect for presentations
-        or when working with dense JSON data that's hard to read at normal size.</p>
-    </div>
-    <div class="faq-item">
-      <h3>Can I search and replace in my JSON?</h3>
-      <p>Yes! Press Ctrl+F to open the Find dialog, Ctrl+H for Find and Replace. You can search with regular
-        expressions,
-        match case, match whole word, and replace single occurrences or all at once throughout your JSON.</p>
-    </div>
-    <div class="faq-item">
-      <h3>Is my data secure when using this tool?</h3>
-      <p>Absolutely. All JSON processing happens entirely in your browser using JavaScript. Your data is never
-        sent to any server, ensuring complete privacy and security.</p>
-    </div>
-    <div class="faq-item">
-      <h3>Can I convert JSON to other formats?</h3>
-      <p>Yes! JSON Formatter Pro supports conversion to XML, CSV, and YAML formats. Use the Actions dropdown to select
-        your desired output format. Note: After conversion, use Clear to reset before pasting new JSON.</p>
-    </div>
-    <div class="faq-item">
-      <h3>What features does the fullscreen preview have?</h3>
-      <p>The fullscreen preview includes all Monaco Editor features plus theme toggle, format, minify, copy, and
-        download
-        buttons. You can edit, search, zoom, and use all keyboard shortcuts right in the preview modal.</p>
-    </div>
-    <div class="faq-item">
-      <h3>How do I format large JSON files online?</h3>
-      <p>JSON Formatter Pro handles large JSON files up to 10MB efficiently. Simply drag and drop your file or paste
-        the
-        content. The Monaco Editor processes it locally in your browser without uploading to any server, ensuring fast
-        performance even with massive datasets.</p>
-    </div>
-    <div class="faq-item">
-      <h3>What is the best JSON Formatter for developers?</h3>
-      <p>JSON Formatter Pro is the best choice for developers because it uses VS Code's Monaco Editor with features
-        like
-        IntelliSense, multi-cursor editing, find & replace with regex, code folding, and syntax highlighting. It's free,
-        works offline after loading, and processes data locally for security.</p>
-    </div>
-    <div class="faq-item">
-      <h3>How do I escape JSON strings online?</h3>
-      <p>To escape JSON strings, use our Escape JSON feature. This properly escapes special characters like quotes,
-        backslashes, and newlines, making your JSON safe for embedding in code or APIs. The Unescape feature reverses
-        this process.</p>
-    </div>
-    <div class="faq-item">
-      <h3>Can I compare two JSON files online?</h3>
-      <p>Yes! Use our dedicated <a href="/json-diff/">JSON Diff Tool</a> to compare two JSON files side by side. It
-        highlights additions, deletions, and modifications with color coding, making it easy to spot differences between
-        API responses or configuration files.</p>
-    </div>
-    <div class="faq-item">
-      <h3>How do I generate JSON Schema from JSON?</h3>
-      <p>Use our <a href="/json-schema/">JSON Schema Generator</a> to automatically create a JSON Schema from your
-        sample JSON data. This helps validate JSON structure in APIs and ensures data consistency across your
-        applications.</p>
-    </div>
-  </section>
+    .bento-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .bento-header h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+      letter-spacing: -0.5px;
+    }
+
+    .bento-header p {
+      font-size: 1.1rem;
+      color: var(--color-text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* Bento Grid Layout */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      grid-template-rows: repeat(2, 200px);
+      gap: 1.25rem;
+      min-height: 420px;
+    }
+
+    .bento-loading {
+      grid-column: 1 / -1;
+      grid-row: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      color: var(--color-text-secondary);
+    }
+
+    .bento-loading-spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(99, 102, 241, 0.2);
+      border-top-color: #6366f1;
+      border-radius: 50%;
+      animation: bentoSpin 0.8s linear infinite;
+    }
+
+    @keyframes bentoSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Bento Card Base */
+    .bento-card {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+    }
+
+    .bento-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Featured Card - Spans 2 rows */
+    .bento-card.featured {
+      grid-row: span 2;
+      background: linear-gradient(145deg, #5a6f5c 0%, #4a5d4c 100%);
+      padding: 2rem;
+    }
+
+    .bento-card.featured::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 60%);
+      z-index: 1;
+    }
+
+    .bento-card.featured .bento-content {
+      position: relative;
+      z-index: 2;
+      color: white;
+    }
+
+    .bento-card.featured .bento-badge {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      color: white;
+    }
+
+    .bento-card.featured .bento-title {
+      font-size: 1.5rem;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .bento-card.featured .bento-excerpt {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Standard Cards */
+    .bento-card.standard {
+      background: #e8e2d9;
+      padding: 1.5rem;
+    }
+
+    [data-theme="dark"] .bento-card.standard {
+      background: #2a2a28;
+    }
+
+    .bento-card.standard:nth-child(3) {
+      background: #e8e2d9;
+    }
+
+    .bento-card.standard:nth-child(4) {
+      background: linear-gradient(145deg, #6b7c6d 0%, #5a6b5c 100%);
+    }
+
+    .bento-card.standard:nth-child(4) .bento-content {
+      color: white;
+    }
+
+    .bento-card.standard:nth-child(4) .bento-badge {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    .bento-card.standard:nth-child(4) .bento-title {
+      color: white;
+    }
+
+    .bento-card.standard:nth-child(4) .bento-excerpt {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    [data-theme="dark"] .bento-card.standard:nth-child(3) {
+      background: #333330;
+    }
+
+    /* Bento Card Content */
+    .bento-content {
+      position: relative;
+    }
+
+    .bento-badge {
+      display: inline-block;
+      background: rgba(99, 102, 241, 0.15);
+      color: #6366f1;
+      padding: 0.3rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+    }
+
+    .bento-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--color-text);
+      line-height: 1.35;
+      margin-bottom: 0.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .bento-excerpt {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .bento-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--color-text-secondary);
+      opacity: 0.8;
+    }
+
+    .bento-meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    /* Arrow indicator */
+    .bento-arrow {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translate(10px, -10px);
+      transition: all 0.3s ease;
+    }
+
+    .bento-card:hover .bento-arrow {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    .bento-arrow svg {
+      width: 18px;
+      height: 18px;
+      color: #333;
+    }
+
+    /* Bento Footer */
+    .bento-footer {
+      text-align: center;
+      margin-top: 2.5rem;
+    }
+
+    .bento-view-all {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      background: #333;
+      color: white;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    [data-theme="dark"] .bento-view-all {
+      background: #4a4a4a;
+    }
+
+    .bento-view-all:hover {
+      background: #555;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .bento-view-all svg {
+      transition: transform 0.3s ease;
+    }
+
+    .bento-view-all:hover svg {
+      transform: translateX(4px);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .bento-blogs-section {
+        padding: 2.5rem 1.5rem;
+        border-radius: 16px;
+      }
+
+      .bento-header h2 {
+        font-size: 1.75rem;
+      }
+
+      .bento-header p {
+        font-size: 1rem;
+      }
+
+      .bento-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 1rem;
+      }
+
+      .bento-card.featured {
+        grid-row: span 1;
+        min-height: 220px;
+      }
+
+      .bento-card.standard {
+        min-height: 160px;
+      }
+
+      .bento-card.featured .bento-title {
+        font-size: 1.25rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .bento-blogs-section {
+        padding: 2rem 1rem;
+      }
+
+      .bento-header h2 {
+        font-size: 1.5rem;
+      }
+
+      .bento-card {
+        padding: 1.25rem !important;
+      }
+
+      .bento-view-all {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+
 
   <!-- How to Use Guide -->
   <section class="content-section">
@@ -1511,78 +1678,6 @@ detection. No signup - try now!{% endblock %}
     </div>
   </section>
 
-  <!-- Comparison Section -->
-  <section class="content-section">
-    <h2>JSON Formatter Pro vs Other Tools</h2>
-    <div class="comparison-table-wrapper">
-      <table class="comparison-table">
-        <thead>
-          <tr>
-            <th>Feature</th>
-            <th>JSON Formatter Pro</th>
-            <th>JSONLint</th>
-            <th>JSON Editor Online</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Monaco Editor (VS Code)</td>
-            <td class="yes">✅</td>
-            <td class="no">❌</td>
-            <td class="no">❌</td>
-          </tr>
-          <tr>
-            <td>Auto-Format on Paste</td>
-            <td class="yes">✅</td>
-            <td class="no">❌</td>
-            <td class="no">❌</td>
-          </tr>
-          <tr>
-            <td>Dark/Light Theme</td>
-            <td class="yes">✅</td>
-            <td class="no">❌</td>
-            <td class="yes">✅</td>
-          </tr>
-          <tr>
-            <td>Find & Replace (Regex)</td>
-            <td class="yes">✅</td>
-            <td class="no">❌</td>
-            <td class="partial">⚠️</td>
-          </tr>
-          <tr>
-            <td>JSON to CSV/XML/YAML</td>
-            <td class="yes">✅</td>
-            <td class="no">❌</td>
-            <td class="partial">⚠️</td>
-          </tr>
-          <tr>
-            <td>Multi-Cursor Editing</td>
-            <td class="yes">✅</td>
-            <td class="no">❌</td>
-            <td class="no">❌</td>
-          </tr>
-          <tr>
-            <td>Code Folding</td>
-            <td class="yes">✅</td>
-            <td class="no">❌</td>
-            <td class="yes">✅</td>
-          </tr>
-          <tr>
-            <td>Large File Support (10MB+)</td>
-            <td class="yes">✅</td>
-            <td class="partial">⚠️</td>
-            <td class="partial">⚠️</td>
-          </tr>
-          <tr>
-            <td>100% Free</td>
-            <td class="yes">✅</td>
-            <td class="yes">✅</td>
-            <td class="partial">⚠️ Limited</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
 </article>
 
 <!-- Fullscreen Modal -->
@@ -2326,5 +2421,107 @@ detection. No signup - try now!{% endblock %}
   } else {
     window.addEventListener('load', startMonaco);
   }
+
+  // =====================
+  // Bento Blog Grid - Lazy Load via AJAX
+  // =====================
+  (function () {
+    let bentoLoaded = false;
+
+    // Lazy load blogs when section comes into view
+    function initBentoObserver() {
+      const section = document.getElementById('bentoBlogsSection');
+      if (!section) return;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !bentoLoaded) {
+            bentoLoaded = true;
+            loadBentoBlogs();
+            observer.disconnect();
+          }
+        });
+      }, { rootMargin: '150px' });
+
+      observer.observe(section);
+    }
+
+    // Fetch blogs via AJAX - only 4 JSON-related blogs
+    async function loadBentoBlogs() {
+      try {
+        const response = await fetch('/api/blogs/?limit=4&category=json');
+        const data = await response.json();
+
+        if (data.success && data.posts && data.posts.length > 0) {
+          renderBentoCards(data.posts);
+        } else {
+          // Fallback: try without category filter
+          const fallbackResponse = await fetch('/api/blogs/?limit=4');
+          const fallbackData = await fallbackResponse.json();
+
+          if (fallbackData.success && fallbackData.posts && fallbackData.posts.length > 0) {
+            renderBentoCards(fallbackData.posts);
+          } else {
+            showNoBentoMessage();
+          }
+        }
+      } catch (error) {
+        console.error('Error loading blogs:', error);
+        showNoBentoMessage();
+      }
+    }
+
+    function showNoBentoMessage() {
+      const loading = document.getElementById('bentoLoading');
+      if (loading) {
+        loading.innerHTML = '<span style="color: var(--color-text-secondary);">No articles available at the moment.</span>';
+      }
+    }
+
+    // Render bento grid cards
+    function renderBentoCards(posts) {
+      const grid = document.getElementById('bentoGrid');
+      if (!grid) return;
+
+      const loading = document.getElementById('bentoLoading');
+      if (loading) loading.remove();
+
+      let html = '';
+      posts.slice(0, 4).forEach((post, index) => {
+        const isFeatured = index === 0;
+        const cardClass = isFeatured ? 'bento-card featured' : 'bento-card standard';
+
+        html += `
+          <a href="${post.url}" class="${cardClass}">
+            <div class="bento-arrow">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+            </div>
+            <div class="bento-content">
+              <span class="bento-badge">${post.category || 'JSON'}</span>
+              <h3 class="bento-title">${post.title}</h3>
+              <p class="bento-excerpt">${post.excerpt}</p>
+              ${isFeatured ? `
+                <div class="bento-meta">
+                  <span>📖 ${post.reading_time} min read</span>
+                  <span>👁️ ${post.views.toLocaleString()} views</span>
+                </div>
+              ` : ''}
+            </div>
+          </a>
+        `;
+      });
+
+      grid.innerHTML = html;
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initBentoObserver);
+    } else {
+      initBentoObserver();
+    }
+  })();
 </script>
 {% endblock %}

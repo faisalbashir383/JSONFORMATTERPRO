@@ -573,6 +573,54 @@ def blog_category(request, slug):
     return render(request, 'blog_list.html', context)
 
 
+@api_view(['GET'])
+def blog_api(request):
+    """
+    API endpoint to get published blog posts for AJAX lazy loading.
+    Returns JSON with blog post data.
+    
+    Query params:
+        - limit: Number of posts to return (default: 10, max: 50)
+        - category: Filter by category slug
+    """
+    try:
+        limit = min(int(request.GET.get('limit', 10)), 50)
+        category_slug = request.GET.get('category', None)
+        
+        posts = BlogPost.objects.filter(published=True).order_by('-published_at')
+        
+        if category_slug:
+            posts = posts.filter(category__slug=category_slug)
+        
+        posts = posts[:limit]
+        
+        posts_data = []
+        for post in posts:
+            posts_data.append({
+                'title': post.title,
+                'slug': post.slug,
+                'excerpt': post.excerpt[:150] + '...' if len(post.excerpt) > 150 else post.excerpt,
+                'url': f'/blog/{post.slug}/',
+                'category': post.category.name if post.category else '',
+                'published_at': post.published_at.strftime('%b %d, %Y') if post.published_at else '',
+                'reading_time': post.reading_time,
+                'views': post.views,
+                'tags': post.get_tags_list()[:3],  # First 3 tags
+            })
+        
+        return Response({
+            'success': True,
+            'posts': posts_data,
+            'count': len(posts_data)
+        })
+    
+    except Exception as e:
+        return Response({
+            'success': False,
+            'error': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 # ====================
 # API & Network Tools Pages
 # ====================
