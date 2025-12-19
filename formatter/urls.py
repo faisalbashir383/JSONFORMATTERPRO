@@ -1,13 +1,16 @@
 """
 URL Configuration for the formatter app
 """
-
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.urls import path, re_path
 from django.views.generic.base import RedirectView
 from . import views
 
 urlpatterns = [
-    path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico', permanent=True)),
+    path('favicon.ico', RedirectView.as_view(
+        url=staticfiles_storage.url('favicon.ico'),
+        permanent=True
+    )),
     # API endpoints
     path('api/format/', views.format_json, name='format_json'),
     path('api/minify/', views.minify_json, name='minify_json'),
