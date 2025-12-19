@@ -7,6 +7,7 @@ from django.views.generic.base import RedirectView
 from . import views
 
 urlpatterns = [
+    path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico', permanent=True)),
     # API endpoints
     path('api/format/', views.format_json, name='format_json'),
     path('api/minify/', views.minify_json, name='minify_json'),
@@ -120,7 +121,6 @@ urlpatterns = [
     path('careers/<slug:slug>/', views.job_detail, name='job_detail'),
     
     path('robots.txt', views.robots_txt, name='robots_txt'),
-    path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico', permanent=True)),
     
     # Blog URLs
     path('blog/', views.blog_list, name='blog_list'),
