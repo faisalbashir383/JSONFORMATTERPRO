@@ -2489,7 +2489,7 @@ detection. No signup - try now!{% endblock %}
         if (action === 'delete') {
           e.stopPropagation();
           deleteHistoryItem(id);
-          return;
+          return
         }
 
         if (action === 'restore' || !action) {
