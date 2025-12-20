@@ -1,0 +1,762 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}JSON to JSONL Converter - Free, Fast & Secure Online Tool{% endblock %}
+{% block meta_title %}JSON to JSONL Converter - Free, Fast & Secure Online Tool{% endblock %}
+{% block meta_description %}Convert standard JSON files into JSON Lines (JSONL) format instantly. Perfect for AI
+training, big data processing, and streaming pipelines. Free, secure, client-side tool.{% endblock %}
+{% block meta_keywords %}json to jsonl, jsonl converter, convert json to jsonl, json lines converter, json to jsonl
+online, jsonl format, jsonl generator, json to ndjson{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/json-to-jsonl/{% endblock %}
+
+{% block structured_data %}
+<!-- WebSite Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "JSON to JSONL Converter",
+  "url": "{{ SITE_URL }}/json-to-jsonl/",
+  "description": "Convert JSON to JSON Lines (JSONL) instantly for AI training and big data pipelines.",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Instant JSON to JSONL conversion",
+    "Client-side processing (Privacy First)",
+    "Supports large file handling",
+    "No signup required"
+  ]
+}
+</script>
+
+<!-- FAQPage Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is JSONL used for?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "JSONL (JSON Lines) is commonly used for storing structured data that may be processed one record at a time, such as application logs, streaming data pipelines, and training datasets for AI models (like GPT fine-tuning)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is JSONL better than JSON?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For specific use cases like streaming and logging, yes. JSONL allows appending new records without parsing the entire file, which makes it more efficient for large datasets and continuous data streams compared to a single monolithic JSON array."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can JSONL contain arrays?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Technically, yes. Each line in a JSONL file must be a valid JSON value. This value *can* be an array, but it is most commonly a JSON object representing a single record."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is JSONL required for AI training?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Many modern AI platforms, including OpenAI, require training datasets to be in JSONL format. This structure allows the training process to efficiently read examples one by one without loading the entire dataset into memory."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this JSON to JSONL converter safe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, it is strictly client-side. Your data is processed entirely within your web browser using JavaScript and never leaves your device."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How large JSON files are handled?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The tool can handle fairly large files (tens of megabytes) because it runs locally. However, extremely large files (GBs) might be limited by your browser's memory."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- HowTo Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Convert JSON to JSONL",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Paste your JSON",
+      "text": "Copy your JSON data (usually an array of objects) and paste it into the left input panel."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Validate structure",
+      "text": "Ensure your JSON is valid. The tool will automatically check for syntax errors."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Convert instantly",
+      "text": "Click the 'Convert to JSONL' button. The tool transforms the array into newline-delimited JSON objects."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Copy or download",
+      "text": "Copy the JSONL output to your clipboard or download it as a .jsonl file for use in your projects."
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Tool Header */
+    .tool-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(59, 130, 246, 0.1);
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+        letter-spacing: -0.02em;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.125rem;
+        max-width: 700px;
+        margin: 0 auto 1.5rem;
+        line-height: 1.6;
+    }
+
+    .trust-badges {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 1.5rem;
+    }
+
+    .trust-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+        background: var(--color-surface);
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        border: 1px solid var(--color-border);
+        box-shadow: var(--shadow-sm);
+    }
+
+    /* Converter Grid */
+    .converter-grid {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 1.5rem;
+        margin-bottom: 4rem;
+        align-items: stretch;
+    }
+
+    .converter-panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 16px var(--color-shadow, rgba(0, 0, 0, 0.05));
+        overflow: hidden;
+        height: 600px;
+        position: relative;
+    }
+
+    [data-theme="dark"] .converter-panel {
+        background: rgba(15, 23, 42, 0.8);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem 1.25rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .panel-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 0;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .icon-btn {
+        background: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        padding: 0.4rem;
+        cursor: pointer;
+        color: var(--color-text-secondary);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .icon-btn:hover {
+        background: var(--color-surface);
+        color: var(--color-primary);
+        border-color: var(--color-primary);
+    }
+
+    .converter-textarea {
+        width: 100%;
+        height: 100%;
+        flex: 1;
+        padding: 1.25rem;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: none;
+        resize: none;
+    }
+
+    [data-theme="dark"] .converter-textarea {
+        background: rgba(10, 15, 26, 0.6);
+    }
+
+    .converter-textarea:focus {
+        outline: none;
+        background: var(--color-surface);
+    }
+
+    /* Actions */
+    .center-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .convert-btn {
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-width: 160px;
+        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+    }
+
+    .convert-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 8px -1px rgba(37, 99, 235, 0.3);
+    }
+
+    .secondary-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        background: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        min-width: 120px;
+        text-align: center;
+    }
+
+    .secondary-btn:hover {
+        color: var(--color-primary);
+        border-color: var(--color-primary);
+        background: rgba(37, 99, 235, 0.05);
+    }
+
+    /* Microcopy */
+    .microcopy {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.5rem;
+        text-align: center;
+        opacity: 0.8;
+    }
+
+    /* Content */
+    .content-section {
+        margin: 0 auto 4rem;
+        color: var(--color-text);
+    }
+
+    .content-block {
+        margin-bottom: 3.5rem;
+    }
+
+    .content-block h2 {
+        font-size: 1.875rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--color-text);
+    }
+
+    .content-block h3 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .content-block p,
+    .content-block ul {
+        font-size: 1.05rem;
+        line-height: 1.8;
+        color: var(--color-text-secondary);
+        margin-bottom: 1.25rem;
+    }
+
+    .content-block li {
+        margin-bottom: 0.75rem;
+    }
+
+    /* Code Block */
+    .code-example {
+        background: var(--color-surface-alt);
+        padding: 1.5rem;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+        overflow-x: auto;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* FAQ */
+    .faq-grid {
+        display: grid;
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .faq-item {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        transition: all 0.2s ease;
+    }
+
+    .faq-item:hover {
+        border-color: var(--color-primary);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .faq-question {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.75rem;
+    }
+
+    .faq-answer {
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+
+    /* Mobile */
+    @media (max-width: 1024px) {
+        .converter-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .center-actions {
+            flex-direction: row;
+            flex-wrap: wrap;
+            padding: 1rem 0;
+        }
+
+        .converter-panel {
+            height: 400px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>JSON to JSONL Converter – Free, Fast & Secure Online Tool</h1>
+    <p>Convert standard JSON files into JSON Lines (JSONL) format instantly. Perfect for AI training, big data
+        processing, and streaming pipelines.</p>
+
+    <div class="trust-badges">
+        <div class="trust-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            Client-Side Conversion
+        </div>
+        <div class="trust-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            No Signup Required
+        </div>
+        <div class="trust-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                <line x1="12" y1="22.08" x2="12" y2="12" />
+            </svg>
+            Large File Support
+        </div>
+        <div class="trust-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            Secure & Private
+        </div>
+    </div>
+</div>
+
+<div class="converter-grid">
+    <!-- Input Panel -->
+    <div class="converter-panel">
+        <div class="panel-header">
+            <div>
+                <h2 class="panel-title">JSON Input</h2>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="document.getElementById('fileInput').click()"
+                    title="Upload JSON">📁</button>
+                <button class="icon-btn" onclick="clearInput()" title="Clear">🗑️</button>
+                <input type="file" id="fileInput" accept=".json" style="display: none;"
+                    onchange="handleFileUpload(event)">
+            </div>
+        </div>
+        <textarea id="jsonInput" class="converter-textarea" placeholder="Paste your JSON array here...
+[
+  { &quot;id&quot;: 1, &quot;name&quot;: &quot;Alice&quot; },
+  { &quot;id&quot;: 2, &quot;name&quot;: &quot;Bob&quot; }
+]" spellcheck="false"></textarea>
+        <div class="microcopy">Typically an array of objects "[...]"</div>
+    </div>
+
+    <!-- Center Actions -->
+    <div class="center-actions">
+        <button class="convert-btn" onclick="convertJsonToJsonl()">
+            <span>⚡</span> Convert to JSONL
+        </button>
+        <button class="secondary-btn" onclick="loadSample()">Load Sample</button>
+    </div>
+
+    <!-- Output Panel -->
+    <div class="converter-panel">
+        <div class="panel-header">
+            <div>
+                <h2 class="panel-title">JSONL Output</h2>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="copyOutput()" title="Copy">📋</button>
+                <button class="icon-btn" onclick="downloadJsonl()" title="Download">⬇️</button>
+            </div>
+        </div>
+        <textarea id="jsonlOutput" class="converter-textarea" readonly
+            placeholder="JSON Lines output will appear here..." spellcheck="false"></textarea>
+        <div class="microcopy">Compatible with AI datasets, logs, and data pipelines</div>
+    </div>
+</div>
+
+<div class="content-section">
+    <div class="content-block">
+        <h2>What Is JSONL?</h2>
+        <p>JSONL, also known as <strong>JSON Lines</strong>, NEWLINE Delimited JSON, or LDJSON, is a file format where
+            each line represents a valid, independent JSON object. Unlike standard JSON, which requires parsing the
+            entire file at once, JSONL is designed for streaming and append-heavy operations.</p>
+        <div class="code-example">
+            {"id": 1, "name": "Alice", "role": "admin"}
+            {"id": 2, "name": "Bob", "role": "user"}
+            {"id": 3, "name": "Charlie", "role": "user"}</div>
+        <p>It acts like a CSV for JSON objects—simple, robust, and perfect for large-scale data processing systems like
+            those used in machine learning and log aggregation.</p>
+    </div>
+
+    <div class="content-block">
+        <h2>JSON vs JSONL Comparison</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.5rem;">
+            <thead>
+                <tr style="background: var(--color-surface-alt); text-align: left;">
+                    <th style="padding: 1rem; border-bottom: 2px solid var(--color-border);">Feature</th>
+                    <th style="padding: 1rem; border-bottom: 2px solid var(--color-border);">JSON</th>
+                    <th style="padding: 1rem; border-bottom: 2px solid var(--color-border);">JSONL (JSON Lines)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);"><strong>Structure</strong>
+                    </td>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">Single document (Root
+                        array/object)</td>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">One object per line</td>
+                </tr>
+                <tr>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);"><strong>Streaming</strong>
+                    </td>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">❌ Difficult/Slow</td>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">✅ Excellent</td>
+                </tr>
+                <tr>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);"><strong>Large
+                            Files</strong></td>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">Memory intensive</td>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">Line-by-line efficient</td>
+                </tr>
+                <tr>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);"><strong>Appendable</strong>
+                    </td>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">❌ No (Must rewrite closing
+                        bracket)</td>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">✅ Yes (Just append new
+                        line)</td>
+                </tr>
+                <tr>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);"><strong>Common Use
+                            Cases</strong></td>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">Web APIs, Config files</td>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">AI Training, Logs, Big Data
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-block">
+        <h2>Why Convert JSON to JSONL?</h2>
+        <ul>
+            <li><strong>AI Model Training:</strong> Platforms like OpenAI (GPT fine-tuning) require dataset uploads in
+                JSONL format. Each line represents a training examle.</li>
+            <li><strong>Log Processing:</strong> Systems like Fluentd, Splunk, and ELK stack prefer line-delimited JSON
+                for ingesting logs efficiently.</li>
+            <li><strong>Stream Processing:</strong> Data pipelines (Kafka, Kinesis) handle JSONL natively as messages
+                arrive one by one.</li>
+            <li><strong>Big Data Frameworks:</strong> Tools like Apache Spark and Hadoop can split and process JSONL
+                files in parallel across multiple nodes much easier than valid single-file JSON.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>Examples</h2>
+
+        <h3>Example 1: Simply Array Conversion</h3>
+        <p><strong>Input (JSON):</strong></p>
+        <div class="code-example">[ {"id": 1}, {"id": 2} ]</div>
+        <p><strong>Output (JSONL):</strong></p>
+        <div class="code-example">{"id": 1}
+            {"id": 2}</div>
+
+        <h3>Example 2: Nested Objects Handling</h3>
+        <p><strong>Input (JSON):</strong></p>
+        <div class="code-example">[
+            {
+            "user": { "id": 1, "name": "Alice" },
+            "active": true
+            },
+            {
+            "user": { "id": 2, "name": "Bob" },
+            "active": false
+            }
+            ]</div>
+        <p><strong>Output (JSONL):</strong></p>
+        <div class="code-example">{"user":{"id":1,"name":"Alice"},"active":true}
+            {"user":{"id":2,"name":"Bob"},"active":false}</div>
+    </div>
+
+    <div class="content-block">
+        <h2>How to Convert JSON to JSONL</h2>
+        <ol>
+            <li><strong>Paste your JSON:</strong> Copy your list of objects and paste it into the converter.</li>
+            <li><strong>Validate structure:</strong> Our tool automatically validates that your input is valid JSON.
+            </li>
+            <li><strong>Convert instantly:</strong> Click the button to transform the structure. The enclosing brackets
+                <code>[]</code> and commas <code>,</code> between objects are removed, and each object is placed on a
+                new line.</li>
+            <li><strong>Use in production:</strong> Download the file for your ML pipeline or log analysis system.</li>
+        </ol>
+    </div>
+
+    <div class="content-block">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-grid">
+            <!-- FAQs already in Schema, repeated here for visibility -->
+            <div class="faq-item">
+                <div class="faq-question">What is JSONL used for?</div>
+                <div class="faq-answer">JSONL (JSON Lines) is commonly used for storing structured data that may be
+                    processed one record at a time, such as application logs, streaming data pipelines, and training
+                    datasets for AI models (like GPT fine-tuning).</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Is JSONL better than JSON?</div>
+                <div class="faq-answer">For specific use cases like streaming and logging, yes. JSONL allows appending
+                    new records without parsing the entire file, which makes it more efficient for large datasets and
+                    continuous data streams compared to a single monolithic JSON array.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Can JSONL contain arrays?</div>
+                <div class="faq-answer">Technically, yes. Each line in a JSONL file must be a valid JSON value. This
+                    value *can* be an array, but it is most commonly a JSON object representing a single record.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Is JSONL required for AI training?</div>
+                <div class="faq-answer">Many modern AI platforms, including OpenAI, require training datasets to be in
+                    JSONL format. This structure allows the training process to efficiently read examples one by one
+                    without loading the entire dataset into memory.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Is this JSON to JSONL converter safe?</div>
+                <div class="faq-answer">Yes, it is strictly client-side. Your data is processed entirely within your web
+                    browser using JavaScript and never leaves your device.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">How large JSON files are handled?</div>
+                <div class="faq-answer">The tool can handle fairly large files (tens of megabytes) because it runs
+                    locally. However, extremely large files (GBs) might be limited by your browser's memory.</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function convertJsonToJsonl() {
+        const input = document.getElementById('jsonInput').value.trim();
+        const output = document.getElementById('jsonlOutput');
+
+        if (!input) {
+            alert('Please enter JSON data to convert');
+            return;
+        }
+
+        try {
+            const json = JSON.parse(input);
+            let jsonl = '';
+
+            if (Array.isArray(json)) {
+                // If it's an array, convert each item to a line
+                jsonl = json.map(item => JSON.stringify(item)).join('\n');
+            } else {
+                // If it's a single object, just make it one line (or warn user?)
+                // Standard behavior: treat single object as single line JSONL file
+                jsonl = JSON.stringify(json);
+            }
+
+            output.value = jsonl;
+        } catch (e) {
+            output.value = 'Error: Invalid JSON Input\n' + e.message;
+        }
+    }
+
+    function loadSample() {
+        const sample = `[
+  {
+    "role": "system",
+    "content": "You are a helpful assistant."
+  },
+  {
+    "role": "user",
+    "content": "What is JSONL?"
+  },
+  {
+    "role": "assistant",
+    "content": "JSONL stands for JSON Lines."
+  }
+]`;
+        document.getElementById('jsonInput').value = sample;
+    }
+
+    function clearInput() {
+        document.getElementById('jsonInput').value = '';
+        document.getElementById('jsonlOutput').value = '';
+        document.getElementById('fileInput').value = '';
+    }
+
+    function copyOutput() {
+        const output = document.getElementById('jsonlOutput');
+        if (!output.value) return;
+        output.select();
+        document.execCommand('copy');
+    }
+
+    function downloadJsonl() {
+        const content = document.getElementById('jsonlOutput').value;
+        if (!content) return;
+
+        const blob = new Blob([content], { type: 'application/x-jsonlines' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'data.jsonl';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById('jsonInput').value = e.target.result;
+        };
+        reader.readAsText(file);
+    }
+</script>
+{% endblock %}
