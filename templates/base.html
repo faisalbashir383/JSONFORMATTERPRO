@@ -307,10 +307,15 @@
                 <div class="nav-item dropdown">
                     <button class="nav-link">JSON Converters ▾</button>
                     <div class="dropdown-content wide">
-                        <a href="/json-to-yaml/" class="dropdown-item">📋 JSON → YAML</a>
-                        <a href="/toon-converter/" class="dropdown-item">⚡ JSON → TOON</a>
-                        <a href="/base64/" class="dropdown-item">🔐 Base64 Encode/Decode</a>
-                        <a href="/csv-to-json/" class="dropdown-item">📄 CSV → JSON</a>
+                        <a href="{% url 'json_to_yaml_page' %}"
+                            class="dropdown-item">JSON
+                            to YAML</a>
+                        <a href="{% url 'csv_to_json_page' %}"
+                            class="dropdown-item">CSV
+                            to JSON</a>
+                        <a href="{% url 'xsd_to_json_schema_page' %}"
+                            class="dropdown-item">XSD
+                            to JSON Schema</a>
                         <a href="{% url 'image_to_base64_page' %}" class="dropdown-item">🖼️ Image to Base64</a>
                     </div>
                 </div>
@@ -354,32 +359,32 @@
                 </div>
 
                 <!-- Calculators -->
-<!--                <div class="nav-item dropdown">-->
-<!--                    <button class="nav-link">Calculators ▾</button>-->
-<!--                    <div class="dropdown-content wide">-->
-<!--                        <a href="/calculator/" class="dropdown-item">🔢 Simple Calculator</a>-->
-<!--                        <a href="/percentage-calculator/" class="dropdown-item">📊 Percentage Calculator</a>-->
-<!--                        <a href="/age-calculator/" class="dropdown-item">🎂 Age Calculator</a>-->
-<!--                        <a href="/date-calculator/" class="dropdown-item">📅 Date Calculator</a>-->
-<!--                        <div class="dropdown-divider"></div>-->
-<!--                        <a href="/loan-calculator/" class="dropdown-item">💰 Loan Calculator</a>-->
-<!--                        <a href="/mortgage-calculator/" class="dropdown-item">🏠 Mortgage Calculator</a>-->
-<!--                        <a href="/car-payment-calculator/" class="dropdown-item">🚗 Car Payment Calculator</a>-->
-<!--                        <a href="/sip-calculator/" class="dropdown-item">📈 SIP Calculator</a>-->
-<!--                        <a href="/compound-interest-calculator/" class="dropdown-item">💹 Compound Interest</a>-->
-<!--                        <div class="dropdown-divider"></div>-->
-<!--                        <a href="/bmi-calculator/" class="dropdown-item">⚖️ BMI Calculator</a>-->
-<!--                        <a href="/calorie-calculator/" class="dropdown-item">🔥 Calorie Calculator</a>-->
-<!--                        <a href="/gpa-calculator/" class="dropdown-item">🎓 GPA Calculator</a>-->
-<!--                        <a href="/unit-converter/" class="dropdown-item">📐 Unit Converter</a>-->
-<!--                        <a href="/tip-calculator/" class="dropdown-item">💳 Tip Calculator</a>-->
-<!--                    </div>-->
-<!--                </div>-->
+                <!--                <div class="nav-item dropdown">-->
+                <!--                    <button class="nav-link">Calculators ▾</button>-->
+                <!--                    <div class="dropdown-content wide">-->
+                <!--                        <a href="/calculator/" class="dropdown-item">🔢 Simple Calculator</a>-->
+                <!--                        <a href="/percentage-calculator/" class="dropdown-item">📊 Percentage Calculator</a>-->
+                <!--                        <a href="/age-calculator/" class="dropdown-item">🎂 Age Calculator</a>-->
+                <!--                        <a href="/date-calculator/" class="dropdown-item">📅 Date Calculator</a>-->
+                <!--                        <div class="dropdown-divider"></div>-->
+                <!--                        <a href="/loan-calculator/" class="dropdown-item">💰 Loan Calculator</a>-->
+                <!--                        <a href="/mortgage-calculator/" class="dropdown-item">🏠 Mortgage Calculator</a>-->
+                <!--                        <a href="/car-payment-calculator/" class="dropdown-item">🚗 Car Payment Calculator</a>-->
+                <!--                        <a href="/sip-calculator/" class="dropdown-item">📈 SIP Calculator</a>-->
+                <!--                        <a href="/compound-interest-calculator/" class="dropdown-item">💹 Compound Interest</a>-->
+                <!--                        <div class="dropdown-divider"></div>-->
+                <!--                        <a href="/bmi-calculator/" class="dropdown-item">⚖️ BMI Calculator</a>-->
+                <!--                        <a href="/calorie-calculator/" class="dropdown-item">🔥 Calorie Calculator</a>-->
+                <!--                        <a href="/gpa-calculator/" class="dropdown-item">🎓 GPA Calculator</a>-->
+                <!--                        <a href="/unit-converter/" class="dropdown-item">📐 Unit Converter</a>-->
+                <!--                        <a href="/tip-calculator/" class="dropdown-item">💳 Tip Calculator</a>-->
+                <!--                    </div>-->
+                <!--                </div>-->
 
                 <div class="nav-item dropdown">
                     <button class="nav-link">Pages ▾</button>
                     <div class="dropdown-content">
-<!--                        <a href="/tutorials/" class="dropdown-item">📚 Tutorials</a>-->
+                        <!--                        <a href="/tutorials/" class="dropdown-item">📚 Tutorials</a>-->
                         <a href="/blog/" class="dropdown-item">📰 Blog / Articles</a>
                         <a href="/careers/" class="dropdown-item">💼 Careers</a>
                         <a href="/about/" class="dropdown-item">ℹ️ About Us</a>
@@ -506,24 +511,24 @@
                         </ul>
                     </div>
 
-<!--                    &lt;!&ndash; Calculators Column &ndash;&gt;-->
-<!--                    <div class="footer-column">-->
-<!--                        <h4 class="footer-heading">Calculators</h4>-->
-<!--                        <ul class="footer-links">-->
-<!--                            <li><a href="/calculator/">Simple Calculator</a></li>-->
-<!--                            <li><a href="/percentage-calculator/">Percentage</a></li>-->
-<!--                            <li><a href="/age-calculator/">Age Calculator</a></li>-->
-<!--                            <li><a href="/bmi-calculator/">BMI Calculator</a></li>-->
-<!--                            <li><a href="/loan-calculator/">Loan Calculator</a></li>-->
-<!--                            <li><a href="/sip-calculator/">SIP Calculator</a></li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
+                    <!--                    &lt;!&ndash; Calculators Column &ndash;&gt;-->
+                    <!--                    <div class="footer-column">-->
+                    <!--                        <h4 class="footer-heading">Calculators</h4>-->
+                    <!--                        <ul class="footer-links">-->
+                    <!--                            <li><a href="/calculator/">Simple Calculator</a></li>-->
+                    <!--                            <li><a href="/percentage-calculator/">Percentage</a></li>-->
+                    <!--                            <li><a href="/age-calculator/">Age Calculator</a></li>-->
+                    <!--                            <li><a href="/bmi-calculator/">BMI Calculator</a></li>-->
+                    <!--                            <li><a href="/loan-calculator/">Loan Calculator</a></li>-->
+                    <!--                            <li><a href="/sip-calculator/">SIP Calculator</a></li>-->
+                    <!--                        </ul>-->
+                    <!--                    </div>-->
 
                     <!-- Pages Column -->
                     <div class="footer-column">
                         <h4 class="footer-heading">Pages</h4>
                         <ul class="footer-links">
-<!--                            <li><a href="/tutorials/">Tutorials</a></li>-->
+                            <!--                            <li><a href="/tutorials/">Tutorials</a></li>-->
                             <li><a href="/about/">About</a></li>
                             <li><a href="/blog/">Blog</a></li>
                             <li><a href="/careers/">Careers</a></li>

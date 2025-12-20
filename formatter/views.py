@@ -445,6 +445,10 @@ def csv_to_json_page(request):
     """Render the CSV to JSON converter page"""
     return render(request, 'csv-to-json.html')
 
+def xsd_to_json_schema_page(request):
+    """Render the XSD to JSON Schema converter page"""
+    return render(request, 'xsd-to-json-schema.html')
+
 
 def json_diff_page(request):
     """Render the JSON Diff comparison tool page"""
