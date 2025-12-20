@@ -81,6 +81,8 @@ class StaticViewSitemap(Sitemap):
             'password_generator_page',
             'url_encoder_page',
             'typing_test_page',
+            'json_to_jsonl_page',
+            'xsd_to_json_schema_page'
         ]
 
 
