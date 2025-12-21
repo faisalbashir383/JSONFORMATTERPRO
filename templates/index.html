@@ -48,13 +48,6 @@ detection. No signup - try now!{% endblock %}
     "target": "{{ SITE_URL }}/?json={search_term_string}",
     "query-input": "required name=search_term_string"
   },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "ratingCount": "15000",
-    "bestRating": "5",
-    "worstRating": "1"
-  },
   "featureList": [
     "Monaco Editor (VS Code Engine)",
     "Auto-Format on Paste",
@@ -155,61 +148,6 @@ detection. No signup - try now!{% endblock %}
 
 </script>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to Format & Fix Invalid JSON Online",
-  "description": "Step-by-step guide to format, validate, and automatically fix common JSON errors like trailing commas and single quotes.",
-  "step": [
-    {
-      "@type": "HowToStep",
-      "name": "Paste or Upload JSON",
-      "text": "Paste your JSON data into the editor or drag and drop a file. The tool supports large files up to 10MB.",
-      "image": "{{ SITE_URL }}/static/images/json-formatter-step1.png",
-      "url": "{{ SITE_URL }}/#step1"
-    },
-    {
-      "@type": "HowToStep",
-      "name": "Auto-Fix Errors",
-      "text": "If your JSON has errors (trailing commas, single quotes), the tool automatically detects and fixes them when you click Format or use the 'Fix Trailing Commas' toggle.",
-      "image": "{{ SITE_URL }}/static/images/json-formatter-step2.png",
-      "url": "{{ SITE_URL }}/#step2"
-    },
-    {
-      "@type": "HowToStep",
-      "name": "Format & Validate",
-      "text": "The Monaco Editor engine instantly formats your code with proper indentation and syntax highlighting, validating correctness.",
-      "image": "{{ SITE_URL }}/static/images/json-formatter-step3.png",
-      "url": "{{ SITE_URL }}/#step3"
-    },
-    {
-      "@type": "HowToStep",
-      "name": "Copy or Download",
-      "text": "Copy the clean, valid JSON to your clipboard or download it as a .json file for use in your application.",
-      "image": "{{ SITE_URL }}/static/images/json-formatter-step4.png",
-      "url": "{{ SITE_URL }}/#step4"
-    }
-  ],
-  "totalTime": "PT1M",
-  "tool": {
-    "@type": "WebApplication",
-    "name": "JSON Formatter Pro",
-      "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "ratingCount": "15000",
-    "bestRating": "5",
-    "worstRating": "1"
-  }
-  }
-}
-</script>
 {% endblock %}
 
 {% block extra_head %}
@@ -1723,30 +1661,6 @@ detection. No signup - try now!{% endblock %}
       </a>
     </div>
   </section>
-
-  <!-- Trust Signals Section -->
-  <section class="content-section trust-section">
-    <h2>Trusted by Developers Worldwide</h2>
-    <div class="trust-stats">
-      <div class="stat-card">
-        <div class="stat-number">5,000+</div>
-        <div class="stat-label">Daily Users</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">20K+</div>
-        <div class="stat-label">JSON Files Processed</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">4.4★</div>
-        <div class="stat-label">User Rating</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">100%</div>
-        <div class="stat-label">Free Forever</div>
-      </div>
-    </div>
-  </section>
-
 
   <style>
     /* SEO FAQ Section - Clean White Background */
