@@ -73,15 +73,6 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="{% block canonical_url %}{{ SITE_URL }}/{% endblock %}">
 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "@id": "{{ SITE_URL }}#website",
-      "url": "{{ SITE_URL }}",
-      "name": "JSON Formatters Pro",
-      "alternateName": ["JSONFormattersPro", "JSON Formatter Pro"]
-    }
 </script>
 
     <!-- Structured Data -->
@@ -89,29 +80,33 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "JSON Formatters Pro",
-      "description": "Free online JSON formatter, validator, minifier, and converter tool",
+      "@type": "WebSite",
+      "@id": "{{ SITE_URL }}#website",
       "url": "{{ SITE_URL }}",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "Web Browser",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
+      "name": "JSON Formatters Pro",
+      "alternateName": "JSON Formatters Online",
+      "publisher": {
+        "@id": "{{ SITE_URL }}#organization"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "{{ SITE_URL }}#organization",
+      "name": "JSON Formatter Pro",
+      "url": "{{ SITE_URL }}",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "{{ SITE_URL }}/static/images/favicon-512.png",
+        "width": 512,
+        "height": 512
       },
-      "featureList": [
-        "JSON Formatting",
-        "JSON Validation",
-        "JSON Minification",
-        "JSON to XML Conversion",
-        "JSON to CSV Conversion",
-        "Base64 Encoding/Decoding",
-        "Syntax Error Detection",
-        "Download Formatted Files"
-      ],
-      "browserRequirements": "Requires JavaScript. Requires HTML5.",
-      "softwareVersion": "2.0"
+      "sameAs": [
+        "https://twitter.com/jsonFormatterpro",
+        "https://github.com/jsonFormatterpro"
+      ]
     }
     </script>
 
