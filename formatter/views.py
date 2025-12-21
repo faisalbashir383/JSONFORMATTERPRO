@@ -717,6 +717,11 @@ def regex_tester_page(request):
     return render(request, 'regex-tester.html')
 
 
+def json_to_code_page(request):
+    """Render the JSON to Code Converter page"""
+    return render(request, 'json-to-code.html')
+
+
 def swagger_viewer_page(request):
     """Render the Swagger/OpenAPI Viewer page"""
     return render(request, 'swagger-viewer.html')

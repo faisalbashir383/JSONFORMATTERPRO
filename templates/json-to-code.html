@@ -1,0 +1,1076 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}JSON to Code Converter - Generate TypeScript, Python, Go, C# Instantly{% endblock %}
+
+{% block meta_description %}Convert JSON to type-safe code instantly. Generate TypeScript interfaces, Python Pydantic
+models, Go structs, C# classes, and more. 100% client-side privacy.{% endblock %}
+
+{% block meta_keywords %}json to code, json to typescript, json to python class, json to go struct, json to c#, json to
+rust, json converter online{% endblock %}
+
+{% block canonical_url %}
+{{ SITE_URL }}/json-to-code/
+{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "JSON to Code Converter",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "All",
+  "browserRequirements": "Requires JavaScript",
+  "description": "Convert JSON into type-safe code for TypeScript, Python, Go, Java, C#, Rust, Kotlin, Swift, Dart, PHP, Ruby, Scala, Node.js and Django.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is JSON to Code Converter free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The JSON to Code Converter is completely free to use with no signup required."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my JSON data secure?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. All conversions happen locally in your browser. Your JSON data is never uploaded or stored."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which programming languages are supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The tool supports TypeScript, Node.js (Mongoose), Python, Django, Go, C#, Java, Rust, Kotlin, Swift, Dart, PHP, Ruby, and Scala."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+
+{% block extra_head %}
+<style>
+    :root {
+        --editor-bg: #1e1e2e;
+        --editor-border: #313244;
+        --accent: #8b5cf6;
+        --accent-hover: #7c3aed;
+    }
+
+    .page-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .page-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .page-header p {
+        color: var(--color-text-secondary, #a1a1aa);
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .converter-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        background: var(--color-surface, #fff);
+        border: 1px solid var(--color-border, #e5e7eb);
+        border-radius: 12px;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .language-select {
+        padding: 0.6rem 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--color-border, #e5e7eb);
+        background: var(--color-bg, #fff);
+        color: var(--color-text, #111);
+        font-size: 1rem;
+        min-width: 220px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-action {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .btn-action:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+
+    .language-select-inline {
+        padding: 0.4rem 0.6rem;
+        border-radius: 6px;
+        border: 1px solid var(--editor-border);
+        background: #11111b;
+        color: #cdd6f4;
+        font-size: 0.85rem;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .icon-btn {
+        background: transparent;
+        border: none;
+        color: #a6adc8;
+        cursor: pointer;
+        padding: 0.4rem;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.15s, color 0.15s;
+    }
+
+    .icon-btn:hover {
+        background: rgba(139, 92, 246, 0.2);
+        color: #cba6f7;
+    }
+
+    .editors-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        min-height: 550px;
+    }
+
+    .editor-panel {
+        display: flex;
+        flex-direction: column;
+        background: var(--editor-bg);
+        border: 1px solid var(--editor-border);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .editor-panel-header {
+        padding: 0.75rem 1rem;
+        background: #181825;
+        border-bottom: 1px solid var(--editor-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #cdd6f4;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.6rem;
+        border-radius: 4px;
+        background: rgba(166, 227, 161, 0.15);
+        color: #a6e3a1;
+    }
+
+    .status-badge.error {
+        background: rgba(243, 139, 168, 0.15);
+        color: #f38ba8;
+    }
+
+    .editor-body {
+        flex: 1;
+        position: relative;
+        min-height: 450px;
+    }
+
+    /* SEO Content */
+    .seo-content {
+        margin-top: 4rem;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .seo-section {
+        margin-bottom: 2.5rem;
+        padding: 2rem;
+        background: var(--color-surface, #fff);
+        border-radius: 12px;
+        border: 1px solid var(--color-border, #e5e7eb);
+    }
+
+    .seo-section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--color-text, #111);
+    }
+
+    .seo-section p,
+    .seo-section li {
+        color: var(--color-text-secondary, #555);
+        line-height: 1.7;
+    }
+
+    .seo-section ul {
+        margin: 1rem 0;
+        padding-left: 1.5rem;
+    }
+
+    .code-example {
+        background: #1e1e2e;
+        color: #cdd6f4;
+        padding: 1rem;
+        border-radius: 8px;
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 0.85rem;
+        overflow-x: auto;
+        margin: 1rem 0;
+        white-space: pre;
+    }
+
+    @media (max-width: 900px) {
+        .editors-container {
+            grid-template-columns: 1fr;
+            min-height: auto;
+        }
+
+        .editor-body {
+            min-height: 350px;
+        }
+
+        .page-header h1 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <header class="page-header">
+        <h1>JSON to Code Converter</h1>
+        <p>
+            Instantly convert JSON to <strong>TypeScript</strong>, <strong>Python</strong>, <strong>Go</strong>,
+            <strong>C#</strong>, <strong>Java</strong>, and <strong>Rust</strong>.
+            Generate type-safe code directly in your browser – 100% client-side.
+        </p>
+    </header>
+
+    <div class="converter-wrapper">
+        <div class="editors-container">
+            <!-- Input JSON -->
+            <div class="editor-panel">
+                <div class="editor-panel-header">
+                    <span>Input JSON</span>
+                    <span id="jsonStatus" class="status-badge">Valid</span>
+                </div>
+                <div id="jsonEditor" class="editor-body"></div>
+            </div>
+
+            <!-- Output Code -->
+            <div class="editor-panel">
+                <div class="editor-panel-header">
+                    <select id="languageSelect" class="language-select-inline">
+                        <option value="typescript">TypeScript</option>
+                        <option value="nodejs">Node.js (Mongoose)</option>
+                        <option value="python">Python Pydantic</option>
+                        <option value="django">Python Django</option>
+                        <option value="go">Go</option>
+                        <option value="csharp">C#</option>
+                        <option value="java">Java</option>
+                        <option value="rust">Rust</option>
+                        <option value="kotlin">Kotlin</option>
+                        <option value="swift">Swift</option>
+                        <option value="dart">Dart</option>
+                        <option value="php">PHP</option>
+                        <option value="ruby">Ruby</option>
+                        <option value="scala">Scala</option>
+                    </select>
+                    <div class="header-actions">
+                        <button id="copyBtn" class="icon-btn" title="Copy Code">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+                            </svg>
+                        </button>
+                        <button id="downloadBtn" class="icon-btn" title="Download">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div id="codeEditor" class="editor-body"></div>
+            </div>
+        </div>
+    </div>
+
+  <article class="seo-content">
+    <section class="seo-section">
+      <h2>Supported Languages</h2>
+      <ul>
+        <li>TypeScript Interfaces</li>
+        <li>Node.js (Mongoose Schemas)</li>
+        <li>Python (Pydantic & Django Models)</li>
+        <li>Go Structs</li>
+        <li>C# Classes</li>
+        <li>Java POJOs</li>
+        <li>Rust Structs</li>
+        <li>Kotlin, Swift, Dart, PHP, Ruby, Scala</li>
+      </ul>
+    </section>
+
+    <section class="seo-section">
+      <h2>Why Use This JSON to Code Tool?</h2>
+      <p>
+        Writing models manually is error-prone and time-consuming.
+        This tool automatically generates clean, readable, and type-safe code
+        from any valid JSON structure.
+      </p>
+    </section>
+
+    <section class="seo-section">
+      <h2>Use Cases</h2>
+      <ul>
+        <li>API response modeling</li>
+        <li>Frontend & backend type generation</li>
+        <li>Database schema creation</li>
+        <li>Fast prototyping</li>
+      </ul>
+    </section>
+  </article>
+
+    <section class="seo-section" id="faq">
+  <h2>Frequently Asked Questions (FAQs)</h2>
+
+  <h3>Is the JSON to Code Converter free?</h3>
+  <p>
+    Yes. The JSON to Code Converter is completely free and does not require
+    signup, registration, or payment.
+  </p>
+
+  <h3>Is my JSON data secure?</h3>
+  <p>
+    Absolutely. All JSON to code conversions happen locally in your browser.
+    Your data is never uploaded, stored, or shared.
+  </p>
+
+  <h3>Which programming languages are supported?</h3>
+  <p>
+    The tool supports TypeScript, Node.js (Mongoose), Python (Pydantic & Django),
+    Go, C#, Java, Rust, Kotlin, Swift, Dart, PHP, Ruby, and Scala.
+  </p>
+
+  <h3>Can I use this tool for large JSON files?</h3>
+  <p>
+    Yes. The converter can handle large and deeply nested JSON structures,
+    depending on your browser’s available memory.
+  </p>
+
+  <h3>Does this tool support nested objects and arrays?</h3>
+  <p>
+    Yes. Nested objects and arrays are automatically detected and converted
+    into appropriate models, structs, or classes for each language.
+  </p>
+</section>
+</div>
+
+<!-- Monaco Editor Script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+<script>
+    require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' } });
+
+    require(['vs/editor/editor.main'], function () {
+        // Sample JSON
+        const sampleJson = `{
+  "id": 1,
+  "name": "John Doe",
+  "email": "john@example.com",
+  "isActive": true,
+  "roles": ["admin", "user"],
+  "profile": {
+    "age": 30,
+    "city": "New York"
+  }
+}`;
+
+        // Create JSON Editor
+        const jsonEditor = monaco.editor.create(document.getElementById('jsonEditor'), {
+            value: sampleJson,
+            language: 'json',
+            theme: 'vs-dark',
+            automaticLayout: true,
+            minimap: { enabled: false },
+            fontSize: 14,
+            lineNumbers: 'on',
+            scrollBeyondLastLine: false,
+            wordWrap: 'on'
+        });
+
+        // Create Code Editor
+        const codeEditor = monaco.editor.create(document.getElementById('codeEditor'), {
+            value: '',
+            language: 'typescript',
+            theme: 'vs-dark',
+            readOnly: true,
+            automaticLayout: true,
+            minimap: { enabled: false },
+            fontSize: 14,
+            lineNumbers: 'on',
+            scrollBeyondLastLine: false,
+            wordWrap: 'on'
+        });
+
+        // --- Helpers ---
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function getType(value) {
+            if (value === null) return 'null';
+            if (Array.isArray(value)) return 'array';
+            return typeof value;
+        }
+
+        // --- Generators ---
+        function generateTypeScript(obj, rootName = 'Root') {
+            let interfaces = [];
+            function walk(obj, name) {
+                let output = `export interface ${name} {\n`;
+                for (const [key, value] of Object.entries(obj)) {
+                    const type = getType(value);
+                    let tsType = 'any';
+                    if (type === 'string') tsType = 'string';
+                    else if (type === 'number') tsType = 'number';
+                    else if (type === 'boolean') tsType = 'boolean';
+                    else if (type === 'object') {
+                        const childName = capitalize(key);
+                        walk(value, childName);
+                        tsType = childName;
+                    } else if (type === 'array' && value.length > 0) {
+                        const childType = getType(value[0]);
+                        if (childType === 'object') {
+                            const childName = capitalize(key) + 'Item';
+                            walk(value[0], childName);
+                            tsType = `${childName}[]`;
+                        } else {
+                            tsType = `${childType}[]`;
+                        }
+                    } else {
+                        tsType = 'any[]';
+                    }
+                    output += `  ${key}: ${tsType};\n`;
+                }
+                output += '}\n';
+                interfaces.push(output);
+            }
+            walk(obj, rootName);
+            return interfaces.reverse().join('\n');
+        }
+
+        function generatePython(obj, rootName = 'Root') {
+            let classes = [];
+            classes.push('from pydantic import BaseModel\nfrom typing import List, Optional, Any\n');
+            function walk(obj, name) {
+                let output = `\nclass ${name}(BaseModel):\n`;
+                for (const [key, value] of Object.entries(obj)) {
+                    const type = getType(value);
+                    let pyType = 'Any';
+                    if (type === 'string') pyType = 'str';
+                    else if (type === 'number') pyType = Number.isInteger(value) ? 'int' : 'float';
+                    else if (type === 'boolean') pyType = 'bool';
+                    else if (type === 'object') {
+                        const childName = capitalize(key);
+                        walk(value, childName);
+                        pyType = childName;
+                    } else if (type === 'array' && value.length > 0) {
+                        const childType = getType(value[0]);
+                        if (childType === 'object') {
+                            const childName = capitalize(key) + 'Item';
+                            walk(value[0], childName);
+                            pyType = `List[${childName}]`;
+                        } else if (childType === 'string') pyType = 'List[str]';
+                        else if (childType === 'number') pyType = 'List[float]';
+                        else pyType = 'List[Any]';
+                    } else {
+                        pyType = 'List[Any]';
+                    }
+                    output += `    ${key}: ${pyType}\n`;
+                }
+                if (Object.keys(obj).length === 0) output += '    pass\n';
+                classes.push(output);
+            }
+            walk(obj, rootName);
+            return classes.join('');
+        }
+
+        function generateGo(obj, rootName = 'Root') {
+            let structs = [];
+            function walk(obj, name) {
+                let output = `type ${name} struct {\n`;
+                for (const [key, value] of Object.entries(obj)) {
+                    const fieldName = capitalize(key);
+                    const type = getType(value);
+                    let goType = 'interface{}';
+                    if (type === 'string') goType = 'string';
+                    else if (type === 'number') goType = Number.isInteger(value) ? 'int' : 'float64';
+                    else if (type === 'boolean') goType = 'bool';
+                    else if (type === 'object') {
+                        const childName = capitalize(key);
+                        walk(value, childName);
+                        goType = childName;
+                    } else if (type === 'array' && value.length > 0) {
+                        const childType = getType(value[0]);
+                        if (childType === 'object') {
+                            const childName = capitalize(key) + 'Item';
+                            walk(value[0], childName);
+                            goType = `[]${childName}`;
+                        } else if (childType === 'string') goType = '[]string';
+                        else if (childType === 'number') goType = '[]float64';
+                        else goType = '[]interface{}';
+                    } else {
+                        goType = '[]interface{}';
+                    }
+                    output += `\t${fieldName} ${goType} \`json:"${key}"\`\n`;
+                }
+                output += '}\n';
+                structs.push(output);
+            }
+            walk(obj, rootName);
+            return 'package main\n\n' + structs.reverse().join('\n');
+        }
+
+        function generateCSharp(obj, rootName = 'Root') {
+            let classes = [];
+            function walk(obj, name) {
+                let output = `public class ${name}\n{\n`;
+                for (const [key, value] of Object.entries(obj)) {
+                    const fieldName = capitalize(key);
+                    const type = getType(value);
+                    let csType = 'object';
+                    if (type === 'string') csType = 'string';
+                    else if (type === 'number') csType = Number.isInteger(value) ? 'int' : 'double';
+                    else if (type === 'boolean') csType = 'bool';
+                    else if (type === 'object') {
+                        const childName = capitalize(key);
+                        walk(value, childName);
+                        csType = childName;
+                    } else if (type === 'array' && value.length > 0) {
+                        const childType = getType(value[0]);
+                        if (childType === 'object') {
+                            const childName = capitalize(key) + 'Item';
+                            walk(value[0], childName);
+                            csType = `List<${childName}>`;
+                        } else if (childType === 'string') csType = 'List<string>';
+                        else if (childType === 'number') csType = 'List<double>';
+                        else csType = 'List<object>';
+                    } else {
+                        csType = 'List<object>';
+                    }
+                    output += `    [JsonPropertyName("${key}")]\n    public ${csType} ${fieldName} { get; set; }\n\n`;
+                }
+                output += '}\n';
+                classes.push(output);
+            }
+            walk(obj, rootName);
+            return 'using System.Collections.Generic;\nusing System.Text.Json.Serialization;\n\n' + classes.reverse().join('\n');
+        }
+
+        function generateJava(obj, rootName = 'Root') {
+            let classes = [];
+            function walk(obj, name) {
+                let output = `public class ${name} {\n`;
+                for (const [key, value] of Object.entries(obj)) {
+                    const type = getType(value);
+                    let javaType = 'Object';
+                    if (type === 'string') javaType = 'String';
+                    else if (type === 'number') javaType = Number.isInteger(value) ? 'int' : 'double';
+                    else if (type === 'boolean') javaType = 'boolean';
+                    else if (type === 'object') {
+                        const childName = capitalize(key);
+                        walk(value, childName);
+                        javaType = childName;
+                    } else if (type === 'array' && value.length > 0) {
+                        const childType = getType(value[0]);
+                        if (childType === 'object') {
+                            const childName = capitalize(key) + 'Item';
+                            walk(value[0], childName);
+                            javaType = `List<${childName}>`;
+                        } else if (childType === 'string') javaType = 'List<String>';
+                        else if (childType === 'number') javaType = 'List<Double>';
+                        else javaType = 'List<Object>';
+                    } else {
+                        javaType = 'List<Object>';
+                    }
+                    output += `    private ${javaType} ${key};\n`;
+                }
+                output += '}\n';
+                classes.push(output);
+            }
+            walk(obj, rootName);
+            return 'import java.util.List;\n\n' + classes.reverse().join('\n');
+        }
+
+        function generateRust(obj, rootName = 'Root') {
+            let structs = [];
+            function walk(obj, name) {
+                let output = `#[derive(Debug, Clone, Serialize, Deserialize)]\npub struct ${name} {\n`;
+                for (const [key, value] of Object.entries(obj)) {
+                    const type = getType(value);
+                    let rustType = 'Value';
+                    if (type === 'string') rustType = 'String';
+                    else if (type === 'number') rustType = Number.isInteger(value) ? 'i64' : 'f64';
+                    else if (type === 'boolean') rustType = 'bool';
+                    else if (type === 'object') {
+                        const childName = capitalize(key);
+                        walk(value, childName);
+                        rustType = childName;
+                    } else if (type === 'array' && value.length > 0) {
+                        const childType = getType(value[0]);
+                        if (childType === 'object') {
+                            const childName = capitalize(key) + 'Item';
+                            walk(value[0], childName);
+                            rustType = `Vec<${childName}>`;
+                        } else if (childType === 'string') rustType = 'Vec<String>';
+                        else if (childType === 'number') rustType = 'Vec<f64>';
+                        else rustType = 'Vec<Value>';
+                    } else {
+                        rustType = 'Vec<Value>';
+                    }
+                    output += `    pub ${key}: ${rustType},\n`;
+                }
+                output += '}\n';
+                structs.push(output);
+            }
+            walk(obj, rootName);
+            return 'use serde::{Serialize, Deserialize};\nuse serde_json::Value;\n\n' + structs.reverse().join('\n');
+        }
+
+        function generateKotlin(obj, rootName = 'Root') {
+            let classes = [];
+            function walk(obj, name) {
+                let output = `data class ${name}(\n`;
+                const entries = Object.entries(obj);
+                entries.forEach(([key, value], idx) => {
+                    const type = getType(value);
+                    let ktType = 'Any';
+                    if (type === 'string') ktType = 'String';
+                    else if (type === 'number') ktType = Number.isInteger(value) ? 'Int' : 'Double';
+                    else if (type === 'boolean') ktType = 'Boolean';
+                    else if (type === 'object') {
+                        const childName = capitalize(key);
+                        walk(value, childName);
+                        ktType = childName;
+                    } else if (type === 'array' && value.length > 0) {
+                        const childType = getType(value[0]);
+                        if (childType === 'object') {
+                            const childName = capitalize(key) + 'Item';
+                            walk(value[0], childName);
+                            ktType = `List<${childName}>`;
+                        } else if (childType === 'string') ktType = 'List<String>';
+                        else if (childType === 'number') ktType = 'List<Double>';
+                        else ktType = 'List<Any>';
+                    } else ktType = 'List<Any>';
+                    output += `    val ${key}: ${ktType}${idx < entries.length - 1 ? ',' : ''}\n`;
+                });
+                output += ')\n';
+                classes.push(output);
+            }
+            walk(obj, rootName);
+            return classes.reverse().join('\n');
+        }
+
+        function generateSwift(obj, rootName = 'Root') {
+            let structs = [];
+            function walk(obj, name) {
+                let output = `struct ${name}: Codable {\n`;
+                for (const [key, value] of Object.entries(obj)) {
+                    const type = getType(value);
+                    let swiftType = 'Any';
+                    if (type === 'string') swiftType = 'String';
+                    else if (type === 'number') swiftType = Number.isInteger(value) ? 'Int' : 'Double';
+                    else if (type === 'boolean') swiftType = 'Bool';
+                    else if (type === 'object') {
+                        const childName = capitalize(key);
+                        walk(value, childName);
+                        swiftType = childName;
+                    } else if (type === 'array' && value.length > 0) {
+                        const childType = getType(value[0]);
+                        if (childType === 'object') {
+                            const childName = capitalize(key) + 'Item';
+                            walk(value[0], childName);
+                            swiftType = `[${childName}]`;
+                        } else if (childType === 'string') swiftType = '[String]';
+                        else if (childType === 'number') swiftType = '[Double]';
+                        else swiftType = '[Any]';
+                    } else swiftType = '[Any]';
+                    output += `    let ${key}: ${swiftType}\n`;
+                }
+                output += '}\n';
+                structs.push(output);
+            }
+            walk(obj, rootName);
+            return structs.reverse().join('\n');
+        }
+
+        function generateDart(obj, rootName = 'Root') {
+            let classes = [];
+            function walk(obj, name) {
+                let output = `class ${name} {\n`;
+                for (const [key, value] of Object.entries(obj)) {
+                    const type = getType(value);
+                    let dartType = 'dynamic';
+                    if (type === 'string') dartType = 'String';
+                    else if (type === 'number') dartType = Number.isInteger(value) ? 'int' : 'double';
+                    else if (type === 'boolean') dartType = 'bool';
+                    else if (type === 'object') {
+                        const childName = capitalize(key);
+                        walk(value, childName);
+                        dartType = childName;
+                    } else if (type === 'array' && value.length > 0) {
+                        const childType = getType(value[0]);
+                        if (childType === 'object') {
+                            const childName = capitalize(key) + 'Item';
+                            walk(value[0], childName);
+                            dartType = `List<${childName}>`;
+                        } else if (childType === 'string') dartType = 'List<String>';
+                        else if (childType === 'number') dartType = 'List<double>';
+                        else dartType = 'List<dynamic>';
+                    } else dartType = 'List<dynamic>';
+                    output += `  final ${dartType} ${key};\n`;
+                }
+                output += `\n  ${name}({`;
+                output += Object.keys(obj).map(k => `required this.${k}`).join(', ');
+                output += '});\n}\n';
+                classes.push(output);
+            }
+            walk(obj, rootName);
+            return classes.reverse().join('\n');
+        }
+
+        function generatePHP(obj, rootName = 'Root') {
+            let classes = [];
+            function walk(obj, name) {
+                let output = `class ${name} {\n`;
+                for (const [key, value] of Object.entries(obj)) {
+                    const type = getType(value);
+                    let phpType = 'mixed';
+                    if (type === 'string') phpType = 'string';
+                    else if (type === 'number') phpType = Number.isInteger(value) ? 'int' : 'float';
+                    else if (type === 'boolean') phpType = 'bool';
+                    else if (type === 'object') {
+                        const childName = capitalize(key);
+                        walk(value, childName);
+                        phpType = childName;
+                    } else if (type === 'array') phpType = 'array';
+                    output += `    public ${phpType} $${key};\n`;
+                }
+                output += '}\n';
+                classes.push(output);
+            }
+            walk(obj, rootName);
+            return '<?php\n\n' + classes.reverse().join('\n');
+        }
+
+        function generateRuby(obj, rootName = 'Root') {
+            let classes = [];
+            function walk(obj, name) {
+                const attrs = Object.keys(obj);
+                let output = `class ${name}\n  attr_accessor :${attrs.join(', :')}\n\n`;
+                output += `  def initialize(`;
+                output += attrs.map(a => `${a}:`).join(', ');
+                output += `)\n`;
+                attrs.forEach(a => output += `    @${a} = ${a}\n`);
+                output += `  end\nend\n`;
+                classes.push(output);
+                for (const [key, value] of Object.entries(obj)) {
+                    if (getType(value) === 'object') walk(value, capitalize(key));
+                    else if (getType(value) === 'array' && value.length > 0 && getType(value[0]) === 'object') {
+                        walk(value[0], capitalize(key) + 'Item');
+                    }
+                }
+            }
+            walk(obj, rootName);
+            return classes.join('\n');
+        }
+
+        function generateScala(obj, rootName = 'Root') {
+            let classes = [];
+            function walk(obj, name) {
+                let output = `case class ${name}(\n`;
+                const entries = Object.entries(obj);
+                entries.forEach(([key, value], idx) => {
+                    const type = getType(value);
+                    let scalaType = 'Any';
+                    if (type === 'string') scalaType = 'String';
+                    else if (type === 'number') scalaType = Number.isInteger(value) ? 'Int' : 'Double';
+                    else if (type === 'boolean') scalaType = 'Boolean';
+                    else if (type === 'object') {
+                        const childName = capitalize(key);
+                        walk(value, childName);
+                        scalaType = childName;
+                    } else if (type === 'array' && value.length > 0) {
+                        const childType = getType(value[0]);
+                        if (childType === 'object') {
+                            const childName = capitalize(key) + 'Item';
+                            walk(value[0], childName);
+                            scalaType = `List[${childName}]`;
+                        } else if (childType === 'string') scalaType = 'List[String]';
+                        else if (childType === 'number') scalaType = 'List[Double]';
+                        else scalaType = 'List[Any]';
+                    } else scalaType = 'List[Any]';
+                    output += `  ${key}: ${scalaType}${idx < entries.length - 1 ? ',' : ''}\n`;
+                });
+                output += ')\n';
+                classes.push(output);
+            }
+            walk(obj, rootName);
+            return classes.reverse().join('\n');
+        }
+
+        function generateDjango(obj, rootName = 'Root') {
+            let models = [];
+            models.push('from django.db import models\n');
+            function walk(obj, name) {
+                let output = `\nclass ${name}(models.Model):\n`;
+                for (const [key, value] of Object.entries(obj)) {
+                    const type = getType(value);
+                    let fieldType = 'models.JSONField()';
+                    if (type === 'string') fieldType = 'models.CharField(max_length=255)';
+                    else if (type === 'number') fieldType = Number.isInteger(value) ? 'models.IntegerField()' : 'models.FloatField()';
+                    else if (type === 'boolean') fieldType = 'models.BooleanField(default=False)';
+                    else if (type === 'object') {
+                        const childName = capitalize(key);
+                        walk(value, childName);
+                        fieldType = `models.ForeignKey('${childName}', on_delete=models.CASCADE, null=True)`;
+                    } else if (type === 'array') fieldType = 'models.JSONField(default=list)';
+                    output += `    ${key} = ${fieldType}\n`;
+                }
+                output += `\n    def __str__(self):\n        return f"${name} #{'{self.id}'}"`;
+                models.push(output);
+            }
+            walk(obj, rootName);
+            return models.join('\n');
+        }
+
+        function generateNodeJS(obj, rootName = 'Root') {
+            let schemas = [];
+            schemas.push("const mongoose = require('mongoose');\n");
+            function walk(obj, name) {
+                let output = `const ${name}Schema = new mongoose.Schema({\n`;
+                for (const [key, value] of Object.entries(obj)) {
+                    const type = getType(value);
+                    let mongoType = 'mongoose.Schema.Types.Mixed';
+                    if (type === 'string') mongoType = 'String';
+                    else if (type === 'number') mongoType = 'Number';
+                    else if (type === 'boolean') mongoType = 'Boolean';
+                    else if (type === 'object') {
+                        const childName = capitalize(key);
+                        walk(value, childName);
+                        mongoType = `{ type: mongoose.Schema.Types.ObjectId, ref: '${childName}' }`;
+                        output += `  ${key}: ${mongoType},\n`;
+                        continue;
+                    } else if (type === 'array' && value.length > 0) {
+                        const childType = getType(value[0]);
+                        if (childType === 'object') {
+                            const childName = capitalize(key) + 'Item';
+                            walk(value[0], childName);
+                            mongoType = `[{ type: mongoose.Schema.Types.ObjectId, ref: '${childName}' }]`;
+                        } else if (childType === 'string') mongoType = '[String]';
+                        else if (childType === 'number') mongoType = '[Number]';
+                        else mongoType = '[mongoose.Schema.Types.Mixed]';
+                        output += `  ${key}: ${mongoType},\n`;
+                        continue;
+                    } else mongoType = '[mongoose.Schema.Types.Mixed]';
+                    output += `  ${key}: { type: ${mongoType}, required: true },\n`;
+                }
+                output += `}, { timestamps: true });\n\nmodule.exports = mongoose.model('${name}', ${name}Schema);\n`;
+                schemas.push(output);
+            }
+            walk(obj, rootName);
+            return schemas.join('\n');
+        }
+
+        // --- Main Update Function ---
+        function updateOutput() {
+            const statusEl = document.getElementById('jsonStatus');
+            try {
+                const jsonStr = jsonEditor.getValue();
+                if (!jsonStr.trim()) {
+                    codeEditor.setValue('');
+                    return;
+                }
+
+                const jsonObj = JSON.parse(jsonStr);
+                const lang = document.getElementById('languageSelect').value;
+                let output = '';
+                let editorLang = 'typescript';
+                let labelText = 'TypeScript Interface';
+
+                switch (lang) {
+                    case 'typescript':
+                        output = generateTypeScript(jsonObj);
+                        editorLang = 'typescript';
+                        break;
+                    case 'nodejs':
+                        output = generateNodeJS(jsonObj);
+                        editorLang = 'javascript';
+                        break;
+                    case 'python':
+                        output = generatePython(jsonObj);
+                        editorLang = 'python';
+                        break;
+                    case 'django':
+                        output = generateDjango(jsonObj);
+                        editorLang = 'python';
+                        break;
+                    case 'go':
+                        output = generateGo(jsonObj);
+                        editorLang = 'go';
+                        break;
+                    case 'csharp':
+                        output = generateCSharp(jsonObj);
+                        editorLang = 'csharp';
+                        break;
+                    case 'java':
+                        output = generateJava(jsonObj);
+                        editorLang = 'java';
+                        break;
+                    case 'rust':
+                        output = generateRust(jsonObj);
+                        editorLang = 'rust';
+                        break;
+                    case 'kotlin':
+                        output = generateKotlin(jsonObj);
+                        editorLang = 'kotlin';
+                        break;
+                    case 'swift':
+                        output = generateSwift(jsonObj);
+                        editorLang = 'swift';
+                        break;
+                    case 'dart':
+                        output = generateDart(jsonObj);
+                        editorLang = 'dart';
+                        break;
+                    case 'php':
+                        output = generatePHP(jsonObj);
+                        editorLang = 'php';
+                        break;
+                    case 'ruby':
+                        output = generateRuby(jsonObj);
+                        editorLang = 'ruby';
+                        break;
+                    case 'scala':
+                        output = generateScala(jsonObj);
+                        editorLang = 'scala';
+                        break;
+                }
+
+                monaco.editor.setModelLanguage(codeEditor.getModel(), editorLang);
+                codeEditor.setValue(output);
+                document.getElementById('outputLabel').textContent = labelText;
+
+                statusEl.textContent = 'Valid';
+                statusEl.classList.remove('error');
+            } catch (e) {
+                statusEl.textContent = 'Invalid JSON';
+                statusEl.classList.add('error');
+            }
+        }
+
+        // Debounced updates
+        let updateTimeout;
+        jsonEditor.onDidChangeModelContent(() => {
+            clearTimeout(updateTimeout);
+            updateTimeout = setTimeout(updateOutput, 250);
+        });
+
+        document.getElementById('languageSelect').addEventListener('change', updateOutput);
+
+        // Initial run
+        updateOutput();
+
+        // Copy button
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            navigator.clipboard.writeText(codeEditor.getValue()).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '✓ Copied!';
+                setTimeout(() => btn.innerHTML = originalHTML, 2000);
+            });
+        });
+
+        // Download button
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            const lang = document.getElementById('languageSelect').value;
+            const extMap = { typescript: 'ts', python: 'py', go: 'go', csharp: 'cs', java: 'java', rust: 'rs' };
+            const blob = new Blob([codeEditor.getValue()], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `generated.${extMap[lang] || 'txt'}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    });
+</script>
+{% endblock %}
