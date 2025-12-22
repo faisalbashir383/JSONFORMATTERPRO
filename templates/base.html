@@ -289,7 +289,7 @@
                     <button class="nav-link">JSON Tools ▾</button>
                     <div class="dropdown-content wide">
                         <a href="/json-diff/" class="dropdown-item">🔍 JSON Diff</a>
-                        <a href="/json-schema/" class="dropdown-item">📐 Schema Validator</a>
+                        <a href="{% url 'json_schema_page' %}" class="dropdown-item">📐 Schema Validator</a>
                         <a href="/json-tree/" class="dropdown-item">🌳 Tree Viewer</a>
                         <a href="/json-visualizer/" class="dropdown-item">📊 JSON Visualizer</a>
                         <a href="/dummy-json/" class="dropdown-item">🎲 Dummy Json Generator</a>
@@ -465,7 +465,7 @@
                             <li><a href="/">JSON Validator</a></li>
                             <li><a href="/json-to-yaml/">JSON to YAML</a></li>
                             <li><a href="/json-diff/">JSON Diff</a></li>
-                            <li><a href="/json-schema/">Schema Validator</a></li>
+                            <li><a href="{% url 'json_schema_page' %}">Schema Validator</a></li>
                             <li><a href="/json-tree/">Tree Viewer</a></li>
                             <li><a href="/json-visualizer/">JSON Visualizer</a></li>
                             <li><a href="/dummy-json/">Dummy JSON</a></li>

@@ -32,7 +32,7 @@ urlpatterns = [
     path('xsd-to-json-schema/', views.xsd_to_json_schema_page, name='xsd_to_json_schema_page'),
     path('json-to-jsonl/', views.json_to_jsonl_page, name='json_to_jsonl_page'),
     path('json-diff/', views.json_diff_page, name='json_diff_page'),
-    path('json-schema/', views.json_schema_page, name='json_schema_page'),
+    path('json-schema-validator/', views.json_schema_page, name='json_schema_page'),
     path('json-tree/', views.json_tree_page, name='json_tree_page'),
     path('json-visualizer/', views.json_visualizer_page, name='json_visualizer_page'),
     path('json-to-code/', views.json_to_code_page, name='json_to_code_page'),
@@ -127,6 +127,7 @@ urlpatterns = [
     path('careers/<slug:slug>/', views.job_detail, name='job_detail'),
     
     path('robots.txt', views.robots_txt, name='robots_txt'),
+    path('llms.txt', views.llms_txt, name='llms_txt'),
     
     # Blog URLs
     path('blog/', views.blog_list, name='blog_list'),

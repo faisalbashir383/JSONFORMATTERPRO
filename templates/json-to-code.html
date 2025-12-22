@@ -342,6 +342,7 @@ rust, json converter online{% endblock %}
                         <option value="php">PHP</option>
                         <option value="ruby">Ruby</option>
                         <option value="scala">Scala</option>
+                        <option value="pandas">Pandas DataFrame</option>
                     </select>
                     <div class="header-actions">
                         <button id="copyBtn" class="icon-btn" title="Copy Code">
@@ -362,74 +363,74 @@ rust, json converter online{% endblock %}
         </div>
     </div>
 
-  <article class="seo-content">
-    <section class="seo-section">
-      <h2>Supported Languages</h2>
-      <ul>
-        <li>TypeScript Interfaces</li>
-        <li>Node.js (Mongoose Schemas)</li>
-        <li>Python (Pydantic & Django Models)</li>
-        <li>Go Structs</li>
-        <li>C# Classes</li>
-        <li>Java POJOs</li>
-        <li>Rust Structs</li>
-        <li>Kotlin, Swift, Dart, PHP, Ruby, Scala</li>
-      </ul>
-    </section>
+    <article class="seo-content">
+        <section class="seo-section">
+            <h2>Supported Languages</h2>
+            <ul>
+                <li>TypeScript Interfaces</li>
+                <li>Node.js (Mongoose Schemas)</li>
+                <li>Python (Pydantic & Django Models)</li>
+                <li>Go Structs</li>
+                <li>C# Classes</li>
+                <li>Java POJOs</li>
+                <li>Rust Structs</li>
+                <li>Kotlin, Swift, Dart, PHP, Ruby, Scala</li>
+            </ul>
+        </section>
 
-    <section class="seo-section">
-      <h2>Why Use This JSON to Code Tool?</h2>
-      <p>
-        Writing models manually is error-prone and time-consuming.
-        This tool automatically generates clean, readable, and type-safe code
-        from any valid JSON structure.
-      </p>
-    </section>
+        <section class="seo-section">
+            <h2>Why Use This JSON to Code Tool?</h2>
+            <p>
+                Writing models manually is error-prone and time-consuming.
+                This tool automatically generates clean, readable, and type-safe code
+                from any valid JSON structure.
+            </p>
+        </section>
 
-    <section class="seo-section">
-      <h2>Use Cases</h2>
-      <ul>
-        <li>API response modeling</li>
-        <li>Frontend & backend type generation</li>
-        <li>Database schema creation</li>
-        <li>Fast prototyping</li>
-      </ul>
-    </section>
-  </article>
+        <section class="seo-section">
+            <h2>Use Cases</h2>
+            <ul>
+                <li>API response modeling</li>
+                <li>Frontend & backend type generation</li>
+                <li>Database schema creation</li>
+                <li>Fast prototyping</li>
+            </ul>
+        </section>
+    </article>
 
     <section class="seo-section" id="faq">
-  <h2>Frequently Asked Questions (FAQs)</h2>
+        <h2>Frequently Asked Questions (FAQs)</h2>
 
-  <h3>Is the JSON to Code Converter free?</h3>
-  <p>
-    Yes. The JSON to Code Converter is completely free and does not require
-    signup, registration, or payment.
-  </p>
+        <h3>Is the JSON to Code Converter free?</h3>
+        <p>
+            Yes. The JSON to Code Converter is completely free and does not require
+            signup, registration, or payment.
+        </p>
 
-  <h3>Is my JSON data secure?</h3>
-  <p>
-    Absolutely. All JSON to code conversions happen locally in your browser.
-    Your data is never uploaded, stored, or shared.
-  </p>
+        <h3>Is my JSON data secure?</h3>
+        <p>
+            Absolutely. All JSON to code conversions happen locally in your browser.
+            Your data is never uploaded, stored, or shared.
+        </p>
 
-  <h3>Which programming languages are supported?</h3>
-  <p>
-    The tool supports TypeScript, Node.js (Mongoose), Python (Pydantic & Django),
-    Go, C#, Java, Rust, Kotlin, Swift, Dart, PHP, Ruby, and Scala.
-  </p>
+        <h3>Which programming languages are supported?</h3>
+        <p>
+            The tool supports TypeScript, Node.js (Mongoose), Python (Pydantic & Django),
+            Go, C#, Java, Rust, Kotlin, Swift, Dart, PHP, Ruby, and Scala.
+        </p>
 
-  <h3>Can I use this tool for large JSON files?</h3>
-  <p>
-    Yes. The converter can handle large and deeply nested JSON structures,
-    depending on your browser’s available memory.
-  </p>
+        <h3>Can I use this tool for large JSON files?</h3>
+        <p>
+            Yes. The converter can handle large and deeply nested JSON structures,
+            depending on your browser’s available memory.
+        </p>
 
-  <h3>Does this tool support nested objects and arrays?</h3>
-  <p>
-    Yes. Nested objects and arrays are automatically detected and converted
-    into appropriate models, structs, or classes for each language.
-  </p>
-</section>
+        <h3>Does this tool support nested objects and arrays?</h3>
+        <p>
+            Yes. Nested objects and arrays are automatically detected and converted
+            into appropriate models, structs, or classes for each language.
+        </p>
+    </section>
 </div>
 
 <!-- Monaco Editor Script -->
@@ -910,6 +911,59 @@ rust, json converter online{% endblock %}
             return models.join('\n');
         }
 
+        function generatePandas(obj) {
+            let output = 'import pandas as pd\nimport json\n\n';
+
+            // Check if input is an array of objects (ideal for DataFrame)
+            if (Array.isArray(obj) && obj.length > 0 && typeof obj[0] === 'object') {
+                output += '# JSON data as list of records\n';
+                output += 'data = ' + JSON.stringify(obj, null, 4) + '\n\n';
+                output += '# Create DataFrame from list of dictionaries\n';
+                output += 'df = pd.DataFrame(data)\n\n';
+                output += '# Display the DataFrame\n';
+                output += 'print(df.head())\n';
+                output += 'print(f"\\nShape: {df.shape}")\n';
+                output += 'print(f"\\nColumns: {list(df.columns)}")\n';
+                output += 'print(f"\\nData Types:\\n{df.dtypes}")\n';
+            } else if (typeof obj === 'object' && !Array.isArray(obj)) {
+                // Check if it's a dict with array values (column-oriented)
+                const allArrays = Object.values(obj).every(v => Array.isArray(v));
+                const sameLength = allArrays && new Set(Object.values(obj).map(v => v.length)).size === 1;
+
+                if (allArrays && sameLength) {
+                    output += '# JSON data as column-oriented dictionary\n';
+                    output += 'data = ' + JSON.stringify(obj, null, 4) + '\n\n';
+                    output += '# Create DataFrame from column dictionary\n';
+                    output += 'df = pd.DataFrame(data)\n\n';
+                } else {
+                    // Single object - convert to single-row DataFrame
+                    output += '# JSON data as single record\n';
+                    output += 'data = ' + JSON.stringify(obj, null, 4) + '\n\n';
+                    output += '# Create DataFrame from single dictionary (wrapping in list)\n';
+                    output += 'df = pd.DataFrame([data])\n\n';
+                }
+                output += '# Display the DataFrame\n';
+                output += 'print(df.head())\n';
+                output += 'print(f"\\nShape: {df.shape}")\n';
+                output += 'print(f"\\nColumns: {list(df.columns)}")\n';
+                output += 'print(f"\\nData Types:\\n{df.dtypes}")\n';
+            } else {
+                // Fallback for simple arrays or primitives
+                output += '# JSON data\n';
+                output += 'data = ' + JSON.stringify(obj, null, 4) + '\n\n';
+                output += '# Create DataFrame\n';
+                output += 'df = pd.DataFrame({"value": data if isinstance(data, list) else [data]})\n\n';
+                output += 'print(df)\n';
+            }
+
+            output += '\n# Optional: Save to CSV\n';
+            output += '# df.to_csv("output.csv", index=False)\n';
+            output += '\n# Optional: Save to Excel\n';
+            output += '# df.to_excel("output.xlsx", index=False)\n';
+
+            return output;
+        }
+
         function generateNodeJS(obj, rootName = 'Root') {
             let schemas = [];
             schemas.push("const mongoose = require('mongoose');\n");
@@ -1020,6 +1074,10 @@ rust, json converter online{% endblock %}
                     case 'scala':
                         output = generateScala(jsonObj);
                         editorLang = 'scala';
+                        break;
+                    case 'pandas':
+                        output = generatePandas(jsonObj);
+                        editorLang = 'python';
                         break;
                 }
 

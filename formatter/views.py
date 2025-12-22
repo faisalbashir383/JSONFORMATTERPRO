@@ -485,6 +485,11 @@ def robots_txt(request):
     return render(request, 'robots.txt', content_type='text/plain')
 
 
+def llms_txt(request):
+    """Serve llms.txt file for LLM crawlers"""
+    return render(request, 'llms.txt', content_type='text/plain')
+
+
 # ====================
 # Blog Views
 # ====================

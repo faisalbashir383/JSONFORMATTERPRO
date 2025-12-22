@@ -7,7 +7,7 @@
 4, 7, 2020-12. Detailed error messages. No signup - try now!{% endblock %}
 {% block meta_keywords %}json schema validator, validate json, json schema online, schema validation, json tester
 {% endblock %}
-{% block canonical_url %}{{ SITE_URL }}/json-schema/{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/json-schema-validator/{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
@@ -16,7 +16,7 @@
   "@type": "WebApplication",
   "name": "JSON Schema Validator Online",
   "description": "Free online tool to validate JSON data against JSON Schema",
-  "url": "{{ SITE_URL }}/json-schema/",
+  "url": "{{ SITE_URL }}/json-schema-validator/",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web Browser",
   "offers": {
@@ -164,7 +164,7 @@
   "name": "JSON Tools",
   "itemListElement": [
     {"@type": "SiteNavigationElement", "position": 1, "name": "JSON Formatter", "url": "{{ SITE_URL }}/"},
-    {"@type": "SiteNavigationElement", "position": 2, "name": "JSON Schema Validator", "url": "{{ SITE_URL }}/json-schema/"},
+    {"@type": "SiteNavigationElement", "position": 2, "name": "JSON Schema Validator", "url": "{{ SITE_URL }}/json-schema-validator/"},
     {"@type": "SiteNavigationElement", "position": 3, "name": "JSON to YAML", "url": "{{ SITE_URL }}/json-to-yaml/"},
     {"@type": "SiteNavigationElement", "position": 4, "name": "JSON Diff", "url": "{{ SITE_URL }}/json-diff/"},
     {"@type": "SiteNavigationElement", "position": 5, "name": "JSON Tree Viewer", "url": "{{ SITE_URL }}/json-tree/"},
@@ -617,7 +617,8 @@
     <h2>JSON Schema Validation Examples</h2>
 
     <p style="margin-bottom: 1rem;">Below is a simple schema that requires a <code>name</code> (string) and
-        <code>age</code> (integer, minimum 0).</p>
+        <code>age</code> (integer, minimum 0).
+    </p>
 
     <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Schema
         Definition</h4>

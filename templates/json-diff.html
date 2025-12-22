@@ -141,7 +141,7 @@ removals, and changes instantly. No signup required - try now!{% endblock %}
   "name": "JSON Tools",
   "itemListElement": [
     {"@type": "SiteNavigationElement", "position": 1, "name": "JSON Formatter", "url": "{{ SITE_URL }}/"},
-    {"@type": "SiteNavigationElement", "position": 2, "name": "JSON Schema Validator", "url": "{{ SITE_URL }}/json-schema/"},
+    {"@type": "SiteNavigationElement", "position": 2, "name": "JSON Schema Validator", "url": "{{ SITE_URL }}/json-schema-validator/"},
     {"@type": "SiteNavigationElement", "position": 3, "name": "JSON to YAML", "url": "{{ SITE_URL }}/json-to-yaml/"},
     {"@type": "SiteNavigationElement", "position": 4, "name": "JSON Diff", "url": "{{ SITE_URL }}/json-diff/"},
     {"@type": "SiteNavigationElement", "position": 5, "name": "JSON Tree Viewer", "url": "{{ SITE_URL }}/json-tree/"},
@@ -698,7 +698,7 @@ removals, and changes instantly. No signup required - try now!{% endblock %}
             <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Visualize JSON as
                 tree</p>
         </a>
-        <a href="/json-schema/"
+        <a href="{% url 'json_schema_page' %}"
             style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
             <strong>📐 JSON Schema Validator</strong>
             <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Validate against

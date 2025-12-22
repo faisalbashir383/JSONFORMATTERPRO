@@ -547,7 +547,7 @@ collapse, and navigate nested objects. No signup required - try now!{% endblock 
             <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Compare two JSON
                 files</p>
         </a>
-        <a href="/json-schema/"
+        <a href="{% url 'json_schema_page' %}"
             style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
             <strong>📐 JSON Schema Validator</strong>
             <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Validate against
