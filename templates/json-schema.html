@@ -1,11 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}JSON Schema Validator Online - Validate JSON Against Schema{% endblock %}
-{% block meta_title %}JSON Schema Validator Online - Free JSON Validation Tool{% endblock %}
-{% block meta_description %}Free JSON schema validator online to validate JSON against schema instantly. Supports Draft
-4, 7, 2020-12. Detailed error messages. No signup - try now!{% endblock %}
-{% block meta_keywords %}json schema validator, validate json, json schema online, schema validation, json tester
+{% block title %}JSON Schema Validator – Validate JSON Against Schema Online{% endblock %}
+{% block meta_title %}JSON Schema Validator Online{% endblock %}
+{% block meta_description %}Validate JSON against a JSON Schema to ensure correct structure, required fields, and data types. Supports Draft 4, 7, and 2020-12.
 {% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/json-schema-validator/{% endblock %}
 
@@ -36,41 +34,6 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to Validate JSON Against Schema",
-  "description": "Learn how to validate your JSON data against a JSON Schema definition",
-  "totalTime": "PT1M",
-  "step": [
-    {
-      "@type": "HowToStep",
-      "position": 1,
-      "name": "Paste JSON Data",
-      "text": "Paste your JSON data in the left panel"
-    },
-    {
-      "@type": "HowToStep",
-      "position": 2,
-      "name": "Paste JSON Schema",
-      "text": "Paste your JSON Schema definition in the right panel"
-    },
-    {
-      "@type": "HowToStep",
-      "position": 3,
-      "name": "Click Validate",
-      "text": "Click the Validate button to check if your JSON conforms to the schema"
-    },
-    {
-      "@type": "HowToStep",
-      "position": 4,
-      "name": "Review Results",
-      "text": "View detailed validation results with error messages if any"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {
@@ -87,14 +50,6 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Paste your JSON data in the JSON Data tab, switch to the Schema tab to paste your JSON Schema, then click Validate. The tool will show you if your JSON is valid or list any errors."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What JSON Schema drafts are supported?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "This validator supports JSON Schema Draft 4, Draft 6, Draft 7, and Draft 2020-12. It automatically detects the draft version from your schema's $schema keyword."
       }
     },
     {
@@ -129,22 +84,7 @@
         "text": "Yes, JSON Schema supports nested object validation. Define nested schemas within the 'properties' of parent objects, or use '$ref' to reference reusable schema definitions."
       }
     },
-    {
-      "@type": "Question",
-      "name": "How do I validate array items in JSON Schema?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Use the 'items' keyword to define the schema for array elements. You can also use 'minItems', 'maxItems', and 'uniqueItems' to add additional constraints on the array."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What is the $ref keyword in JSON Schema?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The $ref keyword allows you to reference other schemas, either within the same document using JSON Pointer (e.g., '#/$defs/address') or external schemas via URI. This enables schema reuse and modular design."
-      }
-    },
+
     {
       "@type": "Question",
       "name": "How do I validate email format in JSON Schema?",
@@ -484,6 +424,18 @@
 <div class="tool-header">
     <h1>JSON Schema Validator Online - Validate JSON Free</h1>
     <p>Free online tool to validate your JSON data against a JSON Schema definition. Supports Draft 4, 7, and 2020-12.
+    </p>
+</div>
+
+<div class="info-section" style="margin-bottom: 1.5rem;">
+    <p>
+        A JSON Schema Validator checks whether a JSON document follows a defined structure,
+        required fields, and data types. It helps catch invalid data early before it causes
+        API failures, application bugs, or unexpected behavior.
+    </p>
+    <p>
+        By validating JSON against a schema, developers can ensure consistent data formats
+        and receive clear error messages when something doesn’t match the expected rules.
     </p>
 </div>
 
