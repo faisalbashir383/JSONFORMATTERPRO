@@ -599,8 +599,9 @@ def blog_api(request):
     try:
         limit = min(int(request.GET.get('limit', 10)), 50)
         category_slug = request.GET.get('category', None)
-        
-        posts = BlogPost.objects.filter(published=True).order_by('-published_at')
+
+        # order by views descending
+        posts = BlogPost.objects.filter(published=True).order_by('-views')
         
         if category_slug:
             posts = posts.filter(category__slug=category_slug)
