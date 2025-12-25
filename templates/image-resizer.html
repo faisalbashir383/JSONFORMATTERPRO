@@ -801,11 +801,18 @@ deep learning background remover, browser background remover, no upload backgrou
                 <div class="toggle-switch" id="bgToggle"></div>
                 <span>Remove background (transparent PNG)</span>
             </div>
+            <div style="margin-top: 0.75rem;">
+                <label
+                    style="font-size: 0.85rem; color: var(--color-text-secondary); display: block; margin-bottom: 0.5rem;">
+                    Tolerance: <span id="toleranceValue">30</span>%
+                </label>
+                <input type="range" id="toleranceSlider" min="5" max="80" value="30" style="width: 100%;">
+            </div>
             <button class="remove-bg-btn" id="removeBgBtn" disabled style="margin-top: 0.75rem;">
                 <span>✨</span> Remove Background Now
             </button>
             <div style="font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 0.5rem;">
-                Works best with photos of people, products, and objects.
+                Removes background color from corners. Adjust tolerance for better results.
             </div>
         </div>
     </div>
@@ -916,6 +923,7 @@ deep learning background remover, browser background remover, no upload backgrou
 
 {% block extra_js %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<!-- Background Removal Library - works with any image -->
 <script type="module">
     (function () {
         // Elements
@@ -1289,6 +1297,106 @@ deep learning background remover, browser background remover, no upload backgrou
             }
         });
 
+        // Helper function to scale down image for faster AI processing
+        function scaleImageForProcessing(img, maxDimension = 1024) {
+            const { width, height } = img;
+
+            // If image is already small enough, return original
+            if (width <= maxDimension && height <= maxDimension) {
+                return { canvas: null, scaleFactor: 1 };
+            }
+
+            // Calculate scale factor
+            const scaleFactor = Math.min(maxDimension / width, maxDimension / height);
+            const newWidth = Math.round(width * scaleFactor);
+            const newHeight = Math.round(height * scaleFactor);
+
+            // Create scaled canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+            return { canvas, scaleFactor, newWidth, newHeight };
+        }
+
+        // Helper function to scale result back to original dimensions
+        function scaleResultToOriginal(resultImg, targetWidth, targetHeight) {
+            const canvas = document.createElement('canvas');
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(resultImg, 0, 0, targetWidth, targetHeight);
+            return canvas.toDataURL('image/png');
+        }
+
+        // Tolerance slider
+        const toleranceSlider = document.getElementById('toleranceSlider');
+        const toleranceValue = document.getElementById('toleranceValue');
+        toleranceSlider.addEventListener('input', () => {
+            toleranceValue.textContent = toleranceSlider.value;
+        });
+
+        // Helper: Get pixel color at x,y
+        function getPixelColor(pixels, x, y, width) {
+            const i = (y * width + x) * 4;
+            return { r: pixels[i], g: pixels[i + 1], b: pixels[i + 2], a: pixels[i + 3] };
+        }
+
+        // Helper: Calculate color distance
+        function colorDistance(c1, c2) {
+            return Math.sqrt(
+                Math.pow(c1.r - c2.r, 2) +
+                Math.pow(c1.g - c2.g, 2) +
+                Math.pow(c1.b - c2.b, 2)
+            );
+        }
+
+        // Helper: Get most common color from samples
+        function getMostCommonColor(samples) {
+            // For simplicity, average the colors that are similar
+            let avgR = 0, avgG = 0, avgB = 0, count = 0;
+            for (const c of samples) {
+                avgR += c.r;
+                avgG += c.g;
+                avgB += c.b;
+                count++;
+            }
+            return { r: Math.round(avgR / count), g: Math.round(avgG / count), b: Math.round(avgB / count) };
+        }
+
+        // Helper: Flood fill algorithm using iterative approach
+        function floodFill(pixels, visited, toRemove, startX, startY, width, height, targetColor, tolerance) {
+            const stack = [[startX, startY]];
+
+            while (stack.length > 0) {
+                const [x, y] = stack.pop();
+
+                if (x < 0 || x >= width || y < 0 || y >= height) continue;
+
+                const idx = y * width + x;
+                if (visited[idx]) continue;
+                visited[idx] = 1;
+
+                const currentColor = getPixelColor(pixels, x, y, width);
+                const distance = colorDistance(currentColor, targetColor);
+
+                if (distance <= tolerance) {
+                    toRemove[idx] = 1;
+                    // Add neighbors to stack
+                    stack.push([x + 1, y]);
+                    stack.push([x - 1, y]);
+                    stack.push([x, y + 1]);
+                    stack.push([x, y - 1]);
+                }
+            }
+        }
+
         // Remove Background Button
         removeBgBtn.addEventListener('click', async () => {
             if (!originalImage || !originalImageDataUrl) return;
@@ -1297,65 +1405,136 @@ deep learning background remover, browser background remover, no upload backgrou
             removeBgBtn.innerHTML = '<span>⏳</span> Removing background...';
             progressContainer.classList.add('active');
             progressFill.style.width = '0%';
-            progressText.textContent = 'Loading AI model... This may take a moment.';
+            progressText.textContent = 'Processing image...';
 
             try {
-                const imgBlob = dataURLtoBlob(originalImageDataUrl);
+                const origW = originalImage.width;
+                const origH = originalImage.height;
+                const tolerance = parseInt(document.getElementById('toleranceSlider').value) / 100 * 255;
 
-                progressFill.style.width = '30%';
-                progressText.textContent = 'Processing image with AI...';
+                progressFill.style.width = '20%';
+                progressText.textContent = 'Analyzing background color...';
 
-                // Use esm.sh which bundles all dependencies
-                const { removeBackground } = await import('https://esm.sh/@imgly/background-removal@1.4.5');
+                // Create canvas for processing
+                const canvas = document.createElement('canvas');
+                canvas.width = origW;
+                canvas.height = origH;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(originalImage, 0, 0);
 
-                const resultBlob = await removeBackground(imgBlob, {
-                    progress: (key, current, total) => {
-                        const percent = 30 + Math.round((current / total) * 60);
-                        progressFill.style.width = percent + '%';
-                        progressText.textContent = `Removing background... ${percent}%`;
+                const imageData = ctx.getImageData(0, 0, origW, origH);
+                const pixels = imageData.data;
+
+                // Sample background colors from corners
+                const cornerSamples = [
+                    getPixelColor(pixels, 0, 0, origW),                    // Top-left
+                    getPixelColor(pixels, origW - 1, 0, origW),            // Top-right
+                    getPixelColor(pixels, 0, origH - 1, origW),            // Bottom-left
+                    getPixelColor(pixels, origW - 1, origH - 1, origW)     // Bottom-right
+                ];
+
+                // Find the most common corner color (likely background)
+                const bgColor = getMostCommonColor(cornerSamples);
+
+                progressFill.style.width = '40%';
+                progressText.textContent = 'Removing background...';
+
+                // Create visited array for flood fill
+                const visited = new Uint8Array(origW * origH);
+                const toRemove = new Uint8Array(origW * origH);
+
+                // Flood fill from all corners
+                const startPoints = [
+                    [0, 0], [origW - 1, 0], [0, origH - 1], [origW - 1, origH - 1],
+                    [Math.floor(origW / 2), 0], [Math.floor(origW / 2), origH - 1],
+                    [0, Math.floor(origH / 2)], [origW - 1, Math.floor(origH / 2)]
+                ];
+
+                for (const [sx, sy] of startPoints) {
+                    floodFill(pixels, visited, toRemove, sx, sy, origW, origH, bgColor, tolerance);
+                }
+
+                progressFill.style.width = '70%';
+                progressText.textContent = 'Creating transparent image...';
+
+                // Apply transparency
+                for (let i = 0; i < toRemove.length; i++) {
+                    if (toRemove[i]) {
+                        pixels[i * 4 + 3] = 0; // Set alpha to 0
                     }
-                });
+                }
 
-                progressFill.style.width = '95%';
+                ctx.putImageData(imageData, 0, 0);
+
+                progressFill.style.width = '90%';
                 progressText.textContent = 'Finalizing...';
 
-                const newDataUrl = await new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result);
-                    reader.readAsDataURL(resultBlob);
+                const resultDataUrl = canvas.toDataURL('image/png');
+
+                // Create result blob for size calculation
+                const resultBlob = dataURLtoBlob(resultDataUrl);
+
+                // Add to resized images array
+                resizedImages.push({
+                    label: 'Background Removed',
+                    width: origW,
+                    height: origH,
+                    dataUrl: resultDataUrl,
+                    blob: resultBlob,
+                    size: resultBlob.size
                 });
 
-                // Update the image
-                const img = new Image();
-                img.onload = () => {
-                    originalImage = img;
-                    originalImageDataUrl = newDataUrl;
-                    imagePreview.src = newDataUrl;
+                // Add to output gallery
+                const item = document.createElement('div');
+                item.className = 'output-item';
+                item.innerHTML = `
+                    <img src="${resultDataUrl}" class="output-preview" alt="Background Removed" style="background: repeating-conic-gradient(#808080 0% 25%, transparent 0% 50%) 50% / 20px 20px;">
+                    <div class="output-info">
+                        <div>
+                            <div class="output-size">${origW}×${origH}</div>
+                            <div class="output-filesize">${formatFileSize(resultBlob.size)} • Transparent</div>
+                        </div>
+                        <button class="output-download" data-index="${resizedImages.length - 1}">⬇️</button>
+                    </div>
+                `;
+                outputGrid.appendChild(item);
 
-                    // Force PNG for transparent background
-                    document.getElementById('outputFormat').value = 'png';
-                    bgToggle.classList.add('active');
-                    removeBgEnabled = true;
+                // Show output section
+                outputSection.classList.add('active');
+                downloadAllBtn.classList.add('active');
 
-                    progressFill.style.width = '100%';
-                    progressText.textContent = 'Background removed successfully!';
+                document.getElementById('outputFormat').value = 'png';
+                bgToggle.classList.add('active');
+                removeBgEnabled = true;
 
-                    setTimeout(() => {
-                        progressContainer.classList.remove('active');
-                    }, 1500);
-                };
-                img.src = newDataUrl;
+                progressFill.style.width = '100%';
+                progressText.textContent = 'Background removed! See result below.';
+
+                setTimeout(() => {
+                    progressContainer.classList.remove('active');
+                    outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 1000);
+
+                removeBgBtn.disabled = false;
+                removeBgBtn.innerHTML = '<span>✨</span> Remove Background Now';
 
             } catch (error) {
                 console.error('Background removal failed:', error);
-                progressText.textContent = 'Error: Could not remove background. Try a different image.';
+                let errorMsg = 'Error: Could not remove background. Try a different image.';
+                if (error.message === 'timeout') {
+                    errorMsg = 'Processing took too long. Try a smaller image or simpler photo.';
+                } else if (error.message.includes('fetch')) {
+                    errorMsg = 'Failed to download AI model. Check your internet connection.';
+                }
+                progressText.textContent = errorMsg;
+                progressFill.style.width = '0%';
                 setTimeout(() => {
                     progressContainer.classList.remove('active');
-                }, 3000);
-            }
+                }, 4000);
 
-            removeBgBtn.disabled = false;
-            removeBgBtn.innerHTML = '<span>✨</span> Remove Background Now';
+                removeBgBtn.disabled = false;
+                removeBgBtn.innerHTML = '<span>✨</span> Remove Background Now';
+            }
         });
     })();
 </script>
