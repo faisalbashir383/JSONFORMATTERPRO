@@ -30,7 +30,7 @@ class SecurityHeadersMiddleware(MiddlewareMixin):
             # In production, you may want to use stricter policies with nonces
             csp_policy = (
                 "default-src 'self'; "
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.google-analytics.com https://ajax.googleapis.com https://googleads.g.doubleclick.net https://www.googleadservices.com; "
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.google-analytics.com https://ajax.googleapis.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://esm.sh; "
                 "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; "
                 "img-src 'self' data: https: blob:; "
                 "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
