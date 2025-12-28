@@ -138,5 +138,15 @@ urlpatterns = [
     # Tutorial URLs
     path('tutorials/', views.tutorials_list, name='tutorials_list'),
     path('tutorials/<slug:slug>/', views.tutorial_detail, name='tutorial_detail'),
+
+    # redirect urls
+    path(
+        "json-schema/",
+        RedirectView.as_view(
+            url="/json-schema-validator/",
+            permanent=True
+        ),
+    ),
+
 ]
 
