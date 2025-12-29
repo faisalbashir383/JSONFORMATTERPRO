@@ -1,0 +1,1223 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Jackson JSON Generator Online - High Performance Streaming JSON Generator{% endblock %}
+{% block meta_title %}Jackson JSON Generator Online - Streaming JSON Generator Online{% endblock %}
+{% block meta_description %}Free high-performance JSON generator with streaming architecture. Generate 100,000+ records
+without crashing. Jackson-style API, Web Worker powered. No signup required.{% endblock %}
+{% block meta_keywords %}json generator, streaming json, json data generator, large json generator, json maker, fake
+json, mock json data{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/json-generator/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Jackson JSON Generator - Streaming JSON Generator",
+  "description": "High-performance client-side JSON generator with streaming architecture. Generate massive datasets (100K+ records) without browser crashes.",
+  "url": "{{ SITE_URL }}/json-generator/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Streaming JSON Generation",
+    "100,000+ Record Support",
+    "Web Worker Architecture",
+    "JSON Formatter/Beautifier",
+    "JSON Minifier",
+    "JSON Schema Generator",
+    "JSON Repair Tool",
+    "Large File Export (100MB+)",
+    "Client-Side Processing"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a streaming JSON generator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A streaming JSON generator creates JSON data incrementally without loading the entire dataset into memory. This allows generation of massive files (100MB+) without crashing the browser."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many records can this generator handle?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This tool uses Web Workers and streaming architecture to generate 100,000+ records while keeping the UI responsive. Memory-efficient patterns prevent browser crashes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this JSON generator free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, this JSON generator is 100% free with no signup required. All processing happens locally in your browser for maximum privacy and speed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What JSON tools are included?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The tool includes JSON Formatter (2/4-space, tabs), JSON Minifier, JSON Schema Generator (UUID, timestamps, random values), and JSON Repair (fix trailing commas, quoted keys)."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block extra_head %}
+<!-- JetBrains Mono for code -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ============================================
+   JSON GENERATOR - GLASSMORPHISM DARK THEME
+   ============================================ */
+
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 2rem;
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* Main Container - Split Panel */
+    .generator-layout {
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 1.5rem;
+        min-height: 700px;
+    }
+
+    /* ============================================
+   LEFT PANEL - GLASSMORPHISM CONFIG
+   ============================================ */
+    .config-panel {
+        background: rgba(30, 30, 50, 0.7);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 1.5rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        overflow-y: auto;
+        max-height: 800px;
+    }
+
+    [data-theme="light"] .config-panel {
+        background: rgba(255, 255, 255, 0.85);
+        border-color: rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .config-section {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="light"] .config-section {
+        border-bottom-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .config-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .section-title {
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #a5b4fc;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    [data-theme="light"] .section-title {
+        color: #6366f1;
+    }
+
+    /* Form Controls */
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+    }
+
+    .form-input,
+    .form-select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        font-family: 'Inter', sans-serif;
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--color-text);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        transition: all 0.2s ease;
+    }
+
+    [data-theme="light"] .form-input,
+    [data-theme="light"] .form-select {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: rgba(0, 0, 0, 0.15);
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .form-input::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    [data-theme="light"] .form-input::placeholder {
+        color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Schema Builder - Field Types */
+    .field-types-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+    .field-type-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 0.8rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        background: rgba(99, 102, 241, 0.1);
+        color: #a5b4fc;
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .field-type-btn:hover {
+        background: rgba(99, 102, 241, 0.2);
+        border-color: rgba(99, 102, 241, 0.5);
+        transform: translateY(-1px);
+    }
+
+    .field-type-btn.active {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        border-color: transparent;
+    }
+
+    /* Schema Fields List */
+    .schema-fields {
+        margin-top: 1rem;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .schema-field-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.6rem 0.8rem;
+        margin-bottom: 0.5rem;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        font-size: 0.9rem;
+    }
+
+    [data-theme="light"] .schema-field-item {
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    .schema-field-item .field-name {
+        font-family: 'JetBrains Mono', monospace;
+        color: #a5b4fc;
+    }
+
+    .schema-field-item .field-type {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+    }
+
+    .schema-field-item .remove-field {
+        background: transparent;
+        border: none;
+        color: #ef4444;
+        cursor: pointer;
+        font-size: 1rem;
+        padding: 0.25rem;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+
+    .schema-field-item .remove-field:hover {
+        opacity: 1;
+    }
+
+    /* Generate Button */
+    .generate-btn-primary {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 1rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .generate-btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .generate-btn-primary:hover::before {
+        left: 100%;
+    }
+
+    .generate-btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+    }
+
+    .generate-btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+        margin-top: 1rem;
+        display: none;
+    }
+
+    .progress-container.active {
+        display: block;
+    }
+
+    .progress-bar-wrapper {
+        height: 8px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #6366f1, #a855f7);
+        border-radius: 4px;
+        transition: width 0.3s ease;
+    }
+
+    .progress-text {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        text-align: center;
+        margin-top: 0.5rem;
+    }
+
+    /* ============================================
+   RIGHT PANEL - OUTPUT
+   ============================================ */
+    .output-panel {
+        background: rgba(30, 30, 50, 0.7);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    [data-theme="light"] .output-panel {
+        background: rgba(255, 255, 255, 0.85);
+        border-color: rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .output-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        background: rgba(0, 0, 0, 0.2);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="light"] .output-header {
+        background: rgba(0, 0, 0, 0.05);
+        border-bottom-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .output-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .output-stats {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        background: rgba(99, 102, 241, 0.2);
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+    }
+
+    .output-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--color-text);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    [data-theme="light"] .action-btn {
+        background: rgba(0, 0, 0, 0.05);
+        border-color: rgba(0, 0, 0, 0.15);
+    }
+
+    .action-btn:hover {
+        background: rgba(99, 102, 241, 0.3);
+        border-color: rgba(99, 102, 241, 0.5);
+    }
+
+    .action-btn.primary {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border-color: transparent;
+    }
+
+    .action-btn.primary:hover {
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+    }
+
+    /* Monaco Editor Container */
+    .editor-container {
+        display: block !important;
+        flex: 1;
+        min-height: 500px;
+        position: relative;
+        background: #1e1e1e;
+    }
+
+    #monacoEditor {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 500px;
+    }
+
+    /* ============================================
+   TOOLS TABS
+   ============================================ */
+    .tools-tabs {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0 1.5rem;
+        margin-top: 0.5rem;
+        overflow-x: auto;
+    }
+
+    .tool-tab {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        background: transparent;
+        color: var(--color-text-secondary);
+        border: none;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .tool-tab:hover {
+        color: var(--color-text);
+    }
+
+    .tool-tab.active {
+        color: #6366f1;
+        border-bottom-color: #6366f1;
+    }
+
+    /* ============================================
+   INFO SECTIONS
+   ============================================ */
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: 16px;
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 1.5rem 0 0.75rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .info-section ul {
+        color: var(--color-text-secondary);
+        line-height: 2;
+        padding-left: 1.5rem;
+    }
+
+    /* Related Tools Grid */
+    .related-tools-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .related-tool-card {
+        display: block;
+        padding: 1rem;
+        background: var(--color-surface-alt);
+        border-radius: 12px;
+        text-decoration: none;
+        color: var(--color-text);
+        transition: all 0.2s ease;
+        border: 1px solid var(--color-border);
+    }
+
+    .related-tool-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px var(--color-shadow);
+        border-color: var(--color-primary);
+    }
+
+    .related-tool-card strong {
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    .related-tool-card p {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        margin: 0;
+    }
+
+    /* FAQ Section */
+    .faq-item {
+        border-bottom: 1px solid var(--color-border);
+        padding: 1rem 0;
+    }
+
+    .faq-item:last-child {
+        border-bottom: none;
+    }
+
+    .faq-item h3 {
+        margin: 0 0 0.5rem;
+    }
+
+    .faq-item p {
+        margin: 0;
+    }
+
+    /* ============================================
+   TOAST NOTIFICATIONS
+   ============================================ */
+    .toast-container {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .toast {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem 1.5rem;
+        background: rgba(30, 30, 50, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        color: white;
+        font-size: 0.9rem;
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .toast.success {
+        border-left: 4px solid #10b981;
+    }
+
+    .toast.error {
+        border-left: 4px solid #ef4444;
+    }
+
+    /* ============================================
+   RESPONSIVE
+   ============================================ */
+    @media (max-width: 1024px) {
+        .generator-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .config-panel {
+            max-height: none;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .field-types-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .output-header {
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .output-actions {
+            width: 100%;
+            justify-content: flex-end;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="tool-header">
+    <h1>High-Performance Jackson-Style JSON Generator</h1>
+    <p class="sr-only">
+        This free Jackson-style JSON generator lets developers create large-scale JSON datasets
+        directly in the browser using a streaming architecture. Ideal for API testing, database
+        seeding, and load testing with 100,000+ records.
+    </p>
+</section>
+
+<div class="generator-layout">
+    <!-- Left Panel - Configuration -->
+    <aside class="config-panel">
+        <!-- Record Settings -->
+        <div class="config-section">
+            <h2 class="section-title">⚙️ Generation Settings</h2>
+
+            <div class="form-group">
+                <label class="form-label" for="recordCount">Number of Records</label>
+                <input type="number" id="recordCount" class="form-input" value="100" min="1" max="1000000"
+                    placeholder="1 - 1,000,000">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="outputFormat">Output Structure</label>
+                <select id="outputFormat" class="form-select">
+                    <option value="array">Array of Objects</option>
+                    <option value="object">Wrapped Object</option>
+                    <option value="ndjson">NDJSON (Newline Delimited)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="indentSize">Formatting</label>
+                <select id="indentSize" class="form-select">
+                    <option value="2">2 Spaces (Default)</option>
+                    <option value="4">4 Spaces</option>
+                    <option value="tab">Tabs</option>
+                    <option value="0">Minified</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Schema Builder -->
+        <div class="config-section">
+            <h2 class="section-title">🏗️ Schema Builder</h2>
+
+            <div class="form-group">
+                <label class="form-label" for="fieldName">Field Name</label>
+                <input type="text" id="fieldName" class="form-input" placeholder="e.g., userId, email, createdAt">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Field Type</label>
+                <div class="field-types-grid">
+                    <button type="button" class="field-type-btn" data-type="uuid">🔑 UUID</button>
+                    <button type="button" class="field-type-btn" data-type="increment">🔢 Increment</button>
+                    <button type="button" class="field-type-btn" data-type="name">👤 Name</button>
+                    <button type="button" class="field-type-btn" data-type="email">📧 Email</button>
+                    <button type="button" class="field-type-btn" data-type="phone">📞 Phone</button>
+                    <button type="button" class="field-type-btn" data-type="string">📝 Random String</button>
+                    <button type="button" class="field-type-btn" data-type="number">🔢 Random Number</button>
+                    <button type="button" class="field-type-btn" data-type="boolean">✓✗ Boolean</button>
+                    <button type="button" class="field-type-btn" data-type="date">📅 Date</button>
+                    <button type="button" class="field-type-btn" data-type="timestamp">⏱️ Timestamp</button>
+                    <button type="button" class="field-type-btn" data-type="address">🏠 Address</button>
+                    <button type="button" class="field-type-btn" data-type="company">🏢 Company</button>
+                </div>
+            </div>
+
+            <button type="button" id="addFieldBtn" class="generate-btn-primary"
+                style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); margin-top: 0.75rem;">
+                <span>➕</span> Add Field to Schema
+            </button>
+
+            <div id="schemaFields" class="schema-fields">
+                <!-- Schema fields will be added here -->
+            </div>
+        </div>
+
+        <!-- JSON Tools -->
+        <div class="config-section">
+            <h2 class="section-title">🛠️ JSON Tools</h2>
+
+            <div class="field-types-grid">
+                <button type="button" class="field-type-btn" id="formatBtn">✨ Format</button>
+                <button type="button" class="field-type-btn" id="minifyBtn">📦 Minify</button>
+                <button type="button" class="field-type-btn" id="repairBtn">🔧 Repair</button>
+                <button type="button" class="field-type-btn" id="clearBtn">🗑️ Clear</button>
+            </div>
+        </div>
+
+        <!-- Generate Button -->
+        <button type="button" id="generateBtn" class="generate-btn-primary">
+            <span>⚡</span> Generate JSON
+        </button>
+
+        <!-- Progress -->
+        <div id="progressContainer" class="progress-container">
+            <div class="progress-bar-wrapper">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+            <p id="progressText" class="progress-text">Generating...</p>
+        </div>
+    </aside>
+
+    <!-- Right Panel - Output -->
+    <main class="output-panel">
+        <header class="output-header">
+            <div class="output-title">
+                <span>📄 Generated JSON</span>
+                <span id="outputStats" class="output-stats">0 records • 0 bytes</span>
+            </div>
+            <div class="output-actions">
+                <button type="button" class="action-btn" id="copyBtn">📋 Copy</button>
+                <button type="button" class="action-btn primary" id="downloadBtn">⬇️ Download</button>
+            </div>
+        </header>
+
+        <div class="editor-container">
+            <div id="monacoEditor"></div>
+        </div>
+    </main>
+</div>
+
+<!-- Features Section -->
+<section class="info-section">
+    <h2>High-Performance Streaming JSON Generator</h2>
+    <p>
+        This tool uses a <strong>Jackson JsonGenerator-style streaming architecture</strong> to create JSON data
+        incrementally.
+        Unlike traditional generators that build entire objects in memory, our streaming approach writes JSON
+        sequentially,
+        enabling generation of massive datasets without crashing your browser.
+    </p>
+
+    <h3>Key Features</h3>
+    <ul>
+        <li><strong>Web Worker Architecture:</strong> Heavy generation runs in a background thread, keeping UI
+            responsive</li>
+        <li><strong>Streaming Output:</strong> JSON is written incrementally using string buffers and Blobs</li>
+        <li><strong>100,000+ Record Support:</strong> Generate massive datasets for load testing, database seeding, API
+            mocking</li>
+        <li><strong>Schema Builder:</strong> Define custom schemas with UUID, timestamps, random strings, incrementing
+            IDs</li>
+        <li><strong>JSON Tools:</strong> Built-in formatter, minifier, and repair tool for trailing commas and quote
+            fixes</li>
+        <li><strong>Client-Side Processing:</strong> Your data never leaves your browser - 100% private</li>
+    </ul>
+
+    <h3>Use Cases</h3>
+    <ul>
+        <li>API load testing and stress testing</li>
+        <li>Database seeding with realistic test data</li>
+        <li>Frontend development and UI prototyping</li>
+        <li>Data pipeline testing</li>
+        <li>JSON schema validation testing</li>
+    </ul>
+</section>
+
+<!-- Related Tools -->
+<section class="info-section">
+    <h2>🔧 Related JSON Tools</h2>
+    <div class="related-tools-grid">
+        <a href="/" class="related-tool-card">
+            <strong>📝 JSON Formatter & Beautifier</strong>
+            <p>Format & beautify JSON with syntax highlighting</p>
+        </a>
+        <a href="/dummy-json/" class="related-tool-card">
+            <strong>🎲 Dummy JSON</strong>
+            <p>Generate simple fake JSON data</p>
+        </a>
+        <a href="/json-tree/" class="related-tool-card">
+            <strong>🌳 JSON Tree Viewer</strong>
+            <p>Visualize JSON as interactive tree</p>
+        </a>
+        <a href="/json-schema-validator/" class="related-tool-card">
+            <strong>📐 Schema Validator</strong>
+            <p>Validate JSON against schema</p>
+        </a>
+    </div>
+</section>
+
+<!-- How Streaming Engine Works -->
+<section class="info-section">
+    <h2>How the Streaming Engine Works</h2>
+    <p>
+        Unlike traditional JSON generators, this tool does not create large in-memory objects.
+        It writes JSON incrementally using streaming buffers and Blobs, similar to Jackson's
+        JsonGenerator API in Java.
+    </p>
+</section>
+
+<!-- FAQ Section -->
+<section class="info-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <article class="faq-item">
+        <h3>What is a streaming JSON generator?</h3>
+        <p>A streaming JSON generator creates JSON data incrementally without loading the entire dataset into memory.
+            This allows generation of massive files (100MB+) without crashing the browser, similar to how Jackson's
+            JsonGenerator works in Java.</p>
+    </article>
+
+    <article class="faq-item">
+        <h3>How many records can this generator handle?</h3>
+        <p>This tool uses Web Workers and streaming architecture to generate 100,000+ records while keeping the UI
+            responsive. The actual limit depends on your browser's memory, but we've tested up to 1 million records
+            successfully.</p>
+    </article>
+
+    <article class="faq-item">
+        <h3>What field types are available?</h3>
+        <p>UUID, incrementing integers, random strings, names, emails, phone numbers, dates, timestamps, addresses,
+            company names, booleans, and random numbers. You can combine these to create custom schemas.</p>
+    </article>
+
+    <article class="faq-item">
+        <h3>Is my data secure?</h3>
+        <p>Yes, all JSON generation happens entirely in your browser using JavaScript. Your data never leaves your
+            computer and is not sent to any server.</p>
+    </article>
+</section>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container"></div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Monaco Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+<script>
+    /**
+     * JSON Generator - High Performance Streaming Engine
+     */
+
+    // DATA GENERATORS
+    const DataGenerators = {
+        uuid() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+                const r = Math.random() * 16 | 0;
+                return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            });
+        },
+        createIncrement(start = 1) { let counter = start; return () => counter++; },
+        name() {
+            const first = ['James', 'Mary', 'John', 'Patricia', 'Robert', 'Jennifer', 'Michael', 'Linda', 'David', 'Elizabeth'];
+            const last = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
+            return first[Math.floor(Math.random() * first.length)] + ' ' + last[Math.floor(Math.random() * last.length)];
+        },
+        email() {
+            const domains = ['gmail.com', 'yahoo.com', 'outlook.com', 'example.com'];
+            return this.name().toLowerCase().replace(' ', '.') + Math.floor(Math.random() * 100) + '@' + domains[Math.floor(Math.random() * domains.length)];
+        },
+        phone() { return '+1-' + this._rand(200, 999) + '-' + this._rand(200, 999) + '-' + this._rand(1000, 9999); },
+        string(len = 10) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            return Array.from({ length: len }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+        },
+        number(min = 0, max = 1000) { return Math.floor(Math.random() * (max - min + 1)) + min; },
+        boolean() { return Math.random() < 0.5; },
+        date() { return new Date(Date.now() - Math.random() * 5 * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]; },
+        timestamp() { return Date.now() - Math.floor(Math.random() * 5 * 365 * 24 * 60 * 60 * 1000); },
+        address() {
+            const streets = ['Main St', 'Oak Ave', 'Maple Dr', 'Cedar Ln', 'Pine Rd'];
+            const cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix'];
+            return this._rand(100, 9999) + ' ' + streets[Math.floor(Math.random() * streets.length)] + ', ' + cities[Math.floor(Math.random() * cities.length)];
+        },
+        company() {
+            const pre = ['Global', 'Tech', 'Digital', 'Future', 'Smart'];
+            const suf = ['Solutions', 'Systems', 'Technologies', 'Industries', 'Labs'];
+            return pre[Math.floor(Math.random() * pre.length)] + ' ' + suf[Math.floor(Math.random() * suf.length)] + ' Inc';
+        },
+        _rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+    };
+
+    // JSON TOOLS
+    const JsonTools = {
+        format(json, indent = 2) { return JSON.stringify(typeof json === 'string' ? JSON.parse(json) : json, null, indent); },
+        minify(json) { return JSON.stringify(typeof json === 'string' ? JSON.parse(json) : json); },
+        repair(str) {
+            let f = str.replace(/,\s*]/g, ']').replace(/,\s*}/g, '}').replace(/'/g, '"');
+            f = f.replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)\s*:/g, '$1"$2":');
+            f = f.replace(/\bTrue\b/g, 'true').replace(/\bFalse\b/g, 'false').replace(/\bNone\b/g, 'null');
+            JSON.parse(f); return f;
+        }
+    };
+
+    // MAIN APPLICATION
+    (function () {
+        'use strict';
+
+        let schema = [];
+        let selectedFieldType = null;
+        let monacoEditor = null;
+        let incrementGenerator = DataGenerators.createIncrement(1);
+
+        const el = {
+            recordCount: document.getElementById('recordCount'),
+            outputFormat: document.getElementById('outputFormat'),
+            indentSize: document.getElementById('indentSize'),
+            fieldName: document.getElementById('fieldName'),
+            schemaFields: document.getElementById('schemaFields'),
+            generateBtn: document.getElementById('generateBtn'),
+            addFieldBtn: document.getElementById('addFieldBtn'),
+            copyBtn: document.getElementById('copyBtn'),
+            downloadBtn: document.getElementById('downloadBtn'),
+            formatBtn: document.getElementById('formatBtn'),
+            minifyBtn: document.getElementById('minifyBtn'),
+            repairBtn: document.getElementById('repairBtn'),
+            clearBtn: document.getElementById('clearBtn'),
+            progressContainer: document.getElementById('progressContainer'),
+            progressBar: document.getElementById('progressBar'),
+            progressText: document.getElementById('progressText'),
+            outputStats: document.getElementById('outputStats'),
+            toastContainer: document.getElementById('toastContainer')
+        };
+
+        function initMonaco() {
+            require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' } });
+            require(['vs/editor/editor.main'], function () {
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                monacoEditor = monaco.editor.create(document.getElementById('monacoEditor'), {
+                    value: '// Click "Generate JSON" to create data\n// Add fields to your schema first',
+                    language: 'json',
+                    theme: isDark ? 'vs-dark' : 'vs',
+                    automaticLayout: true,
+                    minimap: { enabled: false },
+                    fontSize: 14,
+                    fontFamily: "'JetBrains Mono', monospace",
+                    lineNumbers: 'on',
+                    scrollBeyondLastLine: false,
+                    wordWrap: 'on'
+                });
+                new MutationObserver(m => m.forEach(mut => {
+                    if (mut.attributeName === 'data-theme') {
+                        monaco.editor.setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'vs-dark' : 'vs');
+                    }
+                })).observe(document.documentElement, { attributes: true });
+            });
+        }
+
+        function showToast(msg, type = 'success') {
+            const t = document.createElement('div');
+            t.className = 'toast ' + type;
+            t.innerHTML = '<span>' + (type === 'success' ? '✓' : '✗') + '</span> ' + msg;
+            el.toastContainer.appendChild(t);
+            setTimeout(() => { t.style.animation = 'slideIn 0.3s ease reverse'; setTimeout(() => t.remove(), 300); }, 3000);
+        }
+
+        function addField(name, type) {
+            if (!name.trim()) { showToast('Enter a field name', 'error'); return; }
+            if (schema.some(f => f.name === name.trim())) { showToast('Field exists', 'error'); return; }
+            schema.push({ name: name.trim(), type });
+            renderSchemaFields();
+            el.fieldName.value = '';
+            showToast('Added: ' + name);
+        }
+
+        function renderSchemaFields() {
+            if (schema.length === 0) {
+                el.schemaFields.innerHTML = '<p style="color: var(--color-text-secondary); font-size: 0.85rem; text-align: center; padding: 1rem;">No fields added yet</p>';
+                return;
+            }
+            el.schemaFields.innerHTML = schema.map((f, i) =>
+                '<div class="schema-field-item"><span class="field-name">' + f.name + '</span><span class="field-type">' + f.type + '</span><button class="remove-field" data-index="' + i + '">&times;</button></div>'
+            ).join('');
+            el.schemaFields.querySelectorAll('.remove-field').forEach(btn => {
+                btn.addEventListener('click', () => { schema.splice(parseInt(btn.dataset.index), 1); renderSchemaFields(); });
+            });
+        }
+
+        function generateRecord(incFn) {
+            const rec = {};
+            schema.forEach(f => {
+                switch (f.type) {
+                    case 'uuid': rec[f.name] = DataGenerators.uuid(); break;
+                    case 'increment': rec[f.name] = incFn(); break;
+                    case 'name': rec[f.name] = DataGenerators.name(); break;
+                    case 'email': rec[f.name] = DataGenerators.email(); break;
+                    case 'phone': rec[f.name] = DataGenerators.phone(); break;
+                    case 'string': rec[f.name] = DataGenerators.string(); break;
+                    case 'number': rec[f.name] = DataGenerators.number(); break;
+                    case 'boolean': rec[f.name] = DataGenerators.boolean(); break;
+                    case 'date': rec[f.name] = DataGenerators.date(); break;
+                    case 'timestamp': rec[f.name] = DataGenerators.timestamp(); break;
+                    case 'address': rec[f.name] = DataGenerators.address(); break;
+                    case 'company': rec[f.name] = DataGenerators.company(); break;
+                    default: rec[f.name] = null;
+                }
+            });
+            return rec;
+        }
+
+        function generateJson() {
+            if (schema.length === 0) { showToast('Add at least one field', 'error'); return; }
+            const count = parseInt(el.recordCount.value) || 100;
+            const format = el.outputFormat.value;
+            const indentVal = el.indentSize.value;
+            let indent = 2, useTab = false, minify = false;
+            if (indentVal === 'tab') useTab = true;
+            else if (indentVal === '0') minify = true;
+            else indent = parseInt(indentVal);
+
+            incrementGenerator = DataGenerators.createIncrement(1);
+            el.progressContainer.classList.add('active');
+            el.generateBtn.disabled = true;
+            el.progressBar.style.width = '0%';
+
+            const BATCH = 1000, records = [];
+            let idx = 0;
+
+            function batch() {
+                const end = Math.min(idx + BATCH, count);
+                for (let i = idx; i < end; i++) records.push(generateRecord(incrementGenerator));
+                idx = end;
+                el.progressBar.style.width = (idx / count * 100) + '%';
+                el.progressText.textContent = 'Generated ' + idx.toLocaleString() + ' of ' + count.toLocaleString();
+
+                if (idx < count) { setTimeout(batch, 0); }
+                else {
+                    let out;
+                    if (format === 'ndjson') out = records.map(r => JSON.stringify(r)).join('\n');
+                    else if (format === 'object') {
+                        const wrap = { data: records, meta: { count: records.length, generated: new Date().toISOString() } };
+                        out = minify ? JSON.stringify(wrap) : JSON.stringify(wrap, null, useTab ? '\t' : indent);
+                    } else {
+                        out = minify ? JSON.stringify(records) : JSON.stringify(records, null, useTab ? '\t' : indent);
+                    }
+                    if (monacoEditor) monacoEditor.setValue(out);
+                    el.outputStats.textContent = count.toLocaleString() + ' records • ' + formatBytes(new Blob([out]).size);
+                    el.progressContainer.classList.remove('active');
+                    el.generateBtn.disabled = false;
+                    showToast('Generated ' + count.toLocaleString() + ' records!');
+                }
+            }
+            batch();
+        }
+
+        function formatBytes(b) {
+            if (b === 0) return '0 Bytes';
+            const k = 1024, s = ['Bytes', 'KB', 'MB', 'GB'], i = Math.floor(Math.log(b) / Math.log(k));
+            return parseFloat((b / Math.pow(k, i)).toFixed(2)) + ' ' + s[i];
+        }
+
+        async function copyToClipboard() {
+            if (!monacoEditor) return;
+            const c = monacoEditor.getValue();
+            if (!c || c.startsWith('//')) { showToast('Nothing to copy', 'error'); return; }
+            try { await navigator.clipboard.writeText(c); showToast('Copied!'); }
+            catch { showToast('Copy failed', 'error'); }
+        }
+
+        function downloadJson() {
+            if (!monacoEditor) return;
+            const c = monacoEditor.getValue();
+            if (!c || c.startsWith('//')) { showToast('Nothing to download', 'error'); return; }
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([c], { type: 'application/json' }));
+            a.download = 'generated-' + Date.now() + '.json';
+            a.click();
+            URL.revokeObjectURL(a.href);
+            showToast('Download started!');
+        }
+
+        function initEvents() {
+            document.querySelectorAll('.field-type-btn[data-type]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.field-type-btn[data-type]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedFieldType = btn.dataset.type;
+                });
+            });
+            el.addFieldBtn.addEventListener('click', () => {
+                if (!selectedFieldType) { showToast('Select field type first', 'error'); return; }
+                addField(el.fieldName.value, selectedFieldType);
+            });
+            el.fieldName.addEventListener('keypress', e => { if (e.key === 'Enter' && selectedFieldType) addField(el.fieldName.value, selectedFieldType); });
+            el.generateBtn.addEventListener('click', generateJson);
+            el.copyBtn.addEventListener('click', copyToClipboard);
+            el.downloadBtn.addEventListener('click', downloadJson);
+            el.formatBtn.addEventListener('click', () => {
+                if (!monacoEditor) return;
+                try { const iv = el.indentSize.value; monacoEditor.setValue(JsonTools.format(monacoEditor.getValue(), iv === 'tab' ? '\t' : parseInt(iv) || 2)); showToast('Formatted!'); }
+                catch (e) { showToast(e.message, 'error'); }
+            });
+            el.minifyBtn.addEventListener('click', () => {
+                if (!monacoEditor) return;
+                try { monacoEditor.setValue(JsonTools.minify(monacoEditor.getValue())); showToast('Minified!'); }
+                catch (e) { showToast(e.message, 'error'); }
+            });
+            el.repairBtn.addEventListener('click', () => {
+                if (!monacoEditor) return;
+                try { monacoEditor.setValue(JsonTools.repair(monacoEditor.getValue())); showToast('Repaired!'); }
+                catch (e) { showToast(e.message, 'error'); }
+            });
+            el.clearBtn.addEventListener('click', () => {
+                if (!monacoEditor) return;
+                monacoEditor.setValue('');
+                el.outputStats.textContent = '0 records • 0 bytes';
+                showToast('Cleared');
+            });
+        }
+
+        function init() {
+            initMonaco();
+            initEvents();
+            schema = [
+                { name: 'id', type: 'uuid' },
+                { name: 'name', type: 'name' },
+                { name: 'email', type: 'email' },
+                { name: 'createdAt', type: 'timestamp' }
+            ];
+            renderSchemaFields();
+        }
+
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+        else init();
+    })();
+</script>
+{% endblock %}

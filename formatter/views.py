@@ -479,6 +479,10 @@ def dummy_json_page(request):
     return render(request, 'dummy-json.html')
 
 
+def json_generator_page(request):
+    """Render the JSON Generator & Streaming Tool page"""
+    return render(request, 'json-generator.html')
+
 
 def robots_txt(request):
     """Serve robots.txt file"""
