@@ -850,16 +850,28 @@ detection. No signup - try now!{% endblock %}
 
 {% block content %}
 
-<header class="header" style="text-align: center; margin-bottom: 1.5rem;">
+<header class="header" style="text-align: center; margin-bottom: 0.5rem; padding: 0.5rem 0;">
   <h1
-    style="font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem;">
+    style="font-size: 1.75rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.25rem;">
     JSON Formatter Online - Format, Validate & Beautify JSON Free
   </h1>
-  <p style="color: var(--color-text-secondary); font-size: 1rem; max-width: 700px; margin: 0 auto;">
-    Format, validate, and <strong>fix invalid JSON</strong> instantly. The only tool that handles large files (10MB+),
-    removes trailing commas, fixes single quotes, and ensures <strong>100% client-side privacy</strong>.
+  <p style="color: var(--color-text-secondary); font-size: 0.9rem; max-width: 650px; margin: 0 auto; line-height: 1.4;">
+    Format, validate, and <strong>fix invalid JSON</strong> instantly. Handles large files (10MB+),
+    removes trailing commas, fixes single quotes. <strong>100% client-side privacy</strong>.
   </p>
-</header>
+</header><br>
+
+<!-- About Section -->
+<section class="header" style="margin-bottom: 0.5rem; padding: 0.5rem;">
+  <div class="card-body" style="padding: 0.4rem 1rem;">
+    <h2 style="font-size: 1rem; margin-bottom: 0.25rem;">Free Online JSON Formatter & Validator</h2>
+    <p class="subtitle" style="font-size: 0.85rem; line-height: 1.4; margin-bottom: 0;">
+      Instantly format, validate, minify, and analyze JSON data in your browser.
+      For developers, API testers, and anyone working with structured JSON files.
+      All processing is client-side – your data is never uploaded.
+    </p>
+  </div>
+</section><br>
 
 <!-- Hidden File Input -->
 <input type="file" id="fileInput" accept=".json" hidden>
@@ -1035,31 +1047,31 @@ detection. No signup - try now!{% endblock %}
 
 
 <article class="seo-content">
-<section class="content-section">
-  <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">
-    Why Trailing Commas Are Invalid in JSON (RFC 8259)
-  </h2>
-<p style="font-size: 0.95rem; color: var(--color-text-secondary); line-height: 1.6;">
-  According to the official JSON standard (<strong>RFC 8259</strong>),
-  <strong>trailing commas are not allowed</strong> and can cause
-  <a href="/blog/json-trailing-commas-rfc-8259"
-     style="color: #6366f1; font-weight: 600; text-decoration: underline;">
-    JSON parse errors
-  </a>
-  in many APIs and programming languages.
-</p>
-  <p style="font-size: 0.95rem; color: var(--color-text-secondary); line-height: 1.6;">
-    This <a href="/" style="color: #6366f1; font-weight: 600; text-decoration: underline;">
-      formatter
-    </a> automatically removes trailing commas and fixes common syntax issues
-    so your JSON is <strong>valid, standard-compliant, and ready to use</strong>.
-  </p>
-  <p style="margin-top: 0.5rem;">
-    <a href="/blog/json-trailing-commas-rfc-8259" style="color: #6366f1; font-weight: 600;">
-      Learn more about JSON trailing commas →
-    </a>
-  </p>
-</section>
+  <section class="content-section">
+    <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">
+      Why Trailing Commas Are Invalid in JSON (RFC 8259)
+    </h2>
+    <p style="font-size: 0.95rem; color: var(--color-text-secondary); line-height: 1.6;">
+      According to the official JSON standard (<strong>RFC 8259</strong>),
+      <strong>trailing commas are not allowed</strong> and can cause
+      <a href="/blog/json-trailing-commas-rfc-8259"
+        style="color: #6366f1; font-weight: 600; text-decoration: underline;">
+        JSON parse errors
+      </a>
+      in many APIs and programming languages.
+    </p>
+    <p style="font-size: 0.95rem; color: var(--color-text-secondary); line-height: 1.6;">
+      This <a href="/" style="color: #6366f1; font-weight: 600; text-decoration: underline;">
+        formatter
+      </a> automatically removes trailing commas and fixes common syntax issues
+      so your JSON is <strong>valid, standard-compliant, and ready to use</strong>.
+    </p>
+    <p style="margin-top: 0.5rem;">
+      <a href="/blog/json-trailing-commas-rfc-8259" style="color: #6366f1; font-weight: 600;">
+        Learn more about JSON trailing commas →
+      </a>
+    </p>
+  </section>
 </article>
 
 
@@ -1069,7 +1081,8 @@ detection. No signup - try now!{% endblock %}
     <h2>Secure JSON Formatter – 100% Client-Side (No Uploads)</h2>
     <p>
       Your data privacy is our top priority. Unlike other tools that upload your files to a server, <strong>JSON
-        Formatter Pro</strong> processes everything locally in your browser (Client-Side). This means your sensitive API
+        Formatter Pro</strong> processes everything locally in your browser (Client-Side). This means your sensitive
+      API
       keys, customer data, and proprietary code never leave your device. It is the perfect secure solution for
       developers working with confidential JSON blocks.
     </p>
@@ -1084,9 +1097,11 @@ detection. No signup - try now!{% endblock %}
         JSON</strong>. It automatically handles common issues that break parsers:
     </p>
     <ul style="margin-top: 1rem; padding-left: 1.5rem;">
-      <li><strong>Remove Trailing Commas:</strong> Instantly cleans up arrays and objects (e.g., <code>[1, 2,]</code>).
+      <li><strong>Remove Trailing Commas:</strong> Instantly cleans up arrays and objects (e.g.,
+        <code>[1, 2,]</code>).
       </li>
-      <li><strong>Fix Single Quotes:</strong> Converts single quotes <code>'key': 'value'</code> to valid double quotes.
+      <li><strong>Fix Single Quotes:</strong> Converts single quotes <code>'key': 'value'</code> to valid double
+        quotes.
       </li>
       <li><strong>Auto-Add Quotes:</strong> Adds missing quotes to keys.</li>
       <li><strong>Python Compatibility:</strong> Converts Python's <code>None</code>, <code>True</code>,
@@ -1100,7 +1115,8 @@ detection. No signup - try now!{% endblock %}
     style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%); padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem;">
     <h2>Format Large JSON Files Online (Up to 10MB)</h2>
     <p>
-      Struggling with massive log files or API dumps? Most online formatters crash with big datasets. Our <strong>large
+      Struggling with massive log files or API dumps? Most online formatters crash with big datasets. Our
+      <strong>large
         file JSON formatter</strong> uses the high-performance Monaco Editor engine to handle files up to 10MB
       effortlessly.
     </p>
@@ -1475,7 +1491,8 @@ detection. No signup - try now!{% endblock %}
       <div class="step-card">
         <div class="step-number">1</div>
         <h4>Paste or Upload JSON</h4>
-        <p>Copy your unformatted JSON and paste it into the editor, or drag & drop a .json file directly onto the page.
+        <p>Copy your unformatted JSON and paste it into the editor, or drag & drop a .json file directly onto the
+          page.
         </p>
       </div>
       <div class="step-card">
@@ -1487,7 +1504,8 @@ detection. No signup - try now!{% endblock %}
       <div class="step-card">
         <div class="step-number">3</div>
         <h4>Validate & Fix Errors</h4>
-        <p>The validator highlights syntax errors with line numbers. Fix missing commas, brackets, or quotes easily.</p>
+        <p>The validator highlights syntax errors with line numbers. Fix missing commas, brackets, or quotes easily.
+        </p>
       </div>
       <div class="step-card">
         <div class="step-number">4</div>
@@ -1508,7 +1526,8 @@ detection. No signup - try now!{% endblock %}
         <h3>Is this JSON formatter free?</h3>
         <div>
           <div>
-            <p>Yes, JSON Formatter Pro is completely free to use with no limitations. There is no signup, registration,
+            <p>Yes, JSON Formatter Pro is completely free to use with no limitations. There is no signup,
+              registration,
               or account creation required. All features including formatting, validation, minification, and format
               conversion are available immediately without any cost. The tool remains free for unlimited usage.</p>
           </div>
@@ -1521,7 +1540,8 @@ detection. No signup - try now!{% endblock %}
         <div>
           <div>
             <p>Yes, your data remains completely private. All JSON processing happens locally in your browser using
-              JavaScript. Your data never leaves your device and is not transmitted to any server. This local processing
+              JavaScript. Your data never leaves your device and is not transmitted to any server. This local
+              processing
               approach ensures sensitive information like API keys, tokens, or proprietary data stays secure on your
               machine.</p>
           </div>
@@ -1561,7 +1581,8 @@ detection. No signup - try now!{% endblock %}
           <div>
             <p>Yes, the tool supports both operations. Formatting applies proper indentation and line breaks to make
               JSON readable. Minification removes all unnecessary whitespace to reduce file size for production use.
-              Both operations are accessible through the Format dropdown menu and the result can be copied or downloaded
+              Both operations are accessible through the Format dropdown menu and the result can be copied or
+              downloaded
               immediately.</p>
           </div>
         </div>
@@ -1587,7 +1608,8 @@ detection. No signup - try now!{% endblock %}
           <div>
             <p>Yes, the tool automatically converts single-quoted JSON to valid double-quoted JSON. Single quotes are
               invalid according to the JSON specification (RFC 8259). When you paste or format data, the tool also
-              converts Python values: True becomes true, False becomes false, and None becomes null. This handles Python
+              converts Python values: True becomes true, False becomes false, and None becomes null. This handles
+              Python
               dictionary output seamlessly.</p>
           </div>
         </div>
