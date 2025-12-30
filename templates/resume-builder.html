@@ -374,11 +374,42 @@ builder, resume builder no signup, tech resume builder, pdf resume maker{% endbl
     }
 
     /* Print/PDF specific styles */
+    /* Remove browser print headers/footers (date, title, URL) */
+    @page {
+        margin: 0;
+    }
+
     @media print {
+        body {
+            padding: 15mm;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
         .resume-preview {
             box-shadow: none;
             padding: 0;
             margin: 0;
+        }
+
+        /* Prevent orphaned section titles - keep heading with at least some content */
+        .section-title {
+            page-break-after: avoid;
+            break-after: avoid;
+        }
+
+        /* Keep individual items together (don't break mid-item) */
+        .experience-item,
+        .education-item,
+        .skills-list {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        /* Prevent page break right after header */
+        .resume-header {
+            page-break-after: avoid;
+            break-after: avoid;
         }
     }
 
@@ -424,11 +455,15 @@ builder, resume builder no signup, tech resume builder, pdf resume maker{% endbl
         margin-bottom: 0.75rem;
         padding-bottom: 0.25rem;
         border-bottom: 1px solid #e5e7eb;
+        page-break-after: avoid;
+        break-after: avoid;
     }
 
     .template-modern .experience-item,
     .template-modern .education-item {
         margin-bottom: 1rem;
+        page-break-inside: avoid;
+        break-inside: avoid;
     }
 
     .template-modern .item-header {
@@ -513,6 +548,8 @@ builder, resume builder no signup, tech resume builder, pdf resume maker{% endbl
         margin-bottom: 0.75rem;
         padding-bottom: 0.25rem;
         border-bottom: 2px solid #1f2937;
+        page-break-after: avoid;
+        break-after: avoid;
     }
 
     /* Developer Template */
@@ -552,6 +589,8 @@ builder, resume builder no signup, tech resume builder, pdf resume maker{% endbl
         text-transform: uppercase;
         letter-spacing: 2px;
         margin-bottom: 0.75rem;
+        page-break-after: avoid;
+        break-after: avoid;
     }
 
     .template-developer .skill-badge {
@@ -592,6 +631,8 @@ builder, resume builder no signup, tech resume builder, pdf resume maker{% endbl
         font-weight: 700;
         color: #f59e0b;
         margin-bottom: 0.75rem;
+        page-break-after: avoid;
+        break-after: avoid;
     }
 
     .template-creative .skill-badge {
@@ -1760,7 +1801,7 @@ builder, resume builder no signup, tech resume builder, pdf resume maker{% endbl
                 windowHeight: element.scrollHeight
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            pagebreak: { mode: 'css', avoid: '.section-title' }
         };
 
         html2pdf().set(opt).from(element).save();
@@ -1839,26 +1880,29 @@ builder, resume builder no signup, tech resume builder, pdf resume maker{% endbl
             <head>
                 <title>${resumeData.personal.fullName || 'Resume'}</title>
                 <style>
+                    @page { margin: 0; }
                     body { 
                         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-                        padding: 20px;
+                        padding: 15mm;
                         margin: 0;
                         color: #1f2937;
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
                     }
                     .resume-header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 2px solid #6366f1; }
                     .resume-name { font-size: 2rem; font-weight: 700; color: #1f2937; margin-bottom: 0.5rem; }
                     .resume-contact { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; font-size: 0.9rem; color: #6b7280; }
                     .resume-contact a { color: #6366f1; text-decoration: none; }
                     .resume-section { margin-bottom: 1.5rem; }
-                    .section-title { font-size: 1.1rem; font-weight: 600; color: #6366f1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; padding-bottom: 0.25rem; border-bottom: 1px solid #e5e7eb; }
-                    .experience-item, .education-item { margin-bottom: 1rem; }
+                    .section-title { font-size: 1.1rem; font-weight: 600; color: #6366f1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; padding-bottom: 0.25rem; border-bottom: 1px solid #e5e7eb; page-break-after: avoid; break-after: avoid; }
+                    .experience-item, .education-item { margin-bottom: 1rem; page-break-inside: avoid; break-inside: avoid; }
                     .item-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.25rem; }
                     .item-title { font-weight: 600; color: #1f2937; }
                     .item-date { color: #6b7280; font-size: 0.85rem; }
                     .item-subtitle { color: #6b7280; font-size: 0.9rem; margin-bottom: 0.5rem; }
                     .item-bullets { padding-left: 1.25rem; margin: 0; }
                     .item-bullets li { margin-bottom: 0.25rem; font-size: 0.9rem; line-height: 1.5; }
-                    .skills-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+                    .skills-list { display: flex; flex-wrap: wrap; gap: 0.5rem; page-break-inside: avoid; break-inside: avoid; }
                     .skill-badge { padding: 0.25rem 0.75rem; background: #f3f4f6; border-radius: 20px; font-size: 0.85rem; color: #374151; }
                 </style>
             </head>
