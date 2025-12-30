@@ -873,6 +873,28 @@ detection. No signup - try now!{% endblock %}
   </div>
 </section><br>
 
+<!-- Author Ownership Section -->
+<section class="content-section author-ownership"
+  style="margin-bottom: 1.5rem; padding: 1.5rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px;">
+  <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary); margin: 0;">
+    <strong style="color: var(--color-text);">About this tool:</strong><br>
+    JSON Formatter Pro is built and maintained by <a href="https://linkedin.com/in/faisal-ahmad-44b37018a/"
+      target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: none;">Faisal Ahmad</a>, an
+    independent software developer, to solve real-world JSON formatting and validation problems faced in API
+    development, debugging, and data engineering.
+    <br><br>
+    <strong style="color: var(--color-text);">Why I built this:</strong> Most JSON formatters fail when handling Python
+    dictionaries or JavaScript objects with single quotes. This tool <strong>automatically converts single quotes to
+      double quotes</strong>, <strong>fixes trailing commas</strong>, and handles Python values (True, False, None)
+    seamlessly. It also supports <strong>large files (10MB+)</strong> with a powerful Monaco editor, includes a
+    <strong>client-side history feature</strong> that never leaves your browser, and provides an exceptional editing
+    experience compared to other formatting tools.
+    <br><br>
+    The tool is actively maintained, privacy-focused, and designed to work entirely client-side so sensitive data never
+    leaves your browser.
+  </p>
+</section>
+
 <!-- Hidden File Input -->
 <input type="file" id="fileInput" accept=".json" hidden>
 
@@ -1657,55 +1679,10 @@ detection. No signup - try now!{% endblock %}
         <h4>Base64 Encoder/Decoder</h4>
         <p>Encode and decode Base64 strings</p>
       </a>
-      <a href="/sql-formatter/" class="tool-link-card">
-        <span class="tool-icon">🗄️</span>
-        <h4>iSQL Formatter</h4>
-        <p>Beautify SQL queries with syntax highlighting</p>
-      </a>
-      <a href="/cron-builder/" class="tool-link-card">
-        <span class="tool-icon">⏰</span>
-        <h4>Cron Expression Builder</h4>
-        <p>Build and test cron job schedules</p>
-      </a>
-      <a href="/markdown-preview/" class="tool-link-card">
-        <span class="tool-icon">📝</span>
-        <h4>Markdown Editor</h4>
-        <p>Write and preview Markdown in real-time</p>
-      </a>
-      <a href="/meta-tag-generator/" class="tool-link-card">
-        <span class="tool-icon">🏷️</span>
-        <h4>Meta Tag Generator</h4>
-        <p>Generate SEO meta tags for your website</p>
-      </a>
-      <a href="/image-resizer/" class="tool-link-card">
-        <span class="tool-icon">🖼️</span>
-        <h4>Image Resizer</h4>
-        <p>Resize, crop and compress images online</p>
-      </a>
-      <a href="/mock-api/" class="tool-link-card">
-        <span class="tool-icon">🎭</span>
-        <h4>Mock API Generator</h4>
-        <p>Generate fake JSON data for testing APIs</p>
-      </a>
-      <a href="/push-notification-tester/" class="tool-link-card">
-        <span class="tool-icon">🔔</span>
-        <h4>FCM Push Tester</h4>
-        <p>Test Firebase & OneSignal push notifications</p>
-      </a>
-      <a href="/typing-test/" class="tool-link-card">
-        <span class="tool-icon">⌨️</span>
-        <h4>Typing Speed Test</h4>
-        <p>Check your WPM with typewriter sounds</p>
-      </a>
       <a href="/dummy-json/" class="tool-link-card">
         <span class="tool-icon">🎲</span>
         <h4>Dummy JSON Generator</h4>
         <p>Generate random JSON data for development</p>
-      </a>
-      <a href="/password-generator/" class="tool-link-card">
-        <span class="tool-icon">🔑</span>
-        <h4>Password Generator</h4>
-        <p>Create strong, secure passwords instantly</p>
       </a>
     </div>
   </section>
@@ -2003,6 +1980,17 @@ detection. No signup - try now!{% endblock %}
 
         editorContainer.classList.add('monaco-loaded');
         jsonEditor.focus();
+
+        // Auto-scroll to editor on page load (with offset for navbar)
+        const editorPanel = document.querySelector('.single-editor-panel');
+        if (editorPanel) {
+          setTimeout(() => {
+            const navbarHeight = 60; // Account for sticky navbar
+            const elementPosition = editorPanel.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = elementPosition - navbarHeight - 20; // Extra 20px padding
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+          }, 100);
+        }
 
         // Watch for theme changes and sync with editor
         const observer = new MutationObserver((mutations) => {
