@@ -489,6 +489,11 @@ def json_formatter_online_page(request):
     return render(request, 'json-formatter-online.html')
 
 
+def json_formatter_page(request):
+    """Render the JSON Formatter SEO authority page"""
+    return render(request, 'json-formatter.html')
+
+
 def robots_txt(request):
     """Serve robots.txt file"""
     return render(request, 'robots.txt', content_type='text/plain')

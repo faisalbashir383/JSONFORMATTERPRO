@@ -1981,6 +1981,18 @@ detection. No signup - try now!{% endblock %}
         editorContainer.classList.add('monaco-loaded');
         jsonEditor.focus();
 
+        // Check for JSON payload from /json-formatter/ authority page
+        const jsonPayload = sessionStorage.getItem('jsonFormatterPayload');
+        if (jsonPayload) {
+          jsonEditor.setValue(jsonPayload);
+          sessionStorage.removeItem('jsonFormatterPayload');
+          // Auto-format the loaded JSON
+          setTimeout(() => {
+            const formatBtn = document.getElementById('formatAction');
+            if (formatBtn) formatBtn.click();
+          }, 300);
+        }
+
         // Auto-scroll to editor on page load (with offset for navbar)
         const editorPanel = document.querySelector('.single-editor-panel');
         if (editorPanel) {
