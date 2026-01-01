@@ -86,7 +86,8 @@ class StaticViewSitemap(Sitemap):
             'json_to_code_page',
             'json_generator_page',
             'json_formatter_online_page',
-            'json_formatter_page'
+            'json_formatter_page',
+            'string_json_to_json_page'
         ]
 
 

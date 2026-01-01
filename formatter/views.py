@@ -494,6 +494,11 @@ def json_formatter_page(request):
     return render(request, 'json-formatter.html')
 
 
+def string_json_to_json_page(request):
+    """Render the String JSON to JSON converter page"""
+    return render(request, 'string-json-to-json.html')
+
+
 def robots_txt(request):
     """Serve robots.txt file"""
     return render(request, 'robots.txt', content_type='text/plain')
