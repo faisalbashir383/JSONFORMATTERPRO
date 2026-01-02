@@ -1,0 +1,812 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}JSON Stringify Online – Convert JSON to String (Free){% endblock %}
+{% block meta_title %}JSON Stringify Online – Convert JSON to String (Free){% endblock %}
+{% block meta_description %}Stringify JSON online for free. Convert JSON objects to escaped strings instantly in your
+browser. No uploads, 100% client-side, safe for sensitive data.{% endblock %}
+{% block meta_keywords %}json stringify online, json to string, convert json to string, json2string, json string
+generator, json escape online, stringify json online{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/json-to-string/{% endblock %}
+
+{% block robots %}
+<meta name="robots" content="index, follow">{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is JSON.stringify?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "JSON.stringify is a JavaScript method that converts a JSON object into a JSON string. It serializes the data by adding outer quotes and escaping internal special characters like quotes and backslashes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does JSON.stringify add backslashes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Backslashes are escape characters. When JSON is converted to a string, internal double quotes must be escaped with backslashes so they don't break the outer string wrapper. This is standard serialization behavior."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How to convert JSON to string online?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paste your JSON into our online stringify tool and click Convert. The tool instantly serializes your JSON using JSON.stringify, producing an escaped string ready for APIs, databases, or storage."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is JSON.stringify safe in the browser?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. JSON.stringify is a native JavaScript function that runs entirely in your browser. Our tool processes everything client-side, meaning your data never leaves your device or touches any server."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I stringify large JSON files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Our tool handles JSON files up to 10MB+ efficiently. Since all processing happens locally in your browser, large files are processed quickly without upload delays."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block extra_head %}
+<meta name="author" content="JSON Formatters Pro">
+<meta property="og:title" content="JSON Stringify Online – Convert JSON to String (Free)">
+<meta property="og:description"
+    content="Convert JSON objects to escaped strings online. Free, instant, client-side JSON stringify tool.">
+<meta property="og:url" content="{{ SITE_URL }}/json-to-string/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JSON Stringify Online – Convert JSON to String">
+<meta name="twitter:description"
+    content="Convert JSON to escaped strings instantly in your browser. Free stringify tool.">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .seo-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    .seo-hero {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-top: 1rem;
+    }
+
+    .seo-hero h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: 0.75rem;
+        line-height: 1.3;
+    }
+
+    .trust-signal {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .trust-signal span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .seo-intro {
+        font-size: 1.05rem;
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        max-width: 800px;
+        margin: 0 auto 1.5rem;
+    }
+
+    .cta-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.875rem 1.5rem;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        color: white;
+    }
+
+    .seo-section {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 1.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .seo-section h2 {
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 1rem;
+    }
+
+    .seo-section h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 1.25rem 0 0.5rem;
+    }
+
+    .seo-section p {
+        font-size: 0.95rem;
+        color: var(--color-text-secondary);
+        line-height: 1.75;
+        margin-bottom: 0.75rem;
+    }
+
+    .seo-section ul {
+        padding-left: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .seo-section li {
+        font-size: 0.95rem;
+        color: var(--color-text-secondary);
+        line-height: 1.75;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Code Example Styles */
+    .code-example {
+        background: #1e1e2e;
+        border-radius: 8px;
+        margin: 1rem 0;
+        overflow: hidden;
+    }
+
+    .code-content {
+        padding: 1rem;
+        overflow-x: auto;
+    }
+
+    .code-content pre {
+        margin: 0;
+        font-family: 'Consolas', 'Monaco', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        color: #cdd6f4;
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+
+    .code-content .string {
+        color: #a6e3a1;
+    }
+
+    .code-content .key {
+        color: #cba6f7;
+    }
+
+    .code-content .number {
+        color: #fab387;
+    }
+
+    /* Comparison Grid */
+    .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+    }
+
+    @media (max-width: 768px) {
+        .comparison-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .comparison-box {
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .comparison-box.input {
+        border-color: #10b981;
+    }
+
+    .comparison-box.output {
+        border-color: #f59e0b;
+    }
+
+    .comparison-label {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .comparison-box.input .comparison-label {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    .comparison-box.output .comparison-label {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+    }
+
+    /* Tool Section */
+    .tool-section {
+        margin: 2rem 0;
+    }
+
+    .tool-container {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .tool-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .tool-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .tool-btn {
+        padding: 0.5rem 0.75rem;
+        background: #3b3b52;
+        color: #cdd6f4;
+        border: 1px solid #4b4b6b;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: background 0.2s;
+    }
+
+    .tool-btn:hover {
+        background: #4b4b6b;
+    }
+
+    .tool-btn.primary {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        border: none;
+        color: white;
+    }
+
+    .tool-btn.primary:hover {
+        opacity: 0.9;
+    }
+
+    .tool-status {
+        font-size: 0.85rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+    }
+
+    .tool-status.success {
+        color: #10b981;
+        background: rgba(16, 185, 129, 0.1);
+    }
+
+    .tool-status.error {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+    }
+
+    .tool-panels {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 400px;
+    }
+
+    @media (max-width: 900px) {
+        .tool-panels {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .tool-panel {
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid var(--color-border);
+    }
+
+    .tool-panel:last-child {
+        border-right: none;
+    }
+
+    .panel-header {
+        padding: 0.5rem 1rem;
+        background: #313244;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #cdd6f4;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .panel-header.input-header {
+        background: rgba(16, 185, 129, 0.15);
+        color: #6ee7b7;
+    }
+
+    .panel-header.output-header {
+        background: rgba(245, 158, 11, 0.15);
+        color: #fcd34d;
+    }
+
+    .tool-textarea {
+        flex: 1;
+        width: 100%;
+        padding: 1rem;
+        font-family: 'Consolas', 'Monaco', monospace;
+        font-size: 13px;
+        line-height: 1.6;
+        background: #1e1e2e;
+        color: #cdd6f4;
+        border: none;
+        resize: none;
+        box-sizing: border-box;
+    }
+
+    [data-theme="light"] .tool-textarea {
+        background: #f8f9fa;
+        color: #1e1e2e;
+    }
+
+    .tool-textarea:focus {
+        outline: 2px solid #6366f1;
+        outline-offset: -2px;
+    }
+
+    .tool-textarea::placeholder {
+        color: #6c7086;
+    }
+
+    .tool-textarea.output {
+        background: #1a1a2e;
+    }
+
+    [data-theme="light"] .tool-textarea.output {
+        background: #f0f4f8;
+    }
+
+    /* FAQ Styles */
+    .faq-item {
+        border-bottom: 1px solid var(--color-border);
+        padding: 1.25rem 0;
+    }
+
+    .faq-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .faq-item h3 {
+        margin: 0 0 0.5rem;
+        font-size: 1.05rem;
+    }
+
+    .faq-item p {
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    /* Internal Link Styles */
+    .internal-link {
+        color: #6366f1;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .internal-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Final CTA Section */
+    .final-cta {
+        text-align: center;
+        padding: 2.5rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        border-radius: 12px;
+        margin: 2rem 0;
+    }
+
+    .final-cta h2 {
+        font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-text);
+    }
+
+    .final-cta p {
+        color: var(--color-text-secondary);
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .seo-hero h1 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="seo-page">
+
+    <!-- Hero Section -->
+    <header class="seo-hero">
+        <h1>JSON Stringify Online – Convert JSON to String</h1>
+        <div class="trust-signal">
+            <span>🔒 Client-side</span>
+            <span>📤 No uploads</span>
+            <span>⚡ Instant</span>
+        </div>
+        <p class="seo-intro">
+            Need to convert a JSON object into an escaped string? <code>JSON.stringify</code> serializes structured JSON
+            data into a compact string format—adding outer quotes and escaping internal characters. This is essential
+            for storing JSON in databases, passing data through APIs, embedding in environment variables, or inserting
+            into logs. Our tool does this instantly in your browser with zero server uploads.
+        </p>
+        <a href="#tool" class="cta-button"
+            onclick="document.querySelector('.tool-section').scrollIntoView({behavior: 'smooth'}); return false;">🔄
+            Convert JSON to String ↓</a>
+    </header>
+
+    <!-- Visual Example Section -->
+    <section class="seo-section">
+        <h2>JSON Object → JSON String: Before & After</h2>
+        <p>
+            When you stringify JSON, the structured object becomes a single escaped string. Here's what that
+            transformation looks like:
+        </p>
+
+        <div class="comparison-grid">
+            <div class="comparison-box input">
+                <div class="comparison-label">✅ INPUT: JSON Object</div>
+                <div class="code-example" style="margin: 0; border-radius: 0;">
+                    <div class="code-content">
+                        <pre>{
+  <span class="key">"name"</span>: <span class="string">"John Doe"</span>,
+  <span class="key">"email"</span>: <span class="string">"john@example.com"</span>,
+  <span class="key">"active"</span>: <span class="number">true</span>
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison-box output">
+                <div class="comparison-label">📝 OUTPUT: JSON String</div>
+                <div class="code-example" style="margin: 0; border-radius: 0;">
+                    <div class="code-content">
+                        <pre>"{\"name\":\"John Doe\",\"email\":\"john@example.com\",\"active\":true}"</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>What Happened?</h3>
+        <ul>
+            <li><strong>Outer quotes added:</strong> The entire JSON is now wrapped in double quotes</li>
+            <li><strong>Internal quotes escaped:</strong> All <code>"</code> characters become <code>\"</code></li>
+            <li><strong>Whitespace removed:</strong> Pretty formatting is stripped for compact output</li>
+            <li><strong>Ready for storage:</strong> The string can now be stored as a single text value</li>
+        </ul>
+    </section>
+
+    <!-- JSON Stringify Tool -->
+    <section class="tool-section" id="tool">
+        <div class="tool-container">
+            <div class="tool-header">
+                <div class="tool-actions">
+                    <button id="stringifyBtn" class="tool-btn primary">📝 Stringify JSON</button>
+                    <button id="copyBtn" class="tool-btn">📋 Copy Output</button>
+                    <button id="clearBtn" class="tool-btn">✕ Clear All</button>
+                    <button id="sampleBtn" class="tool-btn">📄 Load Sample</button>
+                </div>
+                <span id="statusMsg" class="tool-status"></span>
+            </div>
+            <div class="tool-panels">
+                <div class="tool-panel">
+                    <div class="panel-header input-header">
+                        <span>⬅️ INPUT: JSON Object</span>
+                    </div>
+                    <textarea id="inputArea" class="tool-textarea" placeholder='{
+  "name": "John Doe",
+  "email": "john@example.com"
+}
+
+Paste your JSON object here.
+Click Stringify to convert it to an escaped string.'></textarea>
+                </div>
+                <div class="tool-panel">
+                    <div class="panel-header output-header">
+                        <span>➡️ OUTPUT: JSON String</span>
+                    </div>
+                    <textarea id="outputArea" class="tool-textarea output" readonly
+                        placeholder="Stringified JSON will appear here..."></textarea>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What is JSON.stringify Section -->
+    <section class="seo-section">
+        <h2>What is JSON.stringify?</h2>
+        <p>
+            <code>JSON.stringify()</code> is a built-in JavaScript method that converts a JavaScript object or value
+            into a JSON string. This process is called "serialization"—it transforms structured data into a flat string
+            format that can be easily stored, transmitted, or embedded.
+        </p>
+        <p>
+            When you stringify JSON, several things happen:
+        </p>
+        <ul>
+            <li>The object is converted to a single-line text string</li>
+            <li>All internal double quotes are escaped with backslashes</li>
+            <li>Special characters (newlines, tabs) are converted to escape sequences</li>
+            <li>The result is wrapped in outer double quotes</li>
+        </ul>
+        <p>
+            This is the reverse of <code>JSON.parse()</code>, which converts a JSON string back into an object. If you
+            need to decode an escaped JSON string, use our <a href="/string-json-to-json/" class="internal-link">JSON
+                string to JSON converter</a>.
+        </p>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="seo-section">
+        <h2>Common Use Cases for JSON Stringify</h2>
+        <p>
+            Stringifying JSON is essential in many development scenarios:
+        </p>
+
+        <h3>API Request Bodies</h3>
+        <p>
+            When sending JSON data via HTTP requests, the body often needs to be a string. JSON.stringify converts your
+            object for transmission.
+        </p>
+
+        <h3>Database Storage</h3>
+        <p>
+            Many databases store JSON in TEXT or VARCHAR columns. Stringifying ensures the data is properly escaped for
+            safe storage and retrieval.
+        </p>
+
+        <h3>Environment Variables</h3>
+        <p>
+            Environment variables are strings. To store complex configuration as JSON in an .env file, you must
+            stringify it first.
+        </p>
+
+        <h3>Logging & Debugging</h3>
+        <p>
+            Log systems typically output single-line strings. Stringified JSON ensures objects are logged as readable,
+            parseable text.
+        </p>
+
+        <h3>Webhooks & Message Queues</h3>
+        <p>
+            Services like Stripe, Slack, and AWS SQS often expect stringified JSON payloads in their message formats.
+        </p>
+
+        <h3>LocalStorage & SessionStorage</h3>
+        <p>
+            Browser storage APIs only accept strings. To store objects, you must stringify them first—and parse them
+            when retrieving.
+        </p>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="seo-section">
+        <h2>Frequently Asked Questions</h2>
+
+        <article class="faq-item">
+            <h3>What is JSON.stringify?</h3>
+            <p>
+                JSON.stringify is a JavaScript method that converts a JSON object into a JSON string. It serializes the
+                data by adding outer quotes and escaping internal special characters like quotes and backslashes.
+            </p>
+        </article>
+
+        <article class="faq-item">
+            <h3>Why does JSON.stringify add backslashes?</h3>
+            <p>
+                Backslashes are escape characters. When JSON is converted to a string, internal double quotes must be
+                escaped with backslashes so they don't break the outer string wrapper. This is standard serialization
+                behavior.
+            </p>
+        </article>
+
+        <article class="faq-item">
+            <h3>How to convert JSON to string online?</h3>
+            <p>
+                Paste your JSON into our stringify tool above and click the "Stringify JSON" button. The tool instantly
+                serializes your JSON, producing an escaped string ready for APIs, databases, or storage.
+            </p>
+        </article>
+
+        <article class="faq-item">
+            <h3>Is JSON.stringify safe in the browser?</h3>
+            <p>
+                Yes. JSON.stringify is a native JavaScript function that runs entirely in your browser. Our tool
+                processes everything client-side—your data never leaves your device or touches any server.
+            </p>
+        </article>
+
+        <article class="faq-item">
+            <h3>Can I stringify large JSON files?</h3>
+            <p>
+                Yes. Our tool handles JSON files up to 10MB+ efficiently. Since all processing happens locally in your
+                browser, large files are processed quickly without upload delays.
+            </p>
+        </article>
+    </section>
+
+    <!-- Internal Links Section -->
+    <section class="seo-section">
+        <h2>Related JSON Tools</h2>
+        <p>
+            Explore our other JSON tools for different formatting and conversion needs:
+        </p>
+        <ul>
+            <li><a href="/" class="internal-link">JSON Formatter</a> – Format, validate, and beautify any JSON</li>
+            <li><a href="/string-json-to-json/" class="internal-link">JSON String to JSON Converter</a> – Decode escaped
+                JSON strings back to objects</li>
+            <li><a href="/json-schema-validator/" class="internal-link">JSON Schema Validator</a> – Validate JSON
+                against a schema</li>
+            <li><a href="/json-to-yaml/" class="internal-link">JSON to YAML Converter</a> – Convert JSON to YAML format
+            </li>
+        </ul>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2>Ready to Stringify Your JSON?</h2>
+        <p>Convert JSON objects to escaped strings instantly with our free online tool.</p>
+        <a href="#tool" class="cta-button"
+            onclick="document.querySelector('.tool-section').scrollIntoView({behavior: 'smooth'}); return false;">Stringify
+            JSON Now ↑</a>
+    </section>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script defer>
+    (function () {
+        'use strict';
+
+        const inputArea = document.getElementById('inputArea');
+        const outputArea = document.getElementById('outputArea');
+        const stringifyBtn = document.getElementById('stringifyBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const sampleBtn = document.getElementById('sampleBtn');
+        const statusMsg = document.getElementById('statusMsg');
+
+        function showStatus(msg, type) {
+            if (statusMsg) {
+                statusMsg.textContent = msg;
+                statusMsg.className = 'tool-status ' + type;
+            }
+        }
+
+        // Stringify JSON
+        if (stringifyBtn) {
+            stringifyBtn.addEventListener('click', () => {
+                const input = inputArea.value.trim();
+
+                if (!input) {
+                    showStatus('⚠ Please enter JSON to stringify', 'error');
+                    outputArea.value = '';
+                    return;
+                }
+
+                try {
+                    // Parse first to validate JSON
+                    const parsed = JSON.parse(input);
+                    // Stringify without pretty printing (compact)
+                    const stringified = JSON.stringify(JSON.stringify(parsed));
+                    outputArea.value = stringified;
+                    showStatus('✓ JSON Stringified Successfully', 'success');
+                } catch (e) {
+                    outputArea.value = '';
+                    showStatus('✗ Invalid JSON: ' + e.message, 'error');
+                }
+            });
+        }
+
+        // Copy to clipboard
+        if (copyBtn) {
+            copyBtn.addEventListener('click', async () => {
+                const output = outputArea.value;
+                if (!output) {
+                    showStatus('⚠ Nothing to copy', 'error');
+                    return;
+                }
+                try {
+                    await navigator.clipboard.writeText(output);
+                    showStatus('✓ Copied to clipboard', 'success');
+                } catch (e) {
+                    showStatus('✗ Copy failed', 'error');
+                }
+            });
+        }
+
+        // Clear all
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                inputArea.value = '';
+                outputArea.value = '';
+                showStatus('', '');
+            });
+        }
+
+        // Load sample
+        const sampleJson = `{
+  "id": 1,
+  "name": "John Doe",
+  "email": "john@example.com",
+  "roles": ["admin", "user"],
+  "settings": {
+    "theme": "dark",
+    "notifications": true
+  }
+}`;
+
+        if (sampleBtn) {
+            sampleBtn.addEventListener('click', () => {
+                inputArea.value = sampleJson;
+                outputArea.value = '';
+                showStatus('✓ Sample loaded - click Stringify to convert', 'success');
+            });
+        }
+    })();
+</script>
+{% endblock %}

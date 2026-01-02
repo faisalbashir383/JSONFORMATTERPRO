@@ -499,6 +499,11 @@ def string_json_to_json_page(request):
     return render(request, 'string-json-to-json.html')
 
 
+def json_to_string_page(request):
+    """Render the JSON to String (stringify) converter page"""
+    return render(request, 'json-to-string.html')
+
+
 def robots_txt(request):
     """Serve robots.txt file"""
     return render(request, 'robots.txt', content_type='text/plain')
