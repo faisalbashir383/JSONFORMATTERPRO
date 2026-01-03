@@ -1,29 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Domain Age Checker - Check Domain Registration Date & WHOIS Info | JSON Formatters Pro{% endblock %}
-{% block meta_title %}Domain Age Checker - Free WHOIS Lookup & Domain Age Calculator Online{% endblock %}
-{% block meta_description %}Free domain age checker tool to find when a domain was registered. Check domain age, WHOIS
-information, expiry date, registrar details, nameservers, and more. Accurate domain age lookup for SEO analysis.
-{% endblock %}
-{% block meta_keywords %}domain age, domain age checker, WHOIS lookup, domain lookup, domain check, domain info,
-registrar, expiry date, domain history, nameserver, DNS, domain registration, domain details, domain analysis, domain
-verify, domain status, domain information, domain checker tool, domain tools, domain validator, domain monitor, domain
-search, domain query, domain finder, domain inspector, domain test, domain scan, domain report, domain research, domain
-audit, domain metrics, domain data, domain stats, domain overview, domain profile, domain review, domain examine, domain
-explore, check domain age, free domain age checker, domain age lookup tool, how old is my domain, domain registration
-date, domain expiry date checker, WHOIS lookup free, domain age for SEO, domain history checker, domain age calculator,
-domain age analyzer, online domain age checker, bulk domain age checker, domain age by URL, domain age verification,
-domain age check online free, best domain age checker 2024, best domain age checker 2025, accurate domain age tool,
-domain creation date finder, domain registration information, domain WHOIS data, domain name age checker, website age
-checker, when was domain registered, domain age lookup by name, check website age, domain age check for SEO, domain
-registrar information, domain age and SEO ranking, domain age importance, domain age impact on SEO, check multiple
-domain ages, domain age and authority, domain age for backlink analysis, domain purchase date checker, domain renewal
-date checker, domain age history timeline, domain ownership history, domain transfer history, domain age comparison
-tool, domain age bulk lookup, domain age API, domain age REST API, programmatic domain age check, domain age for link
-building, domain age verification service, domain age audit tool, domain registration lookup, domain name information
-lookup, WHOIS domain age query, free WHOIS lookup tool, domain age SEO tool, domain age marketing tool, domain age
-competitive analysis, domain age research tool{% endblock %}
+{% block title %}Domain Age Checker – Check Domain Registration Date Instantly (Free){% endblock %}
+{% block meta_title %}Domain Age Checker – Check Domain Registration Date Instantly (Free){% endblock %}
+{% block meta_description %}Instantly check domain registration date, domain age, expiry date, and WHOIS details for any
+domain. Free domain age checker tool for SEO professionals and website owners.{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/domain-age/{% endblock %}
 
 {% block structured_data %}
@@ -32,9 +13,9 @@ competitive analysis, domain age research tool{% endblock %}
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Domain Age Checker",
-  "description": "Free online tool to check domain age, registration date, and WHOIS information",
+  "description": "Free online tool to check domain age, registration date, expiry date, and WHOIS information for any domain",
   "url": "{{ SITE_URL }}/domain-age/",
-  "applicationCategory": "DeveloperApplication",
+  "applicationCategory": "WebApplication",
   "operatingSystem": "Web Browser",
   "offers": {
     "@type": "Offer",
@@ -43,12 +24,61 @@ competitive analysis, domain age research tool{% endblock %}
   },
   "featureList": [
     "Domain Age Calculation",
-    "WHOIS Information Lookup",
+    "Domain Registration Date Lookup",
     "Domain Expiry Date Check",
+    "WHOIS Information Lookup",
     "Registrar Information",
     "Nameserver Details",
     "Domain Status Codes"
   ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Domain Age Checker",
+  "operatingSystem": "Web Browser",
+  "applicationCategory": "WebApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ SITE_URL }}/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Domain Age Checker",
+      "item": "{{ SITE_URL }}/domain-age/"
+    }
+  ]
+}
+</script>
+
+<!-- WebPage with dateModified for freshness signals -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Domain Age Checker",
+  "description": "Free online tool to check domain age, registration date, expiry date, and WHOIS information",
+  "url": "{{ SITE_URL }}/domain-age/",
+  "dateModified": "2026-01-03"
 }
 </script>
 
@@ -62,7 +92,7 @@ competitive analysis, domain age research tool{% endblock %}
       "name": "What is domain age?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Domain age refers to the length of time a domain name has been registered and active on the internet. It is calculated from the domain's original registration date to the present day."
+        "text": "Domain age refers to how long a domain name has been registered and active on the internet. It is calculated from the domain's original creation date (the date it was first registered with a registrar) to the current date. For example, if a domain was registered on January 1, 2010, its domain age would be calculated from that date to today, giving you the exact years, months, and days since registration."
       }
     },
     {
@@ -70,7 +100,7 @@ competitive analysis, domain age research tool{% endblock %}
       "name": "Why is domain age important for SEO?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Domain age is considered a trust signal by search engines. Older domains often have more established backlink profiles and content history, which can positively influence search rankings."
+        "text": "Domain age is considered one of many ranking factors in search engine optimization. While it's not the most critical factor, older domains often benefit from more established backlink profiles built over time, longer content history that search engines have indexed, greater perceived trustworthiness, and more time to accumulate authority signals. However, a new domain with excellent content and proper SEO strategy can still outrank older domains."
       }
     },
     {
@@ -78,7 +108,63 @@ competitive analysis, domain age research tool{% endblock %}
       "name": "How accurate is this domain age checker?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Our domain age checker uses official WHOIS databases to retrieve accurate registration information. The data is sourced directly from domain registrars and is typically accurate to the exact day."
+        "text": "Our domain age checker retrieves information directly from official WHOIS databases maintained by domain registrars and ICANN-accredited organizations. The creation date we display is the official registration date on record. This data is highly accurate and is the same information used by domain registrars, web hosting companies, and SEO professionals worldwide for domain research and analysis."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What information can I get from WHOIS lookup?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A WHOIS lookup provides various details about a domain including: creation date (when the domain was first registered), updated date (when the registration was last modified), expiration date (when the current registration expires), registrar (the company through which the domain was registered), name servers (DNS servers handling the domain), domain status codes (current status like clientTransferProhibited), and DNSSEC status (whether domain security extensions are enabled)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does domain age affect Google ranking?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Google has stated that domain age by itself is not a significant ranking factor. However, older domains often correlate with factors that do matter for rankings: more time to build quality backlinks naturally, established content that has been indexed and evaluated over time, accumulated user behavior data, and brand recognition with trust signals. Focus on creating quality content rather than relying on domain age alone."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a good domain age?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There's no specific \"good\" domain age threshold that guarantees SEO success. Domains over 2-3 years are generally considered established in the eyes of search engines. Domains over 10 years may have additional trust advantages. However, many successful websites are built on newer domains. What matters more is the quality of your content, your backlink profile, overall user experience, and comprehensive SEO strategy rather than age alone."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I check multiple domains at once?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Currently, our tool checks one domain at a time to provide detailed, accurate WHOIS information for each query. This approach ensures reliable results and prevents rate limiting from WHOIS servers. For bulk domain age checking needs, you can check domains sequentially by entering each domain name after receiving results for the previous one. We're working on a bulk lookup feature for the future."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How to find when a domain expires?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Simply enter the domain name in our checker above and click \"Check Age\". The results will show the expiration date prominently, along with the number of days until expiry. This is useful for monitoring your own domains for renewal, checking competitor domains, finding potentially expiring domains to acquire, and performing due diligence before purchasing a domain from the secondary market."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is WHOIS information?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "WHOIS (pronounced \"who is\") is a query and response protocol used to look up information about domain name registrations. It was created in the 1980s and provides a directory of domain ownership and technical information. While privacy protection services have limited some personal data visibility, you can still find registration dates, registrar information, name servers, and domain status through WHOIS lookups for most domains."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are nameservers?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nameservers are specialized servers that handle DNS (Domain Name System) queries for a domain. They translate human-readable domain names (like google.com) into IP addresses that computers use to communicate. When you see nameservers like \"ns1.example.com\" in WHOIS results, they indicate which servers are authoritative for that domain's DNS records. Nameservers are typically provided by your web hosting company or a dedicated DNS service provider."
       }
     }
   ]
@@ -659,8 +745,9 @@ competitive analysis, domain age research tool{% endblock %}
 
 {% block content %}
 <div class="tool-header">
-    <h1>🕐 Domain Age Checker</h1>
-    <p>Check domain registration date, age, WHOIS information, expiry details, and more - completely free</p>
+    <h1>Domain Age Checker</h1>
+    <p>Enter any domain name to check its registration date, age, and WHOIS details—including news sites, brands,
+        companies, and personal blogs.</p>
 </div>
 
 <div class="checker-container">
@@ -786,6 +873,291 @@ competitive analysis, domain age research tool{% endblock %}
     </div>
 </div>
 
+<!-- SEO Content Section -->
+<div class="info-section">
+    <h2>What Is a Domain Age Checker?</h2>
+    <p>
+        A domain age checker is a free online tool that allows you to find out how old a domain name is by looking up
+        its original registration date. When you enter any domain name into our tool, it queries official WHOIS
+        databases to retrieve the exact date when the domain was first registered with a domain registrar. This
+        information helps you understand the history and credibility of any website.
+    </p>
+    <p>
+        You can use this tool to check the domain registration date of any website, including news sites, brands,
+        companies, and personal blogs. Whether you're researching a competitor's website, evaluating a domain for
+        purchase, or simply curious about how old a website is, our domain age checker provides accurate, real-time
+        data.
+    </p>
+
+    <h2>How Is Domain Age Calculated?</h2>
+    <p>
+        Domain age is calculated from the domain's creation date (also known as the domain registration date or domain
+        creation date) found in WHOIS records to the current date. WHOIS databases store the official registration
+        information for every domain name, including when it was first registered, when it was last updated, and when it
+        will expire.
+    </p>
+    <p>
+        Our tool automatically calculates the difference between the creation date and today's date, displaying the
+        result in years, months, and days. This gives you an exact answer to the question "how old is a domain?" for any
+        website you want to research.
+    </p>
+
+    <h2>Why Does Domain Age Matter for SEO and Trust?</h2>
+    <p>
+        Domain age is often considered a trust signal in the SEO community. While Google has stated that domain age
+        alone is not a direct ranking factor, older domains tend to have several advantages: they've had more time to
+        build quality backlinks, establish content authority, develop brand recognition, and accumulate positive user
+        signals.
+    </p>
+    <p>
+        For users evaluating a website's trustworthiness, domain age can be an important indicator. A website that has
+        been registered for many years is generally perceived as more established and reliable than a brand-new domain.
+        This is particularly relevant when evaluating e-commerce sites, news sources, or any website where trust is
+        important.
+    </p>
+
+    <h2>What Information Does This Tool Provide?</h2>
+    <p>
+        Our domain age checker provides comprehensive WHOIS information including: the exact domain registration date
+        (when the domain was created), the last updated date (when registration details were last modified), the expiry
+        date (when the domain registration expires), the domain registrar (the company that manages the registration),
+        nameservers (DNS servers handling the domain), and domain status codes.
+    </p>
+
+    <h2>Where This Domain Age Data Comes From</h2>
+    <p>
+        All data displayed by our domain age checker comes directly from official WHOIS records maintained by domain
+        registrars and ICANN-accredited organizations. WHOIS is a publicly accessible database that stores domain
+        registration information. We query these authoritative sources in real-time to ensure you receive accurate,
+        up-to-date information for any domain you check.
+    </p>
+</div>
+
+<!-- Use Cases Section -->
+<div class="info-section">
+    <h2>Common Use Cases for Domain Age Checking</h2>
+    <ul style="color: var(--color-text-secondary); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1rem;">
+        <li><strong>SEO Analysis</strong> – Evaluate domain authority and trustworthiness for backlink strategies.</li>
+        <li><strong>Competitor Research</strong> – Understand how long competitors have been established online.</li>
+        <li><strong>Brand Verification</strong> – Confirm the legitimacy and history of a company's web presence.</li>
+        <li><strong>Domain Buying</strong> – Assess the value and history of domains before purchasing.</li>
+    </ul>
+</div>
+
+<!-- How to Use Section -->
+<div class="info-section">
+    <h2>How to Use This Domain Age Checker</h2>
+    <p>
+        Checking a domain's age and registration date is simple with our free tool:
+    </p>
+    <ol style="color: var(--color-text-secondary); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1rem;">
+        <li><strong>Enter the domain name</strong> – Type or paste any domain name (e.g., google.com, bbc.com, or
+            your-domain.com) into the search box above.</li>
+        <li><strong>Click "Check Age"</strong> – Press the check button or hit Enter to submit your query.</li>
+        <li><strong>View the results</strong> – Instantly see the domain's registration date, exact age (in years,
+            months, and days), expiry date, registrar, nameservers, and status.</li>
+        <li><strong>Use the information</strong> – Apply these insights for SEO research, competitor analysis, domain
+            purchasing decisions, or due diligence.</li>
+    </ol>
+</div>
+
+<!-- Popular Domains Slider Section (Static fallback for SEO) -->
+<div class="info-section" id="topDomainsSection">
+    <h2>🔥 Popular Domain Lookups</h2>
+    <p style="margin-bottom: 1.5rem;">See what domains others are researching:</p>
+
+    <div class="slider-container">
+        <button class="slider-btn slider-prev" onclick="slideDomains(-1)">❮</button>
+        <div class="slider-track" id="domainsSlider">
+            <!-- Static fallback for Googlebot (replaced by JS when data loads) -->
+            <noscript>
+                <a href="/domain-age/google.com/" class="domain-card">
+                    <div class="domain-name">google.com</div>
+                    <div class="domain-age">Check age</div>
+                </a>
+                <a href="/domain-age/facebook.com/" class="domain-card">
+                    <div class="domain-name">facebook.com</div>
+                    <div class="domain-age">Check age</div>
+                </a>
+                <a href="/domain-age/youtube.com/" class="domain-card">
+                    <div class="domain-name">youtube.com</div>
+                    <div class="domain-age">Check age</div>
+                </a>
+            </noscript>
+        </div>
+        <button class="slider-btn slider-next" onclick="slideDomains(1)">❯</button>
+    </div>
+</div>
+
+<style>
+    .slider-container {
+        position: relative;
+        overflow: hidden;
+        padding: 0 3rem;
+    }
+
+    .slider-track {
+        display: flex;
+        gap: 1rem;
+        transition: transform 0.4s ease;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .slider-track::-webkit-scrollbar {
+        display: none;
+    }
+
+    .slider-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slider-btn:hover {
+        transform: translateY(-50%) scale(1.1);
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .slider-prev {
+        left: 0;
+    }
+
+    .slider-next {
+        right: 0;
+    }
+
+    .domain-card {
+        flex: 0 0 auto;
+        min-width: 200px;
+        padding: 1.25rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .domain-card:hover {
+        border-color: var(--color-primary);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.15);
+    }
+
+    .domain-name {
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .domain-age {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--color-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .domain-visitors {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+    }
+
+    @media (max-width: 768px) {
+        .slider-container {
+            padding: 0 2.5rem;
+        }
+
+        .slider-btn {
+            width: 32px;
+            height: 32px;
+            font-size: 1rem;
+        }
+
+        .domain-card {
+            min-width: 160px;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Fetch top domains for slider
+        fetch('/api/top-domains/?limit=15')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.domains && data.domains.length > 0) {
+                    const slider = document.getElementById('domainsSlider');
+                    const section = document.getElementById('topDomainsSection');
+
+                    slider.innerHTML = data.domains.map(d => {
+                        let ageText = 'Check age →';
+                        if (d.age && d.age.years !== undefined) {
+                            ageText = `${d.age.years}y ${d.age.months}m`;
+                        }
+                        return `
+                        <a href="/domain-age/${d.domain}/" class="domain-card">
+                            <div class="domain-name">${d.domain}</div>
+                            <div class="domain-age">${ageText}</div>
+                            <div class="domain-visitors">👁️ ${d.uniqueVisitors || d.visitCount} views</div>
+                        </a>
+                    `;
+                    }).join('');
+
+                    section.style.display = 'block';
+                }
+            })
+            .catch(err => console.log('Top domains not available'));
+    });
+
+    function slideDomains(direction) {
+        const slider = document.getElementById('domainsSlider');
+        const scrollAmount = 240; // card width + gap
+        slider.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+    }
+</script>
+
+<!-- Related Tools Section -->
+<div class="info-section">
+    <h2>Related Domain Tools</h2>
+    <p>
+        Explore our other domain and WHOIS tools for comprehensive website analysis:
+    </p>
+    <ul style="list-style: none; margin-left: 0; padding: 0;">
+        <li style="margin-bottom: 0.75rem;">
+            <a href="/whois-lookup/" style="color: var(--color-primary); text-decoration: none; font-weight: 500;">🔍
+                WHOIS Lookup</a> – Get detailed domain ownership and registrar information.
+        </li>
+        <li style="margin-bottom: 0.75rem;">
+            <a href="/domain-expiry-checker/"
+                style="color: var(--color-primary); text-decoration: none; font-weight: 500;">📅 Domain Expiry
+                Checker</a> – Track when domains expire and find expiring domains to acquire.
+        </li>
+        <li style="margin-bottom: 0.75rem;">
+            <a href="/whois-api/" style="color: var(--color-primary); text-decoration: none; font-weight: 500;">⚙️ WHOIS
+                API</a> – For developers: access WHOIS data programmatically via our API.
+        </li>
+    </ul>
+</div>
+
 <!-- FAQ Section -->
 <div class="faq-section">
     <h2 class="faq-title">❓ Frequently Asked Questions</h2>
@@ -797,8 +1169,9 @@ competitive analysis, domain age research tool{% endblock %}
         </div>
         <div class="faq-answer">
             Domain age refers to how long a domain name has been registered and active on the internet. It is calculated
-            from the domain's original creation date (when it was first registered) to the current date. For example, if
-            a domain was registered on January 1, 2010, its domain age would be calculated from that date to today.
+            from the domain's original creation date (the date it was first registered with a registrar) to the current
+            date. For example, if a domain was registered on January 1, 2010, its domain age would be calculated from
+            that date to today, giving you the exact years, months, and days since registration.
         </div>
     </div>
 
@@ -862,10 +1235,11 @@ competitive analysis, domain age research tool{% endblock %}
             <span class="faq-toggle">▼</span>
         </div>
         <div class="faq-answer">
-            There's no specific "good" domain age threshold. Domains over 2-3 years are generally considered
-            established. Domains over 10 years may have additional trust advantages. However, many successful websites
-            are built on newer domains. What matters more is the quality of your content, backlink profile, user
-            experience, and overall SEO strategy rather than age alone.
+            There's no specific "good" domain age threshold that guarantees SEO success. Domains over 2-3 years are
+            generally considered established in the eyes of search engines. Domains over 10 years may have additional
+            trust advantages. However, many successful websites are built on newer domains. What matters more is the
+            quality of your content, your backlink profile, overall user experience, and comprehensive SEO strategy
+            rather than age alone.
         </div>
     </div>
 
@@ -875,9 +1249,10 @@ competitive analysis, domain age research tool{% endblock %}
             <span class="faq-toggle">▼</span>
         </div>
         <div class="faq-answer">
-            Currently, our tool checks one domain at a time to provide detailed, accurate information. This ensures
-            reliable results and prevents rate limiting from WHOIS servers. For bulk domain age checking needs, you can
-            check domains sequentially, and we're working on a bulk lookup feature for the future.
+            Currently, our tool checks one domain at a time to provide detailed, accurate WHOIS information for each
+            query. This approach ensures reliable results and prevents rate limiting from WHOIS servers. For bulk domain
+            age checking needs, you can check domains sequentially by entering each domain name after receiving results
+            for the previous one. We're working on a bulk lookup feature for the future.
         </div>
     </div>
 
@@ -902,8 +1277,9 @@ competitive analysis, domain age research tool{% endblock %}
         <div class="faq-answer">
             WHOIS (pronounced "who is") is a query and response protocol used to look up information about domain name
             registrations. It was created in the 1980s and provides a directory of domain ownership and technical
-            information. While privacy protection has limited some personal data, you can still find registration dates,
-            registrar information, name servers, and domain status through WHOIS lookups.
+            information. While privacy protection services have limited some personal data visibility, you can still
+            find registration dates, registrar information, name servers, and domain status through WHOIS lookups for
+            most domains.
         </div>
     </div>
 
@@ -914,41 +1290,12 @@ competitive analysis, domain age research tool{% endblock %}
         </div>
         <div class="faq-answer">
             Nameservers are specialized servers that handle DNS (Domain Name System) queries for a domain. They
-            translate human-readable domain names (like google.com) into IP addresses that computers use. When you see
-            nameservers like "ns1.example.com", they indicate which servers are authoritative for that domain's DNS
-            records. Nameservers are typically provided by your web hosting company or a dedicated DNS service.
+            translate human-readable domain names (like google.com) into IP addresses that computers use to communicate.
+            When you see nameservers like "ns1.example.com" in WHOIS results, they indicate which servers are
+            authoritative for that domain's DNS records. Nameservers are typically provided by your web hosting company
+            or a dedicated DNS service provider.
         </div>
     </div>
-</div>
-
-<!-- Info Section -->
-<div class="info-section">
-    <h2>💡 About Domain Age Checker</h2>
-    <p>
-        Our free Domain Age Checker tool helps you discover when a website's domain was first registered and provides
-        comprehensive WHOIS information. Whether you're conducting SEO research, evaluating a domain for purchase, or
-        simply curious about a website's history, this tool delivers accurate, real-time data.
-    </p>
-    <p>
-        <strong>Key features of our Domain Age Checker:</strong>
-    </p>
-    <ul>
-        <li><strong>Accurate Age Calculation:</strong> See exact years, months, and days since registration</li>
-        <li><strong>WHOIS Data:</strong> Access registrar, nameserver, and DNS information</li>
-        <li><strong>Expiry Tracking:</strong> Know when a domain expires and days remaining</li>
-        <li><strong>Status Monitoring:</strong> View domain status codes and DNSSEC status</li>
-        <li><strong>Visual Timeline:</strong> See domain lifecycle from creation to expiry</li>
-    </ul>
-    <p>
-        <strong>Use cases for domain age checking:</strong>
-    </p>
-    <ul>
-        <li><strong>SEO Analysis:</strong> Evaluate domain authority and trust signals</li>
-        <li><strong>Competitive Research:</strong> Understand competitor domain history</li>
-        <li><strong>Domain Acquisition:</strong> Assess value before purchasing a domain</li>
-        <li><strong>Due Diligence:</strong> Verify website legitimacy and history</li>
-        <li><strong>Backlink Analysis:</strong> Evaluate link sources by domain age</li>
-    </ul>
 </div>
 {% endblock %}
 

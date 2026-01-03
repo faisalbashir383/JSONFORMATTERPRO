@@ -72,6 +72,10 @@ urlpatterns = [
     path('image-resizer/', views.image_resizer_page, name='image_resizer_page'),
     path('toon-converter/', views.toon_converter_page, name='toon_converter_page'),
     path('domain-age/', views.domain_age_page, name='domain_age_page'),
+    path('domain-age/<str:domain>/', views.domain_age_result_page, name='domain_age_result_page'),
+    path('whois-lookup/', views.whois_lookup_page, name='whois_lookup_page'),
+    path('domain-expiry-checker/', views.domain_expiry_checker_page, name='domain_expiry_checker_page'),
+    path('whois-api/', views.whois_api_page, name='whois_api_page'),
     path('resume-builder/', views.resume_builder, name='resume_builder'),
     
     # Calculator Pages
@@ -109,6 +113,7 @@ urlpatterns = [
 
     path('api/qr-generator/', views.generate_qr_code, name='generate_qr_code'),
     path('api/domain-age/', views.domain_age_api, name='domain_age_api'),
+    path('api/top-domains/', views.top_domains_api, name='top_domains_api'),
     path('api/typing-test/submit/', views.submit_typing_score, name='submit_typing_score'),
     path('api/typing-test/leaderboard/', views.get_typing_leaderboard, name='get_typing_leaderboard'),
     

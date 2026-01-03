@@ -50,6 +50,9 @@ class StaticViewSitemap(Sitemap):
             'lorem_ipsum_page',
             'image_resizer_page',
             'domain_age_page',
+            'whois_lookup_page',
+            'domain_expiry_checker_page',
+            'whois_api_page',
             'resume_builder',
             # Data Format Tools
             'toon_converter_page',
@@ -140,3 +143,20 @@ class JobPostingSitemap(Sitemap):
     
     def location(self, obj):
         return obj.get_absolute_url()
+
+
+class ApprovedDomainSitemap(Sitemap):
+    """Sitemap for approved domain age pages (only indexable ones)"""
+    changefreq = 'monthly'
+    priority = 0.6
+    
+    def items(self):
+        from .models import ApprovedDomain
+        return ApprovedDomain.objects.filter(is_indexable=True)
+    
+    def lastmod(self, obj):
+        return obj.updated_at
+    
+    def location(self, obj):
+        return f'/domain-age/{obj.domain}/'
+

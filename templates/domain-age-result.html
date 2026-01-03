@@ -1,0 +1,566 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ domain }} Domain Registration Date & Age - Check Domain Info{% endblock %}
+{% block meta_title %}{{ domain }} Domain Registration Date & Age - Check Domain Info{% endblock %}
+{% block meta_description %}{{ meta_description }}{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/domain-age/{{ domain }}/{% endblock %}
+
+{% block robots %}
+{% if is_indexable %}
+<meta name="robots" content="index, follow">
+{% else %}
+<meta name="robots" content="noindex, follow">
+{% endif %}
+{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ SITE_URL }}/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Domain Age Checker",
+      "item": "{{ SITE_URL }}/domain-age/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "{{ domain }}",
+      "item": "{{ SITE_URL }}/domain-age/{{ domain }}/"
+    }
+  ]
+}
+</script>
+
+<!-- Domain-specific FAQ Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "When was {{ domain }} registered?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The domain {{ domain }} registration date and exact age can be found using this domain age checker tool. Enter the domain above to see the complete WHOIS registration information including the original creation date from official registry records."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How old is {{ domain }}?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Check the exact age of {{ domain }} in years, months, and days using this free tool. Domain age is calculated from the original WHOIS creation date to the current date, providing accurate information about how long this domain has been registered."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is the registrar for {{ domain }}?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The registrar information for {{ domain }} is displayed in the WHOIS lookup results above. This includes the company that manages the domain registration, nameservers, and expiration date details."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- WebPage schema with dateModified -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "{{ domain }} Domain Registration Date & Age",
+  "description": "{{ meta_description }}",
+  "url": "{{ SITE_URL }}/domain-age/{{ domain }}/",
+  "dateModified": "{{ last_updated|date:'Y-m-d' }}",
+  "mainEntity": {
+    "@type": "Thing",
+    "name": "{{ domain }}",
+    "description": "Domain age and WHOIS information for {{ domain }}"
+  }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 1.85rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .breadcrumb a {
+        color: var(--color-primary);
+        text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .result-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    /* Static Summary Section */
+    .static-summary {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 1.5rem 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        line-height: 1.8;
+        color: var(--color-text-secondary);
+    }
+
+    .static-summary h2 {
+        font-size: 1.25rem;
+        color: var(--color-text);
+        margin-bottom: 1rem;
+    }
+
+    .last-updated {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    /* Loading State */
+    .loading-container {
+        text-align: center;
+        padding: 3rem 2rem;
+    }
+
+    .loading-spinner {
+        width: 48px;
+        height: 48px;
+        border: 4px solid rgba(99, 102, 241, 0.2);
+        border-top-color: #6366f1;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1.5rem;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .loading-text {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+    }
+
+    .loading-domain {
+        color: var(--color-primary);
+        font-weight: 600;
+    }
+
+    /* Error State */
+    .error-container {
+        text-align: center;
+        padding: 2rem;
+        color: #ef4444;
+    }
+
+    .error-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Results */
+    .age-display {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+
+    .age-card {
+        text-align: center;
+        padding: 1.5rem 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        border-radius: var(--radius-md);
+        min-width: 100px;
+    }
+
+    .age-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--color-primary);
+    }
+
+    .age-label {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .info-item {
+        padding: 1rem;
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+    }
+
+    .info-item label {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    .info-item .value {
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    .nameservers-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .ns-tag {
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--color-primary);
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.85rem;
+    }
+
+    .cta-section {
+        text-align: center;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        border-radius: var(--radius-lg);
+        margin-top: 2rem;
+    }
+
+    .cta-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        transition: all 250ms ease;
+    }
+
+    .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    /* Related Tools Footer */
+    .related-tools-footer {
+        max-width: 900px;
+        margin: 2rem auto 0;
+        padding: 1.5rem;
+        background: rgba(99, 102, 241, 0.05);
+        border-radius: var(--radius-lg);
+        text-align: center;
+    }
+
+    .related-tools-footer h3 {
+        font-size: 1rem;
+        color: var(--color-text);
+        margin-bottom: 0.75rem;
+    }
+
+    .related-tools-footer a {
+        color: var(--color-primary);
+        text-decoration: none;
+        margin: 0 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    .related-tools-footer a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.4rem;
+        }
+
+        .age-display {
+            flex-wrap: wrap;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Visible Breadcrumb Navigation -->
+<nav class="breadcrumb">
+    <a href="/">Home</a>
+    <span>›</span>
+    <a href="/domain-age/">Domain Age Checker</a>
+    <span>›</span>
+    <span>{{ domain }}</span>
+</nav>
+
+<div class="tool-header">
+    <h1>{{ domain }} Domain Registration Date & Age</h1>
+    <p>Check the registration date, exact age, expiry date, and WHOIS information for {{ domain }}</p>
+    {% if unique_visitors > 0 %}
+    <div style="margin-top: 1rem;">
+        <span
+            style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(99, 102, 241, 0.1); padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.85rem; color: var(--color-text-secondary);">
+            👁️ <strong style="color: var(--color-primary);">{{ unique_visitors }}</strong> unique visitors checked this
+            domain
+        </span>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Static Server-Side Summary (150-200 words for Google indexing) -->
+<div class="static-summary">
+    <h2>About {{ domain }} Domain Age</h2>
+    <p>
+        This page displays the domain age and registration information for <strong>{{ domain }}</strong>.
+        Domain age refers to how long a domain name has been registered since its original creation date.
+        Understanding when {{ domain }} was first registered can be valuable for SEO analysis, competitive research,
+        brand verification, and evaluating website trustworthiness.
+    </p>
+    <p>
+        The WHOIS data shown above includes the exact registration date, last update date, expiration date,
+        registrar name, and nameservers for {{ domain }}. This information is retrieved from official WHOIS
+        registry databases maintained by ICANN-accredited registrars. For comprehensive domain research,
+        you can use our <a href="/domain-age/"
+            style="color: var(--color-primary); text-decoration: none; font-weight: 500;">domain age checker</a>
+        tool to analyze any domain instantly.
+    </p>
+    <p class="last-updated">
+        📅 Last updated: {{ last_updated|date:"F j, Y" }}
+    </p>
+    <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 0.75rem; font-style: italic;">
+        ⚠️ Data accuracy note: WHOIS data availability may vary by TLD and registrar privacy settings.
+    </p>
+</div>
+
+<div class="result-container">
+    <!-- Loading State (shown initially) -->
+    <div id="loadingContainer" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Looking up WHOIS data for <span class="loading-domain">{{ domain }}</span>...</p>
+    </div>
+
+    <!-- Error State (hidden initially) -->
+    <div id="errorContainer" class="error-container hidden">
+        <div class="error-icon">⚠️</div>
+        <p id="errorMessage">Unable to fetch WHOIS data</p>
+        <a href="/domain-age/" class="cta-button" style="margin-top: 1rem;">Try Another Domain</a>
+    </div>
+
+    <!-- Results (hidden initially) -->
+    <div id="resultsContainer" class="hidden">
+        <!-- Age Display -->
+        <div class="age-display">
+            <div class="age-card">
+                <div class="age-number" id="ageYears">-</div>
+                <div class="age-label">Years</div>
+            </div>
+            <div class="age-card">
+                <div class="age-number" id="ageMonths">-</div>
+                <div class="age-label">Months</div>
+            </div>
+            <div class="age-card">
+                <div class="age-number" id="ageDays">-</div>
+                <div class="age-label">Days</div>
+            </div>
+        </div>
+
+        <!-- Domain Info Grid -->
+        <div class="info-grid">
+            <div class="info-item">
+                <label>📅 Registration Date</label>
+                <div class="value" id="createdDate">-</div>
+            </div>
+            <div class="info-item">
+                <label>🔄 Last Updated</label>
+                <div class="value" id="updatedDate">-</div>
+            </div>
+            <div class="info-item">
+                <label>⏰ Expiry Date</label>
+                <div class="value" id="expiryDate">-</div>
+            </div>
+            <div class="info-item">
+                <label>🏢 Registrar</label>
+                <div class="value" id="registrar">-</div>
+            </div>
+        </div>
+
+        <!-- Nameservers -->
+        <div class="info-item" id="nameserversSection">
+            <label>🌐 Nameservers</label>
+            <div class="nameservers-list" id="nameserversList"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Check Another Domain CTA -->
+<div class="cta-section">
+    <p style="margin-bottom: 1rem; color: var(--color-text);">Want to check another domain?</p>
+    <a href="/domain-age/" class="cta-button">
+        🔍 Check Another Domain
+    </a>
+</div>
+
+<!-- Related Domain Tools Footer -->
+<div class="related-tools-footer">
+    <h3>Related Domain Tools</h3>
+    <a href="/whois-lookup/">WHOIS Lookup</a> •
+    <a href="/domain-expiry-checker/">Domain Expiry Checker</a> •
+    <a href="/whois-api/">WHOIS API</a> •
+    <a href="/domain-age/">Domain Age Checker</a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const domain = '{{ domain }}';
+        const loadingContainer = document.getElementById('loadingContainer');
+        const errorContainer = document.getElementById('errorContainer');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Fetch WHOIS data from API
+        fetch('/api/domain-age/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ domain: domain })
+        })
+            .then(response => response.json())
+            .then(data => {
+                loadingContainer.classList.add('hidden');
+
+                if (data.error) {
+                    errorMessage.textContent = data.error;
+                    errorContainer.classList.remove('hidden');
+                    return;
+                }
+
+                // Populate results
+                document.getElementById('ageYears').textContent = data.age?.years ?? 0;
+                document.getElementById('ageMonths').textContent = data.age?.months ?? 0;
+                document.getElementById('ageDays').textContent = data.age?.days ?? 0;
+
+                // Format dates
+                function formatDate(isoString) {
+                    if (!isoString) return 'Not available';
+                    const date = new Date(isoString);
+                    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                }
+
+                document.getElementById('createdDate').textContent = formatDate(data.createdDate);
+                document.getElementById('updatedDate').textContent = formatDate(data.updatedDate);
+
+                let expiryText = formatDate(data.expiryDate);
+                if (data.daysUntilExpiry !== null && data.daysUntilExpiry !== undefined) {
+                    expiryText += ` (${data.daysUntilExpiry} days)`;
+                }
+                document.getElementById('expiryDate').textContent = expiryText;
+
+                document.getElementById('registrar').textContent = data.registrar || 'Not available';
+
+                // Nameservers
+                const nameserversList = document.getElementById('nameserversList');
+                const nameserversSection = document.getElementById('nameserversSection');
+                if (data.nameServers && data.nameServers.length > 0) {
+                    nameserversList.innerHTML = data.nameServers.map(ns =>
+                        `<span class="ns-tag">${ns}</span>`
+                    ).join('');
+                    nameserversSection.classList.remove('hidden');
+                } else {
+                    nameserversSection.classList.add('hidden');
+                }
+
+                resultsContainer.classList.remove('hidden');
+            })
+            .catch(error => {
+                loadingContainer.classList.add('hidden');
+                errorMessage.textContent = 'Unable to fetch WHOIS data. Please try again.';
+                errorContainer.classList.remove('hidden');
+                console.error('WHOIS fetch error:', error);
+            });
+    });
+</script>
+{% endblock %}

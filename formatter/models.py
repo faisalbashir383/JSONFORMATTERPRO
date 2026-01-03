@@ -1013,3 +1013,137 @@ class MockEndpoint(models.Model):
         if not self.allowed_ips:
             return []
         return [ip.strip() for ip in self.allowed_ips.split(',') if ip.strip()]
+
+
+# ====================
+# Domain Age SEO - Approved Domains for Dynamic Pages
+# ====================
+
+class ApprovedDomain(models.Model):
+    """
+    Admin-controlled list of domains that can have indexable dynamic result pages.
+    Used for /domain-age/<domain>/ URLs to capture branded search queries like
+    "indianexpress.com domain registration date"
+    """
+    domain = models.CharField(
+        max_length=255, 
+        unique=True, 
+        db_index=True,
+        help_text="Domain name without protocol (e.g., 'indianexpress.com')"
+    )
+    is_indexable = models.BooleanField(
+        default=False,
+        help_text="If True, page will have 'index, follow'. If False, 'noindex, follow'"
+    )
+    meta_title = models.CharField(
+        max_length=255, 
+        blank=True,
+        help_text="Custom SEO title (leave blank for auto-generated)"
+    )
+    meta_description = models.TextField(
+        blank=True,
+        help_text="Custom SEO description (leave blank for auto-generated)"
+    )
+    notes = models.TextField(
+        blank=True,
+        help_text="Internal notes about this domain"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['domain']),
+            models.Index(fields=['is_indexable']),
+        ]
+        verbose_name = "Approved Domain"
+        verbose_name_plural = "Approved Domains"
+    
+    def __str__(self):
+        status = "✓ Index" if self.is_indexable else "✗ NoIndex"
+        return f"{status} - {self.domain}"
+    
+    def save(self, *args, **kwargs):
+        # Clean domain: remove protocol and www
+        if self.domain:
+            import re
+            self.domain = re.sub(r'^https?://', '', self.domain)
+            self.domain = re.sub(r'^www\.', '', self.domain)
+            self.domain = self.domain.lower().strip()
+        super().save(*args, **kwargs)
+
+
+class DomainPageVisit(models.Model):
+    """
+    Track unique visits to dynamic domain age pages.
+    Used to show popular domains and visit counts.
+    """
+    domain = models.CharField(
+        max_length=255,
+        unique=True,
+        db_index=True,
+        help_text="Domain name being checked"
+    )
+    visit_count = models.PositiveIntegerField(
+        default=0,
+        help_text="Total visits to this domain's page"
+    )
+    unique_visitors = models.PositiveIntegerField(
+        default=0,
+        help_text="Unique IP addresses that visited"
+    )
+    last_cached_data = models.TextField(
+        blank=True,
+        help_text="Cached WHOIS JSON data"
+    )
+    cache_updated_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="When WHOIS data was last cached"
+    )
+    first_visit = models.DateTimeField(auto_now_add=True)
+    last_visit = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-visit_count']
+        indexes = [
+            models.Index(fields=['domain']),
+            models.Index(fields=['-visit_count']),
+        ]
+        verbose_name = "Domain Page Visit"
+        verbose_name_plural = "Domain Page Visits"
+    
+    def __str__(self):
+        return f"{self.domain} - {self.visit_count} visits"
+    
+    @classmethod
+    def record_visit(cls, domain, ip_address):
+        """Record a visit, incrementing counters"""
+        from django.core.cache import cache
+        
+        # Clean domain
+        import re
+        domain = domain.lower().strip()
+        domain = re.sub(r'^https?://', '', domain)
+        domain = re.sub(r'^www\.', '', domain)
+        
+        # Get or create the record
+        obj, created = cls.objects.get_or_create(domain=domain)
+        obj.visit_count += 1
+        
+        # Check if this IP is unique for this domain (using cache)
+        cache_key = f"domain_visit_{domain}_{ip_address}"
+        if not cache.get(cache_key):
+            obj.unique_visitors += 1
+            cache.set(cache_key, True, 86400)  # 24 hours
+        
+        obj.save()
+        return obj
+    
+    @classmethod
+    def get_top_domains(cls, limit=10):
+        """Get top visited domains"""
+        return cls.objects.order_by('-visit_count')[:limit]
+
+

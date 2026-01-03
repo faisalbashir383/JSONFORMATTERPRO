@@ -1619,15 +1619,115 @@ def domain_age_page(request):
     return render(request, 'domain-age-checker.html')
 
 
+def whois_lookup_page(request):
+    """Render the WHOIS Lookup page"""
+    return render(request, 'whois-lookup.html')
+
+
+def domain_expiry_checker_page(request):
+    """Render the Domain Expiry Checker page"""
+    return render(request, 'domain-expiry-checker.html')
+
+
+def whois_api_page(request):
+    """Render the WHOIS API documentation page"""
+    return render(request, 'whois-api.html')
+
+
+def domain_age_result_page(request, domain):
+    """
+    Dynamic domain age result page for SEO.
+    Page loads instantly with loading spinner.
+    WHOIS data is fetched asynchronously via JavaScript.
+    Index/noindex controlled via ApprovedDomain model in admin.
+    """
+    from .models import ApprovedDomain, DomainPageVisit
+    
+    # Clean domain
+    domain = domain.lower().strip()
+    domain = re.sub(r'^https?://', '', domain)
+    domain = re.sub(r'^www\.', '', domain)
+    domain = domain.split('/')[0]
+    domain = domain.split('?')[0]
+    
+    # Validate domain format (basic check)
+    if not domain or '.' not in domain or len(domain) < 4:
+        from django.http import Http404
+        raise Http404(f"Invalid domain: '{domain}'")
+    
+    # Get client IP for visit tracking
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip_address = x_forwarded_for.split(',')[0].strip()
+    else:
+        ip_address = request.META.get('REMOTE_ADDR', '')
+    
+    # Record visit
+    try:
+        visit_record = DomainPageVisit.record_visit(domain, ip_address)
+        visit_count = visit_record.visit_count
+        unique_visitors = visit_record.unique_visitors
+    except:
+        visit_count = 0
+        unique_visitors = 0
+    
+    # Check if domain is approved and indexable
+    try:
+        approved = ApprovedDomain.objects.get(domain=domain)
+        is_indexable = approved.is_indexable
+        custom_title = approved.meta_title
+        custom_description = approved.meta_description
+    except ApprovedDomain.DoesNotExist:
+        is_indexable = False
+        custom_title = ''
+        custom_description = ''
+    
+    # Generate SEO meta (without WHOIS data - page loads instantly)
+    if custom_title:
+        meta_title = custom_title
+    else:
+        meta_title = f"{domain} Domain Age & Registration Date - Check Domain Info"
+    
+    if custom_description:
+        meta_description = custom_description
+    else:
+        meta_description = f"Check {domain} domain age, registration date, expiry date, and WHOIS information."
+    
+    # Last updated timestamp for freshness signals
+    from datetime import datetime
+    try:
+        if visit_record and visit_record.cache_updated_at:
+            last_updated = visit_record.cache_updated_at
+        else:
+            last_updated = datetime.now()
+    except:
+        last_updated = datetime.now()
+    
+    context = {
+        'domain': domain,
+        'is_indexable': is_indexable,
+        'meta_title': meta_title,
+        'meta_description': meta_description,
+        'visit_count': visit_count,
+        'unique_visitors': unique_visitors,
+        'last_updated': last_updated,
+    }
+    
+    return render(request, 'domain-age-result.html', context)
+
+
 @api_view(['POST'])
 def domain_age_api(request):
     """
     Check domain age and WHOIS information.
     Returns registration dates, registrar, nameservers, and calculated age.
+    Results are cached for 24 hours for performance.
     """
     try:
         import whois
         from datetime import datetime
+        from django.core.cache import cache
+        import json
         
         domain = request.data.get('domain', '').strip()
         
@@ -1639,6 +1739,13 @@ def domain_age_api(request):
         domain = re.sub(r'^www\.', '', domain)
         domain = domain.split('/')[0]
         domain = domain.split('?')[0]
+        domain = domain.lower()
+        
+        # Check cache first (24 hour cache)
+        cache_key = f"whois_data_{domain}"
+        cached_result = cache.get(cache_key)
+        if cached_result:
+            return Response(cached_result)
         
         try:
             w = whois.whois(domain)
@@ -1725,12 +1832,68 @@ def domain_age_api(request):
             'dnssec': dnssec,
         }
         
+        # Cache for 24 hours (86400 seconds)
+        cache.set(cache_key, result, 86400)
+        
+        # Also store in database for persistence
+        try:
+            from .models import DomainPageVisit
+            visit_record, _ = DomainPageVisit.objects.get_or_create(domain=domain)
+            visit_record.last_cached_data = json.dumps(result)
+            visit_record.cache_updated_at = datetime.now()
+            visit_record.save(update_fields=['last_cached_data', 'cache_updated_at'])
+        except:
+            pass  # Don't fail request if caching fails
+        
         return Response(result)
         
     except ImportError:
         return Response({'error': 'WHOIS library not installed. Please install python-whois.'}, status=500)
     except Exception as e:
         return Response({'error': str(e)}, status=500)
+
+
+@api_view(['GET'])
+def top_domains_api(request):
+    """
+    Get top visited domain age pages.
+    Used to display popular domains slider on main page.
+    """
+    try:
+        from .models import DomainPageVisit
+        import json
+        
+        limit = int(request.GET.get('limit', 10))
+        limit = min(limit, 50)  # Cap at 50
+        
+        top_domains = DomainPageVisit.objects.order_by('-visit_count')[:limit]
+        
+        results = []
+        for visit in top_domains:
+            data = {
+                'domain': visit.domain,
+                'visitCount': visit.visit_count,
+                'uniqueVisitors': visit.unique_visitors,
+            }
+            
+            # Include cached WHOIS data if available
+            if visit.last_cached_data:
+                try:
+                    cached = json.loads(visit.last_cached_data)
+                    data['age'] = cached.get('age')
+                    data['registrar'] = cached.get('registrar')
+                except:
+                    pass
+            
+            results.append(data)
+        
+        return Response({
+            'success': True,
+            'domains': results,
+            'total': len(results)
+        })
+    except Exception as e:
+        return Response({'success': False, 'error': str(e)}, status=500)
 
 
 # ====================

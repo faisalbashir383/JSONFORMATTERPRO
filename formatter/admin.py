@@ -516,3 +516,76 @@ class MockEndpointAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+
+
+# ====================
+# Domain Age SEO - Approved Domains Admin
+# ====================
+
+from .models import ApprovedDomain
+
+
+@admin.register(ApprovedDomain)
+class ApprovedDomainAdmin(admin.ModelAdmin):
+    """Admin for managing indexable domain age result pages"""
+    list_display = ['domain', 'is_indexable', 'meta_title', 'created_at', 'updated_at']
+    list_filter = ['is_indexable', 'created_at']
+    search_fields = ['domain', 'meta_title', 'notes']
+    list_editable = ['is_indexable']
+    ordering = ['-created_at']
+    
+    fieldsets = (
+        ('Domain', {
+            'fields': ('domain', 'is_indexable')
+        }),
+        ('SEO Overrides (Optional)', {
+            'fields': ('meta_title', 'meta_description'),
+            'classes': ('collapse',),
+            'description': 'Leave blank to use auto-generated SEO content'
+        }),
+        ('Notes', {
+            'fields': ('notes',),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    actions = ['make_indexable', 'make_noindex']
+    
+    def make_indexable(self, request, queryset):
+        updated = queryset.update(is_indexable=True)
+        self.message_user(request, f'{updated} domain(s) marked as indexable.')
+    make_indexable.short_description = 'Mark selected as indexable'
+    
+    def make_noindex(self, request, queryset):
+        updated = queryset.update(is_indexable=False)
+        self.message_user(request, f'{updated} domain(s) marked as noindex.')
+    make_noindex.short_description = 'Mark selected as noindex'
+
+
+from .models import DomainPageVisit
+
+
+@admin.register(DomainPageVisit)
+class DomainPageVisitAdmin(admin.ModelAdmin):
+    """Admin for viewing domain page visit statistics"""
+    list_display = ['domain', 'visit_count', 'unique_visitors', 'cache_updated_at', 'last_visit']
+    list_filter = ['cache_updated_at', 'first_visit']
+    search_fields = ['domain']
+    readonly_fields = ['domain', 'visit_count', 'unique_visitors', 'first_visit', 'last_visit', 'cache_updated_at']
+    ordering = ['-visit_count']
+    
+    fieldsets = (
+        ('Domain Stats', {
+            'fields': ('domain', 'visit_count', 'unique_visitors')
+        }),
+        ('Timestamps', {
+            'fields': ('first_visit', 'last_visit', 'cache_updated_at'),
+        }),
+        ('Cached Data', {
+            'fields': ('last_cached_data',),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def has_add_permission(self, request):
+        return False  # Records are auto-created
