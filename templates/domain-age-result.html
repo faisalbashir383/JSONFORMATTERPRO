@@ -360,6 +360,67 @@
             grid-template-columns: 1fr;
         }
     }
+
+    /* JSON Output Section */
+    .json-output-section {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .json-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .json-header label {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    .json-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .json-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--color-primary);
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .json-btn:hover {
+        background: rgba(99, 102, 241, 0.2);
+        border-color: var(--color-primary);
+    }
+
+    .json-code {
+        background: #1e1e2e;
+        color: #cdd6f4;
+        padding: 1.25rem;
+        border-radius: var(--radius-md);
+        overflow-x: auto;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        max-height: 400px;
+        overflow-y: auto;
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
 </style>
 {% endblock %}
 
@@ -469,6 +530,22 @@
             <label>🌐 Nameservers</label>
             <div class="nameservers-list" id="nameserversList"></div>
         </div>
+
+        <!-- JSON Output Section -->
+        <div class="json-output-section" id="jsonOutputSection">
+            <div class="json-header">
+                <label>📄 JSON Output</label>
+                <div class="json-actions">
+                    <button onclick="copyJson()" class="json-btn" title="Copy JSON">
+                        <span id="copyIcon">📋</span> Copy
+                    </button>
+                    <button onclick="downloadJson()" class="json-btn" title="Download JSON">
+                        💾 Download
+                    </button>
+                </div>
+            </div>
+            <pre class="json-code" id="jsonOutput"></pre>
+        </div>
     </div>
 </div>
 
@@ -553,6 +630,10 @@
                     nameserversSection.classList.add('hidden');
                 }
 
+                // JSON Output - store globally for copy/download
+                window.domainJsonData = JSON.stringify(data, null, 2);
+                document.getElementById('jsonOutput').textContent = window.domainJsonData;
+
                 resultsContainer.classList.remove('hidden');
             })
             .catch(error => {
@@ -562,5 +643,32 @@
                 console.error('WHOIS fetch error:', error);
             });
     });
+
+    // Copy JSON to clipboard
+    function copyJson() {
+        if (window.domainJsonData) {
+            navigator.clipboard.writeText(window.domainJsonData).then(() => {
+                const copyIcon = document.getElementById('copyIcon');
+                copyIcon.textContent = '✅';
+                setTimeout(() => { copyIcon.textContent = '📋'; }, 2000);
+            });
+        }
+    }
+
+    // Download JSON file
+    function downloadJson() {
+        if (window.domainJsonData) {
+            const domain = '{{ domain }}';
+            const blob = new Blob([window.domainJsonData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${domain.replace(/\./g, '_')}_whois.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    }
 </script>
 {% endblock %}

@@ -526,6 +526,43 @@ domain. Free domain age checker tool for SEO professionals and website owners.{%
         border: 1px solid var(--color-border);
     }
 
+    /* JSON Output */
+    .json-action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--color-primary);
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .json-action-btn:hover {
+        background: rgba(99, 102, 241, 0.2);
+        border-color: var(--color-primary);
+    }
+
+    .json-output-code {
+        background: #1e1e2e;
+        color: #cdd6f4;
+        padding: 1.25rem;
+        border-radius: var(--radius-md);
+        overflow-x: auto;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        max-height: 350px;
+        overflow-y: auto;
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
     /* Timeline */
     .timeline-section {
         margin-top: 1rem;
@@ -867,6 +904,25 @@ domain. Free domain age checker tool for SEO professionals and website owners.{%
                     <div class="status-codes-list" id="statusCodesList">
                         <span class="status-tag">-</span>
                     </div>
+                </div>
+
+                <!-- JSON Output Section -->
+                <div class="details-section"
+                    style="padding: 0; margin-top: 1.5rem; border-top: 1px solid var(--color-border); padding-top: 1.5rem;"
+                    id="jsonOutputSection">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3 class="details-title" style="margin: 0;">📄 JSON Output</h3>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="copyDomainJson()" class="json-action-btn" title="Copy JSON">
+                                <span id="mainCopyIcon">📋</span> Copy
+                            </button>
+                            <button onclick="downloadDomainJson()" class="json-action-btn" title="Download JSON">
+                                💾 Download
+                            </button>
+                        </div>
+                    </div>
+                    <pre class="json-output-code" id="jsonOutputCode"></pre>
                 </div>
             </div>
         </div>
@@ -1509,8 +1565,39 @@ domain. Free domain age checker tool for SEO professionals and website owners.{%
                 statusContainer.innerHTML = '<span class="status-tag">Active</span>';
             }
 
+            // JSON Output - store globally for copy/download
+            window.currentDomainJson = JSON.stringify(data, null, 2);
+            document.getElementById('jsonOutputCode').textContent = window.currentDomainJson;
+            window.currentDomain = data.domain || '';
+
             resultContainer.classList.add('active');
         }
     });
+
+    // Copy JSON to clipboard (main page)
+    function copyDomainJson() {
+        if (window.currentDomainJson) {
+            navigator.clipboard.writeText(window.currentDomainJson).then(() => {
+                const copyIcon = document.getElementById('mainCopyIcon');
+                copyIcon.textContent = '✅';
+                setTimeout(() => { copyIcon.textContent = '📋'; }, 2000);
+            });
+        }
+    }
+
+    // Download JSON file (main page)
+    function downloadDomainJson() {
+        if (window.currentDomainJson && window.currentDomain) {
+            const blob = new Blob([window.currentDomainJson], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${window.currentDomain.replace(/\./g, '_')}_whois.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    }
 </script>
 {% endblock %}
