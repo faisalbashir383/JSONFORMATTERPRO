@@ -1845,6 +1845,24 @@ def domain_age_api(request):
         except:
             pass  # Don't fail request if caching fails
         
+        # Auto-create ApprovedDomain for indexing (only if WHOIS lookup was successful)
+        try:
+            from .models import ApprovedDomain
+            approved, created = ApprovedDomain.objects.get_or_create(
+                domain=domain,
+                defaults={
+                    "is_indexable": True,
+                    "meta_title": f"{domain} Domain Registration Date & Age | Domain Age Checker",
+                    "meta_description": (
+                        f"Check {domain} domain registration date, domain age, expiry date, "
+                        f"and WHOIS details instantly using our free domain age checker."
+                    ),
+                    "notes": "Auto-approved: capturing domain registration date searches."
+                }
+            )
+        except:
+            pass  # Don't fail request if approval fails
+        
         return Response(result)
         
     except ImportError:
