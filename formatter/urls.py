@@ -37,6 +37,7 @@ urlpatterns = [
     path('json-visualizer/', views.json_visualizer_page, name='json_visualizer_page'),
     path('json-to-code/', views.json_to_code_page, name='json_to_code_page'),
     path('dummy-json/', views.dummy_json_page, name='dummy_json_page'),
+    path('dummy-json-api/', views.dummy_json_api_page, name='dummy_json_api_page'),
     path('json-generator/', views.json_generator_page, name='json_generator_page'),
     path('json-formatter-online/', views.json_formatter_online_page, name='json_formatter_online_page'),
     path('json-formatter/', views.json_formatter_page, name='json_formatter_page'),
@@ -114,6 +115,9 @@ urlpatterns = [
     path('api/qr-generator/', views.generate_qr_code, name='generate_qr_code'),
     path('api/domain-age/', views.domain_age_api, name='domain_age_api'),
     path('api/top-domains/', views.top_domains_api, name='top_domains_api'),
+    path('api/dummy-json/users/', views.dummy_json_users_api, name='dummy_json_users_api'),
+    path('api/dummy-json/products/', views.dummy_json_products_api, name='dummy_json_products_api'),
+    path('api/dummy-json/posts/', views.dummy_json_posts_api, name='dummy_json_posts_api'),
     path('api/typing-test/submit/', views.submit_typing_score, name='submit_typing_score'),
     path('api/typing-test/leaderboard/', views.get_typing_leaderboard, name='get_typing_leaderboard'),
     

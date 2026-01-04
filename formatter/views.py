@@ -478,6 +478,97 @@ def dummy_json_page(request):
     """Render the Dummy JSON Generator page"""
     return render(request, 'dummy-json.html')
 
+def dummy_json_api_page(request):
+    """Render the Dummy JSON API documentation page"""
+    return render(request, 'dummy-json-api.html')
+
+
+@api_view(['GET'])
+def dummy_json_users_api(request):
+    """Generate random fake user data"""
+    import random
+    
+    count = min(int(request.GET.get('count', 5)), 100)
+    
+    first_names = ['Emma', 'James', 'Sarah', 'Michael', 'Emily', 'David', 'Olivia', 'Daniel', 'Sophia', 'William', 'Ava', 'Alexander', 'Isabella', 'Matthew', 'Mia', 'Ethan', 'Charlotte', 'Andrew', 'Amelia', 'Joseph']
+    last_names = ['Wilson', 'Rodriguez', 'Kim', 'Johnson', 'Chen', 'Smith', 'Brown', 'Davis', 'Garcia', 'Miller', 'Martinez', 'Taylor', 'Anderson', 'Thomas', 'Jackson', 'White', 'Harris', 'Martin', 'Thompson', 'Moore']
+    companies = ['TechStart Inc', 'DataFlow Systems', 'CloudNine Labs', 'ByteWave', 'NexGen Solutions', 'Quantum Dynamics', 'SkyPeak Tech', 'BlueShift AI', 'InnovateCo', 'FuturePath']
+    statuses = ['active', 'active', 'active', 'inactive', 'pending']
+    
+    users = []
+    for i in range(count):
+        first = random.choice(first_names)
+        last = random.choice(last_names)
+        users.append({
+            'id': i + 1,
+            'name': f'{first} {last}',
+            'email': f'{first.lower()}.{last.lower()}@example.com',
+            'phone': f'+1-555-{random.randint(1000, 9999)}',
+            'company': random.choice(companies),
+            'status': random.choice(statuses)
+        })
+    
+    return Response({'success': True, 'count': count, 'data': users})
+
+
+@api_view(['GET'])
+def dummy_json_products_api(request):
+    """Generate random fake product data"""
+    import random
+    
+    count = min(int(request.GET.get('count', 10)), 100)
+    
+    products_list = [
+        ('Wireless Headphones', 'Electronics'), ('Smart Watch', 'Electronics'), ('Bluetooth Speaker', 'Electronics'),
+        ('Ergonomic Chair', 'Furniture'), ('Standing Desk', 'Furniture'), ('LED Desk Lamp', 'Furniture'),
+        ('Running Shoes', 'Sports'), ('Yoga Mat', 'Sports'), ('Dumbbell Set', 'Sports'),
+        ('Coffee Maker', 'Kitchen'), ('Air Fryer', 'Kitchen'), ('Blender Pro', 'Kitchen'),
+        ('Laptop Backpack', 'Accessories'), ('Leather Wallet', 'Accessories'), ('Sunglasses', 'Accessories')
+    ]
+    
+    products = []
+    for i in range(count):
+        name, category = random.choice(products_list)
+        products.append({
+            'id': i + 1,
+            'name': f'{name} {random.choice(["Pro", "Plus", "Max", "Lite", "X", ""])}',
+            'price': round(random.uniform(19.99, 499.99), 2),
+            'category': category,
+            'inStock': random.choice([True, True, True, False]),
+            'rating': round(random.uniform(3.5, 5.0), 1)
+        })
+    
+    return Response({'success': True, 'count': count, 'data': products})
+
+
+@api_view(['GET'])
+def dummy_json_posts_api(request):
+    """Generate random fake blog post data"""
+    import random
+    from datetime import datetime, timedelta
+    
+    count = min(int(request.GET.get('count', 5)), 100)
+    
+    titles = ['Getting Started with React', 'Python Best Practices', 'Introduction to Machine Learning', 
+              'Docker for Beginners', 'REST API Design Patterns', 'Building Microservices', 
+              'JavaScript ES6 Features', 'Cloud Architecture Basics', 'Database Optimization Tips',
+              'Security Best Practices', 'CI/CD Pipeline Setup', 'Testing Strategies']
+    authors = ['John Developer', 'Jane Coder', 'Alex Engineer', 'Sam Architect', 'Chris DevOps']
+    
+    posts = []
+    for i in range(count):
+        date = datetime.now() - timedelta(days=random.randint(1, 365))
+        posts.append({
+            'id': i + 1,
+            'title': random.choice(titles),
+            'body': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            'author': random.choice(authors),
+            'date': date.strftime('%Y-%m-%d'),
+            'views': random.randint(100, 10000)
+        })
+    
+    return Response({'success': True, 'count': count, 'data': posts})
+
 
 def json_generator_page(request):
     """Render the JSON Generator & Streaming Tool page"""
