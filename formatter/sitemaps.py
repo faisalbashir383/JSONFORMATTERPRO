@@ -29,6 +29,7 @@ class StaticViewSitemap(Sitemap):
             'json_tree_page',
             'dummy_json_page',
             'dummy_json_api_page',
+            'json_tools_page',
             # API & Network Tools
             'http_headers_page',
             'ip_info_page',

@@ -1,0 +1,473 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}JSON Tools for Developers - Free Online Utilities{% endblock %}
+{% block meta_title %}JSON Tools for Developers - Free Online Utilities{% endblock %}
+{% block meta_description %}Collection of free JSON tools for developers. Format, validate, compare, visualize, and
+generate JSON data with our suite of online utilities.{% endblock %}
+{% block meta_keywords %}json tools, online json tools, json utilities, developer tools{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/json-tools/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "JSON Tools for Developers",
+  "description": "Collection of free JSON tools for developers including formatter, validator, diff, visualizer, and generator",
+  "url": "{{ SITE_URL }}/json-tools/"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ SITE_URL }}/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "JSON Tools",
+      "item": "{{ SITE_URL }}/json-tools/"
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "JSON Tools",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "JSON Formatter", "url": "{{ SITE_URL }}/"},
+    {"@type": "ListItem", "position": 2, "name": "JSON Schema Validator", "url": "{{ SITE_URL }}/json-schema-validator/"},
+    {"@type": "ListItem", "position": 3, "name": "JSON Diff", "url": "{{ SITE_URL }}/json-diff/"},
+    {"@type": "ListItem", "position": 4, "name": "JSON Tree Viewer", "url": "{{ SITE_URL }}/json-tree/"},
+    {"@type": "ListItem", "position": 5, "name": "JSON Visualizer", "url": "{{ SITE_URL }}/json-visualizer/"},
+    {"@type": "ListItem", "position": 6, "name": "Dummy JSON Generator", "url": "{{ SITE_URL }}/dummy-json/"},
+    {"@type": "ListItem", "position": 7, "name": "Mock API Generator", "url": "{{ SITE_URL }}/mock-api/"}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What are JSON tools used for?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "JSON tools help developers work with JSON data more efficiently. They are used for formatting, validating, comparing, visualizing, and generating JSON throughout the development lifecycle."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are these JSON tools free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, all tools in this collection are completely free with no signup required. Processing happens in your browser for privacy and speed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to install anything?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No installation required. All tools run directly in your web browser and work on any device with a modern browser."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .page-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #6366f1 0%, #10b981 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+    }
+
+    .page-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.8;
+    }
+
+    .content-section {
+        margin-bottom: 3rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .content-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.25rem;
+        color: var(--color-text);
+    }
+
+    .content-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .workflow-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .workflow-step {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+    }
+
+    .step-number {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        background: var(--color-primary);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .step-content h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        color: var(--color-text);
+    }
+
+    .step-content p {
+        font-size: 0.95rem;
+        margin: 0;
+    }
+
+    .step-content a {
+        color: var(--color-primary);
+        text-decoration: none;
+    }
+
+    .step-content a:hover {
+        text-decoration: underline;
+    }
+
+    .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.25rem;
+        margin-top: 1.5rem;
+    }
+
+    .tool-card {
+        display: block;
+        padding: 1.5rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+        text-decoration: none;
+        color: var(--color-text);
+        transition: all 0.2s ease;
+    }
+
+    .tool-card:hover {
+        border-color: var(--color-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px var(--color-shadow);
+    }
+
+    .tool-card h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .tool-card p {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    .use-cases-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .use-case {
+        padding: 1.25rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+    }
+
+    .use-case h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+    }
+
+    .use-case p {
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .faq-item {
+        border-bottom: 1px solid var(--color-border);
+        padding: 1.25rem 0;
+    }
+
+    .faq-item:last-child {
+        border-bottom: none;
+    }
+
+    .faq-item h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+    }
+
+    .faq-item p {
+        margin: 0;
+    }
+
+    @media (max-width: 768px) {
+        .page-header h1 {
+            font-size: 1.75rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>JSON Tools for Developers</h1>
+    <p>
+        A complete collection of free online utilities for working with JSON data.
+        Whether you're debugging APIs, validating data structures, or prototyping applications,
+        these tools streamline your JSON workflow.
+    </p>
+</div>
+
+<!-- Intro Section -->
+<div class="content-section">
+    <h2>Why Use JSON Tools?</h2>
+    <p>
+        JSON (JavaScript Object Notation) is the standard format for data exchange in modern web development.
+        APIs, configuration files, and data storage all rely on JSON. However, working with raw JSON can be
+        challenging—especially when dealing with large files, nested structures, or subtle formatting issues.
+    </p>
+    <p>
+        These tools help developers work more efficiently by automating common tasks like formatting,
+        validation, comparison, and visualization. All processing happens in your browser, ensuring
+        your data remains private and secure.
+    </p>
+</div>
+
+<!-- Workflow Section -->
+<div class="content-section">
+    <h2>A Typical JSON Workflow</h2>
+    <p>Here's how developers typically use these tools together:</p>
+
+    <div class="workflow-steps">
+        <div class="workflow-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3>Format JSON</h3>
+                <p>Start by prettifying minified or messy JSON for readability. → <a href="/">JSON Formatter</a></p>
+            </div>
+        </div>
+
+        <div class="workflow-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3>Validate JSON</h3>
+                <p>Check if your JSON conforms to a schema or specification. → <a href="/json-schema-validator/">JSON
+                        Schema Validator</a></p>
+            </div>
+        </div>
+
+        <div class="workflow-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3>Compare JSON</h3>
+                <p>Find differences between two JSON files or API responses. → <a href="/json-diff/">JSON Diff</a></p>
+            </div>
+        </div>
+
+        <div class="workflow-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <h3>Visualize JSON</h3>
+                <p>Explore complex structures with tree or graph views. → <a href="/json-tree/">JSON Tree Viewer</a></p>
+            </div>
+        </div>
+
+        <div class="workflow-step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+                <h3>Generate JSON</h3>
+                <p>Create realistic test data for development and testing. → <a href="/dummy-json/">Dummy JSON
+                        Generator</a></p>
+            </div>
+        </div>
+
+        <div class="workflow-step">
+            <div class="step-number">6</div>
+            <div class="step-content">
+                <h3>Mock APIs</h3>
+                <p>Build fake API endpoints for frontend development. → <a href="/mock-api/">Mock API Generator</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tool Grid -->
+<div class="content-section">
+    <h2>All JSON Tools</h2>
+
+    <div class="tools-grid">
+        <a href="/" class="tool-card">
+            <h3>📝 JSON Formatter</h3>
+            <p>Beautify, minify, and fix common JSON formatting issues.</p>
+        </a>
+
+        <a href="/json-schema-validator/" class="tool-card">
+            <h3>📐 JSON Schema Validator</h3>
+            <p>Validate JSON data against JSON Schema specifications.</p>
+        </a>
+
+        <a href="/json-diff/" class="tool-card">
+            <h3>🔍 JSON Diff</h3>
+            <p>Compare two JSON files and highlight differences visually.</p>
+        </a>
+
+        <a href="/json-tree/" class="tool-card">
+            <h3>🌳 JSON Tree Viewer</h3>
+            <p>Navigate nested JSON structures in an expandable tree view.</p>
+        </a>
+
+        <a href="/json-visualizer/" class="tool-card">
+            <h3>📊 JSON Visualizer</h3>
+            <p>View JSON as interactive graphs and diagrams.</p>
+        </a>
+
+        <a href="/dummy-json/" class="tool-card">
+            <h3>🎲 Dummy JSON Generator</h3>
+            <p>Generate realistic fake JSON data for testing purposes.</p>
+        </a>
+
+        <a href="/mock-api/" class="tool-card">
+            <h3>🔌 Mock API Generator</h3>
+            <p>Create custom API endpoints with simulated responses.</p>
+        </a>
+
+        <a href="/json-to-yaml/" class="tool-card">
+            <h3>🔄 JSON to YAML</h3>
+            <p>Convert between JSON and YAML formats seamlessly.</p>
+        </a>
+    </div>
+</div>
+
+<!-- Use Cases -->
+<div class="content-section">
+    <h2>Who Uses These Tools?</h2>
+
+    <div class="use-cases-grid">
+        <div class="use-case">
+            <h3>🧑‍💻 Frontend Developers</h3>
+            <p>Mock API responses and visualize data structures during development.</p>
+        </div>
+
+        <div class="use-case">
+            <h3>⚙️ Backend Developers</h3>
+            <p>Validate API schemas and debug JSON payloads.</p>
+        </div>
+
+        <div class="use-case">
+            <h3>🧪 QA Engineers</h3>
+            <p>Compare API responses and generate test data for automation.</p>
+        </div>
+
+        <div class="use-case">
+            <h3>📚 Students & Learners</h3>
+            <p>Understand JSON structure through visualization and formatting.</p>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ -->
+<div class="content-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+        <h3>What are JSON tools used for?</h3>
+        <p>JSON tools help developers work with JSON data more efficiently. They are used for formatting, validating,
+            comparing, visualizing, and generating JSON throughout the development lifecycle.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Are these JSON tools free?</h3>
+        <p>Yes, all tools in this collection are completely free with no signup required. Processing happens in your
+            browser for privacy and speed.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Do I need to install anything?</h3>
+        <p>No installation required. All tools run directly in your web browser and work on any device with a modern
+            browser.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Is my data secure?</h3>
+        <p>Yes. All processing happens locally in your browser. Your JSON data is never sent to any server.</p>
+    </div>
+</div>
+{% endblock %}

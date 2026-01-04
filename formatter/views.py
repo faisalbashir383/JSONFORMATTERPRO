@@ -483,6 +483,11 @@ def dummy_json_api_page(request):
     return render(request, 'dummy-json-api.html')
 
 
+def json_tools_page(request):
+    """Render the JSON Tools pillar page"""
+    return render(request, 'json-tools.html')
+
+
 @api_view(['GET'])
 def dummy_json_users_api(request):
     """Generate random fake user data"""
