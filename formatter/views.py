@@ -596,6 +596,111 @@ def dummy_json_posts_api(request):
     return Response({'success': True, 'count': count, 'data': posts})
 
 
+@api_view(['GET'])
+def dummy_json_comments_api(request):
+    """Generate random fake comment data"""
+    import random
+    
+    count = min(int(request.GET.get('count', 5)), 100)
+    
+    names = ['Alice Johnson', 'Bob Smith', 'Carol Williams', 'David Brown', 'Eva Martinez', 'Frank Lee', 'Grace Kim', 'Henry Davis']
+    
+    comments = []
+    for i in range(count):
+        name = random.choice(names)
+        comments.append({
+            'id': i + 1,
+            'name': name,
+            'email': f'{name.split()[0].lower()}@example.com',
+            'body': random.choice([
+                'Great article! Very informative and well written.',
+                'Thanks for sharing this, it really helped me understand the topic.',
+                'I have a question about the third point you mentioned.',
+                'This is exactly what I was looking for. Bookmarked!',
+                'Could you elaborate more on the implementation details?'
+            ]),
+            'postId': random.randint(1, 100)
+        })
+    
+    # Track request
+    from .models import DummyJsonApiLog
+    ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', '127.0.0.1'))
+    if ip and ',' in ip:
+        ip = ip.split(',')[0].strip()
+    DummyJsonApiLog.log_request('comments', ip, request.META.get('HTTP_USER_AGENT'))
+    
+    return Response({'success': True, 'count': count, 'data': comments})
+
+
+@api_view(['GET'])
+def dummy_json_todos_api(request):
+    """Generate random fake todo data"""
+    import random
+    from datetime import datetime, timedelta
+    
+    count = min(int(request.GET.get('count', 5)), 100)
+    
+    tasks = [
+        'Complete project documentation', 'Review pull request', 'Fix login bug',
+        'Update dependencies', 'Write unit tests', 'Refactor authentication module',
+        'Design new dashboard', 'Implement search feature', 'Optimize database queries',
+        'Deploy to staging', 'Code review', 'Team meeting', 'Update README'
+    ]
+    priorities = ['low', 'medium', 'medium', 'high', 'critical']
+    
+    todos = []
+    for i in range(count):
+        due = datetime.now() + timedelta(days=random.randint(1, 30))
+        todos.append({
+            'id': i + 1,
+            'title': random.choice(tasks),
+            'completed': random.choice([True, False, False]),
+            'priority': random.choice(priorities),
+            'dueDate': due.strftime('%Y-%m-%d')
+        })
+    
+    # Track request
+    from .models import DummyJsonApiLog
+    ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', '127.0.0.1'))
+    if ip and ',' in ip:
+        ip = ip.split(',')[0].strip()
+    DummyJsonApiLog.log_request('todos', ip, request.META.get('HTTP_USER_AGENT'))
+    
+    return Response({'success': True, 'count': count, 'data': todos})
+
+
+@api_view(['GET'])
+def dummy_json_companies_api(request):
+    """Generate random fake company data"""
+    import random
+    
+    count = min(int(request.GET.get('count', 5)), 100)
+    
+    company_names = ['TechCorp', 'DataVerse', 'CloudNine', 'ByteWorks', 'NexGen', 'SkyPeak', 'BlueShift', 'InnovateCo', 'FuturePath', 'QuantumLeap']
+    industries = ['Technology', 'Finance', 'Healthcare', 'E-commerce', 'Manufacturing', 'Consulting', 'Education']
+    suffixes = ['Inc', 'LLC', 'Corp', 'Group', 'Solutions', 'Labs', 'Systems']
+    
+    companies = []
+    for i in range(count):
+        companies.append({
+            'id': i + 1,
+            'name': f'{random.choice(company_names)} {random.choice(suffixes)}',
+            'industry': random.choice(industries),
+            'employees': random.randint(10, 10000),
+            'revenue': f'${random.randint(1, 500)}M',
+            'founded': random.randint(1990, 2023)
+        })
+    
+    # Track request
+    from .models import DummyJsonApiLog
+    ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', '127.0.0.1'))
+    if ip and ',' in ip:
+        ip = ip.split(',')[0].strip()
+    DummyJsonApiLog.log_request('companies', ip, request.META.get('HTTP_USER_AGENT'))
+    
+    return Response({'success': True, 'count': count, 'data': companies})
+
+
 def json_generator_page(request):
     """Render the JSON Generator & Streaming Tool page"""
     return render(request, 'json-generator.html')

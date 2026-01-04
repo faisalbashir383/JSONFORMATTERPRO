@@ -1153,6 +1153,9 @@ class DummyJsonApiLog(models.Model):
         ('users', 'Users'),
         ('products', 'Products'),
         ('posts', 'Posts'),
+        ('comments', 'Comments'),
+        ('todos', 'Todos'),
+        ('companies', 'Companies'),
     ]
     
     endpoint = models.CharField(max_length=20, choices=ENDPOINT_CHOICES)

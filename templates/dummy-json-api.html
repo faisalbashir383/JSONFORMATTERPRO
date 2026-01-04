@@ -275,6 +275,214 @@ endpoint{% endblock %}
         white-space: pre;
     }
 
+    /* API Explorer Tabs */
+    .api-tabs {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-top: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .api-tab {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .api-tab:hover {
+        border-color: var(--color-primary);
+        color: var(--color-text);
+    }
+
+    .api-tab.active {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        border-color: transparent;
+        color: white;
+    }
+
+    /* API Options Panel */
+    .api-options {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+        padding: 1.25rem;
+        margin-top: 1rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+    }
+
+    .option-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .option-group label {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+    }
+
+    .option-group select {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        background: var(--color-surface);
+        color: var(--color-text);
+        cursor: pointer;
+    }
+
+    .field-checkboxes {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .field-checkboxes label {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.35rem 0.75rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .field-checkboxes label:has(input:checked) {
+        background: rgba(99, 102, 241, 0.15);
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    .field-checkboxes input {
+        accent-color: var(--color-primary);
+    }
+
+    /* API Actions */
+    .api-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .try-btn {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .try-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+
+    .action-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--color-text);
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    /* Response Preview */
+    .response-preview {
+        margin-top: 1.5rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+    }
+
+    .response-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .response-header span:last-child {
+        color: #10b981;
+    }
+
+    .response-preview .json-response {
+        margin: 0;
+        border-radius: 0;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    /* Endpoints Grid */
+    .endpoints-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .endpoint-card {
+        padding: 1.25rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+        transition: all 0.2s ease;
+    }
+
+    .endpoint-card:hover {
+        border-color: var(--color-primary);
+    }
+
+    .endpoint-card h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .endpoint-card code {
+        display: block;
+        padding: 0.5rem 0.75rem;
+        background: var(--color-bg);
+        border-radius: var(--radius-sm);
+        font-size: 0.8rem;
+        margin-bottom: 0.75rem;
+        font-family: 'SF Mono', monospace;
+        color: var(--color-primary);
+    }
+
+    .endpoint-card p {
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
     .use-case-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -392,58 +600,123 @@ endpoint{% endblock %}
     </p>
 </div>
 
-<!-- API Endpoint Section -->
+<!-- Interactive API Explorer -->
 <div class="content-section">
-    <h2>API Endpoints</h2>
-    <p>
-        Make HTTP requests to these endpoints to receive fake JSON data. All endpoints are free and require no
-        authentication.
-    </p>
+    <h2>API Explorer</h2>
+    <p>Choose an API endpoint, customize options, and test live responses. All endpoints are free and require no
+        authentication.</p>
 
-    <h3 style="font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Get Random Users</h3>
-    <div class="endpoint-box">
+    <!-- API Type Tabs -->
+    <div class="api-tabs">
+        <button class="api-tab active" data-api="users">👤 Users</button>
+        <button class="api-tab" data-api="products">📦 Products</button>
+        <button class="api-tab" data-api="posts">📝 Posts</button>
+        <button class="api-tab" data-api="comments">💬 Comments</button>
+        <button class="api-tab" data-api="todos">✅ Todos</button>
+        <button class="api-tab" data-api="companies">🏢 Companies</button>
+    </div>
+
+    <!-- Options Panel -->
+    <div class="api-options">
+        <div class="option-group">
+            <label for="countSelect">Number of items:</label>
+            <select id="countSelect">
+                <option value="1">1</option>
+                <option value="3">3</option>
+                <option value="5" selected>5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+
+        <div class="option-group" id="fieldsGroup">
+            <label>Include fields:</label>
+            <div class="field-checkboxes" id="fieldCheckboxes">
+                <!-- Populated by JS based on selected API -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Generated Endpoint -->
+    <div class="endpoint-box" style="margin-top: 1.5rem;">
         <div class="endpoint-content">
             <span class="endpoint-method">GET</span>
-            <span class="endpoint-url" id="usersUrl">{{ SITE_URL }}/api/dummy-json/users/?count=5</span>
+            <span class="endpoint-url" id="generatedUrl">{{ SITE_URL }}/api/dummy-json/users/?count=5</span>
         </div>
-        <button class="copy-endpoint-btn" onclick="copyEndpoint('usersUrl', this)" title="Copy URL"><svg
-                xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+        <button class="copy-endpoint-btn" onclick="copyGeneratedUrl()" title="Copy URL">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg></button>
+            </svg>
+        </button>
     </div>
-    <p>Returns an array of random user objects with id, name, email, phone, and company fields.</p>
 
-    <h3 style="font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Get Random Products</h3>
-    <div class="endpoint-box">
-        <div class="endpoint-content">
-            <span class="endpoint-method">GET</span>
-            <span class="endpoint-url" id="productsUrl">{{ SITE_URL }}/api/dummy-json/products/?count=10</span>
-        </div>
-        <button class="copy-endpoint-btn" onclick="copyEndpoint('productsUrl', this)" title="Copy URL"><svg
-                xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg></button>
+    <!-- Action Buttons -->
+    <div class="api-actions">
+        <button class="try-btn" onclick="tryApi()">🚀 Try It Live</button>
+        <button class="action-btn" onclick="copyGeneratedUrl()">📋 Copy URL</button>
     </div>
-    <p>Returns an array of random product objects with id, name, price, category, and stock fields.</p>
 
-    <h3 style="font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Get Random Posts</h3>
-    <div class="endpoint-box">
-        <div class="endpoint-content">
-            <span class="endpoint-method">GET</span>
-            <span class="endpoint-url" id="postsUrl">{{ SITE_URL }}/api/dummy-json/posts/?count=5</span>
+    <!-- Live Response Preview -->
+    <div id="responsePreview" class="response-preview" style="display: none;">
+        <div class="response-header">
+            <span>Response</span>
+            <span id="responseStatus"></span>
         </div>
-        <button class="copy-endpoint-btn" onclick="copyEndpoint('postsUrl', this)" title="Copy URL"><svg
-                xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg></button>
+        <pre id="responseBody" class="json-response"></pre>
     </div>
-    <p>Returns an array of random blog post objects with id, title, body, author, and date fields.</p>
+
+    <!-- Mock API CTA -->
+    <div
+        style="margin-top: 1.5rem; padding: 1.25rem; background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%); border-radius: var(--radius-md); border: 1px solid rgba(139, 92, 246, 0.2); text-align: center;">
+        <p style="margin: 0 0 0.75rem 0; color: var(--color-text);">
+            <strong>Need more customization?</strong> Define your own schema, custom fields, and response structure.
+        </p>
+        <a href="/mock-api/"
+            style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.5rem; background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); color: white; text-decoration: none; border-radius: var(--radius-md); font-weight: 600; font-size: 0.95rem;">
+            🛠️ Try Mock API Generator
+        </a>
+    </div>
+</div>
+
+<!-- All Endpoints Reference -->
+<div class="content-section">
+    <h2>All API Endpoints</h2>
+    <div class="endpoints-grid">
+        <div class="endpoint-card">
+            <h3>👤 Users</h3>
+            <code>/api/dummy-json/users/</code>
+            <p>Random user profiles with name, email, phone, company, and status.</p>
+        </div>
+        <div class="endpoint-card">
+            <h3>📦 Products</h3>
+            <code>/api/dummy-json/products/</code>
+            <p>Product data with name, price, category, stock, and rating.</p>
+        </div>
+        <div class="endpoint-card">
+            <h3>📝 Posts</h3>
+            <code>/api/dummy-json/posts/</code>
+            <p>Blog posts with title, body, author, date, and view count.</p>
+        </div>
+        <div class="endpoint-card">
+            <h3>💬 Comments</h3>
+            <code>/api/dummy-json/comments/</code>
+            <p>Comments with name, email, body, and post reference.</p>
+        </div>
+        <div class="endpoint-card">
+            <h3>✅ Todos</h3>
+            <code>/api/dummy-json/todos/</code>
+            <p>Todo items with title, completed status, and priority.</p>
+        </div>
+        <div class="endpoint-card">
+            <h3>🏢 Companies</h3>
+            <code>/api/dummy-json/companies/</code>
+            <p>Company data with name, industry, employees, and revenue.</p>
+        </div>
+    </div>
 </div>
 
 <!-- Example Response -->
@@ -764,15 +1037,101 @@ fmt.Println(string(body))</pre>
     const copyIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
     const checkIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
 
-    function copyEndpoint(elementId, btn) {
-        const url = document.getElementById(elementId).textContent;
+    const baseUrl = '{{ SITE_URL }}';
+    let currentApi = 'users';
+
+    // API field definitions
+    const apiFields = {
+        users: ['id', 'name', 'email', 'phone', 'company', 'status'],
+        products: ['id', 'name', 'price', 'category', 'inStock', 'rating'],
+        posts: ['id', 'title', 'body', 'author', 'date', 'views'],
+        comments: ['id', 'name', 'email', 'body', 'postId'],
+        todos: ['id', 'title', 'completed', 'priority', 'dueDate'],
+        companies: ['id', 'name', 'industry', 'employees', 'revenue', 'founded']
+    };
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', function () {
+        renderFieldCheckboxes('users');
+        updateGeneratedUrl();
+
+        // Tab switching
+        document.querySelectorAll('.api-tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                currentApi = this.dataset.api;
+                document.querySelectorAll('.api-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                renderFieldCheckboxes(currentApi);
+                updateGeneratedUrl();
+            });
+        });
+
+        // Count selector change
+        document.getElementById('countSelect').addEventListener('change', updateGeneratedUrl);
+    });
+
+    function renderFieldCheckboxes(api) {
+        const container = document.getElementById('fieldCheckboxes');
+        const fields = apiFields[api] || [];
+        container.innerHTML = fields.map(field => `
+            <label>
+                <input type="checkbox" value="${field}" checked onchange="updateGeneratedUrl()">
+                ${field}
+            </label>
+        `).join('');
+    }
+
+    function getSelectedFields() {
+        const checkboxes = document.querySelectorAll('#fieldCheckboxes input:checked');
+        return Array.from(checkboxes).map(cb => cb.value);
+    }
+
+    function updateGeneratedUrl() {
+        const count = document.getElementById('countSelect').value;
+        const fields = getSelectedFields();
+        let url = `${baseUrl}/api/dummy-json/${currentApi}/?count=${count}`;
+        if (fields.length < apiFields[currentApi].length && fields.length > 0) {
+            url += `&fields=${fields.join(',')}`;
+        }
+        document.getElementById('generatedUrl').textContent = url;
+    }
+
+    function copyGeneratedUrl() {
+        const url = document.getElementById('generatedUrl').textContent;
         navigator.clipboard.writeText(url).then(() => {
-            btn.innerHTML = checkIcon;
-            setTimeout(() => { btn.innerHTML = copyIcon; }, 2000);
+            // Brief feedback
+            const btn = document.querySelector('.api-actions .action-btn');
+            const original = btn.innerHTML;
+            btn.innerHTML = '✅ Copied!';
+            setTimeout(() => { btn.innerHTML = original; }, 2000);
         });
     }
 
-    // Tab switching
+    async function tryApi() {
+        const url = document.getElementById('generatedUrl').textContent;
+        const preview = document.getElementById('responsePreview');
+        const status = document.getElementById('responseStatus');
+        const body = document.getElementById('responseBody');
+
+        preview.style.display = 'block';
+        status.textContent = 'Loading...';
+        status.style.color = 'var(--color-text-secondary)';
+        body.textContent = '';
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            status.textContent = `${response.status} OK`;
+            status.style.color = '#10b981';
+            body.textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+            status.textContent = 'Error';
+            status.style.color = '#ef4444';
+            body.textContent = `Failed to fetch: ${error.message}`;
+        }
+    }
+
+    // Language tab switching (for Quick Start section)
     document.querySelectorAll('.lang-tab').forEach(tab => {
         tab.addEventListener('click', function () {
             const lang = this.dataset.lang;
@@ -783,7 +1142,6 @@ fmt.Println(string(body))</pre>
         });
     });
 
-    // Copy code
     function copyCode(lang) {
         const code = document.querySelector('#code-' + lang + ' pre').textContent;
         const btn = document.querySelector('#code-' + lang + ' .copy-code-btn');

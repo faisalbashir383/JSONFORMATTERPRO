@@ -119,6 +119,9 @@ urlpatterns = [
     path('api/dummy-json/users/', views.dummy_json_users_api, name='dummy_json_users_api'),
     path('api/dummy-json/products/', views.dummy_json_products_api, name='dummy_json_products_api'),
     path('api/dummy-json/posts/', views.dummy_json_posts_api, name='dummy_json_posts_api'),
+    path('api/dummy-json/comments/', views.dummy_json_comments_api, name='dummy_json_comments_api'),
+    path('api/dummy-json/todos/', views.dummy_json_todos_api, name='dummy_json_todos_api'),
+    path('api/dummy-json/companies/', views.dummy_json_companies_api, name='dummy_json_companies_api'),
     path('api/typing-test/submit/', views.submit_typing_score, name='submit_typing_score'),
     path('api/typing-test/leaderboard/', views.get_typing_leaderboard, name='get_typing_leaderboard'),
     
