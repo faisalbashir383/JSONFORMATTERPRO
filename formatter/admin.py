@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import BlogCategory, BlogPost, SiteSettings, VisitorLog, PageView, ContactMessage, Redirect
+from .models import BlogCategory, BlogPost, SiteSettings, VisitorLog, PageView, ContactMessage, Redirect, DummyJsonApiLog
 
 
 @admin.register(SiteSettings)
@@ -589,3 +589,22 @@ class DomainPageVisitAdmin(admin.ModelAdmin):
     
     def has_add_permission(self, request):
         return False  # Records are auto-created
+
+
+@admin.register(DummyJsonApiLog)
+class DummyJsonApiLogAdmin(admin.ModelAdmin):
+    list_display = ['ip_address', 'endpoint', 'request_count', 'first_request', 'last_request']
+    list_filter = ['endpoint', 'first_request', 'last_request']
+    search_fields = ['ip_address', 'user_agent']
+    readonly_fields = ['ip_address', 'endpoint', 'user_agent', 'request_count', 'first_request', 'last_request']
+    ordering = ['-request_count']
+    
+    def has_add_permission(self, request):
+        return False
+    
+    def changelist_view(self, request, extra_context=None):
+        from .models import DummyJsonApiLog
+        stats = DummyJsonApiLog.get_stats()
+        extra_context = extra_context or {}
+        extra_context['api_stats'] = stats
+        return super().changelist_view(request, extra_context=extra_context)

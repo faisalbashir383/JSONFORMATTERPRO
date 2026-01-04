@@ -1147,3 +1147,58 @@ class DomainPageVisit(models.Model):
         return cls.objects.order_by('-visit_count')[:limit]
 
 
+class DummyJsonApiLog(models.Model):
+    """Track Dummy JSON API requests"""
+    ENDPOINT_CHOICES = [
+        ('users', 'Users'),
+        ('products', 'Products'),
+        ('posts', 'Posts'),
+    ]
+    
+    endpoint = models.CharField(max_length=20, choices=ENDPOINT_CHOICES)
+    ip_address = models.GenericIPAddressField()
+    user_agent = models.TextField(blank=True, null=True)
+    request_count = models.PositiveIntegerField(default=1)
+    first_request = models.DateTimeField(auto_now_add=True)
+    last_request = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = "Dummy JSON API Log"
+        verbose_name_plural = "Dummy JSON API Logs"
+        unique_together = ['endpoint', 'ip_address']
+        indexes = [
+            models.Index(fields=['endpoint']),
+            models.Index(fields=['ip_address']),
+            models.Index(fields=['last_request']),
+        ]
+    
+    def __str__(self):
+        return f"{self.ip_address} - {self.endpoint} ({self.request_count} requests)"
+    
+    @classmethod
+    def log_request(cls, endpoint, ip_address, user_agent=None):
+        """Log an API request, incrementing count for existing IP+endpoint combo"""
+        obj, created = cls.objects.get_or_create(
+            endpoint=endpoint,
+            ip_address=ip_address,
+            defaults={'user_agent': user_agent}
+        )
+        if not created:
+            obj.request_count += 1
+            obj.save(update_fields=['request_count', 'last_request'])
+        return obj
+    
+    @classmethod
+    def get_stats(cls):
+        """Get overall API stats"""
+        from django.db.models import Sum, Count
+        return {
+            'total_requests': cls.objects.aggregate(total=Sum('request_count'))['total'] or 0,
+            'unique_ips': cls.objects.values('ip_address').distinct().count(),
+            'by_endpoint': {
+                e[0]: cls.objects.filter(endpoint=e[0]).aggregate(
+                    total=Sum('request_count'),
+                    unique_ips=Count('ip_address', distinct=True)
+                ) for e in cls.ENDPOINT_CHOICES
+            }
+        }

@@ -513,6 +513,13 @@ def dummy_json_users_api(request):
             'status': random.choice(statuses)
         })
     
+    # Track request
+    from .models import DummyJsonApiLog
+    ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', '127.0.0.1'))
+    if ip and ',' in ip:
+        ip = ip.split(',')[0].strip()
+    DummyJsonApiLog.log_request('users', ip, request.META.get('HTTP_USER_AGENT'))
+    
     return Response({'success': True, 'count': count, 'data': users})
 
 
@@ -543,6 +550,13 @@ def dummy_json_products_api(request):
             'rating': round(random.uniform(3.5, 5.0), 1)
         })
     
+    # Track request
+    from .models import DummyJsonApiLog
+    ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', '127.0.0.1'))
+    if ip and ',' in ip:
+        ip = ip.split(',')[0].strip()
+    DummyJsonApiLog.log_request('products', ip, request.META.get('HTTP_USER_AGENT'))
+    
     return Response({'success': True, 'count': count, 'data': products})
 
 
@@ -571,6 +585,13 @@ def dummy_json_posts_api(request):
             'date': date.strftime('%Y-%m-%d'),
             'views': random.randint(100, 10000)
         })
+    
+    # Track request
+    from .models import DummyJsonApiLog
+    ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', '127.0.0.1'))
+    if ip and ',' in ip:
+        ip = ip.split(',')[0].strip()
+    DummyJsonApiLog.log_request('posts', ip, request.META.get('HTTP_USER_AGENT'))
     
     return Response({'success': True, 'count': count, 'data': posts})
 
