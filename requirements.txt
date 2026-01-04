@@ -12,4 +12,6 @@ qrcode[pil]==7.4.2
 Pillow==10.4.0
 python-whois==0.9.6
 whitenoise==6.8.2
+dnspython==2.8.0
+
 

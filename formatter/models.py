@@ -1205,3 +1205,90 @@ class DummyJsonApiLog(models.Model):
                 ) for e in cls.ENDPOINT_CHOICES
             }
         }
+
+
+class NetworkLookupLog(models.Model):
+    """
+    Tracks all DNS and IP lookup requests.
+    Stores the query, type, requester IP, and response data.
+    """
+    LOOKUP_TYPE_CHOICES = [
+        ('dns', 'DNS Lookup'),
+        ('ip', 'IP Lookup'),
+    ]
+    
+    lookup_type = models.CharField(max_length=10, choices=LOOKUP_TYPE_CHOICES)
+    query = models.CharField(max_length=255, help_text="Domain name or IP address queried")
+    
+    # Requester info
+    requester_ip = models.GenericIPAddressField(help_text="IP of the user making the request")
+    user_agent = models.TextField(blank=True, null=True)
+    
+    # Response data (stored as JSON for flexibility)
+    response_data = models.JSONField(null=True, blank=True, help_text="Full API response")
+    success = models.BooleanField(default=True)
+    error_message = models.TextField(blank=True, null=True)
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = "Network Lookup Log"
+        verbose_name_plural = "Network Lookup Logs"
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['lookup_type', 'created_at']),
+            models.Index(fields=['query']),
+            models.Index(fields=['requester_ip']),
+        ]
+    
+    def __str__(self):
+        return f"{self.get_lookup_type_display()}: {self.query} from {self.requester_ip}"
+    
+    @classmethod
+    def log_dns_lookup(cls, domain, requester_ip, response_data=None, success=True, error=None, user_agent=None):
+        """Log a DNS lookup request"""
+        return cls.objects.create(
+            lookup_type='dns',
+            query=domain,
+            requester_ip=requester_ip,
+            response_data=response_data,
+            success=success,
+            error_message=error,
+            user_agent=user_agent
+        )
+    
+    @classmethod
+    def log_ip_lookup(cls, ip_address, requester_ip, response_data=None, success=True, error=None, user_agent=None):
+        """Log an IP lookup request"""
+        return cls.objects.create(
+            lookup_type='ip',
+            query=ip_address,
+            requester_ip=requester_ip,
+            response_data=response_data,
+            success=success,
+            error_message=error,
+            user_agent=user_agent
+        )
+    
+    @classmethod
+    def get_stats(cls):
+        """Get lookup statistics"""
+        from django.db.models import Count
+        from django.utils import timezone
+        from datetime import timedelta
+        
+        last_24h = timezone.now() - timedelta(hours=24)
+        last_7d = timezone.now() - timedelta(days=7)
+        
+        return {
+            'total_lookups': cls.objects.count(),
+            'dns_lookups': cls.objects.filter(lookup_type='dns').count(),
+            'ip_lookups': cls.objects.filter(lookup_type='ip').count(),
+            'last_24h': cls.objects.filter(created_at__gte=last_24h).count(),
+            'last_7d': cls.objects.filter(created_at__gte=last_7d).count(),
+            'unique_ips': cls.objects.values('requester_ip').distinct().count(),
+            'top_queries': list(cls.objects.values('query').annotate(
+                count=Count('id')
+            ).order_by('-count')[:10])
+        }

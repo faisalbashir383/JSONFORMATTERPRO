@@ -1587,10 +1587,12 @@ from urllib.parse import urlparse
 @api_view(['POST'])
 def dns_lookup_api(request):
     """
-    Perform DNS lookup for a domain.
-    Returns A, AAAA records with geolocation info for each IP.
+    Perform comprehensive DNS lookup for a domain.
+    Returns A, AAAA, MX, TXT, NS, SOA, CNAME records with geolocation info.
     """
     import requests as http_requests
+    import dns.resolver
+    import dns.rdatatype
     
     try:
         domain = request.data.get('domain', '').strip()
@@ -1608,31 +1610,89 @@ def dns_lookup_api(request):
             'ipDetails': []
         }
         
+        # Create resolver with timeout
+        resolver = dns.resolver.Resolver()
+        resolver.timeout = 5
+        resolver.lifetime = 10
+        
         # A records (IPv4)
         try:
-            a_records = socket.getaddrinfo(domain, None, socket.AF_INET)
-            ips = list(set([r[4][0] for r in a_records]))
-            result['records']['A'] = ips
+            a_records = resolver.resolve(domain, 'A')
+            result['records']['A'] = [str(rdata) for rdata in a_records]
         except:
             result['records']['A'] = []
         
         # AAAA records (IPv6)
         try:
-            aaaa_records = socket.getaddrinfo(domain, None, socket.AF_INET6)
-            ipv6s = list(set([r[4][0] for r in aaaa_records]))
-            result['records']['AAAA'] = ipv6s
+            aaaa_records = resolver.resolve(domain, 'AAAA')
+            result['records']['AAAA'] = [str(rdata) for rdata in aaaa_records]
         except:
             result['records']['AAAA'] = []
         
-        # Get hostname
+        # MX records (Mail servers)
         try:
-            hostname = socket.gethostbyaddr(result['records']['A'][0])[0] if result['records']['A'] else None
-            result['hostname'] = hostname
+            mx_records = resolver.resolve(domain, 'MX')
+            result['records']['MX'] = [
+                {'priority': rdata.preference, 'host': str(rdata.exchange).rstrip('.')}
+                for rdata in mx_records
+            ]
         except:
-            result['hostname'] = None
+            result['records']['MX'] = []
         
-        # Get geolocation for each IP (limit to first 5)
-        all_ips = result['records']['A'][:5]
+        # TXT records
+        try:
+            txt_records = resolver.resolve(domain, 'TXT')
+            result['records']['TXT'] = [str(rdata).strip('"') for rdata in txt_records]
+        except:
+            result['records']['TXT'] = []
+        
+        # NS records (Name servers)
+        try:
+            ns_records = resolver.resolve(domain, 'NS')
+            result['records']['NS'] = [str(rdata).rstrip('.') for rdata in ns_records]
+        except:
+            result['records']['NS'] = []
+        
+        # SOA record (Start of Authority)
+        try:
+            soa_records = resolver.resolve(domain, 'SOA')
+            for rdata in soa_records:
+                result['records']['SOA'] = {
+                    'mname': str(rdata.mname).rstrip('.'),
+                    'rname': str(rdata.rname).rstrip('.'),
+                    'serial': rdata.serial,
+                    'refresh': rdata.refresh,
+                    'retry': rdata.retry,
+                    'expire': rdata.expire,
+                    'minimum': rdata.minimum
+                }
+                break
+        except:
+            result['records']['SOA'] = None
+        
+        # CNAME record
+        try:
+            cname_records = resolver.resolve(domain, 'CNAME')
+            result['records']['CNAME'] = [str(rdata.target).rstrip('.') for rdata in cname_records]
+        except:
+            result['records']['CNAME'] = []
+        
+        # PTR record (Reverse DNS for first A record)
+        if result['records']['A']:
+            try:
+                first_ip = result['records']['A'][0]
+                # Create reverse IP for PTR lookup
+                parts = first_ip.split('.')
+                reverse_ip = '.'.join(reversed(parts)) + '.in-addr.arpa'
+                ptr_records = resolver.resolve(reverse_ip, 'PTR')
+                result['records']['PTR'] = [str(rdata).rstrip('.') for rdata in ptr_records]
+            except:
+                result['records']['PTR'] = []
+        else:
+            result['records']['PTR'] = []
+        
+        # Get geolocation for each IP (limit to first 3)
+        all_ips = result['records']['A'][:3]
         for ip in all_ips:
             try:
                 geo_response = http_requests.get(
@@ -1657,22 +1717,39 @@ def dns_lookup_api(request):
                             'as': geo_data.get('as', '')
                         })
             except:
-                # Skip if geolocation fails for this IP
                 result['ipDetails'].append({
                     'ip': ip,
                     'error': 'Could not fetch location'
                 })
         
-        # Get nameservers using socket
+        # Log the DNS lookup request
+        from formatter.models import NetworkLookupLog
         try:
-            ns_info = socket.gethostbyname_ex(domain)
-            result['aliases'] = ns_info[1] if ns_info[1] else []
+            NetworkLookupLog.log_dns_lookup(
+                domain=domain,
+                requester_ip=get_client_ip(request),
+                response_data=result,
+                success=True,
+                user_agent=request.META.get('HTTP_USER_AGENT')
+            )
         except:
-            result['aliases'] = []
+            pass  # Don't fail the request if logging fails
         
         return Response(result)
         
     except Exception as e:
+        # Log failed DNS lookup
+        from formatter.models import NetworkLookupLog
+        try:
+            NetworkLookupLog.log_dns_lookup(
+                domain=request.data.get('domain', ''),
+                requester_ip=get_client_ip(request),
+                success=False,
+                error=str(e),
+                user_agent=request.META.get('HTTP_USER_AGENT')
+            )
+        except:
+            pass
         return Response({'error': str(e)}, status=500)
 
 
@@ -2257,6 +2334,110 @@ def get_client_ip_api(request):
         'ip': client_ip,
         'message': 'Your public IP address'
     })
+
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def ip_lookup_api(request):
+    """
+    Lookup IP address geolocation details.
+    Server-side proxy to ip-api.com to avoid CSP issues.
+    
+    Query params:
+        ip: IP address to lookup (optional, defaults to client IP)
+    """
+    import requests
+    
+    # Get IP to lookup - either from query param or client IP
+    ip_to_lookup = request.GET.get('ip', '').strip()
+    if not ip_to_lookup:
+        ip_to_lookup = get_client_ip(request)
+    
+    # Validate IP format (basic check)
+    if not ip_to_lookup:
+        return JsonResponse({
+            'success': False,
+            'error': 'No IP address provided'
+        }, status=400)
+    
+    try:
+        # Call ip-api.com from server side
+        response = requests.get(
+            f'http://ip-api.com/json/{ip_to_lookup}',
+            params={
+                'fields': 'status,message,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,query'
+            },
+            timeout=5
+        )
+        
+        if response.status_code == 200:
+            data = response.json()
+            
+            if data.get('status') == 'success':
+                result = {
+                    'success': True,
+                    'ip': data.get('query'),
+                    'country': data.get('country'),
+                    'countryCode': data.get('countryCode'),
+                    'region': data.get('region'),
+                    'regionName': data.get('regionName'),
+                    'city': data.get('city'),
+                    'zip': data.get('zip'),
+                    'lat': data.get('lat'),
+                    'lon': data.get('lon'),
+                    'timezone': data.get('timezone'),
+                    'isp': data.get('isp'),
+                    'org': data.get('org'),
+                    'as': data.get('as')
+                }
+                
+                # Log the IP lookup
+                from formatter.models import NetworkLookupLog
+                try:
+                    NetworkLookupLog.log_ip_lookup(
+                        ip_address=ip_to_lookup,
+                        requester_ip=get_client_ip(request),
+                        response_data=result,
+                        success=True,
+                        user_agent=request.META.get('HTTP_USER_AGENT')
+                    )
+                except:
+                    pass
+                
+                return JsonResponse(result)
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'error': data.get('message', 'Lookup failed')
+                }, status=400)
+        else:
+            return JsonResponse({
+                'success': False,
+                'error': 'External API unavailable'
+            }, status=502)
+            
+    except requests.Timeout:
+        return JsonResponse({
+            'success': False,
+            'error': 'Request timed out'
+        }, status=504)
+    except Exception as e:
+        # Log failed IP lookup
+        from formatter.models import NetworkLookupLog
+        try:
+            NetworkLookupLog.log_ip_lookup(
+                ip_address=ip_to_lookup,
+                requester_ip=get_client_ip(request),
+                success=False,
+                error=str(e),
+                user_agent=request.META.get('HTTP_USER_AGENT')
+            )
+        except:
+            pass
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        }, status=500)
 
 
 @csrf_exempt

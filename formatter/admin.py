@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import BlogCategory, BlogPost, SiteSettings, VisitorLog, PageView, ContactMessage, Redirect, DummyJsonApiLog
+from .models import BlogCategory, BlogPost, SiteSettings, VisitorLog, PageView, ContactMessage, Redirect, DummyJsonApiLog, NetworkLookupLog
 
 
 @admin.register(SiteSettings)
@@ -607,4 +607,27 @@ class DummyJsonApiLogAdmin(admin.ModelAdmin):
         stats = DummyJsonApiLog.get_stats()
         extra_context = extra_context or {}
         extra_context['api_stats'] = stats
+        return super().changelist_view(request, extra_context=extra_context)
+
+
+@admin.register(NetworkLookupLog)
+class NetworkLookupLogAdmin(admin.ModelAdmin):
+    list_display = ['lookup_type', 'query', 'requester_ip', 'success', 'created_at']
+    list_filter = ['lookup_type', 'success', 'created_at']
+    search_fields = ['query', 'requester_ip']
+    readonly_fields = ['lookup_type', 'query', 'requester_ip', 'user_agent', 'response_data', 'success', 'error_message', 'created_at']
+    ordering = ['-created_at']
+    date_hierarchy = 'created_at'
+    
+    def has_add_permission(self, request):
+        return False
+    
+    def has_change_permission(self, request, obj=None):
+        return False
+    
+    def changelist_view(self, request, extra_context=None):
+        from .models import NetworkLookupLog
+        stats = NetworkLookupLog.get_stats()
+        extra_context = extra_context or {}
+        extra_context['lookup_stats'] = stats
         return super().changelist_view(request, extra_context=extra_context)

@@ -1,20 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}DNS Lookup Tool - Check DNS Records Online | JSON Formatters Pro{% endblock %}
-{% block meta_title %}DNS Lookup Tool - Check DNS Records Online | JSON Formatters Pro{% endblock %}
-{% block meta_description %}Look up DNS records for any domain. Check A, AAAA, MX, TXT, NS, and CNAME records. Free
-online DNS lookup and propagation checker tool.{% endblock %}
-{% block meta_keywords %}dns lookup, dns checker, dns record lookup, mx record lookup, a record lookup, nameserver
-lookup,
-txt record checker, dns propagation checker, check dns records, dns query tool, domain dns lookup, nslookup online,
-dns record finder, cname lookup, aaaa record lookup, dns diagnostic tool, free dns lookup, dns record check,
-domain nameserver lookup, dns testing tool, dns lookup 2026, best dns checker 2026, free dns lookup 2026,
-dns lookup online, dns record viewer, dns information, domain dns checker, dns resolver online, dns query online,
-check mx records, check txt records, check ns records, check cname records, check a records, spf record lookup,
-dkim record lookup, dmarc record lookup, dns health check, dns analyzer, dns inspector, domain dns analyzer,
-what is my dns, dns lookup free, instant dns lookup, quick dns check, easy dns lookup{% endblock %}
-{% block canonical_url %}{{ SITE_URL }}/dns-lookup/{% endblock %}
+{% block title %}DNS Lookup – Check A, MX, TXT & NS Records Online | JSON Formatters Pro{% endblock %}
+{% block meta_title %}DNS Lookup – Check A, MX, TXT & NS Records Online | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Free DNS lookup tool to check DNS records for any domain.
+View A, AAAA, MX, TXT, NS, and CNAME records instantly. No signup required.{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
@@ -347,8 +337,16 @@ what is my dns, dns lookup free, instant dns lookup, quick dns check, easy dns l
 
 {% block content %}
 <div class="tool-header">
-    <h1>🔍 DNS Lookup Tool</h1>
+    <h1>DNS Lookup Tool</h1>
     <p>Look up DNS records for any domain including A, AAAA, MX, TXT, and NS records</p>
+</div>
+
+<div class="info-section" style="margin-bottom: 2rem; text-align:center;">
+    <p style="max-width:700px;margin:0 auto;">
+        Use this free <strong>DNS lookup tool</strong> to check DNS records for any domain.
+        Instantly view <strong>A, AAAA, MX, TXT, NS, and CNAME records</strong> to debug
+        domain configuration, email delivery issues, and DNS propagation.
+    </p>
 </div>
 
 <div class="lookup-container">
@@ -390,6 +388,11 @@ what is my dns, dns lookup free, instant dns lookup, quick dns check, easy dns l
         <strong>NS Record:</strong> Nameserver records<br>
         <strong>CNAME Record:</strong> Canonical name (alias)
     </p>
+    <p>
+        Once you find the IP addresses from DNS records, you can use our
+        <a href="/ip-info/" style="color: var(--color-primary); font-weight: 500;">IP Address Lookup</a> tool
+        to get detailed geolocation and ISP information for each address.
+    </p>
 </div>
 
 <div class="info-section" style="margin-top: 1.5rem;">
@@ -426,5 +429,180 @@ what is my dns, dns lookup free, instant dns lookup, quick dns check, easy dns l
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/dns-lookup.js' %}"></script>
+<script>
+    const domainInput = document.getElementById('domainInput');
+    const lookupBtn = document.getElementById('lookupBtn');
+    const resultCard = document.getElementById('resultCard');
+    const loadingState = document.getElementById('loadingState');
+    const errorState = document.getElementById('errorState');
+    const recordsContainer = document.getElementById('recordsContainer');
+    const displayDomain = document.getElementById('displayDomain');
+
+    // Record type colors and labels
+    const recordTypes = {
+        'A': { label: 'IPv4 Addresses', color: '#ef4444' },
+        'AAAA': { label: 'IPv6 Addresses', color: '#22c55e' },
+        'MX': { label: 'Mail Servers', color: '#f59e0b' },
+        'NS': { label: 'Name Servers', color: '#8b5cf6' },
+        'TXT': { label: 'TXT Records', color: '#06b6d4' },
+        'CNAME': { label: 'Canonical Name', color: '#ec4899' },
+        'PTR': { label: 'Reverse DNS', color: '#6366f1' },
+        'SOA': { label: 'Start of Authority', color: '#14b8a6' }
+    };
+
+    // Country code to flag emoji
+    function countryToFlag(countryCode) {
+        if (!countryCode) return '🌍';
+        const codePoints = countryCode.toUpperCase().split('').map(char => 127397 + char.charCodeAt());
+        return String.fromCodePoint(...codePoints);
+    }
+
+    function showLoading() {
+        resultCard.style.display = 'none';
+        errorState.style.display = 'none';
+        loadingState.style.display = 'block';
+        lookupBtn.disabled = true;
+    }
+
+    function showError(message) {
+        loadingState.style.display = 'none';
+        resultCard.style.display = 'none';
+        errorState.style.display = 'block';
+        errorState.textContent = '⚠️ ' + message;
+        lookupBtn.disabled = false;
+    }
+
+    function renderRecords(data) {
+        loadingState.style.display = 'none';
+        errorState.style.display = 'none';
+        resultCard.style.display = 'block';
+        lookupBtn.disabled = false;
+
+        displayDomain.textContent = data.domain;
+        recordsContainer.innerHTML = '';
+
+        const records = data.records || {};
+
+        // Render each record type
+        Object.keys(recordTypes).forEach(type => {
+            const config = recordTypes[type];
+            const values = records[type];
+
+            if (type === 'SOA' && values) {
+                // SOA is an object, not array
+                const section = document.createElement('div');
+                section.className = 'record-section';
+                section.innerHTML = `
+                    <span class="record-type" style="background: ${config.color};">${type}</span>
+                    <span style="margin-left: 0.5rem; color: var(--color-text-secondary); font-size: 0.85rem;">- ${config.label}</span>
+                    <div class="record-values">
+                        <div class="record-value">Primary NS: ${values.mname}</div>
+                        <div class="record-value">Admin Email: ${values.rname.replace('.', '@')}</div>
+                        <div class="record-value">Serial: ${values.serial}</div>
+                        <div class="record-value">Refresh: ${values.refresh}s | Retry: ${values.retry}s | Expire: ${values.expire}s</div>
+                    </div>
+                `;
+                recordsContainer.appendChild(section);
+            } else if (Array.isArray(values) && values.length > 0) {
+                const section = document.createElement('div');
+                section.className = 'record-section';
+
+                let valuesHtml = '';
+                values.forEach(val => {
+                    if (type === 'MX' && typeof val === 'object') {
+                        valuesHtml += `<div class="record-value">${val.priority} - ${val.host}</div>`;
+                    } else {
+                        valuesHtml += `<div class="record-value">${val}</div>`;
+                    }
+                });
+
+                section.innerHTML = `
+                    <span class="record-type" style="background: ${config.color};">${type}</span>
+                    <span style="margin-left: 0.5rem; color: var(--color-text-secondary); font-size: 0.85rem;">- ${config.label}</span>
+                    <div class="record-values">${valuesHtml}</div>
+                `;
+                recordsContainer.appendChild(section);
+            }
+        });
+
+        // Render IP geolocation details
+        if (data.ipDetails && data.ipDetails.length > 0) {
+            const geoSection = document.createElement('div');
+            geoSection.className = 'ip-details-section';
+
+            let cardsHtml = '';
+            data.ipDetails.forEach(ip => {
+                if (!ip.error) {
+                    cardsHtml += `
+                        <div class="ip-card">
+                            <div class="ip-card-header">
+                                <span class="ip-flag">${countryToFlag(ip.countryCode)}</span>
+                                <div>
+                                    <div class="ip-address">${ip.ip}</div>
+                                    <div class="ip-location">${ip.city}, ${ip.country}</div>
+                                </div>
+                            </div>
+                            <div class="ip-info-grid">
+                                <div class="ip-info-item"><div class="ip-info-label">Country</div><div class="ip-info-value">${ip.country}</div></div>
+                                <div class="ip-info-item"><div class="ip-info-label">Region</div><div class="ip-info-value">${ip.region}</div></div>
+                                <div class="ip-info-item"><div class="ip-info-label">City</div><div class="ip-info-value">${ip.city}</div></div>
+                                <div class="ip-info-item"><div class="ip-info-label">Timezone</div><div class="ip-info-value">${ip.timezone}</div></div>
+                                <div class="ip-info-item full-width"><div class="ip-info-label">ISP</div><div class="ip-info-value">${ip.isp}</div></div>
+                                <div class="ip-info-item full-width"><div class="ip-info-label">Organization</div><div class="ip-info-value">${ip.org}</div></div>
+                                <div class="ip-info-item full-width"><div class="ip-info-label">AS Number</div><div class="ip-info-value">${ip.as}</div></div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            geoSection.innerHTML = `
+                <div class="ip-details-title">📍 IP Geolocation Details</div>
+                <div class="ip-detail-grid">${cardsHtml}</div>
+            `;
+            recordsContainer.appendChild(geoSection);
+        }
+    }
+
+    async function lookupDNS(domain) {
+        showLoading();
+
+        try {
+            // Get CSRF token from cookie
+            const csrfToken = document.cookie.split('; ').find(row => row.startsWith('csrftoken='))?.split('=')[1];
+
+            const response = await fetch('/api/dns-lookup/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ domain: domain })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                renderRecords(data);
+            } else {
+                showError(data.error || 'Failed to lookup DNS records');
+            }
+        } catch (error) {
+            showError('Network error. Please try again.');
+        }
+    }
+
+    lookupBtn.addEventListener('click', () => {
+        const domain = domainInput.value.trim();
+        if (domain) {
+            lookupDNS(domain);
+        }
+    });
+
+    domainInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            lookupBtn.click();
+        }
+    });
+</script>
 {% endblock %}

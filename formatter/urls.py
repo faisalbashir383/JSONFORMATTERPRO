@@ -124,9 +124,9 @@ urlpatterns = [
     path('api/dummy-json/companies/', views.dummy_json_companies_api, name='dummy_json_companies_api'),
     path('api/typing-test/submit/', views.submit_typing_score, name='submit_typing_score'),
     path('api/typing-test/leaderboard/', views.get_typing_leaderboard, name='get_typing_leaderboard'),
-    
     # Mock API Management Endpoints
     path('api/my-ip/', views.get_client_ip_api, name='get_client_ip_api'),
+    path('api/ip-lookup/', views.ip_lookup_api, name='ip_lookup_api'),
     path('api/mock/create/', views.create_mock_endpoint, name='create_mock_endpoint'),
     path('api/mock/my-endpoints/', views.list_my_endpoints, name='list_my_endpoints'),
     path('api/mock/<str:endpoint_id>/info/', views.get_mock_endpoint_info, name='get_mock_endpoint_info'),

@@ -1,20 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}IP Address Lookup - IP Geolocation & Info Tool | JSON Formatters Pro{% endblock %}
-{% block meta_title %}IP Address Lookup - IP Geolocation & Info Tool | JSON Formatters Pro{% endblock %}
-{% block meta_description %}Look up any IP address to get geolocation, country, city, ISP, and more. Find your public IP
-address and get detailed location information. Free IP lookup tool.{% endblock %}
-{% block meta_keywords %}ip address lookup, ip geolocation, what is my ip, my ip address, ip location finder, ip to
-location,
-geoip lookup, ip country finder, ip address locator, find ip location, ip tracker, ip info, ip details, public ip
-address,
-check ip address, ip geolocation api, ip to country, ip city lookup, ip isp lookup, ip whois, free ip lookup,
-ipv4 lookup, ipv6 lookup, ip address checker online, ip lookup 2026, best ip lookup 2026, ip finder 2026,
-free ip lookup 2026, online ip lookup 2026, ip geolocation 2026, what is my ip 2026,
-ip location online, ip address finder, ip address tracker, ip address info, ip address details,
-find my ip address, show my ip, ip checker online, ip lookup tool, ip geolocation tool,
-ip country lookup, ip region lookup, ip city finder, ip location checker, ip no signup{% endblock %}
+{% block title %}IP Address Lookup – Check IP Location & ISP | JSON Formatters Pro{% endblock %}
+{% block meta_title %}IP Address Lookup – Check IP Location & ISP | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Free IP address lookup tool to check IP location, country, city, ISP, and geolocation.
+Find your public IP instantly. No signup required.{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/ip-info/{% endblock %}
 
 {% block structured_data %}
@@ -336,6 +326,16 @@ ip country lookup, ip region lookup, ip city finder, ip location checker, ip no 
     <p>Get geolocation, country, city, ISP, and more for any IP address</p>
 </div>
 
+<!-- Above-fold SEO intro -->
+<div class="info-section" style="margin-bottom: 2rem; text-align: center;">
+    <p style="font-size: 1.05rem; max-width: 700px; margin: 0 auto;">
+        Use this free <strong>IP address lookup</strong> tool to instantly find geolocation details for any IPv4 or IPv6
+        address.
+        Enter an IP to see its <strong>city, country, ISP, timezone, and coordinates</strong>.
+        Click "My IP" to check your own public IP address location.
+    </p>
+</div>
+
 <div class="lookup-container">
     <div class="search-box">
         <input type="text" id="ipInput" class="ip-input" placeholder="Enter IP address (e.g., 8.8.8.8)">
@@ -386,12 +386,14 @@ ip country lookup, ip region lookup, ip city finder, ip location checker, ip no 
                     <div class="result-value" id="asn">-</div>
                 </div>
             </div>
-            <div class="map-container">
+            <div class="map-container" id="mapContainer" style="cursor: pointer;" onclick="openInMaps()"
+                title="Click to open in Google Maps">
                 <div class="map-placeholder" id="mapPlaceholder">
-                    📍 Map coordinates available
+                    📍 Click to view location on Google Maps
                 </div>
                 <div class="map-coords" id="mapCoords" style="display: none;">
                     Lat: <span id="lat">-</span>, Lon: <span id="lon">-</span>
+                    <span style="margin-left: 1rem; font-size: 0.75rem; opacity: 0.8;">🔗 Click to open map</span>
                 </div>
             </div>
         </div>
@@ -457,8 +459,190 @@ ip country lookup, ip region lookup, ip city finder, ip location checker, ip no 
             device.</p>
     </details>
 </div>
+
+<!-- What Is My IP Section -->
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>🏠 What Is My IP Address?</h2>
+    <p>
+        Your <strong>public IP address</strong> is the unique identifier assigned to your device by your Internet
+        Service Provider (ISP).
+        This is the address that websites and online services see when you connect to the internet. Unlike your private
+        (local) IP
+        address which is used within your home network, your public IP is visible to the outside world.
+    </p>
+    <p>
+        To find your current public IP address, simply click the <strong>"My IP"</strong> button above. The IP address
+        lookup tool
+        will instantly show your IP along with your approximate location, ISP name, and other geolocation details. This
+        is useful
+        for troubleshooting network issues, verifying VPN connections, or checking what information websites can see
+        about your connection.
+    </p>
+</div>
+
+<!-- Related Network Tools -->
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>🔗 Related Network Tools</h2>
+    <p>
+        Use our other free network tools alongside this IP address lookup to diagnose connection issues and analyze
+        network infrastructure:
+    </p>
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <a href="/dns-lookup/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); border: 1px solid var(--color-border);">
+            <strong>🔍 DNS Lookup</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Look up DNS records
+                for any domain</p>
+        </a>
+        <a href="/http-headers/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); border: 1px solid var(--color-border);">
+            <strong>📋 HTTP Headers</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Analyze HTTP response
+                headers</p>
+        </a>
+        <a href="/ssl-checker/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); border: 1px solid var(--color-border);">
+            <strong>🔒 SSL Checker</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Verify SSL
+                certificate details</p>
+        </a>
+        <a href="/cors-checker/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); border: 1px solid var(--color-border);">
+            <strong>🌐 CORS Checker</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Test CORS
+                configuration for APIs</p>
+        </a>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/ip-info.js' %}"></script>
+<script>
+    // DOM Elements
+    const ipInput = document.getElementById('ipInput');
+    const lookupBtn = document.getElementById('lookupBtn');
+    const myIpBtn = document.getElementById('myIpBtn');
+    const resultCard = document.getElementById('resultCard');
+    const loadingState = document.getElementById('loadingState');
+    const errorState = document.getElementById('errorState');
+
+    // Result elements
+    const displayIp = document.getElementById('displayIp');
+    const flagEmoji = document.getElementById('flagEmoji');
+    const locationText = document.getElementById('locationText');
+    const countryEl = document.getElementById('country');
+    const regionEl = document.getElementById('region');
+    const cityEl = document.getElementById('city');
+    const zipEl = document.getElementById('zip');
+    const timezoneEl = document.getElementById('timezone');
+    const ispEl = document.getElementById('isp');
+    const orgEl = document.getElementById('org');
+    const asnEl = document.getElementById('asn');
+    const latEl = document.getElementById('lat');
+    const lonEl = document.getElementById('lon');
+    const mapCoords = document.getElementById('mapCoords');
+
+    // Country code to flag emoji
+    function countryToFlag(countryCode) {
+        if (!countryCode) return '🌍';
+        const codePoints = countryCode
+            .toUpperCase()
+            .split('')
+            .map(char => 127397 + char.charCodeAt());
+        return String.fromCodePoint(...codePoints);
+    }
+
+    // Show loading state
+    function showLoading() {
+        resultCard.style.display = 'none';
+        errorState.style.display = 'none';
+        loadingState.style.display = 'block';
+    }
+
+    // Show error state
+    function showError(message) {
+        loadingState.style.display = 'none';
+        resultCard.style.display = 'none';
+        errorState.style.display = 'block';
+        errorState.textContent = '⚠️ ' + message;
+    }
+
+    // Display results
+    function displayResults(data) {
+        loadingState.style.display = 'none';
+        errorState.style.display = 'none';
+        resultCard.style.display = 'block';
+
+        displayIp.textContent = data.ip || '-';
+        flagEmoji.textContent = countryToFlag(data.countryCode);
+        locationText.textContent = `${data.city || '-'}, ${data.country || '-'}`;
+
+        countryEl.textContent = data.country || '-';
+        regionEl.textContent = data.regionName || '-';
+        cityEl.textContent = data.city || '-';
+        zipEl.textContent = data.zip || '-';
+        timezoneEl.textContent = data.timezone || '-';
+        ispEl.textContent = data.isp || '-';
+        orgEl.textContent = data.org || '-';
+        asnEl.textContent = data.as || '-';
+
+        if (data.lat && data.lon) {
+            latEl.textContent = data.lat;
+            lonEl.textContent = data.lon;
+            mapCoords.style.display = 'block';
+        } else {
+            mapCoords.style.display = 'none';
+        }
+    }
+
+    // Lookup IP using our backend API
+    async function lookupIP(ip) {
+        showLoading();
+
+        try {
+            const url = ip ? `/api/ip-lookup/?ip=${encodeURIComponent(ip)}` : '/api/ip-lookup/';
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.success) {
+                displayResults(data);
+            } else {
+                showError(data.error || 'Failed to lookup IP address. Please try again.');
+            }
+        } catch (error) {
+            showError('Network error. Please check your connection and try again.');
+        }
+    }
+
+    // Event listeners
+    lookupBtn.addEventListener('click', () => {
+        const ip = ipInput.value.trim();
+        if (ip) {
+            lookupIP(ip);
+        } else {
+            lookupIP(); // Lookup own IP
+        }
+    });
+
+    myIpBtn.addEventListener('click', () => {
+        ipInput.value = '';
+        lookupIP();
+    });
+
+    ipInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            lookupBtn.click();
+        }
+    });
+
+    // Open coordinates in Google Maps
+    function openInMaps() {
+        const lat = latEl.textContent;
+        const lon = lonEl.textContent;
+        if (lat && lon && lat !== '-' && lon !== '-') {
+            window.open(`https://www.google.com/maps?q=${lat},${lon}`, '_blank');
+        }
+    }
+</script>
 {% endblock %}
