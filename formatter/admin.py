@@ -631,3 +631,16 @@ class NetworkLookupLogAdmin(admin.ModelAdmin):
         extra_context = extra_context or {}
         extra_context['lookup_stats'] = stats
         return super().changelist_view(request, extra_context=extra_context)
+
+from .models import ToolUsageLog
+
+@admin.register(ToolUsageLog)
+class ToolUsageLogAdmin(admin.ModelAdmin):
+    list_display = ['tool_name', 'action', 'ip_address', 'country', 'city', 'created_at']
+    list_filter = ['tool_name', 'action', 'country', 'created_at']
+    search_fields = ['tool_name', 'action', 'ip_address', 'country']
+    readonly_fields = ['tool_name', 'action', 'ip_address', 'user_agent', 'country', 'city', 'metadata', 'created_at']
+    ordering = ['-created_at']
+    
+    def has_add_permission(self, request):
+        return False

@@ -2958,3 +2958,72 @@ def list_my_endpoints(request):
         'endpoints': endpoints_list,
         'your_ip': client_ip
     })
+
+@api_view(['GET'])
+def track_swagger_usage(request):
+    """
+    Track Swagger Viewer usage event.
+    The actual tracking happens via VisitorTrackingMiddleware which logs the request.
+    No JSON payload is processed or stored.
+    """
+    return Response({'success': True, 'tracked': True})
+
+
+from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.permissions import AllowAny
+
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def track_tool_usage(request):
+    """
+    Generic endpoint to track tool usage.
+    Expects JSON: {"tool_name": "...", "action": "...", "metadata": {...}}
+    """
+    try:
+        data = request.data
+        tool_name = data.get('tool_name')
+        action = data.get('action')
+        
+        if not tool_name or not action:
+            return Response({'success': False, 'error': 'tool_name and action are required'}, status=400)
+            
+        # Get IP and User Agent
+        ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', '127.0.0.1'))
+        if ip and ',' in ip:
+            ip = ip.split(',')[0].strip()
+        
+        user_agent = request.META.get('HTTP_USER_AGENT', '')
+        
+        # Resolve Geolocation (if not local)
+        country = None
+        city = None
+        
+        if ip not in ['127.0.0.1', '::1'] and not ip.startswith('192.168.'):
+            try:
+                import requests
+                # Use a short timeout to prevent blocking
+                geo_resp = requests.get(f'http://ip-api.com/json/{ip}', timeout=1.5)
+                if geo_resp.status_code == 200:
+                    geo_data = geo_resp.json()
+                    if geo_data.get('status') == 'success':
+                        country = geo_data.get('country')
+                        city = geo_data.get('city')
+            except:
+                pass # Fail silently for geo lookup
+        
+        # Create Log
+        from .models import ToolUsageLog
+        ToolUsageLog.objects.create(
+            tool_name=tool_name,
+            action=action,
+            ip_address=ip,
+            user_agent=user_agent,
+            country=country,
+            city=city,
+            metadata=data.get('metadata', {})
+        )
+        
+        return Response({'success': True, 'tracked': True})
+    except Exception as e:
+        return Response({'success': False, 'error': str(e)}, status=500)

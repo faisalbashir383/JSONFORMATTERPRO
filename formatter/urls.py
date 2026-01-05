@@ -157,6 +157,10 @@ urlpatterns = [
     path('tutorials/', views.tutorials_list, name='tutorials_list'),
     path('tutorials/<slug:slug>/', views.tutorial_detail, name='tutorial_detail'),
 
+    # Tracking Endpoints
+    path('api/track/swagger-usage/', views.track_swagger_usage, name='track_swagger_usage'),
+    path('api/track/tool-usage/', views.track_tool_usage, name='track_tool_usage'),
+
     # redirect urls
     path(
         "json-schema/",

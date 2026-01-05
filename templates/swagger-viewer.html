@@ -2110,6 +2110,19 @@ Example:
                 if (!spec) throw new Error('Could not parse');
                 currentSpec = spec;
                 renderSpec(spec);
+                // Generic Tool Usage Tracking
+                fetch('/api/track/tool-usage/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        tool_name: 'swagger-viewer',
+                        action: 'parse_spec',
+                        metadata: {
+                            version: spec.openapi || spec.swagger || 'unknown'
+                        }
+                    })
+                }).catch(() => { });
+
                 hideLoading();
                 apiDocs.classList.add('visible');
                 infoSection.style.display = 'none';

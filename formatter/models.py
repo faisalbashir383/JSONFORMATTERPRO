@@ -1292,3 +1292,34 @@ class NetworkLookupLog(models.Model):
                 count=Count('id')
             ).order_by('-count')[:10])
         }
+
+class ToolUsageLog(models.Model):
+    """
+    Generic model to track usage events for various tools.
+    Designed to be lightweight and privacy-focused (no payloads stored).
+    """
+    tool_name = models.CharField(max_length=100, help_text="Name of the tool (e.g., swagger-viewer)")
+    action = models.CharField(max_length=100, help_text="Action performed (e.g., parse_spec)")
+    
+    # Visitor Info
+    ip_address = models.GenericIPAddressField(blank=True, null=True)
+    user_agent = models.TextField(blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    
+    # Metadata
+    metadata = models.JSONField(default=dict, blank=True, help_text="Optional non-sensitive metadata")
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['tool_name', 'action']),
+            models.Index(fields=['-created_at']),
+        ]
+        verbose_name = "Tool Usage Log"
+        verbose_name_plural = "Tool Usage Logs"
+
+    def __str__(self):
+        return f"{self.tool_name} - {self.action} ({self.created_at.strftime('%Y-%m-%d %H:%M')})"
