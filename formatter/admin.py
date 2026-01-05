@@ -637,7 +637,7 @@ from .models import ToolUsageLog
 @admin.register(ToolUsageLog)
 class ToolUsageLogAdmin(admin.ModelAdmin):
     list_display = ['tool_name', 'action', 'ip_address', 'country', 'city', 'created_at', 'updated_at']
-    list_filter = ['tool_name', 'action', 'country', 'created_at']
+    list_filter = ['tool_name', 'action', 'created_at', 'country']
     search_fields = ['tool_name', 'action', 'ip_address', 'country']
     readonly_fields = ['tool_name', 'action', 'ip_address', 'user_agent', 'country', 'city', 'metadata', 'created_at', 'updated_at']
     ordering = ['-created_at']
