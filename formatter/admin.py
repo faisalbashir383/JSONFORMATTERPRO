@@ -639,7 +639,7 @@ class ToolUsageLogAdmin(admin.ModelAdmin):
     list_display = ['tool_name', 'action', 'ip_address', 'country', 'city', 'created_at']
     list_filter = ['tool_name', 'action', 'country', 'created_at']
     search_fields = ['tool_name', 'action', 'ip_address', 'country']
-    readonly_fields = ['tool_name', 'action', 'ip_address', 'user_agent', 'country', 'city', 'metadata', 'created_at']
+    readonly_fields = ['tool_name', 'action', 'ip_address', 'user_agent', 'country', 'city', 'metadata', 'created_at', 'updated_at']
     ordering = ['-created_at']
     
     def has_add_permission(self, request):

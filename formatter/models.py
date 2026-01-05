@@ -1311,6 +1311,7 @@ class ToolUsageLog(models.Model):
     metadata = models.JSONField(default=dict, blank=True, help_text="Optional non-sensitive metadata")
     
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-created_at']
