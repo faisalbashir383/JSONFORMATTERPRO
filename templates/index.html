@@ -893,20 +893,22 @@ detection. No signup - try now!{% endblock %}
     The tool is actively maintained, privacy-focused, and designed to work entirely client-side so sensitive data never
     leaves your browser.
     <br><br>
-<p style="font-size: 0.9rem; margin-bottom: 0.75rem;">
-  Working with escaped or stringified JSON? Try our
-  <a href="/string-json-to-json/" style="color: var(--color-primary); text-decoration: none;">
-    JSON string to JSON converter
-  </a>
-  to remove backslashes and decode nested JSON.
-</p>
+  <p style="font-size: 0.9rem; margin-bottom: 0.75rem;">
+    Working with escaped or stringified JSON? Try our
+    <a href="/string-json-to-json/" style="color: var(--color-primary); text-decoration: none;">
+      JSON string to JSON converter
+    </a>
+    to remove backslashes and decode nested JSON.
+  </p>
 
-<p style="font-size:0.9rem; color: var(--color-text-secondary); line-height:1.6;">
-  <strong>JSON-Datei öffnen:</strong>
-  Wenn Sie eine JSON-Datei online öffnen möchten („json datei öffnen“), können Sie diese einfach in den Editor einfügen
-  oder per Drag & Drop hochladen. Der JSON Formatter formatiert, validiert und zeigt die Datei übersichtlich an – direkt
-  im Browser, ohne Installation.
-</p>
+  <p style="font-size:0.9rem; color: var(--color-text-secondary); line-height:1.6;">
+    <strong>JSON-Datei öffnen:</strong>
+    Wenn Sie eine JSON-Datei online öffnen möchten („json datei öffnen“), können Sie diese einfach in den Editor
+    einfügen
+    oder per Drag & Drop hochladen. Der JSON Formatter formatiert, validiert und zeigt die Datei übersichtlich an –
+    direkt
+    im Browser, ohne Installation.
+  </p>
   </p>
 </section>
 
@@ -1667,14 +1669,14 @@ detection. No signup - try now!{% endblock %}
       </div>
 
       <div class="faq-item-seo">
-      <h3>Wie kann ich eine JSON-Datei öffnen?</h3>
-      <div>
-        <p>
-          Sie können eine JSON-Datei direkt im Browser öffnen, indem Sie sie in den Editor einfügen oder hochladen.
-          Unser JSON Formatter zeigt die Struktur lesbar an und überprüft die Datei automatisch auf Fehler.
-        </p>
+        <h3>Wie kann ich eine JSON-Datei öffnen?</h3>
+        <div>
+          <p>
+            Sie können eine JSON-Datei direkt im Browser öffnen, indem Sie sie in den Editor einfügen oder hochladen.
+            Unser JSON Formatter zeigt die Struktur lesbar an und überprüft die Datei automatisch auf Fehler.
+          </p>
+        </div>
       </div>
-    </div>
 
     </div>
   </section>
@@ -2007,14 +2009,20 @@ detection. No signup - try now!{% endblock %}
         editorContainer.classList.add('monaco-loaded');
         jsonEditor.focus();
 
-        // Check for JSON payload from /json-formatter/ authority page
-        const jsonPayload = sessionStorage.getItem('jsonFormatterPayload');
+        // Check for JSON payload from /json-formatter/ authority page (supports both session and local storage)
+        const jsonPayload = sessionStorage.getItem('jsonFormatterPayload') || localStorage.getItem('jsonFormatterPayload');
         if (jsonPayload) {
           jsonEditor.setValue(jsonPayload);
           sessionStorage.removeItem('jsonFormatterPayload');
+          localStorage.removeItem('jsonFormatterPayload');
+
+          // Auto-enable "Fix Trailing Commas" and format
+          const fixToggle = document.getElementById('fixTrailingCommas');
+          if (fixToggle) fixToggle.checked = true;
+
           // Auto-format the loaded JSON
           setTimeout(() => {
-            const formatBtn = document.getElementById('formatAction');
+            const formatBtn = document.getElementById('formatBtn');
             if (formatBtn) formatBtn.click();
           }, 300);
         }
@@ -2190,120 +2198,103 @@ detection. No signup - try now!{% endblock %}
           const { fixed, wasFixed } = fixJsonErrors(content);
 
           if (wasFixed) {
-            try {
-              const p = JSON.parse(fixed);
-              jsonEditor.setValue(JSON.stringify(p, null, 2));
-              jsonEditor.setPosition({ lineNumber: 1, column: 1 });
-              jsonEditor.revealLine(1);
-              updateValidation('valid', '✓ Formatted (Auto-Fixed)');
-            } catch (err) {
-              // Parse error even after fix attempt
-            }
+            jsonEditor.setValue(JSON.stringify(JSON.parse(fixed), null, 2));
+            updateValidation('valid', '✓ Auto-Fixed');
           }
         }
       });
 
-      // Actions
+      // Format Button Handler
       document.getElementById('formatBtn')?.addEventListener('click', () => {
         const content = jsonEditor.getValue().trim();
-        if (!content) {
-          updateValidation('invalid', '✗ Empty');
-          dropdown?.classList.remove('open');
-          return;
-        }
+        if (!content) return;
 
-        // Try to fix errors
         const { fixed, wasFixed } = fixJsonErrors(content);
 
         try {
-          const p = JSON.parse(fixed);
-          jsonEditor.setValue(JSON.stringify(p, null, 2));
+          const parsed = JSON.parse(fixed);
+          const formatted = JSON.stringify(parsed, null, 2);
+          jsonEditor.setValue(formatted);
           jsonEditor.setPosition({ lineNumber: 1, column: 1 });
           jsonEditor.revealLine(1);
-          updateValidation('valid', wasFixed ? '✓ Formatted (Auto-Fixed)' : '✓ Formatted');
+          updateValidation('valid', wasFixed ? '✓ Formatted & Fixed' : '✓ Formatted');
         } catch (e) {
-          // Check if it looks like XML, CSV, or YAML
-          if (content.startsWith('<?xml') || content.startsWith('<')) {
-            updateValidation('invalid', '✗ XML detected, not JSON');
-          } else if (content.includes(',') && content.split('\n')[0].includes(',')) {
-            updateValidation('invalid', '✗ CSV detected, not JSON');
-          } else if (content.includes(':') && !content.includes('{')) {
-            updateValidation('invalid', '✗ YAML detected, not JSON');
-          } else if (content.includes("'")) {
-            updateValidation('invalid', '✗ Invalid: Use double quotes for JSON');
-          } else {
-            updateValidation('invalid', '✗ Invalid JSON');
-          }
+          updateValidation('invalid', '✗ Invalid JSON');
         }
-        dropdown?.classList.remove('open');
       });
 
-      document.getElementById('validateBtn')?.addEventListener('click', () => {
-        const content = jsonEditor.getValue().trim();
-        const { fixed, wasFixed } = fixJsonErrors(content);
-        try {
-          JSON.parse(fixed);
-          if (wasFixed) {
-            jsonEditor.setValue(fixed);
-          }
-          updateValidation('valid', wasFixed ? '✓ Valid (Auto-Fixed)' : '✓ Valid JSON');
-        } catch (e) {
-          if (content.includes("'")) {
-            updateValidation('invalid', '✗ Use double quotes for JSON');
-          } else {
-            updateValidation('invalid', '✗ ' + e.message.split(':')[0]);
-          }
-        }
-        dropdown?.classList.remove('open');
-      });
-
+      // Minify Button Handler
       document.getElementById('minifyBtn')?.addEventListener('click', () => {
         const content = jsonEditor.getValue().trim();
-        const { fixed, wasFixed } = fixJsonErrors(content);
+        if (!content) return;
+
         try {
-          jsonEditor.setValue(JSON.stringify(JSON.parse(fixed)));
-          updateValidation('valid', wasFixed ? '✓ Minified (Auto-Fixed)' : '✓ Minified');
+          // Parse first to ensure validity, then stringify without indentation
+          const minified = JSON.stringify(JSON.parse(content));
+          jsonEditor.setValue(minified);
+          jsonEditor.setPosition({ lineNumber: 1, column: 1 });
+          jsonEditor.revealLine(1);
+          updateValidation('valid', '✓ Minified');
         } catch (e) {
-          if (content.includes("'")) {
-            updateValidation('invalid', '✗ Use double quotes for JSON');
-          } else {
-            updateValidation('invalid', '✗ Invalid');
-          }
+          updateValidation('invalid', '✗ Invalid JSON');
         }
-        dropdown?.classList.remove('open');
       });
 
-      document.getElementById('clearBtn')?.addEventListener('click', () => {
-        jsonEditor.setValue('');
-        updateValidation('');
-        dropdown?.classList.remove('open');
-      });
-
+      // Copy Button Handler
       document.getElementById('copyBtn')?.addEventListener('click', () => {
-        navigator.clipboard.writeText(jsonEditor.getValue()).then(() => {
+        const content = jsonEditor.getValue();
+        if (!content) return;
+
+        navigator.clipboard.writeText(content).then(() => {
           const btn = document.getElementById('copyBtn');
-          btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
-          setTimeout(() => btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>', 1500);
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+          setTimeout(() => {
+            btn.innerHTML = originalText;
+          }, 2000);
         });
       });
 
+      // Download Button Handler
       document.getElementById('downloadBtn')?.addEventListener('click', () => {
-        const v = jsonEditor.getValue();
-        if (!v) return;
-        const blob = new Blob([v], { type: 'application/json' });
+        const content = jsonEditor.getValue();
+        if (!content) return;
+
+        const blob = new Blob([content], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'data.json';
+        a.href = url;
+        a.download = 'formatted.json';
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
       });
 
-      document.getElementById('fileInput')?.addEventListener('change', (e) => {
+      // Clear Button Handler
+      document.getElementById('clearBtn')?.addEventListener('click', () => {
+        jsonEditor.setValue('');
+        updateValidation('');
+        document.getElementById('endpointCounter').textContent = '0 Endpoints';
+        document.getElementById('endpointList').innerHTML = '<div class="empty-state">No endpoints detected</div>';
+      });
+
+      // File Upload Handler
+      const fileInput = document.getElementById('fileInput');
+      const uploadBtn = document.getElementById('uploadBtn');
+
+      uploadBtn?.addEventListener('click', () => fileInput?.click());
+
+      fileInput?.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
           const reader = new FileReader();
           reader.onload = (ev) => {
             try {
-              jsonEditor.setValue(JSON.stringify(JSON.parse(ev.target.result), null, 2));
+              const content = ev.target.result;
+              const parsed = JSON.parse(content);
+              const formatted = JSON.stringify(parsed, null, 2);
+              jsonEditor.setValue(formatted);
               updateValidation('valid', '✓ Loaded');
             } catch (e) {
               jsonEditor.setValue(ev.target.result);
