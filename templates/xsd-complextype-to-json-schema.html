@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Converting XSD ComplexType to JSON Schema - The Definitive Guide{% endblock %}
+{% block meta_title %}Converting XSD ComplexType to JSON Schema - The Definitive Guide{% endblock %}
+{% block meta_description %}Learn how to convert XSD complexType elements to JSON Schema objects. A detailed guide on
+mapping sequences, choices, and nested types.{% endblock %}
+{% block meta_keywords %}xsd complextype to json schema, xml schema complex type conversion, xsd sequence vs json
+schema, convert xsd structure to json{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/xsd-complextype-to-json-schema/{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>Converting XSD ComplexType to JSON Schema</h1>
+    <p>Understanding how the workhorse of XML Schema—the <code>complexType</code>—maps to the world of JSON Schema
+        objects and properties.</p>
+    <a href="/xsd-to-json-schema/" class="convert-btn" style="width: fit-content; margin: 2rem auto;">
+        ⚡ Test the Converter
+    </a>
+</div>
+
+<div class="content-section">
+    <div class="content-block">
+        <h2>What is complexType?</h2>
+        <p>In XML Schema (XSD), a <code>complexType</code> defines an element that can contain attributes and other
+            elements. It is strictly hierarchical.</p>
+        <p>In JSON Schema, this concept maps almost directly to an object definition with a <code>properties</code>
+            keyword. However, handling order (`sequence`) and optionality (`choice`) requires specific techniques.</p>
+    </div>
+
+    <div class="content-block">
+        <h2>Mapping complexType to "type": "object"</h2>
+        <p>The most direct translation involves setting the JSON type to "object" and enumerating children in
+            "properties".</p>
+
+        <div class="edge-case-grid" style="display: grid; gap: 2rem; margin-top: 1.5rem;">
+            <div class="edge-case-card"
+                style="background: var(--color-surface); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+                <h3>The Mapping Pattern</h3>
+                <ul
+                    style="list-style: disc; margin-left: 1.5rem; margin-bottom: 1rem; color: var(--color-text-secondary);">
+                    <li><strong>XSD Name</strong> → JSON Property Key</li>
+                    <li><strong>XSD Type</strong> → JSON Schema Type (e.g., xs:string → string)</li>
+                    <li><strong>minOccurs="1"</strong> → Added to "required" array</li>
+                    <li><strong>minOccurs="0"</strong> → Omitted from "required" array</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Handling &lt;xs:sequence&gt;</h2>
+        <p>XML is an ordered format; JSON objects are technically unordered (though most parsers preserve insertion
+            order). Standard conversion ignores the strict ordering enforcement of `sequence` in favor of a flat
+            property list, as this is more idiomatic for JSON APIs.</p>
+    </div>
+
+    <div class="content-block">
+        <h2>Handling &lt;xs:choice&gt;</h2>
+        <p>This is a trickier pattern. An XSD `choice` means "one of these elements must exist".</p>
+        <div class="edge-case-card"
+            style="background: var(--color-surface); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+            <h3>XSD Choice Input</h3>
+            <pre style="background: var(--color-bg); padding: 1rem; overflow-x: auto; margin-bottom: 1rem;">
+&lt;xs:choice&gt;
+  &lt;xs:element name="error" type="xs:string"/&gt;
+  &lt;xs:element name="result" type="xs:int"/&gt;
+&lt;/xs:choice&gt;</pre>
+            <h3>JSON Schema Approach</h3>
+            <p>Our converter typically maps this using the <code>oneOf</code> keyword to ensure validation logic remains
+                strictly equivalent:</p>
+            <pre style="background: var(--color-bg); padding: 1rem; overflow-x: auto;">
+"oneOf": [
+  { "required": ["error"] },
+  { "required": ["result"] }
+]</pre>
+        </div>
+    </div>
+
+    <div class="content-block" style="text-align: center; margin-top: 3rem;">
+        <h3>Automate Your Complex Conversions</h3>
+        <p>Don't map these manually. Our tool handles complexTypes, sequences, and choices instantly.</p>
+        <a href="/xsd-to-json-schema/" class="convert-btn"
+            style="width: fit-content; margin: 1rem auto; display: inline-flex;">
+            Use XSD to JSON Schema Converter
+        </a>
+    </div>
+</div>
+
+<style>
+    /* Reuse styles from main tool page */
+    .tool-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(79, 70, 229, 0.1);
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .convert-btn {
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: var(--color-primary);
+        border: none;
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+</style>
+{% endblock %}

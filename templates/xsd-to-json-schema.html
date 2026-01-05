@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}XSD & JSON Schema Converter – Free Developer Tools | JSON Formatters Pro{% endblock %}
-{% block meta_title %}XSD & JSON Schema Converter – Free Developer Tools | JSON Formatters Pro{% endblock %}
-{% block meta_description %}Free online suite for Schema conversion: Convert XSD to JSON Schema, Generate JSON Schema
-from JSON, and Create JSON Samples from XSD. Client-side & Secure.{% endblock %}
+{% block title %}XSD to JSON Schema Converter (Free, Client-Side, Draft-07){% endblock %}
+{% block meta_title %}XSD to JSON Schema Converter (Free, Client-Side, Draft-07){% endblock %}
+{% block meta_description %}Convert XSD to JSON Schema instantly in your browser. Free, secure, client-side,
+Draft-07 compatible. No uploads required.{% endblock %}
 {% block meta_keywords %}xsd to json schema, json to json schema generator, convert json to schema, generate json schema
 from json online, xml schema to json converter, create json schema from xml, xsd to json example generator, json schema
 draft 07 generator, free xsd converter{% endblock %}
@@ -199,7 +199,7 @@ draft 07 generator, free xsd converter{% endblock %}
     /* Converter Grid */
     .converter-grid {
         display: grid;
-        grid-template-columns: 1fr auto 1fr;
+        grid-template-columns: 1fr 1fr;
         gap: 1.5rem;
         margin-bottom: 4rem;
         align-items: stretch;
@@ -285,15 +285,6 @@ draft 07 generator, free xsd converter{% endblock %}
         background: var(--color-surface);
     }
 
-    /* Actions */
-    .center-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        justify-content: center;
-        align-items: center;
-    }
-
     .convert-btn {
         padding: 0.875rem 1.5rem;
         font-size: 1rem;
@@ -308,7 +299,6 @@ draft 07 generator, free xsd converter{% endblock %}
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
-        min-width: 160px;
         box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
     }
 
@@ -327,7 +317,6 @@ draft 07 generator, free xsd converter{% endblock %}
         border-radius: var(--radius-md);
         cursor: pointer;
         transition: all 0.2s ease;
-        min-width: 120px;
         text-align: center;
     }
 
@@ -408,7 +397,7 @@ draft 07 generator, free xsd converter{% endblock %}
 
 
     /* Mobile Responsive */
-    @media (max-width: 1024px) {
+    @media (max-width: 768px) {
         .converter-grid {
             grid-template-columns: 1fr;
             gap: 1rem;
@@ -458,17 +447,27 @@ draft 07 generator, free xsd converter{% endblock %}
     </div>
 </div>
 
+<div class="value-props-bar"
+    style="text-align: center; margin-bottom: 2rem; padding: 1rem; background: var(--color-surface); border-radius: var(--radius-md); border: 1px solid var(--color-border); display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+    <span title="No server latency">⚡ <strong>Instant Conversion</strong></span>
+    <span title="100% Client-side">🔒 <strong>Privacy Guaranteed</strong></span>
+    <span title="JSON Schema Draft 07">✅ <strong>Draft-07 Compatible</strong></span>
+    <span title="Paste directly">🚫 <strong>No File Uploads Needed</strong></span>
+</div>
+
 <div class="tools-tabs">
     <button class="tab-btn active" onclick="switchMode('xsd2schema')">XSD → JSON Schema</button>
     <button class="tab-btn" onclick="switchMode('json2schema')">JSON → JSON Schema</button>
     <button class="tab-btn" onclick="switchMode('xsd2json')">XSD → JSON Sample</button>
 </div>
 
+<!-- Input Panel -->
 <div class="converter-grid">
-    <!-- Input Panel -->
     <div class="converter-panel">
         <div class="panel-header">
-            <div>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <button class="secondary-btn" onclick="loadSample()"
+                    style="padding: 0.3rem 0.8rem; font-size: 0.8rem; min-width: auto;">Load Sample</button>
                 <h2 class="panel-title" id="inputTitle">XSD Input</h2>
             </div>
             <div class="header-actions">
@@ -481,14 +480,6 @@ draft 07 generator, free xsd converter{% endblock %}
         <textarea id="mainInput" class="converter-textarea" spellcheck="false"></textarea>
     </div>
 
-    <!-- Center Actions -->
-    <div class="center-actions">
-        <button class="convert-btn" onclick="executeConversion()">
-            <span>⚡</span> <span id="actionBtnText">Convert Schema</span>
-        </button>
-        <button class="secondary-btn" onclick="loadSample()">Load Sample</button>
-    </div>
-
     <!-- Output Panel -->
     <div class="converter-panel">
         <div class="panel-header">
@@ -496,11 +487,104 @@ draft 07 generator, free xsd converter{% endblock %}
                 <h2 class="panel-title" id="outputTitle">JSON Schema Output</h2>
             </div>
             <div class="header-actions">
+                <button class="convert-btn" onclick="executeConversion()"
+                    style="padding: 0.4rem 1rem; font-size: 0.85rem; min-width: auto;">
+                    <span>⚡</span> <span id="actionBtnText">Convert</span>
+                </button>
                 <button class="icon-btn" onclick="copyOutput()" title="Copy">📋</button>
                 <button class="icon-btn" onclick="downloadOutput()" title="Download">⬇️</button>
             </div>
         </div>
         <textarea id="mainOutput" class="converter-textarea" readonly spellcheck="false"></textarea>
+    </div>
+</div>
+
+
+
+<div class="content-block" style="margin-bottom: 4rem;">
+    <h2>Common XSD Edge Cases We Handle</h2>
+    <div class="edge-case-grid"
+        style="display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+
+        <!-- Case 1 -->
+        <div class="edge-case-card"
+            style="background: var(--color-surface); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+            <h3>1. complexType → Object</h3>
+            <p>Nested structures are preserved. XSD <code>complexType</code> definitions automatically become JSON
+                Schema <code>"type": "object"</code> properties.</p>
+            <div class="code-compare" style="display: grid; gap: 1rem;">
+                <div class="code-col">
+                    <small>XSD</small>
+                    <pre
+                        style="background: var(--color-bg); padding: 0.5rem; border-radius: 4px; overflow-x: auto; font-size: 0.8em;">&lt;xs:complexType name="User"&gt;
+  &lt;xs:sequence&gt;
+    &lt;xs:element name="id" type="xs:int"/&gt;
+  &lt;/xs:sequence&gt;
+&lt;/xs:complexType&gt;</pre>
+                </div>
+                <div class="code-col">
+                    <small>JSON Schema</small>
+                    <pre
+                        style="background: var(--color-bg); padding: 0.5rem; border-radius: 4px; overflow-x: auto; font-size: 0.8em;">"User": {
+  "type": "object",
+  "properties": {
+    "id": { "type": "integer" }
+  }
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Case 2 -->
+        <div class="edge-case-card"
+            style="background: var(--color-surface); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+            <h3>2. maxOccurs="unbounded"</h3>
+            <p>elements with <code>maxOccurs="unbounded"</code> are correctly interpreted as arrays, wrapping the item
+                definition in an <code>items</code> property.</p>
+            <div class="code-compare" style="display: grid; gap: 1rem;">
+                <div class="code-col">
+                    <small>XSD</small>
+                    <pre
+                        style="background: var(--color-bg); padding: 0.5rem; border-radius: 4px; overflow-x: auto; font-size: 0.8em;">&lt;xs:element name="tag" 
+  type="xs:string" 
+  maxOccurs="unbounded"/&gt;</pre>
+                </div>
+                <div class="code-col">
+                    <small>JSON Schema</small>
+                    <pre
+                        style="background: var(--color-bg); padding: 0.5rem; border-radius: 4px; overflow-x: auto; font-size: 0.8em;">"tag": {
+  "type": "array",
+  "items": { "type": "string" }
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Case 3 -->
+        <div class="edge-case-card"
+            style="background: var(--color-surface); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+            <h3>3. XML Attributes</h3>
+            <p>XSD attributes (<code>xs:attribute</code>) are treated as regular JSON properties, often added to the
+                <code>required</code> list if use="required".
+            </p>
+            <div class="code-compare" style="display: grid; gap: 1rem;">
+                <div class="code-col">
+                    <small>XSD</small>
+                    <pre
+                        style="background: var(--color-bg); padding: 0.5rem; border-radius: 4px; overflow-x: auto; font-size: 0.8em;">&lt;xs:attribute name="lang" 
+  type="xs:string" 
+  use="required"/&gt;</pre>
+                </div>
+                <div class="code-col">
+                    <small>JSON Schema</small>
+                    <pre
+                        style="background: var(--color-bg); padding: 0.5rem; border-radius: 4px; overflow-x: auto; font-size: 0.8em;">"properties": {
+  "@lang": { "type": "string" }
+},
+"required": ["@lang"]</pre>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -517,7 +601,8 @@ draft 07 generator, free xsd converter{% endblock %}
             <p>Perfect for migrating SOAP/XML services to REST/JSON. It takes your rigorous XML Schema Definitions
                 (XSDs) and converts them into standard JSON Schema (Draft 07). It preserves types like
                 <code>xs:string</code>, <code>xs:integer</code>, and structure constraints like
-                <code>minOccurs/maxOccurs</code>.</p>
+                <code>minOccurs/maxOccurs</code>.
+            </p>
         </div>
 
         <div style="margin-top: 1.5rem;">
@@ -528,116 +613,149 @@ draft 07 generator, free xsd converter{% endblock %}
         </div>
 
         <div style="margin-top: 1.5rem;">
-            <h3>3. XSD to JSON Sample Generator</h3>
-            <p>Need dummy data for testing? This mode takes an XSD file and generates a valid JSON object that conforms
-                to the schema. Great for seeding databases or mocking API endpoints before the backend is built.</p>
-        </div>
-    </div>
+            <div style="margin-top: 1.5rem;">
+                <h3>3. XSD to JSON Sample Generator</h3>
+                <p>Need dummy data for testing? This mode takes an XSD file and generates a valid JSON object that
+                    conforms
+                    to the schema. Great for seeding databases or mocking API endpoints before the backend is built.</p>
+            </div>
 
-    <div class="content-block">
-        <h2>Comparison: XSD vs JSON Schema</h2>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.5rem;">
-            <thead>
-                <tr style="background: var(--color-surface-alt); text-align: left;">
-                    <th style="padding: 1rem; border-bottom: 2px solid var(--color-border);">Feature</th>
-                    <th style="padding: 1rem; border-bottom: 2px solid var(--color-border);">XML Schema (XSD)</th>
-                    <th style="padding: 1rem; border-bottom: 2px solid var(--color-border);">JSON Schema</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);"><strong>Data Model</strong>
-                    </td>
-                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">Tree of Elements &
-                        Attributes</td>
-                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">Objects, Arrays, Primitives
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);"><strong>Usage</strong></td>
-                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">SOAP, Enterprise Java,
-                        Configs</td>
-                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">REST APIs, NoSQL, Configs
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);"><strong>Complexity</strong>
-                    </td>
-                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">High (Namespaces, types)
-                    </td>
-                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">Medium (Composition based)
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);"><strong>Validation</strong>
-                    </td>
-                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">Strict, Type-heavy</td>
-                    <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">Structural,
-                        Constraint-based</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="content-block">
-        <h2>Frequently Asked Questions</h2>
-        <div class="faq-grid">
-            <div class="faq-item">
-                <div class="faq-question">How to generate JSON Schema from a JSON object?</div>
-                <div class="faq-answer">
-                    Select the "JSON → JSON Schema" tab above. Paste your JSON data (object or array) into the left
-                    panel and click "Generate Schema". The tool will create a ready-to-use JSON Schema based on your
-                    data's structure and types.
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Can I convert complex XSD types to JSON Schema?</div>
-                <div class="faq-answer">
-                    Yes. Our engine handles key XSD concepts: <code>complexTypes</code> become JSON properties,
-                    <code>sequences</code> suggest property order (though JSON is unordered), and
-                    <code>simpleTypes</code> with restrictions are mapped to JSON Schema `enum` or `pattern` constraints
-                    where possible.
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Is the XSD converter free?</div>
-                <div class="faq-answer">
-                    Yes, it is 100% free and open for unlimited use. There are no daily limits, and since it runs in
-                    your browser, it's extremely fast even for large schemas.
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">How to create mock JSON from XSD?</div>
-                <div class="faq-answer">
-                    Use the "XSD → JSON Sample" tab. Input your XSD, and the tool will generate a "dummy" JSON object
-                    filled with placeholder strings, numbers, and booleans that satisfy the schema's requirements.
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Is this compatible with Draft 07/2019-09?</div>
-                <div class="faq-answer">
-                    The output is generated targeting JSON Schema Draft 07, which strikes the best balance between
-                    modern features and compatibility with major validators in Python, Java, and Node.js.
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Can I use this for API validation?</div>
-                <div class="faq-answer">
-                    Absolutely. The schemas generated here can be dropped directly into libraries like `ajv` (Node.js),
-                    `jsonschema` (Python), or framework middleware to validate incoming API requests automatically.
-                </div>
+            <div class="related-guides"
+                style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-border);">
+                <h3>Deep Dive Resources</h3>
+                <ul
+                    style="list-style: none; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <li>
+                        <a href="/xsd-to-json-schema-example/" class="secondary-btn"
+                            style="display: block; text-decoration: none;">
+                            📄 View XSD Conversion Examples
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/xsd-complextype-to-json-schema/" class="secondary-btn"
+                            style="display: block; text-decoration: none;">
+                            🧩 Handling ComplexTypes Guide
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
+
+        <div class="content-block">
+            <h2>Comparison: XSD vs JSON Schema</h2>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.5rem;">
+                <thead>
+                    <tr style="background: var(--color-surface-alt); text-align: left;">
+                        <th style="padding: 1rem; border-bottom: 2px solid var(--color-border);">Feature</th>
+                        <th style="padding: 1rem; border-bottom: 2px solid var(--color-border);">XML Schema (XSD)</th>
+                        <th style="padding: 1rem; border-bottom: 2px solid var(--color-border);">JSON Schema</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);"><strong>Data
+                                Model</strong>
+                        </td>
+                        <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">Tree of Elements &
+                            Attributes</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">Objects, Arrays,
+                            Primitives
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);"><strong>Usage</strong>
+                        </td>
+                        <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">SOAP, Enterprise Java,
+                            Configs</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">REST APIs, NoSQL,
+                            Configs
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">
+                            <strong>Complexity</strong>
+                        </td>
+                        <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">High (Namespaces,
+                            types)
+                        </td>
+                        <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">Medium (Composition
+                            based)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">
+                            <strong>Validation</strong>
+                        </td>
+                        <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">Strict, Type-heavy</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid var(--color-border);">Structural,
+                            Constraint-based</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-block">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">How to generate JSON Schema from a JSON object?</div>
+                    <div class="faq-answer">
+                        Select the "JSON → JSON Schema" tab above. Paste your JSON data (object or array) into the left
+                        panel and click "Generate Schema". The tool will create a ready-to-use JSON Schema based on your
+                        data's structure and types.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I convert complex XSD types to JSON Schema?</div>
+                    <div class="faq-answer">
+                        Yes. Our engine handles key XSD concepts: <code>complexTypes</code> become JSON properties,
+                        <code>sequences</code> suggest property order (though JSON is unordered), and
+                        <code>simpleTypes</code> with restrictions are mapped to JSON Schema `enum` or `pattern`
+                        constraints
+                        where possible.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is the XSD converter free?</div>
+                    <div class="faq-answer">
+                        Yes, it is 100% free and open for unlimited use. There are no daily limits, and since it runs in
+                        your browser, it's extremely fast even for large schemas.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How to create mock JSON from XSD?</div>
+                    <div class="faq-answer">
+                        Use the "XSD → JSON Sample" tab. Input your XSD, and the tool will generate a "dummy" JSON
+                        object
+                        filled with placeholder strings, numbers, and booleans that satisfy the schema's requirements.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is this compatible with Draft 07/2019-09?</div>
+                    <div class="faq-answer">
+                        The output is generated targeting JSON Schema Draft 07, which strikes the best balance between
+                        modern features and compatibility with major validators in Python, Java, and Node.js.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I use this for API validation?</div>
+                    <div class="faq-answer">
+                        Absolutely. The schemas generated here can be dropped directly into libraries like `ajv`
+                        (Node.js),
+                        `jsonschema` (Python), or framework middleware to validate incoming API requests automatically.
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}
 
-{% block extra_js %}
-<script>
-    let currentMode = 'xsd2schema';
+    {% block extra_js %}
+    <script>
+        let currentMode = 'xsd2schema';
 
-    // Sample Data
-    const SAMPLE_XSD = `<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        // Sample Data
+        const SAMPLE_XSD = `<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:element name="user">
     <xs:complexType>
       <xs:sequence>
@@ -657,7 +775,7 @@ draft 07 generator, free xsd converter{% endblock %}
   </xs:element>
 </xs:schema>`;
 
-    const SAMPLE_JSON = `{
+        const SAMPLE_JSON = `{
   "id": 101,
   "name": "John Doe",
   "email": "john@example.com",
@@ -669,282 +787,282 @@ draft 07 generator, free xsd converter{% endblock %}
   }
 }`;
 
-    // UI Logic
-    function switchMode(mode) {
-        currentMode = mode;
+        // UI Logic
+        function switchMode(mode) {
+            currentMode = mode;
 
-        // Update Tabs
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelector(`button[onclick="switchMode('${mode}')"]`).classList.add('active');
+            // Update Tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`button[onclick="switchMode('${mode}')"]`).classList.add('active');
 
-        // Update Text
-        const inputTitle = document.getElementById('inputTitle');
-        const outputTitle = document.getElementById('outputTitle');
-        const placeholder = document.getElementById('mainInput');
-        const actionBtn = document.getElementById('actionBtnText');
-        const fileInput = document.getElementById('fileInput');
+            // Update Text
+            const inputTitle = document.getElementById('inputTitle');
+            const outputTitle = document.getElementById('outputTitle');
+            const placeholder = document.getElementById('mainInput');
+            const actionBtn = document.getElementById('actionBtnText');
+            const fileInput = document.getElementById('fileInput');
 
-        document.getElementById('mainInput').value = '';
-        document.getElementById('mainOutput').value = '';
+            document.getElementById('mainInput').value = '';
+            document.getElementById('mainOutput').value = '';
 
-        if (mode === 'xsd2schema') {
-            inputTitle.textContent = 'XSD Input';
-            outputTitle.textContent = 'JSON Schema Output';
-            placeholder.placeholder = 'Paste XSD here...';
-            actionBtn.textContent = 'Convert to Schema';
-            fileInput.accept = '.xsd,.xml';
-        } else if (mode === 'json2schema') {
-            inputTitle.textContent = 'JSON Input';
-            outputTitle.textContent = 'JSON Schema Output';
-            placeholder.placeholder = 'Paste JSON here...';
-            actionBtn.textContent = 'Generate Schema';
-            fileInput.accept = '.json';
-        } else if (mode === 'xsd2json') {
-            inputTitle.textContent = 'XSD Input';
-            outputTitle.textContent = 'Sample JSON Output';
-            placeholder.placeholder = 'Paste XSD here...';
-            actionBtn.textContent = 'Generate Sample';
-            fileInput.accept = '.xsd,.xml';
-        }
-    }
-
-    function loadSample() {
-        const input = document.getElementById('mainInput');
-        if (currentMode === 'json2schema') {
-            input.value = SAMPLE_JSON;
-        } else {
-            input.value = SAMPLE_XSD;
-        }
-    }
-
-    function clearInput() {
-        document.getElementById('mainInput').value = '';
-        document.getElementById('mainOutput').value = '';
-        document.getElementById('fileInput').value = '';
-    }
-
-    function executeConversion() {
-        const input = document.getElementById('mainInput').value.trim();
-        const output = document.getElementById('mainOutput');
-
-        if (!input) {
-            alert('Please enter data to convert.');
-            return;
-        }
-
-        try {
-            if (currentMode === 'xsd2schema') {
-                output.value = convertXsdToReference(input);
-            } else if (currentMode === 'json2schema') {
-                const jsonObj = JSON.parse(input);
-                output.value = JSON.stringify(inferSchema(jsonObj), null, 2);
-            } else if (currentMode === 'xsd2json') {
-                output.value = JSON.stringify(generateSampleFromXsd(input), null, 2);
+            if (mode === 'xsd2schema') {
+                inputTitle.textContent = 'XSD Input';
+                outputTitle.textContent = 'JSON Schema Output';
+                placeholder.placeholder = 'Paste XSD here...';
+                actionBtn.textContent = 'Convert to Schema';
+                fileInput.accept = '.xsd,.xml';
+            } else if (mode === 'json2schema') {
+                inputTitle.textContent = 'JSON Input';
+                outputTitle.textContent = 'JSON Schema Output';
+                placeholder.placeholder = 'Paste JSON here...';
+                actionBtn.textContent = 'Generate Schema';
+                fileInput.accept = '.json';
+            } else if (mode === 'xsd2json') {
+                inputTitle.textContent = 'XSD Input';
+                outputTitle.textContent = 'Sample JSON Output';
+                placeholder.placeholder = 'Paste XSD here...';
+                actionBtn.textContent = 'Generate Sample';
+                fileInput.accept = '.xsd,.xml';
             }
-        } catch (e) {
-            output.value = "Error: " + e.message;
         }
-    }
 
-    // --- Core Logic Engines ---
-
-    // 1. JSON -> JSON Schema Inference
-    function inferSchema(data) {
-        const type = getType(data);
-        const schema = { type: type };
-
-        if (type === 'object') {
-            schema.properties = {};
-            schema.required = [];
-            for (const key in data) {
-                schema.properties[key] = inferSchema(data[key]);
-                schema.required.push(key);
-            }
-            if (schema.required.length === 0) delete schema.required;
-        } else if (type === 'array') {
-            if (data.length > 0) {
-                // Determine if all items are same type
-                const itemSchemas = data.map(inferSchema);
-                // For simplicity in this v1, user first item's schema or a basic merge
-                // Ideally we'd merge all, but taking 0 is a decent 'inference' for uniform arrays
-                schema.items = itemSchemas[0];
+        function loadSample() {
+            const input = document.getElementById('mainInput');
+            if (currentMode === 'json2schema') {
+                input.value = SAMPLE_JSON;
             } else {
-                schema.items = {}; // Any
+                input.value = SAMPLE_XSD;
             }
         }
 
-        return schema;
-    }
-
-    function getType(val) {
-        if (val === null) return 'null';
-        if (Array.isArray(val)) return 'array';
-        return typeof val;
-    }
-
-    // 2. XSD -> JSON Schema (Improved)
-    function convertXsdToReference(xsdContent) {
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xsdContent, "text/xml");
-        checkParseError(xmlDoc);
-
-        const schema = {
-            "$schema": "http://json-schema.org/draft-07/schema#",
-            "type": "object",
-            "properties": {}
-        };
-
-        const rootElements = getXsdElements(xmlDoc);
-
-        if (rootElements.length === 1) {
-            const root = rootElements[0];
-            schema.title = root.getAttribute('name');
-            Object.assign(schema, parseXsdElement(root));
-        } else {
-            // Multiple roots? Treat as properties of main schema
-            rootElements.forEach(el => {
-                const name = el.getAttribute('name');
-                if (name) schema.properties[name] = parseXsdElement(el);
-            });
+        function clearInput() {
+            document.getElementById('mainInput').value = '';
+            document.getElementById('mainOutput').value = '';
+            document.getElementById('fileInput').value = '';
         }
 
-        return JSON.stringify(schema, null, 2);
-    }
+        function executeConversion() {
+            const input = document.getElementById('mainInput').value.trim();
+            const output = document.getElementById('mainOutput');
 
-    // 3. XSD -> JSON Sample
-    function generateSampleFromXsd(xsdContent) {
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xsdContent, "text/xml");
-        checkParseError(xmlDoc);
+            if (!input) {
+                alert('Please enter data to convert.');
+                return;
+            }
 
-        const rootElements = getXsdElements(xmlDoc);
-        if (rootElements.length === 0) throw new Error("No root elements found in XSD");
+            try {
+                if (currentMode === 'xsd2schema') {
+                    output.value = convertXsdToReference(input);
+                } else if (currentMode === 'json2schema') {
+                    const jsonObj = JSON.parse(input);
+                    output.value = JSON.stringify(inferSchema(jsonObj), null, 2);
+                } else if (currentMode === 'xsd2json') {
+                    output.value = JSON.stringify(generateSampleFromXsd(input), null, 2);
+                }
+            } catch (e) {
+                output.value = "Error: " + e.message;
+            }
+        }
 
-        const root = rootElements[0];
-        // If root is a complex type, generate object.
-        return generateMockData(root);
-    }
+        // --- Core Logic Engines ---
 
-    // --- Helpers ---
+        // 1. JSON -> JSON Schema Inference
+        function inferSchema(data) {
+            const type = getType(data);
+            const schema = { type: type };
 
-    function checkParseError(doc) {
-        const err = doc.getElementsByTagName("parsererror");
-        if (err.length > 0) throw new Error("Invalid XML content");
-    }
+            if (type === 'object') {
+                schema.properties = {};
+                schema.required = [];
+                for (const key in data) {
+                    schema.properties[key] = inferSchema(data[key]);
+                    schema.required.push(key);
+                }
+                if (schema.required.length === 0) delete schema.required;
+            } else if (type === 'array') {
+                if (data.length > 0) {
+                    // Determine if all items are same type
+                    const itemSchemas = data.map(inferSchema);
+                    // For simplicity in this v1, user first item's schema or a basic merge
+                    // Ideally we'd merge all, but taking 0 is a decent 'inference' for uniform arrays
+                    schema.items = itemSchemas[0];
+                } else {
+                    schema.items = {}; // Any
+                }
+            }
 
-    function getXsdElements(doc) {
-        return Array.from(doc.querySelectorAll('*')).filter(el =>
-            el.localName === 'element' && el.parentNode.localName === 'schema'
-        );
-    }
+            return schema;
+        }
 
-    function parseXsdElement(node) {
-        // Recursive parsing for Schema generation
-        const type = node.getAttribute('type');
-        const name = node.getAttribute('name');
-        let schema = {};
+        function getType(val) {
+            if (val === null) return 'null';
+            if (Array.isArray(val)) return 'array';
+            return typeof val;
+        }
 
-        // Simple type mapping
-        if (type) {
-            const t = type.split(':').pop();
-            const map = {
-                'string': 'string', 'integer': 'integer', 'int': 'integer',
-                'long': 'integer', 'decimal': 'number', 'float': 'number',
-                'boolean': 'boolean', 'date': 'string', 'dateTime': 'string'
+        // 2. XSD -> JSON Schema (Improved)
+        function convertXsdToReference(xsdContent) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xsdContent, "text/xml");
+            checkParseError(xmlDoc);
+
+            const schema = {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "type": "object",
+                "properties": {}
             };
-            if (map[t]) schema.type = map[t];
-            else schema.type = 'string'; // Default fallback
-        }
 
-        // Complex Type handling (Inline)
-        // Look for direct complexType child
-        const complex = Array.from(node.children).find(c => c.localName === 'complexType');
-        if (complex) {
-            schema.type = 'object';
-            schema.properties = {};
-            const seq = Array.from(complex.children).find(c => c.localName === 'sequence');
-            if (seq) {
-                Array.from(seq.children).forEach(child => {
-                    if (child.localName === 'element') {
-                        const cName = child.getAttribute('name');
-                        const cMax = child.getAttribute('maxOccurs');
-                        if (cMax === 'unbounded') {
-                            schema.properties[cName] = {
-                                type: 'array',
-                                items: parseXsdElement(child)
-                            };
-                        } else {
-                            schema.properties[cName] = parseXsdElement(child);
-                        }
-                    }
+            const rootElements = getXsdElements(xmlDoc);
+
+            if (rootElements.length === 1) {
+                const root = rootElements[0];
+                schema.title = root.getAttribute('name');
+                Object.assign(schema, parseXsdElement(root));
+            } else {
+                // Multiple roots? Treat as properties of main schema
+                rootElements.forEach(el => {
+                    const name = el.getAttribute('name');
+                    if (name) schema.properties[name] = parseXsdElement(el);
                 });
             }
+
+            return JSON.stringify(schema, null, 2);
         }
 
-        return schema;
-    }
+        // 3. XSD -> JSON Sample
+        function generateSampleFromXsd(xsdContent) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xsdContent, "text/xml");
+            checkParseError(xmlDoc);
 
-    function generateMockData(node) {
-        const type = node.getAttribute('type');
-        if (type) {
-            const t = type.split(':').pop();
-            if (t === 'string') return "sample_string";
-            if (t === 'integer' || t === 'int') return 123;
-            if (t === 'boolean') return true;
-            if (t === 'date') return "2023-01-01";
+            const rootElements = getXsdElements(xmlDoc);
+            if (rootElements.length === 0) throw new Error("No root elements found in XSD");
+
+            const root = rootElements[0];
+            // If root is a complex type, generate object.
+            return generateMockData(root);
         }
 
-        // Complex check
-        const complex = Array.from(node.children).find(c => c.localName === 'complexType');
-        if (complex) {
-            const obj = {};
-            const seq = Array.from(complex.children).find(c => c.localName === 'sequence');
-            if (seq) {
-                Array.from(seq.children).forEach(child => {
-                    if (child.localName === 'element') {
-                        const name = child.getAttribute('name');
-                        const max = child.getAttribute('maxOccurs');
-                        if (max === 'unbounded') {
-                            obj[name] = [generateMockData(child)]; // Array with 1 sample
-                        } else {
-                            obj[name] = generateMockData(child);
-                        }
-                    }
-                });
+        // --- Helpers ---
+
+        function checkParseError(doc) {
+            const err = doc.getElementsByTagName("parsererror");
+            if (err.length > 0) throw new Error("Invalid XML content");
+        }
+
+        function getXsdElements(doc) {
+            return Array.from(doc.querySelectorAll('*')).filter(el =>
+                el.localName === 'element' && el.parentNode.localName === 'schema'
+            );
+        }
+
+        function parseXsdElement(node) {
+            // Recursive parsing for Schema generation
+            const type = node.getAttribute('type');
+            const name = node.getAttribute('name');
+            let schema = {};
+
+            // Simple type mapping
+            if (type) {
+                const t = type.split(':').pop();
+                const map = {
+                    'string': 'string', 'integer': 'integer', 'int': 'integer',
+                    'long': 'integer', 'decimal': 'number', 'float': 'number',
+                    'boolean': 'boolean', 'date': 'string', 'dateTime': 'string'
+                };
+                if (map[t]) schema.type = map[t];
+                else schema.type = 'string'; // Default fallback
             }
-            return obj;
+
+            // Complex Type handling (Inline)
+            // Look for direct complexType child
+            const complex = Array.from(node.children).find(c => c.localName === 'complexType');
+            if (complex) {
+                schema.type = 'object';
+                schema.properties = {};
+                const seq = Array.from(complex.children).find(c => c.localName === 'sequence');
+                if (seq) {
+                    Array.from(seq.children).forEach(child => {
+                        if (child.localName === 'element') {
+                            const cName = child.getAttribute('name');
+                            const cMax = child.getAttribute('maxOccurs');
+                            if (cMax === 'unbounded') {
+                                schema.properties[cName] = {
+                                    type: 'array',
+                                    items: parseXsdElement(child)
+                                };
+                            } else {
+                                schema.properties[cName] = parseXsdElement(child);
+                            }
+                        }
+                    });
+                }
+            }
+
+            return schema;
         }
 
-        return "value";
-    }
+        function generateMockData(node) {
+            const type = node.getAttribute('type');
+            if (type) {
+                const t = type.split(':').pop();
+                if (t === 'string') return "sample_string";
+                if (t === 'integer' || t === 'int') return 123;
+                if (t === 'boolean') return true;
+                if (t === 'date') return "2023-01-01";
+            }
 
-    function copyOutput() {
-        const output = document.getElementById('mainOutput');
-        if (!output.value) return;
-        output.select();
-        document.execCommand('copy');
-    }
+            // Complex check
+            const complex = Array.from(node.children).find(c => c.localName === 'complexType');
+            if (complex) {
+                const obj = {};
+                const seq = Array.from(complex.children).find(c => c.localName === 'sequence');
+                if (seq) {
+                    Array.from(seq.children).forEach(child => {
+                        if (child.localName === 'element') {
+                            const name = child.getAttribute('name');
+                            const max = child.getAttribute('maxOccurs');
+                            if (max === 'unbounded') {
+                                obj[name] = [generateMockData(child)]; // Array with 1 sample
+                            } else {
+                                obj[name] = generateMockData(child);
+                            }
+                        }
+                    });
+                }
+                return obj;
+            }
 
-    function downloadOutput() {
-        const content = document.getElementById('mainOutput').value;
-        if (!content) return;
-        const blob = new Blob([content], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = currentMode === 'xsd2json' ? 'sample.json' : 'schema.json';
-        a.click();
-        URL.revokeObjectURL(url);
-    }
+            return "value";
+        }
 
-    function handleFileUpload(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            document.getElementById('mainInput').value = e.target.result;
-        };
-        reader.readAsText(file);
-    }
-</script>
-{% endblock %}
+        function copyOutput() {
+            const output = document.getElementById('mainOutput');
+            if (!output.value) return;
+            output.select();
+            document.execCommand('copy');
+        }
+
+        function downloadOutput() {
+            const content = document.getElementById('mainOutput').value;
+            if (!content) return;
+            const blob = new Blob([content], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = currentMode === 'xsd2json' ? 'sample.json' : 'schema.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('mainInput').value = e.target.result;
+            };
+            reader.readAsText(file);
+        }
+    </script>
+    {% endblock %}

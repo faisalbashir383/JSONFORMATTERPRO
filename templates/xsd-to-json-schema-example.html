@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}XSD to JSON Schema Examples - Practical Conversion Scenarios{% endblock %}
+{% block meta_title %}XSD to JSON Schema Examples - Practical Conversion Scenarios{% endblock %}
+{% block meta_description %}Real-world XSD to JSON Schema conversion examples. Learn how to map XML elements,
+attributes, and types to JSON Schema Draft 07 properties.{% endblock %}
+{% block meta_keywords %}xsd to json schema example, convert xsd to json schema tutorial, xml schema examples, json
+schema generation patterns{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/xsd-to-json-schema-example/{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>XSD to JSON Schema Examples</h1>
+    <p>A collection of practical examples demonstrating how XML Schema Definition (XSD) structures map to modern JSON
+        Schema (Draft 07).</p>
+    <a href="/xsd-to-json-schema/" class="convert-btn" style="width: fit-content; margin: 2rem auto;">
+        ⚡ Go to Converter Tool
+    </a>
+</div>
+
+<div class="content-section">
+    <!-- Example 1: Basic Person -->
+    <div class="content-block">
+        <h2>Example 1: Simple Object Mapping</h2>
+        <p>A common scenario is mapping a flat XML element with child elements to a JSON object with properties.</p>
+
+        <div class="edge-case-grid"
+            style="display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+            <div class="edge-case-card"
+                style="background: var(--color-surface); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                <h3>Input XSD</h3>
+                <pre style="background: var(--color-bg); padding: 1rem; overflow-x: auto;">
+&lt;xs:complexType name="Person"&gt;
+  &lt;xs:sequence&gt;
+    &lt;xs:element name="fullName" type="xs:string"/&gt;
+    &lt;xs:element name="age" type="xs:integer"/&gt;
+    &lt;xs:element name="isActive" type="xs:boolean"/&gt;
+  &lt;/xs:sequence&gt;
+&lt;/xs:complexType&gt;</pre>
+            </div>
+            <div class="edge-case-card"
+                style="background: var(--color-surface); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                <h3>JSON Schema Output</h3>
+                <pre style="background: var(--color-bg); padding: 1rem; overflow-x: auto;">
+"Person": {
+  "type": "object",
+  "properties": {
+    "fullName": { "type": "string" },
+    "age": { "type": "integer" },
+    "isActive": { "type": "boolean" }
+  },
+  "required": ["fullName", "age", "isActive"]
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Example 2: Arrays -->
+    <div class="content-block">
+        <h2>Example 2: Handling Arrays (Lists)</h2>
+        <p>In XSD, collections are defined using <code>maxOccurs="unbounded"</code>. In JSON Schema, this translates to
+            the <code>array</code> type.</p>
+
+        <div class="edge-case-grid"
+            style="display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+            <div class="edge-case-card"
+                style="background: var(--color-surface); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                <h3>Input XSD</h3>
+                <pre style="background: var(--color-bg); padding: 1rem; overflow-x: auto;">
+&lt;xs:element name="tags"&gt;
+  &lt;xs:complexType&gt;
+    &lt;xs:sequence&gt;
+      &lt;xs:element name="tag" type="xs:string" 
+                  maxOccurs="unbounded"/&gt;
+    &lt;/xs:sequence&gt;
+  &lt;/xs:complexType&gt;
+&lt;/xs:element&gt;</pre>
+            </div>
+            <div class="edge-case-card"
+                style="background: var(--color-surface); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                <h3>JSON Schema Output</h3>
+                <pre style="background: var(--color-bg); padding: 1rem; overflow-x: auto;">
+"tags": {
+  "type": "object",
+  "properties": {
+    "tag": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Example 3: Nested -->
+    <div class="content-block">
+        <h2>Example 3: Deeply Nested Structures</h2>
+        <p>Modern APIs often have deep nesting. Our converter handles generic recursive structures efficiently.</p>
+        <div class="edge-case-grid"
+            style="display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+            <div class="edge-case-card"
+                style="background: var(--color-surface); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                <h3>Input XSD</h3>
+                <pre style="background: var(--color-bg); padding: 1rem; overflow-x: auto;">
+&lt;xs:element name="Order"&gt;
+  &lt;xs:complexType&gt;
+    &lt;xs:sequence&gt;
+       &lt;xs:element name="id" type="xs:string"/&gt;
+       &lt;xs:element name="items"&gt;
+         &lt;xs:complexType&gt;
+           &lt;xs:sequence&gt;
+             &lt;xs:element name="item" maxOccurs="unbounded"&gt;
+                &lt;xs:complexType&gt;
+                  &lt;xs:sequence&gt;
+                    &lt;xs:element name="sku" type="xs:string"/&gt;
+                  &lt;/xs:sequence&gt;
+                &lt;/xs:complexType&gt;
+             &lt;/xs:element&gt;
+           &lt;/xs:sequence&gt;
+         &lt;/xs:complexType&gt;
+       &lt;/xs:element&gt;
+    &lt;/xs:sequence&gt;
+  &lt;/xs:complexType&gt;
+&lt;/xs:element&gt;</pre>
+            </div>
+            <div class="edge-case-card"
+                style="background: var(--color-surface); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                <h3>JSON Schema Output</h3>
+                <pre style="background: var(--color-bg); padding: 1rem; overflow-x: auto;">
+"Order": {
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "items": {
+      "type": "object",
+      "properties": {
+        "item": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sku": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block" style="text-align: center; margin-top: 3rem;">
+        <h3>Ready to convert your own XSD files?</h3>
+        <p>Try our free, private, client-side converter tool.</p>
+        <a href="/xsd-to-json-schema/" class="convert-btn"
+            style="width: fit-content; margin: 1rem auto; display: inline-flex;">
+            Use XSD to JSON Schema Converter
+        </a>
+    </div>
+</div>
+
+<style>
+    /* Reuse styles from main tool page */
+    .tool-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(79, 70, 229, 0.1);
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .convert-btn {
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: var(--color-primary);
+        border: none;
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+</style>
+{% endblock %}

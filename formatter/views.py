@@ -3027,3 +3027,11 @@ def track_tool_usage(request):
         return Response({'success': True, 'tracked': True})
     except Exception as e:
         return Response({'success': False, 'error': str(e)}, status=500)
+
+def xsd_to_json_schema_example_page(request):
+    """Render the XSD to JSON Schema Examples page"""
+    return render(request, 'xsd-to-json-schema-example.html')
+
+def xsd_complextype_to_json_schema_page(request):
+    """Render the XSD ComplexType Guide page"""
+    return render(request, 'xsd-complextype-to-json-schema.html')
