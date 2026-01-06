@@ -34,8 +34,8 @@
     <!-- FontAwesome removed - using inline SVGs for faster page loads -->
 
     <!-- Primary Meta Tags -->
-    <title>{% block title %}JSON Formatters Pro - Free Online JSON Tools{% endblock %}</title>
-    <meta name="title" content="{% block meta_title %}JSON Formatters Pro - Free Online JSON Tools{% endblock %}">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="title" content="{% block meta_title %}JSON Formatter Online - Free Online JSON Tools{% endblock %}">
     <meta name="description"
         content="{% block meta_description %}Free JSON formatter, validator & minifier. Format, validate, minify, beautify JSON online. Convert to XML/CSV. Fast, secure, no signup or registration.{% endblock %}">
     <meta name="keywords"
@@ -272,7 +272,7 @@
                     style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
                     <img src="{% static 'images/favicon-512.png' %}" alt="JSON Formatters Pro Logo" class="nav-logo"
                         style="height: 40px; width: auto;">
-                    <span class="brand-name">JSON Formatters Pro</span>
+                    <span class="brand-name">JSON Formatter Pro</span>
                 </a>
             </div>
 
@@ -422,14 +422,14 @@
                         <span class="brand">
                             <a href="/"
                                 style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
-                                <img src="{% static 'images/logo.png' %}" alt="JSON Formatters Pro Logo"
+                                <img src="{% static 'images/favicon-512.png' %}" alt="JSON Formatters Pro Logo"
                                     class="nav-logo" style="height: 40px; width: auto;">
                             </a>
                         </span>
-                        <span class="footer-name">JSON Formatters Pro</span>
+                        <span class="footer-name">JSON Formatter Pro</span>
                     </div>
                     <p class="footer-description">
-                        Free online JSON formatter, validator, and converter that developers and teams love.
+                        Free online JSON formatter to format and beautify JSON instantly. Built for developers, APIs, and large JSON files.
                     </p>
 
                     <!-- Social Icons -->
@@ -465,17 +465,17 @@
                         <h4 class="footer-heading"><a href="/json-tools/"
                                 style="color: inherit; text-decoration: none;">JSON Tools</a></h4>
                         <ul class="footer-links">
-                            <li><a href="/json-tools/">All JSON Tools</a></li>
-                            <li><a href="/json-formatter/">JSON Formatter Guide</a></li>
-                            <li><a href="/json-to-yaml/">JSON to YAML</a></li>
+                            <li><a href="/" title="JSON Formatter">JSON Formatter</a></li>
+                            <li><a href="/json-formatter/">Format JSON Online</a></li>
+                            <li><a href="/json-visualizer/">JSON Visualizer</a></li>
                             <li><a href="/json-diff/">JSON Diff</a></li>
+                            <li><a href="/json-to-yaml/">JSON to YAML</a></li>
+                            <li><a href="/json-to-string/">JSON to String</a></li>
                             <li><a href="{% url 'json_schema_page' %}">Schema Validator</a></li>
                             <li><a href="/json-tree/">Tree Viewer</a></li>
-                            <li><a href="/json-visualizer/">JSON Visualizer</a></li>
                             <li><a href="/json-generator/">JSON Generator</a></li>
                             <li><a href="/dummy-json/">Dummy JSON</a></li>
                             <li><a href="/string-json-to-json/">String to JSON</a></li>
-                            <li><a href="/json-to-string/">JSON to String</a></li>
                         </ul>
                     </div>
 
