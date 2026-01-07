@@ -38,8 +38,7 @@
     <meta name="title" content="{% block meta_title %}JSON Formatter Online - Free Online JSON Tools{% endblock %}">
     <meta name="description"
         content="{% block meta_description %}Free JSON formatter, validator & minifier. Format, validate, minify, beautify JSON online. Convert to XML/CSV. Fast, secure, no signup or registration.{% endblock %}">
-    <meta name="keywords"
-        content="{% block meta_keywords %}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
     <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
     <meta name="language" content="English">
     <meta name="author" content="{% block author %}Faisal Ahmad{% endblock %}">
@@ -50,8 +49,7 @@
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:url" content="{% block og_url %}{{ SITE_URL }}/{% endblock %}">
     <meta property="og:title" content="{% block og_title %}{{ SITE_NAME }} - Free Online JSON Tools{% endblock %}">
-    <meta property="og:description"
-        content="{% block og_description %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% endblock %}">
     <meta property="og:image"
         content="{% block og_image %}{% if site_settings.og_image %}{{ site_settings.og_image }}{% else %}{{ SITE_URL }}/static/images/og-image.jpg{% endif %}{% endblock %}">
     <meta property="og:site_name" content="{{ SITE_NAME }}">
@@ -294,6 +292,8 @@
                         <a href="{% url 'json_schema_page' %}" class="dropdown-item">📐 Schema Validator</a>
                         <a href="/json-tree/" class="dropdown-item">🌳 Tree Viewer</a>
                         <a href="/json-visualizer/" class="dropdown-item">📊 JSON Visualizer</a>
+                        <a href="/json-path-tester/" class="dropdown-item">🎯 JSON Path Tester <span
+                                style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; font-size: 0.65rem; padding: 0.15rem 0.4rem; border-radius: 4px; margin-left: 0.3rem;">NEW</span></a>
                         <a href="/dummy-json/" class="dropdown-item">🎲 Dummy Json Generator</a>
                         <a href="/json-generator/" class="dropdown-item">⚡ JSON Generator (100K+)</a>
                         <a href="{% url 'json_editor_page' %}" class="dropdown-item">📝 JSON Editor</a>
@@ -429,7 +429,8 @@
                         <span class="footer-name">JSON Formatter Pro</span>
                     </div>
                     <p class="footer-description">
-                        Free online JSON formatter to format and beautify JSON instantly. Built for developers, APIs, and large JSON files.
+                        Free online JSON formatter to format and beautify JSON instantly. Built for developers, APIs,
+                        and large JSON files.
                     </p>
 
                     <!-- Social Icons -->

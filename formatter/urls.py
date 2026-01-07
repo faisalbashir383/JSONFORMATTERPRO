@@ -46,6 +46,7 @@ urlpatterns = [
     path('json-formatter/', views.json_formatter_page, name='json_formatter_page'),
     path('string-json-to-json/', views.string_json_to_json_page, name='string_json_to_json_page'),
     path('json-to-string/', views.json_to_string_page, name='json_to_string_page'),
+    path('json-path-tester/', views.json_path_tester_page, name='json_path_tester_page'),
     
     # API & Network Tool Pages
     path('http-headers/', views.http_headers_page, name='http_headers_page'),

@@ -726,6 +726,11 @@ def json_to_string_page(request):
     return render(request, 'json-to-string.html')
 
 
+def json_path_tester_page(request):
+    """Render the JSON Path Tester tool page"""
+    return render(request, 'json-path-tester.html')
+
+
 def robots_txt(request):
     """Serve robots.txt file"""
     return render(request, 'robots.txt', content_type='text/plain')

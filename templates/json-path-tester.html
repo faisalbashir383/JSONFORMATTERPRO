@@ -1,0 +1,1316 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}JSON Path Tester – Test & Evaluate JSONPath Online | JSON Formatters Pro{% endblock %}
+
+{% block meta_title %}JSON Path Tester – Test & Evaluate JSONPath Online{% endblock %}
+
+{% block meta_description %}Test JSONPath expressions online. Extract, filter, and validate JSON data instantly using
+our free JSON Path Tester. No signup required.{% endblock %}
+
+{% block meta_keywords %}json path tester, jsonpath tester online, json path evaluator, jsonpath online tool, extract
+data from json, jsonpath examples, json path query tool, test jsonpath expression, jsonpath filter examples, jsonpath
+playground{% endblock %}
+
+{% block canonical_url %}{{ SITE_URL }}/json-path-tester/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "JSON Path Tester",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web Browser",
+    "description": "Test JSONPath expressions online. Extract, filter, and validate JSON data instantly.",
+    "url": "{{ SITE_URL }}/json-path-tester/",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+    },
+    "featureList": [
+        "Real-time JSONPath evaluation",
+        "Pre-built expression examples",
+        "Client-side processing",
+        "Copy results to clipboard",
+        "Error explanations"
+    ]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "What is JSONPath?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "JSONPath is a query language for JSON, similar to XPath for XML. It allows you to extract specific data from JSON documents using path expressions like $.store.book[0].title."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How do I use JSONPath to extract data?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use the $ symbol to represent the root object, then chain property names with dots (.) and array indices with brackets ([]). For example, $.users[0].name extracts the name of the first user."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What is the difference between JSONPath and XPath?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "JSONPath is designed for JSON data while XPath is for XML. JSONPath uses $ for root and . for properties, while XPath uses / for paths. JSONPath is simpler for JSON data structures."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Can I filter JSON arrays with JSONPath?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, use filter expressions like $.books[?(@.price < 10)] to find all books with price less than 10, or $.users[?(@.active==true)] to find active users."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Is this JSONPath tester free to use?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, completely free with no signup required. All processing happens in your browser, so your JSON data never leaves your device."
+            }
+        }
+    ]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Test JSONPath Expressions Online",
+    "description": "Learn how to use our free JSONPath tester to extract and filter data from JSON documents in 3 simple steps.",
+    "totalTime": "PT1M",
+    "step": [
+        {
+            "@type": "HowToStep",
+            "position": 1,
+            "name": "Paste or Upload JSON",
+            "text": "Paste your JSON data into the input panel on the left, or click 'Upload' to load a JSON file from your device."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 2,
+            "name": "Enter JSONPath Expression",
+            "text": "Type your JSONPath expression in the input field (e.g., $.store.book[*].author). Use the 'Examples' dropdown for common patterns."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 3,
+            "name": "View and Copy Results",
+            "text": "Results appear instantly in the right panel with syntax highlighting. Click 'Copy' to copy the extracted data to your clipboard."
+        }
+    ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .jsonpath-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        height: 550px;
+    }
+
+    @media (max-width: 900px) {
+        .jsonpath-container {
+            grid-template-columns: 1fr;
+            height: auto;
+        }
+
+        .panel {
+            height: 400px;
+        }
+    }
+
+    .panel {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .panel-title {
+        font-weight: 600;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .panel-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        background: var(--color-bg);
+        color: var(--color-text);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .btn:hover {
+        border-color: #6366f1;
+        color: #6366f1;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        border-color: transparent;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .json-input,
+    .result-output {
+        flex: 1;
+        padding: 1rem;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        border: none;
+        resize: none;
+        background: var(--color-bg);
+        color: var(--color-text);
+        overflow: auto;
+        min-height: 0;
+    }
+
+    .json-input:focus,
+    .result-output:focus {
+        outline: none;
+    }
+
+    .path-input-container {
+        padding: 1rem;
+        border-bottom: 1px solid var(--color-border);
+        background: var(--color-surface);
+    }
+
+    .path-input-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .path-input-wrapper {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .path-input {
+        flex: 1;
+        padding: 0.6rem 0.75rem;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 0.9rem;
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        background: var(--color-bg);
+        color: var(--color-text);
+        transition: border-color 0.2s;
+    }
+
+    .path-input:focus {
+        outline: none;
+        border-color: #6366f1;
+    }
+
+    .path-input.error {
+        border-color: #ef4444;
+    }
+
+    .path-input.success {
+        border-color: #10b981;
+    }
+
+    .examples-dropdown {
+        position: relative;
+    }
+
+    .examples-btn {
+        padding: 0.6rem 0.75rem;
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-size: 0.85rem;
+        color: var(--color-text);
+    }
+
+    .examples-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 0.25rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        min-width: 320px;
+        z-index: 100;
+        display: none;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .examples-menu.show {
+        display: block;
+    }
+
+    .example-item {
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        border-bottom: 1px solid var(--color-border);
+        transition: background 0.2s;
+    }
+
+    .example-item:last-child {
+        border-bottom: none;
+    }
+
+    .example-item:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .example-path {
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: #6366f1;
+        margin-bottom: 0.25rem;
+    }
+
+    .example-desc {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+    }
+
+    .status-bar {
+        padding: 0.5rem 1rem;
+        background: var(--color-surface-alt);
+        border-top: 1px solid var(--color-border);
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .status-bar.error {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+
+    .status-bar.success {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    .result-count {
+        font-weight: 600;
+    }
+
+    .tool-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .privacy-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 1rem;
+        padding: 0.4rem 0.8rem;
+        background: rgba(16, 185, 129, 0.1);
+        border-radius: 20px;
+        font-size: 0.8rem;
+        color: #10b981;
+    }
+
+    /* SEO Content Sections */
+    .seo-content {
+        margin-top: 3rem;
+    }
+
+    .content-section {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .content-section h2 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .content-section h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 1.5rem 0 0.75rem 0;
+        color: var(--color-text);
+    }
+
+    .content-section p {
+        line-height: 1.7;
+        color: var(--color-text-secondary);
+        margin-bottom: 1rem;
+    }
+
+    .content-section ul {
+        margin: 1rem 0;
+        padding-left: 1.5rem;
+    }
+
+    .content-section li {
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+        color: var(--color-text-secondary);
+    }
+
+    .syntax-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        font-size: 0.9rem;
+    }
+
+    .syntax-table th,
+    .syntax-table td {
+        padding: 0.75rem 1rem;
+        text-align: left;
+        border: 1px solid var(--color-border);
+    }
+
+    .syntax-table th {
+        background: var(--color-surface-alt);
+        font-weight: 600;
+    }
+
+    .syntax-table code {
+        background: rgba(99, 102, 241, 0.1);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-family: monospace;
+        color: #6366f1;
+    }
+
+    .code-example {
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        margin: 1rem 0;
+        overflow-x: auto;
+    }
+
+    .code-example code {
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 0.85rem;
+        color: var(--color-text);
+        white-space: pre;
+    }
+
+    /* Internal Links Section */
+    .internal-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    .internal-link {
+        padding: 0.5rem 1rem;
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        color: var(--color-text);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .internal-link:hover {
+        border-color: #6366f1;
+        color: #6366f1;
+    }
+
+    /* FAQ Accordion */
+    .faq-item {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        margin-bottom: 0.75rem;
+        overflow: hidden;
+    }
+
+    .faq-item summary {
+        padding: 1rem;
+        cursor: pointer;
+        font-weight: 600;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .faq-item summary::after {
+        content: '+';
+        font-size: 1.25rem;
+        color: var(--color-text-secondary);
+    }
+
+    .faq-item[open] summary::after {
+        content: '−';
+    }
+
+    .faq-answer {
+        padding: 0 1rem 1rem 1rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    /* JSON Syntax Highlighting */
+    .json-highlighted {
+        flex: 1;
+        padding: 1rem;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        background: var(--color-bg);
+        color: var(--color-text);
+        overflow: auto;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        min-height: 0;
+    }
+
+    .json-key {
+        color: #6366f1;
+    }
+
+    .json-string {
+        color: #10b981;
+    }
+
+    .json-number {
+        color: #f59e0b;
+    }
+
+    .json-boolean {
+        color: #ec4899;
+    }
+
+    .json-null {
+        color: #8b5cf6;
+    }
+
+    .json-bracket {
+        color: var(--color-text-secondary);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tool-header">
+    <h1>JSON Path Tester</h1>
+    <p>Test JSONPath expressions online. Extract, filter, and query JSON data instantly with real-time evaluation.</p>
+    <div class="privacy-badge">
+        🔒 100% Client-Side – Your data never leaves your browser
+    </div>
+</div>
+
+<div class="jsonpath-container">
+    <!-- Input Panel -->
+    <div class="panel">
+        <div class="panel-header">
+            <span class="panel-title">JSON Input Panel</span>
+            <div class="panel-actions">
+                <button class="btn" onclick="loadSample()">📥 Sample</button>
+                <button class="btn" onclick="formatInput()">✨ Format</button>
+                <button class="btn" onclick="clearInput()">🗑️ Clear</button>
+                <label class="btn" style="margin: 0;">
+                    📁 Upload
+                    <input type="file" accept=".json" onchange="uploadFile(event)" style="display: none;">
+                </label>
+            </div>
+        </div>
+        <div class="path-input-container">
+            <label class="path-input-label">JSONPath Expression</label>
+            <div class="path-input-wrapper">
+                <input type="text" id="pathInput" class="path-input" placeholder="$.store.book[*].author" value="$"
+                    oninput="evaluatePath()">
+                <div class="examples-dropdown">
+                    <button class="examples-btn" onclick="toggleExamples()">📚 Examples ▾</button>
+                    <div id="examplesMenu" class="examples-menu">
+                        <div class="example-item" onclick="useExample('$')">
+                            <div class="example-path">$</div>
+                            <div class="example-desc">Root element (entire JSON)</div>
+                        </div>
+                        <div class="example-item" onclick="useExample('$.store.book[*].author')">
+                            <div class="example-path">$.store.book[*].author</div>
+                            <div class="example-desc">Get all authors from books array</div>
+                        </div>
+                        <div class="example-item" onclick="useExample('$..author')">
+                            <div class="example-path">$..author</div>
+                            <div class="example-desc">All authors (recursive search)</div>
+                        </div>
+                        <div class="example-item" onclick="useExample('$.store.book[0]')">
+                            <div class="example-path">$.store.book[0]</div>
+                            <div class="example-desc">First book in array</div>
+                        </div>
+                        <div class="example-item" onclick="useExample('$.store.book[-1:]')">
+                            <div class="example-path">$.store.book[-1:]</div>
+                            <div class="example-desc">Last book in array</div>
+                        </div>
+                        <div class="example-item" onclick="useExample('$.store.book[0,1]')">
+                            <div class="example-path">$.store.book[0,1]</div>
+                            <div class="example-desc">First two books</div>
+                        </div>
+                        <div class="example-item" onclick="useExample('$.store.book[:2]')">
+                            <div class="example-path">$.store.book[:2]</div>
+                            <div class="example-desc">First two books (slice)</div>
+                        </div>
+                        <div class="example-item" onclick="useExample('$.store.book[?(@.price < 10)]')">
+                            <div class="example-path">$.store.book[?(@.price < 10)]</div>
+                                    <div class="example-desc">Filter: books with price &lt; 10</div>
+                            </div>
+                            <div class="example-item" onclick='useExample("$.store.book[?(@.category==\"fiction\")]")'>
+                                <div class="example-path">$.store.book[?(@.category=="fiction")]</div>
+                                <div class="example-desc">Filter: fiction books only</div>
+                            </div>
+                            <div class="example-item" onclick="useExample('$.store.*')">
+                                <div class="example-path">$.store.*</div>
+                                <div class="example-desc">All children of store</div>
+                            </div>
+                            <div class="example-item" onclick="useExample('$..price')">
+                                <div class="example-path">$..price</div>
+                                <div class="example-desc">All prices (recursive)</div>
+                            </div>
+                            <div class="example-item" onclick="useExample('$.store.book[*].title')">
+                                <div class="example-path">$.store.book[*].title</div>
+                                <div class="example-desc">All book titles</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <textarea id="jsonInput" class="json-input"
+                placeholder="Paste your JSON here or click 'Sample' to load example data...">{
+  "store": {
+    "book": [
+      { "category": "reference", "author": "Faisal Ahmad", "title": "Sayings of the Century", "price": 8.95 },
+      { "category": "fiction", "author": "Evelyn Waugh", "title": "Sword of Honour", "price": 12.99 },
+      { "category": "fiction", "author": "Herman Melville", "title": "Moby Dick", "price": 8.99 },
+      { "category": "fiction", "author": "J. R. R. Tolkien", "title": "The Lord of the Rings", "price": 22.99 }
+    ],
+    "bicycle": {
+      "color": "red",
+      "price": 19.95
+    }
+  }
+}</textarea>
+            <div id="inputStatus" class="status-bar success">
+                <span>✓ Valid JSON</span>
+                <span id="jsonSize">234 bytes</span>
+            </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">RESULTS PANEL</span>
+                <div class="panel-actions">
+                    <button class="btn" onclick="copyResult()">📋 Copy</button>
+                    <button class="btn" onclick="copyPath()">🔗 Copy Path</button>
+                    <select id="outputFormat" class="btn" onchange="evaluatePath()" style="padding-right: 0.5rem;">
+                        <option value="pretty">Pretty JSON</option>
+                        <option value="minified">Minified</option>
+                        <option value="values">Values Only</option>
+                    </select>
+                </div>
+            </div>
+            <div id="resultOutput" class="json-highlighted">Results will appear here...</div>
+            <div id="resultStatus" class="status-bar">
+                <span id="resultMessage">Enter a JSONPath expression to see results</span>
+                <span id="resultCount" class="result-count"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Internal Links Section -->
+    <section
+        style="margin-top: 1.5rem; padding: 1.25rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
+        <h2
+            style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--color-text); text-align: center;">
+            🔗 Related JSON Tools
+        </h2>
+        <div class="internal-links" style="justify-content: center;">
+            <a href="/" class="internal-link">Format JSON before testing</a>
+            <a href="/json-tree/" class="internal-link">Visualize JSON structure</a>
+            <a href="/json-diff/" class="internal-link">Compare JSON files</a>
+            <a href="/json-to-code/" class="internal-link">Convert JSON to Code</a>
+            <a href="/swagger-viewer/" class="internal-link">Swagger Viewer Online</a>
+        </div>
+    </section>
+
+    <!-- SEO Content Sections -->
+    <div class="seo-content">
+        <!-- What is JSONPath -->
+        <section class="content-section">
+            <h2>What is JSONPath?</h2>
+            <p>
+                <strong>JSONPath</strong> is a query language for JSON (JavaScript Object Notation) that allows you to
+                extract specific data from JSON documents using path expressions. Similar to how XPath works for XML,
+                JSONPath provides a simple and powerful way to navigate and filter JSON data structures.
+            </p>
+            <p>
+                JSONPath expressions start with <code>$</code> representing the root element, followed by property
+                names separated by dots (<code>.</code>) and array indices in brackets (<code>[]</code>). For example,
+                <code>$.store.book[0].title</code> extracts the title of the first book in a store object.
+            </p>
+        </section>
+
+        <!-- Why Use JSONPath Tester -->
+        <section class="content-section">
+            <h2>Why Use a JSON Path Tester?</h2>
+            <p style="margin-bottom: 1rem;">
+                <strong>Unlike basic JSONPath evaluators</strong>, our tool provides instant syntax highlighting,
+                pre-built expression examples, and human-readable error messages. You get real-time results
+                as you type — no page refreshes, no account required, and complete privacy since all processing
+                happens in your browser.
+            </p>
+            <ul>
+                <li><strong>Debug API Responses:</strong> Quickly extract and validate specific data from complex JSON
+                    API responses</li>
+                <li><strong>Test Extraction Logic:</strong> Validate your JSONPath expressions before using them in
+                    production code</li>
+                <li><strong>Learn JSONPath Syntax:</strong> Experiment with different expressions using the built-in
+                    examples</li>
+                <li><strong>QA & Automation Testing:</strong> Test JSONPath queries used in automation frameworks like
+                    Playwright, Cypress, or Postman</li>
+                <li><strong>Data Transformation:</strong> Extract specific fields from large JSON datasets</li>
+                <li><strong>API Development:</strong> Validate that your API returns expected data structures</li>
+            </ul>
+        </section>
+
+        <!-- JSONPath Syntax -->
+        <section class="content-section">
+            <h2>JSONPath Syntax Explained</h2>
+            <table class="syntax-table">
+                <thead>
+                    <tr>
+                        <th>Expression</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>$</code></td>
+                        <td>Root object/element</td>
+                        <td><code>$</code> → entire JSON</td>
+                    </tr>
+                    <tr>
+                        <td><code>.</code></td>
+                        <td>Child operator</td>
+                        <td><code>$.store</code> → store object</td>
+                    </tr>
+                    <tr>
+                        <td><code>..</code></td>
+                        <td>Recursive descent</td>
+                        <td><code>$..author</code> → all authors</td>
+                    </tr>
+                    <tr>
+                        <td><code>*</code></td>
+                        <td>Wildcard (all elements)</td>
+                        <td><code>$.store.*</code> → all children</td>
+                    </tr>
+                    <tr>
+                        <td><code>[n]</code></td>
+                        <td>Array index</td>
+                        <td><code>$.books[0]</code> → first book</td>
+                    </tr>
+                    <tr>
+                        <td><code>[n,m]</code></td>
+                        <td>Multiple indices</td>
+                        <td><code>$.books[0,2]</code> → 1st and 3rd</td>
+                    </tr>
+                    <tr>
+                        <td><code>[start:end]</code></td>
+                        <td>Array slice</td>
+                        <td><code>$.books[:2]</code> → first two</td>
+                    </tr>
+                    <tr>
+                        <td><code>[?()]</code></td>
+                        <td>Filter expression</td>
+                        <td><code>[?(@.price < 10)]</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>@</code></td>
+                        <td>Current element (in filter)</td>
+                        <td><code>@.price</code> in filter</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Common Examples -->
+        <section class="content-section">
+            <h2>Common JSONPath Examples</h2>
+
+            <h3>1. Extract All Values of a Key</h3>
+            <div class="code-example">
+                <code>$.store.book[*].author</code>
+            </div>
+            <p>Returns: <code>["Nigel Rees", "Evelyn Waugh", "Herman Melville", "J. R. R. Tolkien"]</code></p>
+
+            <h3>2. Filter by Condition</h3>
+            <div class="code-example">
+                <code>$.store.book[?(@.price < 10)]</code>
+            </div>
+            <p>Returns all books where price is less than 10.</p>
+
+            <h3>3. Recursive Search</h3>
+            <div class="code-example">
+                <code>$..price</code>
+            </div>
+            <p>Finds all "price" properties at any level in the JSON structure.</p>
+
+            <h3>4. Array Slicing</h3>
+            <div class="code-example">
+                <code>$.store.book[-2:]</code>
+            </div>
+            <p>Returns the last two books in the array.</p>
+
+            <h3>5. Filter with String Match</h3>
+            <div class="code-example">
+                <code>$.store.book[?(@.category=="fiction")]</code>
+            </div>
+            <p>Returns all books in the "fiction" category.</p>
+        </section>
+
+        <!-- JSONPath vs XPath -->
+        <section class="content-section">
+            <h2>JSONPath vs XPath</h2>
+            <table class="syntax-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>JSONPath</th>
+                        <th>XPath</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data Format</td>
+                        <td>JSON</td>
+                        <td>XML</td>
+                    </tr>
+                    <tr>
+                        <td>Root Symbol</td>
+                        <td><code>$</code></td>
+                        <td><code>/</code></td>
+                    </tr>
+                    <tr>
+                        <td>Child Selector</td>
+                        <td><code>.</code> or <code>[]</code></td>
+                        <td><code>/</code></td>
+                    </tr>
+                    <tr>
+                        <td>Recursive Descent</td>
+                        <td><code>..</code></td>
+                        <td><code>//</code></td>
+                    </tr>
+                    <tr>
+                        <td>Current Node</td>
+                        <td><code>@</code></td>
+                        <td><code>.</code></td>
+                    </tr>
+                    <tr>
+                        <td>Complexity</td>
+                        <td>Simpler</td>
+                        <td>More powerful</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                JSONPath is generally simpler and more intuitive for JSON data, while XPath offers more
+                advanced features for XML documents. If you're working with APIs and JSON data, JSONPath
+                is the natural choice.
+            </p>
+        </section>
+
+        <!-- Use Cases -->
+        <section class="content-section">
+            <h2>JSONPath Use Cases in APIs & Automation</h2>
+            <ul>
+                <li><strong>Postman Tests:</strong> Use JSONPath in Postman test scripts to validate API responses</li>
+                <li><strong>REST Assured:</strong> Extract values from API responses in Java-based API testing</li>
+                <li><strong>Cypress/Playwright:</strong> Parse and validate JSON in end-to-end tests</li>
+                <li><strong>JMeter:</strong> Extract data from JSON responses using JSON Path Extractor</li>
+                <li><strong>AWS Step Functions:</strong> Use JSONPath for state machine data manipulation</li>
+                <li><strong>Kubernetes:</strong> JSONPath queries in kubectl for custom output</li>
+                <li><strong>Data Pipelines:</strong> Extract and transform JSON data in ETL processes</li>
+            </ul>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="content-section">
+            <h2>Frequently Asked Questions</h2>
+
+            <details class="faq-item">
+                <summary>What is JSONPath?</summary>
+                <div class="faq-answer">
+                    JSONPath is a query language for JSON, similar to XPath for XML. It allows you to extract
+                    specific data from JSON documents using path expressions like <code>$.store.book[0].title</code>.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>How do I use JSONPath to extract data?</summary>
+                <div class="faq-answer">
+                    Use the <code>$</code> symbol to represent the root object, then chain property names with
+                    dots (<code>.</code>) and array indices with brackets (<code>[]</code>). For example,
+                    <code>$.users[0].name</code> extracts the name of the first user.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>Can I filter JSON arrays with JSONPath?</summary>
+                <div class="faq-answer">
+                    Yes! Use filter expressions like <code>$.books[?(@.price < 10)]</code> to find all books
+                    with price less than 10, or <code>$.users[?(@.active==true)]</code> to find active users.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>What's the difference between . and .. in JSONPath?</summary>
+                <div class="faq-answer">
+                    Single dot (<code>.</code>) accesses direct children, while double dot (<code>..</code>)
+                    performs a recursive descent, searching at all levels. For example, <code>$..author</code>
+                    finds all "author" properties anywhere in the JSON.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>Is this JSONPath tester free to use?</summary>
+                <div class="faq-answer">
+                    Yes, completely free with no signup required. All processing happens in your browser,
+                    so your JSON data never leaves your device. We don't store or log any of your data.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>What JSON libraries support JSONPath?</summary>
+                <div class="faq-answer">
+                    Popular libraries include: JSONPath-Plus (JavaScript), json-path (Python), JsonPath (Java/Jayway),
+                    and JsonPath.Net (C#). Most API testing tools like Postman and JMeter also support JSONPath.
+                </div>
+            </details>
+        </section>
+
+        <!-- Related Searches Section (SEO Long-tail) -->
+        <section class="content-section" style="background: var(--color-surface-alt);">
+            <h2>Related Searches</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                <span
+                    style="padding: 0.4rem 0.8rem; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 20px; font-size: 0.85rem; color: var(--color-text-secondary);">JSONPath
+                    tester online</span>
+                <span
+                    style="padding: 0.4rem 0.8rem; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 20px; font-size: 0.85rem; color: var(--color-text-secondary);">JSONPath
+                    examples</span>
+                <span
+                    style="padding: 0.4rem 0.8rem; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 20px; font-size: 0.85rem; color: var(--color-text-secondary);">Extract
+                    data from JSON</span>
+                <span
+                    style="padding: 0.4rem 0.8rem; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 20px; font-size: 0.85rem; color: var(--color-text-secondary);">JSONPath
+                    filter syntax</span>
+                <span
+                    style="padding: 0.4rem 0.8rem; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 20px; font-size: 0.85rem; color: var(--color-text-secondary);">JSON
+                    query tool</span>
+                <span
+                    style="padding: 0.4rem 0.8rem; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 20px; font-size: 0.85rem; color: var(--color-text-secondary);">JSONPath
+                    playground</span>
+                <span
+                    style="padding: 0.4rem 0.8rem; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 20px; font-size: 0.85rem; color: var(--color-text-secondary);">Test
+                    JSONPath expression</span>
+                <span
+                    style="padding: 0.4rem 0.8rem; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 20px; font-size: 0.85rem; color: var(--color-text-secondary);">JSONPath
+                    evaluator</span>
+            </div>
+        </section>
+    </div>
+
+    {% endblock %}
+
+    {% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/jsonpath@1.1.1/jsonpath.min.js"></script>
+    <script>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function () {
+            evaluatePath();
+            updateJsonSize();
+
+            // Auto-evaluate on JSON input change
+            document.getElementById('jsonInput').addEventListener('input', function () {
+                validateJson();
+                evaluatePath();
+                updateJsonSize();
+            });
+
+            // Close examples menu on outside click
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('.examples-dropdown')) {
+                    document.getElementById('examplesMenu').classList.remove('show');
+                }
+            });
+        });
+
+        // Evaluate JSONPath
+        function evaluatePath() {
+            const jsonInput = document.getElementById('jsonInput').value.trim();
+            const pathInput = document.getElementById('pathInput').value.trim();
+            const outputFormat = document.getElementById('outputFormat').value;
+            const resultOutput = document.getElementById('resultOutput');
+            const resultStatus = document.getElementById('resultStatus');
+            const resultMessage = document.getElementById('resultMessage');
+            const resultCount = document.getElementById('resultCount');
+            const pathField = document.getElementById('pathInput');
+
+            // Reset states
+            pathField.classList.remove('error', 'success');
+            resultStatus.classList.remove('error', 'success');
+
+            if (!jsonInput) {
+                resultOutput.value = '';
+                resultMessage.textContent = 'Enter JSON data to begin';
+                resultCount.textContent = '';
+                return;
+            }
+
+            if (!pathInput) {
+                resultOutput.value = '';
+                resultMessage.textContent = 'Enter a JSONPath expression';
+                resultCount.textContent = '';
+                return;
+            }
+
+            let jsonData;
+            try {
+                jsonData = JSON.parse(jsonInput);
+            } catch (e) {
+                resultOutput.value = '';
+                resultMessage.textContent = '⚠️ Invalid JSON: ' + e.message;
+                resultStatus.classList.add('error');
+                resultCount.textContent = '';
+                return;
+            }
+
+            try {
+                // Use jsonpath library
+                const result = jsonpath.query(jsonData, pathInput);
+
+                if (result === undefined || result === null || (Array.isArray(result) && result.length === 0)) {
+                    resultOutput.textContent = 'No matches found';
+                    resultMessage.textContent = 'No matches found for this expression';
+                    resultCount.textContent = '0 results';
+                    pathField.classList.add('error');
+                    return;
+                }
+
+                // Format output based on selection
+                let output;
+                const count = Array.isArray(result) ? result.length : 1;
+
+                if (outputFormat === 'pretty') {
+                    output = JSON.stringify(result, null, 2);
+                } else if (outputFormat === 'minified') {
+                    output = JSON.stringify(result);
+                } else if (outputFormat === 'values') {
+                    if (Array.isArray(result)) {
+                        output = result.map(item => {
+                            if (typeof item === 'object') {
+                                return JSON.stringify(item);
+                            }
+                            return String(item);
+                        }).join('\n');
+                    } else {
+                        output = typeof result === 'object' ? JSON.stringify(result) : String(result);
+                    }
+                }
+
+                // Apply syntax highlighting for pretty and minified modes
+                if (outputFormat === 'pretty' || outputFormat === 'minified') {
+                    resultOutput.innerHTML = highlightJson(output);
+                } else {
+                    resultOutput.textContent = output;
+                }
+                resultMessage.textContent = '✓ JSONPath evaluated successfully';
+                resultCount.textContent = count + ' result' + (count !== 1 ? 's' : '');
+                resultStatus.classList.add('success');
+                pathField.classList.add('success');
+
+            } catch (e) {
+                resultOutput.textContent = '';
+
+                // Provide user-friendly error messages
+                let errorMsg = e.message;
+                if (errorMsg.includes('Unexpected token')) {
+                    errorMsg = 'Syntax error in JSONPath expression. Check for typos or missing brackets.';
+                } else if (errorMsg.includes('Lexer')) {
+                    errorMsg = 'Invalid JSONPath syntax. Make sure expression starts with $ and uses valid operators.';
+                }
+
+                resultMessage.textContent = '⚠️ ' + errorMsg;
+                resultStatus.classList.add('error');
+                pathField.classList.add('error');
+                resultCount.textContent = '';
+            }
+        }
+
+        // JSON Syntax Highlighting
+        function highlightJson(json) {
+            // Escape HTML first
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+            // Highlight patterns
+            return json.replace(
+                /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g,
+                function (match) {
+                    let cls = 'json-number';
+                    if (/^"/.test(match)) {
+                        if (/:$/.test(match)) {
+                            cls = 'json-key';
+                            // Remove the colon from the span and add it outside
+                            return '<span class="' + cls + '">' + match.slice(0, -1) + '</span>:';
+                        } else {
+                            cls = 'json-string';
+                        }
+                    } else if (/true|false/.test(match)) {
+                        cls = 'json-boolean';
+                    } else if (/null/.test(match)) {
+                        cls = 'json-null';
+                    }
+                    return '<span class="' + cls + '">' + match + '</span>';
+                }
+            );
+        }
+
+        // Validate JSON
+        function validateJson() {
+            const jsonInput = document.getElementById('jsonInput').value.trim();
+            const statusBar = document.getElementById('inputStatus');
+
+            if (!jsonInput) {
+                statusBar.className = 'status-bar';
+                statusBar.innerHTML = '<span>Enter JSON data</span><span id="jsonSize">0 bytes</span>';
+                return false;
+            }
+
+            try {
+                JSON.parse(jsonInput);
+                statusBar.className = 'status-bar success';
+                statusBar.innerHTML = '<span>✓ Valid JSON</span><span id="jsonSize">' + jsonInput.length + ' bytes</span>';
+                return true;
+            } catch (e) {
+                statusBar.className = 'status-bar error';
+                statusBar.innerHTML = '<span>✗ ' + e.message + '</span><span id="jsonSize">' + jsonInput.length + ' bytes</span>';
+                return false;
+            }
+        }
+
+        // Update JSON size
+        function updateJsonSize() {
+            const jsonInput = document.getElementById('jsonInput').value;
+            const sizeEl = document.getElementById('jsonSize');
+            if (sizeEl) {
+                sizeEl.textContent = jsonInput.length + ' bytes';
+            }
+        }
+
+        // Load sample JSON
+        function loadSample() {
+            const sample = {
+                "store": {
+                    "book": [
+                        { "category": "reference", "author": "Nigel Rees", "title": "Sayings of the Century", "price": 8.95 },
+                        { "category": "fiction", "author": "Evelyn Waugh", "title": "Sword of Honour", "price": 12.99 },
+                        { "category": "fiction", "author": "Herman Melville", "title": "Moby Dick", "price": 8.99 },
+                        { "category": "fiction", "author": "J. R. R. Tolkien", "title": "The Lord of the Rings", "price": 22.99 }
+                    ],
+                    "bicycle": {
+                        "color": "red",
+                        "price": 19.95
+                    }
+                }
+            };
+            document.getElementById('jsonInput').value = JSON.stringify(sample, null, 2);
+            validateJson();
+            evaluatePath();
+            updateJsonSize();
+        }
+
+        // Format input JSON
+        function formatInput() {
+            const jsonInput = document.getElementById('jsonInput');
+            try {
+                const parsed = JSON.parse(jsonInput.value);
+                jsonInput.value = JSON.stringify(parsed, null, 2);
+                validateJson();
+            } catch (e) {
+                // Already invalid, validateJson will show error
+                validateJson();
+            }
+        }
+
+        // Clear input
+        function clearInput() {
+            document.getElementById('jsonInput').value = '';
+            document.getElementById('pathInput').value = '$';
+            document.getElementById('resultOutput').value = '';
+            validateJson();
+            evaluatePath();
+        }
+
+        // Upload file
+        function uploadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('jsonInput').value = e.target.result;
+                validateJson();
+                evaluatePath();
+                updateJsonSize();
+            };
+            reader.readAsText(file);
+            event.target.value = ''; // Reset for same file upload
+        }
+
+        // Copy result
+        function copyResult() {
+            const result = document.getElementById('resultOutput').textContent;
+            if (!result || result === 'Results will appear here...' || result === 'No matches found') return;
+
+            navigator.clipboard.writeText(result).then(() => {
+                showToast('Result copied to clipboard!');
+            });
+        }
+
+        // Copy path
+        function copyPath() {
+            const path = document.getElementById('pathInput').value;
+            navigator.clipboard.writeText(path).then(() => {
+                showToast('JSONPath copied to clipboard!');
+            });
+        }
+
+        // Toggle examples dropdown
+        function toggleExamples() {
+            document.getElementById('examplesMenu').classList.toggle('show');
+        }
+
+        // Use example
+        function useExample(path) {
+            document.getElementById('pathInput').value = path;
+            document.getElementById('examplesMenu').classList.remove('show');
+            evaluatePath();
+        }
+
+        // Toast notification
+        function showToast(message) {
+            // Check if toast container exists
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                container.style.cssText = 'position: fixed; bottom: 20px; right: 20px; z-index: 10000;';
+                document.body.appendChild(container);
+            }
+
+            const toast = document.createElement('div');
+            toast.style.cssText = 'background: #10b981; color: white; padding: 0.75rem 1.25rem; border-radius: 8px; margin-top: 0.5rem; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+    </script>
+    {% endblock %}
