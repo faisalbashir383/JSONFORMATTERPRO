@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ domain }} Domain Registration Date & Age - Check Domain Info{% endblock %}
-{% block meta_title %}{{ domain }} Domain Registration Date & Age - Check Domain Info{% endblock %}
+{% block title %}{{ meta_title }}{% endblock %}
+{% block meta_title %}{{ meta_title }}{% endblock %}
 {% block meta_description %}{{ meta_description }}{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/domain-age/{{ domain }}/{% endblock %}
 
@@ -42,7 +42,7 @@
 }
 </script>
 
-<!-- Domain-specific FAQ Schema -->
+<!-- Domain-specific FAQ Schema with real data -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -53,7 +53,7 @@
       "name": "When was {{ domain }} registered?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The domain {{ domain }} registration date and exact age can be found using this domain age checker tool. Enter the domain above to see the complete WHOIS registration information including the original creation date from official registry records."
+        "text": "{% if whois_data and whois_data.createdDateHuman %}{{ domain }} was registered on {{ whois_data.createdDateHuman }} according to official WHOIS records maintained by ICANN-accredited registries.{% else %}WHOIS registration records for {{ domain }} are maintained by ICANN-accredited registries and contain the official domain creation date.{% endif %}"
       }
     },
     {
@@ -61,7 +61,7 @@
       "name": "How old is {{ domain }}?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Check the exact age of {{ domain }} in years, months, and days using this free tool. Domain age is calculated from the original WHOIS creation date to the current date, providing accurate information about how long this domain has been registered."
+        "text": "{% if whois_data and whois_data.age %}{{ domain }} is {{ whois_data.age.years }} years and {{ whois_data.age.months }} months old, calculated from its original WHOIS creation date.{% else %}Domain age is determined by the creation date recorded in official WHOIS registry databases.{% endif %}"
       }
     },
     {
@@ -69,7 +69,7 @@
       "name": "Who is the registrar for {{ domain }}?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The registrar information for {{ domain }} is displayed in the WHOIS lookup results above. This includes the company that manages the domain registration, nameservers, and expiration date details."
+        "text": "{% if whois_data and whois_data.registrar %}{{ domain }} is registered through {{ whois_data.registrar }}, an ICANN-accredited domain registrar.{% else %}Registrar information is recorded in the official WHOIS database and identifies the company managing the domain registration.{% endif %}"
       }
     }
   ]
@@ -81,7 +81,7 @@
 {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "name": "{{ domain }} Domain Registration Date & Age",
+  "name": "{{ meta_title }}",
   "description": "{{ meta_description }}",
   "url": "{{ SITE_URL }}/domain-age/{{ domain }}/",
   "dateModified": "{{ last_updated|date:'Y-m-d' }}",
@@ -435,8 +435,16 @@
 </nav>
 
 <div class="tool-header">
-    <h1>{{ domain }} Domain Registration Date & Age</h1>
-    <p>Check the registration date, exact age, expiry date, and WHOIS information for {{ domain }}</p>
+    <h1>{{ domain }} Registration Date (WHOIS) – Exact Domain Age</h1>
+    {% if whois_data and whois_data.createdDateHuman %}
+    <!-- STRONG ANSWER SENTENCE - This single sentence fully answers the query -->
+    <p style="font-size: 1.2rem; color: var(--color-text); font-weight: 500;">
+        {{ domain }} was registered on {{ whois_data.createdDateHuman }} and is {{ whois_data.age.years }} years,
+        {{ whois_data.age.months }} months old.
+    </p>
+    {% else %}
+    <p>Official WHOIS registration date and domain age for {{ domain }}.</p>
+    {% endif %}
     {% if unique_visitors > 0 %}
     <div style="margin-top: 1rem;">
         <span
@@ -448,33 +456,148 @@
     {% endif %}
 </div>
 
-<!-- Static Server-Side Summary (150-200 words for Google indexing) -->
+<!-- Answer-First Content Section (Server-Side Rendered) -->
 <div class="static-summary">
-    <h2>About {{ domain }} Domain Age</h2>
-    <p>
-        This page displays the domain age and registration information for <strong>{{ domain }}</strong>.
-        Domain age refers to how long a domain name has been registered since its original creation date.
-        Understanding when {{ domain }} was first registered can be valuable for SEO analysis, competitive research,
-        brand verification, and evaluating website trustworthiness.
+    <!-- Section 1: When was {domain} registered? -->
+    <h2>When was {{ domain }} registered?</h2>
+    {% if whois_data and whois_data.createdDateHuman %}
+    <p style="font-size: 1.15rem; color: var(--color-text); margin-bottom: 1rem;">
+        <strong>{{ domain }}</strong> was registered on <strong>{{ whois_data.createdDateHuman }}</strong>
+        and is currently <strong>{{ whois_data.age.years }} years, {{ whois_data.age.months }} months</strong> old.
+        {% if whois_data.registrar %}The domain is registered through {{ whois_data.registrar }}.{% endif %}
     </p>
+    {% else %}
     <p>
-        The WHOIS data shown above includes the exact registration date, last update date, expiration date,
-        registrar name, and nameservers for {{ domain }}. This information is retrieved from official WHOIS
-        registry databases maintained by ICANN-accredited registrars. For comprehensive domain research,
-        you can use our <a href="/domain-age/"
-            style="color: var(--color-primary); text-decoration: none; font-weight: 500;">domain age checker</a>
-        tool to analyze any domain instantly.
+        <strong>{{ domain }}</strong> registration date is recorded in the official WHOIS database.
+        WHOIS records contain the authoritative creation date for all registered domains,
+        maintained by ICANN-accredited registries worldwide.
     </p>
+    {% endif %}
+
+    <!-- Section 2: How old is {domain}? (Dedicated section for "domain age" queries) -->
+    <h2 style="margin-top: 2rem;">How old is {{ domain }}?</h2>
+    {% if whois_data and whois_data.age %}
+    <p style="font-size: 1.15rem; color: var(--color-text);">
+        <strong>{{ domain }}</strong> is <strong>{{ whois_data.age.years }} years and {{ whois_data.age.months }} months
+            old</strong>.
+        The domain was first registered on {{ whois_data.createdDateHuman }}{% if whois_data.expiryDateHuman %} and is
+        set to expire on {{ whois_data.expiryDateHuman }}{% endif %}.
+    </p>
+    {% else %}
+    <p>
+        Domain age is calculated from the original WHOIS creation date to the current date.
+        This information is maintained in official registry databases and reflects how long {{ domain }} has been
+        registered.
+    </p>
+    {% endif %}
+
+    <!-- Section 3: WHOIS Details -->
+    <h3 style="margin-top: 1.5rem; font-size: 1.1rem;">{{ domain }} WHOIS Registration Details</h3>
+    <p>
+        WHOIS records for {{ domain }} include the registration date, last update date, expiration date,
+        registrar name, and authoritative nameservers. These records are maintained by ICANN-accredited
+        registries, the official source for domain registration information.
+    </p>
+
+    <!-- Official Source Trust Signal -->
+    <div
+        style="margin-top: 1.25rem; padding: 0.75rem 1rem; background: rgba(16, 185, 129, 0.08); border-left: 3px solid #10b981; border-radius: 0 var(--radius-md) var(--radius-md) 0;">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--color-text);">
+            <strong style="color: #10b981;">✓ Official Source:</strong> All registration data is retrieved from
+            <strong>ICANN-accredited WHOIS registries</strong>, the authoritative and official source for domain
+            registration information worldwide.
+        </p>
+    </div>
+
     <p class="last-updated">
-        📅 Last updated: {{ last_updated|date:"F j, Y" }}
-    </p>
-    <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 0.75rem; font-style: italic;">
-        ⚠️ Data accuracy note: WHOIS data availability may vary by TLD and registrar privacy settings.
+        📅 Last verified: {{ last_updated|date:"F j, Y" }}
     </p>
 </div>
 
 <div class="result-container">
-    <!-- Loading State (shown initially) -->
+    {% if whois_data %}
+    <!-- Server-Side Rendered Results (Answer First) -->
+    <div id="resultsContainer">
+        <!-- Age Display -->
+        <div class="age-display">
+            <div class="age-card">
+                <div class="age-number">{{ whois_data.age.years }}</div>
+                <div class="age-label">Years</div>
+            </div>
+            <div class="age-card">
+                <div class="age-number">{{ whois_data.age.months }}</div>
+                <div class="age-label">Months</div>
+            </div>
+            <div class="age-card">
+                <div class="age-number">{{ whois_data.age.days }}</div>
+                <div class="age-label">Days</div>
+            </div>
+        </div>
+
+        <!-- Domain Info Grid -->
+        <div class="info-grid">
+            <div class="info-item">
+                <label>📅 Registration Date</label>
+                <div class="value">{{ whois_data.createdDateHuman }}</div>
+            </div>
+            <div class="info-item">
+                <label>🔄 Last Updated</label>
+                <div class="value">{{ whois_data.updatedDateHuman|default:"Not available" }}</div>
+            </div>
+            <div class="info-item">
+                <label>⏰ Expiry Date</label>
+                <div class="value">
+                    {{ whois_data.expiryDateHuman }}
+                    {% if whois_data.daysUntilExpiry %}<span
+                        style="font-size: 0.85rem; color: var(--color-text-secondary);">
+                    ({{ whois_data.daysUntilExpiry }} days)</span>{% endif %}
+                </div>
+            </div>
+            <div class="info-item">
+                <label>🏢 Registrar</label>
+                <div class="value">{{ whois_data.registrar|default:"Not available" }}</div>
+            </div>
+        </div>
+
+        {% if whois_data.nameServers %}
+        <!-- Nameservers -->
+        <div class="info-item" style="margin-bottom: 2rem;">
+            <label>🌐 Nameservers</label>
+            <div class="nameservers-list">
+                {% for ns in whois_data.nameServers %}
+                <span class="ns-tag">{{ ns }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- JSON Output Section -->
+        <div class="json-output-section">
+            <div class="json-header">
+                <label>📄 JSON Output</label>
+                <div class="json-actions">
+                    <button onclick="copyJson()" class="json-btn" title="Copy JSON">
+                        <span id="copyIcon">📋</span> Copy
+                    </button>
+                    <button onclick="downloadJson()" class="json-btn" title="Download JSON">
+                        💾 Download
+                    </button>
+                </div>
+            </div>
+            <pre class="json-code" id="jsonOutput"></pre>
+        </div>
+    </div>
+
+    <script>
+        // Pre-populate from server-side data
+        window.domainJsonData = JSON.stringify({{ whois_data| safe }}, null, 2);
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('jsonOutput').textContent = window.domainJsonData;
+        });
+    </script>
+
+    {% else %}
+    <!-- Loading State (shown when no cached data) -->
     <div id="loadingContainer" class="loading-container">
         <div class="loading-spinner"></div>
         <p class="loading-text">Looking up WHOIS data for <span class="loading-domain">{{ domain }}</span>...</p>
@@ -487,7 +610,7 @@
         <a href="/domain-age/" class="cta-button" style="margin-top: 1rem;">Try Another Domain</a>
     </div>
 
-    <!-- Results (hidden initially) -->
+    <!-- Results (hidden initially, populated by JS) -->
     <div id="resultsContainer" class="hidden">
         <!-- Age Display -->
         <div class="age-display">
@@ -547,6 +670,7 @@
             <pre class="json-code" id="jsonOutput"></pre>
         </div>
     </div>
+    {% endif %}
 </div>
 
 <!-- Check Another Domain CTA -->
@@ -568,6 +692,7 @@
 {% endblock %}
 
 {% block extra_js %}
+{% if not whois_data %}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const domain = '{{ domain }}';
@@ -643,19 +768,24 @@
                 console.error('WHOIS fetch error:', error);
             });
     });
+</script>
+{% endif %}
 
-    // Copy JSON to clipboard
+<script>
+    // Copy JSON to clipboard (shared function)
     function copyJson() {
         if (window.domainJsonData) {
             navigator.clipboard.writeText(window.domainJsonData).then(() => {
                 const copyIcon = document.getElementById('copyIcon');
-                copyIcon.textContent = '✅';
-                setTimeout(() => { copyIcon.textContent = '📋'; }, 2000);
+                if (copyIcon) {
+                    copyIcon.textContent = '✅';
+                    setTimeout(() => { copyIcon.textContent = '📋'; }, 2000);
+                }
             });
         }
     }
 
-    // Download JSON file
+    // Download JSON file (shared function)
     function downloadJson() {
         if (window.domainJsonData) {
             const domain = '{{ domain }}';

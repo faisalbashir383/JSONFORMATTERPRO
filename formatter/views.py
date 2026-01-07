@@ -1936,11 +1936,25 @@ def whois_api_page(request):
 def domain_age_result_page(request, domain):
     """
     Dynamic domain age result page for SEO.
-    Page loads instantly with loading spinner.
-    WHOIS data is fetched asynchronously via JavaScript.
+    Uses cached WHOIS data for SSR (Answer-First) when available.
+    New domains show loading spinner, subsequent visits have full SSR.
     Index/noindex controlled via ApprovedDomain model in admin.
     """
     from .models import ApprovedDomain, DomainPageVisit
+    from datetime import datetime
+    import json
+    
+    # Helper to format ISO date to "Month Day, Year"
+    def format_date_human(iso_date_str):
+        if not iso_date_str:
+            return None
+        try:
+            # Handle both datetime and date-only strings
+            date_str = iso_date_str[:10]  # YYYY-MM-DD
+            dt = datetime.strptime(date_str, '%Y-%m-%d')
+            return dt.strftime('%B %d, %Y')  # e.g., "August 08, 1996"
+        except:
+            return iso_date_str[:10]
     
     # Clean domain
     domain = domain.lower().strip()
@@ -1962,6 +1976,7 @@ def domain_age_result_page(request, domain):
         ip_address = request.META.get('REMOTE_ADDR', '')
     
     # Record visit
+    visit_record = None
     try:
         visit_record = DomainPageVisit.record_visit(domain, ip_address)
         visit_count = visit_record.visit_count
@@ -1970,6 +1985,20 @@ def domain_age_result_page(request, domain):
         visit_count = 0
         unique_visitors = 0
     
+    # ---------------------------------------------------------
+    # Try to get cached WHOIS data for SSR (Answer-First)
+    # ---------------------------------------------------------
+    whois_data = None
+    if visit_record and visit_record.last_cached_data:
+        try:
+            whois_data = json.loads(visit_record.last_cached_data)
+            # Add human-readable date formats
+            whois_data['createdDateHuman'] = format_date_human(whois_data.get('createdDate'))
+            whois_data['updatedDateHuman'] = format_date_human(whois_data.get('updatedDate'))
+            whois_data['expiryDateHuman'] = format_date_human(whois_data.get('expiryDate'))
+        except json.JSONDecodeError:
+            pass
+    
     # Check if domain is approved and indexable
     try:
         approved = ApprovedDomain.objects.get(domain=domain)
@@ -1977,23 +2006,31 @@ def domain_age_result_page(request, domain):
         custom_title = approved.meta_title
         custom_description = approved.meta_description
     except ApprovedDomain.DoesNotExist:
-        is_indexable = False
+        # Auto-index if we have cached data, otherwise noindex
+        is_indexable = True if whois_data else False
         custom_title = ''
         custom_description = ''
     
-    # Generate SEO meta (without WHOIS data - page loads instantly)
+    # Generate SEO-optimized title
     if custom_title:
         meta_title = custom_title
     else:
-        meta_title = f"{domain} Domain Age & Registration Date - Check Domain Info"
+        # User-requested format: "{domain} Registration Date (WHOIS) – Exact Domain Age"
+        meta_title = f"{domain} Registration Date (WHOIS) – Exact Domain Age"
     
+    # Generate SEO-optimized description with real data if available
     if custom_description:
         meta_description = custom_description
     else:
-        meta_description = f"Check {domain} domain age, registration date, expiry date, and WHOIS information."
+        if whois_data and whois_data.get('createdDateHuman'):
+            age = whois_data.get('age', {})
+            age_years = age.get('years', 0)
+            age_months = age.get('months', 0)
+            meta_description = f"{domain} was registered on {whois_data['createdDateHuman']} and is {age_years} years, {age_months} months old. Official WHOIS registration details from ICANN-accredited registries."
+        else:
+            meta_description = f"{domain} domain registration date and age verified from official WHOIS records maintained by ICANN-accredited registries."
     
     # Last updated timestamp for freshness signals
-    from datetime import datetime
     try:
         if visit_record and visit_record.cache_updated_at:
             last_updated = visit_record.cache_updated_at
@@ -2010,6 +2047,7 @@ def domain_age_result_page(request, domain):
         'visit_count': visit_count,
         'unique_visitors': unique_visitors,
         'last_updated': last_updated,
+        'whois_data': whois_data,  # None if no cache, dict if cached
     }
     
     return render(request, 'domain-age-result.html', context)

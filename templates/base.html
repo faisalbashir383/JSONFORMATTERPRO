@@ -39,10 +39,10 @@
     <meta name="description"
         content="{% block meta_description %}Free JSON formatter, validator & minifier. Format, validate, minify, beautify JSON online. Convert to XML/CSV. Fast, secure, no signup or registration.{% endblock %}">
     <meta name="keywords"
-        content="{% block meta_keywords %}{% if site_settings %}{{ site_settings.get_all_keywords }}{% else %}json formatter, json validator, json minifier, json beautifier, json parser, json editor, format json online, validate json, minify json, json to xml, json to csv, json converter, base64 encoder, base64 decoder, online json tool, json syntax checker, json pretty print, compact json, json online, free json formatter, json formatter online free, json viewer, json lint, json escape, json unescape, json tester, json checker, json decode, json encode, rest api json, json api, jsonlint, json compare, json diff, json merge, json split, json xpath, json query, json path, json schema validator{% endif %}{% endblock %}">
+        content="{% block meta_keywords %}{% endblock %}">
     <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
     <meta name="language" content="English">
-    <meta name="author" content="{% block author %}JSON Formatters Pro{% endblock %}">
+    <meta name="author" content="{% block author %}Faisal Ahmad{% endblock %}">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="revisit-after" content="7 days">
 
@@ -51,7 +51,7 @@
     <meta property="og:url" content="{% block og_url %}{{ SITE_URL }}/{% endblock %}">
     <meta property="og:title" content="{% block og_title %}{{ SITE_NAME }} - Free Online JSON Tools{% endblock %}">
     <meta property="og:description"
-        content="{% block og_description %}Format, validate, minify, and convert JSON with our free online tool. Support for XML, CSV conversion, and Base64 encoding.{% endblock %}">
+        content="{% block og_description %}{% endblock %}">
     <meta property="og:image"
         content="{% block og_image %}{% if site_settings.og_image %}{{ site_settings.og_image }}{% else %}{{ SITE_URL }}/static/images/og-image.jpg{% endif %}{% endblock %}">
     <meta property="og:site_name" content="{{ SITE_NAME }}">
@@ -68,7 +68,7 @@
     <meta name="twitter:image"
         content="{% block twitter_image %}{{ SITE_URL }}/static/images/og-image.jpg{% endblock %}">
     <meta name="twitter:image:alt"
-        content="{% block twitter_image_alt %}JSON Formatters Pro - Free Online JSON Tools{% endblock %}">
+        content="{% block twitter_image_alt %}JSON Formatter Pro - Free Online JSON Tools{% endblock %}">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="{% block canonical_url %}{{ SITE_URL }}/{% endblock %}">
