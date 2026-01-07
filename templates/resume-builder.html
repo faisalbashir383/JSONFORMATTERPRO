@@ -8,8 +8,10 @@
 {% block meta_description %}Build your professional resume for free with our online resume builder. Multiple templates,
 ATS-optimized, PDF export. No signup required. 100% client-side and private.{% endblock %}
 
-{% block meta_keywords %}resume builder, free resume builder, developer resume, software engineer resume, ats resume
-builder, resume builder no signup, tech resume builder, pdf resume maker{% endblock %}
+{% block meta_keywords %}resume builder, free resume builder, free resume builder for developers, software engineer
+resume builder, tech resume builder, ats resume builder no signup, resume builder privacy-first, resume builder JSON
+export, resume builder client-side, resume builder PDF download free, developer resume, resume builder no signup, pdf
+resume maker, ats-friendly resume{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/resume-builder/{% endblock %}
 
 {% block structured_data %}
@@ -55,6 +57,121 @@ builder, resume builder no signup, tech resume builder, pdf resume maker{% endbl
     @media (max-width: 1024px) {
         .resume-container {
             grid-template-columns: 1fr;
+        }
+    }
+
+
+    /* Mobile Responsiveness - Fit content in viewport with scroll where needed */
+    @media (max-width: 768px) {
+
+        /* Main container - single column, no overflow issues */
+        .resume-container {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        /* Form panel - fit viewport */
+        .form-panel {
+            width: 100%;
+            max-width: 100vw;
+        }
+
+        .form-sections {
+            max-height: none;
+            padding: 0.75rem;
+        }
+
+        /* Form row - stack inputs vertically */
+        .form-row {
+            grid-template-columns: 1fr !important;
+        }
+
+        /* Preview panel wrapper - scrollable container */
+        .preview-panel {
+            width: 100%;
+            max-width: 100vw;
+        }
+
+        /* Preview header - stack vertically */
+        .preview-header {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 0.75rem;
+            gap: 0.75rem;
+        }
+
+        /* Template selector - wrap buttons */
+        .template-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .template-btn {
+            flex: 1 1 auto;
+            min-width: 80px;
+            text-align: center;
+            padding: 0.4rem 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        /* Export buttons - wrap */
+        .export-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .export-btn {
+            flex: 1 1 auto;
+            min-width: 70px;
+            justify-content: center;
+            padding: 0.4rem 0.6rem;
+            font-size: 0.75rem;
+        }
+
+        /* Preview content - scrollable in both directions */
+        .preview-content {
+            max-height: 60vh;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 0.75rem;
+        }
+
+        /* Resume preview - scale down, keep aspect ratio */
+        .resume-preview {
+            max-width: 100%;
+            min-width: auto;
+            padding: 1rem;
+            font-size: 0.85rem;
+            transform-origin: top left;
+        }
+
+        /* Tool header compact */
+        .tool-header {
+            padding: 1rem;
+        }
+
+        .tool-header h1 {
+            font-size: 1.25rem;
+        }
+
+        .tool-header p {
+            font-size: 0.85rem;
+        }
+
+        /* Form inputs full width */
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Section content compact */
+        .section-content {
+            padding: 0.75rem;
         }
     }
 
@@ -858,7 +975,7 @@ builder, resume builder no signup, tech resume builder, pdf resume maker{% endbl
 <div class="toast-container" id="toastContainer"></div>
 
 <div class="tool-header">
-    <h1>📝 Free Resume Builder</h1>
+    <h1>Free Resume Builder (No Signup, ATS-Friendly PDF)</h1>
     <p>Create a professional, ATS-friendly resume in minutes. No signup required. 100% free with PDF export.</p>
 </div>
 
@@ -1060,6 +1177,175 @@ builder, resume builder no signup, tech resume builder, pdf resume maker{% endbl
 
 <input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="handleJSONImport(event)">
 
+<!-- Internal Linking Section (Right Below Tool) -->
+<section
+    style="margin: 1.5rem auto; padding: 1.25rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
+    <h2
+        style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--color-text); text-align: center;">
+        🔗 Related Resources
+    </h2>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;">
+        <a href="/careers/"
+            style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; text-decoration: none; border-radius: var(--radius-sm); font-weight: 500; font-size: 0.85rem;">
+            Browse Job Listings
+        </a>
+        <a href="/"
+            style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; background: var(--color-surface-alt); color: var(--color-text); text-decoration: none; border-radius: var(--radius-sm); font-weight: 500; font-size: 0.85rem; border: 1px solid var(--color-border);">
+            JSON Formatter
+        </a>
+        <a href="/about/"
+            style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; background: var(--color-surface-alt); color: var(--color-text); text-decoration: none; border-radius: var(--radius-sm); font-weight: 500; font-size: 0.85rem; border: 1px solid var(--color-border);">
+            About Us
+        </a>
+    </div>
+    <p style="text-align: center; margin-top: 0.75rem; font-size: 0.8rem; color: var(--color-text-secondary);">
+        Looking for open roles? Visit our <a href="/careers/"
+            style="color: #6366f1; text-decoration: none; font-weight: 500;">careers page</a> to explore current opportunities
+and apply with your newly created resume.
+    </p>
+</section>
+
+<!-- SEO Content Sections - Long-Tail Keywords & AI Search Optimization -->
+<div style="margin: 2rem auto; padding: 0 1rem;">
+
+    <!-- Why Different Section (AI Search Optimization) -->
+    <section
+        style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">
+            🎯 Why This Resume Builder Is Different
+        </h2>
+        <ul style="margin: 0; padding-left: 1.25rem; line-height: 1.8; color: var(--color-text-secondary);">
+            <li><strong>100% client-side</strong> – your data never leaves your device, ever</li>
+            <li><strong>No signup, no tracking, no watermarks</strong> – start building immediately</li>
+            <li><strong>ATS-optimized templates</strong> tested with real applicant tracking systems</li>
+            <li><strong>JSON export</strong> for developers who want data portability</li>
+            <li><strong>PDF download</strong> – high-quality, print-ready resumes in one click</li>
+            <li><strong>Auto-save to browser</strong> – never lose your progress</li>
+        </ul>
+        <p style="margin-top: 1rem; font-size: 0.95rem; color: var(--color-text-secondary);">
+            <strong>Best for:</strong> Software developers, tech professionals, privacy-conscious job seekers, and
+            anyone who wants a professional resume without the hassle of signups or subscriptions.
+        </p>
+    </section>
+
+    <!-- Developer Resume Section -->
+    <section
+        style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">
+            👨‍💻 Free Resume Builder for Developers & Tech Professionals
+        </h2>
+        <p style="line-height: 1.7; color: var(--color-text-secondary); margin-bottom: 1rem;">
+            Built specifically for <strong>software engineers, developers, and tech professionals</strong>. This free
+            resume builder includes dedicated fields for GitHub, LinkedIn, and portfolio links – essential for developer
+            resumes. Choose from 4 templates including a dark-mode "Developer" theme that showcases your technical
+            skills.
+        </p>
+        <p style="line-height: 1.7; color: var(--color-text-secondary);">
+            Unlike generic resume builders, we understand that <strong>tech resumes need to highlight projects,
+                technical skills, and code contributions</strong>. Export your resume data as JSON for version control
+            or to build custom integrations – perfect for developers who want maximum flexibility.
+        </p>
+    </section>
+
+    <!-- ATS Section -->
+    <section
+        style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">
+            ✅ ATS-Friendly Resume Builder (No Signup Required)
+        </h2>
+        <p style="line-height: 1.7; color: var(--color-text-secondary); margin-bottom: 1rem;">
+            ATS (Applicant Tracking Systems) are software that companies use to scan and filter resumes before a human
+            ever sees them. Our templates are <strong>ATS-optimized</strong> with clean formatting, standard section
+            headers, and machine-readable fonts – ensuring your resume passes automated screening.
+        </p>
+        <p style="line-height: 1.7; color: var(--color-text-secondary);">
+            <strong>No signup or account required.</strong> Simply start typing, see your resume update in real-time,
+            and download as PDF. Your data stays in your browser – we never collect, store, or sell your personal
+            information. This is the most <strong>privacy-first resume builder</strong> available online.
+        </p>
+    </section>
+
+    <!-- Tool Comparison (AI Search Optimization) -->
+    <section
+        style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">
+            ⚖️ How We Compare to Other Resume Builders
+        </h2>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <thead>
+                    <tr style="background: var(--color-surface-alt);">
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid var(--color-border);">
+                            Feature</th>
+                        <th style="padding: 0.75rem; text-align: center; border-bottom: 2px solid var(--color-border);">
+                            JSON Formatter Pro</th>
+                        <th style="padding: 0.75rem; text-align: center; border-bottom: 2px solid var(--color-border);">
+                            Typical Resume Builders</th>
+                    </tr>
+                </thead>
+                <tbody style="color: var(--color-text-secondary);">
+                    <tr>
+                        <td style="padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border);">Price</td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border); color: #10b981; font-weight: 600;">
+                            100% Free</td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border);">
+                            Free trial, then $10-30/mo</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border);">Signup
+                            Required</td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border); color: #10b981; font-weight: 600;">
+                            No</td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border);">
+                            Yes</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border);">Data Privacy
+                        </td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border); color: #10b981; font-weight: 600;">
+                            Client-side only</td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border);">
+                            Uploaded to servers</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border);">PDF Download
+                        </td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border); color: #10b981; font-weight: 600;">
+                            Free, no watermark</td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border);">
+                            Paid or watermarked</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border);">JSON Export
+                        </td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border); color: #10b981; font-weight: 600;">
+                            Yes</td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border);">
+                            Rarely</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.6rem 0.75rem;">GitHub/LinkedIn Fields</td>
+                        <td style="padding: 0.6rem 0.75rem; text-align: center; color: #10b981; font-weight: 600;">
+                            Built-in</td>
+                        <td style="padding: 0.6rem 0.75rem; text-align: center;">Sometimes</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+
 <!-- Info Section -->
 <div class="info-section">
     <div class="info-card">
@@ -1099,13 +1385,27 @@ builder, resume builder no signup, tech resume builder, pdf resume maker{% endbl
     </div>
 </div>
 
+<!-- EEAT Trust / Authority Section -->
+<section
+    style="max-width: 800px; margin: 2rem auto; padding: 1.5rem; background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%); border: 1px solid var(--color-border); border-radius: var(--radius-lg); text-align: center;">
+    <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--color-text);">
+        🔒 Built With Privacy & Developers in Mind
+    </h2>
+    <p style="line-height: 1.7; color: var(--color-text-secondary); margin: 0;">
+        This resume builder is designed by <strong><a href="https://www.linkedin.com/in/faisal-ahmad-44b37018a/"
+                target="_blank" rel="noopener" style="color: #6366f1; text-decoration: none;">Faisal Ahmad</a></strong>,
+        a developer who values privacy, transparency, and control over personal data. No tracking, no accounts required,
+        no hidden monetization. Your resume stays on your device – always.
+    </p>
+</section>
+
 <!-- FAQ Section -->
 <div class="faq-section" style="margin-top: 2rem;">
     <h2
         style="text-align: center; font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-        ❓ Frequently Asked Questions</h2>
+        Frequently Asked Questions</h2>
 
-    <div style="max-width: 800px; margin: 0 auto;">
+    <div style="margin: 0 auto;">
         <details
             style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: 0.75rem; overflow: hidden;">
             <summary
@@ -1329,6 +1629,13 @@ builder, resume builder no signup, tech resume builder, pdf resume maker{% endbl
 
         // Auto-save every 5 seconds
         setInterval(saveToLocalStorage, 5000);
+
+        // Collapse all sections by default on mobile
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.section-header').forEach(function (header) {
+                header.classList.add('collapsed');
+            });
+        }
     });
 
     // Toggle section collapse
