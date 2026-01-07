@@ -2011,22 +2011,33 @@ def domain_age_result_page(request, domain):
         custom_title = ''
         custom_description = ''
     
-    # Generate SEO-optimized title
+    # Check if admin values use old format (should be regenerated)
+    old_format_markers = [
+        "Domain Registration Date & Age |",
+        "Domain Age Checker",
+        "Check ",
+        "using our free",
+    ]
+    
+    # Force regeneration if old format detected
+    if custom_title and any(marker in custom_title for marker in old_format_markers):
+        custom_title = ''
+    if custom_description and any(marker in custom_description for marker in old_format_markers):
+        custom_description = ''
+    
+    # Generate SEO-optimized title (always use new format unless admin has custom non-default value)
     if custom_title:
         meta_title = custom_title
     else:
-        # User-requested format: "{domain} Registration Date (WHOIS) – Exact Domain Age"
-        meta_title = f"{domain} Registration Date (WHOIS) – Exact Domain Age"
+        meta_title = f"{domain} domain Registration Date (WHOIS) – Exact Age"
     
-    # Generate SEO-optimized description with real data if available
+    # Generate SEO-optimized description with real data
     if custom_description:
         meta_description = custom_description
     else:
         if whois_data and whois_data.get('createdDateHuman'):
-            age = whois_data.get('age', {})
-            age_years = age.get('years', 0)
-            age_months = age.get('months', 0)
-            meta_description = f"{domain} was registered on {whois_data['createdDateHuman']} and is {age_years} years, {age_months} months old. Official WHOIS registration details from ICANN-accredited registries."
+            age_years = whois_data.get('age', {}).get('years', 0)
+            meta_description = f"{domain} was registered on {whois_data['createdDateHuman']} and is {age_years} years old. View official WHOIS registration details, registrar, and expiry date."
         else:
             meta_description = f"{domain} domain registration date and age verified from official WHOIS records maintained by ICANN-accredited registries."
     
@@ -2185,15 +2196,28 @@ def domain_age_api(request):
         # Auto-create ApprovedDomain for indexing (only if WHOIS lookup was successful)
         try:
             from .models import ApprovedDomain
+            
+            # Format date for meta description
+            reg_date_human = None
+            if created_date:
+                reg_date_human = created_date.strftime('%B %d, %Y')  # e.g., "August 08, 1996"
+            
+            age_years = age.get('years', 0)
+            
+            # Generate meta fields with real data
+            if reg_date_human:
+                auto_title = f"{domain} domain Registration Date (WHOIS) – Exact Age"
+                auto_description = f"{domain} was registered on {reg_date_human} and is {age_years} years old. View official WHOIS registration details, registrar, and expiry date."
+            else:
+                auto_title = f"{domain} domain Registration Date (WHOIS) – Exact Age"
+                auto_description = f"{domain} domain registration date and age verified from official WHOIS records maintained by ICANN-accredited registries."
+            
             approved, created = ApprovedDomain.objects.get_or_create(
                 domain=domain,
                 defaults={
                     "is_indexable": True,
-                    "meta_title": f"{domain} Domain Registration Date & Age | Domain Age Checker",
-                    "meta_description": (
-                        f"Check {domain} domain registration date, domain age, expiry date, "
-                        f"and WHOIS details instantly using our free domain age checker."
-                    ),
+                    "meta_title": auto_title,
+                    "meta_description": auto_description,
                     "notes": "Auto-approved: capturing domain registration date searches."
                 }
             )
