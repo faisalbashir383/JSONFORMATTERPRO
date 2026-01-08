@@ -78,12 +78,12 @@ endpoints, schemas, and API details directly in your browser.{% endblock %}
         "text": "No limits at all! You can use this Swagger/OpenAPI Viewer unlimited times, 24/7. Since all processing happens in your browser (client-side), there are no server requests that could be rate-limited."
       }
     },
-      {
+    {
       "@type": "Question",
       "name": "Can I view OpenAPI and Swagger files online without Swagger UI?",
       "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. An online Swagger and OpenAPI viewer allows you to paste JSON or YAML specifications and explore API endpoints directly in the browser without installing Swagger UI."
+        "@type": "Answer",
+        "text": "Yes. An online Swagger and OpenAPI viewer allows you to paste JSON or YAML specifications and explore API endpoints directly in the browser without installing Swagger UI."
       }
     }
   ]
@@ -120,7 +120,7 @@ endpoints, schemas, and API details directly in your browser.{% endblock %}
       "position": 3,
       "name": "Explore endpoints and schemas",
       "text": "Browse through your API endpoints organized by tags, view parameters and responses, generate code snippets in cURL, JavaScript, or Python, and explore schema definitions.",
-      "url": "{{ SITE_URL }}/swagger-viewer/#apiDocs"
+      "url": "{{ SITE_URL }}/swagger-viewer/#swagger-ui"
     }
   ]
 }
@@ -128,7 +128,52 @@ endpoints, schemas, and API details directly in your browser.{% endblock %}
 {% endblock %}
 
 {% block extra_css %}
+<!-- Swagger UI CSS will be loaded dynamically for better performance -->
 <style>
+    /* ===== Swagger UI Theme Overrides ===== */
+    /* Swagger UI has built-in dark mode - we just apply orange accent colors */
+
+    .swagger-ui {
+        font-family: inherit;
+    }
+
+    /* Hide default top bar */
+    .swagger-ui .topbar {
+        display: none !important;
+    }
+
+    /* Orange accent colors */
+    .swagger-ui .info a {
+        color: #f97316;
+    }
+
+    .swagger-ui .info .version {
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        color: white;
+    }
+
+    .swagger-ui .btn.execute {
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        border-color: #f97316;
+    }
+
+    .swagger-ui .btn.authorize {
+        border-color: #f97316;
+        color: #f97316;
+    }
+
+    .swagger-ui .btn.authorize svg {
+        fill: #f97316;
+    }
+
+    /* External docs links */
+    html.dark-mode .swagger-ui .opblock .opblock-external-docs a.link,
+    html.dark-mode .swagger-ui a {
+        color: #f97316;
+    }
+
+    /* ===== End Swagger UI Theme Overrides ===== */
+
     .tool-header {
         text-align: center;
         margin-bottom: 2rem;
@@ -173,6 +218,7 @@ endpoints, schemas, and API details directly in your browser.{% endblock %}
         color: var(--color-text-secondary);
     }
 
+    /* Input Section */
     .input-section {
         background: var(--color-surface);
         border-radius: var(--radius-lg);
@@ -310,507 +356,7 @@ endpoints, schemas, and API details directly in your browser.{% endblock %}
         display: none;
     }
 
-    /* Stats Section */
-    .stats-section {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .stat-card {
-        background: var(--color-surface);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
-        padding: 1rem;
-        text-align: center;
-    }
-
-    .stat-value {
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--color-primary);
-    }
-
-    .stat-label {
-        font-size: 0.8rem;
-        color: var(--color-text-secondary);
-        text-transform: uppercase;
-        margin-top: 0.25rem;
-    }
-
-    .stat-card.get .stat-value {
-        color: #1d4ed8;
-    }
-
-    .stat-card.post .stat-value {
-        color: #15803d;
-    }
-
-    .stat-card.put .stat-value {
-        color: #b45309;
-    }
-
-    .stat-card.delete .stat-value {
-        color: #b91c1c;
-    }
-
-    /* Toolbar */
-    .toolbar {
-        display: flex;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-        margin-bottom: 1.5rem;
-        padding: 1rem;
-        background: var(--color-surface);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
-    }
-
-    .search-box {
-        flex: 1;
-        min-width: 200px;
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
-        background: var(--color-bg);
-        color: var(--color-text);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
-    }
-
-    .search-box:focus {
-        outline: none;
-        border-color: var(--color-primary);
-    }
-
-    .toolbar-btn {
-        padding: 0.5rem 1rem;
-        font-size: 0.85rem;
-        font-weight: 500;
-        background: var(--color-bg);
-        color: var(--color-text);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
-        cursor: pointer;
-        transition: all 200ms ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-    }
-
-    .toolbar-btn:hover {
-        background: var(--color-primary);
-        color: white;
-        border-color: var(--color-primary);
-    }
-
-    .server-select {
-        padding: 0.5rem 1rem;
-        font-size: 0.85rem;
-        background: var(--color-bg);
-        color: var(--color-text);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
-        cursor: pointer;
-    }
-
-    /* API Documentation Styles */
-    .api-docs {
-        display: none;
-    }
-
-    .api-docs.visible {
-        display: block;
-    }
-
-    .api-header {
-        background: var(--color-surface);
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--color-border);
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .api-title {
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: var(--color-text);
-        margin-bottom: 0.5rem;
-    }
-
-    .api-version {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
-        background: rgba(34, 197, 94, 0.1);
-        color: #22c55e;
-        border-radius: var(--radius-sm);
-        font-size: 0.85rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-    }
-
-    .api-description {
-        color: var(--color-text-secondary);
-        line-height: 1.6;
-    }
-
-    .api-info-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid var(--color-border);
-    }
-
-    .api-info-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.85rem;
-    }
-
-    .api-info-item .label {
-        color: var(--color-text-secondary);
-    }
-
-    .api-info-item .value {
-        color: var(--color-text);
-        font-weight: 500;
-    }
-
-    .endpoints-section {
-        background: var(--color-surface);
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--color-border);
-        overflow: hidden;
-    }
-
-    .section-header {
-        padding: 1rem 1.5rem;
-        background: var(--color-bg);
-        border-bottom: 1px solid var(--color-border);
-        font-size: 1.1rem;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .endpoint-group {
-        border-bottom: 1px solid var(--color-border);
-    }
-
-    .endpoint-group:last-child {
-        border-bottom: none;
-    }
-
-    .endpoint-group-header {
-        padding: 1rem 1.5rem;
-        background: var(--color-bg);
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--color-primary);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .endpoint-group-header:hover {
-        background: rgba(99, 102, 241, 0.05);
-    }
-
-    .endpoint {
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid var(--color-border);
-        transition: background 200ms ease;
-    }
-
-    .endpoint:last-child {
-        border-bottom: none;
-    }
-
-    .endpoint:hover {
-        background: rgba(99, 102, 241, 0.03);
-    }
-
-    .endpoint.hidden {
-        display: none;
-    }
-
-    .endpoint-header {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        cursor: pointer;
-    }
-
-    .method-badge {
-        padding: 0.25rem 0.75rem;
-        border-radius: var(--radius-sm);
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        min-width: 60px;
-        text-align: center;
-    }
-
-    .method-get {
-        background: #dbeafe;
-        color: #1d4ed8;
-    }
-
-    .method-post {
-        background: #dcfce7;
-        color: #15803d;
-    }
-
-    .method-put {
-        background: #fef3c7;
-        color: #b45309;
-    }
-
-    .method-patch {
-        background: #e0e7ff;
-        color: #4338ca;
-    }
-
-    .method-delete {
-        background: #fee2e2;
-        color: #b91c1c;
-    }
-
-    .endpoint-path {
-        font-family: 'Monaco', 'Menlo', monospace;
-        font-size: 0.9rem;
-        color: var(--color-text);
-        flex: 1;
-    }
-
-    .copy-btn {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.75rem;
-        background: transparent;
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-sm);
-        cursor: pointer;
-        opacity: 0.6;
-        transition: opacity 200ms;
-    }
-
-    .copy-btn:hover {
-        opacity: 1;
-        background: var(--color-bg);
-    }
-
-    .endpoint-summary {
-        font-size: 0.85rem;
-        color: var(--color-text-secondary);
-        margin-top: 0.5rem;
-        padding-left: calc(60px + 1rem);
-    }
-
-    .endpoint-details {
-        display: none;
-        padding: 1rem 1.5rem;
-        background: var(--color-bg);
-        border-top: 1px solid var(--color-border);
-    }
-
-    .endpoint-details.open {
-        display: block;
-    }
-
-    .detail-section {
-        margin-bottom: 1rem;
-    }
-
-    .detail-section:last-child {
-        margin-bottom: 0;
-    }
-
-    .detail-title {
-        font-size: 0.8rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        color: var(--color-text-secondary);
-        margin-bottom: 0.5rem;
-    }
-
-    .params-table {
-        width: 100%;
-        font-size: 0.85rem;
-        border-collapse: collapse;
-    }
-
-    .params-table th {
-        text-align: left;
-        padding: 0.5rem;
-        background: var(--color-surface);
-        border-bottom: 1px solid var(--color-border);
-        font-weight: 600;
-    }
-
-    .params-table td {
-        padding: 0.5rem;
-        border-bottom: 1px solid var(--color-border);
-    }
-
-    .param-name {
-        font-family: 'Monaco', 'Menlo', monospace;
-        color: var(--color-primary);
-    }
-
-    .param-required {
-        color: #ef4444;
-        font-size: 0.75rem;
-    }
-
-    .param-type {
-        color: #f97316;
-        font-size: 0.8rem;
-    }
-
-    .response-code {
-        display: inline-block;
-        padding: 0.25rem 0.5rem;
-        border-radius: var(--radius-sm);
-        font-size: 0.8rem;
-        font-weight: 600;
-        margin-right: 0.5rem;
-    }
-
-    .response-2xx {
-        background: #dcfce7;
-        color: #15803d;
-    }
-
-    .response-4xx {
-        background: #fef3c7;
-        color: #b45309;
-    }
-
-    .response-5xx {
-        background: #fee2e2;
-        color: #b91c1c;
-    }
-
-    /* Code Snippet Section */
-    .code-snippets {
-        margin-top: 1rem;
-        padding: 1rem;
-        background: var(--color-surface);
-        border-radius: var(--radius-md);
-    }
-
-    .snippet-tabs {
-        display: flex;
-        gap: 0.5rem;
-        margin-bottom: 0.75rem;
-        flex-wrap: wrap;
-    }
-
-    .snippet-tab {
-        color: var(--color-text);
-        padding: 0.35rem 0.75rem;
-        font-size: 0.8rem;
-        background: var(--color-bg);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-sm);
-        cursor: pointer;
-    }
-
-    .snippet-tab.active {
-        background: var(--color-primary);
-        color: white;
-        border-color: var(--color-primary);
-    }
-
-    .snippet-code {
-        background: #1e1e1e;
-        color: #d4d4d4;
-        padding: 1rem;
-        border-radius: var(--radius-md);
-        font-family: 'Monaco', 'Menlo', monospace;
-        font-size: 0.8rem;
-        overflow-x: auto;
-        white-space: pre;
-        position: relative;
-    }
-
-    .snippet-copy-btn {
-        position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        padding: 0.25rem 0.5rem;
-        font-size: 0.7rem;
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-        border: none;
-        border-radius: var(--radius-sm);
-        cursor: pointer;
-    }
-
-    .snippet-copy-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-    }
-
-    .schemas-section {
-        margin-top: 1.5rem;
-        background: var(--color-surface);
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--color-border);
-        overflow: hidden;
-    }
-
-    .schema-item {
-        border-bottom: 1px solid var(--color-border);
-    }
-
-    .schema-item:last-child {
-        border-bottom: none;
-    }
-
-    .schema-header {
-        padding: 1rem 1.5rem;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .schema-header:hover {
-        background: rgba(99, 102, 241, 0.03);
-    }
-
-    .schema-name {
-        font-family: 'Monaco', 'Menlo', monospace;
-        font-weight: 600;
-        color: var(--color-primary);
-    }
-
-    .schema-details {
-        display: none;
-        padding: 1rem 1.5rem;
-        background: var(--color-bg);
-        border-top: 1px solid var(--color-border);
-    }
-
-    .schema-details.open {
-        display: block;
-    }
-
-    .schema-code {
-        background: var(--color-surface);
-        padding: 1rem;
-        border-radius: var(--radius-md);
-        font-family: 'Monaco', 'Menlo', monospace;
-        font-size: 0.8rem;
-        overflow-x: auto;
-        white-space: pre-wrap;
-    }
-
+    /* Loading */
     .loading {
         display: none;
         text-align: center;
@@ -836,6 +382,25 @@ endpoints, schemas, and API details directly in your browser.{% endblock %}
         to {
             transform: rotate(360deg);
         }
+    }
+
+    /* Swagger UI Container */
+    #swagger-ui-container {
+        display: none;
+        margin-top: 2rem;
+    }
+
+    #swagger-ui-container.visible {
+        display: block;
+    }
+
+    /* Override Swagger UI styles to match theme */
+    .swagger-ui .topbar {
+        display: none;
+    }
+
+    .swagger-ui {
+        font-family: inherit;
     }
 
     /* FAQ Section */
@@ -930,463 +495,9 @@ endpoints, schemas, and API details directly in your browser.{% endblock %}
         font-weight: 500;
         z-index: 1000;
         display: none;
-        animation: slideIn 300ms ease;
     }
 
-    @keyframes slideIn {
-        from {
-            transform: translateY(20px);
-            opacity: 0;
-        }
-
-        to {
-            transform: translateY(0);
-            opacity: 1;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .stats-section {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .toolbar {
-            flex-direction: column;
-        }
-
-        .search-box {
-            width: 100%;
-        }
-
-        .method-legend {
-            flex-wrap: wrap;
-        }
-
-        .auth-row {
-            flex-direction: column;
-        }
-    }
-
-    /* Sticky Toolbar */
-    .toolbar.sticky {
-        position: fixed;
-        top: 60px;
-        /* Below navbar (50px height + padding) */
-        left: 0;
-        right: 0;
-        z-index: 999;
-        /* Just below navbar z-index of 1000 */
-        margin: 0;
-        border-radius: 0;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        padding: 0.5rem 1rem;
-        background: var(--color-surface);
-        border-bottom: 1px solid var(--color-border);
-    }
-
-    /* Toolbar Toggle */
-    .toolbar-toggle {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        padding: 0.5rem 0.75rem;
-        font-size: 0.85rem;
-        background: var(--color-bg);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
-        cursor: pointer;
-        transition: all 200ms ease;
-    }
-
-    .toolbar-toggle:hover {
-        background: var(--color-primary);
-        color: white;
-        border-color: var(--color-primary);
-    }
-
-    .toolbar-toggle input[type="checkbox"] {
-        margin: 0;
-        cursor: pointer;
-    }
-
-    /* Method Legend */
-    .method-legend {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 0.75rem 1rem;
-        background: var(--color-surface);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
-        margin-bottom: 1rem;
-        font-size: 0.8rem;
-    }
-
-    .legend-item {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        color: var(--color-text-secondary);
-    }
-
-    .legend-color {
-        width: 12px;
-        height: 12px;
-        border-radius: 3px;
-    }
-
-    .legend-color.get {
-        background: #1d4ed8;
-    }
-
-    .legend-color.post {
-        background: #15803d;
-    }
-
-    .legend-color.put {
-        background: #b45309;
-    }
-
-    .legend-color.patch {
-        background: #4338ca;
-    }
-
-    .legend-color.delete {
-        background: #b91c1c;
-    }
-
-    .legend-counter {
-        margin-left: auto;
-        font-weight: 600;
-        color: var(--color-text);
-    }
-
-    /* Authentication Section */
-    .auth-section {
-        background: var(--color-surface);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
-        margin-bottom: 1rem;
-    }
-
-    .auth-header {
-        padding: 0.75rem 1rem;
-        cursor: pointer;
-        font-weight: 500;
-        color: var(--color-text);
-    }
-
-    .auth-header:hover {
-        background: rgba(99, 102, 241, 0.03);
-    }
-
-    .auth-content {
-        padding: 0 1rem 1rem;
-    }
-
-    .auth-description {
-        font-size: 0.85rem;
-        color: var(--color-text-secondary);
-        margin-bottom: 0.75rem;
-    }
-
-    .auth-row {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-
-    .auth-field {
-        flex: 1;
-        min-width: 180px;
-    }
-
-    .auth-field label {
-        display: block;
-        font-size: 0.8rem;
-        font-weight: 500;
-        color: var(--color-text-secondary);
-        margin-bottom: 0.35rem;
-    }
-
-    .auth-field input,
-    .auth-field select {
-        width: 100%;
-        padding: 0.5rem 0.75rem;
-        font-size: 0.85rem;
-        background: var(--color-bg);
-        color: var(--color-text);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
-    }
-
-    .auth-field input:focus,
-    .auth-field select:focus {
-        outline: none;
-        border-color: var(--color-primary);
-        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
-    }
-
-    /* Validation Panel */
-    .validation-panel {
-        background: rgba(245, 158, 11, 0.08);
-        border: 1px solid rgba(245, 158, 11, 0.3);
-        border-radius: var(--radius-md);
-        margin-bottom: 1rem;
-        overflow: hidden;
-    }
-
-    .validation-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.75rem 1rem;
-        background: rgba(245, 158, 11, 0.1);
-        font-weight: 600;
-        color: #b45309;
-    }
-
-    .validation-close {
-        background: none;
-        border: none;
-        font-size: 1.25rem;
-        cursor: pointer;
-        color: #b45309;
-        padding: 0 0.25rem;
-    }
-
-    .validation-close:hover {
-        color: #92400e;
-    }
-
-    .validation-content {
-        padding: 1rem;
-        max-height: 300px;
-        overflow-y: auto;
-    }
-
-    .validation-item {
-        display: flex;
-        gap: 0.5rem;
-        padding: 0.5rem;
-        background: var(--color-surface);
-        border-radius: var(--radius-sm);
-        margin-bottom: 0.5rem;
-        font-size: 0.85rem;
-    }
-
-    .validation-item:last-child {
-        margin-bottom: 0;
-    }
-
-    .validation-icon {
-        flex-shrink: 0;
-    }
-
-    .validation-message {
-        color: var(--color-text);
-    }
-
-    .validation-path {
-        font-family: 'Monaco', 'Menlo', monospace;
-        color: var(--color-primary);
-        font-size: 0.8rem;
-    }
-
-    /* Lazy Rendering */
-    .endpoint.lazy-render {
-        content-visibility: auto;
-        contain-intrinsic-size: 0 80px;
-    }
-
-    .schema-item.lazy-render {
-        content-visibility: auto;
-        contain-intrinsic-size: 0 60px;
-    }
-
-    /* Accessibility - Focus States */
-    .endpoint-header:focus {
-        outline: 2px solid var(--color-primary);
-        outline-offset: 2px;
-    }
-
-    .toolbar-btn:focus,
-    .parse-btn:focus,
-    .sample-btn:focus,
-    .secondary-btn:focus,
-    .load-btn:focus {
-        outline: 2px solid var(--color-primary);
-        outline-offset: 2px;
-    }
-
-    .faq-question:focus {
-        outline: 2px solid var(--color-primary);
-        outline-offset: -2px;
-    }
-
-    /* High Contrast Method Badges (WCAG AA) */
-    .method-get {
-        background: #dbeafe;
-        color: #1d4ed8;
-        font-weight: 700;
-    }
-
-    .method-post {
-        background: #dcfce7;
-        color: #15803d;
-        font-weight: 700;
-    }
-
-    .method-put {
-        background: #fef3c7;
-        color: #92400e;
-        font-weight: 700;
-    }
-
-    .method-patch {
-        background: #e0e7ff;
-        color: #3730a3;
-        font-weight: 700;
-    }
-
-    .method-delete {
-        background: #fee2e2;
-        color: #991b1b;
-        font-weight: 700;
-    }
-
-    /* Share Link Modal */
-    .share-modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1001;
-    }
-
-    .share-modal-content {
-        background: var(--color-surface);
-        border-radius: var(--radius-lg);
-        padding: 1.5rem;
-        width: 90%;
-        max-width: 500px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    }
-
-    .share-modal-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-    }
-
-    .share-url-input {
-        width: 100%;
-        padding: 0.75rem;
-        font-size: 0.85rem;
-        font-family: 'Monaco', 'Menlo', monospace;
-        background: var(--color-bg);
-        color: var(--color-text);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
-        margin-bottom: 1rem;
-    }
-
-    .share-disclaimer {
-        font-size: 0.8rem;
-        color: var(--color-text-secondary);
-        background: rgba(99, 102, 241, 0.05);
-        padding: 0.75rem;
-        border-radius: var(--radius-sm);
-        margin-bottom: 1rem;
-    }
-
-    .share-buttons {
-        display: flex;
-        gap: 0.75rem;
-        justify-content: flex-end;
-    }
-
-    kbd {
-        display: inline-block;
-        padding: 0.15rem 0.4rem;
-        font-size: 0.75rem;
-        font-family: 'Monaco', 'Menlo', monospace;
-        background: var(--color-bg);
-        border: 1px solid var(--color-border);
-        border-radius: 3px;
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Scroll Down Arrow Indicator */
-    .scroll-indicator {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-        margin: 1.5rem 0;
-        cursor: pointer;
-        animation: fadeInOut 2s ease-in-out infinite;
-    }
-
-    .scroll-indicator:hover {
-        animation-play-state: paused;
-    }
-
-    .scroll-indicator-text {
-        font-size: 0.85rem;
-        font-weight: 500;
-        color: var(--color-primary);
-    }
-
-    .scroll-indicator-arrow {
-        width: 40px;
-        height: 40px;
-        border: 2px solid var(--color-primary);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-        color: var(--color-primary);
-        animation: bounceArrow 1.5s ease-in-out infinite;
-        transition: all 200ms ease;
-    }
-
-    .scroll-indicator:hover .scroll-indicator-arrow {
-        background: var(--color-primary);
-        color: white;
-    }
-
-    @keyframes bounceArrow {
-
-        0%,
-        100% {
-            transform: translateY(0);
-        }
-
-        50% {
-            transform: translateY(8px);
-        }
-    }
-
-    @keyframes fadeInOut {
-
-        0%,
-        100% {
-            opacity: 1;
-        }
-
-        50% {
-            opacity: 0.6;
-        }
-    }
-
-    /* Related Tools Section */
+    /* Related Tools */
     .related-tools {
         display: flex;
         gap: 1rem;
@@ -1414,12 +525,80 @@ endpoints, schemas, and API details directly in your browser.{% endblock %}
         background: var(--color-primary);
         color: white;
         border-color: var(--color-primary);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
     }
 
-    .related-tool-link .icon {
-        font-size: 1rem;
+    /* Scroll indicator */
+    .scroll-indicator {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 1.5rem 0;
+        cursor: pointer;
+        animation: fadeInOut 2s ease-in-out infinite;
+    }
+
+    .scroll-indicator-text {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--color-primary);
+    }
+
+    .scroll-indicator-arrow {
+        width: 40px;
+        height: 40px;
+        border: 2px solid var(--color-primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        color: var(--color-primary);
+        animation: bounceArrow 1.5s ease-in-out infinite;
+    }
+
+    @keyframes bounceArrow {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(8px);
+        }
+    }
+
+    @keyframes fadeInOut {
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.6;
+        }
+    }
+
+    kbd {
+        display: inline-block;
+        padding: 0.15rem 0.4rem;
+        font-size: 0.75rem;
+        font-family: 'Monaco', 'Menlo', monospace;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: 3px;
+    }
+
+    @media (max-width: 768px) {
+        .input-row {
+            flex-direction: column;
+        }
+
+        .url-input {
+            min-width: 100%;
+        }
     }
 </style>
 {% endblock %}
@@ -1432,104 +611,69 @@ endpoints, schemas, and API details directly in your browser.{% endblock %}
     <div class="feature-badges">
         <span class="feature-badge">✨ JSON/YAML Support</span>
         <span class="feature-badge">🔍 Search Endpoints</span>
-        <span class="feature-badge">💻 Code Snippets</span>
-        <span class="feature-badge">📤 Export Options</span>
+        <span class="feature-badge">💻 Try It Out</span>
+        <span class="feature-badge">📤 Official Swagger UI</span>
     </div>
-    <!-- Trust Badges -->
     <div class="feature-badges" style="margin-top: 0.75rem;">
         <span class="feature-badge"
             style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: #059669;">🛡️
             Browser-Based</span>
         <span class="feature-badge"
             style="background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.3); color: #4f46e5;">🔒
-            Privacy
-            Guaranteed</span>
+            Privacy Guaranteed</span>
         <span class="feature-badge"
             style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); color: #d97706;">🎁 Free
             Forever</span>
     </div>
-    <!-- Bookmark CTA -->
     <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--color-text-secondary);">
-        ⭐ <strong>Tip:</strong> Bookmark this Swagger Viewer (<kbd>Ctrl+D</kbd> / <kbd>⌘+D</kbd>) for quick access
-        whenever you need to view API specs!
+        ⭐ <strong>Tip:</strong> Bookmark this Swagger Viewer (<kbd>Ctrl+D</kbd> / <kbd>⌘+D</kbd>) for quick access!
     </p>
-
-    <!-- Scroll Down Indicator -->
     <div class="scroll-indicator" id="scrollIndicator" onclick="scrollToTool()">
         <span class="scroll-indicator-text">👇 Scroll down to use the tool</span>
         <div class="scroll-indicator-arrow">↓</div>
     </div>
 </div>
 
+<div class="info-section" style="margin-bottom: 1.5rem; margin-top: 0;">
+    <h2>Why This Swagger Viewer Exists</h2>
+    <p>
+        Developers often need to <strong>quickly view API documentation</strong> without the overhead of installing
+        software or signing up for services.
+        Unlike <strong>Swagger Editor</strong> which focuses on editing specs, or local Swagger UI that requires
+        <code>npm install</code> and configuration,
+        this <strong>online Swagger viewer</strong> lets you paste or load any OpenAPI or Swagger JSON/YAML file and
+        explore it
+        instantly <em>zero setup required</em>.
+    </p>
 
-<div class="info-section" style="margin-bottom: 1.5rem;">
-    <h2>OpenAPI Viewer Online for JSON and YAML Specifications</h2>
+    <h3 style="margin-top: 1.5rem; font-size: 1.1rem; font-weight: 600;">How It Compares</h3>
+    <ul style="margin: 0.75rem 0; padding-left: 1.5rem; color: var(--color-text-secondary);">
+        <li><strong>vs. Swagger Editor:</strong> ✏️ No editing overhead — just view and explore endpoints</li>
+        <li><strong>vs. Local Swagger UI:</strong> No installation, no Node.js, no CLI commands</li>
+        <li><strong>vs. Postman/Insomnia:</strong> Lighter weight, no account required, instant preview</li>
+        <li><strong>vs. Redoc:</strong> Interactive "Try It Out" feature built-in with official Swagger UI</li>
+    </ul>
+
+    <h3 style="margin-top: 1.5rem; font-size: 1.1rem; font-weight: 600;">OpenAPI Viewer Online for JSON and YAML</h3>
     <p>
         This <strong>Swagger viewer online</strong> works as a complete <strong>OpenAPI viewer</strong>, API
         documentation viewer, and Swagger JSON viewer.
-        Paste your OpenAPI YAML specifications or Swagger JSON files and explore endpoints directly in your browser—no
-        installation required.
-        Whether you need to view Swagger without Swagger UI or quickly inspect an API's structure, this tool handles
-        both OpenAPI 2.0 (Swagger) and OpenAPI 3.0 formats seamlessly.
+        Paste your OpenAPI YAML specifications or Swagger JSON files and explore endpoints directly in your browser.
+        Whether you need to view Swagger without installing Swagger UI locally or quickly inspect an API's structure,
+        this tool handles both <strong>OpenAPI 2.0 (Swagger)</strong> and <strong>OpenAPI 3.0/3.1</strong> formats
+        seamlessly.
     </p>
 
-    <h3 style="margin-top: 1.5rem; font-size: 1.1rem; font-weight: 600;">Swagger Viewer vs Swagger UI: What's the
-        Difference?</h3>
-    <p>
-        <strong>Swagger UI</strong> is an open-source tool that generates interactive API documentation from OpenAPI
-        specifications.
-        It's typically self-hosted or integrated into your application. A <strong>Swagger viewer</strong> like this one,
-        however,
-        lets you view and explore any OpenAPI spec instantly online—without deploying anything. Simply paste your JSON
-        or YAML spec,
-        and you're ready to browse endpoints, parameters, and schemas. This makes it ideal for quick reviews, debugging,
-        or when you
-        don't have access to a hosted Swagger UI instance.
-    </p>
-
-    <h3 style="margin-top: 1.5rem; font-size: 1.1rem; font-weight: 600;">OpenAPI 2.0 vs OpenAPI 3.0</h3>
-    <p>
-        This <strong>OpenAPI YAML viewer</strong> supports both specification versions. <strong>OpenAPI 2.0</strong>
-        (also called Swagger 2.0)
-        uses a simpler structure with <code>definitions</code> for schemas and <code>host</code>/<code>basePath</code>
-        for server URLs.
-        <strong>OpenAPI 3.0</strong> introduces a more flexible <code>components</code> section, multiple
-        <code>servers</code> support,
-        improved security schemes, and advanced features like <code>oneOf</code>/<code>anyOf</code> for complex schemas
-        and <code>callbacks</code>
-        for webhook definitions. Regardless of which version your API uses, this viewer displays it correctly.
-    </p>
-
-    <h3 style="margin-top: 1.5rem; font-size: 1.1rem; font-weight: 600;">Secure, In-Browser Processing</h3>
+    <h3 style="margin-top: 1.5rem; font-size: 1.1rem; font-weight: 600;">🔒 Secure, In-Browser Processing</h3>
     <p>
         All analysis is performed <strong>locally on your device</strong>. Your API specification is never uploaded to
-        our
-        servers, persisted, or logged.
-        This makes our Swagger JSON viewer safe for proprietary, internal, or sensitive API documentation. There's no
-        signup required, no usage limits,
-        and no premium features locked behind a paywall—it's completely free, forever.
+        our servers, persisted, or logged.
+        This makes our Swagger JSON viewer safe for proprietary, internal, or sensitive API documentation.
+        <em>Your specs stay on your machine always.</em>
     </p>
 </div>
 
-<!-- Comparison Section -->
-<div class="info-section" style="margin-bottom: 1.5rem;">
-    <h2 style="font-size: 1.15rem;">Why Use This Instead of Swagger UI or Redoc?</h2>
-    <ul style="color: var(--color-text-secondary); line-height: 1.8; padding-left: 1.5rem; margin-top: 0.75rem;">
-        <li><strong>No setup required</strong> — Paste your spec and view instantly. No deployment, hosting, or npm
-            install.</li>
-        <li><strong>Privacy-first</strong> — Runs entirely in your browser. Nothing is uploaded or transmitted.</li>
-        <li><strong>Code snippets included</strong> — Generate cURL, JavaScript, and Python code for any endpoint.</li>
-        <li><strong>Export to Markdown</strong> — Download your API documentation as a Markdown file with one click.
-        </li>
-        <li><strong>Endpoint statistics</strong> — See HTTP method distribution (GET, POST, PUT, DELETE) at a glance.
-        </li>
-        <li><strong>Real-time search</strong> — Find endpoints instantly as you type.</li>
-        <li><strong>Works offline</strong> — Once loaded, parsing works without internet (except for URL-loaded specs).
-        </li>
-    </ul>
-</div>
-
-<div class="input-section">
+<div class="input-section" id="inputSection">
     <div class="input-row">
         <input type="url" id="specUrl" class="url-input"
             placeholder="Enter OpenAPI spec URL (e.g., https://petstore.swagger.io/v2/swagger.json)">
@@ -1560,7 +704,7 @@ Example:
         <button id="parseBtn" class="parse-btn">🔍 Parse & View Spec</button>
         <button id="sampleBtn" class="sample-btn">📄 Load Sample</button>
         <button id="clearBtn" class="secondary-btn">🗑️ Clear</button>
-        <a href="{% url 'index' %}" id="validateJsonBtn" class="sample-btn" target="_blank"
+        <a href="{% url 'index' %}" class="sample-btn" target="_blank"
             style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border: none;">✨
             Validate JSON</a>
     </div>
@@ -1570,172 +714,37 @@ Example:
 
 <div class="loading" id="loading">
     <div class="loading-spinner"></div>
-    <p>Loading specification...</p>
+    <p>Loading Swagger UI...</p>
 </div>
 
-<div class="api-docs" id="apiDocs">
-    <!-- Stats -->
-    <div class="stats-section" id="statsSection">
-        <div class="stat-card">
-            <div class="stat-value" id="totalEndpoints">0</div>
-            <div class="stat-label">Total Endpoints</div>
-        </div>
-        <div class="stat-card get">
-            <div class="stat-value" id="getCount">0</div>
-            <div class="stat-label">GET</div>
-        </div>
-        <div class="stat-card post">
-            <div class="stat-value" id="postCount">0</div>
-            <div class="stat-label">POST</div>
-        </div>
-        <div class="stat-card put">
-            <div class="stat-value" id="putCount">0</div>
-            <div class="stat-label">PUT</div>
-        </div>
-        <div class="stat-card delete">
-            <div class="stat-value" id="deleteCount">0</div>
-            <div class="stat-label">DELETE</div>
-        </div>
-    </div>
-
-    <!-- Toolbar -->
-    <div class="toolbar" id="mainToolbar">
-        <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search endpoints..."
-            aria-label="Search endpoints">
-        <select class="server-select" id="serverSelect" aria-label="Select server">
-            <option value="">Select Server</option>
-        </select>
-        <button class="toolbar-btn" id="expandAllBtn" aria-label="Expand all endpoints">➕ Expand All</button>
-        <button class="toolbar-btn" id="collapseAllBtn" aria-label="Collapse all endpoints">➖ Collapse All</button>
-        <button class="toolbar-btn" id="exportMdBtn" aria-label="Export as Markdown">📄 Export MD</button>
-        <button class="toolbar-btn" id="exportJsonBtn" aria-label="Copy JSON to clipboard">📋 Copy JSON</button>
-        <button class="toolbar-btn" id="shareLinkBtn" aria-label="Generate shareable link">🔗 Share Link</button>
-        <span class="toolbar-toggle" title="Spec is automatically validated" style="cursor: default;">
-            <span>✅ Auto-Validated</span>
-        </span>
-    </div>
-
-    <!-- Method Legend -->
-    <div class="method-legend" id="methodLegend">
-        <span class="legend-item"><span class="legend-color get"></span> GET</span>
-        <span class="legend-item"><span class="legend-color post"></span> POST</span>
-        <span class="legend-item"><span class="legend-color put"></span> PUT</span>
-        <span class="legend-item"><span class="legend-color patch"></span> PATCH</span>
-        <span class="legend-item"><span class="legend-color delete"></span> DELETE</span>
-        <span class="legend-counter" id="endpointCounter">0 / 0 endpoints</span>
-    </div>
-
-    <!-- Authentication Section -->
-    <details class="auth-section" id="authSection">
-        <summary class="auth-header">🔑 Authentication (Optional)</summary>
-        <div class="auth-content">
-            <p class="auth-description">Add authentication to auto-inject into code snippets:</p>
-            <div class="auth-row">
-                <div class="auth-field">
-                    <label for="authType">Auth Type</label>
-                    <select id="authType">
-                        <option value="none">None</option>
-                        <option value="bearer">Bearer Token</option>
-                        <option value="apikey">API Key (Header)</option>
-                    </select>
-                </div>
-                <div class="auth-field" id="bearerField" style="display: none;">
-                    <label for="bearerToken">Bearer Token</label>
-                    <input type="text" id="bearerToken" placeholder="Enter your bearer token">
-                </div>
-                <div class="auth-field" id="apiKeyNameField" style="display: none;">
-                    <label for="apiKeyName">Header Name</label>
-                    <input type="text" id="apiKeyName" placeholder="X-API-Key">
-                </div>
-                <div class="auth-field" id="apiKeyValueField" style="display: none;">
-                    <label for="apiKeyValue">API Key</label>
-                    <input type="text" id="apiKeyValue" placeholder="Enter your API key">
-                </div>
-            </div>
-        </div>
-    </details>
-
-    <!-- Validation Results Panel -->
-    <div class="validation-panel" id="validationPanel" role="region" aria-label="Validation results"
-        style="display: none;">
-        <div class="validation-header">
-            <span>⚠️ Spec Validation Results</span>
-            <button class="validation-close" id="closeValidation" aria-label="Close validation panel">×</button>
-        </div>
-        <div class="validation-content" id="validationContent" aria-live="polite" aria-atomic="true"></div>
-    </div>
-
-    <div class="api-header">
-        <h2 class="api-title" id="apiTitle">API Title</h2>
-        <span class="api-version" id="apiVersion">v1.0.0</span>
-        <p class="api-description" id="apiDescription"></p>
-        <div class="api-info-grid" id="apiInfoGrid"></div>
-    </div>
-
-    <div class="endpoints-section">
-        <div class="section-header">
-            <span>📡 Endpoints</span>
-            <span id="visibleCount"></span>
-        </div>
-        <div id="endpointsList"></div>
-    </div>
-
-    <div class="schemas-section" id="schemasSection" style="display: none;">
-        <div class="section-header">📦 Schemas</div>
-        <div id="schemasList"></div>
-    </div>
+<!-- Swagger UI Container -->
+<div id="swagger-ui-container">
+    <div id="swagger-ui"></div>
 </div>
 
 <div class="info-section">
     <h2>Use Cases for Swagger and OpenAPI Viewer</h2>
-
     <h3>View Swagger JSON Online</h3>
-    <p>
-        Many APIs publish Swagger JSON files that are hard to read in raw format.
-        This Swagger JSON viewer converts them into structured, searchable documentation
-        so endpoints, parameters, and schemas are easy to understand.
-    </p><br>
-
-    <h3>Read OpenAPI YAML Specifications</h3>
-    <p>
-        OpenAPI YAML files are common in production APIs.
-        An online OpenAPI viewer makes it possible to read and validate these files
-        without setting up Swagger UI locally.
-    </p><br>
-
-    <h3>Explore API Endpoints Without Swagger UI</h3>
-    <p>
-        Developers often need a quick way to explore APIs without hosting Swagger UI.
-        An online Swagger viewer solves this by rendering OpenAPI specs instantly
-        in the browser.
-    </p>
+    <p>Many APIs publish Swagger JSON files that are hard to read in raw format. This Swagger JSON viewer converts them
+        into structured, searchable documentation so endpoints, parameters, and schemas are easy to understand.</p>
+    <h3 style="margin-top: 1rem;">Read OpenAPI YAML Specifications</h3>
+    <p>OpenAPI YAML files are common in production APIs. An online OpenAPI viewer makes it possible to read and validate
+        these files without setting up Swagger UI locally.</p>
 </div>
 
 <!-- Related Tools Section -->
 <div class="info-section">
     <h2>Related Developer Tools</h2>
-    <p style="color: var(--color-text-secondary); margin-bottom: 1rem;">
-        Explore more free developer tools to work with JSON, APIs, and data formats:
-    </p>
+    <p style="color: var(--color-text-secondary); margin-bottom: 1rem;">Explore more free developer tools to work with
+        JSON, APIs, and data formats:</p>
     <div class="related-tools" style="justify-content: flex-start;">
-        <a href="{% url 'json_schema_page' %}" class="related-tool-link">
-            <span class="icon">📋</span> JSON Schema Validator
-        </a>
-        <a href="{% url 'json_to_yaml_page' %}" class="related-tool-link">
-            <span class="icon">🔄</span> JSON to YAML
-        </a>
-        <a href="{% url 'json_diff_page' %}" class="related-tool-link">
-            <span class="icon">🔍</span> JSON Diff
-        </a>
-        <a href="{% url 'json_to_code_page' %}" class="related-tool-link">
-            <span class="icon">💻</span> JSON to Code
-        </a>
-        <a href="{% url 'json_tree_page' %}" class="related-tool-link">
-            <span class="icon">🌳</span> JSON Tree Viewer
-        </a>
-        <a href="/json-path-tester/" class="related-tool-link">
-            <span class="icon">🎯</span> JSON Path Tester
-        </a>
+        <a href="{% url 'json_schema_page' %}" class="related-tool-link"><span class="icon">📋</span> JSON Schema
+            Validator</a>
+        <a href="{% url 'json_to_yaml_page' %}" class="related-tool-link"><span class="icon">🔄</span> JSON to YAML</a>
+        <a href="{% url 'json_diff_page' %}" class="related-tool-link"><span class="icon">🔍</span> JSON Diff</a>
+        <a href="{% url 'json_to_code_page' %}" class="related-tool-link"><span class="icon">💻</span> JSON to Code</a>
+        <a href="{% url 'json_tree_page' %}" class="related-tool-link"><span class="icon">🌳</span> JSON Tree Viewer</a>
+        <a href="/json-path-tester/" class="related-tool-link"><span class="icon">🎯</span> JSON Path Tester</a>
     </div>
 </div>
 
@@ -1751,8 +760,7 @@ Example:
         <div class="faq-answer">
             OpenAPI (formerly known as Swagger) is an industry-standard specification for describing, producing,
             consuming, and visualizing RESTful web services. It provides a way to describe your API's structure in a
-            format that both humans and machines can understand. The specification includes information about endpoints,
-            request/response formats, authentication methods, and more.
+            format that both humans and machines can understand.
         </div>
     </div>
 
@@ -1768,8 +776,6 @@ Example:
             <br>• <strong>Request body</strong>: Dedicated requestBody keyword instead of body parameters
             <br>• <strong>Multiple content types</strong>: Better support for different media types
             <br>• <strong>oneOf/anyOf/allOf</strong>: Enhanced schema composition
-            <br>• <strong>Callbacks</strong>: Support for webhook-style async operations
-            <br>• <strong>Links</strong>: Relationship links between operations
         </div>
     </div>
 
@@ -1781,34 +787,7 @@ Example:
         <div class="faq-answer">
             This viewer supports both <strong>JSON</strong> and <strong>YAML</strong> formats. You can paste your
             specification in either format, and the tool will automatically detect and parse it. You can also load
-            specifications directly from a URL if your server allows CORS requests.
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>How do I create an OpenAPI specification?</span>
-            <span class="icon">+</span>
-        </div>
-        <div class="faq-answer">
-            There are several ways to create an OpenAPI spec:
-            <br><br>• <strong>Manual writing</strong>: Write JSON/YAML following the OpenAPI spec
-            <br>• <strong>Swagger Editor</strong>: Use the official Swagger Editor for guided creation
-            <br>• <strong>Code annotations</strong>: Use annotations in your code (like springdoc, swagger-jsdoc)
-            <br>• <strong>API clients</strong>: Tools like Postman can export OpenAPI specs
-            <br>• <strong>Auto-generation</strong>: Many frameworks auto-generate specs from your routes
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>Can I generate code from my API spec?</span>
-            <span class="icon">+</span>
-        </div>
-        <div class="faq-answer">
-            Yes! This tool can generate code snippets in multiple languages (cURL, JavaScript, Python) for each
-            endpoint. Click on any endpoint to expand it, and you'll see the code snippets section. For full SDK
-            generation, you can use tools like OpenAPI Generator or Swagger Codegen.
+            specifications directly from a URL.
         </div>
     </div>
 
@@ -1825,90 +804,23 @@ Example:
 
     <div class="faq-item">
         <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>What are common use cases for OpenAPI/Swagger?</span>
-            <span class="icon">+</span>
-        </div>
-        <div class="faq-answer">
-            • <strong>API Documentation</strong>: Generate interactive documentation for developers
-            <br>• <strong>Client SDK Generation</strong>: Auto-generate SDKs in multiple languages
-            <br>• <strong>API Testing</strong>: Create test cases from the spec
-            <br>• <strong>Mock Servers</strong>: Generate mock servers for frontend development
-            <br>• <strong>API Validation</strong>: Validate requests/responses against the spec
-            <br>• <strong>Contract Testing</strong>: Ensure API implementation matches the spec
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
             <span>Is this Swagger viewer completely free?</span>
             <span class="icon">+</span>
         </div>
         <div class="faq-answer">
             <strong>Yes, 100% free!</strong> No account needed, no trial periods, no hidden costs. Use it for any spec
-            size, as often as you want—commercial or personal projects alike.
+            size, as often as you want commercial or personal projects alike.
         </div>
     </div>
 
     <div class="faq-item">
         <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>Are there any ads on this tool?</span>
+            <span>Does the "Try it out" feature work?</span>
             <span class="icon">+</span>
         </div>
         <div class="faq-answer">
-            We strive to provide an <strong>ad-free experience</strong> for developer tools. Our focus is on providing
-            fast, clean, and professional-grade tools without distractions. You can focus entirely on your API
-            documentation without interruptions.
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>Is there a limit on how many times I can use this tool?</span>
-            <span class="icon">+</span>
-        </div>
-        <div class="faq-answer">
-            <strong>No limits at all!</strong> Use this viewer as often as you need, 24/7. Because parsing runs locally
-            in your browser, there are no server-side rate limits or usage caps.
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>Does this tool work offline?</span>
-            <span class="icon">+</span>
-        </div>
-        <div class="faq-answer">
-            Once the page is loaded, most features work offline since processing is done client-side. However, loading
-            specs from external URLs requires internet connectivity. For fully offline use, you can paste your
-            specification directly into the textarea.
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>Can I export the API documentation?</span>
-            <span class="icon">+</span>
-        </div>
-        <div class="faq-answer">
-            Yes! You can export documentation in multiple formats:
-            <br><br>• <strong>Markdown</strong>: Click "Export MD" to get a complete Markdown document
-            <br>• <strong>JSON</strong>: Click "Copy JSON" to copy the parsed specification
-            <br>• <strong>Code Snippets</strong>: Copy cURL, JavaScript, or Python code for any endpoint
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>Why should I use this instead of Swagger UI?</span>
-            <span class="icon">+</span>
-        </div>
-        <div class="faq-answer">
-            Our Swagger Viewer offers several advantages:
-            <br><br>• <strong>No setup required</strong>: Just paste your spec and view instantly
-            <br>• <strong>Code snippets</strong>: Generate cURL, JavaScript, Python code instantly
-            <br>• <strong>Export features</strong>: Export to Markdown with one click
-            <br>• <strong>Endpoint stats</strong>: See HTTP method distribution at a glance
-            <br>• <strong>Search</strong>: Quickly find endpoints with real-time search
+            Yes! This viewer uses the official Swagger UI library, so the "Try it out" feature is fully functional. You
+            can make real API calls directly from the browser (subject to CORS restrictions on the target API).
         </div>
     </div>
 </div>
@@ -1916,11 +828,9 @@ Example:
 <div class="info-section" id="infoSection">
     <h2>💡 About This Tool</h2>
     <p>
-        Built for developers who need a quick way to explore REST APIs, this viewer renders OpenAPI specs instantly.
-        Paste JSON or YAML, or fetch from a URL. Key features: smart endpoint search, method statistics,
-        auto-generated code snippets (cURL, JavaScript, Python), Markdown export, and support for both OpenAPI 2.0 and
-        3.0.
-        Everything runs locally—your specifications stay on your machine.
+        Built for developers who need a quick way to explore REST APIs, this viewer uses the official Swagger UI library
+        to render OpenAPI specs instantly.
+        Paste JSON or YAML, or fetch from a URL. Everything runs locally your specifications stay on your machine.
     </p>
 </div>
 
@@ -1929,10 +839,67 @@ Example:
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+<!-- js-yaml for parsing YAML specs -->
+<script defer src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
 <script>
+    // Swagger UI assets - loaded lazily for performance
+    let swaggerUILoaded = false;
+    const SWAGGER_CSS_URL = '{% static "swagger-ui/swagger-ui.css" %}';
+    const SWAGGER_BUNDLE_URL = '{% static "swagger-ui/swagger-ui-bundle.js" %}';
+    const SWAGGER_PRESET_URL = '{% static "swagger-ui/swagger-ui-standalone-preset.js" %}';
+
+    // Lazy load Swagger UI assets
+    function loadSwaggerUI() {
+        return new Promise((resolve) => {
+            if (swaggerUILoaded) {
+                resolve();
+                return;
+            }
+
+            // Load CSS
+            const cssLink = document.createElement('link');
+            cssLink.rel = 'stylesheet';
+            cssLink.href = SWAGGER_CSS_URL;
+            document.head.appendChild(cssLink);
+
+            // Load JS files
+            const bundleScript = document.createElement('script');
+            bundleScript.src = SWAGGER_BUNDLE_URL;
+
+            const presetScript = document.createElement('script');
+            presetScript.src = SWAGGER_PRESET_URL;
+
+            // Load bundle first, then preset
+            bundleScript.onload = () => {
+                document.body.appendChild(presetScript);
+            };
+
+            presetScript.onload = () => {
+                swaggerUILoaded = true;
+                // Sync theme after loading
+                syncSwaggerTheme();
+                resolve();
+            };
+
+            document.body.appendChild(bundleScript);
+        });
+    }
+
+    // Theme sync function
+    function syncSwaggerTheme() {
+        const siteTheme = document.documentElement.getAttribute('data-theme');
+        if (siteTheme === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        } else {
+            document.documentElement.classList.remove('dark-mode');
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
+        // Watch for theme changes
+        const observer = new MutationObserver(syncSwaggerTheme);
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
         const specUrl = document.getElementById('specUrl');
         const specInput = document.getElementById('specInput');
         const loadUrlBtn = document.getElementById('loadUrlBtn');
@@ -1941,810 +908,518 @@ Example:
         const clearBtn = document.getElementById('clearBtn');
         const errorMessage = document.getElementById('errorMessage');
         const loading = document.getElementById('loading');
-        const apiDocs = document.getElementById('apiDocs');
-        const infoSection = document.getElementById('infoSection');
-        const searchBox = document.getElementById('searchBox');
-        const serverSelect = document.getElementById('serverSelect');
+        const swaggerContainer = document.getElementById('swagger-ui-container');
         const toast = document.getElementById('toast');
 
-        let currentSpec = null;
-        let currentBaseUrl = '';
-
-        // Scroll to tool function
-        window.scrollToTool = function () {
-            const inputSection = document.querySelector('.input-section');
-            if (inputSection) {
-                inputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                // Hide scroll indicator after scrolling
-                const scrollIndicator = document.getElementById('scrollIndicator');
-                if (scrollIndicator) {
-                    setTimeout(() => {
-                        scrollIndicator.style.display = 'none';
-                    }, 500);
-                }
-            }
-        };
-
-        // Hide scroll indicator when user scrolls past header
-        window.addEventListener('scroll', () => {
-            const scrollIndicator = document.getElementById('scrollIndicator');
-            if (scrollIndicator && window.scrollY > 300) {
-                scrollIndicator.style.display = 'none';
-            }
-        }, { passive: true });
-
-        // Sample OpenAPI spec
+        // Sample spec - comprehensive example
         const sampleSpec = {
-            "openapi": "3.0.0",
+            "openapi": "3.0.3",
             "info": {
-                "title": "Sample Pet Store API",
-                "description": "A sample API demonstrating OpenAPI 3.0 features",
-                "version": "1.0.0",
-                "contact": { "name": "API Support", "email": "support@example.com" }
+                "title": "🐾 Pet Store API",
+                "description": "A comprehensive sample API demonstrating OpenAPI 3.0 features including authentication, multiple environments, request/response schemas, and various HTTP methods.\n\n## Features\n- 🔐 OAuth2 & API Key authentication\n- 🌍 Multiple server environments\n- 📦 CRUD operations for pets, orders, and users\n- 📋 Detailed request/response schemas\n\n**Contact**: [api@petstore.io](mailto:api@petstore.io)",
+                "version": "2.0.0",
+                "termsOfService": "https://petstore.io/terms",
+                "contact": {
+                    "name": "API Support",
+                    "email": "api@petstore.io",
+                    "url": "https://petstore.io/support"
+                },
+                "license": {
+                    "name": "MIT",
+                    "url": "https://opensource.org/licenses/MIT"
+                }
+            },
+            "externalDocs": {
+                "description": "Find more info here",
+                "url": "https://petstore.io/docs"
             },
             "servers": [
-                { "url": "https://api.example.com/v1", "description": "Production" },
-                { "url": "https://staging.example.com/v1", "description": "Staging" }
+                { "url": "https://api.petstore.io/v2", "description": "🌐 Production Server" },
+                { "url": "https://staging-api.petstore.io/v2", "description": "🧪 Staging Server" },
+                { "url": "https://sandbox-api.petstore.io/v2", "description": "🔧 Sandbox Server" },
+                { "url": "http://localhost:3000/v2", "description": "💻 Local Development" }
+            ],
+            "tags": [
+                { "name": "pets", "description": "Everything about your Pets", "externalDocs": { "description": "Find out more", "url": "https://petstore.io/docs/pets" } },
+                { "name": "orders", "description": "Access to Petstore orders" },
+                { "name": "users", "description": "Operations about users" }
             ],
             "paths": {
                 "/pets": {
                     "get": {
                         "summary": "List all pets",
-                        "description": "Returns all pets from the system",
+                        "description": "Returns a paginated list of all pets in the store. Supports filtering by status and tag.",
+                        "operationId": "listPets",
                         "tags": ["pets"],
                         "parameters": [
-                            { "name": "limit", "in": "query", "description": "Max pets to return", "schema": { "type": "integer" } },
-                            { "name": "status", "in": "query", "description": "Filter by status", "schema": { "type": "string", "enum": ["available", "pending", "sold"] } }
+                            { "name": "status", "in": "query", "description": "Filter by pet status", "schema": { "type": "string", "enum": ["available", "pending", "sold"] } },
+                            { "name": "limit", "in": "query", "description": "Maximum number of pets to return", "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 } },
+                            { "name": "offset", "in": "query", "description": "Number of pets to skip", "schema": { "type": "integer", "minimum": 0, "default": 0 } }
                         ],
-                        "responses": { "200": { "description": "List of pets" }, "400": { "description": "Bad request" } }
+                        "responses": {
+                            "200": {
+                                "description": "A list of pets",
+                                "content": {
+                                    "application/json": {
+                                        "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Pet" } }
+                                    }
+                                }
+                            },
+                            "401": { "$ref": "#/components/responses/Unauthorized" }
+                        },
+                        "security": [{ "api_key": [] }]
                     },
                     "post": {
-                        "summary": "Create a pet",
+                        "summary": "Create a new pet",
+                        "description": "Add a new pet to the store inventory",
+                        "operationId": "createPet",
                         "tags": ["pets"],
-                        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Pet" } } } },
-                        "responses": { "201": { "description": "Pet created" } }
+                        "requestBody": {
+                            "description": "Pet object to be added",
+                            "required": true,
+                            "content": {
+                                "application/json": {
+                                    "schema": { "$ref": "#/components/schemas/PetCreate" },
+                                    "example": { "name": "Buddy", "category": "dog", "status": "available", "tags": ["friendly", "trained"] }
+                                }
+                            }
+                        },
+                        "responses": {
+                            "201": {
+                                "description": "Pet created successfully",
+                                "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Pet" } } }
+                            },
+                            "400": { "$ref": "#/components/responses/BadRequest" },
+                            "401": { "$ref": "#/components/responses/Unauthorized" }
+                        },
+                        "security": [{ "oauth2": ["write:pets"] }]
                     }
                 },
                 "/pets/{petId}": {
                     "get": {
                         "summary": "Get pet by ID",
+                        "description": "Returns a single pet by its unique identifier",
+                        "operationId": "getPetById",
                         "tags": ["pets"],
-                        "parameters": [{ "name": "petId", "in": "path", "required": true, "schema": { "type": "integer" } }],
-                        "responses": { "200": { "description": "Success" }, "404": { "description": "Not found" } }
+                        "parameters": [
+                            { "name": "petId", "in": "path", "required": true, "description": "Unique pet identifier", "schema": { "type": "integer", "format": "int64", "example": 12345 } }
+                        ],
+                        "responses": {
+                            "200": {
+                                "description": "Pet details",
+                                "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Pet" } } }
+                            },
+                            "404": { "$ref": "#/components/responses/NotFound" }
+                        }
                     },
                     "put": {
-                        "summary": "Update pet",
+                        "summary": "Update an existing pet",
+                        "operationId": "updatePet",
                         "tags": ["pets"],
-                        "parameters": [{ "name": "petId", "in": "path", "required": true, "schema": { "type": "integer" } }],
-                        "responses": { "200": { "description": "Updated" } }
+                        "parameters": [
+                            { "name": "petId", "in": "path", "required": true, "schema": { "type": "integer", "format": "int64" } }
+                        ],
+                        "requestBody": {
+                            "required": true,
+                            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PetCreate" } } }
+                        },
+                        "responses": {
+                            "200": { "description": "Pet updated successfully" },
+                            "400": { "$ref": "#/components/responses/BadRequest" },
+                            "404": { "$ref": "#/components/responses/NotFound" }
+                        },
+                        "security": [{ "oauth2": ["write:pets"] }]
                     },
                     "delete": {
-                        "summary": "Delete pet",
+                        "summary": "Delete a pet",
+                        "operationId": "deletePet",
                         "tags": ["pets"],
-                        "parameters": [{ "name": "petId", "in": "path", "required": true, "schema": { "type": "integer" } }],
-                        "responses": { "204": { "description": "Deleted" } }
+                        "parameters": [
+                            { "name": "petId", "in": "path", "required": true, "schema": { "type": "integer", "format": "int64" } },
+                            { "name": "api_key", "in": "header", "schema": { "type": "string" } }
+                        ],
+                        "responses": {
+                            "204": { "description": "Pet deleted successfully" },
+                            "404": { "$ref": "#/components/responses/NotFound" }
+                        },
+                        "security": [{ "oauth2": ["write:pets"] }]
+                    }
+                },
+                "/pets/{petId}/upload-image": {
+                    "post": {
+                        "summary": "Upload pet image",
+                        "operationId": "uploadPetImage",
+                        "tags": ["pets"],
+                        "parameters": [
+                            { "name": "petId", "in": "path", "required": true, "schema": { "type": "integer", "format": "int64" } }
+                        ],
+                        "requestBody": {
+                            "content": {
+                                "multipart/form-data": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "file": { "type": "string", "format": "binary" },
+                                            "description": { "type": "string" }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "responses": {
+                            "200": { "description": "Image uploaded successfully" }
+                        }
+                    }
+                },
+                "/orders": {
+                    "post": {
+                        "summary": "Place an order",
+                        "operationId": "placeOrder",
+                        "tags": ["orders"],
+                        "requestBody": {
+                            "required": true,
+                            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Order" } } }
+                        },
+                        "responses": {
+                            "201": { "description": "Order placed successfully" },
+                            "400": { "$ref": "#/components/responses/BadRequest" }
+                        }
+                    }
+                },
+                "/orders/{orderId}": {
+                    "get": {
+                        "summary": "Get order by ID",
+                        "operationId": "getOrderById",
+                        "tags": ["orders"],
+                        "parameters": [
+                            { "name": "orderId", "in": "path", "required": true, "schema": { "type": "integer", "format": "int64" } }
+                        ],
+                        "responses": {
+                            "200": {
+                                "description": "Order details",
+                                "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Order" } } }
+                            },
+                            "404": { "$ref": "#/components/responses/NotFound" }
+                        }
                     }
                 },
                 "/users": {
-                    "get": { "summary": "List users", "tags": ["users"], "responses": { "200": { "description": "Success" } } },
-                    "post": { "summary": "Create user", "tags": ["users"], "responses": { "201": { "description": "Created" } } }
+                    "post": {
+                        "summary": "Create user",
+                        "operationId": "createUser",
+                        "tags": ["users"],
+                        "requestBody": {
+                            "required": true,
+                            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserCreate" } } }
+                        },
+                        "responses": {
+                            "201": { "description": "User created" }
+                        }
+                    }
+                },
+                "/users/login": {
+                    "post": {
+                        "summary": "User login",
+                        "operationId": "loginUser",
+                        "tags": ["users"],
+                        "requestBody": {
+                            "required": true,
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "required": ["username", "password"],
+                                        "properties": {
+                                            "username": { "type": "string", "example": "john_doe" },
+                                            "password": { "type": "string", "format": "password" }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "responses": {
+                            "200": {
+                                "description": "Login successful",
+                                "headers": {
+                                    "X-Rate-Limit": { "schema": { "type": "integer" }, "description": "Requests per hour" },
+                                    "X-Expires-After": { "schema": { "type": "string", "format": "date-time" }, "description": "Token expiration" }
+                                },
+                                "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LoginResponse" } } }
+                            },
+                            "401": { "description": "Invalid credentials" }
+                        }
+                    }
                 }
             },
             "components": {
                 "schemas": {
-                    "Pet": { "type": "object", "required": ["name"], "properties": { "id": { "type": "integer" }, "name": { "type": "string" }, "status": { "type": "string" } } },
-                    "User": { "type": "object", "properties": { "id": { "type": "integer" }, "username": { "type": "string" }, "email": { "type": "string" } } }
+                    "Pet": {
+                        "type": "object",
+                        "required": ["id", "name"],
+                        "properties": {
+                            "id": { "type": "integer", "format": "int64", "example": 12345, "readOnly": true },
+                            "name": { "type": "string", "example": "Buddy", "minLength": 1, "maxLength": 50 },
+                            "category": { "type": "string", "enum": ["dog", "cat", "bird", "fish", "other"], "example": "dog" },
+                            "status": { "type": "string", "enum": ["available", "pending", "sold"], "default": "available" },
+                            "tags": { "type": "array", "items": { "type": "string" }, "example": ["friendly", "trained"] },
+                            "photoUrls": { "type": "array", "items": { "type": "string", "format": "uri" } },
+                            "createdAt": { "type": "string", "format": "date-time", "readOnly": true },
+                            "updatedAt": { "type": "string", "format": "date-time", "readOnly": true }
+                        }
+                    },
+                    "PetCreate": {
+                        "type": "object",
+                        "required": ["name"],
+                        "properties": {
+                            "name": { "type": "string", "example": "Buddy" },
+                            "category": { "type": "string", "enum": ["dog", "cat", "bird", "fish", "other"] },
+                            "status": { "type": "string", "enum": ["available", "pending", "sold"], "default": "available" },
+                            "tags": { "type": "array", "items": { "type": "string" } }
+                        }
+                    },
+                    "Order": {
+                        "type": "object",
+                        "properties": {
+                            "id": { "type": "integer", "format": "int64", "readOnly": true },
+                            "petId": { "type": "integer", "format": "int64" },
+                            "quantity": { "type": "integer", "minimum": 1, "maximum": 10, "default": 1 },
+                            "shipDate": { "type": "string", "format": "date-time" },
+                            "status": { "type": "string", "enum": ["placed", "approved", "delivered"], "default": "placed" },
+                            "complete": { "type": "boolean", "default": false }
+                        }
+                    },
+                    "UserCreate": {
+                        "type": "object",
+                        "required": ["username", "email", "password"],
+                        "properties": {
+                            "username": { "type": "string", "minLength": 3, "maxLength": 20 },
+                            "email": { "type": "string", "format": "email" },
+                            "password": { "type": "string", "format": "password", "minLength": 8 },
+                            "firstName": { "type": "string" },
+                            "lastName": { "type": "string" },
+                            "phone": { "type": "string", "pattern": "^\\+?[1-9]\\d{1,14}$" }
+                        }
+                    },
+                    "LoginResponse": {
+                        "type": "object",
+                        "properties": {
+                            "token": { "type": "string", "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." },
+                            "expiresIn": { "type": "integer", "example": 3600 },
+                            "tokenType": { "type": "string", "example": "Bearer" }
+                        }
+                    },
+                    "Error": {
+                        "type": "object",
+                        "properties": {
+                            "code": { "type": "integer", "example": 400 },
+                            "message": { "type": "string", "example": "Validation failed" },
+                            "details": { "type": "array", "items": { "type": "string" } }
+                        }
+                    }
+                },
+                "responses": {
+                    "BadRequest": {
+                        "description": "Bad request - validation error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+                    },
+                    "Unauthorized": {
+                        "description": "Unauthorized - authentication required",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+                    },
+                    "NotFound": {
+                        "description": "Resource not found",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+                    }
+                },
+                "securitySchemes": {
+                    "api_key": {
+                        "type": "apiKey",
+                        "name": "X-API-Key",
+                        "in": "header",
+                        "description": "API key for accessing the Pet Store API"
+                    },
+                    "oauth2": {
+                        "type": "oauth2",
+                        "description": "OAuth2 authentication",
+                        "flows": {
+                            "implicit": {
+                                "authorizationUrl": "https://petstore.io/oauth/authorize",
+                                "scopes": {
+                                    "read:pets": "Read pets",
+                                    "write:pets": "Create and update pets"
+                                }
+                            }
+                        }
+                    }
                 }
             }
         };
 
+        // Scroll to tool
+        window.scrollToTool = function () {
+            document.getElementById('inputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.getElementById('scrollIndicator').style.display = 'none';
+        };
+
+        // Hide scroll indicator on scroll
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                document.getElementById('scrollIndicator').style.display = 'none';
+            }
+        }, { passive: true });
+
+        // Initialize Swagger UI
+        async function initSwaggerUI(spec) {
+            // Lazy load Swagger UI if not already loaded
+            await loadSwaggerUI();
+
+            // Wait for SwaggerUIBundle to be available
+            if (typeof SwaggerUIBundle === 'undefined') {
+                setTimeout(() => initSwaggerUI(spec), 100);
+                return;
+            }
+
+            loading.classList.remove('visible');
+            swaggerContainer.classList.add('visible');
+
+            SwaggerUIBundle({
+                spec: spec,
+                dom_id: '#swagger-ui',
+                deepLinking: false,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "StandaloneLayout"
+            });
+
+            // Sync theme AFTER Swagger UI renders
+            setTimeout(() => syncSwaggerTheme(), 50);
+
+            // Scroll to Swagger UI
+            setTimeout(() => {
+                swaggerContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        // Parse spec
+        function parseSpec(text) {
+            hideError();
+            loading.classList.add('visible');
+            swaggerContainer.classList.remove('visible');
+
+            try {
+                let spec;
+                // Try JSON first
+                try {
+                    spec = JSON.parse(text);
+                } catch (e) {
+                    // Try YAML
+                    if (typeof jsyaml !== 'undefined') {
+                        spec = jsyaml.load(text);
+                    } else {
+                        throw new Error('Could not parse as JSON. YAML parser not loaded.');
+                    }
+                }
+
+                if (!spec || (!spec.openapi && !spec.swagger)) {
+                    throw new Error('Invalid OpenAPI/Swagger specification');
+                }
+
+                initSwaggerUI(spec);
+                showToast('Spec loaded successfully!');
+
+            } catch (e) {
+                loading.classList.remove('visible');
+                showError('Error parsing spec: ' + e.message);
+            }
+        }
+
         // Event listeners
-        sampleBtn.addEventListener('click', () => { specInput.value = JSON.stringify(sampleSpec, null, 2); });
-        clearBtn.addEventListener('click', () => { specInput.value = ''; specUrl.value = ''; hideError(); });
+        parseBtn.addEventListener('click', () => {
+            const text = specInput.value.trim();
+            if (!text) {
+                showError('Please enter an OpenAPI specification');
+                return;
+            }
+            // Track tool usage
+            fetch('/api/track/tool-usage/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tool_name: 'swagger-viewer', action: 'parse' })
+            }).catch(() => { }); // Silent fail
+            parseSpec(text);
+        });
+
+        sampleBtn.addEventListener('click', () => {
+            specInput.value = JSON.stringify(sampleSpec, null, 2);
+            showToast('Sample spec loaded!');
+        });
+
+        clearBtn.addEventListener('click', () => {
+            specInput.value = '';
+            specUrl.value = '';
+            hideError();
+            swaggerContainer.classList.remove('visible');
+        });
 
         loadUrlBtn.addEventListener('click', async () => {
             const url = specUrl.value.trim();
-            if (!url) { showError('Please enter a URL'); return; }
-            showLoading();
+            if (!url) {
+                showError('Please enter a URL');
+                return;
+            }
+
+            loading.classList.add('visible');
+            hideError();
+
             try {
                 const response = await fetch(url);
-                if (!response.ok) throw new Error('Failed to fetch');
+                if (!response.ok) throw new Error('Failed to fetch: ' + response.status);
                 const text = await response.text();
                 specInput.value = text;
                 parseSpec(text);
             } catch (e) {
-                showError('Failed to load from URL. Try pasting directly.');
-                hideLoading();
+                loading.classList.remove('visible');
+                showError('Failed to load URL: ' + e.message + '. Try pasting the spec directly.');
             }
         });
 
-        parseBtn.addEventListener('click', () => {
-            const text = specInput.value.trim();
-            if (!text) { showError('Please enter an OpenAPI spec'); return; }
-            parseSpec(text);
-        });
-
-        // Search functionality
-        searchBox.addEventListener('input', () => {
-            const query = searchBox.value.toLowerCase();
-            const endpoints = document.querySelectorAll('.endpoint');
-            let visible = 0;
-            endpoints.forEach(ep => {
-                const path = ep.querySelector('.endpoint-path')?.textContent.toLowerCase() || '';
-                const summary = ep.querySelector('.endpoint-summary')?.textContent.toLowerCase() || '';
-                if (path.includes(query) || summary.includes(query)) {
-                    ep.classList.remove('hidden');
-                    visible++;
-                } else {
-                    ep.classList.add('hidden');
-                }
-            });
-            document.getElementById('visibleCount').textContent = `(${visible} shown)`;
-        });
-
-        // Server selector
-        serverSelect.addEventListener('change', () => {
-            currentBaseUrl = serverSelect.value;
-            showToast('Server changed to: ' + currentBaseUrl);
-        });
-
-        // Expand/collapse all
-        document.getElementById('expandAllBtn').addEventListener('click', () => {
-            document.querySelectorAll('.endpoint-details').forEach(d => d.classList.add('open'));
-        });
-        document.getElementById('collapseAllBtn').addEventListener('click', () => {
-            document.querySelectorAll('.endpoint-details').forEach(d => d.classList.remove('open'));
-        });
-
-        // Export buttons
-        document.getElementById('exportMdBtn').addEventListener('click', exportMarkdown);
-        document.getElementById('exportJsonBtn').addEventListener('click', () => {
-            if (currentSpec) {
-                navigator.clipboard.writeText(JSON.stringify(currentSpec, null, 2));
-                showToast('JSON copied to clipboard!');
-            }
-        });
-
-        function parseSpec(text) {
-            showLoading(); hideError();
-            try {
-                let spec;
-                try { spec = JSON.parse(text); } catch (e) { spec = jsyaml.load(text); }
-                if (!spec) throw new Error('Could not parse');
-                currentSpec = spec;
-                renderSpec(spec);
-                // Generic Tool Usage Tracking
-                fetch('/api/track/tool-usage/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        tool_name: 'swagger-viewer',
-                        action: 'parse_spec',
-                        metadata: {
-                            version: spec.openapi || spec.swagger || 'unknown'
-                        }
-                    })
-                }).catch(() => { });
-
-                hideLoading();
-                apiDocs.classList.add('visible');
-                infoSection.style.display = 'none';
-            } catch (e) {
-                showError('Invalid spec: ' + e.message);
-                hideLoading();
-            }
+        // Utility functions
+        function showError(msg) {
+            errorMessage.textContent = msg;
+            errorMessage.style.display = 'block';
         }
 
-        function renderSpec(spec) {
-            const info = spec.info || {};
-            document.getElementById('apiTitle').textContent = info.title || 'API Documentation';
-            document.getElementById('apiVersion').textContent = 'v' + (info.version || '1.0.0');
-            document.getElementById('apiDescription').textContent = info.description || '';
-
-            // Info grid
-            const infoGrid = document.getElementById('apiInfoGrid');
-            infoGrid.innerHTML = '';
-            if (info.contact?.email) infoGrid.innerHTML += `<div class="api-info-item"><span class="label">Contact:</span><span class="value">${info.contact.email}</span></div>`;
-            if (info.license?.name) infoGrid.innerHTML += `<div class="api-info-item"><span class="label">License:</span><span class="value">${info.license.name}</span></div>`;
-
-            // Servers
-            serverSelect.innerHTML = '<option value="">Select Server</option>';
-            if (spec.servers?.length) {
-                spec.servers.forEach(s => {
-                    serverSelect.innerHTML += `<option value="${s.url}">${s.description || s.url}</option>`;
-                });
-                currentBaseUrl = spec.servers[0].url;
-                serverSelect.value = currentBaseUrl;
-            }
-            if (spec.host) {
-                const url = (spec.schemes?.[0] || 'https') + '://' + spec.host + (spec.basePath || '');
-                serverSelect.innerHTML += `<option value="${url}">${url}</option>`;
-                currentBaseUrl = url;
-                serverSelect.value = url;
-            }
-
-            // Count endpoints
-            const paths = spec.paths || {};
-            let total = 0, gets = 0, posts = 0, puts = 0, deletes = 0;
-            const groupedByTag = {};
-
-            for (const [path, methods] of Object.entries(paths)) {
-                for (const [method, details] of Object.entries(methods)) {
-                    if (['get', 'post', 'put', 'patch', 'delete'].includes(method)) {
-                        total++;
-                        if (method === 'get') gets++;
-                        if (method === 'post') posts++;
-                        if (method === 'put') puts++;
-                        if (method === 'delete') deletes++;
-                        const tag = (details.tags || ['default'])[0];
-                        if (!groupedByTag[tag]) groupedByTag[tag] = [];
-                        groupedByTag[tag].push({ path, method, details });
-                    }
-                }
-            }
-
-            // Update stats
-            document.getElementById('totalEndpoints').textContent = total;
-            document.getElementById('getCount').textContent = gets;
-            document.getElementById('postCount').textContent = posts;
-            document.getElementById('putCount').textContent = puts;
-            document.getElementById('deleteCount').textContent = deletes;
-            document.getElementById('visibleCount').textContent = `(${total} shown)`;
-
-            // Update endpoint counter
-            const counter = document.getElementById('endpointCounter');
-            if (counter) counter.textContent = `${total} / ${total} endpoints`;
-
-            // Render endpoints with lazy loading
-            const endpointsList = document.getElementById('endpointsList');
-            endpointsList.innerHTML = '';
-            let globalIndex = 0;
-
-            for (const [tag, endpoints] of Object.entries(groupedByTag)) {
-                let html = `<div class="endpoint-group"><div class="endpoint-group-header" onclick="this.parentElement.classList.toggle('collapsed')">📁 ${tag.charAt(0).toUpperCase() + tag.slice(1)} (${endpoints.length})</div>`;
-                endpoints.forEach((ep, idx) => {
-                    const isLazy = globalIndex >= 10;
-                    html += renderEndpoint(ep, tag + idx, isLazy);
-                    globalIndex++;
-                });
-                html += '</div>';
-                endpointsList.innerHTML += html;
-            }
-
-            // Restore expanded states
-            if (typeof restoreExpandedState === 'function') restoreExpandedState();
-
-            // Schemas
-            const schemas = spec.components?.schemas || spec.definitions || {};
-            const schemasSection = document.getElementById('schemasSection');
-            const schemasList = document.getElementById('schemasList');
-
-            if (Object.keys(schemas).length > 0) {
-                schemasSection.style.display = 'block';
-                schemasList.innerHTML = '';
-                let schemaIndex = 0;
-                for (const [name, schema] of Object.entries(schemas)) {
-                    const lazyClass = schemaIndex > 5 ? ' lazy-render' : '';
-                    schemasList.innerHTML += `<div class="schema-item${lazyClass}"><div class="schema-header" tabindex="0" role="button" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open'); this.setAttribute('aria-expanded', this.nextElementSibling.classList.contains('open'))"><span class="schema-name">${name}</span><span>▼</span></div><div class="schema-details"><pre class="schema-code">${JSON.stringify(schema, null, 2)}</pre></div></div>`;
-                    schemaIndex++;
-                }
-            } else {
-                schemasSection.style.display = 'none';
-            }
-
-            // Auto-run validation after parsing
-            setTimeout(() => {
-                if (typeof runValidation === 'function') {
-                    runValidation(spec);
-                }
-            }, 100);
+        function hideError() {
+            errorMessage.style.display = 'none';
         }
 
-        function renderEndpoint(ep, id, isLazy = false) {
-            const { path, method, details } = ep;
-            const params = details.parameters || [];
-            const responses = details.responses || {};
-
-            // Generate code snippets
-            const curl = generateCurl(method, path, params);
-            const js = generateJS(method, path, params);
-            const python = generatePython(method, path, params);
-
-            const lazyClass = isLazy ? ' lazy-render' : '';
-            const deprecatedBadge = details.deprecated ? '<span style="color: #b91c1c; font-size: 0.75rem; margin-left: 0.5rem;">⚠️ DEPRECATED</span>' : '';
-
-            return `
-        <div class="endpoint${lazyClass}" role="region" aria-label="${method.toUpperCase()} ${path}">
-            <div class="endpoint-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-${id}" onclick="toggleEndpoint('details-${id}'); this.setAttribute('aria-expanded', document.getElementById('details-${id}').classList.contains('open'))">
-                <span class="method-badge method-${method}">${method}</span>
-                <span class="endpoint-path">${path}${deprecatedBadge}</span>
-                <button class="copy-btn" onclick="event.stopPropagation(); copyPath('${path}')" aria-label="Copy endpoint URL">📋</button>
-            </div>
-            ${details.summary ? `<div class="endpoint-summary">${details.summary}</div>` : ''}
-            <div class="endpoint-details" id="details-${id}">
-                ${details.description ? `<div class="detail-section"><div class="detail-title">Description</div><p>${details.description}</p></div>` : ''}
-                ${params.length > 0 ? `
-                    <div class="detail-section">
-                        <div class="detail-title">Parameters</div>
-                        <table class="params-table">
-                            <thead><tr><th>Name</th><th>In</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
-                            <tbody>
-                                ${params.map(p => `<tr><td><span class="param-name">${p.name}</span></td><td>${p.in}</td><td><span class="param-type">${p.schema?.type || p.type || '-'}</span></td><td>${p.required ? '<span class="param-required">required</span>' : 'optional'}</td><td>${p.description || '-'}</td></tr>`).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                ` : ''}
-                <div class="detail-section">
-                    <div class="detail-title">Responses</div>
-                    ${Object.entries(responses).map(([code, resp]) => {
-                let cls = 'response-2xx';
-                if (code.startsWith('4')) cls = 'response-4xx';
-                if (code.startsWith('5')) cls = 'response-5xx';
-                return `<div><span class="response-code ${cls}">${code}</span> ${resp.description || ''}</div>`;
-            }).join('')}
-                </div>
-                <div class="code-snippets">
-                    <div class="detail-title">Code Snippets</div>
-                    <div class="snippet-tabs">
-                        <button class="snippet-tab active" onclick="showSnippet(this, 'curl-${id}')">cURL</button>
-                        <button class="snippet-tab" onclick="showSnippet(this, 'js-${id}')">JavaScript</button>
-                        <button class="snippet-tab" onclick="showSnippet(this, 'py-${id}')">Python</button>
-                    </div>
-                    <div class="snippet-code" id="curl-${id}">${escapeHtml(curl)}<button class="snippet-copy-btn" onclick="copySnippet('curl-${id}')">Copy</button></div>
-                    <div class="snippet-code" id="js-${id}" style="display:none">${escapeHtml(js)}<button class="snippet-copy-btn" onclick="copySnippet('js-${id}')">Copy</button></div>
-                    <div class="snippet-code" id="py-${id}" style="display:none">${escapeHtml(python)}<button class="snippet-copy-btn" onclick="copySnippet('py-${id}')">Copy</button></div>
-                </div>
-            </div>
-        </div>`;
-        }
-
-        function generateCurl(method, path, params) {
-            let url = currentBaseUrl + path;
-            const queryParams = params.filter(p => p.in === 'query').map(p => `${p.name}=value`);
-            if (queryParams.length) url += '?' + queryParams.join('&');
-            let cmd = `curl -X ${method.toUpperCase()} "${url}"`;
-
-            // Add auth header if configured
-            const auth = typeof getAuthHeaders === 'function' ? getAuthHeaders() : null;
-            if (auth) {
-                cmd += ` \\\n  -H "${auth.header}: ${auth.value}"`;
-            }
-
-            if (['post', 'put', 'patch'].includes(method)) {
-                cmd += ` \\\n  -H "Content-Type: application/json" \\\n  -d '{"key": "value"}'`;
-            }
-            return cmd;
-        }
-
-        function generateJS(method, path, params) {
-            let url = currentBaseUrl + path;
-            const hasBody = ['post', 'put', 'patch'].includes(method);
-            const auth = typeof getAuthHeaders === 'function' ? getAuthHeaders() : null;
-
-            let headers = {};
-            if (hasBody) headers['Content-Type'] = 'application/json';
-            if (auth) headers[auth.header] = auth.value;
-
-            const hasHeaders = Object.keys(headers).length > 0;
-            const headersStr = hasHeaders ? JSON.stringify(headers, null, 4).replace(/\n/g, '\n  ') : '';
-
-            return `fetch("${url}", {
-  method: "${method.toUpperCase()}"${hasHeaders ? `,
-  headers: ${headersStr}` : ''}${hasBody ? `,
-  body: JSON.stringify({ key: "value" })` : ''}
-})
-  .then(res => res.json())
-  .then(data => console.log(data));`;
-        }
-
-        function generatePython(method, path, params) {
-            let url = currentBaseUrl + path;
-            const hasBody = ['post', 'put', 'patch'].includes(method);
-            const auth = typeof getAuthHeaders === 'function' ? getAuthHeaders() : null;
-
-            let headersArg = '';
-            if (auth) {
-                headersArg = `, headers={"${auth.header}": "${auth.value}"}`;
-            }
-
-            return `import requests
-
-response = requests.${method}("${url}"${hasBody ? ', json={"key": "value"}' : ''}${headersArg})
-print(response.json())`;
-        }
-
-        function exportMarkdown() {
-            if (!currentSpec) return;
-            const info = currentSpec.info || {};
-            let md = `# ${info.title || 'API'}\n\n${info.description || ''}\n\n**Version:** ${info.version || '1.0.0'}\n\n## Endpoints\n\n`;
-
-            for (const [path, methods] of Object.entries(currentSpec.paths || {})) {
-                for (const [method, details] of Object.entries(methods)) {
-                    if (['get', 'post', 'put', 'patch', 'delete'].includes(method)) {
-                        md += `### ${method.toUpperCase()} ${path}\n\n${details.summary || ''}\n\n`;
-                    }
-                }
-            }
-
-            const blob = new Blob([md], { type: 'text/markdown' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'api-documentation.md';
-            a.click();
-            showToast('Markdown exported!');
-        }
-
-        function escapeHtml(str) {
-            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        }
-
-        window.showSnippet = function (btn, id) {
-            const parent = btn.closest('.code-snippets');
-            parent.querySelectorAll('.snippet-tab').forEach(t => t.classList.remove('active'));
-            parent.querySelectorAll('.snippet-code').forEach(c => c.style.display = 'none');
-            btn.classList.add('active');
-            document.getElementById(id).style.display = 'block';
-        };
-
-        window.copySnippet = function (id) {
-            const code = document.getElementById(id).textContent.replace('Copy', '').trim();
-            navigator.clipboard.writeText(code);
-            showToast('Code copied!');
-        };
-
-        window.copyPath = function (path) {
-            navigator.clipboard.writeText(currentBaseUrl + path);
-            showToast('URL copied!');
-        };
-
-        function showError(msg) { errorMessage.textContent = msg; errorMessage.style.display = 'block'; }
-        function hideError() { errorMessage.style.display = 'none'; }
-        function showLoading() { loading.classList.add('visible'); apiDocs.classList.remove('visible'); }
-        function hideLoading() { loading.classList.remove('visible'); }
         function showToast(msg) {
             toast.textContent = msg;
             toast.style.display = 'block';
             setTimeout(() => { toast.style.display = 'none'; }, 2000);
         }
 
-        // ==========================================
-        // NEW FEATURES
-        // ==========================================
-
-        // Authentication handling
-        const authType = document.getElementById('authType');
-        const bearerField = document.getElementById('bearerField');
-        const bearerToken = document.getElementById('bearerToken');
-        const apiKeyNameField = document.getElementById('apiKeyNameField');
-        const apiKeyName = document.getElementById('apiKeyName');
-        const apiKeyValueField = document.getElementById('apiKeyValueField');
-        const apiKeyValue = document.getElementById('apiKeyValue');
-
-        authType.addEventListener('change', () => {
-            bearerField.style.display = 'none';
-            apiKeyNameField.style.display = 'none';
-            apiKeyValueField.style.display = 'none';
-
-            if (authType.value === 'bearer') {
-                bearerField.style.display = 'block';
-            } else if (authType.value === 'apikey') {
-                apiKeyNameField.style.display = 'block';
-                apiKeyValueField.style.display = 'block';
-            }
-        });
-
-        // Get current auth headers
-        function getAuthHeaders() {
-            if (authType.value === 'bearer' && bearerToken.value.trim()) {
-                return { header: 'Authorization', value: `Bearer ${bearerToken.value.trim()} ` };
-            } else if (authType.value === 'apikey' && apiKeyValue.value.trim()) {
-                return { header: apiKeyName.value.trim() || 'X-API-Key', value: apiKeyValue.value.trim() };
-            }
-            return null;
-        }
-
-
-        // Validation panel functionality (validation runs automatically now)
-        const validationPanel = document.getElementById('validationPanel');
-        const validationContent = document.getElementById('validationContent');
-        const closeValidation = document.getElementById('closeValidation');
-
-        closeValidation.addEventListener('click', () => {
-            validationPanel.style.display = 'none';
-        });
-
-        function runValidation(spec) {
-            const issues = [];
-
-            // Check for missing info.description
-            if (!spec.info?.description) {
-                issues.push({ type: 'warning', path: 'info.description', message: 'Missing API description' });
-            }
-
-            // Check paths
-            const paths = spec.paths || {};
-            for (const [path, methods] of Object.entries(paths)) {
-                for (const [method, details] of Object.entries(methods)) {
-                    if (!['get', 'post', 'put', 'patch', 'delete'].includes(method)) continue;
-
-                    // Check for deprecated
-                    if (details.deprecated) {
-                        issues.push({ type: 'info', path: `${method.toUpperCase()} ${path} `, message: 'Deprecated endpoint' });
-                    }
-
-                    // Check response descriptions
-                    const responses = details.responses || {};
-                    for (const [code, resp] of Object.entries(responses)) {
-                        if (!resp.description) {
-                            issues.push({ type: 'warning', path: `${method.toUpperCase()} ${path} → ${code} `, message: 'Missing response description' });
-                        }
-                    }
-
-                    // Check parameter types
-                    const params = details.parameters || [];
-                    for (const param of params) {
-                        if (!param.schema?.type && !param.type) {
-                            issues.push({ type: 'warning', path: `${method.toUpperCase()} ${path} → ${param.name} `, message: 'Missing parameter type' });
-                        }
-                    }
-                }
-            }
-
-            if (issues.length > 0) {
-                // Check if any deprecated endpoints exist
-                const hasDeprecated = issues.some(i => i.message === 'Deprecated endpoint');
-                const shouldAutoOpen = issues.length >= 3 || hasDeprecated;
-
-                validationContent.innerHTML = issues.map(issue => `
-                    <div class="validation-item">
-                        <span class="validation-icon">${issue.type === 'warning' ? '⚠️' : 'ℹ️'}</span>
-                        <div>
-                            <div class="validation-path">${issue.path}</div>
-                            <div class="validation-message">${issue.message}</div>
-                        </div>
-                    </div>
-                `).join('');
-
-                if (shouldAutoOpen) {
-                    // Auto-open for significant issues
-                    validationPanel.style.display = 'block';
-                } else {
-                    // Minor issues - show toast, keep panel collapsed
-                    validationPanel.style.display = 'none';
-                    showToast(`✅ Spec validated — ${issues.length} minor issue${issues.length > 1 ? 's' : ''} found`);
-                }
-            } else {
-                // No issues at all
-                validationContent.innerHTML = '<div class="validation-item"><span>✅</span><div class="validation-message">No issues found! Your spec looks good.</div></div>';
-                validationPanel.style.display = 'none';
-                showToast('✅ Spec validated — no issues found');
-            }
-        }
-
-        // Share Link functionality with compression
-        const shareLinkBtn = document.getElementById('shareLinkBtn');
-        const MAX_URL_LENGTH = 2000; // Safe limit for most browsers and platforms
-
-        shareLinkBtn.addEventListener('click', () => {
-            if (!currentSpec) {
-                showToast('Please load a spec first');
-                return;
-            }
-
-            try {
-                const specJson = JSON.stringify(currentSpec);
-
-                // Use LZ-String compression for smaller URLs
-                const compressed = LZString.compressToEncodedURIComponent(specJson);
-                const shareUrl = `${window.location.origin}${window.location.pathname}#lz=${compressed}`;
-
-                const isTooLong = shareUrl.length > MAX_URL_LENGTH;
-                const warningHtml = isTooLong ? `
-                    <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 0.75rem; margin-bottom: 1rem; color: #b45309;">
-                        <strong>⚠️ Large Spec Warning:</strong> This URL is ${shareUrl.length.toLocaleString()} characters. 
-                        Some platforms (Slack, Discord, Twitter) may truncate it. Consider copying the raw JSON instead.
-                    </div>
-                ` : '';
-
-                const copyJsonBtn = isTooLong ? `<button class="sample-btn" id="copyRawJson">📄 Copy Raw JSON</button>` : '';
-
-                // Create modal
-                const modal = document.createElement('div');
-                modal.className = 'share-modal';
-                modal.innerHTML = `
-                    <div class="share-modal-content">
-                        <div class="share-modal-title">🔗 Share This Spec</div>
-                        ${warningHtml}
-                        <input type="text" class="share-url-input" value="${shareUrl}" readonly>
-                        <div class="share-disclaimer">
-                            <strong>🔒 Privacy Note:</strong> The spec is compressed and encoded in the URL—never stored on our servers.
-                            ${isTooLong ? '' : `<br><span style="color: var(--color-text-secondary);">URL length: ${shareUrl.length.toLocaleString()} characters (compressed from ${specJson.length.toLocaleString()})</span>`}
-                        </div>
-                        <div class="share-buttons">
-                            <button class="secondary-btn" id="closeShareModal">Cancel</button>
-                            ${copyJsonBtn}
-                            <button class="parse-btn" id="copyShareUrl">📋 Copy URL</button>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(modal);
-
-                const urlInput = modal.querySelector('.share-url-input');
-                urlInput.select();
-
-                modal.querySelector('#closeShareModal').addEventListener('click', () => modal.remove());
-                modal.querySelector('#copyShareUrl').addEventListener('click', () => {
-                    navigator.clipboard.writeText(shareUrl);
-                    showToast('Share URL copied!');
-                    modal.remove();
-                });
-
-                if (isTooLong) {
-                    modal.querySelector('#copyRawJson').addEventListener('click', () => {
-                        navigator.clipboard.writeText(specJson);
-                        showToast('Raw JSON copied! Share via file or paste.');
-                        modal.remove();
-                    });
-                }
-
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) modal.remove();
-                });
-            } catch (e) {
-                showToast('Failed to generate share link');
-            }
-        });
-
-        // Check for shared spec on page load (support both old and new formats)
-        function loadFromHash() {
-            const hash = window.location.hash;
-
-            // New compressed format
-            if (hash.startsWith('#lz=')) {
-                try {
-                    const compressed = hash.substring(4);
-                    const specJson = LZString.decompressFromEncodedURIComponent(compressed);
-                    if (specJson) {
-                        specInput.value = specJson;
-                        parseSpec(specJson);
-                        showToast('Shared spec loaded!');
-                    }
-                } catch (e) {
-                    console.error('Failed to load compressed spec:', e);
-                }
-            }
-            // Legacy Base64 format (backwards compatibility)
-            else if (hash.startsWith('#spec=')) {
-                try {
-                    const encoded = hash.substring(6);
-                    const specJson = decodeURIComponent(escape(atob(encoded)));
-                    specInput.value = specJson;
-                    parseSpec(specJson);
-                    showToast('Shared spec loaded!');
-                } catch (e) {
-                    console.error('Failed to load shared spec:', e);
-                }
-            }
-        }
-        loadFromHash();
-
-        // Validate JSON button handler
-        const validateJsonBtn = document.getElementById('validateJsonBtn');
-        if (validateJsonBtn) {
-            validateJsonBtn.addEventListener('click', () => {
-                const content = specInput.value.trim();
-                // Save to localStorage so index.html can pick it up
-                if (content) {
-                    localStorage.setItem('jsonFormatterPayload', content);
-                } else {
-                    // Clear any stale data if sending empty content
-                    localStorage.removeItem('jsonFormatterPayload');
-                }
-            });
-        }
-
-        // Sticky toolbar
-        const mainToolbar = document.getElementById('mainToolbar');
-        const inputSection = document.querySelector('.input-section');
-
-        function handleScroll() {
-            if (!inputSection || !mainToolbar) return;
-            const inputBottom = inputSection.getBoundingClientRect().bottom;
-            if (inputBottom < 50 && apiDocs.classList.contains('visible')) {
-                mainToolbar.classList.add('sticky');
-            } else {
-                mainToolbar.classList.remove('sticky');
-            }
-        }
-        window.addEventListener('scroll', handleScroll, { passive: true });
-
-        // Endpoint counter
-        function updateEndpointCounter(visible, total) {
-            const counter = document.getElementById('endpointCounter');
-            if (counter) {
-                counter.textContent = `${visible} / ${total} endpoints`;
-            }
-        }
-
-        // LocalStorage for expanded state
-        const EXPANDED_STATE_KEY = 'swagger_viewer_expanded';
-
-        function saveExpandedState() {
-            const expanded = [];
-            document.querySelectorAll('.endpoint-details.open').forEach(el => {
-                expanded.push(el.id);
-            });
-            localStorage.setItem(EXPANDED_STATE_KEY, JSON.stringify(expanded));
-        }
-
-        function restoreExpandedState() {
-            try {
-                const expanded = JSON.parse(localStorage.getItem(EXPANDED_STATE_KEY) || '[]');
-                expanded.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.classList.add('open');
-                });
-            } catch (e) { }
-        }
-
-        // Keyboard navigation for endpoints
-        document.addEventListener('keydown', (e) => {
-            if (e.target.closest('.endpoint-header')) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    e.target.click();
-                }
-            }
-            // FAQ keyboard navigation
-            if (e.target.closest('.faq-question')) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    const faqItem = e.target.closest('.faq-item');
-                    faqItem.classList.toggle('open');
-                    const isOpen = faqItem.classList.contains('open');
-                    e.target.setAttribute('aria-expanded', isOpen);
-                }
-            }
-            // Schema header keyboard navigation
-            if (e.target.closest('.schema-header')) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    e.target.click();
-                }
-            }
-        });
-
-        // Initialize FAQ items with accessibility attributes
+        // FAQ accessibility
         document.querySelectorAll('.faq-question').forEach((faq, index) => {
             faq.setAttribute('tabindex', '0');
             faq.setAttribute('role', 'button');
             faq.setAttribute('aria-expanded', 'false');
-            faq.setAttribute('aria-controls', `faq-answer-${index}`);
-            const answer = faq.nextElementSibling;
-            if (answer) {
-                answer.setAttribute('id', `faq-answer-${index}`);
-                answer.setAttribute('role', 'region');
-            }
-            // Update onclick to also update aria-expanded
+            faq.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    faq.click();
+                }
+            });
             faq.addEventListener('click', function () {
                 const isOpen = this.parentElement.classList.contains('open');
                 this.setAttribute('aria-expanded', isOpen);
             });
         });
-
-        // Override endpoint toggle to save state
-        window.toggleEndpoint = function (id) {
-            const el = document.getElementById(id);
-            if (el) {
-                el.classList.toggle('open');
-                // Update aria-expanded on header
-                const header = el.previousElementSibling;
-                if (header && header.classList.contains('endpoint-header')) {
-                    header.setAttribute('aria-expanded', el.classList.contains('open'));
-                }
-                saveExpandedState();
-            }
-        };
     });
 </script>
 {% endblock %}
