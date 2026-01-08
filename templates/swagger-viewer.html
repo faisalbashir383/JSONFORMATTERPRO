@@ -1420,6 +1420,22 @@ Example:
                 this.setAttribute('aria-expanded', isOpen);
             });
         });
+
+        // Check if coming from Mock API Generator with a spec to auto-load
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('from') === 'mock-api') {
+            const mockApiSpec = localStorage.getItem('mockApiSwaggerSpec');
+            if (mockApiSpec) {
+                specInput.value = mockApiSpec;
+                // Auto-parse after a short delay to let UI settle
+                setTimeout(() => {
+                    parseSpec(mockApiSpec);
+                    showToast('Mock API spec loaded from Mock API Generator!');
+                }, 500);
+                // Clean up localStorage
+                localStorage.removeItem('mockApiSwaggerSpec');
+            }
+        }
     });
 </script>
 {% endblock %}

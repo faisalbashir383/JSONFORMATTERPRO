@@ -172,8 +172,6 @@ template variables, latency simulation & error testing. No signup - start now!{%
 {% endblock %}
 
 {% block extra_css %}
-<!-- Prism.js CSS for syntax highlighting -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 <style>
     .tool-header {
         text-align: center;
@@ -824,32 +822,8 @@ template variables, latency simulation & error testing. No signup - start now!{%
                     <button id="resetBtn" class="action-btn">Reset</button>
                 </div>
             </div>
-            <div class="code-editor-container"
-                style="position: relative; height: 350px; border-radius: var(--radius-md); overflow: hidden;">
-                <!-- Highlighted Backdrop -->
-                <pre class="code-highlight-backdrop"
-                    style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding: 1rem; overflow: auto; background: #2d2d2d; border: 1px solid var(--color-border); border-radius: var(--radius-md); pointer-events: none;"><code id="highlightedCode" class="language-json" style="font-family: 'Fira Code', 'Monaco', 'Consolas', monospace; font-size: 0.875rem; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word;"></code></pre>
-                <!-- Editable Textarea -->
-                <textarea id="responseTemplate" class="response-textarea code-editor-textarea"
-                    style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding: 1rem; width: 100%; height: 100%; resize: none; background: transparent; color: transparent; caret-color: white; font-family: 'Fira Code', 'Monaco', 'Consolas', monospace; font-size: 0.875rem; line-height: 1.6; border: 1px solid transparent; border-radius: var(--radius-md); outline: none; overflow: auto; white-space: pre-wrap; word-wrap: break-word;"
-                    spellcheck="false" placeholder="Enter your JSON response template...">{
-  "success": true,
-  "data": [
-    {
-      "id": "{{uuid}}",
-      "firstName": "{{firstName}}",
-      "lastName": "{{lastName}}",
-      "email": "{{email}}",
-      "avatar": "{{avatar}}",
-      "createdAt": "{{isoDate}}"
-    }
-  ],
-  "meta": {
-    "total": {{number:100}},
-    "page": 1,
-    "limit": 10
-  }
-}</textarea>
+            <div id="monacoEditorContainer"
+                style="height: 350px; border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden;">
             </div>
         </div>
 
@@ -860,40 +834,78 @@ template variables, latency simulation & error testing. No signup - start now!{%
             </div>
             <div class="variables-section">
                 <div class="variable-grid" id="variableGrid">
-                    <div class="variable-chip" data-var="{{uuid}}">{{uuid}}<span class="insert-icon">+</span></div>
-                    <div class="variable-chip" data-var="{{firstName}}">{{firstName}}<span class="insert-icon">+</span>
+                    <div class="variable-chip" data-var="&quot;{{uuid}}&quot;">{{uuid}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{firstName}}&quot;">{{firstName}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{lastName}}&quot;">{{lastName}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{fullName}}&quot;">{{fullName}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{email}}&quot;">{{email}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{phone}}&quot;">{{phone}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{avatar}}&quot;">{{avatar}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{username}}&quot;">{{username}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{company}}&quot;">{{company}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{jobTitle}}&quot;">{{jobTitle}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{street}}&quot;">{{street}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{city}}&quot;">{{city}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{country}}&quot;">{{country}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{zipCode}}&quot;">{{zipCode}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{isoDate}}&quot;">{{isoDate}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{date}}&quot;" title="YYYY-MM-DD">{{date}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{datetime}}&quot;">{{datetime}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{time}}&quot;" title="HH:MM:SS">{{time}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="{{boolean}}" title="No quotes (boolean)">{{boolean}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="{{number:100}}" title="No quotes (number)">{{number:N}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="{{number:1,100}}" title="No quotes (number)">
+                        {{number:min,max}}<span class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="{{float:1,100}}" title="No quotes (decimal)">
+                        {{float:min,max}}<span class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="{{percentage}}" title="No quotes (number)">{{percentage}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{oneOf:option1,option2,option3}}&quot;"
+                        title="Random choice (string)">{{oneOf:...}}<span class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="{{id}}" title="No quotes (number)">{{id}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{slug}}&quot;">{{slug}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{url}}&quot;">{{url}}<span class="insert-icon">+</span>
                     </div>
-                    <div class="variable-chip" data-var="{{lastName}}">{{lastName}}<span class="insert-icon">+</span>
-                    </div>
-                    <div class="variable-chip" data-var="{{fullName}}">{{fullName}}<span class="insert-icon">+</span>
-                    </div>
-                    <div class="variable-chip" data-var="{{email}}">{{email}}<span class="insert-icon">+</span></div>
-                    <div class="variable-chip" data-var="{{phone}}">{{phone}}<span class="insert-icon">+</span></div>
-                    <div class="variable-chip" data-var="{{avatar}}">{{avatar}}<span class="insert-icon">+</span></div>
-                    <div class="variable-chip" data-var="{{username}}">{{username}}<span class="insert-icon">+</span>
-                    </div>
-                    <div class="variable-chip" data-var="{{company}}">{{company}}<span class="insert-icon">+</span>
-                    </div>
-                    <div class="variable-chip" data-var="{{jobTitle}}">{{jobTitle}}<span class="insert-icon">+</span>
-                    </div>
-                    <div class="variable-chip" data-var="{{street}}">{{street}}<span class="insert-icon">+</span></div>
-                    <div class="variable-chip" data-var="{{city}}">{{city}}<span class="insert-icon">+</span></div>
-                    <div class="variable-chip" data-var="{{country}}">{{country}}<span class="insert-icon">+</span>
-                    </div>
-                    <div class="variable-chip" data-var="{{zipCode}}">{{zipCode}}<span class="insert-icon">+</span>
-                    </div>
-                    <div class="variable-chip" data-var="{{isoDate}}">{{isoDate}}<span class="insert-icon">+</span>
-                    </div>
-                    <div class="variable-chip" data-var="{{pastDate}}">{{pastDate}}<span class="insert-icon">+</span>
-                    </div>
-                    <div class="variable-chip" data-var="{{boolean}}">{{boolean}}<span class="insert-icon">+</span>
-                    </div>
-                    <div class="variable-chip" data-var="{{number:100}}">{{number:N}}<span class="insert-icon">+</span>
-                    </div>
-                    <div class="variable-chip" data-var="{{lorem:20}}">{{lorem:N}}<span class="insert-icon">+</span>
-                    </div>
-                    <div class="variable-chip" data-var="{{imageUrl}}">{{imageUrl}}<span class="insert-icon">+</span>
-                    </div>
+                    <div class="variable-chip" data-var="&quot;{{sentence}}&quot;">{{sentence}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{paragraph}}&quot;">{{paragraph}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{lorem:20}}&quot;">{{lorem:N}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{color}}&quot;" title="Hex color code">{{color}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="{{price}}" title="No quotes (number)">{{price}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{creditCard}}&quot;">{{creditCard}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{ipAddress}}&quot;">{{ipAddress}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{macAddress}}&quot;">{{macAddress}}<span
+                            class="insert-icon">+</span></div>
+                    <div class="variable-chip" data-var="&quot;{{imageUrl}}&quot;">{{imageUrl}}<span
+                            class="insert-icon">+</span></div>
                 </div>
 
                 <!-- Custom Variables -->
@@ -903,15 +915,30 @@ template variables, latency simulation & error testing. No signup - start now!{%
                         <span style="font-size: 0.8rem; font-weight: 600; color: var(--color-primary);">➕ Add Custom
                             Variable</span>
                     </div>
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: flex-start;">
                         <input type="text" id="customVarName" placeholder="Variable name"
                             style="flex: 1; min-width: 100px; padding: 0.5rem 0.75rem; font-size: 0.85rem; background: var(--color-bg); color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--radius-sm);">
-                        <input type="text" id="customVarValue" placeholder="Value or values (comma separated)"
+                        <select id="customVarType"
+                            style="padding: 0.5rem 0.75rem; font-size: 0.85rem; background: var(--color-bg); color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--radius-sm); cursor: pointer;">
+                            <option value="single">Single Value</option>
+                            <option value="choice">Choice (oneOf)</option>
+                            <option value="array">Array</option>
+                        </select>
+                        <input type="text" id="customVarValue" placeholder="Value"
                             style="flex: 2; min-width: 150px; padding: 0.5rem 0.75rem; font-size: 0.85rem; background: var(--color-bg); color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--radius-sm);">
                         <button id="addCustomVarBtn"
                             style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; border: none; border-radius: var(--radius-sm); cursor: pointer; transition: all 200ms ease;">
                             Add
                         </button>
+                    </div>
+                    <!-- Hint messages -->
+                    <div id="customVarHint"
+                        style="display: none; margin-top: 0.5rem; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); font-size: 0.8rem;">
+                    </div>
+                    <!-- Format examples -->
+                    <div id="customVarFormatHelp"
+                        style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--color-text-secondary);">
+                        <span id="formatHelpText">Enter a single value for this variable</span>
                     </div>
                     <div id="customVarsList" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem;">
                     </div>
@@ -924,7 +951,7 @@ template variables, latency simulation & error testing. No signup - start now!{%
             <div class="panel-header">
                 <h2 class="panel-title">📡 Generated Endpoint</h2>
                 <div class="panel-actions">
-                    <button id="exportSwaggerBtn" class="action-btn">Export OpenAPI</button>
+                    <button id="exportSwaggerBtn" class="action-btn">📖 View in Swagger</button>
                 </div>
             </div>
             <div class="endpoint-display">
@@ -1585,7 +1612,63 @@ template variables, latency simulation & error testing. No signup - start now!{%
 {% endblock %}
 
 {% block extra_js %}
+<!-- Monaco Editor Loader -->
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
 {% verbatim %}
+<script>
+    // Initialize Monaco Editor
+    let monacoEditor = null;
+    const defaultTemplate = `{
+  "success": true,
+  "data": [
+    {
+      "id": "{{uuid}}",
+      "firstName": "{{firstName}}",
+      "lastName": "{{lastName}}",
+      "email": "{{email}}",
+      "avatar": "{{avatar}}",
+      "createdAt": "{{isoDate}}"
+    }
+  ],
+  "meta": {
+    "total": {{number:100}},
+    "page": 1,
+    "limit": 10
+  }
+}`;
+
+    require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+    require(['vs/editor/editor.main'], function () {
+        const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+
+        // Disable JSON validation to allow template variables like {{uuid}}, {{number:100}}
+        monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+            validate: false
+        });
+
+        monacoEditor = monaco.editor.create(document.getElementById('monacoEditorContainer'), {
+            value: defaultTemplate,
+            language: 'json',
+            theme: isDarkMode ? 'vs-dark' : 'vs',
+            automaticLayout: true,
+            minimap: { enabled: false },
+            fontSize: 14,
+            lineNumbers: 'on',
+            scrollBeyondLastLine: false,
+            wordWrap: 'on',
+            tabSize: 2,
+            insertSpaces: true,
+            formatOnPaste: true
+        });
+
+        // Watch for theme changes
+        const observer = new MutationObserver(() => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            monaco.editor.setTheme(isDark ? 'vs-dark' : 'vs');
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    });
+</script>
 <script>
     (function () {
         // DOM Elements
@@ -1597,7 +1680,22 @@ template variables, latency simulation & error testing. No signup - start now!{%
         const errorRateSlider = document.getElementById('errorRateSlider');
         const errorRateValue = document.getElementById('errorRateValue');
         const recordCount = document.getElementById('recordCount');
-        const responseTemplate = document.getElementById('responseTemplate');
+        // Monaco Editor wrapper - provides compatibility with old responseTemplate.value interface
+        const responseTemplate = {
+            get value() {
+                return monacoEditor ? monacoEditor.getValue() : defaultTemplate;
+            },
+            set value(val) {
+                if (monacoEditor) {
+                    monacoEditor.setValue(val);
+                }
+            },
+            focus() {
+                if (monacoEditor) monacoEditor.focus();
+            },
+            selectionStart: 0,
+            selectionEnd: 0
+        };
         const generatedResponse = document.getElementById('generatedResponse');
         const generateBtn = document.getElementById('generateBtn');
         const testEndpointBtn = document.getElementById('testEndpointBtn');
@@ -1943,10 +2041,10 @@ template variables, latency simulation & error testing. No signup - start now!{%
                 info: {
                     title: 'Mock API',
                     version: '1.0.0',
-                    description: 'Generated mock API specification'
+                    description: 'Generated mock API specification from Mock API Generator'
                 },
                 servers: [
-                    { url: 'https://api.mockendpoint.dev' }
+                    { url: window.location.origin }
                 ],
                 paths: {
                     [path]: {
@@ -1967,23 +2065,27 @@ template variables, latency simulation & error testing. No signup - start now!{%
                 }
             };
 
-            const blob = new Blob([JSON.stringify(openapi, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'openapi-spec.json';
-            a.click();
-            URL.revokeObjectURL(url);
+            // Store spec in localStorage and redirect to Swagger Viewer
+            localStorage.setItem('mockApiSwaggerSpec', JSON.stringify(openapi, null, 2));
+            window.open('/swagger-viewer/?from=mock-api', '_blank');
         }
 
-        // Insert variable into template
+        // Insert variable into template using Monaco Editor
         function insertVariable(variable) {
-            const cursorPos = responseTemplate.selectionStart;
-            const before = responseTemplate.value.substring(0, cursorPos);
-            const after = responseTemplate.value.substring(cursorPos);
-            responseTemplate.value = before + variable + after;
-            responseTemplate.focus();
-            responseTemplate.selectionStart = responseTemplate.selectionEnd = cursorPos + variable.length;
+            if (!monacoEditor) return;
+            const selection = monacoEditor.getSelection();
+            const range = new monaco.Range(
+                selection.startLineNumber,
+                selection.startColumn,
+                selection.endLineNumber,
+                selection.endColumn
+            );
+            monacoEditor.executeEdits('insert-variable', [{
+                range: range,
+                text: variable,
+                forceMoveMarkers: true
+            }]);
+            monacoEditor.focus();
         }
 
         // Event listeners
@@ -2010,39 +2112,96 @@ template variables, latency simulation & error testing. No signup - start now!{%
         httpMethod.addEventListener('change', updateEndpointDisplay);
         endpointPath.addEventListener('input', updateEndpointDisplay);
 
+        // Custom Variables - Type selector handler
+        const customVarType = document.getElementById('customVarType');
+        const customVarHint = document.getElementById('customVarHint');
+        const formatHelpText = document.getElementById('formatHelpText');
+
+        // Update placeholder and help text based on selected type
+        customVarType.addEventListener('change', () => {
+            const type = customVarType.value;
+            if (type === 'single') {
+                customVarValue.placeholder = 'Enter a value (e.g., active)';
+                formatHelpText.textContent = 'Enter a single value for this variable';
+            } else if (type === 'choice') {
+                customVarValue.placeholder = 'Enter options comma-separated (e.g., active,inactive,pending)';
+                formatHelpText.innerHTML = 'Will generate: <code style="background: var(--color-surface-alt); padding: 0.1rem 0.3rem; border-radius: 3px;">{{oneOf:option1,option2,...}}</code>';
+            } else if (type === 'array') {
+                customVarValue.placeholder = 'Enter items comma-separated (e.g., tag1,tag2,tag3)';
+                formatHelpText.innerHTML = 'Will generate an array: <code style="background: var(--color-surface-alt); padding: 0.1rem 0.3rem; border-radius: 3px;">["item1", "item2", ...]</code>';
+            }
+            customVarHint.style.display = 'none';
+        });
+
+        // Detect if user enters comma values without selecting choice type
+        customVarValue.addEventListener('input', () => {
+            const value = customVarValue.value;
+            const type = customVarType.value;
+
+            if (type === 'single' && value.includes(',')) {
+                customVarHint.style.display = 'block';
+                customVarHint.style.background = 'rgba(245, 158, 11, 0.15)';
+                customVarHint.style.color = '#f59e0b';
+                customVarHint.innerHTML = '💡 <strong>Tip:</strong> It looks like you entered multiple values. Did you mean to use <strong>Choice (oneOf)</strong> or <strong>Array</strong> type?';
+            } else {
+                customVarHint.style.display = 'none';
+            }
+        });
+
         // Custom Variables - Add button handler
         addCustomVarBtn.addEventListener('click', () => {
             const name = customVarName.value.trim();
             const value = customVarValue.value.trim();
+            const type = customVarType.value;
 
             if (!name) {
                 showToast('Please enter a variable name', 'warning');
                 return;
             }
             if (!value) {
-                showToast('Please enter a value or values', 'warning');
+                showToast('Please enter a value', 'warning');
                 return;
             }
 
-            // Parse values - if comma-separated, make array
-            const values = value.includes(',')
-                ? value.split(',').map(v => v.trim()).filter(v => v)
-                : value;
+            // Validate name (no spaces or special chars)
+            if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(name)) {
+                showToast('Variable name must start with a letter and contain only letters, numbers, and underscores', 'error');
+                return;
+            }
 
-            customVariables[name] = values;
+            let templateVar = '';
+            let displayName = '';
+
+            if (type === 'single') {
+                templateVar = value;
+                displayName = `${name}`;
+                customVariables[name] = value;
+            } else if (type === 'choice') {
+                // Format as {{oneOf:option1,option2,...}}
+                const options = value.split(',').map(v => v.trim()).filter(v => v).join(',');
+                templateVar = `{{oneOf:${options}}}`;
+                displayName = `${name} (choice)`;
+                customVariables[name] = { type: 'oneOf', options: options };
+            } else if (type === 'array') {
+                // Format as ["item1", "item2", ...]
+                const items = value.split(',').map(v => `"${v.trim()}"`).filter(v => v !== '""');
+                templateVar = `[${items.join(', ')}]`;
+                displayName = `${name} (array)`;
+                customVariables[name] = { type: 'array', items: items };
+            }
 
             // Create visual chip
             const chip = document.createElement('div');
             chip.className = 'variable-chip';
-            chip.setAttribute('data-var', `{{${name}}}`);
-            chip.innerHTML = `{{${name}}}<span class="delete-icon" style="margin-left: 0.5rem; color: #ef4444; cursor: pointer;">×</span>`;
-            chip.style.background = 'rgba(139, 92, 246, 0.15)';
-            chip.style.borderColor = '#8b5cf6';
+            chip.setAttribute('data-var', templateVar);
+            chip.innerHTML = `${displayName}<span class="delete-icon" style="margin-left: 0.5rem; color: #ef4444; cursor: pointer;">×</span>`;
+            chip.style.background = type === 'choice' ? 'rgba(16, 185, 129, 0.15)' : type === 'array' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(139, 92, 246, 0.15)';
+            chip.style.borderColor = type === 'choice' ? '#10b981' : type === 'array' ? '#3b82f6' : '#8b5cf6';
 
             // Click to insert
             chip.addEventListener('click', (e) => {
                 if (!e.target.classList.contains('delete-icon')) {
-                    insertVariable(`{{${name}}}`);
+                    insertVariable(templateVar);
                 }
             });
 
@@ -2058,6 +2217,9 @@ template variables, latency simulation & error testing. No signup - start now!{%
             // Clear inputs
             customVarName.value = '';
             customVarValue.value = '';
+            customVarHint.style.display = 'none';
+
+            showToast(`Variable "${name}" added! Click to insert.`, 'success');
         });
 
         // Variable chips click handlers
@@ -2361,61 +2523,8 @@ template variables, latency simulation & error testing. No signup - start now!{%
         // Initial display update
         updateEndpointDisplay();
 
-        // === Prism.js Syntax Highlighting ===
-        const highlightedCode = document.getElementById('highlightedCode');
-
-        function updateHighlighting() {
-            const code = responseTemplate.value;
-            // Escape HTML entities and highlight template variables
-            let escaped = code
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;');
-
-            // Highlight {{variable}} patterns with special color
-            escaped = escaped.replace(/(\{\{[^}]+\}\})/g, '<span style="color: #f59e0b; font-weight: 600;">$1</span>');
-
-            highlightedCode.innerHTML = escaped;
-
-            // Apply Prism highlighting if available
-            if (window.Prism) {
-                Prism.highlightElement(highlightedCode);
-            }
-        }
-
-        // Sync highlighting on input
-        responseTemplate.addEventListener('input', updateHighlighting);
-        responseTemplate.addEventListener('scroll', function () {
-            const backdrop = document.querySelector('.code-highlight-backdrop');
-            if (backdrop) {
-                backdrop.scrollTop = this.scrollTop;
-                backdrop.scrollLeft = this.scrollLeft;
-            }
-        });
-
-        // Initial highlight
-        updateHighlighting();
+        // Monaco Editor handles syntax highlighting automatically
     })();
-</script>
-
-<!-- Prism.js for syntax highlighting -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-<script>
-    // Re-highlight after Prism.js loads
-    if (window.Prism) {
-        const highlightedCode = document.getElementById('highlightedCode');
-        const responseTemplate = document.getElementById('responseTemplate');
-        if (highlightedCode && responseTemplate) {
-            let escaped = responseTemplate.value
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/(\{\{[^}]+\}\})/g, '<span style="color: #f59e0b; font-weight: 600;">$1</span>');
-            highlightedCode.innerHTML = escaped;
-            Prism.highlightElement(highlightedCode);
-        }
-    }
 </script>
 {% endverbatim %}
 {% endblock %}

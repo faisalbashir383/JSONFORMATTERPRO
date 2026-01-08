@@ -31,9 +31,9 @@ class SecurityHeadersMiddleware(MiddlewareMixin):
             csp_policy = (
                 "default-src 'self'; "
                 "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.google-analytics.com https://ajax.googleapis.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://esm.sh; "
-                "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; "
+                "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://fonts.googleapis.com; "
                 "img-src 'self' data: https: blob:; "
-                "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
+                "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; "
                 "connect-src 'self' https: wss: blob: http://ip-api.com https://cdn.jsdelivr.net https://esm.sh https://www.google-analytics.com https://ip-api.com https://pagead2.googlesyndication.com https://cdnjs.cloudflare.com https://www.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net; "
                 "frame-src 'self' https://www.google.com https://pagead2.googlesyndication.com https://www.googletagmanager.com; "
                 "worker-src 'self' blob: data: https://esm.sh; "

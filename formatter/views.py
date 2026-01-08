@@ -2611,6 +2611,8 @@ def process_template_variables(template_str):
     job_titles = ['Software Engineer', 'Product Manager', 'UX Designer', 'Data Scientist', 'DevOps Engineer']
     cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'San Francisco', 'Seattle']
     countries = ['United States', 'Canada', 'United Kingdom', 'Germany', 'France', 'Australia', 'Japan']
+    streets = ['Main St', 'Oak Ave', 'Park Blvd', 'Maple Dr', 'Cedar Ln', 'Elm St', 'Pine Rd']
+    words = ['lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit', 'sed', 'do', 'eiusmod', 'tempor', 'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna', 'aliqua']
     
     def gen_uuid():
         return str(secrets.token_hex(4)) + '-' + str(secrets.token_hex(2)) + '-4' + str(secrets.token_hex(1))[1:] + '-' + str(secrets.token_hex(2)) + '-' + str(secrets.token_hex(6))
@@ -2624,30 +2626,90 @@ def process_template_variables(template_str):
     def gen_phone():
         return f"+1 {random.randint(200,999)}-{random.randint(200,999)}-{random.randint(1000,9999)}"
     
+    def gen_username():
+        fn = random.choice(first_names).lower()
+        return f"{fn}{random.randint(10,999)}"
+    
+    def gen_slug():
+        return '-'.join(random.choices(words, k=random.randint(2,4)))
+    
+    def gen_paragraph():
+        sentences = random.randint(3, 6)
+        result = []
+        for _ in range(sentences):
+            sentence_words = random.randint(8, 15)
+            sentence = ' '.join(random.choices(words, k=sentence_words))
+            result.append(sentence.capitalize() + '.')
+        return ' '.join(result)
+    
+    def gen_sentence():
+        sentence_words = random.randint(8, 15)
+        sentence = ' '.join(random.choices(words, k=sentence_words))
+        return sentence.capitalize() + '.'
+    
+    def gen_url():
+        paths = ['products', 'users', 'posts', 'articles', 'pages', 'items']
+        return f"https://example.com/{random.choice(paths)}/{random.randint(1,9999)}"
+    
+    def gen_color():
+        return f"#{secrets.token_hex(3)}"
+    
+    def gen_credit_card():
+        return f"4{random.randint(100,999)} {random.randint(1000,9999)} {random.randint(1000,9999)} {random.randint(1000,9999)}"
+    
+    def gen_price():
+        return f"{random.randint(1, 999)}.{random.randint(0,99):02d}"
+    
+    def gen_ip():
+        return f"{random.randint(1,255)}.{random.randint(0,255)}.{random.randint(0,255)}.{random.randint(1,255)}"
+    
+    def gen_mac():
+        return ':'.join([secrets.token_hex(1) for _ in range(6)])
+    
     result = template_str
     result = re.sub(r'\{\{uuid\}\}', lambda m: gen_uuid(), result)
+    result = re.sub(r'\{\{id\}\}', lambda m: str(random.randint(1, 99999)), result)
     result = re.sub(r'\{\{firstName\}\}', lambda m: random.choice(first_names), result)
     result = re.sub(r'\{\{lastName\}\}', lambda m: random.choice(last_names), result)
     result = re.sub(r'\{\{fullName\}\}', lambda m: f"{random.choice(first_names)} {random.choice(last_names)}", result)
+    result = re.sub(r'\{\{username\}\}', lambda m: gen_username(), result)
     result = re.sub(r'\{\{email\}\}', lambda m: gen_email(), result)
     result = re.sub(r'\{\{phone\}\}', lambda m: gen_phone(), result)
     result = re.sub(r'\{\{company\}\}', lambda m: random.choice(companies), result)
     result = re.sub(r'\{\{jobTitle\}\}', lambda m: random.choice(job_titles), result)
+    result = re.sub(r'\{\{street\}\}', lambda m: f"{random.randint(100,9999)} {random.choice(streets)}", result)
     result = re.sub(r'\{\{city\}\}', lambda m: random.choice(cities), result)
     result = re.sub(r'\{\{country\}\}', lambda m: random.choice(countries), result)
     result = re.sub(r'\{\{isoDate\}\}', lambda m: (datetime.now() - timedelta(days=random.randint(0, 365))).isoformat(), result)
     result = re.sub(r'\{\{date\}\}', lambda m: (datetime.now() - timedelta(days=random.randint(0, 365))).strftime('%Y-%m-%d'), result)
     result = re.sub(r'\{\{datetime\}\}', lambda m: (datetime.now() - timedelta(days=random.randint(0, 365))).strftime('%Y-%m-%d %H:%M:%S'), result)
+    result = re.sub(r'\{\{time\}\}', lambda m: f"{random.randint(0,23):02d}:{random.randint(0,59):02d}:{random.randint(0,59):02d}", result)
     result = re.sub(r'\{\{boolean\}\}', lambda m: str(random.choice([True, False])).lower(), result)
     # Number with range: {{number:min,max}}
     result = re.sub(r'\{\{number:(\d+),(\d+)\}\}', lambda m: str(random.randint(int(m.group(1)), int(m.group(2)))), result)
     # Number with max only: {{number:max}}
     result = re.sub(r'\{\{number:(\d+)\}\}', lambda m: str(random.randint(0, int(m.group(1)))), result)
+    # Float with range: {{float:min,max}}
+    result = re.sub(r'\{\{float:(\d+),(\d+)\}\}', lambda m: f"{random.uniform(float(m.group(1)), float(m.group(2))):.2f}", result)
+    # Percentage
+    result = re.sub(r'\{\{percentage\}\}', lambda m: str(random.randint(0, 100)), result)
     # OneOf choice: {{oneOf:option1,option2,option3}}
     result = re.sub(r'\{\{oneOf:([^}]+)\}\}', lambda m: random.choice(m.group(1).split(',')), result)
     result = re.sub(r'\{\{avatar\}\}', lambda m: f"https://i.pravatar.cc/150?img={random.randint(1,70)}", result)
     result = re.sub(r'\{\{imageUrl\}\}', lambda m: f"https://picsum.photos/seed/{random.randint(1,1000)}/400/300", result)
     result = re.sub(r'\{\{zipCode\}\}', lambda m: str(random.randint(10000, 99999)), result)
+    result = re.sub(r'\{\{url\}\}', lambda m: gen_url(), result)
+    result = re.sub(r'\{\{slug\}\}', lambda m: gen_slug(), result)
+    result = re.sub(r'\{\{paragraph\}\}', lambda m: gen_paragraph(), result)
+    result = re.sub(r'\{\{sentence\}\}', lambda m: gen_sentence(), result)
+    result = re.sub(r'\{\{color\}\}', lambda m: gen_color(), result)
+    result = re.sub(r'\{\{hexColor\}\}', lambda m: gen_color(), result)
+    result = re.sub(r'\{\{creditCard\}\}', lambda m: gen_credit_card(), result)
+    result = re.sub(r'\{\{price\}\}', lambda m: gen_price(), result)
+    result = re.sub(r'\{\{ipAddress\}\}', lambda m: gen_ip(), result)
+    result = re.sub(r'\{\{macAddress\}\}', lambda m: gen_mac(), result)
+    # Lorem with word count: {{lorem:N}}
+    result = re.sub(r'\{\{lorem:(\d+)\}\}', lambda m: ' '.join(random.choices(words, k=int(m.group(1)))), result)
     
     return result
 
