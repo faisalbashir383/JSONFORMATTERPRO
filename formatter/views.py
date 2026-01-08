@@ -2636,8 +2636,15 @@ def process_template_variables(template_str):
     result = re.sub(r'\{\{city\}\}', lambda m: random.choice(cities), result)
     result = re.sub(r'\{\{country\}\}', lambda m: random.choice(countries), result)
     result = re.sub(r'\{\{isoDate\}\}', lambda m: (datetime.now() - timedelta(days=random.randint(0, 365))).isoformat(), result)
+    result = re.sub(r'\{\{date\}\}', lambda m: (datetime.now() - timedelta(days=random.randint(0, 365))).strftime('%Y-%m-%d'), result)
+    result = re.sub(r'\{\{datetime\}\}', lambda m: (datetime.now() - timedelta(days=random.randint(0, 365))).strftime('%Y-%m-%d %H:%M:%S'), result)
     result = re.sub(r'\{\{boolean\}\}', lambda m: str(random.choice([True, False])).lower(), result)
+    # Number with range: {{number:min,max}}
+    result = re.sub(r'\{\{number:(\d+),(\d+)\}\}', lambda m: str(random.randint(int(m.group(1)), int(m.group(2)))), result)
+    # Number with max only: {{number:max}}
     result = re.sub(r'\{\{number:(\d+)\}\}', lambda m: str(random.randint(0, int(m.group(1)))), result)
+    # OneOf choice: {{oneOf:option1,option2,option3}}
+    result = re.sub(r'\{\{oneOf:([^}]+)\}\}', lambda m: random.choice(m.group(1).split(',')), result)
     result = re.sub(r'\{\{avatar\}\}', lambda m: f"https://i.pravatar.cc/150?img={random.randint(1,70)}", result)
     result = re.sub(r'\{\{imageUrl\}\}', lambda m: f"https://picsum.photos/seed/{random.randint(1,1000)}/400/300", result)
     result = re.sub(r'\{\{zipCode\}\}', lambda m: str(random.randint(10000, 99999)), result)
