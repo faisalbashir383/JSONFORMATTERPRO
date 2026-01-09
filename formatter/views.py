@@ -3171,3 +3171,7 @@ def xsd_to_json_schema_example_page(request):
 def xsd_complextype_to_json_schema_page(request):
     """Render the XSD ComplexType Guide page"""
     return render(request, 'xsd-complextype-to-json-schema.html')
+
+def json_viewer_page(request):
+    """Render the JSON Viewer Online page"""
+    return render(request, 'json-viewer.html')

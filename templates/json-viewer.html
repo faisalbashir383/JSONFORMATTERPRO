@@ -1,0 +1,1637 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}JSON Viewer Online – Read & Explore JSON with Tree View{% endblock %}
+
+{% block meta_description %}Free JSON Viewer Online to read and explore JSON in an interactive tree view. Paste or upload JSON, format it, and convert single or double quotes instantly.{% endblock %}
+
+{% block canonical %}
+<link rel="canonical" href="https://jsonformatterspro.com/json-viewer/">
+{% endblock %}
+
+{% block extra_head %}
+<meta property="og:title" content="JSON Viewer Online – View, Explore & Read JSON Instantly">
+<meta property="og:description"
+    content="Free online JSON Viewer to view, read, and explore JSON data in a tree view. No signup required.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jsonformatterspro.com/json-viewer/">
+<meta name="robots" content="index, follow">
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "JSON Viewer Online",
+    "description": "Free online JSON Viewer to view, read, and explore JSON data in a structured tree format.",
+    "url": "https://jsonformatterspro.com/json-viewer/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://jsonformatterspro.com/json-viewer/"
+    }
+}
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "What is a JSON Viewer?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A JSON Viewer is a specialized web-based tool designed to help developers, data analysts, and students visualize JSON (JavaScript Object Notation) data in a readable, structured tree format." }
+        },
+        {
+            "@type": "Question",
+            "name": "Is this JSON Viewer free?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes, this Online JSON Viewer is 100% free with no usage limits." }
+        },
+        {
+            "@type": "Question",
+            "name": "Is my data safe?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. We prioritize your privacy. All JSON processing is performed locally in your browser using JavaScript. Your data is never sent to our servers." }
+        },
+        {
+            "@type": "Question",
+            "name": "Can I view large JSON files?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes, our tool uses the efficient Monaco Editor and optimized tree rendering to handle large JSON files smoothly without crashing your browser." }
+        }
+    ]
+}
+</script>
+{% endblock %}
+
+{% block navigation %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Visually hidden - accessible but not visible */
+    .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    /* Full Screen Layout - edge to edge */
+    .navbar {
+        display: none !important;
+    }
+
+    .main-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: none !important;
+        min-height: 100vh !important;
+    }
+
+    .json-viewer-wrapper {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+    .json-viewer-app {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        background: var(--color-bg);
+        overflow: hidden;
+    }
+
+    /* Header Toolbar */
+    .viewer-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.6rem 1rem;
+        background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-surface-alt) 100%);
+        border-bottom: 1px solid var(--color-border);
+        flex-wrap: wrap;
+        position: relative;
+        /* Ensure tooltips stack above editor */
+        z-index: 10;
+    }
+
+    .toolbar-group {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .toolbar-divider {
+        width: 1px;
+        height: 28px;
+        background: linear-gradient(180deg, transparent 0%, var(--color-border) 50%, transparent 100%);
+        margin: 0 0.6rem;
+    }
+
+    .tool-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.5rem 0.85rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        background: linear-gradient(180deg, var(--color-bg) 0%, rgba(0, 0, 0, 0.02) 100%);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        white-space: nowrap;
+        position: relative;
+        /* overflow: hidden; - Removed to allow tooltips to show outside */
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Tooltip Styles */
+    .tool-btn[data-tooltip] {
+        position: relative;
+    }
+
+    .tool-btn[data-tooltip]:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: -35px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0.3rem 0.6rem;
+        background: rgba(0, 0, 0, 0.85);
+        color: white;
+        font-size: 0.75rem;
+        border-radius: 4px;
+        white-space: nowrap;
+        pointer-events: none;
+        z-index: 1000;
+        opacity: 0;
+        animation: fadeIn 0.2s forwards;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+
+    .tool-btn::before {
+        content: '';
+        display: none;
+        /* Disabled shine effect since it requires overflow:hidden which breaks tooltips */
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 400ms ease;
+    }
+
+    .tool-btn:hover::before {
+        left: 100%;
+    }
+
+    .tool-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    .tool-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .tool-btn .icon {
+        font-size: 1rem;
+        transition: transform 200ms ease;
+    }
+
+    .tool-btn:hover .icon {
+        transform: scale(1.15);
+    }
+
+    .tool-btn.primary {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    }
+
+    .tool-btn.primary:hover {
+        background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+        color: white;
+    }
+
+    .tool-btn.success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+    }
+
+    .tool-btn.success:hover {
+        background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+        color: white;
+    }
+
+    .tool-btn.active {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+    }
+
+    .tool-btn.warning {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+    }
+
+    .tool-btn.warning:hover {
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+        color: white;
+    }
+
+    .tool-btn.icon-only {
+        padding: 0.5rem;
+        min-width: 36px;
+        min-height: 36px;
+    }
+
+    .tool-btn.icon-only svg {
+        transition: transform 200ms ease;
+    }
+
+    .tool-btn.icon-only:hover svg {
+        transform: scale(1.15);
+    }
+
+    .toolbar-right {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Hide mobile-only elements on desktop */
+    .mobile-menu-btn {
+        display: none;
+    }
+
+    .mobile-drawer,
+    .mobile-drawer-overlay {
+        display: none;
+    }
+
+    .search-input {
+        width: 180px;
+        padding: 0.4rem 0.65rem;
+        font-size: 0.78rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+    }
+
+    .stats-text {
+        font-size: 0.72rem;
+        color: var(--color-text-secondary);
+        padding: 0 0.5rem;
+    }
+
+    /* Theme Toggle */
+    .theme-icon {
+        font-size: 1.1rem;
+    }
+
+    .dark-icon {
+        display: none;
+    }
+
+    [data-theme="dark"] .light-icon {
+        display: none;
+    }
+
+    [data-theme="dark"] .dark-icon {
+        display: inline;
+    }
+
+    /* Editor Container */
+    .editor-main {
+        flex: 1;
+        display: flex;
+        overflow: hidden;
+        min-height: 0;
+    }
+
+    /* Monaco Editor Container */
+    .editor-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+    }
+
+    #monacoContainer {
+        flex: 1;
+        min-height: 0;
+    }
+
+    /* Fallback Textarea - hidden when Monaco is active */
+    .json-textarea {
+        display: none;
+    }
+
+    /* Tree Panel (hidden by default) */
+    .tree-panel {
+        flex: 1;
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        border-left: 1px solid var(--color-border);
+        background: var(--color-bg);
+    }
+
+    .tree-panel.visible {
+        display: flex;
+    }
+
+    .tree-content {
+        flex: 1;
+        overflow: auto;
+        padding: 1rem;
+        font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+        font-size: 0.85rem;
+        line-height: 1.7;
+    }
+
+    /* Tree Nodes */
+    .tree-node {
+        padding-left: 1.25rem;
+    }
+
+    .tree-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 0.15rem 0.4rem;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+    }
+
+    .tree-item:hover {
+        background: rgba(59, 130, 246, 0.08);
+    }
+
+    .tree-item:hover .copy-btn {
+        opacity: 1;
+    }
+
+    .tree-toggle {
+        width: 14px;
+        flex-shrink: 0;
+        color: var(--color-text-secondary);
+        font-size: 0.6rem;
+        cursor: pointer;
+    }
+
+    .tree-key {
+        color: #9333ea;
+        font-weight: 500;
+    }
+
+    .tree-colon {
+        color: var(--color-text-secondary);
+        margin: 0 0.3rem;
+    }
+
+    .tree-value.string {
+        color: #16a34a;
+    }
+
+    .tree-value.number {
+        color: #2563eb;
+    }
+
+    .tree-value.boolean {
+        color: #ea580c;
+    }
+
+    .tree-value.null {
+        color: #dc2626;
+        font-style: italic;
+    }
+
+    .tree-value.bracket {
+        color: var(--color-text-secondary);
+    }
+
+    .tree-info {
+        font-size: 0.65rem;
+        color: var(--color-text-secondary);
+        margin-left: 0.4rem;
+    }
+
+    .copy-btn {
+        opacity: 0;
+        margin-left: auto;
+        padding: 0.1rem 0.3rem;
+        font-size: 0.6rem;
+        background: rgba(59, 130, 246, 0.15);
+        color: #3b82f6;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    /* Status Bar */
+    .status-bar {
+        margin-top: -31px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.4rem 1rem;
+        background: var(--color-surface);
+        border-top: 1px solid var(--color-border);
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+    }
+
+    /* SEO content */
+    .seo-content {
+        margin-top: 0;
+    }
+
+    .status-path {
+        font-family: monospace;
+        color: var(--color-primary);
+    }
+
+    /* Error */
+    .error-bar {
+        padding: 0.5rem 1rem;
+        background: rgba(220, 38, 38, 0.1);
+        border-bottom: 1px solid rgba(220, 38, 38, 0.2);
+        color: #dc2626;
+        font-size: 0.8rem;
+        display: none;
+    }
+
+    .error-bar.visible {
+        display: block;
+    }
+
+    /* Toast */
+    .toast {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        padding: 0.6rem 1rem;
+        background: #10b981;
+        color: white;
+        border-radius: var(--radius-md);
+        font-size: 0.85rem;
+        opacity: 0;
+        transform: translateY(1rem);
+        transition: all 200ms ease;
+        z-index: 1000;
+    }
+
+    .toast.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .file-input {
+        display: none;
+    }
+
+    .seo-content {
+        padding: 2rem;
+        margin: 0 auto;
+        background: var(--color-bg);
+        border-top: 1px solid var(--color-border);
+    }
+
+
+    .seo-content h2 {
+        font-size: 1.25rem;
+        margin: 1.5rem 0 0.75rem 0;
+        color: var(--color-text);
+    }
+
+    .seo-content h2:first-child {
+        margin-top: 0;
+    }
+
+    .seo-content p,
+    .seo-content li {
+        color: #4b5563;
+        /* Darker gray for better contrast (was var(--color-text-secondary)) */
+        line-height: 1.6;
+        margin-bottom: 0.75rem;
+    }
+
+    [data-theme="dark"] .seo-content p,
+    [data-theme="dark"] .seo-content li {
+        color: #9ca3af;
+        /* Lighter gray for dark mode contrast */
+    }
+
+    /* Related Tools Grid */
+    .internal-links-section {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .internal-links-section h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .internal-links-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .related-tool-card {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .related-tool-card:hover {
+        border-color: var(--color-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .tool-icon {
+        font-size: 1.25rem;
+    }
+
+    .tool-name {
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+
+        /* Mobile Toolbar - show only essential buttons */
+        .viewer-toolbar {
+            padding: 0.5rem;
+            gap: 0.3rem;
+        }
+
+        .toolbar-group {
+            display: none;
+        }
+
+        .toolbar-divider {
+            display: none;
+        }
+
+        .toolbar-right {
+            margin-left: auto;
+        }
+
+        /* Show only home, menu toggle, and essential right items */
+        .home-btn,
+        .mobile-menu-btn,
+        .toolbar-right {
+            display: flex !important;
+        }
+
+        /* Enable mobile drawer */
+        .mobile-drawer,
+        .mobile-drawer-overlay {
+            display: flex;
+        }
+
+        /* Mobile Drawer */
+        .mobile-drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9998;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 300ms ease, visibility 300ms ease;
+        }
+
+        .mobile-drawer-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-drawer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--color-surface);
+            z-index: 9999;
+            transform: translateX(-100%);
+            transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .mobile-drawer.active {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+        }
+
+        .drawer-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--color-text);
+        }
+
+        .drawer-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            color: var(--color-text-secondary);
+        }
+
+        .drawer-content {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .drawer-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .drawer-section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.5rem;
+            padding-left: 0.5rem;
+        }
+
+        .drawer-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--color-text);
+            cursor: pointer;
+            transition: all 150ms ease;
+            text-align: left;
+        }
+
+        .drawer-btn:hover {
+            background: var(--color-surface-alt);
+        }
+
+        .drawer-btn.primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .drawer-btn.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .drawer-btn svg,
+        .drawer-btn .icon {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .search-input {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .stats-text {
+            font-size: 0.7rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="json-viewer-wrapper" id="jsonViewerTool">
+    <!-- SEO H1 - visually hidden but accessible -->
+    <h1 class="visually-hidden">JSON Viewer Online</h1>
+    <p class="visually-hidden">Use this JSON Viewer Online to view, read, and explore JSON data in a structured tree
+        format.</p>
+
+    <!-- Mobile Drawer Overlay -->
+    <div id="mobileDrawerOverlay" class="mobile-drawer-overlay"></div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileDrawer" class="mobile-drawer">
+        <div class="drawer-header">
+            <span class="drawer-title">JSON Tools</span>
+            <button id="drawerClose" class="drawer-close">×</button>
+        </div>
+        <div class="drawer-content">
+            <div class="drawer-section">
+                <div class="drawer-section-title">Format & Transform</div>
+                <button id="drawerFormatBtn" class="drawer-btn primary">✨ Format JSON</button>
+                <button id="drawerMinifyBtn" class="drawer-btn">📦 Minify</button>
+                <button id="drawerFixQuotesBtn" class="drawer-btn">❝ Single → Double Quotes</button>
+                <button id="drawerToSingleBtn" class="drawer-btn">❜ Double → Single Quotes</button>
+            </div>
+
+            <div class="drawer-section">
+                <div class="drawer-section-title">File Actions</div>
+                <button id="drawerUploadBtn" class="drawer-btn">📁 Upload JSON File</button>
+                <button id="drawerSampleBtn" class="drawer-btn">📋 Load Sample</button>
+                <button id="drawerClearBtn" class="drawer-btn">🗑️ Clear</button>
+            </div>
+
+            <div class="drawer-section">
+                <div class="drawer-section-title">View & Export</div>
+                <button id="drawerTreeBtn" class="drawer-btn">🌲 Tree View</button>
+                <button id="drawerCopyBtn" class="drawer-btn success">📋 Copy to Clipboard</button>
+                <button id="drawerDownloadBtn" class="drawer-btn">⬇️ Download JSON</button>
+            </div>
+
+            <div class="drawer-section">
+                <div class="drawer-section-title">Settings</div>
+                <button id="drawerThemeBtn" class="drawer-btn">
+                    <span class="light-icon">🌙 Switch to Dark Mode</span>
+                    <span class="dark-icon">☀️ Switch to Light Mode</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="json-viewer-app">
+        <!-- Toolbar -->
+        <div class="viewer-toolbar">
+            <!-- Home Button -->
+            <a href="/" class="tool-btn home-btn" data-tooltip="Go to Homepage" aria-label="Go to Homepage">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+            </a>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobileMenuBtn" class="tool-btn mobile-menu-btn" data-tooltip="Open Menu" aria-label="Open Menu">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="toolbar-divider"></div>
+
+            <div class="toolbar-group">
+                <button id="formatBtn" class="tool-btn primary" data-tooltip="Format & Beautify JSON"><span
+                        class="icon">✨</span><span>Format</span></button>
+                <button id="minifyBtn" class="tool-btn" data-tooltip="Minify & Compress JSON"><span
+                        class="icon">📦</span><span>Minify</span></button>
+                <button id="fixQuotesBtn" class="tool-btn" data-tooltip="Convert Single to Double Quotes"><span
+                        class="icon">❝</span><span>' → "</span></button>
+                <button id="toSingleQuotesBtn" class="tool-btn" data-tooltip="Convert Double to Single Quotes"><span
+                        class="icon">❜</span><span>" → '</span></button>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <div class="toolbar-group">
+                <button id="uploadBtn" class="tool-btn icon-only" data-tooltip="Upload JSON File"
+                    aria-label="Upload JSON File">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                </button>
+                <input type="file" id="fileInput" class="file-input" accept=".json,application/json">
+                <button id="sampleBtn" class="tool-btn" data-tooltip="Load Sample JSON"
+                    aria-label="Load Sample JSON"><span class="icon">📋</span><span>Sample</span></button>
+                <button id="clearBtn" class="tool-btn icon-only" data-tooltip="Clear Editor" aria-label="Clear Editor">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <div class="toolbar-group">
+                <button id="treeToggleBtn" class="tool-btn" data-tooltip="Toggle Tree View"><span
+                        class="icon">🌲</span><span>Tree View</span></button>
+                <button id="expandAllBtn" class="tool-btn" style="display:none;" data-tooltip="Expand All Nodes"><span
+                        class="icon">➕</span><span>Expand</span></button>
+                <button id="collapseAllBtn" class="tool-btn" style="display:none;"
+                    data-tooltip="Collapse All Nodes"><span class="icon">➖</span><span>Collapse</span></button>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <div class="toolbar-group">
+                <button id="copyBtn" class="tool-btn success icon-only" data-tooltip="Copy to Clipboard"
+                    aria-label="Copy to Clipboard">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                </button>
+                <button id="downloadBtn" class="tool-btn icon-only" data-tooltip="Download JSON File"
+                    aria-label="Download JSON File">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="toolbar-right">
+                <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search..."
+                    style="display:none;">
+                <span class="stats-text" id="statsText"></span>
+                <button id="editorThemeToggle" class="tool-btn icon-only" data-tooltip="Switch Theme"
+                    aria-label="Switch Theme">
+                    <span class="theme-icon light-icon" style="font-size: 1.1rem;">☀️</span>
+                    <span class="theme-icon dark-icon" style="font-size: 1.1rem;">🌙</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Error Bar -->
+        <div id="errorBar" class="error-bar"></div>
+
+        <!-- Main Editor Area -->
+        <div class="editor-main">
+            <!-- Editor -->
+            <div class="editor-wrapper" id="editorWrapper">
+                <div id="monacoContainer"></div>
+                <textarea id="jsonTextarea" class="json-textarea" placeholder='Paste your JSON here...
+
+                {
+                  "name": "John Doe",
+                  "email": "john@example.com",
+                  "age": 30,
+                  "active": true
+                }'></textarea>
+            </div>
+
+            <!-- Tree Panel (hidden by default) -->
+            <div class="tree-panel" id="treePanel">
+                <div class="tree-content" id="treeContent">
+                    <p style="color: var(--color-text-secondary); text-align: center; padding: 2rem;">
+                        Click "Tree View" to see JSON as interactive tree
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span id="statusLeft">Ready</span>
+            <span class="status-path" id="statusPath"></span>
+            <span id="statusRight"></span>
+        </div>
+    </div>
+
+    <!-- SEO Content -->
+    <div class="seo-content" id="seoContent">
+        <div class="content-container">
+            <h2>What is a JSON Viewer?</h2>
+            <p>A <strong>JSON Viewer</strong> is a specialized web-based tool designed to help developers, data
+                analysts, and students visualize <strong>JSON (JavaScript Object Notation)</strong> data in a readable,
+                structured format. Raw JSON is often minified or unformatted, making it difficult to read. A
+                <strong>JSON Viewer Online</strong> transforms this raw text into an interactive <strong>JSON tree
+                    view</strong>, allowing you to collapse and expand objects and arrays to explore the data hierarchy
+                effortlessly.
+            </p>
+
+            <h2>How to View JSON Online</h2>
+            <p>Using our free <strong>Online JSON Viewer</strong> is simple and requires no installation:</p>
+            <ol>
+                <li><strong>Paste your JSON</strong> code into the editor or use the <strong>Upload</strong> button to
+                    load a <code>.json</code> file from your device.</li>
+                <li>The tool automatically processes your Input. If valid, it instantly renders an interactive
+                    <strong>JSON Tree</strong>.
+                </li>
+                <li>Click the <strong>Tree View</strong> button (if not auto-selected) to explore nodes.</li>
+                <li>Use <strong>Expand All</strong> or <strong>Collapse All</strong> to navigate deep structures.</li>
+                <li>Need to edit? Switch to the editor mode to <a href="/json-formatter-online/">Format JSON</a> or <a
+                        href="/api/minify/">Minify JSON</a> before viewing.</li>
+            </ol>
+
+            <h2>JSON Viewer Features</h2>
+            <p>Our tool is packed with advanced features to make specific tasks easier:</p>
+            <ul>
+                <li><strong>Interactive Tree View:</strong> Navigate deep nested objects with ease.</li>
+                <li><strong>Search & Filter:</strong> Find specific keys or values within large JSON files instantly.
+                <li><strong>Error Validation:</strong> Automatically detects and highlights syntax errors with line
+                    numbers.</li>
+                <li><strong>Client-Side Processing:</strong> Your data is secure. All processing happens in your
+                    browser—we never store or see your JSON.</li>
+                <li><strong>File Upload Support:</strong> Support for large <code>.json</code> files.</li>
+                <li><strong>Copy & Export options:</strong> Copy entire objects, specific subtrees, or <strong>Download
+                        JSON</strong> files formatted to your preference.</li>
+                <li><strong>Dark Mode:</strong> A developer-friendly interface with automatic or toggleable dark/light
+                    themes.</li>
+            </ul>
+
+            <h2>JSON Viewer vs JSON Formatter</h2>
+            <p>While both tools are essential, they serve different purposes. A <strong>JSON Formatter</strong> (like
+                our <a href="/json-formatter-online/">Format JSON Online</a> tool) is designed to "beautify" or
+                pretty-print code, adding varying indentation and whitespace to make it human-readable.</p>
+            <p>A <strong>JSON Viewer</strong>, on the other hand, focuses on <em>exploration</em>. It parses the data
+                into clickable nodes. This is ideal when you need to understand the structure of a complex API response,
+                debug a huge dataset, or simply "read" the data without seeing all the braces and quotes.</p>
+            <p>If you need to strictly validate syntax against a schema, check out our <a
+                    href="/json-formatter-online/">JSON Validator</a>.</p>
+
+            <h2>Common JSON Viewer Use Cases</h2>
+            <ul>
+                <li><strong>Debugging APIs:</strong> Quickly inspect JSON responses from REST or GraphQL APIs.</li>
+                <li><strong>Data Analysis:</strong> Explore large datasets exported from databases like MongoDB or
+                    PostgreSQL.</li>
+                <li><strong>Configuration Files:</strong> Read and verify <code>package.json</code>,
+                    <code>tsconfig.json</code>, or other config files.
+                </li>
+                <li><strong>Learning JSON:</strong> Beginners can use the <strong>JSON Tree Viewer</strong> to
+                    understand how objects and arrays are nested.</li>
+            </ul>
+            <br>
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <h3>Is this JSON Viewer free?</h3>
+                <p>Yes, this <strong>Online JSON Viewer</strong> is 100% free with no usage limits.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Is my data safe?</h3>
+                <p>Absolutely. We prioritize your privacy. All JSON processing is performed locally in your browser
+                    using JavaScript. Your data is never sent to our servers.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Can I view large JSON files?</h3>
+                <p>Yes, our tool uses the efficient Monaco Editor and optimized tree rendering to handle large JSON
+                    files smoothly without crashing your browser.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Does it work offline?</h3>
+                <p>Once the page is loaded, the tool works offline as it relies on client-side code.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Can I convert JSON to other formats?</h3>
+                <p>Yes, check our other tools if you need to <a href="/json-diff/">Diff JSON</a> or convert <a
+                        href="/api/convert/csv/">JSON to CSV</a>.</p>
+            </div>
+            <div class="internal-links-section">
+                <h3>Related Tools</h3>
+                <div class="internal-links-grid">
+                    <a href="{% url 'json_formatter_page' %}" class="related-tool-card">
+                        <span class="tool-icon">✨</span>
+                        <span class="tool-name">JSON Formatter</span>
+                    </a>
+                    <a href="{% url 'json_tree_page' %}" class="related-tool-card">
+                        <span class="tool-icon">🌲</span>
+                        <span class="tool-name">JSON Tree Viewer</span>
+                    </a>
+                    <a href="{% url 'json_diff_page' %}" class="related-tool-card">
+                        <span class="tool-icon">⚖️</span>
+                        <span class="tool-name">JSON Diff</span>
+                    </a>
+                    <a href="{% url 'json_schema_page' %}" class="related-tool-card">
+                        <span class="tool-icon">✅</span>
+                        <span class="tool-name">JSON Validator</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    (function () {
+
+        // DOM Elements
+        const jsonTextarea = document.getElementById('jsonTextarea');
+        const monacoContainer = document.getElementById('monacoContainer');
+        const formatBtn = document.getElementById('formatBtn');
+        const minifyBtn = document.getElementById('minifyBtn');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileInput = document.getElementById('fileInput');
+        const sampleBtn = document.getElementById('sampleBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const treeToggleBtn = document.getElementById('treeToggleBtn');
+        const expandAllBtn = document.getElementById('expandAllBtn');
+        const collapseAllBtn = document.getElementById('collapseAllBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const searchInput = document.getElementById('searchInput');
+        const treePanel = document.getElementById('treePanel');
+        const treeContent = document.getElementById('treeContent');
+        const errorBar = document.getElementById('errorBar');
+        const statusLeft = document.getElementById('statusLeft');
+        const statusPath = document.getElementById('statusPath');
+        const statusRight = document.getElementById('statusRight');
+        const statsText = document.getElementById('statsText');
+        const toast = document.getElementById('toast');
+
+        let monacoEditor = null;
+        let monacoLoaded = false;
+        let parsedData = null;
+        let treeVisible = false;
+
+        // Sample JSON
+        const sampleJson = {
+            "user": { "id": 12345, "name": "John Doe", "email": "john@example.com", "isActive": true },
+            "posts": [
+                { "id": 1, "title": "Getting Started with JSON", "published": true },
+                { "id": 2, "title": "Advanced Techniques", "published": false }
+            ],
+            "settings": { "theme": "dark", "notifications": { "email": true, "push": false } }
+        };
+
+        // Lazy load Monaco Editor
+        function loadMonaco() {
+            if (monacoLoaded) return Promise.resolve();
+
+            return new Promise((resolve) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js';
+                script.onload = () => {
+                    require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+                    require(['vs/editor/editor.main'], () => {
+                        monacoLoaded = true;
+                        initMonaco();
+                        resolve();
+                    });
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+        function initMonaco() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+            monacoEditor = monaco.editor.create(monacoContainer, {
+                value: jsonTextarea.value,
+                language: 'json',
+                theme: isDark ? 'vs-dark' : 'vs',
+                automaticLayout: true,
+                minimap: { enabled: false },
+                fontSize: 14,
+                lineNumbers: 'on',
+                scrollBeyondLastLine: false,
+                wordWrap: 'on',
+                tabSize: 2,
+                scrollbar: {
+                    alwaysConsumeMouseWheel: false
+                }
+            });
+
+            // Hide textarea, show Monaco
+            jsonTextarea.style.display = 'none';
+            monacoContainer.style.display = 'block';
+
+            // Theme sync
+            const observer = new MutationObserver(() => {
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                monaco.editor.setTheme(isDark ? 'vs-dark' : 'vs');
+            });
+            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+            // Update stats on change
+            monacoEditor.onDidChangeModelContent(() => updateStats());
+            updateStats();
+        }
+
+        function getEditorValue() {
+            return monacoEditor ? monacoEditor.getValue() : jsonTextarea.value;
+        }
+
+        function setEditorValue(val) {
+            if (monacoEditor) {
+                monacoEditor.setValue(val);
+            } else {
+                jsonTextarea.value = val;
+            }
+            updateStats();
+        }
+
+        function updateStats() {
+            const val = getEditorValue();
+            const lines = val.split('\n').length;
+            const chars = val.length;
+            statsText.textContent = `${lines} lines | ${chars.toLocaleString()} chars`;
+        }
+
+        // Fix single quotes to double quotes - smart conversion
+        function fixSingleQuotes(str) {
+            let result = str;
+
+            // Step 1: Handle Python-style True/False/None to JSON
+            result = result.replace(/:\s*True\b/g, ': true');
+            result = result.replace(/:\s*False\b/g, ': false');
+            result = result.replace(/:\s*None\b/g, ': null');
+
+            // Step 2: Smart quote replacement using state machine
+            // This properly handles apostrophes in words like "don't" or "Alzheimer's"
+            let output = '';
+            let inString = false;
+            let stringChar = null;
+            let i = 0;
+
+            while (i < result.length) {
+                const char = result[i];
+                const prevChar = i > 0 ? result[i - 1] : '';
+                const nextChar = i < result.length - 1 ? result[i + 1] : '';
+
+                if (!inString) {
+                    // Not in a string - look for string start
+                    if (char === '"') {
+                        inString = true;
+                        stringChar = '"';
+                        output += '"';
+                    } else if (char === "'") {
+                        // Check if this is a string delimiter or apostrophe
+                        // It's a string delimiter if preceded by : [ , { or whitespace
+                        const isDelimiter = /[\s:,\[\{]/.test(prevChar) || prevChar === '';
+                        if (isDelimiter) {
+                            inString = true;
+                            stringChar = "'";
+                            output += '"'; // Convert to double quote
+                        } else {
+                            output += char; // Keep as apostrophe
+                        }
+                    } else {
+                        output += char;
+                    }
+                } else {
+                    // Inside a string
+                    if (char === '\\' && nextChar) {
+                        // Escape sequence - copy both characters
+                        output += char + nextChar;
+                        i++;
+                    } else if (char === stringChar) {
+                        // End of string
+                        if (stringChar === "'") {
+                            output += '"'; // Convert closing single quote to double
+                        } else {
+                            output += char;
+                        }
+                        inString = false;
+                        stringChar = null;
+                    } else if (char === '"' && stringChar === "'") {
+                        // Double quote inside single-quoted string - needs escaping
+                        output += '\\"';
+                    } else {
+                        output += char;
+                    }
+                }
+                i++;
+            }
+
+            return output;
+        }
+
+        // Format JSON (with auto-fix for single quotes)
+        function formatJson() {
+            let input = getEditorValue();
+
+            // First try to parse directly
+            try {
+                const data = JSON.parse(input);
+                setEditorValue(JSON.stringify(data, null, 2));
+                hideError();
+                showToast('✓ Formatted');
+                return;
+            } catch (e) {
+                // If failed, try fixing single quotes first
+            }
+
+            // Try with fixed quotes
+            try {
+                const fixed = fixSingleQuotes(input);
+                const data = JSON.parse(fixed);
+                setEditorValue(JSON.stringify(data, null, 2));
+                hideError();
+                showToast('✓ Formatted (fixed quotes)');
+            } catch (e) {
+                showError('Invalid JSON: ' + e.message);
+            }
+        }
+
+        // Convert single quotes to double quotes (button action)
+        function convertToDoubleQuotes() {
+            const input = getEditorValue();
+            const fixed = fixSingleQuotes(input);
+            setEditorValue(fixed);
+            showToast('✓ Converted to double quotes');
+        }
+
+        // Convert double quotes to single quotes
+        function convertToSingleQuotes() {
+            let input = getEditorValue();
+
+            // First ensure it's valid JSON
+            try {
+                const data = JSON.parse(input);
+                // Format it first
+                let formatted = JSON.stringify(data, null, 2);
+                // Replace double quotes with single quotes
+                formatted = formatted.replace(/"([^"\\]*(?:\\.[^"\\]*)*)"/g, function (match, content) {
+                    // Unescape double quotes and escape single quotes
+                    const unescaped = content.replace(/\\"/g, '"').replace(/'/g, "\\'");
+                    return "'" + unescaped + "'";
+                });
+                setEditorValue(formatted);
+                hideError();
+                showToast("✓ Converted to single quotes (non-standard)");
+            } catch (e) {
+                showError('Invalid JSON: Fix errors first');
+            }
+        }
+
+        // Minify JSON
+        function minifyJson() {
+            try {
+                const data = JSON.parse(getEditorValue());
+                setEditorValue(JSON.stringify(data));
+                hideError();
+                showToast('✓ Minified');
+            } catch (e) {
+                showError('Invalid JSON: ' + e.message);
+            }
+        }
+
+        // Toggle Tree View
+        function toggleTree() {
+            // Check if there's any content to show
+            const editorValue = getEditorValue().trim();
+            if (!editorValue) {
+                showToast('⚠️ Please enter JSON first');
+                return;
+            }
+
+            treeVisible = !treeVisible;
+            treePanel.classList.toggle('visible', treeVisible);
+            treeToggleBtn.classList.toggle('active', treeVisible);
+            expandAllBtn.style.display = treeVisible ? 'flex' : 'none';
+            collapseAllBtn.style.display = treeVisible ? 'flex' : 'none';
+            searchInput.style.display = treeVisible ? 'block' : 'none';
+
+            if (treeVisible) {
+                renderTree();
+            }
+        }
+
+        // Render tree
+        function renderTree() {
+            const editorValue = getEditorValue().trim();
+            if (!editorValue) {
+                treeContent.innerHTML = '<div style="color: var(--color-text-secondary); padding: 2rem; text-align: center;">📝 Enter JSON in the editor to see the tree view</div>';
+                return;
+            }
+
+            try {
+                parsedData = JSON.parse(editorValue);
+                hideError();
+                treeContent.innerHTML = createTreeHtml(parsedData, '', 'root');
+                addTreeListeners();
+            } catch (e) {
+                treeContent.innerHTML = '<div style="color: #dc2626; padding: 1.5rem; text-align: center; background: rgba(220, 38, 38, 0.1); border-radius: 8px; margin: 1rem;">⚠️ Invalid JSON - Please fix errors before viewing tree</div>';
+            }
+        }
+
+        function createTreeHtml(value, key, path) {
+            if (value === null) return leafHtml(key, 'null', 'null', path);
+            if (Array.isArray(value)) return arrayHtml(value, key, path);
+            if (typeof value === 'object') return objectHtml(value, key, path);
+
+            const type = typeof value;
+            let displayValue = type === 'string' ? `"${escapeHtml(value)}"` : String(value);
+            return leafHtml(key, displayValue, type, path);
+        }
+
+        function leafHtml(key, value, type, path) {
+            const keyPart = key !== '' ? `<span class="tree-key">${escapeHtml(String(key))}</span><span class="tree-colon">:</span>` : '';
+            return `<div class="tree-item" data-path="${path}">${keyPart}<span class="tree-value ${type}">${value}</span><button class="copy-btn" onclick="event.stopPropagation();copyPath('${path}')">Copy</button></div>`;
+        }
+
+        function objectHtml(obj, key, path) {
+            const keys = Object.keys(obj);
+            const keyPart = key !== '' ? `<span class="tree-key">${escapeHtml(String(key))}</span><span class="tree-colon">:</span>` : '';
+            let children = keys.map(k => createTreeHtml(obj[k], k, `${path}.${k}`)).join('');
+            return `<div class="tree-item expandable" data-path="${path}"><span class="tree-toggle">▼</span>${keyPart}<span class="tree-value bracket">{</span><span class="tree-info">${keys.length}</span><button class="copy-btn" onclick="event.stopPropagation();copySubtree('${path}')">Copy</button></div><div class="tree-node">${children}</div><div class="tree-item"><span class="tree-toggle" style="visibility:hidden;"></span><span class="tree-value bracket">}</span></div>`;
+        }
+
+        function arrayHtml(arr, key, path) {
+            const keyPart = key !== '' ? `<span class="tree-key">${escapeHtml(String(key))}</span><span class="tree-colon">:</span>` : '';
+            let children = arr.map((item, i) => createTreeHtml(item, i, `${path}[${i}]`)).join('');
+            return `<div class="tree-item expandable" data-path="${path}"><span class="tree-toggle">▼</span>${keyPart}<span class="tree-value bracket">[</span><span class="tree-info">${arr.length}</span><button class="copy-btn" onclick="event.stopPropagation();copySubtree('${path}')">Copy</button></div><div class="tree-node">${children}</div><div class="tree-item"><span class="tree-toggle" style="visibility:hidden;"></span><span class="tree-value bracket">]</span></div>`;
+        }
+
+        function addTreeListeners() {
+            treeContent.querySelectorAll('.expandable').forEach(item => {
+                item.addEventListener('click', e => {
+                    if (e.target.classList.contains('copy-btn')) return;
+                    const toggle = item.querySelector('.tree-toggle');
+                    const node = item.nextElementSibling;
+                    if (node && node.classList.contains('tree-node')) {
+                        const isExpanded = toggle.textContent === '▼';
+                        toggle.textContent = isExpanded ? '▶' : '▼';
+                        node.style.display = isExpanded ? 'none' : 'block';
+                    }
+                });
+            });
+
+            treeContent.querySelectorAll('.tree-item[data-path]').forEach(item => {
+                item.addEventListener('mouseenter', () => statusPath.textContent = item.dataset.path);
+                item.addEventListener('mouseleave', () => statusPath.textContent = '');
+            });
+        }
+
+        function expandAll() {
+            treeContent.querySelectorAll('.tree-toggle').forEach(t => t.textContent = '▼');
+            treeContent.querySelectorAll('.tree-node').forEach(n => n.style.display = 'block');
+        }
+
+        function collapseAll() {
+            treeContent.querySelectorAll('.expandable .tree-toggle').forEach(t => t.textContent = '▶');
+            treeContent.querySelectorAll('.tree-node').forEach(n => n.style.display = 'none');
+        }
+
+        // Search
+        searchInput.addEventListener('input', () => {
+            const q = searchInput.value.toLowerCase();
+            treeContent.querySelectorAll('.tree-item').forEach(item => {
+                const match = q && item.textContent.toLowerCase().includes(q);
+                item.style.background = match ? 'rgba(251, 191, 36, 0.15)' : '';
+                if (match) {
+                    let parent = item.parentElement;
+                    while (parent && parent !== treeContent) {
+                        if (parent.classList.contains('tree-node')) {
+                            parent.style.display = 'block';
+                            const prev = parent.previousElementSibling;
+                            if (prev) {
+                                const toggle = prev.querySelector('.tree-toggle');
+                                if (toggle) toggle.textContent = '▼';
+                            }
+                        }
+                        parent = parent.parentElement;
+                    }
+                }
+            });
+        });
+
+        // Copy functions
+        window.copyPath = function (path) {
+            navigator.clipboard.writeText(path);
+            showToast(`✓ Copied: ${path}`);
+        };
+
+        window.copySubtree = function (path) {
+            if (!parsedData) return;
+            try {
+                const parts = path.replace('root', '').split(/[.\[\]]/).filter(Boolean);
+                let value = parsedData;
+                for (const p of parts) value = value[isNaN(p) ? p : parseInt(p)];
+                navigator.clipboard.writeText(JSON.stringify(value, null, 2));
+                showToast('✓ Subtree copied');
+            } catch (e) { }
+        };
+
+        // Event listeners
+        formatBtn.addEventListener('click', formatJson);
+        minifyBtn.addEventListener('click', minifyJson);
+        document.getElementById('fixQuotesBtn').addEventListener('click', convertToDoubleQuotes);
+        document.getElementById('toSingleQuotesBtn').addEventListener('click', convertToSingleQuotes);
+        treeToggleBtn.addEventListener('click', toggleTree);
+        expandAllBtn.addEventListener('click', expandAll);
+        collapseAllBtn.addEventListener('click', collapseAll);
+
+        uploadBtn.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    setEditorValue(ev.target.result);
+                    formatJson();
+                    if (treeVisible) renderTree();
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        sampleBtn.addEventListener('click', () => {
+            setEditorValue(JSON.stringify(sampleJson, null, 2));
+            if (treeVisible) renderTree();
+            showToast('✓ Sample loaded');
+        });
+
+        clearBtn.addEventListener('click', () => {
+            setEditorValue('');
+            hideError();
+            treeContent.innerHTML = '<p style="color: var(--color-text-secondary); text-align: center; padding: 2rem;">Click "Tree View" to see JSON as interactive tree</p>';
+        });
+
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(getEditorValue());
+            showToast('✓ Copied');
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            const blob = new Blob([getEditorValue()], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('✓ Downloaded');
+        });
+
+        // Theme toggle
+        document.getElementById('editorThemeToggle').addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            // Update Monaco editor theme if loaded
+            if (monacoEditor && window.monaco) {
+                monaco.editor.setTheme(newTheme === 'dark' ? 'vs-dark' : 'vs');
+            }
+            showToast(newTheme === 'dark' ? '🌙 Dark mode' : '☀️ Light mode');
+        });
+
+        // Mobile Drawer functionality
+        const mobileDrawer = document.getElementById('mobileDrawer');
+        const mobileDrawerOverlay = document.getElementById('mobileDrawerOverlay');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const drawerClose = document.getElementById('drawerClose');
+
+        function openDrawer() {
+            mobileDrawer.classList.add('active');
+            mobileDrawerOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDrawer() {
+            mobileDrawer.classList.remove('active');
+            mobileDrawerOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        mobileMenuBtn.addEventListener('click', openDrawer);
+        drawerClose.addEventListener('click', closeDrawer);
+        mobileDrawerOverlay.addEventListener('click', closeDrawer);
+
+        // Drawer button handlers
+        document.getElementById('drawerFormatBtn').addEventListener('click', () => { formatJson(); closeDrawer(); });
+        document.getElementById('drawerMinifyBtn').addEventListener('click', () => { minifyJson(); closeDrawer(); });
+        document.getElementById('drawerFixQuotesBtn').addEventListener('click', () => { convertToDoubleQuotes(); closeDrawer(); });
+        document.getElementById('drawerToSingleBtn').addEventListener('click', () => { convertToSingleQuotes(); closeDrawer(); });
+        document.getElementById('drawerUploadBtn').addEventListener('click', () => { fileInput.click(); closeDrawer(); });
+        document.getElementById('drawerSampleBtn').addEventListener('click', () => { setEditorValue(JSON.stringify(sampleJson, null, 2)); closeDrawer(); });
+        document.getElementById('drawerClearBtn').addEventListener('click', () => { setEditorValue(''); closeDrawer(); });
+        document.getElementById('drawerTreeBtn').addEventListener('click', () => { toggleTree(); closeDrawer(); });
+        document.getElementById('drawerCopyBtn').addEventListener('click', () => { navigator.clipboard.writeText(getEditorValue()); showToast('✓ Copied'); closeDrawer(); });
+        document.getElementById('drawerDownloadBtn').addEventListener('click', () => {
+            const blob = new Blob([getEditorValue()], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('✓ Downloaded');
+            closeDrawer();
+        });
+        document.getElementById('drawerThemeBtn').addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            if (monacoEditor && window.monaco) {
+                monaco.editor.setTheme(newTheme === 'dark' ? 'vs-dark' : 'vs');
+            }
+            showToast(newTheme === 'dark' ? '🌙 Dark mode' : '☀️ Light mode');
+            closeDrawer();
+        });
+
+
+
+        // Helpers
+        function showError(msg) {
+            errorBar.textContent = '⚠️ ' + msg;
+            errorBar.classList.add('visible');
+            statusLeft.textContent = 'Error';
+        }
+
+        function hideError() {
+            errorBar.classList.remove('visible');
+            statusLeft.textContent = 'Ready';
+        }
+
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add('visible');
+            setTimeout(() => toast.classList.remove('visible'), 1500);
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey && e.key === 'e') { e.preventDefault(); expandAll(); }
+            if (e.ctrlKey && e.key === 'q') { e.preventDefault(); collapseAll(); }
+        });
+
+        // Load Monaco after page is interactive (lazy)
+        if (document.readyState === 'complete') {
+            setTimeout(loadMonaco, 500);
+        } else {
+            window.addEventListener('load', () => setTimeout(loadMonaco, 500));
+        }
+
+        // Initial stats
+        updateStats();
+    })();
+</script>
+{% endblock %}
