@@ -2833,47 +2833,106 @@ def serve_mock_endpoint(request, endpoint_id, subpath=''):
                 parsed = json.loads(temp_template)
                 
                 if 'data' in parsed and isinstance(parsed['data'], list) and len(parsed['data']) > 0:
-                    # Get the first item as our template
-                    item_template = parsed['data'][0]
+                    # Get the first item as our template - but use the ORIGINAL string template, not parsed
+                    # Extract the original item template string from response_template
+                    data_idx = response_template.find('"data"')
+                    bracket_start = response_template.find('[', data_idx)
+                    obj_start = response_template.find('{', bracket_start)
                     
-                    # Generate N records
+                    # Find matching closing brace
+                    brace_count = 1
+                    pos = obj_start + 1
+                    while pos < len(response_template) and brace_count > 0:
+                        if response_template[pos] == '{':
+                            brace_count += 1
+                        elif response_template[pos] == '}':
+                            brace_count -= 1
+                        pos += 1
+                    
+                    original_item_template = response_template[obj_start:pos]
+                    array_end = response_template.find(']', pos)
+                    
+                    # Generate N records - each with fresh random values
                     generated_items = []
                     for _ in range(record_count):
-                        # Deep copy the item template
-                        new_item = json.loads(json.dumps(item_template))
-                        # Replace placeholders with fresh processed values
-                        item_str = json.dumps(new_item)
-                        for placeholder, var in var_map.items():
-                            clean_placeholder = placeholder.strip('"')
-                            if clean_placeholder in item_str:
-                                processed_val = process_template_variables(var)
-                                item_str = item_str.replace(f'"{clean_placeholder}"', processed_val if processed_val.startswith('"') or processed_val.isdigit() or processed_val in ['true', 'false', 'null'] else f'"{processed_val}"')
-                        generated_items.append(json.loads(item_str))
+                        # Process template variables fresh for each item
+                        processed_item = process_template_variables(original_item_template)
+                        generated_items.append(json.loads(processed_item))
                     
-                    # Replace data array
-                    parsed['data'] = generated_items
+                    # Build the complete response
+                    before_data = response_template[:bracket_start + 1]
+                    after_data = response_template[array_end:]
+                    items_json = ',\n'.join(json.dumps(item) for item in generated_items)
+                    processed_body = before_data + items_json + after_data
                     
-                    # Process remaining template vars in other parts (like meta)
-                    result_str = json.dumps(parsed)
-                    for placeholder, var in var_map.items():
-                        clean_placeholder = placeholder.strip('"')
-                        if clean_placeholder in result_str:
-                            processed_val = process_template_variables(var)
-                            result_str = result_str.replace(f'"{clean_placeholder}"', processed_val if processed_val.startswith('"') or processed_val.isdigit() or processed_val in ['true', 'false', 'null'] else f'"{processed_val}"')
-                    
-                    response_data = json.loads(result_str)
+                    # Process remaining template vars (like in meta)
+                    processed_body = process_template_variables(processed_body)
+                    response_data = json.loads(processed_body)
                 else:
                     # No data array found, process normally
                     processed_body = process_template_variables(response_template)
                     response_data = json.loads(processed_body)
                     
             except Exception as e:
-                # Fallback: just process template variables directly
-                processed_body = process_template_variables(response_template)
+                # Fallback: Try a simpler approach that still generates multiple records
+                import re
                 try:
-                    response_data = json.loads(processed_body)
-                except:
-                    response_data = {'raw_response': processed_body, 'error': str(e)}
+                    # Find the data array start position
+                    data_start = response_template.find('"data"')
+                    if data_start != -1:
+                        # Find the opening bracket of the array
+                        bracket_start = response_template.find('[', data_start)
+                        if bracket_start != -1:
+                            # Find the first object's opening brace
+                            obj_start = response_template.find('{', bracket_start)
+                            if obj_start != -1:
+                                # Find the matching closing brace (handle nested braces)
+                                brace_count = 1
+                                pos = obj_start + 1
+                                while pos < len(response_template) and brace_count > 0:
+                                    if response_template[pos] == '{':
+                                        brace_count += 1
+                                    elif response_template[pos] == '}':
+                                        brace_count -= 1
+                                    pos += 1
+                                obj_end = pos
+                                
+                                # Extract the item template
+                                item_template = response_template[obj_start:obj_end]
+                                
+                                # Find where the data array ends
+                                array_end = response_template.find(']', obj_end)
+                                
+                                # Generate multiple items with fresh random values each time
+                                items = []
+                                for _ in range(record_count):
+                                    processed_item = process_template_variables(item_template)
+                                    items.append(processed_item)
+                                
+                                # Build the new response
+                                items_json = ',\n'.join(items)
+                                before_data = response_template[:bracket_start + 1]
+                                after_data = response_template[array_end:]
+                                processed_body = before_data + items_json + after_data
+                                
+                                # Process any remaining template vars (like in meta section)
+                                processed_body = process_template_variables(processed_body)
+                                response_data = json.loads(processed_body)
+                            else:
+                                raise ValueError("No object found in data array")
+                        else:
+                            raise ValueError("No data array bracket found")
+                    else:
+                        # No data array, just process normally
+                        processed_body = process_template_variables(response_template)
+                        response_data = json.loads(processed_body)
+                except Exception as e2:
+                    # Final fallback
+                    processed_body = process_template_variables(response_template)
+                    try:
+                        response_data = json.loads(processed_body)
+                    except:
+                        response_data = {'raw_response': processed_body, 'error': str(e)}
         else:
             # No data array structure, simple processing
             processed_body = process_template_variables(response_template)

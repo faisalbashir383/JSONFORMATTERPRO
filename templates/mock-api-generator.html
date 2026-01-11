@@ -212,7 +212,10 @@ template variables, latency simulation & error testing. No signup - start now!{%
         border: 1px solid var(--color-border);
         padding: 1.5rem;
         box-shadow: 0 4px 16px var(--color-shadow);
-        max-height: fit-content;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        position: sticky;
+        top: 80px;
     }
 
     .config-title {
@@ -2074,17 +2077,77 @@ template variables, latency simulation & error testing. No signup - start now!{%
         function insertVariable(variable) {
             if (!monacoEditor) return;
             const selection = monacoEditor.getSelection();
-            const range = new monaco.Range(
-                selection.startLineNumber,
-                selection.startColumn,
-                selection.endLineNumber,
-                selection.endColumn
-            );
-            monacoEditor.executeEdits('insert-variable', [{
-                range: range,
-                text: variable,
-                forceMoveMarkers: true
-            }]);
+            const position = selection.getStartPosition();
+
+            // Get text before cursor to check if we need a comma separator
+            const model = monacoEditor.getModel();
+            const textBeforeCursor = model.getValueInRange({
+                startLineNumber: position.lineNumber,
+                startColumn: 1,
+                endLineNumber: position.lineNumber,
+                endColumn: position.column
+            });
+
+            let insertText = variable;
+            const trimmedBefore = textBeforeCursor.trimEnd();
+
+            // Check if cursor is right after a template variable inside quotes (e.g., "{{street}}")
+            // If so, we need to:
+            // 1. Move cursor back to before the closing quote
+            // 2. Insert ", {{variable}}" without the leading quote
+            if (trimmedBefore.endsWith('}}"')) {
+                // Variable comes with quotes like "{{city}}", we need just , {{city}}
+                // Strip the leading quote from the variable
+                if (variable.startsWith('"')) {
+                    insertText = ', ' + variable.slice(1, -1); // Remove both quotes, we'll keep the existing closing quote
+                } else {
+                    insertText = ', ' + variable;
+                }
+                // We need to insert BEFORE the closing quote, so adjust the range
+                const newColumn = position.column - 1; // Move back before the "
+                const range = new monaco.Range(
+                    position.lineNumber,
+                    newColumn,
+                    position.lineNumber,
+                    newColumn
+                );
+                monacoEditor.executeEdits('insert-variable', [{
+                    range: range,
+                    text: insertText,
+                    forceMoveMarkers: true
+                }]);
+            } else if (trimmedBefore.endsWith('}}')) {
+                // Inside quotes but no closing quote yet, just add comma separator
+                if (variable.startsWith('"')) {
+                    insertText = ', ' + variable.slice(1); // Remove leading quote only
+                } else {
+                    insertText = ', ' + variable;
+                }
+                const range = new monaco.Range(
+                    selection.startLineNumber,
+                    selection.startColumn,
+                    selection.endLineNumber,
+                    selection.endColumn
+                );
+                monacoEditor.executeEdits('insert-variable', [{
+                    range: range,
+                    text: insertText,
+                    forceMoveMarkers: true
+                }]);
+            } else {
+                // Normal insertion
+                const range = new monaco.Range(
+                    selection.startLineNumber,
+                    selection.startColumn,
+                    selection.endLineNumber,
+                    selection.endColumn
+                );
+                monacoEditor.executeEdits('insert-variable', [{
+                    range: range,
+                    text: insertText,
+                    forceMoveMarkers: true
+                }]);
+            }
             monacoEditor.focus();
         }
 
@@ -2288,7 +2351,9 @@ template variables, latency simulation & error testing. No signup - start now!{%
             const errorRate = parseInt(errorRateSlider.value);
             const ipEnabled = ipRestrictionEnabled.checked;
             const allowedIps = allowedIpsInput.value.trim();
-            const responseBody = generatedResponse.value || responseTemplate.value;
+            // IMPORTANT: Always send the TEMPLATE (with {{}} placeholders), not the generated preview
+            // The backend will process the template fresh on each request to generate unique values
+            const responseBody = monacoEditor ? monacoEditor.getValue() : responseTemplate.value;
 
             if (!responseBody.trim()) {
                 showToast('Please generate a response first or enter a response template', 'warning');
