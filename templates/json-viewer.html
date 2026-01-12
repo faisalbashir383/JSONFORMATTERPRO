@@ -3,7 +3,8 @@
 
 {% block title %}JSON Viewer Online – Read & Explore JSON with Tree View{% endblock %}
 
-{% block meta_description %}Free JSON Viewer Online to read and explore JSON in an interactive tree view. Paste or upload JSON, format it, and convert single or double quotes instantly.{% endblock %}
+{% block meta_description %}Free JSON Viewer Online to read and explore JSON in an interactive tree view. Paste or
+upload JSON, format it, and convert single or double quotes instantly.{% endblock %}
 
 {% block canonical %}
 <link rel="canonical" href="https://jsonformatterspro.com/json-viewer/">
@@ -19,19 +20,16 @@
 
 <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "JSON Viewer Online",
-    "description": "Free online JSON Viewer to view, read, and explore JSON data in a structured tree format.",
-    "url": "https://jsonformatterspro.com/json-viewer/",
-    "applicationCategory": "DeveloperApplication",
-    "operatingSystem": "Any",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "browserRequirements": "Requires JavaScript. Requires HTML5.",
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": "https://jsonformatterspro.com/json-viewer/"
-    }
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "JSON Viewer Online",
+  "description": "Free online JSON Viewer to view, read, and explore JSON data in a structured tree format.",
+  "url": "https://jsonformatterspro.com/json-viewer/",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "JSON Formatters Pro",
+    "url": "https://jsonformatterspro.com/"
+  }
 }
 </script>
 
@@ -69,17 +67,19 @@
 
 {% block extra_css %}
 <style>
-    /* Visually hidden - accessible but not visible */
-    .visually-hidden {
+    /* SEO Shell - hidden for users but visible to search engines (Bing-safe) */
+    #seo-shell {
         position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
+        top: -9999px;
+        left: 0;
+        width: 100%;
+        height: auto;
+        overflow: visible;
+        color: inherit;
+    }
+
+    #seo-shell * {
+        color: inherit;
     }
 
     /* Full Screen Layout - edge to edge */
@@ -774,10 +774,12 @@
 
 {% block content %}
 <div class="json-viewer-wrapper" id="jsonViewerTool">
-    <!-- SEO H1 - visually hidden but accessible -->
-    <h1 class="visually-hidden">JSON Viewer Online</h1>
-    <p class="visually-hidden">Use this JSON Viewer Online to view, read, and explore JSON data in a structured tree
-        format.</p>
+    <!-- SEO Shell - hidden for users but visible to search engines -->
+    <div id="seo-shell">
+        <h1>JSON Viewer Online</h1>
+          <p>Use this JSON Viewer Online to view, read, and explore JSON data in a structured tree format.</p>
+          <p>Format and validate JSON using our <a href="/json-formatter-online/">JSON Formatter</a> and <a href="/json-schema-validator/">JSON Schema Validator</a>.</p>
+    </div>
 
     <!-- Mobile Drawer Overlay -->
     <div id="mobileDrawerOverlay" class="mobile-drawer-overlay"></div>
