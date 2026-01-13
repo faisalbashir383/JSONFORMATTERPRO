@@ -6,14 +6,6 @@
 {% block meta_description %}{{ meta_description }}{% endblock %}
 {% block canonical_url %}{{ SITE_URL }}/domain-age/{{ domain }}/{% endblock %}
 
-{% block robots %}
-{% if is_indexable %}
-<meta name="robots" content="index, follow">
-{% else %}
-<meta name="robots" content="noindex, follow">
-{% endif %}
-{% endblock %}
-
 {% block structured_data %}
 <script type="application/ld+json">
 {
