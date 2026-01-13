@@ -314,7 +314,7 @@
                             to JSONL</a>
                         <a href="{% url 'json_to_code_page' %}" class="dropdown-item">JSON
                             to Code (TS, Py, Go)</a>
-                        <a href="{% url 'image_to_base64_page' %}" class="dropdown-item">🖼️ Image to Base64</a>
+                        <a href="{% url 'image_to_base64_page' %}" class="dropdown-item">Image to Base64</a>
                     </div>
                 </div>
 
@@ -322,18 +322,19 @@
                 <div class="nav-item dropdown">
                     <button class="nav-link">Dev Tools ▾</button>
                     <div class="dropdown-content wide">
-                        <a href="/cron-builder/" class="dropdown-item">⏰ Cron Builder</a>
-                        <a href="/sql-formatter/" class="dropdown-item">🗃️ SQL Formatter</a>
-                        <a href="/markdown-preview/" class="dropdown-item">📝 Markdown Preview</a>
-                        <a href="/qr-generator/" class="dropdown-item">📱 QR Code Generator</a>
-                        <a href="{% url 'regex_tester_page' %}" class="dropdown-item">🔍 Regex Tester/Generator</a>
-                        <a href="/mock-api/" class="dropdown-item">🔌 Mock API Generator</a>
-                        <a href="/swagger-viewer/" class="dropdown-item">📋 Swagger/OpenAPI Viewer</a>
-                        <a href="/push-notification-tester/" class="dropdown-item">🔔 Push Notification Tester</a>
-                        <a href="/password-generator/" class="dropdown-item">🔐 Password Generator</a>
-                        <a href="/url-encoder/" class="dropdown-item">🔗 URL Encoder/Decoder</a>
-                        <a href="/typing-test/" class="dropdown-item">⌨️ Typing Speed Test</a>
-                        <a href="/resume-builder/" class="dropdown-item">📝 Resume Builder</a>
+                        <a href="/cron-builder/" class="dropdown-item">Cron Builder</a>
+                        <a href="/sql-formatter/" class="dropdown-item">SQL Formatter</a>
+                        <a href="{% url 'sqlite_viewer_page' %}" class="dropdown-item">SQLite Viewer</a>
+                        <a href="/markdown-preview/" class="dropdown-item">Markdown Preview</a>
+                        <a href="/qr-generator/" class="dropdown-item">QR Code Generator</a>
+                        <a href="{% url 'regex_tester_page' %}" class="dropdown-item">Regex Tester/Generator</a>
+                        <a href="/mock-api/" class="dropdown-item">Mock API Generator</a>
+                        <a href="/swagger-viewer/" class="dropdown-item">Swagger/OpenAPI Viewer</a>
+                        <a href="/push-notification-tester/" class="dropdown-item">Push Notification Tester</a>
+                        <a href="/password-generator/" class="dropdown-item">Password Generator</a>
+                        <a href="/url-encoder/" class="dropdown-item">URL Encoder/Decoder</a>
+                        <a href="/typing-test/" class="dropdown-item">Typing Speed Test</a>
+                        <a href="/resume-builder/" class="dropdown-item">Resume Builder</a>
                     </div>
                 </div>
 
@@ -342,17 +343,17 @@
                 <div class="nav-item dropdown">
                     <button class="nav-link">Web & Network ▾</button>
                     <div class="dropdown-content wide">
-                        <a href="/meta-tag-generator/" class="dropdown-item">🌐 Meta Tag Generator</a>
-                        <a href="/domain-age/" class="dropdown-item">🕐 Domain Age Checker</a>
-                        <a href="/lorem-ipsum/" class="dropdown-item">📏 Lorem Ipsum Generator</a>
-                        <a href="/image-resizer/" class="dropdown-item">📸 Image Resizer</a>
+                        <a href="/meta-tag-generator/" class="dropdown-item">Meta Tag Generator</a>
+                        <a href="/domain-age/" class="dropdown-item">Domain Age Checker</a>
+                        <a href="/lorem-ipsum/" class="dropdown-item">Lorem Ipsum Generator</a>
+                        <a href="/image-resizer/" class="dropdown-item">Image Resizer</a>
                         <div class="dropdown-divider"></div>
-                        <a href="/http-headers/" class="dropdown-item">🌐 HTTP Headers Parser</a>
-                        <a href="/cors-checker/" class="dropdown-item">🔄 CORS Checker</a>
-                        <a href="/ip-info/" class="dropdown-item">📍 IP Address Info</a>
-                        <a href="/dns-lookup/" class="dropdown-item">🔍 DNS Lookup</a>
-                        <a href="/ssl-checker/" class="dropdown-item">🔒 SSL Cert Checker</a>
-                        <a href="/api-response-tester/" class="dropdown-item">⏱️ API Response Tester</a>
+                        <a href="/http-headers/" class="dropdown-item">HTTP Headers Parser</a>
+                        <a href="/cors-checker/" class="dropdown-item">CORS Checker</a>
+                        <a href="/ip-info/" class="dropdown-item">IP Address Info</a>
+                        <a href="/dns-lookup/" class="dropdown-item">DNS Lookup</a>
+                        <a href="/ssl-checker/" class="dropdown-item">SSL Cert Checker</a>
+                        <a href="/api-response-tester/" class="dropdown-item">API Response Tester</a>
                     </div>
                 </div>
 
@@ -488,6 +489,7 @@
                             <li><a href="/base64/">Base64 Encoder</a></li>
                             <li><a href="/cron-builder/">Cron Builder</a></li>
                             <li><a href="/sql-formatter/">SQL Formatter</a></li>
+                            <li><a href="{% url 'sqlite_viewer_page' %}">SQLite Viewer</a></li>
                             <li><a href="/markdown-preview/">Markdown Preview</a></li>
                             <li><a href="/password-generator/">Password Generator</a></li>
                             <li><a href="/url-encoder/">URL Encoder</a></li>

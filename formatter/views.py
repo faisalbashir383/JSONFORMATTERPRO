@@ -3252,3 +3252,13 @@ def xsd_complextype_to_json_schema_page(request):
 def json_viewer_page(request):
     """Render the JSON Viewer Online page"""
     return render(request, 'json-viewer.html')
+
+def sqlite_viewer_page(request):
+    """
+    Render the SQLite Viewer page.
+    """
+    context = {
+        'page_title': 'SQLite Viewer Online – Open & Explore SQLite .db Files Instantly',
+        'meta_description': 'Open, view, and explore SQLite database files online. Upload .db, browse tables, run SQL queries, and export data to CSV or JSON. 100% client-side, private, and secure.',
+    }
+    return render(request, 'sqlite-viewer.html', context)

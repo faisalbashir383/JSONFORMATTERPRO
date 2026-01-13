@@ -344,7 +344,7 @@ sqlite formatter{% endblock %}
         }
     }
 
-        /* Custom theme adjustments for light mode */
+    /* Custom theme adjustments for light mode */
     .cm-s-default.CodeMirror {
         background: var(--color-bg) !important;
         color: var(--color-text) !important;
@@ -602,6 +602,17 @@ ORDER BY
                     <span
                         style="font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.5; display: block;">View
                         OpenAPI & Swagger specs without setup.</span>
+                </div>
+            </a>
+            <a href="{% url 'sqlite_viewer_page' %}" style="text-decoration: none; color: inherit;">
+                <div
+                    style="background: var(--color-surface); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); transition: transform 0.2s; height: 100%;">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📂</div>
+                    <strong style="display: block; margin-bottom: 0.5rem; color: var(--color-text);">SQLite Viewer
+                        Online</strong>
+                    <span
+                        style="font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.5; display: block;">Open,
+                        Browse & Query SQLite files instantly.</span>
                 </div>
             </a>
         </div>

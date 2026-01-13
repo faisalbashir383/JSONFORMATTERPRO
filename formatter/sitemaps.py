@@ -97,7 +97,8 @@ class StaticViewSitemap(Sitemap):
             'xsd_to_json_schema_example_page',
             'xsd_complextype_to_json_schema_page',
             'json_path_tester_page',
-            'json_viewer_page'
+            'json_viewer_page',
+            'sqlite_viewer_page',
         ]
 
 
