@@ -1,0 +1,1279 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dummy JSON API Playground – Test Fake JSON Endpoints{% endblock %}
+{% block meta_title %}Dummy JSON API Playground – Test Fake JSON Endpoints{% endblock %}
+{% block meta_robots %}noindex,follow{% endblock %}
+
+{% block extra_head %}
+<!-- Custom syntax highlighting, no external dependencies -->
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .playground-layout {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        gap: 1.5rem;
+        min-height: calc(100vh - 200px);
+    }
+
+    /* Sidebar Styles */
+    .api-sidebar {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1.25rem;
+        position: sticky;
+        top: 70px;
+        height: fit-content;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+    }
+
+    .sidebar-header {
+        margin-bottom: 1.25rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .sidebar-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        color: var(--color-primary);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+
+    .api-category-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .api-category-item {
+        margin-bottom: 0.35rem;
+    }
+
+    .api-category-btn {
+        width: 100%;
+        padding: 0.7rem 0.9rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-align: left;
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        cursor: pointer;
+        transition: all 0.15s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .api-category-btn:hover {
+        border-color: var(--color-primary);
+        background: rgba(99, 102, 241, 0.05);
+    }
+
+    .api-category-btn.active {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        border-color: transparent;
+        color: white;
+    }
+
+    /* Main Panel */
+    .main-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .panel-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1.25rem;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .panel-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin: 0;
+    }
+
+    .panel-subtitle {
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+    }
+
+    /* Endpoint URL Display */
+    .endpoint-display {
+        background: #1e1e2e;
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .endpoint-content {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        overflow-x: auto;
+    }
+
+    .endpoint-method {
+        background: #22c55e;
+        color: white;
+        padding: 0.2rem 0.6rem;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        font-size: 0.8rem;
+        margin-right: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    .endpoint-url {
+        color: #cdd6f4;
+        font-family: 'SF Mono', monospace;
+        font-size: 0.85rem;
+        word-break: break-all;
+    }
+
+    .copy-url-btn {
+        background: rgba(99, 102, 241, 0.2);
+        border: 1px solid rgba(99, 102, 241, 0.4);
+        color: #a5b4fc;
+        padding: 0.4rem 0.8rem;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        transition: all 0.15s ease;
+    }
+
+    .copy-url-btn:hover {
+        background: rgba(99, 102, 241, 0.3);
+    }
+
+    /* Options Grid */
+    .options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .option-group label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.4rem;
+    }
+
+    .option-group select,
+    .option-group input {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        background: var(--color-surface);
+        color: var(--color-text);
+    }
+
+    /* Field Checkboxes */
+    .fields-section {
+        margin-bottom: 1rem;
+    }
+
+    .fields-section>label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.5rem;
+    }
+
+    .field-checkboxes {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .field-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.3rem 0.6rem;
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .field-checkbox:has(input:checked) {
+        background: rgba(99, 102, 241, 0.15);
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    .field-checkbox input {
+        accent-color: var(--color-primary);
+        width: 14px;
+        height: 14px;
+    }
+
+    /* Action Buttons */
+    .action-row {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .try-btn {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .try-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .action-btn {
+        padding: 0.7rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--color-text);
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .action-btn:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    /* Response Panel */
+    .response-panel {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+    }
+
+    .response-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.6rem 1rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+        font-size: 0.85rem;
+    }
+
+    .response-meta {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.8rem;
+    }
+
+    .response-meta span {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .response-status {
+        color: #10b981;
+        font-weight: 500;
+    }
+
+    .response-status.error {
+        color: #ef4444;
+    }
+
+    .response-status.loading {
+        color: var(--color-text-secondary);
+    }
+
+    .response-time {
+        color: var(--color-text-secondary);
+    }
+
+    .response-size {
+        color: var(--color-text-secondary);
+    }
+
+    .response-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .response-action-btn {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
+        background: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .response-action-btn:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    .response-body {
+        background: #1e1e2e;
+        max-height: 400px;
+        overflow: auto;
+        margin: 0;
+    }
+
+    .response-body pre {
+        margin: 0;
+        padding: 1rem;
+    }
+
+    .response-body code {
+        font-family: 'SF Mono', monospace;
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+
+    .response-placeholder {
+        padding: 3rem;
+        text-align: center;
+        color: var(--color-text-secondary);
+        background: var(--color-surface-alt);
+    }
+
+    /* Code Snippets Panel */
+    .code-snippets-panel {
+        margin-top: 0;
+    }
+
+    .code-tabs {
+        display: flex;
+        gap: 0.25rem;
+        border-bottom: 1px solid var(--color-border);
+        padding: 0 1rem;
+        background: var(--color-surface-alt);
+        overflow-x: auto;
+    }
+
+    .code-tab {
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        background: transparent;
+        border: none;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+        transition: all 0.15s ease;
+        white-space: nowrap;
+    }
+
+    .code-tab:hover {
+        color: var(--color-text);
+    }
+
+    .code-tab.active {
+        color: var(--color-primary);
+        border-bottom-color: var(--color-primary);
+    }
+
+    .code-content {
+        position: relative;
+    }
+
+    .code-content pre {
+        margin: 0;
+        padding: 1rem;
+        background: #1e1e2e;
+        color: #cdd6f4;
+        max-height: 200px;
+        overflow: auto;
+    }
+
+    .copy-code-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
+        background: rgba(99, 102, 241, 0.3);
+        border: 1px solid rgba(99, 102, 241, 0.5);
+        color: #a5b4fc;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+    }
+
+    .copy-code-btn:hover {
+        background: rgba(99, 102, 241, 0.5);
+    }
+
+    /* Request History */
+    .history-panel {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .history-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid var(--color-border);
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+
+    .history-item:last-child {
+        border-bottom: none;
+    }
+
+    .history-item:hover {
+        background: var(--color-surface-alt);
+        margin: 0 -1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .history-endpoint {
+        font-family: 'SF Mono', monospace;
+        font-size: 0.75rem;
+        color: var(--color-text);
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .history-meta {
+        display: flex;
+        gap: 0.75rem;
+        font-size: 0.7rem;
+        color: var(--color-text-secondary);
+    }
+
+    .history-status {
+        color: #10b981;
+    }
+
+    .history-status.error {
+        color: #ef4444;
+    }
+
+    /* Headers Panel */
+    .headers-table {
+        width: 100%;
+        font-size: 0.8rem;
+        border-collapse: collapse;
+    }
+
+    .headers-table th,
+    .headers-table td {
+        padding: 0.5rem;
+        text-align: left;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .headers-table th {
+        font-weight: 600;
+        color: var(--color-text);
+        background: var(--color-surface-alt);
+    }
+
+    .headers-table td:first-child {
+        font-family: 'SF Mono', monospace;
+        color: var(--color-primary);
+    }
+
+    /* Collapsible Sections */
+    .collapsible-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .collapsible-header h3 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .collapsible-toggle {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+    }
+
+    .collapsible-content {
+        padding-top: 0.75rem;
+    }
+
+    .collapsible-content.hidden {
+        display: none;
+    }
+
+    /* Share URL Modal */
+    .share-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .share-modal.active {
+        display: flex;
+    }
+
+    .share-modal-content {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        max-width: 500px;
+        width: 90%;
+    }
+
+    .share-url-input {
+        width: 100%;
+        padding: 0.75rem;
+        font-family: 'SF Mono', monospace;
+        font-size: 0.85rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        margin: 1rem 0;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 900px) {
+        .playground-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .api-sidebar {
+            position: static;
+            max-height: none;
+        }
+
+        .api-category-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+        }
+
+        .api-category-item {
+            margin-bottom: 0;
+        }
+
+        .api-category-btn {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8rem;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .options-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .action-row {
+            flex-direction: column;
+        }
+
+        .action-row button {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="playground-layout">
+    <!-- Sidebar -->
+    <aside class="api-sidebar">
+        <div class="sidebar-header">
+            <h1 class="sidebar-title">🚀 API Playground</h1>
+            <a href="/dummy-json-api/" class="back-link">← Back to Documentation</a>
+        </div>
+
+        <nav>
+            <ul class="api-category-list">
+                <li class="api-category-item">
+                    <button class="api-category-btn active" data-api="users">👤 Users</button>
+                </li>
+                <li class="api-category-item">
+                    <button class="api-category-btn" data-api="products">📦 Products</button>
+                </li>
+                <li class="api-category-item">
+                    <button class="api-category-btn" data-api="posts">📝 Posts</button>
+                </li>
+                <li class="api-category-item">
+                    <button class="api-category-btn" data-api="comments">💬 Comments</button>
+                </li>
+                <li class="api-category-item">
+                    <button class="api-category-btn" data-api="todos">✅ Todos</button>
+                </li>
+                <li class="api-category-item">
+                    <button class="api-category-btn" data-api="companies">🏢 Companies</button>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Request History -->
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--color-border);">
+            <div class="collapsible-header" onclick="toggleSection('history')">
+                <h3>📜 History</h3>
+                <span class="collapsible-toggle" id="history-toggle">▼</span>
+            </div>
+            <div class="collapsible-content" id="history-content">
+                <div class="history-panel" id="requestHistory">
+                    <p style="font-size: 0.8rem; color: var(--color-text-secondary); margin: 0;">No requests yet</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Panel -->
+    <main class="main-panel">
+        <!-- Request Builder -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title" id="apiTitle">Users API</h2>
+                    <p class="panel-subtitle" id="apiDescription">Generate random user profiles with avatars</p>
+                </div>
+            </div>
+
+            <!-- Endpoint URL -->
+            <div class="endpoint-display">
+                <div class="endpoint-content">
+                    <span class="endpoint-method">GET</span>
+                    <span class="endpoint-url" id="generatedUrl">{{ SITE_URL }}/api/dummy-json/users/?count=5</span>
+                </div>
+                <button class="copy-url-btn" onclick="copyUrl()">📋 Copy</button>
+            </div>
+
+            <!-- Options -->
+            <div class="options-grid">
+                <div class="option-group">
+                    <label for="countSelect">Count</label>
+                    <select id="countSelect">
+                        <option value="1">1</option>
+                        <option value="3">3</option>
+                        <option value="5" selected>5</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label for="delaySelect">Simulate Delay</label>
+                    <select id="delaySelect">
+                        <option value="0">No delay</option>
+                        <option value="500">500ms</option>
+                        <option value="1000">1 second</option>
+                        <option value="2000">2 seconds</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label for="errorSelect">Simulate Error</label>
+                    <select id="errorSelect">
+                        <option value="">None</option>
+                        <option value="404">404 Not Found</option>
+                        <option value="500">500 Server Error</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Fields -->
+            <div class="fields-section">
+                <label>Include Fields:</label>
+                <div class="field-checkboxes" id="fieldCheckboxes"></div>
+            </div>
+
+            <!-- Actions -->
+            <div class="action-row">
+                <button class="try-btn" onclick="tryApi()">🚀 Try It Live</button>
+                <button class="action-btn" onclick="copyUrl()">📋 Copy URL</button>
+                <button class="action-btn" onclick="copyCurl()">💻 Copy cURL</button>
+                <button class="action-btn" onclick="shareUrl()">🔗 Share</button>
+            </div>
+        </div>
+
+        <!-- Response Panel -->
+        <div class="panel-card">
+            <div class="response-panel">
+                <div class="response-header">
+                    <div class="response-meta">
+                        <span class="response-status" id="responseStatus">Ready</span>
+                        <span class="response-time" id="responseTime"></span>
+                        <span class="response-size" id="responseSize"></span>
+                    </div>
+                    <div class="response-actions">
+                        <button class="response-action-btn" onclick="copyResponse()">📋 Copy</button>
+                        <button class="response-action-btn" onclick="downloadResponse()">⬇ Download</button>
+                        <button class="response-action-btn" onclick="togglePrettyPrint()" id="prettyPrintBtn">🔧
+                            Minify</button>
+                    </div>
+                </div>
+                <div class="response-body" id="responseContainer">
+                    <div class="response-placeholder" id="responsePlaceholder">
+                        <p>👆 Click "Try It Live" to see the API response</p>
+                    </div>
+                    <div id="monacoEditor" style="height: 400px; display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Snippets -->
+        <div class="panel-card code-snippets-panel">
+            <div class="collapsible-header" onclick="toggleSection('code')">
+                <h3>💻 Code Snippets</h3>
+                <span class="collapsible-toggle" id="code-toggle">▼</span>
+            </div>
+            <div class="collapsible-content" id="code-content">
+                <div class="code-tabs">
+                    <button class="code-tab active" data-lang="curl">cURL</button>
+                    <button class="code-tab" data-lang="javascript">JavaScript</button>
+                    <button class="code-tab" data-lang="python">Python</button>
+                    <button class="code-tab" data-lang="php">PHP</button>
+                    <button class="code-tab" data-lang="ruby">Ruby</button>
+                    <button class="code-tab" data-lang="go">Go</button>
+                </div>
+                <div class="code-content" id="codeContent">
+                    <button class="copy-code-btn" onclick="copyCodeSnippet()">📋 Copy</button>
+                    <pre><code class="language-bash" id="codeSnippet"></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Response Headers -->
+        <div class="panel-card" id="headersPanel" style="display: none;">
+            <div class="collapsible-header" onclick="toggleSection('headers')">
+                <h3>📋 Response Headers</h3>
+                <span class="collapsible-toggle" id="headers-toggle">▼</span>
+            </div>
+            <div class="collapsible-content" id="headers-content">
+                <table class="headers-table" id="headersTable">
+                    <thead>
+                        <tr>
+                            <th>Header</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Share Modal -->
+<div class="share-modal" id="shareModal">
+    <div class="share-modal-content">
+        <h3 style="margin: 0 0 0.5rem;">🔗 Share This Request</h3>
+        <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0;">Copy this URL to share your
+            current configuration:</p>
+        <input type="text" class="share-url-input" id="shareUrlInput" readonly>
+        <div style="display: flex; gap: 0.75rem;">
+            <button class="try-btn" onclick="copyShareUrl()" style="flex: 1;">📋 Copy URL</button>
+            <button class="action-btn" onclick="closeShareModal()">Close</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<!-- Monaco Editor CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+<script>
+    const baseUrl = '{{ SITE_URL }}';
+    let currentApi = 'users';
+    let currentLang = 'curl';
+    let isPrettyPrint = true;
+    let lastResponse = null;
+    let lastResponseHeaders = null;
+    let requestHistory = [];
+    let monacoEditor = null;
+
+    // Helper to get the current theme for Monaco
+    function getMonacoTheme() {
+        const theme = document.documentElement.getAttribute('data-theme');
+        return theme === 'dark' ? 'vs-dark' : 'vs';
+    }
+
+    // Initialize Monaco Editor
+    require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' } });
+    require(['vs/editor/editor.main'], function () {
+        monacoEditor = monaco.editor.create(document.getElementById('monacoEditor'), {
+            value: '',
+            language: 'json',
+            theme: getMonacoTheme(),
+            readOnly: true,
+            minimap: { enabled: false },
+            automaticLayout: true,
+            scrollBeyondLastLine: false,
+            lineNumbers: 'on',
+            fontSize: 13,
+            wordWrap: 'on',
+            folding: true,
+            formatOnPaste: true
+        });
+
+        // Watch for theme changes and update Monaco theme
+        const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.attributeName === 'data-theme' && monacoEditor) {
+                    monaco.editor.setTheme(getMonacoTheme());
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+    });
+
+    // API configurations with image fields
+    const apiConfigs = {
+        users: {
+            title: 'Users API',
+            description: 'Generate random user profiles with avatars',
+            fields: ['id', 'name', 'email', 'phone', 'company', 'status', 'avatar']
+        },
+        products: {
+            title: 'Products API',
+            description: 'Generate product data with images',
+            fields: ['id', 'name', 'price', 'category', 'inStock', 'rating', 'image']
+        },
+        posts: {
+            title: 'Posts API',
+            description: 'Generate blog posts with thumbnails',
+            fields: ['id', 'title', 'body', 'author', 'authorAvatar', 'date', 'views', 'thumbnail']
+        },
+        comments: {
+            title: 'Comments API',
+            description: 'Generate comments with user avatars',
+            fields: ['id', 'name', 'email', 'avatar', 'body', 'postId']
+        },
+        todos: {
+            title: 'Todos API',
+            description: 'Generate todo items with priorities',
+            fields: ['id', 'title', 'completed', 'priority', 'dueDate']
+        },
+        companies: {
+            title: 'Companies API',
+            description: 'Generate company data with logos',
+            fields: ['id', 'name', 'industry', 'employees', 'revenue', 'founded', 'logo']
+        }
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function () {
+        // Check for shared URL params
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('api')) {
+            currentApi = params.get('api');
+            document.querySelectorAll('.api-category-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.api === currentApi);
+            });
+        }
+        if (params.has('count')) {
+            document.getElementById('countSelect').value = params.get('count');
+        }
+
+        updateUI();
+        renderFieldCheckboxes();
+        updateGeneratedUrl();
+        updateCodeSnippet();
+
+        // API category switching
+        document.querySelectorAll('.api-category-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                currentApi = this.dataset.api;
+                document.querySelectorAll('.api-category-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                updateUI();
+                renderFieldCheckboxes();
+                updateGeneratedUrl();
+                updateCodeSnippet();
+            });
+        });
+
+        // Option change handlers
+        ['countSelect', 'delaySelect', 'errorSelect'].forEach(id => {
+            document.getElementById(id).addEventListener('change', () => {
+                updateGeneratedUrl();
+                updateCodeSnippet();
+            });
+        });
+
+        // Code tab switching
+        document.querySelectorAll('.code-tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                currentLang = this.dataset.lang;
+                document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                updateCodeSnippet();
+            });
+        });
+    });
+
+    function updateUI() {
+        const config = apiConfigs[currentApi];
+        document.getElementById('apiTitle').textContent = config.title;
+        document.getElementById('apiDescription').textContent = config.description;
+    }
+
+    function renderFieldCheckboxes() {
+        const container = document.getElementById('fieldCheckboxes');
+        const fields = apiConfigs[currentApi]?.fields || [];
+        container.innerHTML = fields.map(field => `
+            <label class="field-checkbox">
+                <input type="checkbox" value="${field}" checked onchange="updateGeneratedUrl(); updateCodeSnippet();">
+                ${field}
+            </label>
+        `).join('');
+    }
+
+    function getSelectedFields() {
+        return Array.from(document.querySelectorAll('#fieldCheckboxes input:checked')).map(cb => cb.value);
+    }
+
+    function updateGeneratedUrl() {
+        const count = document.getElementById('countSelect').value;
+        const fields = getSelectedFields();
+        const allFields = apiConfigs[currentApi]?.fields || [];
+
+        let url = `${baseUrl}/api/dummy-json/${currentApi}/?count=${count}`;
+        if (fields.length < allFields.length && fields.length > 0) {
+            url += `&fields=${fields.join(',')}`;
+        }
+        document.getElementById('generatedUrl').textContent = url;
+    }
+
+    function getApiUrl() {
+        return document.getElementById('generatedUrl').textContent;
+    }
+
+    function updateCodeSnippet() {
+        const url = getApiUrl();
+        const snippets = {
+            curl: `curl "${url}"`,
+            javascript: `fetch('${url}')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));`,
+            python: `import requests
+
+response = requests.get('${url}')
+data = response.json()
+print(data)`,
+            php: `<?php
+$response = file_get_contents('${url}');
+$data = json_decode($response, true);
+print_r($data);`,
+            ruby: `require 'net/http'
+require 'json'
+
+uri = URI('${url}')
+response = Net::HTTP.get(uri)
+data = JSON.parse(response)
+puts data`,
+            go: `package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    resp, _ := http.Get("${url}")
+    defer resp.Body.Close()
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}`
+        };
+
+        const codeEl = document.getElementById('codeSnippet');
+        codeEl.textContent = snippets[currentLang];
+    }
+
+    async function tryApi() {
+        const url = getApiUrl();
+        const delay = parseInt(document.getElementById('delaySelect').value);
+        const errorCode = document.getElementById('errorSelect').value;
+
+        const statusEl = document.getElementById('responseStatus');
+        const timeEl = document.getElementById('responseTime');
+        const sizeEl = document.getElementById('responseSize');
+        const placeholder = document.getElementById('responsePlaceholder');
+        const editorDiv = document.getElementById('monacoEditor');
+        const headersPanel = document.getElementById('headersPanel');
+
+        statusEl.textContent = 'Loading...';
+        statusEl.className = 'response-status loading';
+        timeEl.textContent = '';
+        sizeEl.textContent = '';
+
+        // Simulate delay if set
+        if (delay > 0) {
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
+
+        // Simulate error if set
+        if (errorCode) {
+            statusEl.textContent = `${errorCode} Error`;
+            statusEl.className = 'response-status error';
+            timeEl.textContent = `⏱ ${delay}ms`;
+            placeholder.innerHTML = `<p style="color: #ef4444;">Simulated ${errorCode} Error</p>`;
+            placeholder.style.display = 'flex';
+            editorDiv.style.display = 'none';
+            addToHistory(url, errorCode, delay);
+            return;
+        }
+
+        const startTime = performance.now();
+
+        try {
+            const response = await fetch(url);
+            const endTime = performance.now();
+            const responseTime = Math.round(endTime - startTime + delay);
+
+            lastResponse = await response.json();
+            lastResponseHeaders = {};
+            response.headers.forEach((value, key) => {
+                lastResponseHeaders[key] = value;
+            });
+
+            const responseText = JSON.stringify(lastResponse, null, isPrettyPrint ? 2 : 0);
+            const responseSize = new Blob([responseText]).size;
+
+            statusEl.textContent = `${response.status} OK`;
+            statusEl.className = 'response-status';
+            timeEl.textContent = `⏱ ${responseTime}ms`;
+            sizeEl.textContent = `📦 ${formatBytes(responseSize)}`;
+
+            // Show Monaco Editor with response
+            placeholder.style.display = 'none';
+            editorDiv.style.display = 'block';
+            if (monacoEditor) {
+                monacoEditor.setValue(responseText);
+            }
+
+            // Show headers
+            headersPanel.style.display = 'block';
+            const tbody = document.querySelector('#headersTable tbody');
+            tbody.innerHTML = Object.entries(lastResponseHeaders)
+                .map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`)
+                .join('');
+
+            addToHistory(url, response.status, responseTime);
+
+        } catch (error) {
+            statusEl.textContent = 'Error';
+            statusEl.className = 'response-status error';
+            placeholder.innerHTML = `<p style="color: #ef4444;">Failed to fetch: ${error.message}</p>`;
+            placeholder.style.display = 'flex';
+            editorDiv.style.display = 'none';
+            addToHistory(url, 'Error', 0);
+        }
+    }
+
+    function addToHistory(url, status, time) {
+        requestHistory.unshift({ url, status, time, timestamp: new Date() });
+        if (requestHistory.length > 10) requestHistory.pop();
+        renderHistory();
+    }
+
+    function renderHistory() {
+        const container = document.getElementById('requestHistory');
+        if (requestHistory.length === 0) {
+            container.innerHTML = '<p style="font-size: 0.8rem; color: var(--color-text-secondary); margin: 0;">No requests yet</p>';
+            return;
+        }
+        container.innerHTML = requestHistory.map((item, i) => `
+            <div class="history-item" onclick="loadHistoryItem(${i})">
+                <span class="history-endpoint">${item.url.replace(baseUrl, '')}</span>
+                <div class="history-meta">
+                    <span class="history-status ${item.status !== 200 && item.status !== '200' ? 'error' : ''}">${item.status}</span>
+                    <span>${item.time}ms</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function loadHistoryItem(index) {
+        const item = requestHistory[index];
+        // Parse URL and set options
+        const url = new URL(item.url);
+        const params = url.searchParams;
+
+        const api = url.pathname.split('/')[3];
+        if (apiConfigs[api]) {
+            currentApi = api;
+            document.querySelectorAll('.api-category-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.api === api);
+            });
+            updateUI();
+            renderFieldCheckboxes();
+        }
+
+        if (params.has('count')) {
+            document.getElementById('countSelect').value = params.get('count');
+        }
+
+        updateGeneratedUrl();
+        updateCodeSnippet();
+    }
+
+    function copyUrl() {
+        navigator.clipboard.writeText(getApiUrl()).then(() => showToast('URL copied!'));
+    }
+
+    function copyCurl() {
+        navigator.clipboard.writeText(`curl "${getApiUrl()}"`).then(() => showToast('cURL copied!'));
+    }
+
+    function copyResponse() {
+        if (!lastResponse) return;
+        const text = JSON.stringify(lastResponse, null, isPrettyPrint ? 2 : 0);
+        navigator.clipboard.writeText(text).then(() => showToast('Response copied!'));
+    }
+
+    function downloadResponse() {
+        if (!lastResponse) return;
+        const text = JSON.stringify(lastResponse, null, 2);
+        const blob = new Blob([text], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${currentApi}-response.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function togglePrettyPrint() {
+        isPrettyPrint = !isPrettyPrint;
+        document.getElementById('prettyPrintBtn').textContent = isPrettyPrint ? '🔧 Minify' : '🔧 Prettify';
+        if (lastResponse && monacoEditor) {
+            const text = JSON.stringify(lastResponse, null, isPrettyPrint ? 2 : 0);
+            monacoEditor.setValue(text);
+        }
+    }
+
+    function copyCodeSnippet() {
+        const code = document.getElementById('codeSnippet').textContent;
+        navigator.clipboard.writeText(code).then(() => showToast('Code copied!'));
+    }
+
+    function shareUrl() {
+        const count = document.getElementById('countSelect').value;
+        const shareUrl = `${window.location.origin}${window.location.pathname}?api=${currentApi}&count=${count}`;
+        document.getElementById('shareUrlInput').value = shareUrl;
+        document.getElementById('shareModal').classList.add('active');
+    }
+
+    function copyShareUrl() {
+        const input = document.getElementById('shareUrlInput');
+        navigator.clipboard.writeText(input.value).then(() => {
+            showToast('Share URL copied!');
+            closeShareModal();
+        });
+    }
+
+    function closeShareModal() {
+        document.getElementById('shareModal').classList.remove('active');
+    }
+
+    function toggleSection(section) {
+        const content = document.getElementById(section + '-content');
+        const toggle = document.getElementById(section + '-toggle');
+        const isHidden = content.classList.toggle('hidden');
+        toggle.textContent = isHidden ? '▶' : '▼';
+    }
+
+    function formatBytes(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.textContent = message;
+        toast.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #10b981; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 0.9rem; z-index: 9999; animation: fadeIn 0.3s ease;';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+    }
+
+    // Close modal on outside click
+    document.getElementById('shareModal').addEventListener('click', function (e) {
+        if (e.target === this) closeShareModal();
+    });
+</script>
+{% endblock %}
