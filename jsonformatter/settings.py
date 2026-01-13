@@ -155,6 +155,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # WhiteNoise for static file serving with compression and caching
 # This adds proper security headers to static files
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+WHITENOISE_MIMETYPES = {
+    ".ico": "image/x-icon",
+}
 
 # WhiteNoise settings
 WHITENOISE_MAX_AGE = 31536000  # 1 year for immutable assets
