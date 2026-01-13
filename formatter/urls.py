@@ -39,6 +39,7 @@ urlpatterns = [
     path('json-visualizer/', views.json_visualizer_page, name='json_visualizer_page'),
     path('json-to-code/', views.json_to_code_page, name='json_to_code_page'),
     path('dummy-json/', views.dummy_json_page, name='dummy_json_page'),
+    path('dummy-json-api/playground/', views.dummy_json_api_playground_page, name='dummy_json_api_playground_page'),
     path('dummy-json-api/', views.dummy_json_api_page, name='dummy_json_api_page'),
     path('json-tools/', views.json_tools_page, name='json_tools_page'),
     path('json-generator/', views.json_generator_page, name='json_generator_page'),

@@ -483,6 +483,11 @@ def dummy_json_api_page(request):
     return render(request, 'dummy-json-api.html')
 
 
+def dummy_json_api_playground_page(request):
+    """Render the Dummy JSON API interactive playground (noindex)"""
+    return render(request, 'dummy-json-api-playground.html')
+
+
 def json_tools_page(request):
     """Render the JSON Tools pillar page"""
     return render(request, 'json-tools.html')
@@ -504,13 +509,15 @@ def dummy_json_users_api(request):
     for i in range(count):
         first = random.choice(first_names)
         last = random.choice(last_names)
+        user_id = i + 1
         users.append({
-            'id': i + 1,
+            'id': user_id,
             'name': f'{first} {last}',
             'email': f'{first.lower()}.{last.lower()}@example.com',
             'phone': f'+1-555-{random.randint(1000, 9999)}',
             'company': random.choice(companies),
-            'status': random.choice(statuses)
+            'status': random.choice(statuses),
+            'avatar': f'https://i.pravatar.cc/150?u={user_id}'
         })
     
     # Track request
@@ -541,13 +548,15 @@ def dummy_json_products_api(request):
     products = []
     for i in range(count):
         name, category = random.choice(products_list)
+        product_id = i + 1
         products.append({
-            'id': i + 1,
+            'id': product_id,
             'name': f'{name} {random.choice(["Pro", "Plus", "Max", "Lite", "X", ""])}',
             'price': round(random.uniform(19.99, 499.99), 2),
             'category': category,
             'inStock': random.choice([True, True, True, False]),
-            'rating': round(random.uniform(3.5, 5.0), 1)
+            'rating': round(random.uniform(3.5, 5.0), 1),
+            'image': f'https://picsum.photos/seed/product{product_id}/300/300'
         })
     
     # Track request
@@ -577,13 +586,17 @@ def dummy_json_posts_api(request):
     posts = []
     for i in range(count):
         date = datetime.now() - timedelta(days=random.randint(1, 365))
+        post_id = i + 1
+        author_id = random.randint(1, 50)
         posts.append({
-            'id': i + 1,
+            'id': post_id,
             'title': random.choice(titles),
             'body': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
             'author': random.choice(authors),
+            'authorAvatar': f'https://i.pravatar.cc/100?u=author{author_id}',
             'date': date.strftime('%Y-%m-%d'),
-            'views': random.randint(100, 10000)
+            'views': random.randint(100, 10000),
+            'thumbnail': f'https://picsum.photos/seed/post{post_id}/400/200'
         })
     
     # Track request
@@ -608,10 +621,12 @@ def dummy_json_comments_api(request):
     comments = []
     for i in range(count):
         name = random.choice(names)
+        commenter_id = random.randint(1, 100)
         comments.append({
             'id': i + 1,
             'name': name,
             'email': f'{name.split()[0].lower()}@example.com',
+            'avatar': f'https://i.pravatar.cc/80?u=commenter{commenter_id}',
             'body': random.choice([
                 'Great article! Very informative and well written.',
                 'Thanks for sharing this, it really helped me understand the topic.',
@@ -682,13 +697,16 @@ def dummy_json_companies_api(request):
     
     companies = []
     for i in range(count):
+        company_id = i + 1
+        company_name = random.choice(company_names)
         companies.append({
-            'id': i + 1,
-            'name': f'{random.choice(company_names)} {random.choice(suffixes)}',
+            'id': company_id,
+            'name': f'{company_name} {random.choice(suffixes)}',
             'industry': random.choice(industries),
             'employees': random.randint(10, 10000),
             'revenue': f'${random.randint(1, 500)}M',
-            'founded': random.randint(1990, 2023)
+            'founded': random.randint(1990, 2023),
+            'logo': f'https://ui-avatars.com/api/?name={company_name}&size=128&background=random'
         })
     
     # Track request
