@@ -777,8 +777,9 @@ upload JSON, format it, and convert single or double quotes instantly.{% endbloc
     <!-- SEO Shell - hidden for users but visible to search engines -->
     <div id="seo-shell">
         <h1>JSON Viewer Online</h1>
-          <p>Use this JSON Viewer Online to view, read, and explore JSON data in a structured tree format.</p>
-          <p>Format and validate JSON using our <a href="/json-formatter-online/">JSON Formatter</a> and <a href="/json-schema-validator/">JSON Schema Validator</a>.</p>
+        <p>Use this JSON Viewer Online to view, read, and explore JSON data in a structured tree format.</p>
+        <p>Format and validate JSON using our <a href="/json-formatter-online/">JSON Formatter</a> and <a
+                href="/json-schema-validator/">JSON Schema Validator</a>.</p>
     </div>
 
     <!-- Mobile Drawer Overlay -->
@@ -1133,6 +1134,12 @@ upload JSON, format it, and convert single or double quotes instantly.{% endbloc
                 script.onload = () => {
                     require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
                     require(['vs/editor/editor.main'], () => {
+                        // Disable auto-validation - errors only shown when explicitly validating
+                        monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+                            validate: false,
+                            allowComments: true,
+                            trailingCommas: 'ignore'
+                        });
                         monacoLoaded = true;
                         initMonaco();
                         resolve();
@@ -1206,6 +1213,26 @@ upload JSON, format it, and convert single or double quotes instantly.{% endbloc
             result = result.replace(/:\s*False\b/g, ': false');
             result = result.replace(/:\s*None\b/g, ': null');
 
+            // Step 1b: Convert Python datetime objects to ISO strings
+            result = result.replace(/datetime\.datetime\([^)]+\)/g, function (match) {
+                const argsMatch = match.match(/datetime\.datetime\(([^)]+)\)/);
+                if (argsMatch) {
+                    const args = argsMatch[1].split(',').map(a => a.trim());
+                    const nums = args.filter(a => /^\d+$/.test(a)).map(Number);
+                    if (nums.length >= 3) {
+                        const year = nums[0];
+                        const month = (nums[1] || 1).toString().padStart(2, '0');
+                        const day = (nums[2] || 1).toString().padStart(2, '0');
+                        const hour = (nums[3] || 0).toString().padStart(2, '0');
+                        const min = (nums[4] || 0).toString().padStart(2, '0');
+                        const sec = (nums[5] || 0).toString().padStart(2, '0');
+                        const hasTz = match.includes('timezone.utc') || match.includes('tzinfo');
+                        return `"${year}-${month}-${day}T${hour}:${min}:${sec}${hasTz ? 'Z' : ''}"`;
+                    }
+                }
+                return `"${match.replace(/"/g, '\\"')}"`;
+            });
+
             // Step 2: Smart quote replacement using state machine
             // This properly handles apostrophes in words like "don't" or "Alzheimer's"
             let output = '';
@@ -1266,7 +1293,7 @@ upload JSON, format it, and convert single or double quotes instantly.{% endbloc
             return output;
         }
 
-        // Format JSON (with auto-fix for single quotes)
+        // Format JSON (with auto-fix for single quotes) - No errors shown
         function formatJson() {
             let input = getEditorValue();
 
@@ -1287,9 +1314,10 @@ upload JSON, format it, and convert single or double quotes instantly.{% endbloc
                 const data = JSON.parse(fixed);
                 setEditorValue(JSON.stringify(data, null, 2));
                 hideError();
-                showToast('✓ Formatted (fixed quotes)');
+                showToast('✓ Formatted (auto-fixed)');
             } catch (e) {
-                showError('Invalid JSON: ' + e.message);
+                // Don't show error - just keep content as-is
+                hideError();
             }
         }
 

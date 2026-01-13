@@ -1736,6 +1736,14 @@ signup.{% endblock %}
     require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' } });
 
     require(['vs/editor/editor.main'], function () {
+      // IMPORTANT: Disable automatic JSON validation by default
+      // Errors will only show when user explicitly clicks "Validate"
+      monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+        validate: false,
+        allowComments: true,
+        trailingCommas: 'ignore'
+      });
+
       // Define custom dark theme
       monaco.editor.defineTheme('jsonDark', {
         base: 'vs-dark', inherit: true,
@@ -1890,7 +1898,7 @@ signup.{% endblock %}
             return { fixed: str, wasFixed: false };
           } catch (e) {
             // Check if we need to fix anything
-            const needsQuoteFix = str.includes("'") || str.includes('True') || str.includes('False') || str.includes('None');
+            const needsQuoteFix = str.includes("'") || str.includes('True') || str.includes('False') || str.includes('None') || str.includes('datetime.datetime');
             const needsCommaFix = shouldFixTrailing && /,\s*[\]}]/.test(str);
 
             if (!needsQuoteFix && !needsCommaFix) {
@@ -1911,6 +1919,32 @@ signup.{% endblock %}
           fixed = fixed.replace(/:\s*True\b/g, ': true');
           fixed = fixed.replace(/:\s*False\b/g, ': false');
           fixed = fixed.replace(/:\s*None\b/g, ': null');
+
+          // Step 1b: Convert Python datetime objects to ISO strings
+          // Handles: datetime.datetime(2025, 10, 21, 0, 0, tzinfo=datetime.timezone.utc)
+          fixed = fixed.replace(/datetime\.datetime\([^)]+\)/g, function (match) {
+            // Try to parse the datetime arguments
+            const argsMatch = match.match(/datetime\.datetime\(([^)]+)\)/);
+            if (argsMatch) {
+              const args = argsMatch[1].split(',').map(a => a.trim());
+              // Get numeric values (year, month, day, hour, minute, second, microsecond)
+              const nums = args.filter(a => /^\d+$/.test(a)).map(Number);
+              if (nums.length >= 3) {
+                const year = nums[0];
+                const month = (nums[1] || 1).toString().padStart(2, '0');
+                const day = (nums[2] || 1).toString().padStart(2, '0');
+                const hour = (nums[3] || 0).toString().padStart(2, '0');
+                const min = (nums[4] || 0).toString().padStart(2, '0');
+                const sec = (nums[5] || 0).toString().padStart(2, '0');
+                // Check if has timezone
+                const hasTz = match.includes('timezone.utc') || match.includes('tzinfo');
+                const tz = hasTz ? 'Z' : '';
+                return `"${year}-${month}-${day}T${hour}:${min}:${sec}${tz}"`;
+              }
+            }
+            // Fallback to string representation
+            return `"${match.replace(/"/g, '\\"')}"`;
+          });
 
           // Also handle in arrays
           fixed = fixed.replace(/\[\s*True\b/g, '[true');
@@ -2032,7 +2066,7 @@ signup.{% endblock %}
         }
       });
 
-      // Format Button Handler
+      // Format Button Handler - No errors shown, just formats what it can
       document.getElementById('formatBtn')?.addEventListener('click', () => {
         const content = jsonEditor.getValue().trim();
         if (!content) return;
@@ -2047,7 +2081,51 @@ signup.{% endblock %}
           jsonEditor.revealLine(1);
           updateValidation('valid', wasFixed ? '✓ Formatted & Fixed' : '✓ Formatted');
         } catch (e) {
-          updateValidation('invalid', '✗ Invalid JSON');
+          // Don't show error - just clear validation status and keep content as-is
+          updateValidation('');
+        }
+      });
+
+      // Validate Button Handler - Enables Monaco diagnostics to show errors
+      document.getElementById('validateBtn')?.addEventListener('click', () => {
+        const content = jsonEditor.getValue().trim();
+        if (!content) {
+          updateValidation('invalid', '✗ Empty');
+          return;
+        }
+
+        // Temporarily enable Monaco JSON diagnostics for validation
+        monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+          validate: true,
+          allowComments: false,
+          trailingCommas: 'error'
+        });
+
+        // Force Monaco to re-validate by triggering model change
+        const model = jsonEditor.getModel();
+        if (model) {
+          monaco.editor.setModelLanguage(model, 'text');
+          setTimeout(() => {
+            monaco.editor.setModelLanguage(model, 'json');
+          }, 10);
+        }
+
+        // Try to parse to determine valid/invalid
+        try {
+          JSON.parse(content);
+          updateValidation('valid', '✓ Valid JSON');
+
+          // If valid, disable diagnostics again after a short delay
+          setTimeout(() => {
+            monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+              validate: false,
+              allowComments: true,
+              trailingCommas: 'ignore'
+            });
+          }, 3000);
+        } catch (e) {
+          // Keep diagnostics enabled to show the errors
+          updateValidation('invalid', '✗ Invalid: ' + e.message.split(' at ')[0]);
         }
       });
 
