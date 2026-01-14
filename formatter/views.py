@@ -1007,6 +1007,11 @@ def comma_separator_page(request):
     return render(request, 'comma-separator.html')
 
 
+def json_fixer_page(request):
+    """Render the JSON Fixer tool page"""
+    return render(request, 'json-fixer.html')
+
+
 
 def lorem_ipsum_page(request):
     """Render the Lorem Ipsum Generator page"""

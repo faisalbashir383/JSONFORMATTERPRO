@@ -50,6 +50,7 @@ urlpatterns = [
     path('json-path-tester/', views.json_path_tester_page, name='json_path_tester_page'),
     path('sqlite-viewer/', views.sqlite_viewer_page, name='sqlite_viewer_page'),
     path('json-viewer/', views.json_viewer_page, name='json_viewer_page'),
+    path('json-fixer/', views.json_fixer_page, name='json_fixer_page'),
     
     # API & Network Tool Pages
     path('http-headers/', views.http_headers_page, name='http_headers_page'),

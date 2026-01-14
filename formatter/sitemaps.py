@@ -100,6 +100,7 @@ class StaticViewSitemap(Sitemap):
             'json_viewer_page',
             'sqlite_viewer_page',
             'comma_separator_page',
+            'json_fixer_page',
         ]
 
 
