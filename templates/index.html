@@ -771,6 +771,323 @@ signup.{% endblock %}
   .fix-toggle:hover .fix-label {
     color: white;
   }
+
+  /* AI Explain Error Button */
+  .ai-explain-btn {
+    display: none;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.6rem;
+    background: linear-gradient(135deg, #8b5cf6, #a855f7);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .ai-explain-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+  }
+
+  .ai-explain-btn.visible {
+    display: inline-flex;
+  }
+
+  /* AI Smart Fix Button (standalone) */
+  .ai-smart-fix-btn {
+    display: none;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #8b5cf6, #a855f7);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .ai-smart-fix-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+  }
+
+  .ai-smart-fix-btn.visible {
+    display: inline-flex;
+  }
+
+  /* AI Explanation Panel */
+  .ai-explanation-panel {
+    display: none;
+    margin: 0 1rem 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 8px;
+    animation: slideDown 0.3s ease;
+  }
+
+  .ai-explanation-panel.visible {
+    display: block;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .ai-explanation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .ai-explanation-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #a855f7;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .ai-explanation-close {
+    background: transparent;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-size: 1.25rem;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .ai-explanation-close:hover {
+    color: var(--color-text);
+  }
+
+  .ai-explanation-content {
+    color: var(--color-text);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .ai-explanation-content h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0.75rem 0 0.4rem;
+  }
+
+  .ai-explanation-content h4:first-child {
+    margin-top: 0;
+  }
+
+  .ai-explanation-content p {
+    margin: 0 0 0.5rem;
+    color: var(--color-text-secondary);
+  }
+
+  .ai-explanation-content code {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: #f472b6;
+  }
+
+  .ai-explanation-content .fix-hint {
+    background: rgba(16, 185, 129, 0.15);
+    border-left: 3px solid #10b981;
+    padding: 0.5rem 0.75rem;
+    margin-top: 0.75rem;
+    border-radius: 0 6px 6px 0;
+    color: var(--color-text);
+  }
+
+  /* Smart Fix Modal */
+  .smart-fix-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 10001;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .smart-fix-modal.active {
+    display: flex;
+  }
+
+  .smart-fix-content {
+    background: var(--color-surface);
+    border-radius: 16px;
+    padding: 1.5rem;
+    max-width: 900px;
+    width: 95%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--color-border);
+  }
+
+  .smart-fix-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .smart-fix-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .smart-fix-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+  }
+
+  .smart-fix-close:hover {
+    color: var(--color-text);
+  }
+
+  .smart-fix-changes {
+    background: rgba(168, 85, 247, 0.1);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .smart-fix-changes h4 {
+    margin: 0 0 0.5rem;
+    color: #a855f7;
+    font-size: 0.9rem;
+  }
+
+  .smart-fix-changes ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .smart-fix-changes li {
+    margin: 0.25rem 0;
+    color: var(--color-text);
+  }
+
+  .smart-fix-diff {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .smart-fix-diff {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .diff-panel {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .diff-panel-header {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .diff-panel.before .diff-panel-header {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+  }
+
+  .diff-panel.after .diff-panel-header {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+  }
+
+  .diff-panel-content {
+    padding: 0.75rem;
+    background: #1e1e2e;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 300px;
+    overflow-y: auto;
+    color: #cdd6f4;
+  }
+
+  .smart-fix-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+  }
+
+  .smart-fix-btn {
+    padding: 0.6rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+  }
+
+  .smart-fix-btn.cancel {
+    background: var(--color-surface-alt);
+    color: var(--color-text);
+  }
+
+  .smart-fix-btn.cancel:hover {
+    background: var(--color-border);
+  }
+
+  .smart-fix-btn.apply {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+  }
+
+  .smart-fix-btn.apply:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  }
 </style>
 
 <!-- Additional SEO Tags -->
@@ -798,7 +1115,7 @@ signup.{% endblock %}
 <header class="header" style="text-align: center; margin-bottom: 0.5rem; padding: 0.5rem 0;">
   <h1
     style="font-size: 1.75rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.25rem;">
-    JSON Formatter Online – Format JSON Instantly
+    JSON Formatter Online – Format JSON Instantly (AI Powered)
   </h1>
   <noscript>
     <p>
@@ -882,29 +1199,6 @@ signup.{% endblock %}
             </svg> Minify
           </button>
           <div class="dropdown-divider"></div>
-          <button id="stringifyBtn" class="dropdown-action-btn" title="Stringify JSON">
-            <svg class="action-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z" />
-            </svg> Stringify
-          </button>
-          <button id="toXmlBtn" class="dropdown-action-btn" title="Convert to XML">
-            <svg class="action-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
-            </svg> To XML
-          </button>
-          <button id="toCsvBtn" class="dropdown-action-btn" title="Convert to CSV">
-            <svg class="action-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-            </svg> To CSV
-          </button>
-          <button id="toYamlBtn" class="dropdown-action-btn" title="Convert to YAML">
-            <svg class="action-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z" />
-            </svg> To YAML
-          </button>
-          <div class="dropdown-divider"></div>
           <button id="clearBtn" class="dropdown-action-btn" title="Clear editor">
             <svg class="action-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
               <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
@@ -929,6 +1223,11 @@ signup.{% endblock %}
           </div>
         </div>
       </div>
+
+      <!-- Smart Fix Button (visible only when there are errors) -->
+      <button id="smartFixBtn" class="ai-smart-fix-btn" title="AI Smart Fix - Auto-repair invalid JSON">
+        🧠 Smart Fix
+      </button>
     </div>
 
     <div class="panel-info">
@@ -941,6 +1240,9 @@ signup.{% endblock %}
 
       <!-- Validation Status (inline) -->
       <span id="validationStatus" class="validation-status"></span>
+      <button id="explainErrorBtn" class="ai-explain-btn" title="AI explains this error">
+        🧠 Explain
+      </button>
       <span id="cursorInfo">Ln 1, Col 1</span>
       <button id="uploadBtn" class="header-icon-btn" title="Upload JSON file"
         onclick="document.getElementById('fileInput').click()">
@@ -971,6 +1273,44 @@ signup.{% endblock %}
   <div class="editor-container" id="editorContainer">
     <label for="jsonEditor" class="sr-only">JSON Editor - Enter your JSON code here</label>
     <textarea id="jsonEditor" aria-label="JSON Editor"></textarea>
+  </div>
+</div>
+
+<!-- AI Explanation Panel -->
+<div id="aiExplanationPanel" class="ai-explanation-panel">
+  <div class="ai-explanation-header">
+    <span class="ai-explanation-title">🧠 AI Error Analysis</span>
+    <button id="closeExplanation" class="ai-explanation-close" title="Close">×</button>
+  </div>
+  <div id="aiExplanationContent" class="ai-explanation-content">
+    <!-- Content injected by JavaScript -->
+  </div>
+</div>
+
+<!-- Smart Fix Modal -->
+<div id="smartFixModal" class="smart-fix-modal">
+  <div class="smart-fix-content">
+    <div class="smart-fix-header">
+      <span class="smart-fix-title">✨ AI Smart Fix</span>
+      <button id="smartFixClose" class="smart-fix-close">×</button>
+    </div>
+    <div id="smartFixChanges" class="smart-fix-changes">
+      <!-- Changes list injected by JS -->
+    </div>
+    <div class="smart-fix-diff">
+      <div class="diff-panel before">
+        <div class="diff-panel-header">❌ Before (Invalid)</div>
+        <div id="diffBefore" class="diff-panel-content"></div>
+      </div>
+      <div class="diff-panel after">
+        <div class="diff-panel-header">✅ After (Fixed)</div>
+        <div id="diffAfter" class="diff-panel-content"></div>
+      </div>
+    </div>
+    <div class="smart-fix-actions">
+      <button id="smartFixCancel" class="smart-fix-btn cancel">Cancel</button>
+      <button id="smartFixApply" class="smart-fix-btn apply">Apply Fix</button>
+    </div>
   </div>
 </div>
 
@@ -2017,9 +2357,11 @@ signup.{% endblock %}
                   window.addToHistory(formatted);
                 }
               } catch (e) {
-                // Show helpful error for single-quoted JSON
+                // Show helpful error and enable AI explanation
                 if (value.includes("'")) {
                   updateValidation('invalid', '✗ Use double quotes for JSON');
+                } else {
+                  updateValidation('invalid', '✗ Invalid JSON');
                 }
               }
             }
@@ -2035,11 +2377,34 @@ signup.{% endblock %}
 
       function updateValidation(status, msg) {
         const el = document.getElementById('validationStatus');
+        const explainBtn = document.getElementById('explainErrorBtn');
+        const smartFixBtn = document.getElementById('smartFixBtn');
+        const explanationPanel = document.getElementById('aiExplanationPanel');
+
         if (!el) return;
         el.className = 'validation-status';
-        if (status === 'valid') { el.classList.add('valid'); el.textContent = msg || '✓ Valid'; }
-        else if (status === 'invalid') { el.classList.add('invalid'); el.textContent = msg || '✗ Invalid'; }
-        else el.textContent = '';
+
+        if (status === 'valid') {
+          el.classList.add('valid');
+          el.textContent = msg || '✓ Valid';
+          // Hide AI buttons when valid
+          explainBtn?.classList.remove('visible');
+          smartFixBtn?.classList.remove('visible');
+          explanationPanel?.classList.remove('visible');
+        }
+        else if (status === 'invalid') {
+          el.classList.add('invalid');
+          el.textContent = msg || '✗ Invalid';
+          // Show AI buttons when invalid
+          explainBtn?.classList.add('visible');
+          smartFixBtn?.classList.add('visible');
+        }
+        else {
+          el.textContent = '';
+          explainBtn?.classList.remove('visible');
+          smartFixBtn?.classList.remove('visible');
+          explanationPanel?.classList.remove('visible');
+        }
       }
 
       // Dropdown toggle
@@ -2081,8 +2446,8 @@ signup.{% endblock %}
           jsonEditor.revealLine(1);
           updateValidation('valid', wasFixed ? '✓ Formatted & Fixed' : '✓ Formatted');
         } catch (e) {
-          // Don't show error - just clear validation status and keep content as-is
-          updateValidation('');
+          // Show error and enable AI explanation
+          updateValidation('invalid', '✗ Invalid: ' + e.message.split(' at ')[0]);
         }
       });
 
@@ -2126,6 +2491,394 @@ signup.{% endblock %}
         } catch (e) {
           // Keep diagnostics enabled to show the errors
           updateValidation('invalid', '✗ Invalid: ' + e.message.split(' at ')[0]);
+          // Store error for explanation
+          window.lastJsonError = e;
+        }
+      });
+
+      // AI Error Explainer Function
+      function explainJsonError(content, errorMessage) {
+        const lowerError = errorMessage.toLowerCase();
+        const lowerContent = content.toLowerCase();
+
+        // Extract position from error message if available
+        const posMatch = errorMessage.match(/position (\d+)|at line (\d+)|column (\d+)/gi);
+
+        // Define comprehensive error patterns
+        const errorPatterns = [
+          {
+            patterns: ['unexpected token', 'expected', 'unexpected end of json'],
+            check: () => content.includes("'"),
+            title: 'Single Quotes Instead of Double Quotes',
+            rule: 'JSON requires double quotes (") for strings, not single quotes (\').',
+            why: 'You\'re using single quotes around keys or values. While JavaScript allows both, JSON strictly requires double quotes.',
+            fix: 'Replace all single quotes with double quotes. Change <code>\'value\'</code> to <code>"value"</code>'
+          },
+          {
+            patterns: ['trailing comma', 'unexpected token }', 'unexpected token ]'],
+            check: () => /,\s*[\}\]]/.test(content),
+            title: 'Trailing Comma',
+            rule: 'JSON does not allow trailing commas after the last item in an array or object.',
+            why: 'There\'s a comma after the last element before a closing bracket <code>}</code> or <code>]</code>.',
+            fix: 'Remove the comma before the closing bracket. Enable "Fix Trailing Commas" toggle to auto-fix.'
+          },
+          {
+            patterns: ['true', 'false', 'null'],
+            check: () => /\bTrue\b|\bFalse\b|\bNone\b/.test(content),
+            title: 'Python Boolean/Null Syntax',
+            rule: 'JSON uses lowercase <code>true</code>, <code>false</code>, and <code>null</code>.',
+            why: 'You\'re using Python-style <code>True</code>, <code>False</code>, or <code>None</code> instead of JSON values.',
+            fix: 'Replace <code>True</code> → <code>true</code>, <code>False</code> → <code>false</code>, <code>None</code> → <code>null</code>'
+          },
+          {
+            patterns: ['unexpected token', 'expected property name'],
+            check: () => /\{[^"'\}]+:/.test(content),
+            title: 'Unquoted Object Key',
+            rule: 'All object keys in JSON must be enclosed in double quotes.',
+            why: 'One or more object keys are not wrapped in quotes. JavaScript objects allow this, but JSON doesn\'t.',
+            fix: 'Add double quotes around all keys. Change <code>{name: "value"}</code> to <code>{"name": "value"}</code>'
+          },
+          {
+            patterns: ['unexpected token /', 'unexpected token #'],
+            check: () => content.includes('//') || content.includes('/*') || content.includes('#'),
+            title: 'Comments Are Not Allowed',
+            rule: 'JSON does not support comments of any kind.',
+            why: 'Your JSON contains <code>//</code>, <code>/* */</code>, or <code>#</code> comments.',
+            fix: 'Remove all comments from your JSON. Comments are not part of the JSON specification.'
+          },
+          {
+            patterns: ['undefined', 'nan', 'infinity'],
+            check: () => /\bundefined\b|\bNaN\b|\bInfinity\b|-Infinity\b/.test(content),
+            title: 'Invalid JavaScript Value',
+            rule: 'JSON only supports: strings, numbers, booleans, null, objects, and arrays.',
+            why: 'You\'re using JavaScript-specific values like <code>undefined</code>, <code>NaN</code>, or <code>Infinity</code>.',
+            fix: 'Replace <code>undefined</code> with <code>null</code>, and use actual numbers instead of <code>NaN</code>/<code>Infinity</code>.'
+          },
+          {
+            patterns: ['unexpected end of json', 'unexpected end of input'],
+            check: () => {
+              const opens = (content.match(/[\{\[]/g) || []).length;
+              const closes = (content.match(/[\}\]]/g) || []).length;
+              return opens !== closes;
+            },
+            title: 'Mismatched Brackets',
+            rule: 'Every opening bracket must have a matching closing bracket.',
+            why: 'Your JSON has unbalanced brackets. An opening <code>{</code> or <code>[</code> doesn\'t have a matching close.',
+            fix: 'Count your brackets and ensure each <code>{</code> has a <code>}</code> and each <code>[</code> has a <code>]</code>.'
+          },
+          {
+            patterns: ['unexpected token ,', 'unexpected token:', 'expected \',\''],
+            check: () => true,
+            title: 'Missing Comma or Colon',
+            rule: 'Object properties must be separated by commas, and key-value pairs use colons.',
+            why: 'There\'s a missing comma between elements, or a colon between a key and its value.',
+            fix: 'Check that each key-value pair uses <code>:</code> and each pair is separated by <code>,</code>.'
+          },
+          {
+            patterns: ['expected string'],
+            check: () => true,
+            title: 'Invalid String',
+            rule: 'Strings must be enclosed in double quotes and special characters must be escaped.',
+            why: 'A string value might have unescaped special characters like newlines or tabs.',
+            fix: 'Escape special characters: use <code>\\n</code> for newlines, <code>\\t</code> for tabs, <code>\\"</code> for quotes inside strings.'
+          }
+        ];
+
+        // Find matching pattern
+        for (const pattern of errorPatterns) {
+          const hasPattern = pattern.patterns.some(p => lowerError.includes(p) || lowerContent.includes(p));
+          if (hasPattern && pattern.check()) {
+            return {
+              title: pattern.title,
+              rule: pattern.rule,
+              why: pattern.why,
+              fix: pattern.fix
+            };
+          }
+        }
+
+        // Default explanation
+        return {
+          title: 'JSON Syntax Error',
+          rule: 'JSON has strict syntax rules that must be followed.',
+          why: 'The JSON parser encountered unexpected content: ' + errorMessage,
+          fix: 'Check for common issues: missing quotes, trailing commas, or invalid values. Try the "Smart Fix" button for automatic repair.'
+        };
+      }
+
+      // Explain Error Button Handler
+      document.getElementById('explainErrorBtn')?.addEventListener('click', () => {
+        const content = jsonEditor.getValue().trim();
+        if (!content) return;
+
+        try {
+          JSON.parse(content);
+          // If valid, hide panel
+          document.getElementById('aiExplanationPanel')?.classList.remove('visible');
+          return;
+        } catch (e) {
+          const explanation = explainJsonError(content, e.message);
+
+          const contentHtml = `
+            <h4>❌ ${explanation.title}</h4>
+            <p><strong>Rule Violated:</strong> ${explanation.rule}</p>
+            <h4>💡 Why This Happened</h4>
+            <p>${explanation.why}</p>
+            <div class="fix-hint">
+              <strong>🔧 How to Fix:</strong> ${explanation.fix}
+            </div>
+          `;
+
+          const panel = document.getElementById('aiExplanationPanel');
+          const contentEl = document.getElementById('aiExplanationContent');
+
+          if (panel && contentEl) {
+            contentEl.innerHTML = contentHtml;
+            panel.classList.add('visible');
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }
+      });
+
+      // Close Explanation Panel
+      document.getElementById('closeExplanation')?.addEventListener('click', () => {
+        document.getElementById('aiExplanationPanel')?.classList.remove('visible');
+      });
+
+      // Store fixed JSON for Apply button
+      let pendingSmartFix = null;
+
+      // Advanced Smart Fix function
+      function smartFix(str) {
+        const changes = [];
+        let fixed = str;
+
+        // ===== PHASE 1: Basic textual fixes =====
+
+        // Step 1: Remove comments (// and /* */)
+        const hasLineComments = fixed.includes('//');
+        const hasBlockComments = fixed.includes('/*');
+        if (hasLineComments || hasBlockComments) {
+          fixed = fixed.replace(/\/\/.*$/gm, '');
+          fixed = fixed.replace(/\/\*[\s\S]*?\*\//g, '');
+          changes.push('Removed JavaScript-style comments');
+        }
+
+        // Step 2: Fix Python values (True/False/None)
+        if (/\bTrue\b/.test(fixed)) {
+          fixed = fixed.replace(/\bTrue\b/g, 'true');
+          changes.push('Converted Python "True" → "true"');
+        }
+        if (/\bFalse\b/.test(fixed)) {
+          fixed = fixed.replace(/\bFalse\b/g, 'false');
+          changes.push('Converted Python "False" → "false"');
+        }
+        if (/\bNone\b/.test(fixed)) {
+          fixed = fixed.replace(/\bNone\b/g, 'null');
+          changes.push('Converted Python "None" → "null"');
+        }
+
+        // Step 3: Fix undefined → null
+        if (/\bundefined\b/.test(fixed)) {
+          fixed = fixed.replace(/\bundefined\b/g, 'null');
+          changes.push('Replaced "undefined" with "null"');
+        }
+
+        // Step 4: Fix trailing commas
+        fixed = fixed.replace(/,(\s*[\}\]])/g, '$1');
+        if (str !== fixed) changes.push('Removed trailing commas');
+
+        // Step 5: Fix single quotes → double quotes
+        if (fixed.includes("'")) {
+          fixed = fixed.replace(/([{,]\s*)'((?:[^'\\]|\\.)*)'(\s*:)/g, '$1"$2"$3');
+          fixed = fixed.replace(/:\s*'((?:[^'\\]|\\.)*)'/g, function (m, p1) {
+            return ': "' + p1.replace(/"/g, '\\"') + '"';
+          });
+          fixed = fixed.replace(/\[\s*'((?:[^'\\]|\\.)*)'/g, '["$1"');
+          fixed = fixed.replace(/,\s*'((?:[^'\\]|\\.)*)'(\s*[,\]\}])/g, ', "$1"$2');
+          changes.push('Replaced single quotes with double quotes');
+        }
+
+        // Step 6: Fix wrong key-value separators (= => -> instead of :)
+        // "key" = "value" → "key": "value"
+        const prevFixed = fixed;
+        fixed = fixed.replace(/("\s*)(=+>?|->)(\s*)/g, '$1:$3');
+        if (fixed !== prevFixed) {
+          changes.push('Fixed separator: replaced = or => or -> with :');
+        }
+
+        // Step 7: Fix unquoted keys
+        fixed = fixed.replace(/(?<=[{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(?=\s*[:=])/g, '"$1"');
+
+        // Step 8: Fix unquoted string values in arrays
+        // Pattern: [value, or , value, or , value]
+        // First: after [ or ,
+        fixed = fixed.replace(/([\[,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(?=\s*[,\]])/g, function (match, prefix, word) {
+          // Don't quote true, false, null
+          if (word === 'true' || word === 'false' || word === 'null') return match;
+          changes.push('Quoted unquoted array value: "' + word + '"');
+          return prefix + '"' + word + '"';
+        });
+
+        // Step 9: Fix unquoted string values after colons
+        // Pattern: : value (where value is not a number, true, false, null, string, object, or array)
+        fixed = fixed.replace(/:\s*([a-zA-Z_][a-zA-Z0-9_]*)(?=\s*[,\}\]])/g, function (match, word) {
+          // Don't quote true, false, null
+          if (word === 'true' || word === 'false' || word === 'null') return match;
+          changes.push('Quoted unquoted value: "' + word + '"');
+          return ': "' + word + '"';
+        });
+
+        // Step 10: Add missing commas between properties
+        fixed = fixed.replace(/(["}\]\d])\s*\n(\s*")/g, '$1,\n$2');
+
+        // ===== PHASE 2: Try parsing =====
+        try {
+          const parsed = JSON.parse(fixed);
+          return { success: true, fixed: JSON.stringify(parsed, null, 2), changes };
+        } catch (e) {
+          // Continue with advanced fixes
+        }
+
+        // ===== PHASE 3: Extract valid key-value pairs and rebuild =====
+        try {
+          // This regex finds valid "key": value patterns
+          const kvPattern = /"([^"\\]|\\.)*"\s*:\s*(?:"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\d+(?:\.\d+)?|true|false|null|\{[^{}]*\}|\[[^\[\]]*\])/g;
+          const matches = fixed.match(kvPattern);
+
+          if (matches && matches.length > 0) {
+            // Rebuild clean JSON
+            const cleanJson = '{\n  ' + matches.join(',\n  ') + '\n}';
+            try {
+              const parsed = JSON.parse(cleanJson);
+              changes.push('Extracted valid key-value pairs, removed garbage text');
+              return { success: true, fixed: JSON.stringify(parsed, null, 2), changes };
+            } catch (e2) {
+              // regex extraction failed, continue
+            }
+          }
+        } catch (e) {
+          // continue with more aggressive fixes
+        }
+
+        // ===== PHASE 4: Aggressive line-by-line cleanup =====
+        try {
+          const lines = fixed.split('\n');
+          const cleanLines = [];
+
+          for (let line of lines) {
+            const trimmed = line.trim();
+            // Skip empty lines
+            if (!trimmed) continue;
+            // Keep bracket-only lines
+            if (/^[\{\}\[\],]+$/.test(trimmed)) {
+              cleanLines.push(line);
+              continue;
+            }
+            // Keep lines that look like valid key-value pairs
+            if (/"[^"]*"\s*:\s*.+/.test(trimmed)) {
+              // Clean garbage after the value on same line
+              const cleaned = trimmed.replace(/((?:"(?:[^"\\]|\\.)*"|true|false|null|\d+(?:\.\d+)?|\{.*\}|\[.*\]))\s*,?\s*[a-zA-Z_][a-zA-Z0-9_]*\s*$/, '$1');
+              cleanLines.push(cleaned);
+              continue;
+            }
+            // Skip lines that are just garbage identifiers (typos)
+            if (/^[a-zA-Z_][a-zA-Z0-9_]*\s*$/.test(trimmed)) {
+              changes.push('Removed typo/garbage: "' + trimmed.substring(0, 15) + (trimmed.length > 15 ? '...' : '') + '"');
+              continue;
+            }
+            // Keep the line if we can't determine
+            cleanLines.push(line);
+          }
+
+          fixed = cleanLines.join('\n');
+
+          // Clean up any remaining issues
+          fixed = fixed.replace(/,(\s*[\}\]])/g, '$1');
+          fixed = fixed.replace(/,\s*,/g, ',');
+
+          // Balance brackets
+          const openBraces = (fixed.match(/{/g) || []).length;
+          const closeBraces = (fixed.match(/}/g) || []).length;
+          if (openBraces > closeBraces) {
+            fixed += '}'.repeat(openBraces - closeBraces);
+            changes.push('Added missing closing braces');
+          }
+
+          const parsed = JSON.parse(fixed);
+          return { success: true, fixed: JSON.stringify(parsed, null, 2), changes };
+        } catch (e) {
+          return { success: false, fixed: str, changes: [], error: e.message };
+        }
+      }
+
+      // Smart Fix Button Handler
+      document.getElementById('smartFixBtn')?.addEventListener('click', () => {
+        const content = jsonEditor.getValue().trim();
+        if (!content) {
+          updateValidation('invalid', '✗ Editor is empty');
+          return;
+        }
+
+        // First check if JSON is already valid
+        try {
+          JSON.parse(content);
+          updateValidation('valid', '✓ JSON is already valid');
+          return;
+        } catch (e) {
+          // Continue with smart fix
+        }
+
+        // Apply smart fix
+        const result = smartFix(content);
+
+        if (!result.success || result.changes.length === 0) {
+          updateValidation('invalid', '✗ Could not auto-fix: ' + (result.error || 'Unknown error'));
+          return;
+        }
+
+        // Store the fix for Apply button
+        pendingSmartFix = result.fixed;
+
+        // Show modal with diff
+        const modal = document.getElementById('smartFixModal');
+        const changesDiv = document.getElementById('smartFixChanges');
+        const beforeDiv = document.getElementById('diffBefore');
+        const afterDiv = document.getElementById('diffAfter');
+
+        if (changesDiv && beforeDiv && afterDiv) {
+          changesDiv.innerHTML = `
+            <h4>🔧 Changes Made:</h4>
+            <ul>${result.changes.map(c => `<li>${c}</li>`).join('')}</ul>
+          `;
+          beforeDiv.textContent = content.substring(0, 2000) + (content.length > 2000 ? '\n...(truncated)' : '');
+          afterDiv.textContent = result.fixed.substring(0, 2000) + (result.fixed.length > 2000 ? '\n...(truncated)' : '');
+        }
+
+        modal?.classList.add('active');
+      });
+
+      // Smart Fix Modal - Cancel
+      document.getElementById('smartFixCancel')?.addEventListener('click', () => {
+        document.getElementById('smartFixModal')?.classList.remove('active');
+        pendingSmartFix = null;
+      });
+
+      document.getElementById('smartFixClose')?.addEventListener('click', () => {
+        document.getElementById('smartFixModal')?.classList.remove('active');
+        pendingSmartFix = null;
+      });
+
+      // Smart Fix Modal - Apply
+      document.getElementById('smartFixApply')?.addEventListener('click', () => {
+        if (pendingSmartFix) {
+          jsonEditor.setValue(pendingSmartFix);
+          jsonEditor.setPosition({ lineNumber: 1, column: 1 });
+          jsonEditor.revealLine(1);
+          updateValidation('valid', '✓ Smart Fix Applied');
+          document.getElementById('smartFixModal')?.classList.remove('active');
+          document.getElementById('aiExplanationPanel')?.classList.remove('visible');
+          pendingSmartFix = null;
         }
       });
 
