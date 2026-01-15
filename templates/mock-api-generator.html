@@ -3,7 +3,8 @@
 
 {% block title %}Mock API Generator – Free Fake REST Endpoints (AI-Assisted) [2026]{% endblock %}
 {% block meta_title %}Mock API Generator – Free Fake REST Endpoints (AI-Assisted) [2026]{% endblock %}
-{% block meta_description %}Free fake API generator to create fake REST API endpoints instantly. Includes AI-assisted smart generation, custom JSON responses, latency simulation, and error testing.{% endblock %}
+{% block meta_description %}Free fake API generator to create fake REST API endpoints instantly. Includes AI-assisted
+smart generation, custom JSON responses, latency simulation, and error testing.{% endblock %}
 {% block meta_keywords %}mock api generator, fake api, rest api testing, api mock tool, json api{% endblock %}
 
 
@@ -2349,7 +2350,15 @@
         }
 
         // Event listeners
-        generateBtn.addEventListener('click', generateMockResponse);
+        generateBtn.addEventListener('click', () => {
+            // Track mock API usage
+            fetch('/api/track/tool-usage/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tool_name: 'mock-api-generator', action: 'generate' })
+            }).catch(() => { }); // Silent fail
+            generateMockResponse();
+        });
         testEndpointBtn.addEventListener('click', testEndpoint);
         formatBtn.addEventListener('click', formatJSON);
         resetBtn.addEventListener('click', resetTemplate);
@@ -2986,10 +2995,10 @@
                 'note': '{{lorem:10}}',
 
                 // Category/Tag fields
-                'category': '{{category}}',
+                'category': '{{oneOf:Electronics,Clothing,Home,Sports,Books}}',
                 'type': '{{oneOf:basic,standard,premium}}',
-                'tag': '{{category}}',
-                'genre': '{{category}}',
+                'tag': '{{oneOf:featured,popular,new,sale}}',
+                'genre': '{{oneOf:Action,Comedy,Drama,Horror,Thriller}}',
                 'priority': '{{oneOf:low,medium,high}}',
                 'role': '{{oneOf:user,admin,moderator}}',
 
@@ -3152,9 +3161,9 @@
                         success: true,
                         data: [{
                             id: "{{uuid}}",
-                            name: "{{product}}",
+                            name: "{{lorem:3}}",
                             price: "{{price}}",
-                            category: "{{category}}",
+                            category: "{{oneOf:Electronics,Clothing,Home,Sports,Books,Beauty}}",
                             inStock: "{{boolean}}",
                             rating: "{{float:1,5}}",
                             image: "{{imageUrl}}",
@@ -3197,7 +3206,7 @@
                             excerpt: "{{lorem:20}}",
                             content: "{{paragraph}}",
                             author: "{{fullName}}",
-                            category: "{{category}}",
+                            category: "{{oneOf:Technology,Business,Lifestyle,Travel,Food,Sports}}",
                             publishedAt: "{{isoDate}}"
                         }],
                         meta: {
@@ -3257,7 +3266,7 @@
                         success: true,
                         data: [{
                             id: "{{uuid}}",
-                            name: "{{category}}",
+                            name: "{{oneOf:Electronics,Clothing,Home,Sports,Books,Beauty,Food,Toys}}",
                             slug: "{{slug}}",
                             description: "{{lorem:10}}",
                             itemCount: "{{number:50}}"
@@ -3467,9 +3476,8 @@
             }
 
             // Update Monaco editor with response template
-            const templateStr = JSON.stringify(config.responseTemplate, null, 2)
-                .replace(/"{{/g, '{{')
-                .replace(/}}"/g, '}}');
+            // Keep quotes around template variables - they are needed for valid JSON
+            const templateStr = JSON.stringify(config.responseTemplate, null, 2);
 
             if (monacoEditor) {
                 monacoEditor.setValue(templateStr);
@@ -3500,6 +3508,13 @@
             await new Promise(resolve => setTimeout(resolve, 600));
 
             try {
+                // Track AI generation usage
+                fetch('/api/track/tool-usage/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tool_name: 'mock-api-generator', action: 'ai-generate' })
+                }).catch(() => { }); // Silent fail
+
                 // Generate config using our smart parser
                 const config = generateMockConfig(prompt);
 
