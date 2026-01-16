@@ -3272,3 +3272,121 @@ def sqlite_viewer_page(request):
         'meta_description': 'Open, view, and explore SQLite database files online. Upload .db, browse tables, run SQL queries, and export data to CSV or JSON. 100% client-side, private, and secure.',
     }
     return render(request, 'sqlite-viewer.html', context)
+
+
+# ====================
+# AI JSON Generator API
+# ====================
+
+import os
+import requests as http_requests
+
+@api_view(['POST'])
+def ai_generate_json(request):
+    """
+    Generate JSON using OpenRouter AI based on user's natural language description.
+    
+    Expected input: {"prompt": "create 5 records of biscuits"}
+    Returns: {"success": true, "json": "generated_json_string"}
+    """
+    try:
+        prompt = request.data.get('prompt', '').strip()
+        
+        if not prompt:
+            return Response({
+                'success': False,
+                'error': 'No prompt provided. Please describe what JSON you need.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get OpenRouter API key from environment
+        api_key = os.environ.get('OPENROUTER_API_KEY')
+        
+        if not api_key:
+            return Response({
+                'success': False,
+                'error': 'OpenRouter API key not configured.'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        # System prompt for JSON generation
+        system_prompt = """You are a JSON generator. Generate ONLY valid JSON based on the user's request.
+
+Rules:
+1. Return ONLY valid JSON - no markdown, no code blocks, no explanations
+2. Generate realistic, varied data for each record
+3. If user asks for multiple records, return an array
+4. Include appropriate fields based on the entity type
+5. For names, use realistic examples (not "Name 1", "Name 2")
+6. For icd codes, use realistic format (like ICD-10 codes, product SKUs, etc.)
+
+Examples:
+- "5 biscuits" → array of 5 biscuit objects with name, brand, flavor, etc.
+- "100 users" → array of 100 user objects with name, email, age, etc.
+- "10 countries" → array of 10 countries with name, capital, population, etc."""
+
+        # Call OpenRouter API with Llama 3.3 70B
+        response = http_requests.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+                "HTTP-Referer": "https://jsonformatterspro.com",
+                "X-Title": "JSON Formatter Pro"
+            },
+            json={
+                "model": "meta-llama/llama-3.3-70b-instruct:free",
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": prompt}
+                ],
+                "temperature": 0.7,
+                "max_tokens": 8192
+            },
+            timeout=60
+        )
+        
+        if response.status_code != 200:
+            return Response({
+                'success': False,
+                'error': f'AI API error: {response.status_code}'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        data = response.json()
+        ai_text = data.get('choices', [{}])[0].get('message', {}).get('content', '')
+        
+        # Clean up response - remove markdown code blocks if present
+        ai_text = ai_text.strip()
+        if ai_text.startswith('```json'):
+            ai_text = ai_text[7:]
+        if ai_text.startswith('```'):
+            ai_text = ai_text[3:]
+        if ai_text.endswith('```'):
+            ai_text = ai_text[:-3]
+        ai_text = ai_text.strip()
+        
+        # Validate it's proper JSON
+        try:
+            parsed = json.loads(ai_text)
+            formatted = json.dumps(parsed, indent=2, ensure_ascii=False)
+            
+            return Response({
+                'success': True,
+                'json': formatted
+            })
+        except json.JSONDecodeError as e:
+            return Response({
+                'success': False,
+                'error': f'AI returned invalid JSON: {str(e)}',
+                'raw': ai_text[:500]  # Return first 500 chars for debugging
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    except http_requests.exceptions.Timeout:
+        return Response({
+            'success': False,
+            'error': 'AI request timed out. Please try again.'
+        }, status=status.HTTP_504_GATEWAY_TIMEOUT)
+    
+    except Exception as e:
+        return Response({
+            'success': False,
+            'error': f'An error occurred: {str(e)}'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

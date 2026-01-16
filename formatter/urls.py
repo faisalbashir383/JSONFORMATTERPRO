@@ -19,6 +19,7 @@ urlpatterns = [
     path('api/convert/csv/', views.convert_to_csv, name='convert_to_csv'),
     path('api/base64/encode/', views.base64_encode, name='base64_encode'),
     path('api/base64/decode/', views.base64_decode, name='base64_decode'),
+    path('api/ai/generate-json/', views.ai_generate_json, name='ai_generate_json'),
     
     # Page views
     path('base64/', views.base64_page, name='base64_page'),

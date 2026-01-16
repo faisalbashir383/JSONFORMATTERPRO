@@ -16,6 +16,10 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from .env file FIRST
+env_path = Path(BASE_DIR) / '.env'
+load_dotenv(dotenv_path=env_path)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -33,9 +37,6 @@ ALLOWED_HOSTS = ["*"]
 
 # Site ID for django.contrib.sites
 SITE_ID = 1
-
-env_path = Path(BASE_DIR) / '.env'
-load_dotenv(dotenv_path=env_path)
 
 
 # Application definition

@@ -5,7 +5,8 @@
 
 {% block meta_title %}JSON Formatter & Validator – Fix & Beautify JSON (AI){% endblock %}
 
-{% block meta_description %}Free JSON formatter, validator & fixer. Beautify, validate and repair JSON with AI. Works 100% client-side — no uploads, secure & fast.{% endblock %}
+{% block meta_description %}Free JSON formatter, validator & fixer. Beautify, validate and repair JSON with AI. Works
+100% client-side — no uploads, secure & fast.{% endblock %}
 
 {% block meta_keywords %}json formatter, json formatter online, format json{% endblock %}
 
@@ -828,6 +829,202 @@ signup.{% endblock %}
     box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
   }
 
+  /* AI Generate JSON Button */
+  .ai-generate-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .ai-generate-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  }
+
+  /* Generate JSON Modal */
+  .generate-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 10001;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .generate-modal.active {
+    display: flex;
+  }
+
+  .generate-modal-content {
+    background: var(--color-surface);
+    border-radius: 16px;
+    padding: 1.5rem;
+    max-width: 700px;
+    width: 95%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--color-border);
+  }
+
+  .generate-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .generate-modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .generate-modal-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+  }
+
+  .generate-prompt-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .generate-prompt-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-surface-alt);
+    color: var(--color-text);
+    font-size: 0.9rem;
+    resize: vertical;
+  }
+
+  .generate-prompt-textarea:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  }
+
+  .generate-examples {
+    margin: 1rem 0;
+  }
+
+  .generate-examples-title {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.5rem;
+  }
+
+  .generate-example-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .generate-example-chip {
+    padding: 0.35rem 0.75rem;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: #10b981;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .generate-example-chip:hover {
+    background: rgba(16, 185, 129, 0.25);
+    transform: translateY(-1px);
+  }
+
+  .generate-preview {
+    margin-top: 1rem;
+    display: none;
+  }
+
+  .generate-preview.visible {
+    display: block;
+  }
+
+  .generate-preview-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+  }
+
+  .generate-preview-content {
+    background: #1e1e2e;
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: #cdd6f4;
+    white-space: pre-wrap;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .generate-modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+
+  .generate-btn {
+    padding: 0.6rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+  }
+
+  .generate-btn.secondary {
+    background: var(--color-surface-alt);
+    color: var(--color-text);
+  }
+
+  .generate-btn.primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+  }
+
+  .generate-btn.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  }
+
   .ai-smart-fix-btn.visible {
     display: inline-flex;
   }
@@ -1144,7 +1341,9 @@ signup.{% endblock %}
     </p>
   </div>
   <div style="display:none">
-  JSON formatter, JSON validator, JSON fixer, JSON beautifier, JSON repair tool, JSON syntax checker, JSON pretty print, format JSON online, fix invalid JSON, remove trailing commas JSON, convert single quotes to double quotes JSON, JSON lint, JSON viewer, API JSON formatter, large JSON formatter
+    JSON formatter, JSON validator, JSON fixer, JSON beautifier, JSON repair tool, JSON syntax checker, JSON pretty
+    print, format JSON online, fix invalid JSON, remove trailing commas JSON, convert single quotes to double quotes
+    JSON, JSON lint, JSON viewer, API JSON formatter, large JSON formatter
   </div>
 </header><br>
 
@@ -1241,6 +1440,11 @@ signup.{% endblock %}
       <button id="smartFixBtn" class="ai-smart-fix-btn" title="AI Smart Fix - Auto-repair invalid JSON">
         🧠 Smart Fix
       </button>
+
+      <!-- Generate JSON Button (always visible) -->
+      <button id="generateJsonBtn" class="ai-generate-btn" title="Generate JSON from description">
+        ✨ Generate
+      </button>
     </div>
 
     <div class="panel-info">
@@ -1328,6 +1532,43 @@ signup.{% endblock %}
 </div>
 
 
+<!-- Generate JSON Modal -->
+<div id="generateModal" class="generate-modal">
+  <div class="generate-modal-content">
+    <div class="generate-modal-header">
+      <span class="generate-modal-title">✨ Generate JSON from Description</span>
+      <button id="generateModalClose" class="generate-modal-close">×</button>
+    </div>
+
+    <label class="generate-prompt-label">Describe the JSON structure you need:</label>
+    <textarea id="generatePrompt" class="generate-prompt-textarea"
+      placeholder="e.g., A user object with name, email, age, and list of hobbies"></textarea>
+
+    <div class="generate-examples">
+      <div class="generate-examples-title">Try an example:</div>
+      <div class="generate-example-chips">
+        <button class="generate-example-chip" data-prompt="100 users">👤 100 Users</button>
+        <button class="generate-example-chip" data-prompt="50 products">📦 50 Products</button>
+        <button class="generate-example-chip" data-prompt="25 orders">🛒 25 Orders</button>
+        <button class="generate-example-chip" data-prompt="10 employees">👔 10 Employees</button>
+        <button class="generate-example-chip" data-prompt="30 blog posts">📝 30 Posts</button>
+        <button class="generate-example-chip" data-prompt="20 transactions">💳 20 Transactions</button>
+      </div>
+    </div>
+
+    <div id="generatePreview" class="generate-preview">
+      <div class="generate-preview-title">Preview:</div>
+      <pre id="generatePreviewContent" class="generate-preview-content"></pre>
+    </div>
+
+    <div class="generate-modal-actions">
+      <button id="generatePreviewBtn" class="generate-btn secondary">Preview</button>
+      <button id="generateInsertBtn" class="generate-btn primary">Insert JSON</button>
+    </div>
+  </div>
+</div>
+
+
 <!-- Author Ownership Section -->
 <section class="content-section author-ownership"
   style="margin-bottom: 1.5rem; padding: 1.5rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px;">
@@ -1400,12 +1641,12 @@ signup.{% endblock %}
   </section>
 
   <section class="content-section">
-  <h2>Fix Invalid JSON Automatically (AI Powered)</h2>
-  <p>
-  Our AI JSON Fixer can repair broken JSON automatically. It fixes single quotes, trailing commas, Python booleans,
-  missing quotes, invalid values, and syntax errors so your JSON becomes valid and usable.
-  </p>
-    </section>
+    <h2>Fix Invalid JSON Automatically (AI Powered)</h2>
+    <p>
+      Our AI JSON Fixer can repair broken JSON automatically. It fixes single quotes, trailing commas, Python booleans,
+      missing quotes, invalid values, and syntax errors so your JSON becomes valid and usable.
+    </p>
+  </section>
 
 
   <style>
@@ -1836,8 +2077,9 @@ signup.{% endblock %}
         <h3>Can this tool fix invalid JSON?</h3>
         <div>
           <div>
-            <p>Yes. JSON Formatter Pro includes an AI-powered JSON fixer that automatically repairs invalid JSON by fixing
-single quotes, trailing commas, Python values, missing quotes, and syntax errors.</p>
+            <p>Yes. JSON Formatter Pro includes an AI-powered JSON fixer that automatically repairs invalid JSON by
+              fixing
+              single quotes, trailing commas, Python values, missing quotes, and syntax errors.</p>
           </div>
         </div>
       </div>
@@ -2910,6 +3152,470 @@ single quotes, trailing commas, Python values, missing quotes, and syntax errors
           document.getElementById('smartFixModal')?.classList.remove('active');
           document.getElementById('aiExplanationPanel')?.classList.remove('visible');
           pendingSmartFix = null;
+        }
+      });
+
+      // ===== JSON GENERATOR =====
+      let generatedJson = null;
+
+      // ===== AI JSON GENERATOR - Backend API =====
+      async function generateWithAI(prompt) {
+        try {
+          const response = await fetch('/api/ai/generate-json/', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+            },
+            body: JSON.stringify({ prompt: prompt })
+          });
+
+          const data = await response.json();
+          
+          if (data.success) {
+            return { success: true, json: data.json };
+          } else {
+            console.error('AI generation error:', data.error);
+            return { success: false, error: data.error };
+          }
+        } catch (error) {
+          console.error('AI generation error:', error);
+          return { success: false, error: error.message };
+        }
+      }
+
+      // Fake data generators (fallback)
+      const fakeData = {
+        firstNames: ['John', 'Jane', 'Michael', 'Emily', 'David', 'Sarah', 'James', 'Emma', 'Robert', 'Olivia', 'William', 'Sophia', 'Daniel', 'Ava', 'Matthew', 'Isabella', 'Anthony', 'Mia', 'Mark', 'Charlotte'],
+        lastNames: ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez', 'Hernandez', 'Lopez', 'Gonzalez', 'Wilson', 'Anderson', 'Thomas', 'Taylor', 'Moore', 'Jackson', 'Martin'],
+        domains: ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com', 'example.com', 'company.com'],
+        cities: ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'London', 'Paris', 'Tokyo', 'Sydney', 'Toronto', 'Berlin'],
+        countries: ['USA', 'UK', 'Canada', 'Australia', 'Germany', 'France', 'Japan', 'Brazil', 'India', 'Italy'],
+        products: ['Laptop', 'Smartphone', 'Headphones', 'Tablet', 'Camera', 'Watch', 'Speaker', 'Monitor', 'Keyboard', 'Mouse'],
+        categories: ['Electronics', 'Clothing', 'Home & Garden', 'Sports', 'Books', 'Toys', 'Food', 'Beauty', 'Automotive', 'Health'],
+        adjectives: ['Amazing', 'Premium', 'Professional', 'Ultra', 'Compact', 'Wireless', 'Smart', 'Advanced', 'Modern', 'Classic'],
+        colors: ['Red', 'Blue', 'Green', 'Black', 'White', 'Silver', 'Gold', 'Purple', 'Orange', 'Pink'],
+        tags: ['featured', 'sale', 'new', 'bestseller', 'trending', 'limited', 'popular', 'exclusive', 'hot', 'recommended'],
+        statuses: ['active', 'pending', 'completed', 'cancelled', 'processing', 'shipped', 'delivered'],
+
+        random(arr) { return arr[Math.floor(Math.random() * arr.length)]; },
+        randomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; },
+        randomFloat(min, max, decimals = 2) { return parseFloat((Math.random() * (max - min) + min).toFixed(decimals)); },
+        randomBool() { return Math.random() > 0.5; },
+        randomDate(startYear = 2020, endYear = 2025) {
+          const start = new Date(startYear, 0, 1);
+          const end = new Date(endYear, 11, 31);
+          const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+          return date.toISOString().split('T')[0];
+        },
+        randomEmail(firstName, lastName) {
+          const f = (firstName || this.random(this.firstNames)).toLowerCase();
+          const l = (lastName || this.random(this.lastNames)).toLowerCase();
+          const num = this.randomInt(1, 999);
+          return `${f}.${l}${num}@${this.random(this.domains)}`;
+        },
+        randomPhone() {
+          return `+1-${this.randomInt(200, 999)}-${this.randomInt(100, 999)}-${this.randomInt(1000, 9999)}`;
+        },
+        randomUUID() {
+          return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+            const r = Math.random() * 16 | 0;
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+          });
+        }
+      };
+
+      // Generate a single record based on detected type
+      function generateRecord(type, index) {
+        const record = { id: index + 1 };
+        const firstName = fakeData.random(fakeData.firstNames);
+        const lastName = fakeData.random(fakeData.lastNames);
+
+        switch (type) {
+          case 'user':
+          case 'users':
+          case 'person':
+          case 'people':
+          case 'profile':
+            record.name = `${firstName} ${lastName}`;
+            record.email = fakeData.randomEmail(firstName, lastName);
+            record.age = fakeData.randomInt(18, 65);
+            record.phone = fakeData.randomPhone();
+            record.city = fakeData.random(fakeData.cities);
+            record.country = fakeData.random(fakeData.countries);
+            record.active = fakeData.randomBool();
+            record.createdAt = fakeData.randomDate();
+            break;
+
+          case 'product':
+          case 'products':
+          case 'item':
+          case 'items':
+            record.name = `${fakeData.random(fakeData.adjectives)} ${fakeData.random(fakeData.colors)} ${fakeData.random(fakeData.products)}`;
+            record.sku = `SKU-${fakeData.randomInt(10000, 99999)}`;
+            record.price = fakeData.randomFloat(9.99, 999.99);
+            record.category = fakeData.random(fakeData.categories);
+            record.stock = fakeData.randomInt(0, 500);
+            record.rating = fakeData.randomFloat(1, 5, 1);
+            record.inStock = record.stock > 0;
+            break;
+
+          case 'order':
+          case 'orders':
+            record.orderId = `ORD-${fakeData.randomInt(100000, 999999)}`;
+            record.customer = { name: `${firstName} ${lastName}`, email: fakeData.randomEmail(firstName, lastName) };
+            record.items = Array.from({ length: fakeData.randomInt(1, 5) }, (_, i) => ({
+              name: `${fakeData.random(fakeData.adjectives)} ${fakeData.random(fakeData.products)}`,
+              quantity: fakeData.randomInt(1, 3),
+              price: fakeData.randomFloat(10, 200)
+            }));
+            record.total = record.items.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2);
+            record.status = fakeData.random(fakeData.statuses);
+            record.orderDate = fakeData.randomDate();
+            break;
+
+          case 'post':
+          case 'posts':
+          case 'blog':
+          case 'article':
+          case 'articles':
+            record.title = `${fakeData.random(fakeData.adjectives)} Guide to ${fakeData.random(fakeData.categories)}`;
+            record.author = `${firstName} ${lastName}`;
+            record.content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+            record.tags = Array.from({ length: fakeData.randomInt(2, 5) }, () => fakeData.random(fakeData.tags));
+            record.publishedAt = fakeData.randomDate();
+            record.views = fakeData.randomInt(100, 10000);
+            record.likes = fakeData.randomInt(10, 500);
+            break;
+
+          case 'comment':
+          case 'comments':
+            record.author = `${firstName} ${lastName}`;
+            record.text = 'This is a sample comment. Great content!';
+            record.likes = fakeData.randomInt(0, 100);
+            record.createdAt = fakeData.randomDate();
+            break;
+
+          case 'employee':
+          case 'employees':
+          case 'staff':
+            record.name = `${firstName} ${lastName}`;
+            record.email = fakeData.randomEmail(firstName, lastName);
+            record.department = fakeData.random(['Engineering', 'Sales', 'Marketing', 'HR', 'Finance', 'Operations']);
+            record.position = fakeData.random(['Manager', 'Developer', 'Analyst', 'Designer', 'Coordinator', 'Director']);
+            record.salary = fakeData.randomInt(40000, 150000);
+            record.hireDate = fakeData.randomDate(2015, 2024);
+            break;
+
+          case 'transaction':
+          case 'transactions':
+          case 'payment':
+          case 'payments':
+            record.transactionId = fakeData.randomUUID();
+            record.amount = fakeData.randomFloat(10, 5000);
+            record.currency = fakeData.random(['USD', 'EUR', 'GBP', 'CAD', 'AUD']);
+            record.type = fakeData.random(['credit', 'debit', 'refund', 'transfer']);
+            record.status = fakeData.random(['completed', 'pending', 'failed']);
+            record.date = fakeData.randomDate();
+            break;
+
+          default:
+            // Generic record
+            record.name = `${firstName} ${lastName}`;
+            record.value = fakeData.randomInt(1, 100);
+            record.active = fakeData.randomBool();
+            record.createdAt = fakeData.randomDate();
+        }
+
+        return record;
+      }
+
+      // Generate custom record based on extracted entity and fields
+      function generateCustomRecord(entityName, fields, index) {
+        const record = { id: index + 1 };
+        const firstName = fakeData.random(fakeData.firstNames);
+        const lastName = fakeData.random(fakeData.lastNames);
+
+        // Generate value based on field name
+        for (const field of fields) {
+          const f = field.toLowerCase();
+
+          // Name-related fields
+          if (/name|title|label/i.test(f)) {
+            if (entityName.includes('user') || entityName.includes('person') || entityName.includes('employee')) {
+              record[field] = `${firstName} ${lastName}`;
+            } else {
+              record[field] = `${fakeData.random(fakeData.adjectives)} ${entityName} ${index + 1}`;
+            }
+          }
+          // Code-related fields  
+          else if (/code|icd|sku|id$/i.test(f)) {
+            const prefix = f.replace(/code|_|id/gi, '').toUpperCase() || entityName.substring(0, 3).toUpperCase();
+            record[field] = `${prefix}${fakeData.randomInt(100, 999)}.${fakeData.randomInt(0, 9)}`;
+          }
+          // Description fields
+          else if (/desc|description|summary|content|text|body/i.test(f)) {
+            record[field] = `Description for ${entityName} ${index + 1}. ${fakeData.random(['Common', 'Rare', 'Standard', 'Special', 'Primary', 'Secondary'])} type.`;
+          }
+          // Category fields
+          else if (/category|type|class|group|kind/i.test(f)) {
+            record[field] = fakeData.random(['Category A', 'Category B', 'Category C', 'Type 1', 'Type 2', 'Type 3', 'Group Alpha', 'Group Beta']);
+          }
+          // Email fields
+          else if (/email|mail/i.test(f)) {
+            record[field] = fakeData.randomEmail(firstName, lastName);
+          }
+          // Phone fields
+          else if (/phone|tel|mobile|cell/i.test(f)) {
+            record[field] = fakeData.randomPhone();
+          }
+          // Price/money fields
+          else if (/price|cost|amount|salary|total|fee|value/i.test(f)) {
+            record[field] = fakeData.randomFloat(10, 10000);
+          }
+          // Number/count fields
+          else if (/count|quantity|number|num|stock|age|year|population|size/i.test(f)) {
+            record[field] = fakeData.randomInt(1, 10000);
+          }
+          // Date fields
+          else if (/date|created|updated|time|at$/i.test(f)) {
+            record[field] = fakeData.randomDate();
+          }
+          // Boolean fields
+          else if (/active|enabled|valid|available|is[A-Z]/i.test(f)) {
+            record[field] = fakeData.randomBool();
+          }
+          // URL fields
+          else if (/url|link|website|site|href/i.test(f)) {
+            record[field] = `https://example.com/${entityName.toLowerCase()}/${index + 1}`;
+          }
+          // Location fields
+          else if (/city|location|place/i.test(f)) {
+            record[field] = fakeData.random(fakeData.cities);
+          }
+          else if (/country|nation|region/i.test(f)) {
+            record[field] = fakeData.random(fakeData.countries);
+          }
+          else if (/capital/i.test(f)) {
+            record[field] = fakeData.random(fakeData.cities);
+          }
+          // Status fields
+          else if (/status|state/i.test(f)) {
+            record[field] = fakeData.random(fakeData.statuses);
+          }
+          // UUID fields
+          else if (/uuid|guid/i.test(f)) {
+            record[field] = fakeData.randomUUID();
+          }
+          // Rating fields
+          else if (/rating|score|stars/i.test(f)) {
+            record[field] = fakeData.randomFloat(1, 5, 1);
+          }
+          // Array/tags fields
+          else if (/tags?|labels?|keywords?/i.test(f)) {
+            record[field] = Array.from({ length: fakeData.randomInt(2, 5) }, () => fakeData.random(fakeData.tags));
+          }
+          // Color fields
+          else if (/color|colour/i.test(f)) {
+            record[field] = fakeData.random(fakeData.colors);
+          }
+          // Default - generate contextual string
+          else {
+            record[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} ${fakeData.randomInt(1, 1000)}`;
+          }
+        }
+
+        return record;
+      }
+
+      // Generate JSON from a natural language description
+      function generateJsonFromDescription(description) {
+        const lower = description.toLowerCase();
+
+        // Extract quantity
+        const quantityMatch = lower.match(/(\d+)\s+/);
+        let count = quantityMatch ? Math.min(parseInt(quantityMatch[1]), 1000) : 1;
+
+        // Check for array keywords
+        if (!quantityMatch && /\barray|\blist|\bmultiple|\brecords?\b|\bentries?\b/i.test(lower)) {
+          count = 10;
+        }
+
+        // Action words to skip
+        const actionWords = ['create', 'generate', 'make', 'build', 'give', 'show', 'get', 'fetch', 'produce', 'output', 'return'];
+
+        // Extract entity name - look for "of X" pattern or "N X" pattern
+        let entityName = 'record';
+
+        // Try "of <entity>" pattern first (e.g., "create 100 records of kashmir states")
+        const ofMatch = lower.match(/\bof\s+([a-z]+(?:\s+[a-z]+)*)/i);
+        if (ofMatch) {
+          entityName = ofMatch[1].replace(/\s+/g, ' ').trim();
+        } else {
+          // Try "<number> <entity>" pattern (e.g., "100 icd codes")
+          const numEntityMatch = lower.match(/\d+\s+([a-z]+(?:\s+[a-z]+)*?)(?:\s+with|\s+having|\s+containing|$)/i);
+          if (numEntityMatch) {
+            let extracted = numEntityMatch[1].trim();
+            // Remove action words from the beginning
+            for (const action of actionWords) {
+              extracted = extracted.replace(new RegExp(`^${action}\\s+`, 'i'), '');
+            }
+            // Remove "records", "entries" etc from entity name
+            extracted = extracted.replace(/\s*(records?|entries?|rows?|items?)\s*/gi, ' ').trim();
+            if (extracted && extracted.length > 1) {
+              entityName = extracted;
+            }
+          }
+        }
+
+        // Clean up entity name - remove "records of", trailing s for singular
+        entityName = entityName.replace(/\s*(records?|entries?)\s*of\s*/gi, '').trim();
+        entityName = entityName.replace(/s$/, ''); // Make singular
+
+        // Extract fields from "with X, Y, Z" pattern
+        const withMatch = description.match(/with\s+(.+)/i);
+        let fields = [];
+
+        if (withMatch) {
+          // Split by commas and "and"
+          fields = withMatch[1]
+            .split(/[,\s]+(?:and\s+)?/i)
+            .map(f => f.trim().replace(/\s+/g, '_'))
+            .filter(f => f.length > 1 && !/^(a|an|the)$/i.test(f));
+        }
+
+        // If no fields specified, generate default fields based on entity
+        if (fields.length === 0) {
+          // Check if it's a known type
+          if (/user|person|people|profile/i.test(entityName)) {
+            return JSON.stringify(Array.from({ length: count }, (_, i) => generateRecord('user', i)), null, 2);
+          } else if (/product|item/i.test(entityName)) {
+            return JSON.stringify(Array.from({ length: count }, (_, i) => generateRecord('product', i)), null, 2);
+          } else if (/order/i.test(entityName)) {
+            return JSON.stringify(Array.from({ length: count }, (_, i) => generateRecord('order', i)), null, 2);
+          } else if (/post|blog|article/i.test(entityName)) {
+            return JSON.stringify(Array.from({ length: count }, (_, i) => generateRecord('post', i)), null, 2);
+          } else if (/employee|staff/i.test(entityName)) {
+            return JSON.stringify(Array.from({ length: count }, (_, i) => generateRecord('employee', i)), null, 2);
+          } else if (/transaction|payment/i.test(entityName)) {
+            return JSON.stringify(Array.from({ length: count }, (_, i) => generateRecord('transaction', i)), null, 2);
+          }
+
+          // For unknown entities, generate simple id + name records
+          // Just the entity name variations - simple and clean
+          const simpleRecords = Array.from({ length: count }, (_, i) => ({
+            id: i + 1,
+            name: `${entityName.charAt(0).toUpperCase() + entityName.slice(1)} ${i + 1}`
+          }));
+          return JSON.stringify(simpleRecords, null, 2);
+        }
+
+        // Generate records with custom fields
+        const records = Array.from({ length: count }, (_, i) => generateCustomRecord(entityName, fields, i));
+
+        // Return array or single object based on count
+        if (count === 1) {
+          return JSON.stringify(records[0], null, 2);
+        }
+        return JSON.stringify(records, null, 2);
+      }
+
+      // Open Generate Modal
+      document.getElementById('generateJsonBtn')?.addEventListener('click', () => {
+        document.getElementById('generateModal')?.classList.add('active');
+        document.getElementById('generatePreview')?.classList.remove('visible');
+        document.getElementById('generatePrompt').value = '';
+        generatedJson = null;
+      });
+
+      // Close Generate Modal
+      document.getElementById('generateModalClose')?.addEventListener('click', () => {
+        document.getElementById('generateModal')?.classList.remove('active');
+      });
+
+      // Example chip click handlers
+      document.querySelectorAll('.generate-example-chip').forEach(chip => {
+        chip.addEventListener('click', (e) => {
+          const prompt = e.target.dataset.prompt;
+          document.getElementById('generatePrompt').value = prompt;
+          // Auto-preview
+          generatedJson = generateJsonFromDescription(prompt);
+          document.getElementById('generatePreviewContent').textContent = generatedJson;
+          document.getElementById('generatePreview').classList.add('visible');
+        });
+      });
+
+      // Preview button - uses AI
+      document.getElementById('generatePreviewBtn')?.addEventListener('click', async () => {
+        const prompt = document.getElementById('generatePrompt').value.trim();
+        if (!prompt) {
+          alert('Please enter a description first');
+          return;
+        }
+
+        const btn = document.getElementById('generatePreviewBtn');
+        const originalText = btn.textContent;
+        btn.textContent = '⏳ Generating...';
+        btn.disabled = true;
+
+        try {
+          const result = await generateWithAI(prompt);
+          if (result.success) {
+            generatedJson = JSON.stringify(JSON.parse(result.json), null, 2);
+          } else {
+            // Fallback to heuristic
+            generatedJson = generateJsonFromDescription(prompt);
+          }
+          document.getElementById('generatePreviewContent').textContent = generatedJson;
+          document.getElementById('generatePreview').classList.add('visible');
+        } catch (e) {
+          generatedJson = generateJsonFromDescription(prompt);
+          document.getElementById('generatePreviewContent').textContent = generatedJson;
+          document.getElementById('generatePreview').classList.add('visible');
+        } finally {
+          btn.textContent = originalText;
+          btn.disabled = false;
+        }
+      });
+
+      // Insert button - uses AI
+      document.getElementById('generateInsertBtn')?.addEventListener('click', async () => {
+        const prompt = document.getElementById('generatePrompt').value.trim();
+        if (!prompt) {
+          alert('Please enter a description first');
+          return;
+        }
+
+        const btn = document.getElementById('generateInsertBtn');
+        const originalText = btn.textContent;
+        btn.textContent = '⏳ Generating...';
+        btn.disabled = true;
+
+        try {
+          if (!generatedJson) {
+            const result = await generateWithAI(prompt);
+            if (result.success) {
+              generatedJson = JSON.stringify(JSON.parse(result.json), null, 2);
+            } else {
+              generatedJson = generateJsonFromDescription(prompt);
+            }
+          }
+
+          jsonEditor.setValue(generatedJson);
+          jsonEditor.setPosition({ lineNumber: 1, column: 1 });
+          jsonEditor.revealLine(1);
+          updateValidation('valid', '✓ AI Generated JSON');
+          document.getElementById('generateModal')?.classList.remove('active');
+
+          // Save to history
+          if (typeof window.addToHistory === 'function') {
+            window.addToHistory(generatedJson);
+          }
+        } catch (e) {
+          alert('Error generating JSON: ' + e.message);
+        } finally {
+          btn.textContent = originalText;
+          btn.disabled = false;
         }
       });
 
