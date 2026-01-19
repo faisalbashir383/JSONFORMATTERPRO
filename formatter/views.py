@@ -1002,6 +1002,12 @@ def swagger_viewer_page(request):
     return render(request, 'swagger-viewer.html')
 
 
+def openapi_builder_page(request):
+    """Render the OpenAPI Builder/Editor page"""
+    return render(request, 'openapi-builder.html')
+
+
+
 def comma_separator_page(request):
     """Render the Comma Separator/Delimiter tool page"""
     return render(request, 'comma-separator.html')

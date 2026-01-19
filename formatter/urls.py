@@ -73,6 +73,7 @@ urlpatterns = [
     path('meta-tag-generator/', views.meta_tag_generator_page, name='meta_tag_generator_page'),
     path('comma-separator/', views.comma_separator_page, name='comma_separator_page'),
     path('swagger-viewer/', views.swagger_viewer_page, name='swagger_viewer_page'),
+    path('openapi-builder/', views.openapi_builder_page, name='openapi_builder_page'),
     path('mock-api/', views.mock_api_generator_page, name='mock_api_generator_page'),
     path('push-notification-tester/', views.push_notification_tester_page, name='push_notification_tester_page'),
     path('api-response-tester/', views.api_response_tester_page, name='api_response_tester_page'),

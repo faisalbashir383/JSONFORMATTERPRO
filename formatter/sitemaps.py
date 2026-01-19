@@ -101,8 +101,11 @@ class StaticViewSitemap(Sitemap):
             'sqlite_viewer_page',
             'comma_separator_page',
             'json_fixer_page',
+            'swagger_viewer_page',
+            'openapi_builder_page',
             'apiutils:webhook_tester',
         ]
+
 
 
 
