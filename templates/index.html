@@ -2123,7 +2123,13 @@ signup.{% endblock %}
         <h4>JSON Path Tester</h4>
         <p>Test JSONPath expressions and extract data</p>
       </a>
+      <a href="/webhook-tester/" class="tool-link-card">
+        <span class="tool-icon">🔗</span>
+        <h4>Webhook Tester</h4>
+        <p>Capture, debug, and test webhooks in real-time</p>
+      </a>
     </div>
+
   </section>
 
 
@@ -3163,7 +3169,7 @@ signup.{% endblock %}
         try {
           const response = await fetch('/api/ai/generate-json/', {
             method: 'POST',
-            headers: { 
+            headers: {
               'Content-Type': 'application/json',
               'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
             },
@@ -3171,7 +3177,7 @@ signup.{% endblock %}
           });
 
           const data = await response.json();
-          
+
           if (data.success) {
             return { success: true, json: data.json };
           } else {

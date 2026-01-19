@@ -31,11 +31,15 @@ sitemaps = {
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
+    # apiutils must come BEFORE formatter to prevent regex catch-all from matching /hook/
+    path('', include('apiutils.urls')),
     path('', include('formatter.urls')),
     
     # Sitemap
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]
+
+
 
 # Custom error handlers for SEO-friendly error pages
 handler404 = 'formatter.views.custom_404'
