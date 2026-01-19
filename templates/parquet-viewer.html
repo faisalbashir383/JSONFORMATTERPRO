@@ -1,0 +1,994 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Parquet Viewer Online – View & Inspect Parquet Files Free{% endblock %}
+{% block meta_title %}Parquet Viewer Online – Open & Inspect Apache Parquet Files{% endblock %}
+{% block meta_description %}Free online Parquet Viewer to open, inspect, and export Apache Parquet files directly in
+your browser. View schema, browse data, and convert to JSON or CSV. No upload required.{% endblock %}
+{% block meta_keywords %}parquet viewer, parquet viewer online, view parquet file, open parquet file, parquet to json,
+parquet to csv{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/parquet-viewer/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Parquet Viewer Online",
+  "description": "Free browser-based tool to view and inspect Apache Parquet files. See schema, browse data, and export to JSON or CSV.",
+  "url": "{{ SITE_URL }}/parquet-viewer/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a Parquet file?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Apache Parquet is a columnar storage file format optimized for analytics. It's widely used in big data ecosystems like Spark, Hive, and data lakes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this Parquet Viewer free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, completely free. Your files are processed entirely in your browser using WebAssembly and are never uploaded to any server."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I convert Parquet to JSON or CSV?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, you can export the viewed data to JSON or CSV format with a single click."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --parquet-primary: #10b981;
+        --parquet-primary-hover: #059669;
+    }
+
+    .parquet-container {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+        color: var(--color-text);
+    }
+
+    /* File Upload Zone */
+    .upload-zone {
+        border: 2px dashed var(--color-border);
+        border-radius: 16px;
+        padding: 3rem 2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: var(--color-surface);
+        margin-bottom: 2rem;
+    }
+
+    .upload-zone:hover {
+        border-color: var(--parquet-primary);
+        background: rgba(16, 185, 129, 0.02);
+    }
+
+    .upload-zone.dragover {
+        border-color: var(--parquet-primary);
+        background: rgba(16, 185, 129, 0.05);
+        transform: scale(1.01);
+    }
+
+    .upload-zone.has-file {
+        border-style: solid;
+        border-color: var(--parquet-primary);
+        background: rgba(16, 185, 129, 0.03);
+    }
+
+    .upload-icon {
+        width: 56px;
+        height: 56px;
+        margin-bottom: 1rem;
+        color: var(--color-text-secondary);
+    }
+
+    .upload-zone h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+        color: var(--color-text);
+    }
+
+    .upload-zone p {
+        margin: 0;
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .file-info {
+        display: none;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--color-surface-alt);
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+    }
+
+    .file-info.visible {
+        display: flex;
+    }
+
+    .file-info-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--parquet-primary);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    .file-info-details {
+        flex: 1;
+    }
+
+    .file-info-name {
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    .file-info-meta {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+    }
+
+    /* Layout */
+    .viewer-layout {
+        display: none;
+        gap: 1.5rem;
+    }
+
+    .viewer-layout.visible {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+    }
+
+    @media (max-width: 900px) {
+        .viewer-layout.visible {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Schema Panel */
+    .schema-panel {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 16px;
+        padding: 1.25rem;
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+    }
+
+    .schema-panel h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0 0 1rem 0;
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .schema-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .schema-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid var(--color-border);
+        font-size: 0.85rem;
+    }
+
+    .schema-item:last-child {
+        border-bottom: none;
+    }
+
+    .schema-col-name {
+        font-weight: 500;
+        color: var(--color-text);
+        font-family: 'Monaco', 'Menlo', monospace;
+    }
+
+    .schema-col-type {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+        background: var(--color-surface-alt);
+        border-radius: 4px;
+        color: var(--parquet-primary);
+        font-family: monospace;
+    }
+
+    /* Data Table */
+    .data-panel {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .data-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--color-border);
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .data-stats {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+    }
+
+    .data-stats strong {
+        color: var(--color-text);
+    }
+
+    .export-btns {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .export-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border-radius: 8px;
+        border: 1px solid var(--color-border);
+        background: var(--color-surface-alt);
+        color: var(--color-text);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .export-btn:hover {
+        border-color: var(--parquet-primary);
+        color: var(--parquet-primary);
+    }
+
+    .table-container {
+        overflow-x: auto;
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+    }
+
+    .data-table th {
+        position: sticky;
+        top: 0;
+        background: var(--color-surface-alt);
+        padding: 0.75rem 1rem;
+        text-align: left;
+        font-weight: 600;
+        color: var(--color-text);
+        border-bottom: 2px solid var(--color-border);
+        white-space: nowrap;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .data-table th:hover {
+        background: var(--color-border);
+    }
+
+    .data-table td {
+        padding: 0.6rem 1rem;
+        border-bottom: 1px solid var(--color-border);
+        color: var(--color-text-secondary);
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .data-table tr:hover td {
+        background: var(--color-surface-alt);
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .page-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+        border: 1px solid var(--color-border);
+        border-radius: 6px;
+        background: var(--color-surface);
+        color: var(--color-text);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .page-btn:hover:not(:disabled) {
+        border-color: var(--parquet-primary);
+        color: var(--parquet-primary);
+    }
+
+    .page-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .page-btn.active {
+        background: var(--parquet-primary);
+        border-color: var(--parquet-primary);
+        color: white;
+    }
+
+    .page-info {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        padding: 0 1rem;
+    }
+
+    /* Error */
+    .error-message {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        display: none;
+    }
+
+    .error-message.visible {
+        display: block;
+    }
+
+    /* Loading */
+    .loading-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .loading-overlay.visible {
+        display: flex;
+    }
+
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid var(--color-border);
+        border-top-color: var(--parquet-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* SEO Section */
+    .seo-section {
+        margin: 4rem auto;
+        padding: 0 1.5rem;
+        max-width: 900px;
+    }
+
+    .seo-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: 1rem;
+    }
+
+    .seo-section p {
+        font-size: 1rem;
+        line-height: 1.8;
+        color: var(--color-text-secondary);
+        margin-bottom: 1rem;
+    }
+
+    .seo-section ul {
+        padding-left: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .seo-section li {
+        margin-bottom: 0.5rem;
+        color: var(--color-text-secondary);
+    }
+
+    .crosslink-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .crosslink-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 1.25rem;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .crosslink-card:hover {
+        border-color: var(--parquet-primary);
+        transform: translateY(-2px);
+    }
+
+    .crosslink-card h4 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 0 0 0.5rem 0;
+    }
+
+    .crosslink-card p {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        margin: 0;
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="sr-only">
+    <h1>Parquet Viewer Online – View Apache Parquet Files</h1>
+    <p>Free browser-based Parquet file viewer. Upload .parquet files to inspect schema, browse data, and export to JSON
+        or CSV.</p>
+</section>
+
+<div class="parquet-container">
+    <div class="section-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            style="width:28px;height:28px;color:var(--parquet-primary)">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <rect x="8" y="12" width="8" height="2" rx="1"></rect>
+            <rect x="8" y="16" width="5" height="2" rx="1"></rect>
+        </svg>
+        <h2>Parquet Viewer</h2>
+    </div>
+
+    <!-- Upload Zone -->
+    <div class="upload-zone" id="upload-zone">
+        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        <h3>Drop your Parquet file here</h3>
+        <p>or click to browse (.parquet)</p>
+        <input type="file" id="file-input" accept=".parquet" style="display: none;">
+    </div>
+
+    <!-- Sample Button -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <button onclick="loadSampleData()"
+            style="padding: 0.6rem 1.25rem; font-size: 0.9rem; font-weight: 600; border-radius: 10px; border: 1px solid var(--color-border); background: var(--color-surface-alt); color: var(--color-text); cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="3" y1="9" x2="21" y2="9"></line>
+                <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+            Load Sample Data
+        </button>
+        <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 0.5rem;">
+            No Parquet file? Try the sample dataset to see how it works.
+        </p>
+    </div>
+
+    <!-- File Info -->
+    <div class="file-info" id="file-info">
+        <div class="file-info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+        </div>
+        <div class="file-info-details">
+            <div class="file-info-name" id="file-name">-</div>
+            <div class="file-info-meta" id="file-meta">-</div>
+        </div>
+        <button onclick="clearFile()"
+            style="padding: 0.5rem; border: none; background: transparent; cursor: pointer; color: var(--color-text-secondary);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-message" id="error-message"></div>
+
+    <!-- Viewer Layout -->
+    <div class="viewer-layout" id="viewer-layout">
+        <!-- Schema Panel -->
+        <div class="schema-panel">
+            <h3>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="width:18px;height:18px">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                </svg>
+                Schema
+            </h3>
+            <ul class="schema-list" id="schema-list"></ul>
+        </div>
+
+        <!-- Data Panel -->
+        <div class="data-panel">
+            <div class="data-toolbar">
+                <div class="data-stats" id="data-stats">
+                    <strong id="row-count">0</strong> rows × <strong id="col-count">0</strong> columns
+                </div>
+                <div class="export-btns">
+                    <button class="export-btn" onclick="exportToJSON()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            style="width:16px;height:16px">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        JSON
+                    </button>
+                    <button class="export-btn" onclick="exportToCSV()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            style="width:16px;height:16px">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        CSV
+                    </button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table" id="data-table">
+                    <thead id="table-head"></thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+            </div>
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loading">
+    <div class="loading-spinner"></div>
+</div>
+
+<!-- SEO Content -->
+<section class="seo-section">
+    <h2>What is Apache Parquet?</h2>
+    <p>
+        Apache Parquet is a columnar storage file format designed for efficient data processing. Unlike row-based
+        formats like CSV or JSON, Parquet stores data by column, enabling faster queries and better
+        compression—especially for analytical workloads.
+    </p>
+    <p>
+        Parquet is the standard format for data lakes, used extensively with Apache Spark, Hive, Presto, AWS Athena,
+        Google BigQuery, and Python data libraries like Pandas and Polars.
+    </p>
+
+    <h3>Why Use This Parquet Viewer?</h3>
+    <ul>
+        <li><strong>No Python, Spark, or Pandas required:</strong> Open and inspect Parquet files instantly without
+            installing any libraries or running code.</li>
+        <li><strong>100% private:</strong> Files are processed locally using WebAssembly—nothing is uploaded to any
+            server.</li>
+        <li><strong>Instant schema inspection:</strong> See column names and data types at a glance.</li>
+        <li><strong>Export to JSON/CSV:</strong> Convert Parquet data to more readable formats with one click.</li>
+        <li><strong>Large file support:</strong> Paginated viewing for files with thousands of rows (previews first
+            10,000 rows for performance).</li>
+    </ul>
+
+    <h3>Parquet vs CSV and JSON</h3>
+    <p>
+        Unlike CSV or JSON, Apache Parquet is a columnar binary format optimized for analytics and large datasets. While
+        CSV and JSON are easier to read manually, Parquet offers significantly better compression and query performance.
+        This Parquet Viewer helps bridge that gap by letting you inspect Parquet files visually and export them to more
+        readable formats like CSV or JSON when needed.
+    </p>
+
+    <h3>Related Tools</h3>
+    <div class="crosslink-grid">
+        <a href="{% url 'sqlite_viewer_page' %}" class="crosslink-card">
+            <h4>SQLite Viewer</h4>
+            <p>View and query SQLite database files directly in your browser.</p>
+        </a>
+        <a href="{% url 'sql_formatter_page' %}" class="crosslink-card">
+            <h4>SQL Formatter</h4>
+            <p>Beautify and format SQL queries with syntax highlighting.</p>
+        </a>
+        <a href="{% url 'csv_to_json_page' %}" class="crosslink-card">
+            <h4>CSV to JSON Converter</h4>
+            <p>Convert CSV files to JSON format instantly.</p>
+        </a>
+        <a href="/" class="crosslink-card">
+            <h4>JSON Formatter</h4>
+            <p>Format, validate, and beautify JSON data.</p>
+        </a>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<!-- parquet-wasm for client-side Parquet parsing -->
+<script type="module">
+    import * as parquet from 'https://cdn.jsdelivr.net/npm/parquet-wasm@0.6.1/esm/parquet_wasm.js';
+    await parquet.default();
+
+    // Global state
+    let currentData = [];
+    let currentSchema = [];
+    let currentPage = 1;
+    const pageSize = 100;
+
+    // Expose to global scope
+    window.parquetLib = parquet;
+    window.currentData = currentData;
+    window.currentSchema = currentSchema;
+
+    // File Upload Handling
+    const uploadZone = document.getElementById('upload-zone');
+    const fileInput = document.getElementById('file-input');
+
+    uploadZone.addEventListener('click', () => fileInput.click());
+
+    uploadZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadZone.classList.add('dragover');
+    });
+
+    uploadZone.addEventListener('dragleave', () => {
+        uploadZone.classList.remove('dragover');
+    });
+
+    uploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file) handleFile(file);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) handleFile(file);
+    });
+
+    async function handleFile(file) {
+        if (!file.name.endsWith('.parquet')) {
+            showError('Please upload a .parquet file.');
+            return;
+        }
+
+        hideError();
+        showLoading();
+
+        try {
+            const buffer = await file.arrayBuffer();
+            const table = parquet.readParquet(new Uint8Array(buffer));
+
+            // Extract schema
+            const schema = table.schema;
+            currentSchema = schema.fields.map(f => ({
+                name: f.name,
+                type: f.type.toString()
+            }));
+            window.currentSchema = currentSchema;
+
+            // Extract data (limit to 10,000 rows for performance)
+            currentData = [];
+            const numRows = table.numRows;
+            const maxRows = 10000;
+            const rowsToLoad = Math.min(numRows, maxRows);
+            const isLimited = numRows > maxRows;
+
+            for (let i = 0; i < rowsToLoad; i++) {
+                const row = {};
+                for (const field of currentSchema) {
+                    const col = table.getColumnAt(currentSchema.indexOf(field));
+                    row[field.name] = col.get(i);
+                }
+                currentData.push(row);
+            }
+            window.currentData = currentData;
+
+            // Update UI
+            document.getElementById('file-name').textContent = file.name;
+            let metaText = `${formatBytes(file.size)} • ${numRows.toLocaleString()} rows • ${currentSchema.length} columns`;
+            if (isLimited) {
+                metaText += ` (showing first ${maxRows.toLocaleString()})`;
+            }
+            document.getElementById('file-meta').textContent = metaText;
+            document.getElementById('file-info').classList.add('visible');
+            uploadZone.classList.add('has-file');
+
+            document.getElementById('row-count').textContent = isLimited ? `${rowsToLoad.toLocaleString()} of ${numRows.toLocaleString()}` : numRows.toLocaleString();
+            document.getElementById('col-count').textContent = currentSchema.length;
+
+            renderSchema();
+            currentPage = 1;
+            renderTable();
+            renderPagination();
+
+            document.getElementById('viewer-layout').classList.add('visible');
+
+        } catch (err) {
+            showError('Failed to parse Parquet file: ' + err.message);
+        } finally {
+            hideLoading();
+        }
+    }
+
+    function renderSchema() {
+        const list = document.getElementById('schema-list');
+        list.innerHTML = currentSchema.map(col => `
+            <li class="schema-item">
+                <span class="schema-col-name">${col.name}</span>
+                <span class="schema-col-type">${col.type}</span>
+            </li>
+        `).join('');
+    }
+
+    function renderTable() {
+        const thead = document.getElementById('table-head');
+        const tbody = document.getElementById('table-body');
+
+        // Header
+        thead.innerHTML = `<tr>${currentSchema.map(col => `<th>${col.name}</th>`).join('')}</tr>`;
+
+        // Body (paginated)
+        const start = (currentPage - 1) * pageSize;
+        const end = Math.min(start + pageSize, currentData.length);
+        const pageData = currentData.slice(start, end);
+
+        tbody.innerHTML = pageData.map(row => `
+            <tr>${currentSchema.map(col => `<td title="${String(row[col.name])}">${formatCell(row[col.name])}</td>`).join('')}</tr>
+        `).join('');
+    }
+
+    function formatCell(value) {
+        if (value === null || value === undefined) return '<em style="color:var(--color-text-secondary)">null</em>';
+        if (typeof value === 'object') return JSON.stringify(value);
+        return String(value);
+    }
+
+    function renderPagination() {
+        const totalPages = Math.ceil(currentData.length / pageSize);
+        const pagination = document.getElementById('pagination');
+
+        if (totalPages <= 1) {
+            pagination.innerHTML = '';
+            return;
+        }
+
+        let html = `<button class="page-btn" onclick="window.goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>← Prev</button>`;
+        html += `<span class="page-info">Page ${currentPage} of ${totalPages}</span>`;
+        html += `<button class="page-btn" onclick="window.goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next →</button>`;
+
+        pagination.innerHTML = html;
+    }
+
+    window.goToPage = function (page) {
+        const totalPages = Math.ceil(currentData.length / pageSize);
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderTable();
+        renderPagination();
+    };
+
+    window.clearFile = function () {
+        currentData = [];
+        currentSchema = [];
+        window.currentData = currentData;
+        window.currentSchema = currentSchema;
+        document.getElementById('file-info').classList.remove('visible');
+        document.getElementById('viewer-layout').classList.remove('visible');
+        uploadZone.classList.remove('has-file');
+        fileInput.value = '';
+    };
+
+    window.exportToJSON = function () {
+        if (!currentData.length) return;
+        const blob = new Blob([JSON.stringify(currentData, null, 2)], { type: 'application/json' });
+        downloadBlob(blob, 'parquet-export.json');
+    };
+
+    window.exportToCSV = function () {
+        if (!currentData.length) return;
+        const headers = currentSchema.map(c => c.name);
+        const rows = currentData.map(row => headers.map(h => {
+            const val = row[h];
+            if (val === null || val === undefined) return '';
+            if (typeof val === 'string' && val.includes(',')) return `"${val}"`;
+            return String(val);
+        }).join(','));
+        const csv = [headers.join(','), ...rows].join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        downloadBlob(blob, 'parquet-export.csv');
+    };
+
+    function downloadBlob(blob, filename) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function formatBytes(bytes) {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function showError(msg) {
+        const el = document.getElementById('error-message');
+        el.textContent = msg;
+        el.classList.add('visible');
+    }
+
+    function hideError() {
+        document.getElementById('error-message').classList.remove('visible');
+    }
+
+    function showLoading() {
+        document.getElementById('loading').classList.add('visible');
+    }
+
+    function hideLoading() {
+        document.getElementById('loading').classList.remove('visible');
+    }
+
+    // Sample Data Function
+    window.loadSampleData = function () {
+        const sampleSchema = [
+            { name: 'order_id', type: 'Int64' },
+            { name: 'customer_name', type: 'Utf8' },
+            { name: 'product', type: 'Utf8' },
+            { name: 'category', type: 'Utf8' },
+            { name: 'quantity', type: 'Int32' },
+            { name: 'price', type: 'Float64' },
+            { name: 'order_date', type: 'Date32' },
+            { name: 'shipped', type: 'Boolean' }
+        ];
+
+        const products = [
+            { name: 'MacBook Pro 14"', category: 'Electronics', price: 1999.99 },
+            { name: 'iPhone 15 Pro', category: 'Electronics', price: 1199.00 },
+            { name: 'AirPods Pro', category: 'Electronics', price: 249.99 },
+            { name: 'Standing Desk', category: 'Furniture', price: 599.00 },
+            { name: 'Python Crash Course', category: 'Books', price: 39.99 },
+            { name: 'Mechanical Keyboard', category: 'Accessories', price: 159.00 },
+            { name: '4K Monitor 27"', category: 'Electronics', price: 399.99 }
+        ];
+
+        const names = ['Alice Johnson', 'Bob Smith', 'Charlie Brown', 'Diana Ross', 'Edward Chen', 'Fiona Wang', 'George Miller', 'Hannah Lee'];
+
+        const sampleData = [];
+        for (let i = 1; i <= 250; i++) {
+            const product = products[Math.floor(Math.random() * products.length)];
+            const customer = names[Math.floor(Math.random() * names.length)];
+            const quantity = Math.floor(Math.random() * 5) + 1;
+            const daysAgo = Math.floor(Math.random() * 365);
+            const orderDate = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+            sampleData.push({
+                order_id: 10000 + i,
+                customer_name: customer,
+                product: product.name,
+                category: product.category,
+                quantity: quantity,
+                price: product.price,
+                order_date: orderDate,
+                shipped: Math.random() > 0.2
+            });
+        }
+
+        currentSchema = sampleSchema;
+        currentData = sampleData;
+        window.currentSchema = currentSchema;
+        window.currentData = currentData;
+
+        document.getElementById('file-name').textContent = 'sample_orders.parquet (Demo)';
+        document.getElementById('file-meta').textContent = `Sample Data • ${sampleData.length} rows • ${sampleSchema.length} columns`;
+        document.getElementById('file-info').classList.add('visible');
+        document.getElementById('upload-zone').classList.add('has-file');
+
+        document.getElementById('row-count').textContent = sampleData.length.toLocaleString();
+        document.getElementById('col-count').textContent = sampleSchema.length;
+
+        renderSchema();
+        currentPage = 1;
+        renderTable();
+        renderPagination();
+
+        document.getElementById('viewer-layout').classList.add('visible');
+    };
+</script>
+{% endblock %}

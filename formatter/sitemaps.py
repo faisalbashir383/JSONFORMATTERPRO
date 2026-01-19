@@ -104,6 +104,7 @@ class StaticViewSitemap(Sitemap):
             'swagger_viewer_page',
             'openapi_builder_page',
             'redoc_viewer_page',
+            'parquet_viewer_page',
             'apiutils:webhook_tester',
         ]
 
