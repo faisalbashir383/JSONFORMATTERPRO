@@ -682,12 +682,15 @@ Example:
         <button id="sampleBtn" class="sample-btn">📄 Load Sample</button>
         <button id="clearBtn" class="secondary-btn">🗑️ Clear</button>
         <a href="{% url 'openapi_builder_page' %}" class="sample-btn"
-           title="Create OpenAPI & Swagger specifications from scratch"
+            title="Create OpenAPI & Swagger specifications from scratch"
             style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: none;">✨
             ✨ Create/Edit OpenAPI Spec (Builder)</a>
         <a href="{% url 'index' %}" class="sample-btn" target="_blank"
             style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border: none;">🚀
             Validate JSON</a>
+        <a href="{% url 'redoc_viewer_page' %}" class="sample-btn"
+            style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none;">📖
+            ReDoc Viewer</a>
     </div>
 
 
@@ -908,15 +911,16 @@ Example:
         </div>
     </div>
     <div class="faq-item">
-          <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
             <span>Can I use this Swagger Viewer without logging in?</span>
-              <span class="icon">+</span>
-          </div>
-          <div class="faq-answer">
-            Yes. This is a <strong>free Swagger viewer with no login</strong>. You can view OpenAPI and Swagger files online
-            instantly without creating an account or uploading data to a server.
-          </div>
+            <span class="icon">+</span>
         </div>
+        <div class="faq-answer">
+            Yes. This is a <strong>free Swagger viewer with no login</strong>. You can view OpenAPI and Swagger files
+            online
+            instantly without creating an account or uploading data to a server.
+        </div>
+    </div>
 
 </div>
 

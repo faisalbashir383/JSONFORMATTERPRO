@@ -806,14 +806,25 @@ online{% endblock %}
                 <li>You want to view or test an existing API specification</li>
                 <li>You need an interactive Swagger UI to explore endpoints</li>
             </ul>
-            <div class="recommendation-btn-container">
+            <div class="recommendation-btn-container" style="gap: 1rem;">
                 <a href="{% url 'swagger_viewer_page' %}" class="recommendation-btn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                         style="width:18px;height:18px">
                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                         <circle cx="12" cy="12" r="3"></circle>
                     </svg>
-                    Go to Swagger Viewer
+                    Swagger Viewer
+                </a>
+                <a href="{% url 'redoc_viewer_page' %}" class="recommendation-btn"
+                    style="background: linear-gradient(135deg, #10b981, #059669);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        style="width:18px;height:18px">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                    ReDoc Viewer
                 </a>
             </div>
         </div>

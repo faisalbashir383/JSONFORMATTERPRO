@@ -1007,6 +1007,11 @@ def openapi_builder_page(request):
     return render(request, 'openapi-builder.html')
 
 
+def redoc_viewer_page(request):
+    """Render the ReDoc Viewer page"""
+    return render(request, 'redoc-viewer.html')
+
+
 
 def comma_separator_page(request):
     """Render the Comma Separator/Delimiter tool page"""

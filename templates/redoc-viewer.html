@@ -1,0 +1,855 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}ReDoc Viewer – Render OpenAPI Documentation Online (Free){% endblock %}
+{% block meta_title %}ReDoc Viewer Online – View OpenAPI Docs with ReDoc{% endblock %}
+{% block meta_description %}Free ReDoc Viewer to render OpenAPI and Swagger documentation online. Paste, upload, or link
+an OpenAPI spec and generate clean, readable API docs instantly. No signup required.{% endblock %}
+{% block meta_keywords %}redoc viewer online, redoc online, openapi redoc, redoc documentation{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/redoc-viewer/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "ReDoc Viewer Online",
+  "description": "Free online ReDoc viewer to render OpenAPI and Swagger documentation as clean, readable API docs.",
+  "url": "{{ SITE_URL }}/redoc-viewer/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is ReDoc?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ReDoc is an open-source tool that generates beautiful, responsive, three-panel API documentation from OpenAPI (Swagger) specifications. It focuses on readability and is widely used for publishing API references."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this ReDoc Viewer free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, this ReDoc Viewer is completely free. There's no signup required, no usage limits, and all processing happens entirely in your browser."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it support Swagger and OpenAPI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, this viewer supports both OpenAPI 3.x and Swagger 2.0 specifications in JSON or YAML format."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is ReDoc different from Swagger UI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ReDoc focuses on generating clean, readable documentation optimized for publishing. Swagger UI is more interactive, allowing users to test API endpoints directly. ReDoc is ideal for documentation portals, while Swagger UI excels at API exploration and testing."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --redoc-primary: #f97316;
+        --redoc-primary-hover: #ea580c;
+        --redoc-bg-alt: var(--color-surface-alt);
+    }
+
+    /* Input Section Styling */
+    .redoc-input-section {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+        color: var(--color-text);
+    }
+
+    .input-tabs {
+        display: flex;
+        gap: 0;
+        border-bottom: 2px solid var(--color-border);
+        margin-bottom: 1.5rem;
+    }
+
+    .input-tab {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -2px;
+        transition: all 0.2s;
+    }
+
+    .input-tab:hover {
+        color: var(--color-text);
+    }
+
+    .input-tab.active {
+        color: var(--redoc-primary);
+        border-bottom-color: var(--redoc-primary);
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .form-textarea {
+        width: 100%;
+        min-height: 200px;
+        padding: 1rem;
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        resize: vertical;
+    }
+
+    .form-textarea:focus {
+        outline: none;
+        border-color: var(--redoc-primary);
+        box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.1);
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        font-size: 0.95rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: var(--redoc-primary);
+        box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.1);
+    }
+
+    .file-upload-zone {
+        border: 2px dashed var(--color-border);
+        border-radius: 12px;
+        padding: 3rem 2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: var(--color-bg);
+    }
+
+    .file-upload-zone:hover {
+        border-color: var(--redoc-primary);
+        background: rgba(233, 30, 99, 0.02);
+    }
+
+    .file-upload-zone.dragover {
+        border-color: var(--redoc-primary);
+        background: rgba(233, 30, 99, 0.05);
+    }
+
+    .upload-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 1rem;
+        color: var(--color-text-secondary);
+    }
+
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.875rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: var(--redoc-primary);
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: 1rem;
+    }
+
+    .btn-primary:hover {
+        background: var(--redoc-primary-hover);
+        transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* ReDoc Container */
+    #redoc-container {
+        display: none;
+        min-height: 600px;
+        border-top: 1px solid var(--color-border);
+    }
+
+    #redoc-container.active {
+        display: block;
+        margin-top: 2rem;
+    }
+
+    /* Error Display */
+    .error-message {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        display: none;
+    }
+
+    .error-message.visible {
+        display: block;
+    }
+
+    /* SEO Section */
+    .seo-section {
+        margin: 4rem auto;
+        padding: 0 1.5rem;
+        margin-top: 10rem;
+    }
+
+    .seo-section h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: 1rem;
+    }
+
+    .seo-section h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .seo-section p {
+        font-size: 1rem;
+        line-height: 1.8;
+        color: var(--color-text-secondary);
+        margin-bottom: 1rem;
+    }
+
+    .seo-section ul {
+        padding-left: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .seo-section li {
+        margin-bottom: 0.5rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+    }
+
+    /* Comparison Box */
+    .comparison-box {
+        background: var(--color-surface-alt);
+        border-left: 4px solid var(--redoc-primary);
+        padding: 1.5rem 2rem;
+        border-radius: 0 12px 12px 0;
+        margin: 2rem 0;
+    }
+
+    .comparison-box h3 {
+        margin-top: 0 !important;
+        color: var(--color-text) !important;
+        font-size: 1.1rem !important;
+    }
+
+    .comparison-box p {
+        margin-bottom: 0 !important;
+    }
+
+    /* Cross-Link Cards */
+    .crosslink-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .crosslink-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .crosslink-card:hover {
+        border-color: var(--redoc-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px var(--color-shadow);
+    }
+
+    .crosslink-card h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 0 0 0.5rem 0;
+    }
+
+    .crosslink-card p {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    /* FAQ Accordion */
+    .faq-section {
+        margin-top: 3rem;
+        background: None;
+    }
+
+    .faq-item {
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .faq-question {
+        width: 100%;
+        padding: 1.25rem 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        background: transparent;
+        border: none;
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .faq-question svg {
+        transition: transform 0.2s;
+        flex-shrink: 0;
+    }
+
+    .faq-question.open svg {
+        transform: rotate(180deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .faq-answer.open {
+        max-height: 500px;
+    }
+
+    .faq-answer p {
+        padding-bottom: 1.25rem;
+        margin: 0;
+    }
+
+    /* Screen Reader Only */
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .input-tab {
+            padding: 0.6rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .seo-section h2 {
+            font-size: 1.5rem;
+        }
+
+        .crosslink-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="sr-only">
+    <h1>ReDoc Viewer – View OpenAPI Documentation Online</h1>
+    <p>
+        The ReDoc Viewer is a free, browser-based tool that renders OpenAPI and Swagger specifications
+        as beautiful, three-panel API documentation using ReDoc. Paste, upload, or link your spec
+        to generate clean, readable docs instantly.
+    </p>
+</section>
+
+<!-- Input Section -->
+<div class="redoc-input-section">
+    <div class="section-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            style="width:28px;height:28px;color:var(--redoc-primary)">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        <h2>ReDoc Viewer</h2>
+    </div>
+
+    <!-- Input Tabs -->
+    <div
+        style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+        <div class="input-tabs" style="margin-bottom: 0;">
+            <button class="input-tab active" data-tab="paste">Paste Spec</button>
+            <button class="input-tab" data-tab="url">Load from URL</button>
+            <button class="input-tab" data-tab="file">Upload File</button>
+        </div>
+        <button class="btn-sample" onclick="loadPetstoreSample()"
+            style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600; border-radius: 8px; border: 1px solid var(--color-border); background: var(--color-surface-alt); color: var(--color-text); cursor: pointer; transition: all 0.2s;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="width:16px;height:16px;vertical-align:middle;margin-right:0.4rem">
+                <path d="M20 12V8H4v4"></path>
+                <path d="M2 12h20"></path>
+                <path d="M7 12v10"></path>
+                <path d="M17 12v10"></path>
+                <path d="M2 12l2-2V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6l2 2"></path>
+            </svg>
+            Petstore Sample
+        </button>
+    </div>
+
+    <!-- Paste Tab -->
+    <div class="tab-content active" id="tab-paste">
+        <textarea id="spec-input" class="form-textarea"
+            placeholder='Paste your OpenAPI/Swagger specification here (JSON or YAML)...'></textarea>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+            <button class="btn-primary" onclick="renderFromPaste()" style="margin-top: 0;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    style="width:18px;height:18px">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Render Documentation
+            </button>
+            <a href="{% url 'openapi_builder_page' %}" class="btn-primary"
+                style="margin-top: 0; background: linear-gradient(135deg, #6366f1, #8b5cf6); text-decoration: none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    style="width:18px;height:18px">
+                    <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+                OpenAPI Builder
+            </a>
+        </div>
+    </div>
+
+    <!-- URL Tab -->
+    <div class="tab-content" id="tab-url">
+        <input type="text" id="spec-url" class="form-input" placeholder="https://petstore.swagger.io/v2/swagger.json">
+        <button class="btn-primary" onclick="renderFromUrl()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                style="width:18px;height:18px">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Load & Render
+        </button>
+        <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 0.75rem;">
+            Note: The URL must be publicly accessible and allow cross-origin requests (CORS).
+        </p>
+    </div>
+
+    <!-- File Upload Tab -->
+    <div class="tab-content" id="tab-file">
+        <div class="file-upload-zone" id="file-drop-zone">
+            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <p style="margin: 0; font-weight: 500; color: var(--color-text);">Drop your OpenAPI file here</p>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.85rem; color: var(--color-text-secondary);">or click to browse
+                (.json, .yaml, .yml)</p>
+            <input type="file" id="file-input" accept=".json,.yaml,.yml" style="display: none;">
+        </div>
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-message" id="error-message"></div>
+</div>
+
+<!-- ReDoc Container -->
+<div id="redoc-container"></div>
+
+<!-- SEO Content Section -->
+<section class="seo-section">
+    <h2>What is ReDoc?</h2>
+    <p>
+        ReDoc is a popular open-source tool for generating beautiful, responsive API documentation from OpenAPI
+        (Swagger) specifications.
+        Unlike interactive API explorers, ReDoc focuses on producing clean, readable documentation that's ideal for
+        publishing and sharing with developers.
+    </p>
+    <p>
+        This free online ReDoc Viewer lets you render any OpenAPI 3.x or Swagger 2.0 specification instantly.
+        Simply paste your spec, upload a file, or load from a URL—no signup or installation required.
+    </p>
+
+    <h3>When to Use ReDoc</h3>
+    <ul>
+        <li><strong>Publishing API references:</strong> Generate polished documentation for developer portals.</li>
+        <li><strong>Reviewing spec changes:</strong> Quickly visualize how API updates affect your docs.</li>
+        <li><strong>Sharing with stakeholders:</strong> Provide clean, readable API overviews without technical setup.
+        </li>
+        <li><strong>Embedding in websites:</strong> Preview how ReDoc will render before integrating it into your site.
+        </li>
+    </ul>
+
+    <div class="comparison-box">
+        <h3>How This Compares to Other Tools</h3>
+        <p>
+            This ReDoc Viewer focuses on rendering clean, readable API documentation. Tools like <strong>Swagger
+                Editor</strong> are designed for manual specification editing, while <strong>Postman</strong> focuses on
+            API testing and collaboration. ReDoc specializes in presenting OpenAPI definitions as polished
+            documentation, making it ideal for publishing and sharing API references. For interactive API exploration
+            and testing, consider using a <a href="{% url 'swagger_viewer_page' %}">Swagger Viewer</a>.
+        </p>
+    </div>
+
+    <h3>Related Tools</h3>
+    <div class="crosslink-grid">
+        <a href="{% url 'openapi_builder_page' %}" class="crosslink-card">
+            <h4>OpenAPI Builder</h4>
+            <p>Create OpenAPI specifications from scratch using a form-based interface. No YAML or JSON knowledge
+                required.</p>
+        </a>
+        <a href="{% url 'swagger_viewer_page' %}" class="crosslink-card">
+            <h4>Swagger Viewer</h4>
+            <p>Explore and test API endpoints interactively using Swagger UI. Ideal for developers who want to try out
+                API calls.</p>
+        </a>
+        <a href="/" class="crosslink-card">
+            <h4>JSON Formatter</h4>
+            <p>Format, validate, and beautify JSON data instantly. Perfect for cleaning up API responses and spec files.
+            </p>
+        </a>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                What is ReDoc?
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="width:20px;height:20px">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+            <div class="faq-answer">
+                <p>ReDoc is a powerful open-source documentation generator created by Redocly. It takes your OpenAPI
+                    (formerly Swagger) specification file and transforms it into a beautiful, responsive, three-panel
+                    documentation layout. The left panel shows navigation, the middle panel displays endpoint details,
+                    and the right panel provides code samples. It's designed specifically for publishing polished API
+                    references that developers love to read.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                Is this ReDoc Viewer free?
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="width:20px;height:20px">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+            <div class="faq-answer">
+                <p>Absolutely! This online ReDoc Viewer is 100% free to use with no limitations whatsoever. There's no
+                    account required, no email signup, no premium tiers, and no usage caps. Everything runs directly in
+                    your browser using JavaScript, which means your API specification never leaves your computer—it's
+                    never uploaded to our servers or stored anywhere.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                Does it support both Swagger and OpenAPI?
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="width:20px;height:20px">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+            <div class="faq-answer">
+                <p>Yes, full support for both! This viewer handles OpenAPI 3.0, OpenAPI 3.1, and the older Swagger 2.0
+                    format (now called OpenAPI 2.0). You can paste or upload your specification in either JSON or YAML
+                    format—the tool automatically detects which one you're using and parses it accordingly.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                How is ReDoc different from Swagger UI?
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="width:20px;height:20px">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+            <div class="faq-answer">
+                <p>The key difference is interactivity vs. readability. Swagger UI is an interactive explorer—it lets
+                    you fill in parameters and actually execute API calls right from the documentation. ReDoc, on the
+                    other hand, is optimized purely for reading. It produces cleaner, more polished documentation that's
+                    perfect for public-facing developer portals, embedded product docs, or generating PDFs. If you need
+                    to test endpoints, use Swagger UI. If you need to publish beautiful docs, use ReDoc.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<!-- js-yaml for YAML parsing -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<!-- ReDoc Standalone -->
+<script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+
+<script>
+    // Tab Switching
+    document.querySelectorAll('.input-tab').forEach(tab => {
+        tab.addEventListener('click', function () {
+            document.querySelectorAll('.input-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+        });
+    });
+
+    // File Upload Handling
+    const fileDropZone = document.getElementById('file-drop-zone');
+    const fileInput = document.getElementById('file-input');
+
+    fileDropZone.addEventListener('click', () => fileInput.click());
+
+    fileDropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileDropZone.classList.add('dragover');
+    });
+
+    fileDropZone.addEventListener('dragleave', () => {
+        fileDropZone.classList.remove('dragover');
+    });
+
+    fileDropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileDropZone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file) handleFile(file);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) handleFile(file);
+    });
+
+    function handleFile(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const content = e.target.result;
+            renderSpec(content);
+        };
+        reader.readAsText(file);
+    }
+
+    // Render from Paste
+    function renderFromPaste() {
+        const content = document.getElementById('spec-input').value;
+        if (!content.trim()) {
+            showError('Please paste an OpenAPI specification.');
+            return;
+        }
+        renderSpec(content);
+    }
+
+    // Render from URL
+    function renderFromUrl() {
+        const url = document.getElementById('spec-url').value.trim();
+        if (!url) {
+            showError('Please enter a URL.');
+            return;
+        }
+
+        hideError();
+        const container = document.getElementById('redoc-container');
+        container.innerHTML = '<p style="text-align:center;padding:3rem;color:var(--color-text-secondary)">Loading specification...</p>';
+        container.classList.add('active');
+
+        // Use ReDoc's built-in URL loading
+        try {
+            Redoc.init(url, {
+                scrollYOffset: 80,
+                hideDownloadButton: false,
+                theme: {
+                    colors: {
+                        primary: { main: '#e91e63' }
+                    },
+                    typography: {
+                        fontFamily: 'inherit'
+                    }
+                }
+            }, container);
+        } catch (err) {
+            showError('Failed to load specification from URL. Ensure the URL is correct and allows CORS.');
+        }
+    }
+
+    // Main Render Function
+    function renderSpec(content) {
+        hideError();
+
+        let spec;
+        try {
+            // Try JSON first
+            spec = JSON.parse(content);
+        } catch (e) {
+            // Try YAML
+            try {
+                spec = jsyaml.load(content);
+            } catch (yamlErr) {
+                showError('Invalid specification format. Please provide valid JSON or YAML.');
+                return;
+            }
+        }
+
+        // Validate OpenAPI presence
+        if (!spec.openapi && !spec.swagger) {
+            showError('Invalid OpenAPI/Swagger specification. Missing "openapi" or "swagger" version field.');
+            return;
+        }
+
+        const container = document.getElementById('redoc-container');
+        container.innerHTML = '';
+        container.classList.add('active');
+
+        try {
+            Redoc.init(spec, {
+                scrollYOffset: 80,
+                hideDownloadButton: false,
+                theme: {
+                    colors: {
+                        primary: { main: '#f97316' }
+                    },
+                    typography: {
+                        fontFamily: 'inherit'
+                    }
+                }
+            }, container);
+
+            // Scroll to documentation
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Save to localStorage
+            try {
+                localStorage.setItem('redoc_last_spec', content);
+            } catch (e) {
+                // Storage might be full, ignore
+            }
+        } catch (err) {
+            showError('Failed to render documentation: ' + err.message);
+        }
+    }
+
+    // Error Handling
+    function showError(message) {
+        const el = document.getElementById('error-message');
+        el.textContent = message;
+        el.classList.add('visible');
+    }
+
+    function hideError() {
+        document.getElementById('error-message').classList.remove('visible');
+    }
+
+    // FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(btn => {
+        btn.addEventListener('click', function () {
+            this.classList.toggle('open');
+            this.nextElementSibling.classList.toggle('open');
+        });
+    });
+
+    // Load last spec from localStorage on page load (optional enhancement)
+    window.addEventListener('load', () => {
+        const lastSpec = localStorage.getItem('redoc_last_spec');
+        if (lastSpec) {
+            document.getElementById('spec-input').value = lastSpec;
+        }
+    });
+
+    // Load Petstore Sample
+    function loadPetstoreSample() {
+        const sampleUrl = 'https://petstore.swagger.io/v2/swagger.json';
+        document.getElementById('spec-url').value = sampleUrl;
+
+        // Switch to URL tab
+        document.querySelectorAll('.input-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelector('[data-tab="url"]').classList.add('active');
+        document.getElementById('tab-url').classList.add('active');
+
+        // Render
+        renderFromUrl();
+    }
+</script>
+{% endblock %}

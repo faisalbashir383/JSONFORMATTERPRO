@@ -103,6 +103,7 @@ class StaticViewSitemap(Sitemap):
             'json_fixer_page',
             'swagger_viewer_page',
             'openapi_builder_page',
+            'redoc_viewer_page',
             'apiutils:webhook_tester',
         ]
 
