@@ -12,7 +12,7 @@
 
 {% block meta_robots %}index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1{% endblock %}
 
-{% block author %}JSON Formatter Pro - Professional JSON Tools{% endblock %}
+{% block author %}Faisal Ahmad{% endblock %}
 
 {% block og_title %}JSON Formatter Online – Format JSON Instantly{% endblock %}
 {% block og_description %}Free JSON formatter to format and beautify JSON instantly in your browser. No uploads, no
@@ -41,6 +41,10 @@ signup.{% endblock %}
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Faisal Ahmad"
   },
   "featureList": [
   "JSON formatting",
@@ -113,20 +117,122 @@ signup.{% endblock %}
 <style>
   /* Screen reader only class for accessibility */
   .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
   }
 
   /* Improved contrast for content sections */
   .content-section {
     color: var(--color-text);
+  }
+  .page-h1 {
+  font-size: 1rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.25rem;
+}
+
+  /* Responsive margin for editor panel */
+  @media (max-width: 768px) {
+    .single-editor-panel {
+      margin-top: -20px !important;
+    }
+
+    /* Mobile panel header fixes */
+    .single-editor-panel .panel-header {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 0.75rem;
+      gap: 0.75rem;
+    }
+
+    .single-editor-panel .panel-title-group {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .single-editor-panel .panel-info {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    /* Make action buttons smaller on mobile */
+    .actions-dropdown .dropdown-trigger,
+    .ai-smart-fix-btn,
+    .ai-generate-btn {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    /* Shorten Generate with AI button text */
+    .ai-generate-btn {
+      font-size: 0;
+    }
+
+    .ai-generate-btn::before {
+      content: '✨ AI';
+      font-size: 0.8rem;
+    }
+
+    /* Fix trailing comma toggle on mobile */
+    .fix-toggle {
+      transform: scale(0.9);
+    }
+
+    .fix-label {
+      font-size: 0.75rem;
+    }
+
+    /* Icon buttons smaller */
+    .header-icon-btn {
+      padding: 0.3rem;
+    }
+
+    /* Hide everything except Format dropdown on mobile */
+    .history-dropdown,
+    .ai-smart-fix-btn,
+    .ai-generate-btn,
+    .single-editor-panel .panel-info {
+      display: none !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .single-editor-panel .panel-title-group {
+      width: 100%;
+    }
+
+    .actions-dropdown .dropdown-trigger,
+    .ai-smart-fix-btn,
+    .ai-generate-btn {
+      flex: 1;
+      min-width: 0;
+      justify-content: center;
+    }
+
+    /* Hide text on dropdown triggers for very small screens */
+    .dropdown-trigger {
+      font-size: 0;
+    }
+
+    .dropdown-trigger .action-icon {
+      font-size: 14px;
+    }
+
+    .dropdown-trigger .dropdown-arrow {
+      font-size: 10px;
+    }
   }
 
   .content-section strong {
@@ -218,6 +324,7 @@ signup.{% endblock %}
     margin-bottom: 2rem;
     position: relative;
     z-index: 1;
+    margin-top: -48px;
   }
 
   /* Editor container */
@@ -1319,9 +1426,8 @@ signup.{% endblock %}
 
 {% block content %}
 
-<header class="header" style="text-align: center; margin-bottom: 0.5rem; padding: 0.5rem 0;">
-  <h1
-    style="font-size: 1.75rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.25rem;">
+<header>
+  <h1 class="page-h1">
     JSON Formatter, Validator & JSON Fixer – Beautify and Repair JSON Online
   </h1>
   <noscript>
@@ -1330,35 +1436,7 @@ signup.{% endblock %}
       Paste your JSON to instantly convert it into a readable structure.
     </p>
   </noscript>
-  <p>
-    Paste your JSON and instantly transform it into a clean, readable format.
-    Perfect for debugging API responses and configuration files.
-  </p>
-  <div style="display:none">
-    <p>
-      JSON Formatter tool for developers to format JSON, fix invalid JSON, remove trailing commas,
-      and beautify JSON files online.
-    </p>
-  </div>
-  <div style="display:none">
-    JSON formatter, JSON validator, JSON fixer, JSON beautifier, JSON repair tool, JSON syntax checker, JSON pretty
-    print, format JSON online, fix invalid JSON, remove trailing commas JSON, convert single quotes to double quotes
-    JSON, JSON lint, JSON viewer, API JSON formatter, large JSON formatter
-  </div>
-</header><br>
-
-<!-- About Section -->
-<section class="header" style="margin-bottom: 0.5rem; padding: 0.5rem;">
-  <div class="card-body" style="padding: 0.4rem 1rem;">
-    <h2 style="font-size: 1rem; margin-bottom: 0.25rem;">Free Online JSON Formatter</h2>
-    <p class="subtitle" style="font-size: 0.85rem; line-height: 1.4; margin-bottom: 0;">
-      Instantly format and beautify JSON data in your browser
-    </p>
-    <p>
-      Optional tools like validation, minification, and conversion are available when needed.
-    </p>
-  </div>
-</section><br>
+</header>
 
 <!-- Hidden File Input -->
 <input type="file" id="fileInput" accept=".json" hidden>
@@ -1568,6 +1646,245 @@ signup.{% endblock %}
   </div>
 </div>
 
+<section class="documentation-content" style="margin:2rem auto;">
+    <article class="documentation-content" style="margin: 0 auto 3rem; padding: 0 1rem;">
+
+  <!-- Main Title & Description -->
+  <section class="doc-section" style="margin-bottom: 2.5rem;">
+    <h2
+      style="font-size: 1.5rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem; border-bottom: 2px solid var(--color-border); padding-bottom: 0.75rem;">
+      JSON Formatter with Validator & AI Repair
+    </h2>
+    <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-bottom: 1rem;">
+      The JSON Formatter transforms messy JSON into clean, readable output with consistent indentation. You can also
+      minify JSON to reduce size, validate syntax to catch errors, or use AI to auto-fix invalid JSON. This tool is
+      ideal for debugging APIs, preparing config files, reviewing log output, and sharing examples. Everything runs in
+      the browser, so your JSON never leaves your device.
+    </p>
+    <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary);">
+      Formatting JSON is more than just indentation. It helps you spot errors faster, improves code reviews, and makes
+      JSON easy to scan. Validating catches syntax issues before they break your application. Minifying removes
+      whitespace for faster transfers in production. With this tool, you can switch between all modes in seconds.
+    </p>
+  </section>
+
+  <!-- What this JSON Formatter Can Do -->
+  <section class="doc-section" style="margin-bottom: 2.5rem;">
+    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">What this JSON
+      formatter can do</h3>
+    <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
+      <li><strong style="color: var(--color-text);">Pretty print:</strong> Add line breaks and indentation for
+        readability.</li>
+      <li><strong style="color: var(--color-text);">Validate:</strong> Check JSON syntax and highlight errors with line
+        numbers.</li>
+      <li><strong style="color: var(--color-text);">Minify:</strong> Remove whitespace to reduce file size and improve
+        transfer speed.</li>
+      <li><strong style="color: var(--color-text);">Fix trailing commas:</strong> Automatically remove trailing commas
+        that break JSON parsing.</li>
+      <li><strong style="color: var(--color-text);">AI Smart Fix:</strong> Repair invalid JSON including single quotes,
+        Python booleans, and missing quotes.</li>
+      <li><strong style="color: var(--color-text);">Generate with AI:</strong> Create JSON data from a text description
+        (e.g., "100 users with name and email").</li>
+      <li><strong style="color: var(--color-text);">Copy/download:</strong> Export the formatted JSON instantly as a
+        file or to clipboard.</li>
+      <li><strong style="color: var(--color-text);">History:</strong> Access your recent JSON edits from the browser's
+        local storage.</li>
+    </ul>
+  </section>
+
+  <!-- How to Use the Formatter -->
+  <section class="doc-section" style="margin-bottom: 2.5rem;">
+    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">How to use the
+      formatter</h3>
+    <ol style="list-style: decimal; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
+      <li>Paste JSON into the editor above, or drag & drop a <code
+          style="background: var(--color-surface-alt); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace;">.json</code>
+        file.</li>
+      <li>Click <strong style="color: var(--color-text);">Format</strong> to beautify, <strong
+          style="color: var(--color-text);">Validate</strong> to check syntax, or <strong
+          style="color: var(--color-text);">Minify</strong> to compress.</li>
+      <li>Enable the <strong style="color: var(--color-text);">Fix Trailing Commas</strong> toggle if your JSON has
+        trailing commas.</li>
+      <li>If JSON is invalid, click <strong style="color: var(--color-text);">Smart Fix</strong> to auto-repair with AI.
+      </li>
+      <li>Copy or download the output from the editor.</li>
+    </ol>
+  </section>
+
+  <!-- Example: Format and Minify -->
+  <section class="doc-section" style="margin-bottom: 2.5rem;">
+    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Example: format and
+      minify</h3>
+
+    <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Input JSON:</p>
+    <pre
+      style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text); margin-bottom: 1.25rem;"><code>{"name":"Avi","roles":["editor","admin"],"meta":{"active":true,"score":9}}</code></pre>
+
+    <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Formatted output (2
+      spaces):</p>
+    <pre
+      style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text); margin-bottom: 1.25rem;"><code>{
+  "name": "Avi",
+  "roles": [
+    "editor",
+    "admin"
+  ],
+  "meta": {
+    "active": true,
+    "score": 9
+  }
+}</code></pre>
+
+    <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Minified output:</p>
+    <pre
+      style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text);"><code>{"name":"Avi","roles":["editor","admin"],"meta":{"active":true,"score":9}}</code></pre>
+  </section>
+
+  <!-- Example: AI Smart Fix -->
+  <section class="doc-section" style="margin-bottom: 2.5rem;">
+    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Example: AI Smart
+      Fix for invalid JSON</h3>
+
+    <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Input (invalid - single
+      quotes & trailing comma):</p>
+    <pre
+      style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text); margin-bottom: 1.25rem;"><code>{'name': 'Avi', 'active': True,}</code></pre>
+
+    <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">After AI Smart Fix:</p>
+    <pre
+      style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text);"><code>{
+  "name": "Avi",
+  "active": true
+}</code></pre>
+  </section>
+
+  <!-- Common Errors and Fixes -->
+  <section class="doc-section" style="margin-bottom: 2.5rem;">
+    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Common errors and
+      fixes</h3>
+    <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
+      <li><strong style="color: var(--color-text);">Error:</strong> <em>Unexpected token</em> during formatting. <strong
+          style="color: var(--color-text);">Cause:</strong> Invalid JSON syntax such as trailing commas or single
+        quotes. <strong style="color: var(--color-text);">Fix:</strong> Enable "Fix Trailing Commas" or use AI Smart
+        Fix.</li>
+      <li><strong style="color: var(--color-text);">Error:</strong> Output is empty after formatting. <strong
+          style="color: var(--color-text);">Cause:</strong> The input is blank or whitespace only. <strong
+          style="color: var(--color-text);">Fix:</strong> Paste valid JSON before formatting.</li>
+      <li><strong style="color: var(--color-text);">Error:</strong> Minify doesn't change output. <strong
+          style="color: var(--color-text);">Cause:</strong> The JSON is already minified. <strong
+          style="color: var(--color-text);">Fix:</strong> This is expected; try Format instead.</li>
+      <li><strong style="color: var(--color-text);">Error:</strong> Validation fails with no visible error. <strong
+          style="color: var(--color-text);">Cause:</strong> Hidden characters like BOM or special whitespace. <strong
+          style="color: var(--color-text);">Fix:</strong> Clear and re-paste the JSON.</li>
+    </ul>
+  </section>
+
+  <!-- Tips for Cleaner JSON -->
+  <section class="doc-section" style="margin-bottom: 2.5rem;">
+    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Tips for cleaner
+      JSON</h3>
+    <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
+      <li>Use formatting during development and minify before shipping to production.</li>
+      <li>Always validate JSON before sending to APIs to catch errors early.</li>
+      <li>Pair this tool with <a href="/json-schema-generator/"
+          style="color: var(--color-primary); text-decoration: none;">JSON Schema Validator</a> to ensure structure as
+        well as readability.</li>
+      <li>Save reusable examples by downloading formatted output as a <code
+          style="background: var(--color-surface-alt); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace;">.json</code>
+        file.</li>
+      <li>Use the History feature to quickly access recent JSON you've worked with.</li>
+    </ul>
+  </section>
+
+  <!-- Where Formatting Helps the Most -->
+  <section class="doc-section" style="margin-bottom: 2.5rem;">
+    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Where formatting
+      helps the most</h3>
+
+    <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-bottom: 1rem;">
+      <strong style="color: var(--color-text);">API debugging:</strong> When API responses are large, formatting makes
+      it easy to scan nested objects and spot missing fields. Pair it with <a href="/json-path-tester/"
+        style="color: var(--color-primary); text-decoration: none;">JSONPath queries</a> to extract specific values
+      quickly.
+    </p>
+    <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-bottom: 1rem;">
+      <strong style="color: var(--color-text);">Code review:</strong> Formatted JSON is easier to diff and review.
+      Teammates can focus on logic changes instead of hunting for structure issues.
+    </p>
+    <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary);">
+      <strong style="color: var(--color-text);">Configuration management:</strong> Formatting ensures config files are
+      readable and consistent across environments.
+    </p>
+  </section>
+
+  <!-- Common Formatting Mistakes -->
+  <section class="doc-section" style="margin-bottom: 2.5rem;">
+    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Common formatting
+      mistakes</h3>
+    <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
+      <li>Using single quotes instead of double quotes around strings.</li>
+      <li>Leaving trailing commas in arrays or objects.</li>
+      <li>Forgetting to escape control characters in strings.</li>
+      <li>Assuming JSON allows comments (it does not).</li>
+      <li>Pasting JavaScript objects that are not valid JSON.</li>
+    </ul>
+    <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-top: 1rem;">
+      If your input looks like a JavaScript object (with single quotes or trailing commas), use the <strong
+        style="color: var(--color-text);">AI Smart Fix</strong> button to convert it to valid JSON first. This formatter
+      only accepts strict JSON, which improves reliability when using the output in APIs and config files.
+    </p>
+  </section>
+
+  <!-- Quick FAQs -->
+  <section class="doc-section" style="margin-bottom: 2.5rem;">
+    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1.25rem;">FAQs</h3>
+
+    <div style="margin-bottom: 1.25rem;">
+      <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">Does formatting
+        change the meaning of JSON?</h4>
+      <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">No. Formatting only changes
+        whitespace; it does not alter values or structure.</p>
+    </div>
+
+    <div style="margin-bottom: 1.25rem;">
+      <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">When should I use
+        minify?</h4>
+      <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">Use minify for production
+        APIs or when you need the smallest possible payload.</p>
+    </div>
+
+    <div style="margin-bottom: 1.25rem;">
+      <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">What does the
+        Validate button do?</h4>
+      <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">It checks JSON syntax and
+        shows errors with line numbers so you can fix them quickly.</p>
+    </div>
+
+    <div style="margin-bottom: 1.25rem;">
+      <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">Can I format very
+        large JSON?</h4>
+      <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">Yes. The tool uses the Monaco
+        Editor engine (same as VS Code) which handles large files efficiently.</p>
+    </div>
+
+    <div style="margin-bottom: 1.25rem;">
+      <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">Is my JSON
+        uploaded anywhere?</h4>
+      <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">No. Formatting and validation
+        happen locally in your browser. Your data never leaves your device.</p>
+    </div>
+
+    <div>
+      <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">Why does my JSON
+        fail formatting?</h4>
+      <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">Usually due to invalid
+        syntax. Enable "Fix Trailing Commas" or use AI Smart Fix to repair common issues like single quotes, trailing
+        commas, or Python-style booleans.</p>
+    </div>
+  </section>
+
+</article>
+</section>
 
 <!-- Author Ownership Section -->
 <section class="content-section author-ownership"
@@ -1593,677 +1910,162 @@ signup.{% endblock %}
   </p>
 </section>
 
-<!-- SEO Content Section -->
-<article class="seo-content">
-  <section class="content-section">
-    <h2>JSON Formatter – Secure & 100% Client-Side</h2>
-    <p>
-      Your data privacy is our top priority. Unlike other tools that upload your files to a server, <strong>JSON
-        Formatter Pro</strong> processes everything locally in your browser (Client-Side). This means your sensitive
-      API
-      keys, customer data, and proprietary code never leave your device. It is the perfect secure solution for
-      developers working with confidential JSON blocks.
-    </p><br>
-
-    <strong>JSON Formatter Pro</strong> is a fast, secure JSON formatter that runs entirely in your browser.
-
-    <br><br>
-    <p style="color: var(--color-text-secondary); font-size: 0.9rem;">
-      Supports fixing common JSON errors like trailing commas and single quotes.
-    </p>
-
-  </section>
-
-  <!-- Large File Cluster -->
-  <section class="content-section"
-    style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%); padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem;">
-    <h2>Handles Large JSON Files Smoothly</h2>
-    <p>
-      Struggling with massive log files or API dumps? Most online formatters crash with big datasets. Our
-      <strong>large
-        file JSON formatter</strong> uses the high-performance Monaco Editor engine to handle files up to 10MB
-      effortlessly.
-    </p>
-    <ul style="margin-top: 1rem; padding-left: 1.5rem;">
-      <li><strong>No Server Lag:</strong> Instant formatting with zero latency.</li>
-      <li><strong>Code Folding:</strong> Collapse huge arrays to focus on what matters.</li>
-      <li><strong>Search & Replace:</strong> Use Regex to find specific records in massive files.</li>
-    </ul>
-  </section>
-
-  <section class="content-section">
-    <h2>Beautify & Read JSON Easily with This Formatter</h2>
-    <p>
-      Transform compact, minified JSON into readable, properly indented format with our <strong>JSON pretty
-        print</strong> tool. Perfect for debugging API responses, reading configuration files, or making JSON data
-      human-readable.
-    </p>
-  </section>
-
-  <section class="content-section">
-    <h2>Fix Invalid JSON Automatically (AI Powered)</h2>
-    <p>
-      Our AI JSON Fixer can repair broken JSON automatically. It fixes single quotes, trailing commas, Python booleans,
-      missing quotes, invalid values, and syntax errors so your JSON becomes valid and usable.
-    </p>
-  </section>
-
-
-  <style>
-    /* Bento Blogs Section - Modern Aesthetic */
-    .bento-blogs-section {
-      background: linear-gradient(180deg, #f8f6f3 0%, #f1ede6 100%);
-      padding: 4rem 3rem;
-      border-radius: 24px;
-      margin-bottom: 3rem;
-    }
-
-    [data-theme="dark"] .bento-blogs-section {
-      background: linear-gradient(180deg, #1a1a1a 0%, #252522 100%);
-    }
-
-    .bento-header {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-
-    .bento-header h2 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--color-text);
-      margin-bottom: 1rem;
-      letter-spacing: -0.5px;
-    }
-
-    .bento-header p {
-      font-size: 1.1rem;
-      color: var(--color-text-secondary);
-      max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.7;
-    }
-
-    /* Bento Grid Layout */
-    .bento-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      grid-template-rows: repeat(2, 200px);
-      gap: 1.25rem;
-      min-height: 420px;
-    }
-
-    .bento-loading {
-      grid-column: 1 / -1;
-      grid-row: 1 / -1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      color: var(--color-text-secondary);
-    }
-
-    .bento-loading-spinner {
-      width: 36px;
-      height: 36px;
-      border: 3px solid rgba(99, 102, 241, 0.2);
-      border-top-color: #6366f1;
-      border-radius: 50%;
-      animation: bentoSpin 0.8s linear infinite;
-    }
-
-    @keyframes bentoSpin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* Bento Card Base */
-    .bento-card {
-      position: relative;
-      border-radius: 20px;
-      overflow: hidden;
-      cursor: pointer;
-      text-decoration: none;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
-    }
-
-    .bento-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-    }
-
-    /* Featured Card - Spans 2 rows */
-    .bento-card.featured {
-      grid-row: span 2;
-      background: linear-gradient(145deg, #5a6f5c 0%, #4a5d4c 100%);
-      padding: 2rem;
-    }
-
-    .bento-card.featured::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 60%);
-      z-index: 1;
-    }
-
-    .bento-card.featured .bento-content {
-      position: relative;
-      z-index: 2;
-      color: white;
-    }
-
-    .bento-card.featured .bento-badge {
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(10px);
-      color: white;
-    }
-
-    .bento-card.featured .bento-title {
-      font-size: 1.5rem;
-      color: white;
-      margin-bottom: 0.5rem;
-    }
-
-    .bento-card.featured .bento-excerpt {
-      color: rgba(255, 255, 255, 0.85);
-      font-size: 0.95rem;
-      line-height: 1.5;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    /* Standard Cards */
-    .bento-card.standard {
-      background: #e8e2d9;
-      padding: 1.5rem;
-    }
-
-    [data-theme="dark"] .bento-card.standard {
-      background: #2a2a28;
-    }
-
-    .bento-card.standard:nth-child(3) {
-      background: #e8e2d9;
-    }
-
-    .bento-card.standard:nth-child(4) {
-      background: linear-gradient(145deg, #6b7c6d 0%, #5a6b5c 100%);
-    }
-
-    .bento-card.standard:nth-child(4) .bento-content {
-      color: white;
-    }
-
-    .bento-card.standard:nth-child(4) .bento-badge {
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-    }
-
-    .bento-card.standard:nth-child(4) .bento-title {
-      color: white;
-    }
-
-    .bento-card.standard:nth-child(4) .bento-excerpt {
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    [data-theme="dark"] .bento-card.standard:nth-child(3) {
-      background: #333330;
-    }
-
-    /* Bento Card Content */
-    .bento-content {
-      position: relative;
-    }
-
-    .bento-badge {
-      display: inline-block;
-      background: rgba(99, 102, 241, 0.15);
-      color: #6366f1;
-      padding: 0.3rem 0.75rem;
-      border-radius: 50px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 0.75rem;
-    }
-
-    .bento-title {
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: var(--color-text);
-      line-height: 1.35;
-      margin-bottom: 0.5rem;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .bento-excerpt {
-      font-size: 0.85rem;
-      color: var(--color-text-secondary);
-      line-height: 1.5;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .bento-meta {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-top: 0.75rem;
-      font-size: 0.75rem;
-      color: var(--color-text-secondary);
-      opacity: 0.8;
-    }
-
-    .bento-meta span {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-
-    /* Arrow indicator */
-    .bento-arrow {
-      position: absolute;
-      top: 1.25rem;
-      right: 1.25rem;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transform: translate(10px, -10px);
-      transition: all 0.3s ease;
-    }
-
-    .bento-card:hover .bento-arrow {
-      opacity: 1;
-      transform: translate(0, 0);
-    }
-
-    .bento-arrow svg {
-      width: 18px;
-      height: 18px;
-      color: #333;
-    }
-
-    /* Bento Footer */
-    .bento-footer {
-      text-align: center;
-      margin-top: 2.5rem;
-    }
-
-    .bento-view-all {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 1rem 2rem;
-      background: #333;
-      color: white;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: all 0.3s ease;
-    }
-
-    [data-theme="dark"] .bento-view-all {
-      background: #4a4a4a;
-    }
-
-    .bento-view-all:hover {
-      background: #555;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-    }
-
-    .bento-view-all svg {
-      transition: transform 0.3s ease;
-    }
-
-    .bento-view-all:hover svg {
-      transform: translateX(4px);
-    }
-
-    /* Mobile Responsive */
-    @media (max-width: 768px) {
-      .bento-blogs-section {
-        padding: 2.5rem 1.5rem;
-        border-radius: 16px;
-      }
-
-      .bento-header h2 {
-        font-size: 1.75rem;
-      }
-
-      .bento-header p {
-        font-size: 1rem;
-      }
-
-      .bento-grid {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        gap: 1rem;
-      }
-
-      .bento-card.featured {
-        grid-row: span 1;
-        min-height: 220px;
-      }
-
-      .bento-card.standard {
-        min-height: 160px;
-      }
-
-      .bento-card.featured .bento-title {
-        font-size: 1.25rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .bento-blogs-section {
-        padding: 2rem 1rem;
-      }
-
-      .bento-header h2 {
-        font-size: 1.5rem;
-      }
-
-      .bento-card {
-        padding: 1.25rem !important;
-      }
-
-      .bento-view-all {
-        padding: 0.875rem 1.5rem;
-        font-size: 0.9rem;
-      }
-    }
-  </style>
-
-
-  <!-- How to Use Guide -->
-  <section class="content-section">
-    <h2>How to Format JSON Online - Step by Step</h2>
-    <div class="how-to-steps">
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <h4>Paste or Upload JSON</h4>
-        <p>Copy your unformatted JSON and paste it into the editor, or drag & drop a .json file directly onto the
-          page.
-        </p>
-      </div>
-      <div class="step-card">
-        <div class="step-number">2</div>
-        <h4>Auto-Format or Click Format</h4>
-        <p>JSON is automatically formatted on paste. You can also click the Format button for manual formatting with
-          custom indentation.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-number">3</div>
-        <h4>Validate & Fix Errors</h4>
-        <p>The validator highlights syntax errors with line numbers. Fix missing commas, brackets, or quotes easily.
-        </p>
-      </div>
-      <div class="step-card">
-        <div class="step-number">4</div>
-        <h4>Copy or Download</h4>
-        <p>Copy formatted JSON to clipboard with one click or download as a .json file for use in your projects.</p>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- SEO FAQ Section with Schema Markup -->
-  <section class="faq-section-seo">
-    <h2>Frequently Asked Questions</h2>
-
-    <div class="faq-grid">
-      <!-- FAQ 1: Free & No Signup -->
-      <div class="faq-item-seo">
-        <h3>Is this JSON formatter and validator free?</h3>
-        <div>
-          <div>
-            <p>Yes, JSON Formatter Pro is completely free to use with no limitations. There is no signup,
-              registration,
-              or account creation required. All features including formatting, validation, minification, and format
-              conversion are available immediately without any cost. The tool remains free for unlimited usage.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- FAQ 2: Security & Privacy -->
-      <div class="faq-item-seo">
-        <h3>Is my JSON data secure?</h3>
-        <div>
-          <div>
-            <p>Yes, your data remains completely private. All JSON processing happens locally in your browser using
-              JavaScript. Your data never leaves your device and is not transmitted to any server. This local
-              processing
-              approach ensures sensitive information like API keys, tokens, or proprietary data stays secure on your
-              machine.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- FAQ 3: Large Files -->
-      <div class="faq-item-seo">
-        <h3>Can it handle large JSON files?</h3>
-        <div>
-          <div>
-            <p>Yes, the tool supports large JSON files efficiently. Processing happens entirely in your browser using
-              the Monaco Editor engine, the same technology used in Visual Studio Code. Features like syntax
-              highlighting, code folding, and validation work smoothly with files containing millions of characters
-              without upload delays.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="faq-item-seo">
-        <h3>Can this tool fix invalid JSON?</h3>
-        <div>
-          <div>
-            <p>Yes. JSON Formatter Pro includes an AI-powered JSON fixer that automatically repairs invalid JSON by
-              fixing
-              single quotes, trailing commas, Python values, missing quotes, and syntax errors.</p>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- Related Tools Section -->
-  <section class="content-section">
-    <h2>More Developer Tools</h2>
-    <p>Explore our complete suite of free developer tools designed to boost your productivity:</p>
-    <div class="related-tools-grid">
-      <a href="/json-diff/" class="tool-link-card">
-        <span class="tool-icon">🔄</span>
-        <h4>JSON Diff</h4>
-        <p>Compare two JSON files and highlight differences</p>
-      </a>
-      <a href="{% url 'json_schema_page' %}" class="tool-link-card">
-        <span class="tool-icon">📋</span>
-        <h4>JSON Schema Generator</h4>
-        <p>Generate JSON Schema from sample data</p>
-      </a>
-      <a href="/json-to-yaml/" class="tool-link-card">
-        <span class="tool-icon">🔁</span>
-        <h4>JSON ↔ YAML Converter</h4>
-        <p>Convert between JSON and YAML formats</p>
-      </a>
-      <a href="/base64/" class="tool-link-card">
-        <span class="tool-icon">🔐</span>
-        <h4>Base64 Encoder/Decoder</h4>
-        <p>Encode and decode Base64 strings</p>
-      </a>
-      <a href="/dummy-json/" class="tool-link-card">
-        <span class="tool-icon">🎲</span>
-        <h4>Dummy JSON Generator</h4>
-        <p>Generate random JSON data for development</p>
-      </a>
-      <a href="/json-path-tester/" class="tool-link-card">
-        <span class="tool-icon">🎯</span>
-        <h4>JSON Path Tester</h4>
-        <p>Test JSONPath expressions and extract data</p>
-      </a>
-      <a href="/webhook-tester/" class="tool-link-card">
-        <span class="tool-icon">🔗</span>
-        <h4>Webhook Tester</h4>
-        <p>Capture, debug, and test webhooks in real-time</p>
-      </a>
-    </div>
-
-  </section>
-
-
-  <style>
-    /* SEO FAQ Section - Clean White Background */
-    .faq-section-seo {
-      padding: 3rem 0;
-      margin-top: 2rem;
-    }
-
-    .faq-section-seo h2 {
-      text-align: center;
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--color-text);
-      margin-bottom: 2.5rem;
+<!-- Related Tools Section -->
+<section class="content-section">
+  <h2>More Developer Tools</h2>
+  <p>Explore our complete suite of free developer tools designed to boost your productivity:</p>
+  <div class="related-tools-grid">
+    <a href="/json-diff/" class="tool-link-card">
+      <span class="tool-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z" />
+        </svg></span>
+      <h4>JSON Diff</h4>
+      <p>Compare two JSON files and highlight differences</p>
+    </a>
+    <a href="{% url 'json_schema_page' %}" class="tool-link-card">
+      <span class="tool-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+        </svg></span>
+      <h4>JSON Schema Generator</h4>
+      <p>Generate JSON Schema from sample data</p>
+    </a>
+    <a href="/json-to-yaml/" class="tool-link-card">
+      <span class="tool-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z" />
+        </svg></span>
+      <h4>JSON ↔ YAML Converter</h4>
+      <p>Convert between JSON and YAML formats</p>
+    </a>
+    <a href="/dummy-json/" class="tool-link-card">
+      <span class="tool-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" />
+        </svg></span>
+      <h4>Dummy JSON Generator</h4>
+      <p>Generate random JSON data for development</p>
+    </a>
+    <a href="/json-path-tester/" class="tool-link-card">
+      <span class="tool-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+        </svg></span>
+      <h4>JSON Path Tester</h4>
+      <p>Test JSONPath expressions and extract data</p>
+    </a>
+  </div>
+
+</section>
+
+
+<style>
+  /* SEO FAQ Section - Clean White Background */
+  .faq-section-seo {
+    padding: 3rem 0;
+    margin-top: 2rem;
+  }
+
+  .faq-section-seo h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 2.5rem;
+  }
+
+  .faq-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .faq-item-seo {
+    padding: 1.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .faq-item-seo:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 20px var(--color-shadow);
+  }
+
+  .faq-item-seo h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+
+  .faq-item-seo p {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+
+  .faq-item-seo p:last-child {
+    margin-bottom: 0;
+  }
+
+  .faq-item-seo ul {
+    margin: 0.75rem 0;
+    padding-left: 1.25rem;
+  }
+
+  .faq-item-seo li {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .faq-item-seo a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .faq-item-seo a:hover {
+    text-decoration: underline;
+  }
+
+  .faq-item-seo strong {
+    color: var(--color-text);
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .single-editor-panel {
+      margin-top: -20px !important;
     }
 
     .faq-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .faq-section-seo {
+      padding: 2rem 0;
+    }
+
+    .faq-section-seo h2 {
+      font-size: 1.5rem;
     }
 
     .faq-item-seo {
-      padding: 1.75rem;
-      border: 1px solid var(--color-border);
-      border-radius: 12px;
-      transition: all 0.3s ease;
-    }
-
-    .faq-item-seo:hover {
-      border-color: var(--color-primary);
-      box-shadow: 0 4px 20px var(--color-shadow);
+      padding: 1.25rem;
     }
 
     .faq-item-seo h3 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--color-text);
-      margin-bottom: 1rem;
-      line-height: 1.4;
+      font-size: 1rem;
     }
-
-    .faq-item-seo p {
-      font-size: 0.95rem;
-      color: var(--color-text-secondary);
-      line-height: 1.7;
-      margin-bottom: 0.75rem;
-    }
-
-    .faq-item-seo p:last-child {
-      margin-bottom: 0;
-    }
-
-    .faq-item-seo ul {
-      margin: 0.75rem 0;
-      padding-left: 1.25rem;
-    }
-
-    .faq-item-seo li {
-      font-size: 0.95rem;
-      color: var(--color-text-secondary);
-      line-height: 1.6;
-      margin-bottom: 0.5rem;
-    }
-
-    .faq-item-seo a {
-      color: var(--color-primary);
-      text-decoration: none;
-    }
-
-    .faq-item-seo a:hover {
-      text-decoration: underline;
-    }
-
-    .faq-item-seo strong {
-      color: var(--color-text);
-    }
-
-    /* Mobile Responsive */
-    @media (max-width: 768px) {
-      .faq-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-
-      .faq-section-seo {
-        padding: 2rem 0;
-      }
-
-      .faq-section-seo h2 {
-        font-size: 1.5rem;
-      }
-
-      .faq-item-seo {
-        padding: 1.25rem;
-      }
-
-      .faq-item-seo h3 {
-        font-size: 1rem;
-      }
-    }
-  </style>
+  }
+</style>
 
 </article>
-
-<!-- JSON Blogs Bento Grid Section -->
-<section class="content-section bento-blogs-section" id="bentoBlogsSection">
-  <div class="bento-header">
-    <h2>Helpful JSON Guides (Optional Reading)</h2>
-    <p>From formatting basics to advanced API integration, discover expert articles crafted for developers at every
-      level.</p>
-  </div>
-
-  <!-- Bento Grid Container -->
-  <div class="bento-grid" id="bentoGrid">
-    <!-- Loading State -->
-    <div class="bento-loading" id="bentoLoading">
-      <div class="bento-loading-spinner"></div>
-      <span>Loading articles...</span>
-    </div>
-  </div>
-
-  <!-- View All Link -->
-  <div class="bento-footer">
-    <a href="/blog/" class="bento-view-all">
-      <span>Browse All Articles</span>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
-      </svg>
-    </a>
-  </div>
-</section>
 
 
 <!-- Fullscreen Modal -->
