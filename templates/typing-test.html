@@ -130,8 +130,9 @@ per minute calculator, touch typing test, programming typing practice{% endblock
     }
 
     .typing-container {
-        max-width: 900px;
+        max-width: 100%;
         margin: 0 auto 2rem;
+        padding: 0 1rem;
     }
 
     .controls-bar {
@@ -252,12 +253,12 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         font-size: 1.25rem;
         line-height: 2.2;
         font-family: 'Georgia', serif;
-        < !-- min-height: 180px;
-        -->< !-- max-height: 300px;
-        -->overflow-y: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
         position: relative;
         word-wrap: break-word;
         overflow-wrap: break-word;
+        white-space: normal;
     }
 
     .text-display.code-mode {
@@ -310,32 +311,30 @@ per minute calculator, touch typing test, programming typing practice{% endblock
     }
 
     .input-area {
-        padding: 1.25rem 2rem;
-        border-top: 2px dashed var(--color-border);
-        background: var(--color-bg);
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+        height: 0;
+        overflow: hidden;
     }
 
     .typing-input {
-        width: 100%;
-        padding: 1rem;
-        font-size: 1.1rem;
-        font-family: 'Courier New', monospace;
-        background: var(--typewriter-paper);
-        color: var(--typewriter-text);
-        border: 2px solid var(--color-border);
-        border-radius: var(--radius-md);
-        outline: none;
-        transition: all 0.2s;
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+        opacity: 0;
+        width: 1px;
+        height: 1px;
     }
 
-    .typing-input:focus {
-        border-color: #c0392b;
-        box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.2);
+    .text-display {
+        cursor: text;
     }
 
-    .typing-input:disabled {
-        background: var(--color-bg);
-        cursor: not-allowed;
+    .text-display:focus-within,
+    .text-display.focused {
+        outline: 2px solid #c0392b;
+        outline-offset: -2px;
     }
 
     .code-language-bar {
@@ -1179,7 +1178,7 @@ per minute calculator, touch typing test, programming typing practice{% endblock
 
 {% block content %}
 <div class="tool-header">
-    <h1>⌨️ Developer Typing Speed Test</h1>
+    <h1>Developer Typing Speed Test</h1>
     <p>Test your WPM, accuracy, and coding speed. The ultimate typing practice for programmers.</p>
 </div>
 
@@ -1990,7 +1989,17 @@ per minute calculator, touch typing test, programming typing practice{% endblock
 
     function focusInput() {
         inputField.focus();
+        textDisplay.classList.add('focused');
     }
+
+    // Handle focus/blur for visual feedback
+    inputField.addEventListener('focus', function () {
+        textDisplay.classList.add('focused');
+    });
+
+    inputField.addEventListener('blur', function () {
+        textDisplay.classList.remove('focused');
+    });
 
     // Init
     initText();
