@@ -86,53 +86,114 @@ per minute calculator, touch typing test, programming typing practice{% endblock
 {% block extra_css %}
 <style>
     :root {
-        --typewriter-bg: #faf8f5;
-        --typewriter-paper: #fff;
-        --typewriter-text: #2c3e50;
-        --typewriter-accent: #c0392b;
-        --typewriter-correct: #27ae60;
-        --typewriter-wrong: #e74c3c;
-        --typewriter-pending: #95a5a6;
+        --typing-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --typing-card-bg: rgba(255, 255, 255, 0.95);
+        --typing-glass: rgba(255, 255, 255, 0.25);
+        --typing-glass-border: rgba(255, 255, 255, 0.3);
+        --typing-text: #1a1a2e;
+        --typing-text-secondary: #6b7280;
+        --typing-accent: #667eea;
+        --typing-accent-secondary: #764ba2;
+        --typing-correct: #10b981;
+        --typing-wrong: #ef4444;
+        --typing-pending: #9ca3af;
+        --typing-wpm-gradient: linear-gradient(135deg, #f59e0b, #f97316);
+        --typing-accuracy-gradient: linear-gradient(135deg, #10b981, #059669);
+        --typing-time-gradient: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        --typing-streak-gradient: linear-gradient(135deg, #ec4899, #f43f5e);
+        --shadow-soft: 0 4px 30px rgba(0, 0, 0, 0.1);
+        --shadow-glow: 0 0 40px rgba(102, 126, 234, 0.3);
     }
 
     [data-theme="dark"] {
-        --typewriter-bg: #1a1a2e;
-        --typewriter-paper: #16213e;
-        --typewriter-text: #e8e8e8;
-        --typewriter-accent: #e94560;
+        --typing-bg: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        --typing-card-bg: rgba(30, 30, 50, 0.95);
+        --typing-glass: rgba(255, 255, 255, 0.08);
+        --typing-glass-border: rgba(255, 255, 255, 0.15);
+        --typing-text: #f3f4f6;
+        --typing-text-secondary: #9ca3af;
+        --shadow-glow: 0 0 60px rgba(102, 126, 234, 0.4);
     }
 
+    /* Minimal SEO Header - visually hidden but kept for SEO */
     .tool-header {
-        text-align: center;
-        margin-bottom: 2rem;
-        padding: 2.5rem 2rem;
-        background: linear-gradient(135deg, rgba(192, 57, 43, 0.1) 0%, rgba(241, 196, 15, 0.1) 100%);
-        border-radius: var(--radius-lg);
-        border: 3px solid rgba(192, 57, 43, 0.2);
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
     }
 
     .tool-header h1 {
-        font-size: 2.5rem;
-        font-weight: 800;
-        background: linear-gradient(135deg, #c0392b, #f39c12);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 0.5rem;
-        font-family: 'Courier New', monospace;
+        font-size: 1rem;
     }
 
     .tool-header p {
-        color: var(--color-text-secondary);
-        font-size: 1.1rem;
-        max-width: 600px;
-        margin: 0 auto;
+        font-size: 0.85rem;
     }
 
+    /* Full width tool container - no gap */
     .typing-container {
         max-width: 100%;
-        margin: 0 auto 2rem;
-        padding: 0 1rem;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Zen Mode Styles */
+    .zen-mode .tool-header,
+    .zen-mode .controls-bar,
+    .zen-mode .action-buttons,
+    .zen-mode .leaderboard-section,
+    .zen-mode .info-grid,
+    .zen-mode .faq-item {
+        display: none !important;
+    }
+
+    .zen-mode .typing-container {
+        max-width: 900px;
+        margin-top: 10vh;
+    }
+
+    .zen-mode .typewriter-card {
+        border: none;
+        box-shadow: var(--shadow-glow);
+    }
+
+    /* Settings Icon for Zen Mode -- toggles controls */
+    .zen-toggle {
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--typing-glass);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--typing-glass-border);
+        display: none;
+        /* Hide floating button - use action bar button instead */
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 100;
+        transition: all 0.3s ease;
+        font-size: 1.4rem;
+    }
+
+    .zen-toggle:hover {
+        transform: scale(1.1);
+        box-shadow: var(--shadow-glow);
+    }
+
+    .zen-mode .zen-toggle {
+        display: flex;
+        /* Show when in zen mode to exit */
+        background: var(--typing-accent);
+        color: white;
     }
 
     .controls-bar {
@@ -141,11 +202,14 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         gap: 1rem;
         justify-content: center;
         align-items: center;
-        margin-bottom: 1.5rem;
-        padding: 1rem;
-        background: var(--color-surface);
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--color-border);
+        margin: 0;
+        padding: 1rem 1.5rem;
+        background: var(--typing-card-bg);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid var(--typing-glass-border);
     }
 
     .control-group {
@@ -157,108 +221,250 @@ per minute calculator, touch typing test, programming typing practice{% endblock
     .control-label {
         font-size: 0.85rem;
         font-weight: 600;
-        color: var(--color-text-secondary);
+        color: var(--typing-text-secondary);
     }
 
     .control-select,
     .control-btn {
-        padding: 0.5rem 1rem;
+        padding: 0.6rem 1.25rem;
         font-size: 0.9rem;
         font-weight: 600;
-        background: var(--color-bg);
-        color: var(--color-text);
-        border: 2px solid var(--color-border);
-        border-radius: var(--radius-md);
+        background: var(--typing-card-bg);
+        color: var(--typing-text);
+        border: 1px solid var(--typing-glass-border);
+        border-radius: 12px;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: all 0.3s ease;
     }
 
     .control-select:hover,
     .control-btn:hover {
-        border-color: #c0392b;
+        background: var(--typing-accent);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .control-btn.active {
+        background: var(--typing-accent);
+        color: white;
+        border-color: var(--typing-accent);
     }
 
     .sound-toggle {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        background: var(--color-bg);
-        border: 2px solid var(--color-border);
-        border-radius: var(--radius-md);
+        padding: 0.6rem 1.25rem;
+        background: var(--typing-card-bg);
+        border: 1px solid var(--typing-glass-border);
+        border-radius: 12px;
         cursor: pointer;
         font-weight: 600;
         font-size: 0.9rem;
+        transition: all 0.3s ease;
     }
 
     .sound-toggle.active {
-        background: #27ae60;
+        background: var(--typing-correct);
         color: white;
-        border-color: #27ae60;
+        border-color: var(--typing-correct);
     }
 
     .typewriter-card {
-        border-radius: var(--radius-lg);
-        border: 3px solid var(--color-border);
+        border-radius: 0;
+        border: none;
+        border-top: 1px solid var(--typing-glass-border);
+        border-bottom: 1px solid var(--typing-glass-border);
         padding: 0;
         overflow: hidden;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        background: var(--typing-card-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
     }
 
+    .typewriter-card:hover {
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Modern Circular Stats Bar */
     .stats-bar {
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
+        align-items: center;
         flex-wrap: wrap;
-        padding: 1.25rem;
-        color: white;
-        gap: 0.5rem;
+        padding: 2rem 1.5rem;
+        gap: 3rem;
+        background: linear-gradient(135deg, var(--typing-accent) 0%, var(--typing-accent-secondary) 100%);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stats-bar::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.5;
     }
 
     .stat-item {
         text-align: center;
-        min-width: 80px;
+        position: relative;
+        z-index: 1;
     }
 
-    .stat-value {
-        font-size: 1.75rem;
+    /* Circular Progress Ring Container */
+    .stat-ring {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 0.5rem;
+    }
+
+    .stat-ring svg {
+        transform: rotate(-90deg);
+        width: 100px;
+        height: 100px;
+    }
+
+    .stat-ring .ring-bg {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.2);
+        stroke-width: 8;
+    }
+
+    .stat-ring .ring-progress {
+        fill: none;
+        stroke: white;
+        stroke-width: 8;
+        stroke-linecap: round;
+        stroke-dasharray: 251.2;
+        stroke-dashoffset: 251.2;
+        transition: stroke-dashoffset 0.5s ease;
+    }
+
+    .stat-ring .ring-value {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.5rem;
         font-weight: 800;
-        font-family: 'Courier New', monospace;
+        color: white;
+        font-family: 'Inter', system-ui, sans-serif;
     }
 
     .stat-label {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
         text-transform: uppercase;
-        opacity: 0.8;
-        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.85);
+        letter-spacing: 1.5px;
+        font-weight: 600;
     }
 
-    .stat-value.wpm {
-        color: #f39c12;
+    /* Streak Counter */
+    .streak-container {
+        position: absolute;
+        top: 1rem;
+        right: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 30px;
+        color: white;
+        font-weight: 700;
+        font-size: 0.9rem;
+        z-index: 2;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
     }
 
-    .stat-value.accuracy {
-        color: #2ecc71;
+    .streak-container.visible {
+        opacity: 1;
+        transform: translateY(0);
     }
 
-    .stat-value.time {
-        color: #3498db;
+    .streak-container.fire {
+        animation: fireGlow 0.5s ease;
     }
 
-    .stat-value.chars {
-        color: #e74c3c;
+    @keyframes fireGlow {
+
+        0%,
+        100% {
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
+        }
+
+        50% {
+            box-shadow: 0 0 40px rgba(249, 115, 22, 0.8);
+        }
+    }
+
+    .streak-icon {
+        font-size: 1.2rem;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+        height: 4px;
+        background: rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, var(--typing-correct), #34d399);
+        width: 0%;
+        transition: width 0.3s ease;
+        position: relative;
+    }
+
+    .progress-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+        0% {
+            transform: translateX(-100%);
+        }
+
+        100% {
+            transform: translateX(100%);
+        }
     }
 
     .text-display {
-        padding: 1.5rem 2rem;
-        font-size: 1.25rem;
-        line-height: 2.2;
-        font-family: 'Georgia', serif;
+        padding: 2rem 2.5rem;
+        font-size: 1.35rem;
+        line-height: 2.4;
+        font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
         overflow-y: auto;
         overflow-x: hidden;
         position: relative;
         word-wrap: break-word;
         overflow-wrap: break-word;
         white-space: normal;
+        min-height: 150px;
+        background: var(--typing-card-bg);
+        color: var(--typing-text);
     }
 
     .text-display.code-mode {
@@ -271,43 +477,97 @@ per minute calculator, touch typing test, programming typing practice{% endblock
 
     .char {
         display: inline;
-        transition: background 0.1s;
+        transition: all 0.15s ease;
+        border-radius: 2px;
     }
 
     .char.correct {
-        color: var(--typewriter-correct);
+        color: var(--typing-correct);
+    }
+
+    .char.correct-pulse {
+        animation: correctPulse 0.2s ease;
+    }
+
+    @keyframes correctPulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+
+        100% {
+            transform: scale(1);
+        }
     }
 
     .char.incorrect {
         color: white;
-        background: var(--typewriter-wrong);
-        border-radius: 2px;
+        background: var(--typing-wrong);
+        border-radius: 3px;
+        animation: shake 0.3s ease;
     }
 
-    .char.current {
-        border-left: 2px solid #c0392b;
-        animation: blink 0.5s infinite;
-        padding-left: 1px;
-    }
-
-    @keyframes blink {
+    @keyframes shake {
 
         0%,
         100% {
-            border-color: #c0392b;
+            transform: translateX(0);
+        }
+
+        25% {
+            transform: translateX(-2px);
+        }
+
+        75% {
+            transform: translateX(2px);
+        }
+    }
+
+    .char.current {
+        position: relative;
+        background: rgba(102, 126, 234, 0.15);
+        border-radius: 3px;
+    }
+
+    .char.current::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: var(--typing-accent);
+        animation: cursorBlink 0.8s infinite;
+    }
+
+    @keyframes cursorBlink {
+
+        0%,
+        100% {
+            opacity: 1;
         }
 
         50% {
-            border-color: transparent;
+            opacity: 0;
         }
     }
 
     .char.pending {
-        color: var(--typewriter-pending);
+        color: var(--typing-pending);
     }
 
     .code-mode .char.pending {
         color: #808080;
+    }
+
+    /* Current word highlight */
+    .word-highlight {
+        background: rgba(102, 126, 234, 0.08);
+        border-radius: 4px;
+        padding: 2px 0;
     }
 
     .input-area {
@@ -333,8 +593,8 @@ per minute calculator, touch typing test, programming typing practice{% endblock
 
     .text-display:focus-within,
     .text-display.focused {
-        outline: 2px solid #c0392b;
-        outline-offset: -2px;
+        outline: none;
+        box-shadow: inset 0 0 0 2px var(--typing-accent);
     }
 
     .code-language-bar {
@@ -372,43 +632,209 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         display: flex;
         gap: 1rem;
         justify-content: center;
-        padding: 1.5rem;
-        background: var(--color-surface);
+        padding: 1.5rem 2rem;
+        background: transparent;
         flex-wrap: wrap;
+        border-top: 1px solid var(--typing-glass-border);
     }
 
     .action-btn {
-        padding: 0.85rem 1.5rem;
+        padding: 0.9rem 1.75rem;
         font-size: 1rem;
         font-weight: 700;
         border: none;
-        border-radius: var(--radius-md);
+        border-radius: 12px;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: all 0.3s ease;
         display: flex;
         align-items: center;
         gap: 0.5rem;
     }
 
     .action-btn.primary {
-        background: linear-gradient(135deg, #c0392b, #e74c3c);
+        background: linear-gradient(135deg, var(--typing-accent), var(--typing-accent-secondary));
         color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
 
     .action-btn.primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(192, 57, 43, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
     }
 
     .action-btn.secondary {
-        background: var(--color-bg);
-        color: var(--color-text);
-        border: 2px solid var(--color-border);
+        background: var(--typing-glass);
+        color: var(--typing-text);
+        border: 1px solid var(--typing-glass-border);
+        backdrop-filter: blur(10px);
     }
 
     .action-btn.secondary:hover {
-        border-color: #c0392b;
-        color: #c0392b;
+        background: var(--typing-accent);
+        color: white;
+        border-color: var(--typing-accent);
+    }
+
+    .action-btn.zen-btn {
+        background: linear-gradient(135deg, #8b5cf6, #a855f7);
+        color: white;
+    }
+
+    /* Confetti Canvas */
+    #confettiCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 9999;
+    }
+
+    /* Celebration Overlay */
+    .celebration-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9998;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .celebration-overlay.active {
+        opacity: 1;
+    }
+
+    .celebration-text {
+        font-size: 4rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #f59e0b, #f97316, #ef4444);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: celebratePulse 0.5s ease;
+        text-shadow: 0 0 60px rgba(249, 115, 22, 0.5);
+    }
+
+    @keyframes celebratePulse {
+        0% {
+            transform: scale(0.5);
+            opacity: 0;
+        }
+
+        50% {
+            transform: scale(1.2);
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    /* Personal Best Indicator */
+    .personal-best-badge {
+        position: absolute;
+        top: 1rem;
+        left: 1.5rem;
+        padding: 0.4rem 0.8rem;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 700;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        z-index: 2;
+    }
+
+    .personal-best-badge.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Tooltips */
+    [data-tooltip] {
+        position: relative;
+    }
+
+    [data-tooltip]::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%) translateY(5px);
+        background: rgba(0, 0, 0, 0.85);
+        color: white;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.2s ease;
+        z-index: 1000;
+        pointer-events: none;
+    }
+
+    [data-tooltip]::before {
+        content: '';
+        position: absolute;
+        bottom: calc(100% + 2px);
+        left: 50%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top-color: rgba(0, 0, 0, 0.85);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.2s ease;
+        z-index: 1000;
+    }
+
+    [data-tooltip]:hover::after,
+    [data-tooltip]:hover::before {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    [data-tooltip]:hover::before {
+        transform: translateX(-50%);
+    }
+
+    /* SVG Icon Styling */
+    .icon {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+        flex-shrink: 0;
+    }
+
+    .icon-sm {
+        width: 14px;
+        height: 14px;
+    }
+
+    .icon-lg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .btn-icon {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     /* Username Modal */
@@ -1177,6 +1603,22 @@ per minute calculator, touch typing test, programming typing practice{% endblock
 {% endblock %}
 
 {% block content %}
+<!-- Zen Mode Toggle Button -->
+<!--<button class="zen-toggle" onclick="toggleZenMode()" data-tooltip="Toggle Zen Mode">-->
+<!--    <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">-->
+<!--        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />-->
+<!--        <path d="M12 6v6l4 2" />-->
+<!--    </svg>-->
+<!--</button>-->
+
+<!-- Confetti Canvas -->
+<canvas id="confettiCanvas"></canvas>
+
+<!-- Celebration Overlay -->
+<div class="celebration-overlay" id="celebrationOverlay">
+    <div class="celebration-text" id="celebrationText"></div>
+</div>
+
 <div class="tool-header">
     <h1>Developer Typing Speed Test</h1>
     <p>Test your WPM, accuracy, and coding speed. The ultimate typing practice for programmers.</p>
@@ -1211,8 +1653,13 @@ per minute calculator, touch typing test, programming typing practice{% endblock
             </div>
 
             <div class="control-group">
-                <button class="control-btn sound-btn active" onclick="toggleSound()">
-                    🔊 Sound On
+                <button class="control-btn sound-btn btn-icon" onclick="toggleSound()"
+                    data-tooltip="Toggle typing sounds">
+                    <svg class="icon" id="soundIcon" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                    </svg>
+                    <span id="soundText">Sound Off</span>
                 </button>
             </div>
         </div>
@@ -1228,21 +1675,67 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         </div>
     </div>
 
-    <!-- Code Editor View with just stats now -->
+    <!-- Modern Typing Card with Circular Stats -->
     <div class="typewriter-card" id="typewriterCard">
         <div class="stats-bar">
+            <!-- Personal Best Badge -->
+            <div class="personal-best-badge" id="personalBestBadge" data-tooltip="You beat your previous record!">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                </svg>
+                New Personal Best!
+            </div>
+
+            <!-- Streak Counter -->
+            <div class="streak-container" id="streakContainer" data-tooltip="Consecutive correct characters">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor" style="color: #f97316;">
+                    <path
+                        d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z" />
+                </svg>
+                <span id="streakCount">0</span>
+            </div>
+
+            <!-- WPM Circular Ring -->
             <div class="stat-item">
-                <div class="stat-value wpm" id="wpm">0</div>
+                <div class="stat-ring">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="ring-bg" cx="50" cy="50" r="40"></circle>
+                        <circle class="ring-progress" id="wpmRing" cx="50" cy="50" r="40"></circle>
+                    </svg>
+                    <div class="ring-value" id="wpm">0</div>
+                </div>
                 <div class="stat-label">WPM</div>
             </div>
+
+            <!-- Accuracy Circular Ring -->
             <div class="stat-item">
-                <div class="stat-value accuracy" id="accuracy">100%</div>
+                <div class="stat-ring">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="ring-bg" cx="50" cy="50" r="40"></circle>
+                        <circle class="ring-progress" id="accuracyRing" cx="50" cy="50" r="40"></circle>
+                    </svg>
+                    <div class="ring-value" id="accuracy">100%</div>
+                </div>
                 <div class="stat-label">Accuracy</div>
             </div>
+
+            <!-- Time Circular Ring -->
             <div class="stat-item">
-                <div class="stat-value time" id="timer">60</div>
+                <div class="stat-ring">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="ring-bg" cx="50" cy="50" r="40"></circle>
+                        <circle class="ring-progress" id="timeRing" cx="50" cy="50" r="40"></circle>
+                    </svg>
+                    <div class="ring-value" id="timer">60</div>
+                </div>
                 <div class="stat-label">Time</div>
             </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
         </div>
 
         <div class="code-editor-view">
@@ -1258,11 +1751,29 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         </div>
 
         <div class="action-buttons">
-            <button class="action-btn secondary" onclick="changeText()">
-                📝 Change Text
+            <button class="action-btn secondary btn-icon" onclick="changeText()"
+                data-tooltip="Load different text to type">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                </svg>
+                Change Text
             </button>
-            <button class="action-btn primary" onclick="resetTest()">
-                🔄 Restart Test
+<!--            <button class="action-btn zen-btn btn-icon" onclick="toggleZenMode()"-->
+<!--                data-tooltip="Distraction-free typing mode">-->
+<!--                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">-->
+<!--                    <circle cx="12" cy="12" r="10" />-->
+<!--                    <path d="M12 6v6l4 2" />-->
+<!--                </svg>-->
+<!--                Zen Mode-->
+<!--            </button>-->
+            <button class="action-btn primary btn-icon" onclick="resetTest()"
+                data-tooltip="Start over with the same text">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
+                </svg>
+                Restart Test
             </button>
         </div>
     </div>
@@ -1553,6 +2064,20 @@ per minute calculator, touch typing test, programming typing practice{% endblock
     const accDisplay = document.getElementById('accuracy');
     const timerDisplay = document.getElementById('timer');
 
+    // Ring Elements
+    const wpmRing = document.getElementById('wpmRing');
+    const accuracyRing = document.getElementById('accuracyRing');
+    const timeRing = document.getElementById('timeRing');
+
+    // Gamification Elements
+    const progressBar = document.getElementById('progressBar');
+    const streakContainer = document.getElementById('streakContainer');
+    const streakCount = document.getElementById('streakCount');
+    const personalBestBadge = document.getElementById('personalBestBadge');
+    const celebrationOverlay = document.getElementById('celebrationOverlay');
+    const celebrationText = document.getElementById('celebrationText');
+    const confettiCanvas = document.getElementById('confettiCanvas');
+
     let timeLeft = 60;
     let timeLimit = 60;
     let timer = null;
@@ -1560,6 +2085,178 @@ per minute calculator, touch typing test, programming typing practice{% endblock
     let charIndex = 0;
     let errors = 0;
     let correctChars = 0;
+
+    // Gamification Variables
+    let streak = 0;
+    let maxStreak = 0;
+    let personalBestWPM = parseInt(localStorage.getItem('typingTestPB')) || 0;
+    let hasShownPB = false;
+    let celebrationShown = { 50: false, 75: false, 100: false };
+    let isZenMode = false;
+
+    // Ring animation constants
+    const RING_CIRCUMFERENCE = 251.2; // 2 * PI * 40
+
+    // Update circular progress ring
+    function updateRing(ring, percentage) {
+        if (!ring) return;
+        const offset = RING_CIRCUMFERENCE - (percentage / 100) * RING_CIRCUMFERENCE;
+        ring.style.strokeDashoffset = Math.max(0, offset);
+    }
+
+    // Update all stats with ring animations
+    function updateStatsDisplay(wpm, accuracy, timePercent) {
+        // Update WPM ring (0-150 scale)
+        const wpmPercent = Math.min((wpm / 150) * 100, 100);
+        updateRing(wpmRing, wpmPercent);
+
+        // Update accuracy ring
+        updateRing(accuracyRing, accuracy);
+
+        // Update time ring
+        updateRing(timeRing, timePercent);
+    }
+
+    // Update progress bar
+    function updateProgress(typed, total) {
+        if (!progressBar) return;
+        const percent = Math.min((typed / total) * 100, 100);
+        progressBar.style.width = percent + '%';
+    }
+
+    // Show/update streak counter
+    function updateStreak(correct) {
+        if (correct) {
+            streak++;
+            maxStreak = Math.max(maxStreak, streak);
+
+            if (streak >= 5 && streakContainer) {
+                streakContainer.classList.add('visible');
+                streakCount.textContent = streak;
+
+                if (streak % 10 === 0) {
+                    streakContainer.classList.add('fire');
+                    setTimeout(() => streakContainer.classList.remove('fire'), 500);
+                }
+            }
+        } else {
+            streak = 0;
+            if (streakContainer) {
+                streakContainer.classList.remove('visible');
+            }
+        }
+    }
+
+    // Confetti effect
+    function triggerConfetti() {
+        if (!confettiCanvas) return;
+
+        const ctx = confettiCanvas.getContext('2d');
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+
+        const particles = [];
+        const colors = ['#667eea', '#764ba2', '#f59e0b', '#10b981', '#ef4444', '#ec4899'];
+
+        for (let i = 0; i < 150; i++) {
+            particles.push({
+                x: Math.random() * confettiCanvas.width,
+                y: -10 - Math.random() * 100,
+                vx: (Math.random() - 0.5) * 8,
+                vy: Math.random() * 3 + 2,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                size: Math.random() * 8 + 4,
+                rotation: Math.random() * 360,
+                rotationSpeed: (Math.random() - 0.5) * 10
+            });
+        }
+
+        let animationId;
+        function animate() {
+            ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+            let activeParticles = 0;
+            particles.forEach(p => {
+                if (p.y < confettiCanvas.height) {
+                    activeParticles++;
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.1;
+                    p.rotation += p.rotationSpeed;
+
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation * Math.PI / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                    ctx.restore();
+                }
+            });
+
+            if (activeParticles > 0) {
+                animationId = requestAnimationFrame(animate);
+            } else {
+                ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            }
+        }
+
+        animate();
+
+        // Clear after 3 seconds
+        setTimeout(() => {
+            cancelAnimationFrame(animationId);
+            ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        }, 3000);
+    }
+
+    // Celebrate milestone
+    function celebrateMilestone(wpm) {
+        const milestones = [50, 75, 100];
+
+        for (const milestone of milestones) {
+            if (wpm >= milestone && !celebrationShown[milestone]) {
+                celebrationShown[milestone] = true;
+
+                if (celebrationOverlay && celebrationText) {
+                    celebrationText.textContent = `${milestone} WPM!`;
+                    celebrationOverlay.classList.add('active');
+
+                    if (milestone >= 75) {
+                        triggerConfetti();
+                    }
+
+                    setTimeout(() => {
+                        celebrationOverlay.classList.remove('active');
+                    }, 2000);
+                }
+                break;
+            }
+        }
+    }
+
+    // Check and show personal best
+    function checkPersonalBest(wpm) {
+        if (wpm > personalBestWPM && !hasShownPB && wpm > 10) {
+            hasShownPB = true;
+            localStorage.setItem('typingTestPB', wpm);
+            personalBestWPM = wpm;
+
+            if (personalBestBadge) {
+                personalBestBadge.classList.add('visible');
+            }
+        }
+    }
+
+    // Zen Mode Toggle
+    function toggleZenMode() {
+        isZenMode = !isZenMode;
+        document.body.classList.toggle('zen-mode', isZenMode);
+
+        // Focus on input when entering zen mode
+        if (isZenMode) {
+            focusInput();
+        }
+    }
 
     // Sample texts - EXPANDED (15 per level, varied types)
     const textData = {
@@ -1703,7 +2400,7 @@ per minute calculator, touch typing test, programming typing practice{% endblock
     let currentCodeLang = 'python';
     // Initialize with random
     let currentText = getRandomText('text', 'medium');
-    let soundEnabled = true;
+    let soundEnabled = false; // Sound off by default
 
     function getRandomText(mode, subKey) {
         let options;
@@ -1722,7 +2419,7 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         return text;
     }
 
-    // Web Audio API for Typewriter Sound
+    // Web Audio API for Soft Typing Sound
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playTypewriterSound() {
@@ -1735,28 +2432,34 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         osc.connect(gainNode);
         gainNode.connect(audioCtx.destination);
 
-        // Simulated click sound
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.05);
+        // Soft, soothing click sound - lower frequency, gentler tone
+        osc.type = 'sine'; // Smoother waveform
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime); // Lower, warmer frequency
+        osc.frequency.exponentialRampToValueAtTime(180, audioCtx.currentTime + 0.08);
 
-        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+        // Gentler volume curve
+        gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime); // Much softer
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
 
         osc.start();
-        osc.stop(audioCtx.currentTime + 0.06);
+        osc.stop(audioCtx.currentTime + 0.12);
     }
 
     function toggleSound() {
         soundEnabled = !soundEnabled;
-        const btn = document.querySelector('.sound-toggle');
+        const btn = document.querySelector('.sound-btn');
+        const icon = document.getElementById('soundIcon');
+        const text = document.getElementById('soundText');
+
         if (soundEnabled) {
             btn.classList.add('active');
-            btn.innerHTML = '🔊 Sound On';
+            icon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>';
+            text.textContent = 'Sound On';
             playTypewriterSound(); // Feedback
         } else {
             btn.classList.remove('active');
-            btn.innerHTML = '🔇 Sound Off';
+            icon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
+            text.textContent = 'Sound Off';
         }
     }
 
@@ -1932,6 +2635,25 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         const wpm = Math.round(((correctChars / 5) / ((timeLimit - timeLeft) / 60))) || 0;
         if (wpm !== Infinity) wpmDisplay.innerText = wpm;
 
+        // Update gamification elements
+        const timePercent = (timeLeft / timeLimit) * 100;
+        updateStatsDisplay(wpm, accuracy, timePercent);
+        updateProgress(input.length, currentText.length);
+
+        // Track streak - check if last typed character was correct
+        if (input.length > 0) {
+            const lastIndex = input.length - 1;
+            const lastSpan = arrayQuote[lastIndex];
+            if (lastSpan) {
+                const isCorrect = lastSpan.classList.contains('correct');
+                updateStreak(isCorrect);
+            }
+        }
+
+        // Check for milestones and personal best
+        celebrateMilestone(wpm);
+        checkPersonalBest(wpm);
+
         // Check end
         if (input.length >= currentText.length) {
             endTest();
@@ -1939,9 +2661,16 @@ per minute calculator, touch typing test, programming typing practice{% endblock
     }
 
     function startTimer() {
+        // Initialize time ring to full
+        updateRing(timeRing, 100);
+
         timer = setInterval(() => {
             timeLeft--;
             timerDisplay.innerText = timeLeft;
+
+            // Update time ring animation
+            const timePercent = (timeLeft / timeLimit) * 100;
+            updateRing(timeRing, timePercent);
 
             if (timeLeft <= 0) {
                 endTest();
@@ -1978,6 +2707,24 @@ per minute calculator, touch typing test, programming typing practice{% endblock
         wpmDisplay.innerText = '0';
         accDisplay.innerText = '100%';
         isRunning = false;
+
+        // Reset gamification elements
+        streak = 0;
+        hasShownPB = false;
+        celebrationShown = { 50: false, 75: false, 100: false };
+
+        // Reset rings to initial state
+        updateRing(wpmRing, 0);
+        updateRing(accuracyRing, 100);
+        updateRing(timeRing, 100);
+
+        // Reset progress bar
+        if (progressBar) progressBar.style.width = '0%';
+
+        // Hide streak container and personal best badge
+        if (streakContainer) streakContainer.classList.remove('visible');
+        if (personalBestBadge) personalBestBadge.classList.remove('visible');
+
         initText();
         document.getElementById('resultsModal').classList.remove('show');
     }
@@ -2176,7 +2923,7 @@ per minute calculator, touch typing test, programming typing practice{% endblock
                 if (data.user_rank) {
                     infoDiv.style.display = 'block';
                     const periodLabel = period === 'all' ? 'All Time' : period.charAt(0).toUpperCase() + period.slice(1);
-                    infoDiv.innerHTML = `🏆 Your Rank: #${data.user_rank} (${periodLabel})`;
+                    infoDiv.innerHTML = `Your Rank: #${data.user_rank} (${periodLabel})`;
                 } else {
                     infoDiv.style.display = 'none';
                 }
