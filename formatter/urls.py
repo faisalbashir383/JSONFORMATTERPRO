@@ -91,6 +91,7 @@ urlpatterns = [
     path('domain-expiry-checker/', views.domain_expiry_checker_page, name='domain_expiry_checker_page'),
     path('whois-api/', views.whois_api_page, name='whois_api_page'),
     path('resume-builder/', views.resume_builder, name='resume_builder'),
+    path('log-analyzer/', views.log_analyzer_page, name='log_analyzer_page'),
     
     # Calculator Pages
     path('calculator/', views.calculator_page, name='calculator_page'),

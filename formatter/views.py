@@ -1038,6 +1038,11 @@ def resume_builder(request):
     return render(request, 'resume-builder.html')
 
 
+def log_analyzer_page(request):
+    """Render the Log Analyzer page"""
+    return render(request, 'log-analyzer.html')
+
+
 # ====================
 # Calculator Pages
 # ====================
