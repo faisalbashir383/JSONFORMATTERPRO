@@ -88,10 +88,54 @@ Syslog, Docker. No upload required.{% endblock %}
   ]
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ SITE_URL }}/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Developer Tools",
+      "item": "{{ SITE_URL }}/#tools"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Log Analyzer",
+      "item": "{{ SITE_URL }}/log-analyzer/"
+    }
+  ]
+}
+</script>
 {% endblock %}
 
 {% block extra_css %}
 <style>
+    /* Fix navbar element clickability */
+    .navbar {
+        z-index: 1000;
+    }
+
+    .navbar .nav-actions {
+        position: relative;
+        z-index: 1001;
+        pointer-events: auto;
+    }
+
+    .navbar .theme-toggle {
+        position: relative;
+        z-index: 1002;
+        pointer-events: auto;
+        cursor: pointer;
+    }
+
     /* Main Sidebar Layout */
     .log-analyzer-container {
         max-width: 1800px;
@@ -209,6 +253,133 @@ Syslog, Docker. No upload required.{% endblock %}
         outline: none;
         border-color: #6366f1;
         box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    /* Date Filter Popup */
+    .date-filter-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        padding: 0;
+        z-index: 2000;
+        min-width: 320px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        animation: popupFadeIn 0.2s ease-out;
+    }
+
+    .date-filter-popup.hidden {
+        display: none;
+    }
+
+    @keyframes popupFadeIn {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -48%);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+    }
+
+    .date-popup-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        font-weight: 600;
+        color: #cdd6f4;
+    }
+
+    .date-popup-close {
+        background: none;
+        border: none;
+        color: #6b7280;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.25rem;
+        line-height: 1;
+    }
+
+    .date-popup-close:hover {
+        color: #ef4444;
+    }
+
+    .date-popup-body {
+        padding: 1.25rem;
+    }
+
+    .date-popup-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .date-popup-label {
+        min-width: 45px;
+        font-size: 0.85rem;
+        color: #9ca3af;
+    }
+
+    .date-popup-row .sidebar-input {
+        flex: 1;
+    }
+
+    .date-popup-presets {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .date-preset-btn {
+        background: rgba(99, 102, 241, 0.15);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        color: #a5b4fc;
+        padding: 0.4rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .date-preset-btn:hover {
+        background: rgba(99, 102, 241, 0.3);
+        border-color: #6366f1;
+    }
+
+    .date-popup-footer {
+        display: flex;
+        gap: 0.75rem;
+        padding: 1rem 1.25rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        justify-content: flex-end;
+    }
+
+    .date-popup-footer .sidebar-btn {
+        padding: 0.5rem 1rem;
+    }
+
+    /* Popup Backdrop */
+    .date-popup-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(2px);
+        z-index: 1999;
+    }
+
+    .date-popup-backdrop.hidden {
+        display: none;
     }
 
     .sidebar-select {
@@ -1170,6 +1341,76 @@ Syslog, Docker. No upload required.{% endblock %}
         background: rgba(255, 255, 255, 0.15);
     }
 
+    /* Quick Start Banner */
+    .quick-start-banner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1));
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .quick-start-banner .step {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #cdd6f4;
+        font-size: 0.9rem;
+    }
+
+    .quick-start-banner .step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+        border-radius: 50%;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: white;
+    }
+
+    .quick-start-banner .step-arrow {
+        color: #6b7280;
+        font-size: 1.2rem;
+    }
+
+    .quick-start-banner .dismiss-btn {
+        background: none;
+        border: none;
+        color: #6b7280;
+        cursor: pointer;
+        padding: 0.25rem;
+        margin-left: auto;
+        font-size: 1.2rem;
+        line-height: 1;
+    }
+
+    .quick-start-banner .dismiss-btn:hover {
+        color: #cdd6f4;
+    }
+
+    .quick-start-banner.hidden {
+        display: none;
+    }
+
+    /* Ensure Quick Start banner is above other elements */
+    .quick-start-banner {
+        position: relative;
+        z-index: 10;
+    }
+
+    .quick-start-banner .dismiss-btn {
+        z-index: 11;
+        pointer-events: auto;
+    }
+
     /* Loading Progress Overlay */
     .loading-overlay {
         position: absolute;
@@ -1303,6 +1544,16 @@ Syslog, Docker. No upload required.{% endblock %}
     .virtual-viewport .line-number {
         flex-shrink: 0;
     }
+
+    .sidebar-btn.active {
+        border-color: #6366f1;
+        color: #6366f1;
+        background: rgba(99, 102, 241, 0.1);
+    }
+
+    .text-left {
+        text-align: left;
+    }
 </style>
 {% endblock %}
 
@@ -1366,7 +1617,18 @@ Syslog, Docker. No upload required.{% endblock %}
                     <option value="debug">⚪ Debug</option>
                 </select>
                 <input type="text" id="serviceFilter" class="sidebar-input" placeholder="Filter by service/host">
+
+                <!-- Date Range Filter Button -->
+                <button id="dateFilterBtn" class="sidebar-btn secondary" style="margin-top: 0.5rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z" />
+                    </svg>
+                    <span id="dateFilterLabel">Date Range</span>
+                </button>
             </div>
+
+
 
             <!-- Saved Queries -->
             <div class="sidebar-section">
@@ -1393,6 +1655,8 @@ Syslog, Docker. No upload required.{% endblock %}
                     </svg>
                     AI Explain Errors
                 </button>
+                <p style="font-size: 0.75rem; color: #6b7280; margin: 0.5rem 0 0.75rem; text-align: center;">Best for
+                    first-level debugging & pattern recognition</p>
                 <button id="analyticsBtn" class="sidebar-btn secondary">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                         <path
@@ -1476,6 +1740,25 @@ Syslog, Docker. No upload required.{% endblock %}
                 </div>
             </div>
 
+            <!-- Quick Start Banner -->
+            <div class="quick-start-banner" id="quickStartBanner">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <span>Upload logs</span>
+                </div>
+                <span class="step-arrow">→</span>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <span>Filter errors</span>
+                </div>
+                <span class="step-arrow">→</span>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <span>Export results</span>
+                </div>
+                <button class="dismiss-btn" id="dismissQuickStart" title="Dismiss">×</button>
+            </div>
+
             <!-- Log Viewer -->
             <div class="log-panel">
                 <!-- Loading Overlay -->
@@ -1504,6 +1787,37 @@ Syslog, Docker. No upload required.{% endblock %}
 
     <!-- Hidden File Input -->
     <input type="file" id="fileInput" class="file-input-hidden" accept=".log,.txt,.json">
+
+    <!-- Date Filter Popup -->
+    <div id="dateFilterPopup" class="date-filter-popup hidden">
+        <div class="date-popup-header">
+            <span>📅 Filter by Date Range</span>
+            <button id="closeDatePopup" class="date-popup-close">×</button>
+        </div>
+        <div class="date-popup-body">
+            <div class="date-popup-row">
+                <label class="date-popup-label">From:</label>
+                <input type="datetime-local" id="startDate" class="sidebar-input">
+            </div>
+            <div class="date-popup-row">
+                <label class="date-popup-label">To:</label>
+                <input type="datetime-local" id="endDate" class="sidebar-input">
+            </div>
+            <div class="date-popup-presets">
+                <button class="date-preset-btn" data-preset="today">Today</button>
+                <button class="date-preset-btn" data-preset="7days">Last 7 Days</button>
+                <button class="date-preset-btn" data-preset="24h">Last 24h</button>
+                <button class="date-preset-btn" data-preset="1h">Last Hour</button>
+            </div>
+        </div>
+        <div class="date-popup-footer">
+            <button id="clearDateFilter" class="sidebar-btn secondary">Clear</button>
+            <button id="applyDateFilter" class="sidebar-btn primary">Apply</button>
+        </div>
+    </div>
+
+    <!-- Popup Backdrop -->
+    <div id="datePopupBackdrop" class="date-popup-backdrop hidden"></div>
 
     <!-- Paste Modal -->
     <div id="pasteModal" class="modal-overlay" style="display:none;">
@@ -1636,6 +1950,37 @@ Syslog, Docker. No upload required.{% endblock %}
             <pre>2024-01-24 10:00:00 ERROR [main] com.app.Service - Failed to connect to database</pre>
         </section>
 
+        <!-- Long-tail SEO H2 Sections -->
+        <section class="seo-section">
+            <h2>Online Nginx Log Analyzer</h2>
+            <p>Analyze Nginx access and error logs directly in your browser. Our Nginx log analyzer automatically
+                detects
+                the common log format and combined log format, highlighting response codes, request methods, and error
+                messages. Perfect for debugging 4xx/5xx errors, identifying slow requests, and monitoring traffic
+                patterns.</p>
+        </section>
+
+        <section class="seo-section">
+            <h2>JSON Log Viewer & Parser</h2>
+            <p>View and parse structured JSON logs from modern applications. The JSON log viewer formats nested objects,
+                extracts key fields like timestamps, levels, and messages, and allows filtering by any JSON property.
+                Ideal for applications using Winston, Pino, Bunyan, or any structured logging library.</p>
+        </section>
+
+        <section class="seo-section">
+            <h2>Apache Access Log Analyzer</h2>
+            <p>Parse Apache httpd access logs in common or combined log format. Quickly identify top URLs, client IPs,
+                user agents, and HTTP status codes. Filter by response codes to find errors, or search for specific
+                request patterns. Supports both Apache 2.2 and 2.4 log formats.</p>
+        </section>
+
+        <section class="seo-section">
+            <h2>Docker Log Analyzer Online</h2>
+            <p>Analyze Docker container logs and Kubernetes pod logs. Supports Docker JSON log driver output and
+                standard container log formats. Filter by stdout/stderr, search for specific error messages, and
+                extract timestamps from containerized application output.</p>
+        </section>
+
         <!-- FAQ Section -->
         <section class="seo-section">
             <h2>Frequently Asked Questions</h2>
@@ -1721,7 +2066,7 @@ Syslog, Docker. No upload required.{% endblock %}
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<!-- Chart.js is now lazy-loaded when analytics panel is opened -->
 <script>
     (function () {
         'use strict';
@@ -1902,6 +2247,52 @@ java.lang.NullPointerException: Cannot invoke method on null object
             infoCount.textContent = stats.info;
         }
 
+        // Extract timestamp from log line
+        function extractTimestamp(line) {
+            // ISO format: 2024-01-24T10:00:01.123Z or 2024-01-24 10:00:01
+            const isoMatch = line.match(/(\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}:\d{2})/);
+            if (isoMatch) return new Date(isoMatch[1].replace(' ', 'T'));
+
+            // Common log format: [24/Jan/2024:10:00:01 +0000]
+            const clfMatch = line.match(/\[(\d{2})\/([A-Za-z]{3})\/(\d{4}):(\d{2}):(\d{2}):(\d{2})/);
+            if (clfMatch) {
+                const months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+                return new Date(clfMatch[3], months[clfMatch[2]], clfMatch[1], clfMatch[4], clfMatch[5], clfMatch[6]);
+            }
+
+            // Syslog format: Jan 24 10:00:01
+            const syslogMatch = line.match(/^([A-Za-z]{3})\s+(\d+)\s+(\d{2}):(\d{2}):(\d{2})/);
+            if (syslogMatch) {
+                const months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+                const date = new Date();
+                date.setMonth(months[syslogMatch[1]]);
+                date.setDate(parseInt(syslogMatch[2]));
+                date.setHours(parseInt(syslogMatch[3]), parseInt(syslogMatch[4]), parseInt(syslogMatch[5]));
+                return date;
+            }
+
+            // Unix timestamp (seconds or milliseconds)
+            const unixMatch = line.match(/^\s*(\d{10,13})\s/);
+            if (unixMatch) {
+                const ts = parseInt(unixMatch[1]);
+                return new Date(ts > 9999999999 ? ts : ts * 1000);
+            }
+
+            return null;
+        }
+
+        // Check if line timestamp is within range
+        function isWithinDateRange(line, startDate, endDate) {
+            if (!startDate && !endDate) return true;
+
+            const timestamp = extractTimestamp(line.content);
+            if (!timestamp) return true; // If no timestamp found, include the line
+
+            if (startDate && timestamp < startDate) return false;
+            if (endDate && timestamp > endDate) return false;
+            return true;
+        }
+
         // Apply filters - async chunked for large datasets
         let filterAbortController = null;
 
@@ -1918,11 +2309,16 @@ java.lang.NullPointerException: Cannot invoke method on null object
             const useRegex = regexToggle.checked;
             const serviceFilterValue = serviceFilter?.value?.trim().toLowerCase() || '';
 
+            // Date range filtering
+            const startDateValue = startDate?.value ? new Date(startDate.value) : null;
+            const endDateValue = endDate?.value ? new Date(endDate.value) : null;
+
             // For small datasets or no search, use fast sync filtering
             if (parsedLines.length < 50000 || !searchTerm) {
                 filteredLines = parsedLines.filter(line => {
                     if (levelFilterValue !== 'all' && line.level !== levelFilterValue) return false;
                     if (serviceFilterValue && !line.content.toLowerCase().includes(serviceFilterValue)) return false;
+                    if (!isWithinDateRange(line, startDateValue, endDateValue)) return false;
                     if (searchTerm) {
                         try {
                             if (useRegex) {
@@ -1962,6 +2358,7 @@ java.lang.NullPointerException: Cannot invoke method on null object
                     const matches = chunk.filter(line => {
                         if (levelFilterValue !== 'all' && line.level !== levelFilterValue) return false;
                         if (serviceFilterValue && !line.content.toLowerCase().includes(serviceFilterValue)) return false;
+                        if (!isWithinDateRange(line, startDateValue, endDateValue)) return false;
                         if (compiled) {
                             if (!compiled.test(line.content)) return false;
                         } else {
@@ -2446,16 +2843,63 @@ java.lang.NullPointerException: Cannot invoke method on null object
             }
         }
 
-        // Toggle analytics panel
-        analyticsBtn?.addEventListener('click', () => {
+        // Quick Start Banner dismiss
+        const quickStartBanner = document.getElementById('quickStartBanner');
+        const dismissQuickStart = document.getElementById('dismissQuickStart');
+
+        if (localStorage.getItem('logAnalyzerQuickStartDismissed')) {
+            quickStartBanner?.classList.add('hidden');
+        }
+
+        dismissQuickStart?.addEventListener('click', () => {
+            quickStartBanner?.classList.add('hidden');
+            localStorage.setItem('logAnalyzerQuickStartDismissed', 'true');
+        });
+
+        // Lazy load Chart.js
+        let chartJsLoaded = false;
+        function loadChartJs() {
+            return new Promise((resolve, reject) => {
+                if (chartJsLoaded || typeof Chart !== 'undefined') {
+                    chartJsLoaded = true;
+                    resolve();
+                    return;
+                }
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js';
+                script.onload = () => {
+                    chartJsLoaded = true;
+                    resolve();
+                };
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+
+        // Toggle analytics panel with lazy Chart.js loading
+        analyticsBtn?.addEventListener('click', async () => {
             const isVisible = analyticsPanel.style.display !== 'none';
-            analyticsPanel.style.display = isVisible ? 'none' : 'block';
-            if (!isVisible) updateAnalytics();
+            if (isVisible) {
+                analyticsPanel.style.display = 'none';
+            } else {
+                analyticsPanel.style.display = 'block';
+                if (!chartJsLoaded) {
+                    try {
+                        await loadChartJs();
+                        updateAnalytics();
+                    } catch (e) {
+                        console.error('Failed to load Chart.js:', e);
+                        showToast('Failed to load analytics chart');
+                    }
+                } else {
+                    updateAnalytics();
+                }
+            }
         });
 
         // Advanced filters
-        startDate?.addEventListener('change', applyFilters);
-        endDate?.addEventListener('change', applyFilters);
+        // startDate?.addEventListener('change', applyFilters);
+        // endDate?.addEventListener('change', applyFilters);
         serviceFilter?.addEventListener('input', applyFilters);
 
         // Saved queries
@@ -2606,6 +3050,97 @@ java.lang.NullPointerException: Cannot invoke method on null object
             if (e.key === 'Enter') {
                 document.getElementById('saveQueryConfirmBtn').click();
             }
+        });
+
+        // Date Filter Popup Logic
+        const dateFilterBtn = document.getElementById('dateFilterBtn');
+        const dateFilterPopup = document.getElementById('dateFilterPopup');
+        const datePopupBackdrop = document.getElementById('datePopupBackdrop');
+        const closeDatePopup = document.getElementById('closeDatePopup');
+        const applyDateFilter = document.getElementById('applyDateFilter');
+        const clearDateFilter = document.getElementById('clearDateFilter');
+        const dateFilterLabel = document.getElementById('dateFilterLabel');
+        const datePresets = document.querySelectorAll('.date-preset-btn');
+        // Re-select inputs since they might have been redefined or we need to span scope
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+
+        function openDatePopup() {
+            dateFilterPopup.classList.remove('hidden');
+            datePopupBackdrop.classList.remove('hidden');
+        }
+
+        function closePopup() {
+            dateFilterPopup.classList.add('hidden');
+            datePopupBackdrop.classList.add('hidden');
+        }
+
+        dateFilterBtn?.addEventListener('click', openDatePopup);
+        closeDatePopup?.addEventListener('click', closePopup);
+        datePopupBackdrop?.addEventListener('click', closePopup);
+
+        // Date Presets
+        datePresets.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const preset = btn.dataset.preset;
+                const now = new Date();
+                let start = new Date();
+
+                switch (preset) {
+                    case 'today':
+                        start.setHours(0, 0, 0, 0);
+                        break;
+                    case '7days':
+                        start.setDate(now.getDate() - 7);
+                        break;
+                    case '24h':
+                        start.setHours(now.getHours() - 24);
+                        break;
+                    case '1h':
+                        start.setHours(now.getHours() - 1);
+                        break;
+                }
+
+                // Format for datetime-local: YYYY-MM-DDTHH:mm
+                const format = (d) => {
+                    const pad = (n) => n.toString().padStart(2, '0');
+                    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+                };
+
+                if (startDateInput) startDateInput.value = format(start);
+                if (endDateInput) endDateInput.value = format(now);
+            });
+        });
+
+        // Apply Filter
+        applyDateFilter?.addEventListener('click', () => {
+            applyFilters();
+            closePopup();
+
+            // Update button label
+            if (startDateInput.value && endDateInput.value) {
+                const start = new Date(startDateInput.value);
+                const end = new Date(endDateInput.value);
+                dateFilterLabel.textContent = `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
+                dateFilterBtn.classList.add('active');
+                dateFilterBtn.style.textAlign = 'left';
+            } else if (startDateInput.value) {
+                dateFilterLabel.textContent = `From ${new Date(startDateInput.value).toLocaleDateString()}`;
+                dateFilterBtn.classList.add('active');
+            } else {
+                dateFilterLabel.textContent = 'Date Range';
+                dateFilterBtn.classList.remove('active');
+            }
+        });
+
+        // Clear Filter
+        clearDateFilter?.addEventListener('click', () => {
+            if (startDateInput) startDateInput.value = '';
+            if (endDateInput) endDateInput.value = '';
+            applyFilters();
+            closePopup();
+            dateFilterLabel.textContent = 'Date Range';
+            dateFilterBtn.classList.remove('active');
         });
 
     })();
