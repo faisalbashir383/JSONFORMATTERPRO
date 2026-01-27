@@ -106,6 +106,7 @@ class StaticViewSitemap(Sitemap):
             'redoc_viewer_page',
             'parquet_viewer_page',
             'apiutils:webhook_tester',
+            'log_analyzer_page'
         ]
 
 
