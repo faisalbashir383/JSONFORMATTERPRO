@@ -779,6 +779,17 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
                     </select>
                 </div>
             </div>
+
+            <!-- Template Preset Selector (shown for POST/PUT/DELETE) -->
+            <div class="input-group" id="templateSelectorGroup" style="display: none; margin-top: 0.75rem;">
+                <label class="input-label">📄 Response Template Preset</label>
+                <select id="templateSelector" class="input-field" style="font-weight: 500;">
+                    <!-- Populated dynamically based on HTTP method -->
+                </select>
+                <div style="font-size: 0.7rem; color: var(--color-text-secondary); margin-top: 0.25rem;">
+                    Select a preset or customize in the editor
+                </div>
+            </div>
         </div>
 
         <div class="config-section">
@@ -878,10 +889,10 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
             <div class="panel-header">
                 <h2 class="panel-title">Response Body Template</h2>
                 <div class="panel-actions">
-<!--                    <button id="aiGenerateBtn" class="action-btn"-->
-<!--                        style="background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); color: white; border: none;">-->
-<!--                        ✨ Generate with AI-->
-<!--                    </button>-->
+                    <!--                    <button id="aiGenerateBtn" class="action-btn"-->
+                    <!--                        style="background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); color: white; border: none;">-->
+                    <!--                        ✨ Generate with AI-->
+                    <!--                    </button>-->
                     <button id="formatBtn" class="action-btn">Format</button>
                     <button id="resetBtn" class="action-btn">Reset</button>
                 </div>
@@ -1919,6 +1930,189 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
   }
 }`;
 
+    // HTTP Method-specific Templates
+    const methodTemplates = {
+        GET: {
+            'user_list': { name: '👥 User List', template: defaultTemplate },
+            'single_user': {
+                name: '👤 Single User', template: `{
+  "success": true,
+  "data": {
+    "id": "{{uuid}}",
+    "firstName": "{{firstName}}",
+    "lastName": "{{lastName}}",
+    "email": "{{email}}",
+    "phone": "{{phone}}",
+    "avatar": "{{avatar}}",
+    "company": "{{company}}",
+    "jobTitle": "{{jobTitle}}",
+    "createdAt": "{{isoDate}}"
+  }
+}` },
+            'product_list': {
+                name: '📦 Product List', template: `{
+  "success": true,
+  "data": [
+    {
+      "id": "{{uuid}}",
+      "name": "{{sentence}}",
+      "price": {{price}},
+      "category": "{{oneOf:Electronics,Clothing,Home,Sports}}",
+      "inStock": {{boolean}},
+      "imageUrl": "{{imageUrl}}"
+    }
+  ],
+  "meta": {
+    "total": {{number:100}},
+    "page": 1,
+    "limit": 10
+  }
+}` }
+        },
+        POST: {
+            'user_created': {
+                name: '✅ User Created', template: `{
+  "success": true,
+  "message": "User created successfully",
+  "data": {
+    "id": "{{uuid}}",
+    "firstName": "{{firstName}}",
+    "lastName": "{{lastName}}",
+    "email": "{{email}}",
+    "createdAt": "{{isoDate}}"
+  }
+}` },
+            'order_placed': {
+                name: '🛒 Order Placed', template: `{
+  "success": true,
+  "message": "Order placed successfully",
+  "data": {
+    "orderId": "{{uuid}}",
+    "status": "pending",
+    "total": {{price}},
+    "itemCount": {{number:1,10}},
+    "estimatedDelivery": "{{date}}",
+    "createdAt": "{{isoDate}}"
+  }
+}` },
+            'login_success': {
+                name: '🔐 Login Success', template: `{
+  "success": true,
+  "message": "Login successful",
+  "data": {
+    "user": {
+      "id": "{{uuid}}",
+      "email": "{{email}}",
+      "firstName": "{{firstName}}"
+    },
+    "token": "{{uuid}}",
+    "expiresIn": 3600
+  }
+}` },
+            'file_uploaded': {
+                name: '📁 File Uploaded', template: `{
+  "success": true,
+  "message": "File uploaded successfully",
+  "data": {
+    "fileId": "{{uuid}}",
+    "fileName": "{{slug}}.pdf",
+    "fileSize": {{number:1000,50000}},
+    "mimeType": "application/pdf",
+    "url": "{{url}}",
+    "uploadedAt": "{{isoDate}}"
+  }
+}` },
+            'validation_error': {
+                name: '⚠️ Validation Error', template: `{
+  "success": false,
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "email",
+      "message": "Invalid email format"
+    },
+    {
+      "field": "password",
+      "message": "Password must be at least 8 characters"
+    }
+  ]
+}` }
+        },
+        PUT: {
+            'user_updated': {
+                name: '✏️ User Updated', template: `{
+  "success": true,
+  "message": "User updated successfully",
+  "data": {
+    "id": "{{uuid}}",
+    "firstName": "{{firstName}}",
+    "lastName": "{{lastName}}",
+    "email": "{{email}}",
+    "updatedAt": "{{isoDate}}"
+  }
+}` },
+            'profile_updated': {
+                name: '👤 Profile Updated', template: `{
+  "success": true,
+  "message": "Profile updated successfully",
+  "data": {
+    "id": "{{uuid}}",
+    "firstName": "{{firstName}}",
+    "lastName": "{{lastName}}",
+    "email": "{{email}}",
+    "phone": "{{phone}}",
+    "company": "{{company}}",
+    "jobTitle": "{{jobTitle}}",
+    "avatar": "{{avatar}}",
+    "updatedAt": "{{isoDate}}"
+  }
+}` },
+            'settings_saved': {
+                name: '⚙️ Settings Saved', template: `{
+  "success": true,
+  "message": "Settings saved successfully",
+  "data": {
+    "theme": "{{oneOf:light,dark,auto}}",
+    "notifications": {{boolean}},
+    "language": "{{oneOf:en,es,fr,de}}",
+    "timezone": "{{oneOf:UTC,EST,PST,GMT}}",
+    "updatedAt": "{{isoDate}}"
+  }
+}` },
+            'password_changed': {
+                name: '🔑 Password Changed', template: `{
+  "success": true,
+  "message": "Password changed successfully",
+  "changedAt": "{{isoDate}}"
+}` }
+        },
+        DELETE: {
+            'resource_deleted': {
+                name: '🗑️ Resource Deleted', template: `{
+  "success": true,
+  "message": "Resource deleted successfully",
+  "deletedId": "{{uuid}}",
+  "deletedAt": "{{isoDate}}"
+}` },
+            'user_deleted': {
+                name: '👤 User Deleted', template: `{
+  "success": true,
+  "message": "User account deleted successfully",
+  "userId": "{{uuid}}",
+  "deletedAt": "{{isoDate}}"
+}` },
+            'no_content': { name: '📭 No Content (204)', template: `` },
+            'bulk_deleted': {
+                name: '📋 Bulk Delete', template: `{
+  "success": true,
+  "message": "Items deleted successfully",
+  "deletedCount": {{number:1,50}},
+  "deletedAt": "{{isoDate}}"
+}` }
+        }
+    };
+
+
     require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
     require(['vs/editor/editor.main'], function () {
         const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -2459,7 +2653,61 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
             errorRateValue.textContent = errorRateSlider.value + '%';
         });
 
-        httpMethod.addEventListener('change', updateEndpointDisplay);
+        // Template selector and HTTP method change handling
+        const templateSelectorGroup = document.getElementById('templateSelectorGroup');
+        const templateSelector = document.getElementById('templateSelector');
+
+        // Function to update template options based on HTTP method
+        function updateTemplateOptions() {
+            const method = httpMethod.value;
+            const templates = methodTemplates[method];
+
+            // Show selector for all methods now that we have GET templates too
+            templateSelectorGroup.style.display = 'block';
+
+            // Populate template dropdown
+            templateSelector.innerHTML = Object.keys(templates)
+                .map(key => `<option value="${key}">${templates[key].name}</option>`)
+                .join('');
+
+            // Auto-select first template and update editor
+            const firstKey = Object.keys(templates)[0];
+            if (monacoEditor && templates[firstKey]) {
+                monacoEditor.setValue(templates[firstKey].template);
+            }
+        }
+
+        // Function to update status code defaults based on method
+        function updateStatusCodeDefaults() {
+            const method = httpMethod.value;
+            const defaultCodes = { GET: '200', POST: '201', PUT: '200', DELETE: '204' };
+            statusCode.value = defaultCodes[method];
+        }
+
+        // Template selector change handler
+        templateSelector.addEventListener('change', () => {
+            const method = httpMethod.value;
+            const templates = methodTemplates[method];
+            const selectedKey = templateSelector.value;
+
+            if (monacoEditor && templates[selectedKey]) {
+                monacoEditor.setValue(templates[selectedKey].template);
+            }
+        });
+
+        httpMethod.addEventListener('change', () => {
+            updateEndpointDisplay();
+            updateTemplateOptions();
+            updateStatusCodeDefaults();
+        });
+
+        // Initialize template options on page load
+        setTimeout(() => {
+            if (monacoEditor) {
+                updateTemplateOptions();
+            }
+        }, 500);
+
         endpointPath.addEventListener('input', updateEndpointDisplay);
 
         // Custom Variables - Type selector handler
