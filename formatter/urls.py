@@ -29,6 +29,7 @@ urlpatterns = [
     
     # JSON Tool Pages
     path('json-to-yaml/', views.json_to_yaml_page, name='json_to_yaml_page'),
+    path('yaml-formatter/', views.yaml_formatter_page, name='yaml_formatter_page'),
     path('csv-to-json/', views.csv_to_json_page, name='csv_to_json_page'),
     path('xsd-to-json-schema/', views.xsd_to_json_schema_page, name='xsd_to_json_schema_page'),
     path('xsd-to-json-schema-example/', views.xsd_to_json_schema_example_page, name='xsd_to_json_schema_example_page'),

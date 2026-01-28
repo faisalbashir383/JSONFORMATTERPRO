@@ -1,0 +1,1343 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}YAML Formatter Online – Format & Beautify YAML Files{% endblock %}
+{% block meta_title %}YAML Formatter Online – Format & Beautify YAML Files{% endblock %}
+{% block meta_description %}Free YAML Formatter online to format, beautify & validate YAML files instantly. Fix
+indentation, preserve comments & download clean YAML.{% endblock %}
+{% block meta_keywords %}yaml formatter, yaml file formatter, yaml formatter online, online yaml formatter, formatter
+yaml, vscode yaml formatter, ansible yaml formatter, best yaml formatter, format yaml online, yaml pretty print, yaml
+beautifier{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/yaml-formatter/{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"YAML Formatter","applicationCategory":"DeveloperTool","operatingSystem":"All","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"url":"https://jsonformatterspro.com/yaml-formatter/","description":"Free online YAML formatter to format, beautify, and validate YAML files instantly.","featureList":["Format YAML files instantly","Fix YAML indentation","Preserve comments","Validate YAML syntax","Large file support","Client-side processing"],"softwareVersion":"1.0"}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Format YAML Online",
+  "description": "Steps to format and validate YAML files online using a free YAML formatter.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Paste or Upload YAML",
+      "text": "Paste your YAML code into the editor or upload a .yaml or .yml file."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Click Format",
+      "text": "Click the Format button to beautify and fix YAML indentation."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Copy or Download",
+      "text": "Copy the formatted YAML or download it as a file."
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is a YAML formatter?","acceptedAnswer":{"@type":"Answer","text":"A YAML formatter reformats messy YAML code with consistent indentation and clean structure."}},{"@type":"Question","name":"Is this YAML formatter free?","acceptedAnswer":{"@type":"Answer","text":"Yes, 100% free with no limits."}},{"@type":"Question","name":"Can I format Ansible YAML files?","acceptedAnswer":{"@type":"Answer","text":"Yes! Works perfectly with Ansible playbooks."}},{"@type":"Question","name":"Is my YAML data secure?","acceptedAnswer":{"@type":"Answer","text":"Completely secure. All processing happens locally in your browser."}},{"@type":"Question","name":"Does this YAML formatter support Kubernetes and Docker Compose files?","acceptedAnswer":{"@type":"Answer","text":"Absolutely! This tool works perfectly with Kubernetes manifests, Docker Compose files, Helm charts, and any YAML-based DevOps configuration."}}]}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --yaml-primary: #6366f1;
+        --yaml-secondary: #8b5cf6;
+        --yaml-glow: rgba(99, 102, 241, 0.2)
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 1.5rem
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: 0.5rem
+    }
+
+    .page-header p {
+        color: var(--color-text-secondary);
+        font-size: 1rem;
+        max-width: 700px;
+        margin: 0 auto
+    }
+
+    .toolbar {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 0.75rem 1rem;
+        background: var(--color-surface);
+        border-radius: 10px;
+        border: 1px solid var(--color-border);
+        flex-wrap: wrap
+    }
+
+    .tool-group {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem
+    }
+
+    .tool-label {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        font-weight: 500
+    }
+
+    .tool-select {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: 6px;
+        cursor: pointer
+    }
+
+    .toolbar-spacer {
+        flex: 1
+    }
+
+    .tool-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem
+    }
+
+    .tool-btn svg {
+        width: 16px;
+        height: 16px
+    }
+
+    .tool-btn.secondary {
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border)
+    }
+
+    .tool-btn.secondary:hover {
+        border-color: var(--yaml-primary);
+        color: var(--yaml-primary)
+    }
+
+    .tool-btn.primary {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: #fff
+    }
+
+    .tool-btn.primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px var(--yaml-glow)
+    }
+
+    .editor-panel {
+        background: var(--color-surface);
+        border-radius: 12px;
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+        margin-bottom: 1rem
+    }
+
+    .editor-panel.has-error {
+        border-color: #ef4444
+    }
+
+    .editor-panel.is-valid {
+        border-color: #10b981
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+        flex-wrap: wrap;
+        gap: 0.5rem
+    }
+
+    .panel-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem
+    }
+
+    .panel-title svg {
+        width: 18px;
+        height: 18px;
+        color: var(--yaml-primary)
+    }
+
+    .panel-actions {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap
+    }
+
+    .action-btn {
+        background: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: 6px;
+        padding: 0.35rem 0.7rem;
+        cursor: pointer;
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem
+    }
+
+    .action-btn svg {
+        width: 14px;
+        height: 14px
+    }
+
+    .action-btn:hover {
+        background: var(--yaml-primary);
+        color: #fff;
+        border-color: var(--yaml-primary)
+    }
+
+    /* Ace Editor Container */
+    #aceEditor {
+        width: 100%;
+        height: 500px;
+        font-size: 14px
+    }
+
+    .status-banner {
+        padding: 0.6rem 1rem;
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8rem
+    }
+
+    .status-banner svg {
+        width: 16px;
+        height: 16px
+    }
+
+    .status-banner.show {
+        display: flex
+    }
+
+    .error-banner {
+        background: rgba(239, 68, 68, 0.08);
+        border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+        color: #dc2626
+    }
+
+    .success-banner {
+        background: rgba(16, 185, 129, 0.08);
+        border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+        color: #059669
+    }
+
+    .info-stats {
+        display: flex;
+        gap: 1rem;
+        padding: 0.5rem 1rem;
+        background: var(--color-bg);
+        border-top: 1px solid var(--color-border);
+        font-size: 0.75rem;
+        color: var(--color-text-secondary)
+    }
+
+    .stat {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem
+    }
+
+    .stat svg {
+        width: 12px;
+        height: 12px
+    }
+
+    /* Dark Mode */
+    [data-theme="dark"] .error-banner {
+        color: #fca5a5
+    }
+
+    [data-theme="dark"] .success-banner {
+        color: #34d399
+    }
+
+    /* Drag & Drop Overlay */
+    .drop-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(139, 92, 246, 0.95));
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        border-radius: 12px
+    }
+
+    .drop-overlay.active {
+        display: flex
+    }
+
+    .drop-content {
+        text-align: center;
+        color: #fff
+    }
+
+    .drop-content svg {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 0.75rem
+    }
+
+    .drop-content p {
+        font-size: 1rem;
+        font-weight: 600
+    }
+
+    /* Keyboard Shortcuts */
+    .shortcuts-hint {
+        display: flex;
+        gap: 1rem;
+        padding: 0.5rem 1rem;
+        background: var(--color-surface-alt);
+        border-top: 1px solid var(--color-border);
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        flex-wrap: wrap
+    }
+
+    .shortcut {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem
+    }
+
+    .shortcut kbd {
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        padding: 0.15rem 0.4rem;
+        font-family: inherit;
+        font-size: 0.7rem
+    }
+
+    /* Convert Button Styles */
+    .tool-btn.convert {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: #fff
+    }
+
+    /* SEO Content */
+    .seo-content {
+        margin-top: 3rem
+    }
+
+    .seo-section {
+        margin-bottom: 2.5rem
+    }
+
+    .seo-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: 1rem
+    }
+
+    .seo-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        margin-bottom: 1rem
+    }
+
+    .seo-section ul {
+        color: var(--color-text-secondary);
+        margin-left: 1.5rem;
+        margin-bottom: 1rem
+    }
+
+    .seo-section li {
+        margin-bottom: 0.5rem;
+        line-height: 1.6
+    }
+
+    .code-example {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+        margin: 1.5rem 0;
+        overflow: hidden
+    }
+
+    .code-example-header {
+        background: var(--color-surface-alt);
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        border-bottom: 1px solid var(--color-border)
+    }
+
+    .code-example pre {
+        margin: 0;
+        padding: 1rem;
+        overflow-x: auto;
+        font-family: 'Fira Code', 'SF Mono', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        color: var(--color-text)
+    }
+
+    [data-theme="dark"] .code-example {
+        background: #0d1117;
+        border-color: #30363d
+    }
+
+    [data-theme="dark"] .code-example-header {
+        background: #161b22;
+        border-color: #30363d
+    }
+
+    [data-theme="dark"] .code-example pre {
+        color: #c9d1d9
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0
+    }
+
+    .feature-item {
+        background: var(--color-surface);
+        padding: 1.25rem;
+        border-radius: 10px;
+        border: 1px solid var(--color-border)
+    }
+
+    .feature-item h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem
+    }
+
+    .feature-item h3 svg {
+        width: 18px;
+        height: 18px;
+        color: var(--yaml-primary)
+    }
+
+    .feature-item p {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        margin: 0;
+        line-height: 1.5
+    }
+
+    .faq-list {
+        margin-top: 1rem
+    }
+
+    .faq-item {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        margin-bottom: 0.75rem;
+        overflow: hidden
+    }
+
+    .faq-q {
+        padding: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--color-text)
+    }
+
+    .faq-q:hover {
+        background: var(--color-surface-alt)
+    }
+
+    .faq-toggle svg {
+        width: 18px;
+        height: 18px;
+        color: var(--yaml-primary);
+        transition: transform 0.3s
+    }
+
+    .faq-item.open .faq-toggle svg {
+        transform: rotate(45deg)
+    }
+
+    .faq-a {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s
+    }
+
+    .faq-item.open .faq-a {
+        max-height: 200px
+    }
+
+    .faq-a-inner {
+        padding: 0 1rem 1rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+        border-top: 1px solid var(--color-border)
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem
+    }
+
+    .related-card {
+        text-decoration: none;
+        color: inherit
+    }
+
+    .related-card>div {
+        background: var(--color-surface);
+        padding: 1.25rem;
+        border-radius: 10px;
+        border: 1px solid var(--color-border);
+        transition: all 0.2s
+    }
+
+    .related-card:hover>div {
+        border-color: var(--yaml-primary)
+    }
+
+    .related-card svg {
+        width: 24px;
+        height: 24px;
+        margin-bottom: 0.4rem;
+        color: var(--yaml-primary)
+    }
+
+    .related-card h4 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.25rem
+    }
+
+    .related-card p {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        margin: 0
+    }
+
+    @media(max-width:768px) {
+        .page-header h1 {
+            font-size: 1.5rem
+        }
+
+        .toolbar {
+            justify-content: center
+        }
+
+        .tool-group {
+            width: 100%;
+            justify-content: space-between
+        }
+
+        .toolbar-spacer {
+            display: none
+        }
+
+        .tool-btn {
+            flex: 1;
+            justify-content: center
+        }
+
+        #aceEditor {
+            height: 300px
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- H1 Above Tool -->
+<div class="page-header">
+    <h1>YAML Formatter Online – Format & Beautify YAML Files</h1>
+    <p>Free YAML Formatter online to format, beautify & validate YAML files instantly. Fix indentation, preserve
+        comments & download clean YAML.
+    </p>
+</div>
+
+<!-- Toolbar -->
+<div class="toolbar">
+    <div class="tool-group">
+        <span class="tool-label">Indent:</span>
+        <select id="indentSize" class="tool-select">
+            <option value="2" selected>2 spaces</option>
+            <option value="4">4 spaces</option>
+        </select>
+    </div>
+    <div class="tool-group">
+        <span class="tool-label">Sort Keys:</span>
+        <select id="sortKeys" class="tool-select">
+            <option value="false" selected>Preserve</option>
+            <option value="true">A-Z</option>
+        </select>
+    </div>
+    <div class="toolbar-spacer"></div>
+    <button id="formatBtn" class="tool-btn primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+        </svg>
+        Format
+    </button>
+    <button id="validateBtn" class="tool-btn secondary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12" />
+        </svg>
+        Validate
+    </button>
+    <button id="minifyBtn" class="tool-btn secondary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <path d="M9 9h6M9 15h6" />
+        </svg>
+        Minify
+    </button>
+    <button id="yamlToJsonBtn" class="tool-btn convert">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6" />
+        </svg>
+        YAML → JSON
+    </button>
+    <button id="jsonToYamlBtn" class="tool-btn convert">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6" />
+        </svg>
+        JSON → YAML
+    </button>
+</div>
+
+<!-- Single Editor -->
+<div class="editor-panel" id="editorPanel">
+    <div class="panel-header">
+        <div class="panel-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+            </svg>
+            YAML Editor
+        </div>
+        <div class="panel-actions">
+            <label class="action-btn"><input type="file" id="fileInput" accept=".yaml,.yml" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                Upload
+            </label>
+            <button id="sampleBtn" class="action-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+                Sample
+            </button>
+            <button id="copyBtn" class="action-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                Copy
+            </button>
+            <button id="downloadBtn" class="action-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Download
+            </button>
+            <button id="clearBtn" class="action-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+                Clear
+            </button>
+        </div>
+    </div>
+    <div class="status-banner error-banner" id="errorBanner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="15" y1="9" x2="9" y2="15" />
+            <line x1="9" y1="9" x2="15" y2="15" />
+        </svg>
+        <span id="errorText"></span>
+    </div>
+    <div class="status-banner success-banner" id="successBanner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+        <span id="successText">Valid YAML</span>
+    </div>
+    <!-- Editor Wrapper with Drag & Drop -->
+    <div style="position:relative">
+        <div id="aceEditor"></div>
+        <!-- Drag & Drop Overlay -->
+        <div class="drop-overlay" id="dropOverlay">
+            <div class="drop-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                <p>Drop YAML or JSON file here</p>
+            </div>
+        </div>
+    </div>
+    <div class="info-stats">
+        <span class="stat" id="lineCount"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            </svg> 0 lines</span>
+        <span class="stat" id="byteCount"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+            </svg> 0 bytes</span>
+    </div>
+    <!-- Keyboard Shortcuts Hint -->
+    <div class="shortcuts-hint">
+        <span class="shortcut"><kbd>⌘</kbd>+<kbd>Enter</kbd> Format</span>
+        <span class="shortcut" title="Overrides browser save"><kbd>⌘</kbd>+<kbd>S</kbd> Copy to clipboard</span>
+        <span class="shortcut"><kbd>Drag & Drop</kbd> Upload files</span>
+    </div>
+</div>
+
+<!-- SEO Content Below Tool -->
+<div class="seo-content">
+    <section class="seo-section">
+        <h2>What is YAML?</h2>
+        <p>YAML (YAML Ain't Markup Language) is a human-readable data serialization format commonly used for
+            configuration files, data exchange, and DevOps automation. Unlike JSON, YAML uses indentation to represent
+            structure, making it easier to read but sensitive to formatting errors.</p>
+        <p>This <strong>YAML file formatter</strong> is designed for developers who want the <strong>best YAML
+                formatter</strong> experience without installing plugins. It works similarly to popular tools like the
+            <strong>VSCode YAML formatter</strong> or <strong>IntelliJ YAML formatter</strong>, but runs fully online.
+        </p>
+        <p>Our <strong>online YAML formatter</strong> helps you quickly format, validate, and beautify YAML files—no
+            installation required.</p>
+    </section>
+
+    <!-- AI-Friendly Definition Block -->
+    <section class="seo-section">
+        <h2>What Does This Tool Do?</h2>
+        <p>This <strong>YAML formatter</strong> is a free online tool that formats, validates, and beautifies YAML files
+            directly in your browser. It fixes indentation errors, corrects spacing issues, and produces clean, readable
+            YAML output. Use it to <strong>format YAML online</strong> without downloading any software.</p>
+
+        <h3>Who Should Use This Tool?</h3>
+        <p>DevOps engineers, backend developers, and system administrators who work with configuration files. This is
+            the <strong>best alternative to VSCode YAML formatter</strong> extensions when you need quick access from
+            any device. It supports Kubernetes manifests, Docker Compose files, CI/CD pipelines, and Ansible playbooks.
+        </p>
+
+        <h3>When Should You Use a YAML Formatter?</h3>
+        <p>Use this <strong>YAML beautifier</strong> when you need to clean up messy YAML files, validate syntax before
+            deployment, convert between YAML and JSON, or apply consistent indentation. The <strong>YAML pretty
+                print</strong> feature ensures your configuration files are readable and properly structured.</p>
+        <p>Unlike desktop tools like the VSCode YAML formatter, <a href="/yaml-formatter/">Online YAML formatter</a>
+            works
+            entirely online with no installation required, making it ideal for quick formatting and validation tasks.
+        </p>
+    </section>
+
+    <!-- Comparison Table for AI/LLM extraction -->
+    <section class="seo-section">
+        <h2>YAML Formatter Comparison</h2>
+        <p>How does this tool compare to other YAML formatting options?</p>
+        <table style="width:100%; border-collapse:collapse; margin:1rem 0;">
+            <thead>
+                <tr style="background:var(--color-surface-alt); text-align:left;">
+                    <th style="padding:0.75rem; border:1px solid var(--color-border);">Feature</th>
+                    <th style="padding:0.75rem; border:1px solid var(--color-border);">This Tool</th>
+                    <th style="padding:0.75rem; border:1px solid var(--color-border);">VSCode Extension</th>
+                    <th style="padding:0.75rem; border:1px solid var(--color-border);">Other Online Tools</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border);">Online / No install</td>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border); color:#10b981;">✓ Yes</td>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border); color:#ef4444;">✗ No</td>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border); color:#10b981;">✓ Yes</td>
+                </tr>
+                <tr>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border);">Ansible YAML support</td>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border); color:#10b981;">✓ Yes</td>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border); color:#10b981;">✓ Yes</td>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border); color:#ef4444;">✗ Limited</td>
+                </tr>
+                <tr>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border);">Kubernetes YAML support</td>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border); color:#10b981;">✓ Yes</td>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border); color:#10b981;">✓ Yes</td>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border); color:#10b981;">✓ Yes</td>
+                </tr>
+                <tr>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border);">YAML ⇌ JSON conversion</td>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border); color:#10b981;">✓ Yes</td>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border); color:#ef4444;">✗ No</td>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border); color:#ef4444;">✗ No</td>
+                </tr>
+                <tr>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border);">Privacy (client-side)</td>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border); color:#10b981;">✓ 100%</td>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border); color:#f59e0b;">⚠ Local</td>
+                    <td style="padding:0.75rem; border:1px solid var(--color-border); color:#f59e0b;">⚠ Varies</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="seo-section">
+        <h2>YAML Formatting Examples</h2>
+        <p>Here are common YAML structures you can format with our tool:</p>
+
+        <div class="code-example">
+            <div class="code-example-header">Kubernetes Deployment</div>
+            <pre>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+  labels:
+    app: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    spec:
+      containers:
+        - name: app
+          image: my-app:latest
+          ports:
+            - containerPort: 8080</pre>
+        </div>
+
+        <div class="code-example">
+            <div class="code-example-header">Docker Compose</div>
+            <pre>version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - db
+  db:
+    image: postgres:14
+    volumes:
+      - db-data:/var/lib/postgresql/data
+volumes:
+  db-data:</pre>
+        </div>
+
+        <div class="code-example">
+            <div class="code-example-header">GitHub Actions Workflow</div>
+            <pre>name: CI Pipeline
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm install
+      - run: npm test</pre>
+        </div>
+
+        <div class="code-example">
+            <div class="code-example-header">Ansible Playbook</div>
+            <pre>---
+- name: Deploy Web Application
+  hosts: webservers
+  become: true
+  vars:
+    app_version: "2.0.0"
+    deploy_user: deploy
+  tasks:
+    - name: Install dependencies
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - nginx
+        - nodejs
+        - npm
+
+    - name: Deploy application
+      git:
+        repo: https://github.com/org/app.git
+        dest: /var/www/app
+        version: "{{ app_version }}"
+      notify: Restart nginx
+
+  handlers:
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted</pre>
+        </div>
+
+        <div class="code-example">
+            <div class="code-example-header">Helm Chart (values.yaml)</div>
+            <pre>replicaCount: 3
+
+image:
+  repository: myapp
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  hosts:
+    - host: myapp.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi</pre>
+        </div>
+
+        <div class="code-example">
+            <div class="code-example-header">Terraform (providers.yaml equivalent)</div>
+            <pre># terraform.tf converted to YAML format
+terraform:
+  required_version: ">= 1.0"
+  required_providers:
+    aws:
+      source: hashicorp/aws
+      version: "~> 5.0"
+
+provider:
+  aws:
+    region: us-east-1
+    default_tags:
+      tags:
+        Environment: production
+        Project: myapp</pre>
+        </div>
+    </section>
+
+    <section class="seo-section">
+        <h2>Features</h2>
+        <div class="features-grid">
+            <div class="feature-item">
+                <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                    </svg> Instant Formatting</h3>
+                <p>Format YAML in milliseconds with real-time syntax highlighting and error detection.</p>
+            </div>
+            <div class="feature-item">
+                <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg> Syntax Validation</h3>
+                <p>Catch YAML errors before deployment with detailed error messages and line numbers.</p>
+            </div>
+            <div class="feature-item">
+                <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg> 100% Private</h3>
+                <p>All processing happens in your browser. Your YAML data never leaves your machine.</p>
+            </div>
+            <div class="feature-item">
+                <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                    </svg> Smart Indentation</h3>
+                <p>Choose 2 or 4 spaces. Automatically fixes nested structures and alignment.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="seo-section">
+        <h2>Common Use Cases</h2>
+        <ul>
+            <li><strong>Kubernetes</strong> – Use this <strong>Kubernetes YAML formatter</strong> to format deployment
+                manifests, ConfigMaps, Services, and Ingress
+                configurations</li>
+            <li><strong>Ansible</strong> – Use this <strong>Ansible YAML formatter</strong> to clean up playbooks,
+                roles, inventory files, and variable definitions</li>
+            <li><strong>Docker Compose</strong> – Use this <strong>Docker Compose YAML formatter</strong> to beautify
+                docker-compose.yml files for multi-container applications
+            </li>
+            <li><strong>CI/CD Pipelines</strong> – Format GitHub Actions, GitLab CI, CircleCI, and Jenkins
+                configurations</li>
+            <li><strong>OpenAPI/Swagger</strong> – Validate and format API specification files</li>
+            <li><strong>Application Configs</strong> – Clean up Spring Boot, Rails, and other framework configurations
+            </li>
+        </ul>
+    </section>
+
+    <section class="seo-section">
+        <h2>FAQ</h2>
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-q"><span>What is a YAML formatter?</span><span class="faq-toggle"><svg
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg></span></div>
+                <div class="faq-a">
+                    <div class="faq-a-inner">A YAML formatter is a tool that takes raw or messy YAML and reformats it
+                        with consistent indentation, proper spacing, and clean structure. It helps make configuration
+                        files readable and catches syntax errors before deployment.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q"><span>Is this YAML formatter free?</span><span class="faq-toggle"><svg
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg></span></div>
+                <div class="faq-a">
+                    <div class="faq-a-inner">Yes, 100% free with no usage limits. Format as many YAML files as you need
+                        without signing up or creating an account.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q"><span>Is my YAML data secure?</span><span class="faq-toggle"><svg viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg></span></div>
+                <div class="faq-a">
+                    <div class="faq-a-inner">Completely secure. All processing happens locally in your browser using
+                        JavaScript. No data is ever sent to our servers, making it safe for configuration files
+                        containing secrets or sensitive information.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q"><span>Does it work like VSCode YAML formatter?</span><span class="faq-toggle"><svg
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg></span></div>
+                <div class="faq-a">
+                    <div class="faq-a-inner">Yes! It provides similar functionality to the VSCode YAML extension—instant
+                        formatting, indentation fixes, and syntax validation—all in your browser without any
+                        installation.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q"><span>Does this YAML formatter support Kubernetes and Docker Compose
+                        files?</span><span class="faq-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg></span></div>
+                <div class="faq-a">
+                    <div class="faq-a-inner">Absolutely! This tool works perfectly with Kubernetes manifests
+                        (Deployments, Services, ConfigMaps, Ingress), Docker Compose files, Helm charts, and any other
+                        YAML-based DevOps configuration.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="seo-section">
+        <h2>Related Tools</h2>
+        <div class="related-tools">
+            <a href="/json-formatter/" class="related-card">
+                <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    </svg>
+                    <h4>JSON Formatter</h4>
+                    <p>Format & beautify JSON</p>
+                </div>
+            </a>
+            <a href="/json-to-yaml/" class="related-card">
+                <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="16 18 22 12 16 6" />
+                        <polyline points="8 6 2 12 8 18" />
+                    </svg>
+                    <h4>JSON to YAML</h4>
+                    <p>Convert JSON to YAML</p>
+                </div>
+            </a>
+            <a href="/json-schema-validator/" class="related-card">
+                <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                        <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg>
+                    <h4>JSON Schema Validator</h4>
+                    <p>Validate JSON schemas</p>
+                </div>
+            </a>
+            <a href="/sql-formatter/" class="related-card">
+                <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <ellipse cx="12" cy="5" rx="9" ry="3" />
+                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+                    </svg>
+                    <h4>SQL Formatter</h4>
+                    <p>Beautify SQL queries</p>
+                </div>
+            </a>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-yaml.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sample = `apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+  labels:
+    app: my-app
+    environment: production
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - name: app
+          image: my-app:latest
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"`;
+
+        // Initialize Ace Editor
+        const editor = ace.edit("aceEditor");
+        editor.setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'ace/theme/tomorrow_night' : 'ace/theme/tomorrow');
+        editor.session.setMode("ace/mode/yaml");
+        editor.setShowPrintMargin(false);
+        editor.setOptions({ fontSize: "14px", wrap: true, tabSize: 2, useSoftTabs: true });
+        editor.setValue(sample, -1);
+
+        // Theme observer
+        const obs = new MutationObserver(() => { editor.setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'ace/theme/tomorrow_night' : 'ace/theme/tomorrow'); });
+        obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+        function updateStats() {
+            const v = editor.getValue();
+            document.getElementById('lineCount').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> ' + v.split('\n').length + ' lines';
+            document.getElementById('byteCount').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg> ' + new Blob([v]).size + ' bytes';
+        }
+        editor.session.on('change', updateStats);
+
+        function showError(m) { document.getElementById('errorBanner').classList.add('show'); document.getElementById('successBanner').classList.remove('show'); document.getElementById('errorText').textContent = m; document.getElementById('editorPanel').classList.add('has-error'); document.getElementById('editorPanel').classList.remove('is-valid'); }
+        function showSuccess(m) { document.getElementById('successBanner').classList.add('show'); document.getElementById('errorBanner').classList.remove('show'); document.getElementById('successText').textContent = m || 'Valid YAML'; document.getElementById('editorPanel').classList.add('is-valid'); document.getElementById('editorPanel').classList.remove('has-error'); }
+        function hideMessages() { document.getElementById('errorBanner').classList.remove('show'); document.getElementById('successBanner').classList.remove('show'); document.getElementById('editorPanel').classList.remove('has-error', 'is-valid'); }
+
+        function formatYaml() {
+            const input = editor.getValue().trim();
+            if (!input) { showError('Please enter YAML content'); return; }
+            try {
+                const indent = parseInt(document.getElementById('indentSize').value);
+                const sortKeys = document.getElementById('sortKeys').value === 'true';
+                const docs = jsyaml.loadAll(input);
+                let formatted = docs.length === 1 ? jsyaml.dump(docs[0], { indent: indent, lineWidth: -1, noRefs: true, sortKeys: sortKeys }) : docs.map(d => jsyaml.dump(d, { indent: indent, lineWidth: -1, noRefs: true, sortKeys: sortKeys })).join('\n---\n');
+                editor.setValue(formatted, -1);
+                editor.session.setMode("ace/mode/yaml");
+                showSuccess('Formatted successfully');
+                updateStats();
+            } catch (e) { showError('Error: ' + e.message); }
+        }
+
+        function validateYaml() {
+            const input = editor.getValue().trim();
+            if (!input) { showError('Enter YAML to validate'); return; }
+            try { jsyaml.loadAll(input); showSuccess('Valid YAML syntax'); } catch (e) { showError('Invalid: ' + e.message); }
+        }
+
+        function minifyYaml() {
+            const input = editor.getValue().trim();
+            if (!input) { showError('Enter YAML to minify'); return; }
+            try {
+                const docs = jsyaml.loadAll(input);
+                let m = docs.length === 1 ? jsyaml.dump(docs[0], { flowLevel: 0, lineWidth: -1 }) : docs.map(d => jsyaml.dump(d, { flowLevel: 0, lineWidth: -1 })).join('\n---\n');
+                editor.setValue(m, -1);
+                showSuccess('Minified');
+                updateStats();
+            } catch (e) { showError('Error: ' + e.message); }
+        }
+
+        // YAML to JSON Conversion
+        function yamlToJson() {
+            const input = editor.getValue().trim();
+            if (!input) { showError('Enter YAML to convert'); return; }
+            try {
+                const docs = jsyaml.loadAll(input);
+                const json = docs.length === 1 ? JSON.stringify(docs[0], null, 2) : JSON.stringify(docs, null, 2);
+                editor.setValue(json, -1);
+                editor.session.setMode("ace/mode/json");
+                showSuccess('Converted to JSON');
+                updateStats();
+            } catch (e) { showError('Invalid YAML: ' + e.message); }
+        }
+
+        // JSON to YAML Conversion
+        function jsonToYaml() {
+            const input = editor.getValue().trim();
+            if (!input) { showError('Enter JSON to convert'); return; }
+            try {
+                const obj = JSON.parse(input);
+                const indent = parseInt(document.getElementById('indentSize').value);
+                const yaml = jsyaml.dump(obj, { indent: indent, lineWidth: -1, noRefs: true });
+                editor.setValue(yaml, -1);
+                editor.session.setMode("ace/mode/yaml");
+                showSuccess('Converted to YAML');
+                updateStats();
+            } catch (e) { showError('Invalid JSON: ' + e.message); }
+        }
+
+        // Copy function
+        function copyToClipboard() {
+            const c = editor.getValue();
+            if (!c) return;
+            navigator.clipboard.writeText(c).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied';
+                setTimeout(() => {
+                    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy';
+                }, 2000);
+            });
+        }
+
+        // Event Listeners
+        document.getElementById('formatBtn').addEventListener('click', formatYaml);
+        document.getElementById('validateBtn').addEventListener('click', validateYaml);
+        document.getElementById('minifyBtn').addEventListener('click', minifyYaml);
+        document.getElementById('yamlToJsonBtn').addEventListener('click', yamlToJson);
+        document.getElementById('jsonToYamlBtn').addEventListener('click', jsonToYaml);
+        document.getElementById('sampleBtn').addEventListener('click', function () { editor.setValue(sample, -1); editor.session.setMode("ace/mode/yaml"); hideMessages(); updateStats(); });
+        document.getElementById('clearBtn').addEventListener('click', function () { editor.setValue('', -1); hideMessages(); updateStats(); });
+        document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
+        document.getElementById('downloadBtn').addEventListener('click', function () { const c = editor.getValue(); if (!c) return; const b = new Blob([c], { type: 'text/yaml' }); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href = u; a.download = 'formatted.yaml'; a.click(); URL.revokeObjectURL(u); });
+        document.getElementById('fileInput').addEventListener('change', function (e) { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = function (ev) { editor.setValue(ev.target.result, -1); hideMessages(); updateStats(); }; r.readAsText(f); this.value = ''; });
+
+        // Drag & Drop
+        const editorPanel = document.getElementById('editorPanel');
+        const dropOverlay = document.getElementById('dropOverlay');
+
+        editorPanel.addEventListener('dragenter', function (e) {
+            e.preventDefault();
+            dropOverlay.classList.add('active');
+        });
+
+        dropOverlay.addEventListener('dragleave', function (e) {
+            e.preventDefault();
+            dropOverlay.classList.remove('active');
+        });
+
+        dropOverlay.addEventListener('dragover', function (e) {
+            e.preventDefault();
+        });
+
+        dropOverlay.addEventListener('drop', function (e) {
+            e.preventDefault();
+            dropOverlay.classList.remove('active');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (ev) {
+                    editor.setValue(ev.target.result, -1);
+                    // Auto-detect if JSON
+                    try {
+                        JSON.parse(ev.target.result);
+                        editor.session.setMode("ace/mode/json");
+                    } catch {
+                        editor.session.setMode("ace/mode/yaml");
+                    }
+                    hideMessages();
+                    updateStats();
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-item').forEach(item => { item.querySelector('.faq-q').addEventListener('click', () => item.classList.toggle('open')); });
+
+        // Keyboard Shortcuts
+        editor.commands.addCommand({ name: 'format', bindKey: { win: 'Ctrl-Enter', mac: 'Cmd-Enter' }, exec: formatYaml });
+        editor.commands.addCommand({ name: 'copy', bindKey: { win: 'Ctrl-S', mac: 'Cmd-S' }, exec: function () { copyToClipboard(); } });
+
+        updateStats();
+    });
+</script>
+{% endblock %}

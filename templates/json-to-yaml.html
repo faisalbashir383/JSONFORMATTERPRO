@@ -382,8 +382,8 @@ converter free, json to yaml python, kubernetes json to yaml, docker json to yam
 
     /* Content Sections */
     .content-section {
-<!--        max-width: 900px;-->
-        margin: 0 auto 4rem;
+        < !-- max-width: 900px;
+        -->margin: 0 auto 4rem;
         color: var(--color-text);
     }
 
@@ -673,7 +673,8 @@ converter free, json to yaml python, kubernetes json to yaml, docker json to yam
         <ul>
             <li><strong>Web APIs:</strong> Sending data between a server and a client (browser or mobile app).</li>
             <li><strong>Configuration:</strong> Storing settings for web applications (e.g., <code>package.json</code>,
-                <code>tsconfig.json</code>).</li>
+                <code>tsconfig.json</code>).
+            </li>
             <li><strong>Data Storage:</strong> NoSQL databases like MongoDB use JSON-like documents (BSON) to store
                 records.</li>
         </ul>
@@ -880,6 +881,14 @@ spec:
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Related Tools -->
+    <div class="content-block">
+        <h2>Related Tools</h2>
+        <p>Need to format your YAML output? Try our <a href="/yaml-formatter/"
+                style="color: var(--color-primary); font-weight: 600;">YAML Formatter</a> to beautify, validate, and fix
+            indentation in YAML files. Works with Kubernetes, Ansible, and Docker Compose configurations.</p>
     </div>
 </div>
 {% endblock %}

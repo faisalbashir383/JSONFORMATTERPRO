@@ -132,14 +132,15 @@ signup.{% endblock %}
   .content-section {
     color: var(--color-text);
   }
+
   .page-h1 {
-  font-size: 1rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 0.25rem;
-}
+    font-size: 1rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.25rem;
+  }
 
   /* Responsive margin for editor panel */
   @media (max-width: 768px) {
@@ -1647,83 +1648,88 @@ signup.{% endblock %}
 </div>
 
 <section class="documentation-content" style="margin:2rem auto;">
-    <article class="documentation-content" style="margin: 0 auto 3rem; padding: 0 1rem;">
+  <article class="documentation-content" style="margin: 0 auto 3rem; padding: 0 1rem;">
 
-  <!-- Main Title & Description -->
-  <section class="doc-section" style="margin-bottom: 2.5rem;">
-    <h2
-      style="font-size: 1.5rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem; border-bottom: 2px solid var(--color-border); padding-bottom: 0.75rem;">
-      JSON Formatter with Validator & AI Repair
-    </h2>
-    <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-bottom: 1rem;">
-      The JSON Formatter transforms messy JSON into clean, readable output with consistent indentation. You can also
-      minify JSON to reduce size, validate syntax to catch errors, or use AI to auto-fix invalid JSON. This tool is
-      ideal for debugging APIs, preparing config files, reviewing log output, and sharing examples. Everything runs in
-      the browser, so your JSON never leaves your device.
-    </p>
-    <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary);">
-      Formatting JSON is more than just indentation. It helps you spot errors faster, improves code reviews, and makes
-      JSON easy to scan. Validating catches syntax issues before they break your application. Minifying removes
-      whitespace for faster transfers in production. With this tool, you can switch between all modes in seconds.
-    </p>
-  </section>
+    <!-- Main Title & Description -->
+    <section class="doc-section" style="margin-bottom: 2.5rem;">
+      <h2
+        style="font-size: 1.5rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem; border-bottom: 2px solid var(--color-border); padding-bottom: 0.75rem;">
+        JSON Formatter with Validator & AI Repair
+      </h2>
+      <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-bottom: 1rem;">
+        The JSON Formatter transforms messy JSON into clean, readable output with consistent indentation. You can also
+        minify JSON to reduce size, validate syntax to catch errors, or use AI to auto-fix invalid JSON. This tool is
+        ideal for debugging APIs, preparing config files, reviewing log output, and sharing examples. Everything runs in
+        the browser, so your JSON never leaves your device.
+      </p>
+      <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary);">
+        Formatting JSON is more than just indentation. It helps you spot errors faster, improves code reviews, and makes
+        JSON easy to scan. Validating catches syntax issues before they break your application. Minifying removes
+        whitespace for faster transfers in production. With this tool, you can switch between all modes in seconds.
+      </p>
+    </section>
 
-  <!-- What this JSON Formatter Can Do -->
-  <section class="doc-section" style="margin-bottom: 2.5rem;">
-    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">What this JSON
-      formatter can do</h3>
-    <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
-      <li><strong style="color: var(--color-text);">Pretty print:</strong> Add line breaks and indentation for
-        readability.</li>
-      <li><strong style="color: var(--color-text);">Validate:</strong> Check JSON syntax and highlight errors with line
-        numbers.</li>
-      <li><strong style="color: var(--color-text);">Minify:</strong> Remove whitespace to reduce file size and improve
-        transfer speed.</li>
-      <li><strong style="color: var(--color-text);">Fix trailing commas:</strong> Automatically remove trailing commas
-        that break JSON parsing.</li>
-      <li><strong style="color: var(--color-text);">AI Smart Fix:</strong> Repair invalid JSON including single quotes,
-        Python booleans, and missing quotes.</li>
-      <li><strong style="color: var(--color-text);">Generate with AI:</strong> Create JSON data from a text description
-        (e.g., "100 users with name and email").</li>
-      <li><strong style="color: var(--color-text);">Copy/download:</strong> Export the formatted JSON instantly as a
-        file or to clipboard.</li>
-      <li><strong style="color: var(--color-text);">History:</strong> Access your recent JSON edits from the browser's
-        local storage.</li>
-    </ul>
-  </section>
+    <!-- What this JSON Formatter Can Do -->
+    <section class="doc-section" style="margin-bottom: 2.5rem;">
+      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">What this JSON
+        formatter can do</h3>
+      <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
+        <li><strong style="color: var(--color-text);">Pretty print:</strong> Add line breaks and indentation for
+          readability.</li>
+        <li><strong style="color: var(--color-text);">Validate:</strong> Check JSON syntax and highlight errors with
+          line
+          numbers.</li>
+        <li><strong style="color: var(--color-text);">Minify:</strong> Remove whitespace to reduce file size and improve
+          transfer speed.</li>
+        <li><strong style="color: var(--color-text);">Fix trailing commas:</strong> Automatically remove trailing commas
+          that break JSON parsing.</li>
+        <li><strong style="color: var(--color-text);">AI Smart Fix:</strong> Repair invalid JSON including single
+          quotes,
+          Python booleans, and missing quotes.</li>
+        <li><strong style="color: var(--color-text);">Generate with AI:</strong> Create JSON data from a text
+          description
+          (e.g., "100 users with name and email").</li>
+        <li><strong style="color: var(--color-text);">Copy/download:</strong> Export the formatted JSON instantly as a
+          file or to clipboard.</li>
+        <li><strong style="color: var(--color-text);">History:</strong> Access your recent JSON edits from the browser's
+          local storage.</li>
+      </ul>
+    </section>
 
-  <!-- How to Use the Formatter -->
-  <section class="doc-section" style="margin-bottom: 2.5rem;">
-    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">How to use the
-      formatter</h3>
-    <ol style="list-style: decimal; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
-      <li>Paste JSON into the editor above, or drag & drop a <code
-          style="background: var(--color-surface-alt); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace;">.json</code>
-        file.</li>
-      <li>Click <strong style="color: var(--color-text);">Format</strong> to beautify, <strong
-          style="color: var(--color-text);">Validate</strong> to check syntax, or <strong
-          style="color: var(--color-text);">Minify</strong> to compress.</li>
-      <li>Enable the <strong style="color: var(--color-text);">Fix Trailing Commas</strong> toggle if your JSON has
-        trailing commas.</li>
-      <li>If JSON is invalid, click <strong style="color: var(--color-text);">Smart Fix</strong> to auto-repair with AI.
-      </li>
-      <li>Copy or download the output from the editor.</li>
-    </ol>
-  </section>
+    <!-- How to Use the Formatter -->
+    <section class="doc-section" style="margin-bottom: 2.5rem;">
+      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">How to use the
+        formatter</h3>
+      <ol style="list-style: decimal; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
+        <li>Paste JSON into the editor above, or drag & drop a <code
+            style="background: var(--color-surface-alt); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace;">.json</code>
+          file.</li>
+        <li>Click <strong style="color: var(--color-text);">Format</strong> to beautify, <strong
+            style="color: var(--color-text);">Validate</strong> to check syntax, or <strong
+            style="color: var(--color-text);">Minify</strong> to compress.</li>
+        <li>Enable the <strong style="color: var(--color-text);">Fix Trailing Commas</strong> toggle if your JSON has
+          trailing commas.</li>
+        <li>If JSON is invalid, click <strong style="color: var(--color-text);">Smart Fix</strong> to auto-repair with
+          AI.
+        </li>
+        <li>Copy or download the output from the editor.</li>
+      </ol>
+    </section>
 
-  <!-- Example: Format and Minify -->
-  <section class="doc-section" style="margin-bottom: 2.5rem;">
-    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Example: format and
-      minify</h3>
+    <!-- Example: Format and Minify -->
+    <section class="doc-section" style="margin-bottom: 2.5rem;">
+      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Example: format
+        and
+        minify</h3>
 
-    <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Input JSON:</p>
-    <pre
-      style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text); margin-bottom: 1.25rem;"><code>{"name":"Avi","roles":["editor","admin"],"meta":{"active":true,"score":9}}</code></pre>
+      <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Input JSON:</p>
+      <pre
+        style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text); margin-bottom: 1.25rem;"><code>{"name":"Avi","roles":["editor","admin"],"meta":{"active":true,"score":9}}</code></pre>
 
-    <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Formatted output (2
-      spaces):</p>
-    <pre
-      style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text); margin-bottom: 1.25rem;"><code>{
+      <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Formatted output (2
+        spaces):</p>
+      <pre
+        style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text); margin-bottom: 1.25rem;"><code>{
   "name": "Avi",
   "roles": [
     "editor",
@@ -1735,155 +1741,161 @@ signup.{% endblock %}
   }
 }</code></pre>
 
-    <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Minified output:</p>
-    <pre
-      style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text);"><code>{"name":"Avi","roles":["editor","admin"],"meta":{"active":true,"score":9}}</code></pre>
-  </section>
+      <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Minified output:</p>
+      <pre
+        style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text);"><code>{"name":"Avi","roles":["editor","admin"],"meta":{"active":true,"score":9}}</code></pre>
+    </section>
 
-  <!-- Example: AI Smart Fix -->
-  <section class="doc-section" style="margin-bottom: 2.5rem;">
-    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Example: AI Smart
-      Fix for invalid JSON</h3>
+    <!-- Example: AI Smart Fix -->
+    <section class="doc-section" style="margin-bottom: 2.5rem;">
+      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Example: AI Smart
+        Fix for invalid JSON</h3>
 
-    <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Input (invalid - single
-      quotes & trailing comma):</p>
-    <pre
-      style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text); margin-bottom: 1.25rem;"><code>{'name': 'Avi', 'active': True,}</code></pre>
+      <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Input (invalid - single
+        quotes & trailing comma):</p>
+      <pre
+        style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text); margin-bottom: 1.25rem;"><code>{'name': 'Avi', 'active': True,}</code></pre>
 
-    <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">After AI Smart Fix:</p>
-    <pre
-      style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text);"><code>{
+      <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">After AI Smart Fix:</p>
+      <pre
+        style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text);"><code>{
   "name": "Avi",
   "active": true
 }</code></pre>
-  </section>
+    </section>
 
-  <!-- Common Errors and Fixes -->
-  <section class="doc-section" style="margin-bottom: 2.5rem;">
-    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Common errors and
-      fixes</h3>
-    <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
-      <li><strong style="color: var(--color-text);">Error:</strong> <em>Unexpected token</em> during formatting. <strong
-          style="color: var(--color-text);">Cause:</strong> Invalid JSON syntax such as trailing commas or single
-        quotes. <strong style="color: var(--color-text);">Fix:</strong> Enable "Fix Trailing Commas" or use AI Smart
-        Fix.</li>
-      <li><strong style="color: var(--color-text);">Error:</strong> Output is empty after formatting. <strong
-          style="color: var(--color-text);">Cause:</strong> The input is blank or whitespace only. <strong
-          style="color: var(--color-text);">Fix:</strong> Paste valid JSON before formatting.</li>
-      <li><strong style="color: var(--color-text);">Error:</strong> Minify doesn't change output. <strong
-          style="color: var(--color-text);">Cause:</strong> The JSON is already minified. <strong
-          style="color: var(--color-text);">Fix:</strong> This is expected; try Format instead.</li>
-      <li><strong style="color: var(--color-text);">Error:</strong> Validation fails with no visible error. <strong
-          style="color: var(--color-text);">Cause:</strong> Hidden characters like BOM or special whitespace. <strong
-          style="color: var(--color-text);">Fix:</strong> Clear and re-paste the JSON.</li>
-    </ul>
-  </section>
+    <!-- Common Errors and Fixes -->
+    <section class="doc-section" style="margin-bottom: 2.5rem;">
+      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Common errors and
+        fixes</h3>
+      <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
+        <li><strong style="color: var(--color-text);">Error:</strong> <em>Unexpected token</em> during formatting.
+          <strong style="color: var(--color-text);">Cause:</strong> Invalid JSON syntax such as trailing commas or
+          single
+          quotes. <strong style="color: var(--color-text);">Fix:</strong> Enable "Fix Trailing Commas" or use AI Smart
+          Fix.</li>
+        <li><strong style="color: var(--color-text);">Error:</strong> Output is empty after formatting. <strong
+            style="color: var(--color-text);">Cause:</strong> The input is blank or whitespace only. <strong
+            style="color: var(--color-text);">Fix:</strong> Paste valid JSON before formatting.</li>
+        <li><strong style="color: var(--color-text);">Error:</strong> Minify doesn't change output. <strong
+            style="color: var(--color-text);">Cause:</strong> The JSON is already minified. <strong
+            style="color: var(--color-text);">Fix:</strong> This is expected; try Format instead.</li>
+        <li><strong style="color: var(--color-text);">Error:</strong> Validation fails with no visible error. <strong
+            style="color: var(--color-text);">Cause:</strong> Hidden characters like BOM or special whitespace. <strong
+            style="color: var(--color-text);">Fix:</strong> Clear and re-paste the JSON.</li>
+      </ul>
+    </section>
 
-  <!-- Tips for Cleaner JSON -->
-  <section class="doc-section" style="margin-bottom: 2.5rem;">
-    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Tips for cleaner
-      JSON</h3>
-    <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
-      <li>Use formatting during development and minify before shipping to production.</li>
-      <li>Always validate JSON before sending to APIs to catch errors early.</li>
-      <li>Pair this tool with <a href="/json-schema-generator/"
-          style="color: var(--color-primary); text-decoration: none;">JSON Schema Validator</a> to ensure structure as
-        well as readability.</li>
-      <li>Save reusable examples by downloading formatted output as a <code
-          style="background: var(--color-surface-alt); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace;">.json</code>
-        file.</li>
-      <li>Use the History feature to quickly access recent JSON you've worked with.</li>
-    </ul>
-  </section>
+    <!-- Tips for Cleaner JSON -->
+    <section class="doc-section" style="margin-bottom: 2.5rem;">
+      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Tips for cleaner
+        JSON</h3>
+      <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
+        <li>Use formatting during development and minify before shipping to production.</li>
+        <li>Always validate JSON before sending to APIs to catch errors early.</li>
+        <li>Pair this tool with <a href="/json-schema-generator/"
+            style="color: var(--color-primary); text-decoration: none;">JSON Schema Validator</a> to ensure structure as
+          well as readability.</li>
+        <li>Save reusable examples by downloading formatted output as a <code
+            style="background: var(--color-surface-alt); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace;">.json</code>
+          file.</li>
+        <li>Use the History feature to quickly access recent JSON you've worked with.</li>
+      </ul>
+    </section>
 
-  <!-- Where Formatting Helps the Most -->
-  <section class="doc-section" style="margin-bottom: 2.5rem;">
-    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Where formatting
-      helps the most</h3>
+    <!-- Where Formatting Helps the Most -->
+    <section class="doc-section" style="margin-bottom: 2.5rem;">
+      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Where formatting
+        helps the most</h3>
 
-    <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-bottom: 1rem;">
-      <strong style="color: var(--color-text);">API debugging:</strong> When API responses are large, formatting makes
-      it easy to scan nested objects and spot missing fields. Pair it with <a href="/json-path-tester/"
-        style="color: var(--color-primary); text-decoration: none;">JSONPath queries</a> to extract specific values
-      quickly.
-    </p>
-    <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-bottom: 1rem;">
-      <strong style="color: var(--color-text);">Code review:</strong> Formatted JSON is easier to diff and review.
-      Teammates can focus on logic changes instead of hunting for structure issues.
-    </p>
-    <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary);">
-      <strong style="color: var(--color-text);">Configuration management:</strong> Formatting ensures config files are
-      readable and consistent across environments.
-    </p>
-  </section>
+      <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-bottom: 1rem;">
+        <strong style="color: var(--color-text);">API debugging:</strong> When API responses are large, formatting makes
+        it easy to scan nested objects and spot missing fields. Pair it with <a href="/json-path-tester/"
+          style="color: var(--color-primary); text-decoration: none;">JSONPath queries</a> to extract specific values
+        quickly.
+      </p>
+      <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-bottom: 1rem;">
+        <strong style="color: var(--color-text);">Code review:</strong> Formatted JSON is easier to diff and review.
+        Teammates can focus on logic changes instead of hunting for structure issues.
+      </p>
+      <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary);">
+        <strong style="color: var(--color-text);">Configuration management:</strong> Formatting ensures config files are
+        readable and consistent across environments.
+      </p>
+    </section>
 
-  <!-- Common Formatting Mistakes -->
-  <section class="doc-section" style="margin-bottom: 2.5rem;">
-    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Common formatting
-      mistakes</h3>
-    <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
-      <li>Using single quotes instead of double quotes around strings.</li>
-      <li>Leaving trailing commas in arrays or objects.</li>
-      <li>Forgetting to escape control characters in strings.</li>
-      <li>Assuming JSON allows comments (it does not).</li>
-      <li>Pasting JavaScript objects that are not valid JSON.</li>
-    </ul>
-    <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-top: 1rem;">
-      If your input looks like a JavaScript object (with single quotes or trailing commas), use the <strong
-        style="color: var(--color-text);">AI Smart Fix</strong> button to convert it to valid JSON first. This formatter
-      only accepts strict JSON, which improves reliability when using the output in APIs and config files.
-    </p>
-  </section>
+    <!-- Common Formatting Mistakes -->
+    <section class="doc-section" style="margin-bottom: 2.5rem;">
+      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Common formatting
+        mistakes</h3>
+      <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
+        <li>Using single quotes instead of double quotes around strings.</li>
+        <li>Leaving trailing commas in arrays or objects.</li>
+        <li>Forgetting to escape control characters in strings.</li>
+        <li>Assuming JSON allows comments (it does not).</li>
+        <li>Pasting JavaScript objects that are not valid JSON.</li>
+      </ul>
+      <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-top: 1rem;">
+        If your input looks like a JavaScript object (with single quotes or trailing commas), use the <strong
+          style="color: var(--color-text);">AI Smart Fix</strong> button to convert it to valid JSON first. This
+        formatter
+        only accepts strict JSON, which improves reliability when using the output in APIs and config files.
+      </p>
+    </section>
 
-  <!-- Quick FAQs -->
-  <section class="doc-section" style="margin-bottom: 2.5rem;">
-    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1.25rem;">FAQs</h3>
+    <!-- Quick FAQs -->
+    <section class="doc-section" style="margin-bottom: 2.5rem;">
+      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1.25rem;">FAQs</h3>
 
-    <div style="margin-bottom: 1.25rem;">
-      <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">Does formatting
-        change the meaning of JSON?</h4>
-      <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">No. Formatting only changes
-        whitespace; it does not alter values or structure.</p>
-    </div>
+      <div style="margin-bottom: 1.25rem;">
+        <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">Does formatting
+          change the meaning of JSON?</h4>
+        <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">No. Formatting only changes
+          whitespace; it does not alter values or structure.</p>
+      </div>
 
-    <div style="margin-bottom: 1.25rem;">
-      <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">When should I use
-        minify?</h4>
-      <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">Use minify for production
-        APIs or when you need the smallest possible payload.</p>
-    </div>
+      <div style="margin-bottom: 1.25rem;">
+        <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">When should I
+          use
+          minify?</h4>
+        <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">Use minify for production
+          APIs or when you need the smallest possible payload.</p>
+      </div>
 
-    <div style="margin-bottom: 1.25rem;">
-      <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">What does the
-        Validate button do?</h4>
-      <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">It checks JSON syntax and
-        shows errors with line numbers so you can fix them quickly.</p>
-    </div>
+      <div style="margin-bottom: 1.25rem;">
+        <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">What does the
+          Validate button do?</h4>
+        <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">It checks JSON syntax and
+          shows errors with line numbers so you can fix them quickly.</p>
+      </div>
 
-    <div style="margin-bottom: 1.25rem;">
-      <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">Can I format very
-        large JSON?</h4>
-      <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">Yes. The tool uses the Monaco
-        Editor engine (same as VS Code) which handles large files efficiently.</p>
-    </div>
+      <div style="margin-bottom: 1.25rem;">
+        <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">Can I format
+          very
+          large JSON?</h4>
+        <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">Yes. The tool uses the
+          Monaco
+          Editor engine (same as VS Code) which handles large files efficiently.</p>
+      </div>
 
-    <div style="margin-bottom: 1.25rem;">
-      <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">Is my JSON
-        uploaded anywhere?</h4>
-      <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">No. Formatting and validation
-        happen locally in your browser. Your data never leaves your device.</p>
-    </div>
+      <div style="margin-bottom: 1.25rem;">
+        <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">Is my JSON
+          uploaded anywhere?</h4>
+        <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">No. Formatting and
+          validation
+          happen locally in your browser. Your data never leaves your device.</p>
+      </div>
 
-    <div>
-      <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">Why does my JSON
-        fail formatting?</h4>
-      <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">Usually due to invalid
-        syntax. Enable "Fix Trailing Commas" or use AI Smart Fix to repair common issues like single quotes, trailing
-        commas, or Python-style booleans.</p>
-    </div>
-  </section>
+      <div>
+        <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">Why does my JSON
+          fail formatting?</h4>
+        <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">Usually due to invalid
+          syntax. Enable "Fix Trailing Commas" or use AI Smart Fix to repair common issues like single quotes, trailing
+          commas, or Python-style booleans.</p>
+      </div>
+    </section>
 
-</article>
+  </article>
 </section>
 
 <!-- Author Ownership Section -->
@@ -1953,6 +1965,14 @@ signup.{% endblock %}
         </svg></span>
       <h4>JSON Path Tester</h4>
       <p>Test JSONPath expressions and extract data</p>
+    </a>
+    <a href="/yaml-formatter/" class="tool-link-card">
+      <span class="tool-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 9h-2V9.5L9.5 12 11 14.5V13h2v3.5L14.5 14 13 11.5V11zm2 9H6V4h7v5h5v11z" />
+        </svg></span>
+      <h4>YAML Formatter</h4>
+      <p>Format, beautify & validate YAML files online</p>
     </a>
   </div>
 
