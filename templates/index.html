@@ -1773,7 +1773,8 @@ signup.{% endblock %}
           <strong style="color: var(--color-text);">Cause:</strong> Invalid JSON syntax such as trailing commas or
           single
           quotes. <strong style="color: var(--color-text);">Fix:</strong> Enable "Fix Trailing Commas" or use AI Smart
-          Fix.</li>
+          Fix.
+        </li>
         <li><strong style="color: var(--color-text);">Error:</strong> Output is empty after formatting. <strong
             style="color: var(--color-text);">Cause:</strong> The input is blank or whitespace only. <strong
             style="color: var(--color-text);">Fix:</strong> Paste valid JSON before formatting.</li>
@@ -2777,6 +2778,54 @@ signup.{% endblock %}
         if (/\bNone\b/.test(fixed)) {
           fixed = fixed.replace(/\bNone\b/g, 'null');
           changes.push('Converted Python "None" → "null"');
+        }
+
+        // Step 2b: Fix Python datetime.datetime() and datetime.date() calls
+        // datetime.datetime(2026, 1, 29, 0, 7, 59) → "2026-01-29T00:07:59.000Z"
+        // datetime.datetime(2026, 1, 29, 12, 30, 45, 123456) → "2026-01-29T12:30:45.123Z"
+        const datetimeRegex = /datetime\.datetime\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+),\s*(\d+),\s*(\d+))?(?:,\s*(\d+))?\)/g;
+        if (datetimeRegex.test(fixed)) {
+          fixed = fixed.replace(/datetime\.datetime\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+),\s*(\d+),\s*(\d+))?(?:,\s*(\d+))?\)/g,
+            (match, year, month, day, hour, minute, second, micro) => {
+              const y = year;
+              const m = String(month).padStart(2, '0');
+              const d = String(day).padStart(2, '0');
+              const h = String(hour || 0).padStart(2, '0');
+              const min = String(minute || 0).padStart(2, '0');
+              const s = String(second || 0).padStart(2, '0');
+              const ms = micro ? String(Math.floor(parseInt(micro) / 1000)).padStart(3, '0') : '000';
+              return `"${y}-${m}-${d}T${h}:${min}:${s}.${ms}Z"`;
+            });
+          changes.push('Converted Python datetime.datetime() → ISO date string');
+        }
+
+        // datetime.date(2026, 1, 29) → "2026-01-29"
+        const dateRegex = /datetime\.date\((\d+),\s*(\d+),\s*(\d+)\)/g;
+        if (dateRegex.test(fixed)) {
+          fixed = fixed.replace(/datetime\.date\((\d+),\s*(\d+),\s*(\d+)\)/g,
+            (match, year, month, day) => {
+              const y = year;
+              const m = String(month).padStart(2, '0');
+              const d = String(day).padStart(2, '0');
+              return `"${y}-${m}-${d}"`;
+            });
+          changes.push('Converted Python datetime.date() → date string');
+        }
+
+        // datetime.datetime.now() → current ISO date
+        if (/datetime\.datetime\.now\(\)/.test(fixed)) {
+          const now = new Date().toISOString();
+          fixed = fixed.replace(/datetime\.datetime\.now\(\)/g, `"${now}"`);
+          changes.push('Converted Python datetime.datetime.now() → current timestamp');
+        }
+
+        // Step 2c: Fix Python uuid() calls
+        // uuid('550e8400-e29b-41d4-a716-446655440000') → "550e8400-e29b-41d4-a716-446655440000"
+        // UUID('...') → "..."
+        const uuidRegex = /[Uu][Uu][Ii][Dd]\(['"]([^'"]+)['"]\)/g;
+        if (uuidRegex.test(fixed)) {
+          fixed = fixed.replace(/[Uu][Uu][Ii][Dd]\(['"]([^'"]+)['"]\)/g, '"$1"');
+          changes.push('Converted Python uuid()/UUID() → string');
         }
 
         // Step 3: Fix undefined → null
