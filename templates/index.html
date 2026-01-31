@@ -26,7 +26,7 @@ signup.{% endblock %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
+  "@type": "SoftwareApplication",
   "isPartOf": {
       "@id": "{{ SITE_URL }}#website"
   },
@@ -35,7 +35,6 @@ signup.{% endblock %}
   "url": "{{ SITE_URL }}",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web Browser",
-  "browserRequirements": "Requires JavaScript. Requires HTML5.",
   "softwareVersion": "2.0",
   "offers": {
     "@type": "Offer",
@@ -357,11 +356,6 @@ signup.{% endblock %}
     display: none !important;
   }
 
-  /* Legacy rule (backup) */
-  .editor-container.monaco-loaded textarea {
-    /* display: none !important; */
-    /* visibility: hidden !important; */
-  }
 
   .single-editor-panel .panel-header {
     display: flex;
@@ -1037,414 +1031,217 @@ signup.{% endblock %}
 
 
 
-<section class="documentation-content" style="margin:2rem auto;">
-  <article class="documentation-content" style="margin: 0 auto 3rem; padding: 0 1rem;">
+<section class="new-content-wrapper" style="background: #fff; padding: 4rem 1rem; color: #334155;">
+  <div style="margin: 0 auto; line-height: 1.6;">
 
-    <!-- Main Title & Description -->
-    <section class="doc-section" style="margin-bottom: 2.5rem;">
-      <h2
-        style="font-size: 1.5rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem; border-bottom: 2px solid var(--color-border); padding-bottom: 0.75rem;">
-        JSON Formatter with Validator
-      </h2>
-      <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-bottom: 1rem;">
-        The JSON Formatter transforms messy JSON into clean, readable output with consistent indentation. You can also
-        minify JSON to reduce size, or validate syntax to catch errors. This tool is
-        ideal for debugging APIs, preparing config files, reviewing log output, and sharing examples. Everything runs in
-        the browser, so your JSON never leaves your device.
+    <!-- Header Section -->
+    <header style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-bottom: 1.5rem;">Free Online JSON Tools for
+        Developers</h2>
+      <p style="margin-bottom: 1.25rem;">
+        <strong>JSONFormattersPro.com</strong> is a fast, browser-based toolkit for viewing, formatting, validating, and
+        converting JSON. It is designed for developers, testers, analysts, and students who work with JSON data every
+        day. Whether you are debugging an API response, validating configuration files, or transforming JSON into other
+        formats, these tools help you move quickly without installing any software.
       </p>
-      <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary);">
-        Formatting JSON is more than just indentation. It helps you spot errors faster, improves code reviews, and makes
-        JSON easy to scan. Validating catches syntax issues before they break your application. Minifying removes
-        whitespace for faster transfers in production. With this tool, you can switch between all modes in seconds.
+      <p>
+        All tools run 100% client-side. Your data stays in your browser and is never uploaded, stored, or logged on any
+        <span style="border-bottom: 1px dotted #64748b; cursor: help;"
+          title="No data is sent to our servers.">server</span>. This makes the site safe for handling sensitive API
+        responses, production payloads, and confidential configuration files. It also means you can use the tools
+        offline once the page is loaded.
       </p>
-    </section>
+    </header>
 
-    <!-- What this JSON Formatter Can Do -->
-    <section class="doc-section" style="margin-bottom: 2.5rem;">
-      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">What this JSON
-        formatter can do</h3>
-      <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
-        <li><strong style="color: var(--color-text);">Pretty print:</strong> Add line breaks and indentation for
-          readability.</li>
-        <li><strong style="color: var(--color-text);">Validate:</strong> Check JSON syntax and highlight errors with
-          line
-          numbers.</li>
-        <li><strong style="color: var(--color-text);">Minify:</strong> Remove whitespace to reduce file size and improve
-          transfer speed.</li>
-        <li><strong style="color: var(--color-text);">Fix trailing commas:</strong> Automatically remove trailing commas
-          that break JSON parsing.</li>
-        <li><strong style="color: var(--color-text);">Copy/download:</strong> Export the formatted JSON instantly as a
-          file or to clipboard.</li>
-        <li><strong style="color: var(--color-text);">History:</strong> Access your recent JSON edits from the browser's
-          local storage.</li>
-      </ul>
-    </section>
-
-    <!-- How to Use the Formatter -->
-    <section class="doc-section" style="margin-bottom: 2.5rem;">
-      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">How to use the
-        formatter</h3>
-      <ol style="list-style: decimal; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
-        <li>Paste JSON into the editor above, or drag & drop a <code
-            style="background: var(--color-surface-alt); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace;">.json</code>
-          file.</li>
-        <li>Click <strong style="color: var(--color-text);">Format</strong> to beautify, <strong
-            style="color: var(--color-text);">Validate</strong> to check syntax, or <strong
-            style="color: var(--color-text);">Minify</strong> to compress.</li>
-        <li>Enable the <strong style="color: var(--color-text);">Fix Trailing Commas</strong> toggle if your JSON has
-          trailing commas.</li>
-        <li>Copy or download the output from the editor.</li>
-      </ol>
-    </section>
-
-    <!-- Example: Format and Minify -->
-    <section class="doc-section" style="margin-bottom: 2.5rem;">
-      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Example: format
-        and
-        minify</h3>
-
-      <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Input JSON:</p>
-      <pre
-        style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text); margin-bottom: 1.25rem;"><code>{"name":"Avi","roles":["editor","admin"],"meta":{"active":true,"score":9}}</code></pre>
-
-      <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Formatted output (2
-        spaces):</p>
-      <pre
-        style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text); margin-bottom: 1.25rem;"><code>{
-  "name": "Avi",
-  "roles": [
-    "editor",
-    "admin"
-  ],
-  "meta": {
-    "active": true,
-    "score": 9
-  }
-}</code></pre>
-
-      <p style="font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Minified output:</p>
-      <pre
-        style="background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--color-text);"><code>{"name":"Avi","roles":["editor","admin"],"meta":{"active":true,"score":9}}</code></pre>
-    </section>
-
-
-
-    <!-- Common Errors and Fixes -->
-    <section class="doc-section" style="margin-bottom: 2.5rem;">
-      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Common errors and
-        fixes</h3>
-      <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
-        <li><strong style="color: var(--color-text);">Error:</strong> <em>Unexpected token</em> during formatting.
-          <strong style="color: var(--color-text);">Cause:</strong> Invalid JSON syntax such as trailing commas or
-          single
-          quotes. <strong style="color: var(--color-text);">Fix:</strong> Enable "Fix Trailing Commas" or manually
-          correct quotes.
-        </li>
-        <li><strong style="color: var(--color-text);">Error:</strong> Output is empty after formatting. <strong
-            style="color: var(--color-text);">Cause:</strong> The input is blank or whitespace only. <strong
-            style="color: var(--color-text);">Fix:</strong> Paste valid JSON before formatting.</li>
-        <li><strong style="color: var(--color-text);">Error:</strong> Minify doesn't change output. <strong
-            style="color: var(--color-text);">Cause:</strong> The JSON is already minified. <strong
-            style="color: var(--color-text);">Fix:</strong> This is expected; try Format instead.</li>
-        <li><strong style="color: var(--color-text);">Error:</strong> Validation fails with no visible error. <strong
-            style="color: var(--color-text);">Cause:</strong> Hidden characters like BOM or special whitespace. <strong
-            style="color: var(--color-text);">Fix:</strong> Clear and re-paste the JSON.</li>
-      </ul>
-    </section>
-
-    <!-- Tips for Cleaner JSON -->
-    <section class="doc-section" style="margin-bottom: 2.5rem;">
-      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Tips for cleaner
-        JSON</h3>
-      <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
-        <li>Use formatting during development and minify before shipping to production.</li>
-        <li>Always validate JSON before sending to APIs to catch errors early.</li>
-        <li>Pair this tool with <a href="/json-schema-generator/"
-            style="color: var(--color-primary); text-decoration: none;">JSON Schema Validator</a> to ensure structure as
-          well as readability.</li>
-        <li>Save reusable examples by downloading formatted output as a <code
-            style="background: var(--color-surface-alt); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace;">.json</code>
-          file.</li>
-        <li>Use the History feature to quickly access recent JSON you've worked with.</li>
-      </ul>
-    </section>
-
-    <!-- Where Formatting Helps the Most -->
-    <section class="doc-section" style="margin-bottom: 2.5rem;">
-      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Where formatting
-        helps the most</h3>
-
-      <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-bottom: 1rem;">
-        <strong style="color: var(--color-text);">API debugging:</strong> When API responses are large, formatting makes
-        it easy to scan nested objects and spot missing fields. Pair it with <a href="/json-path-tester/"
-          style="color: var(--color-primary); text-decoration: none;">JSONPath queries</a> to extract specific values
-        quickly.
-      </p>
-      <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-bottom: 1rem;">
-        <strong style="color: var(--color-text);">Code review:</strong> Formatted JSON is easier to diff and review.
-        Teammates can focus on logic changes instead of hunting for structure issues.
-      </p>
-      <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary);">
-        <strong style="color: var(--color-text);">Configuration management:</strong> Formatting ensures config files are
-        readable and consistent across environments.
-      </p>
-    </section>
-
-    <!-- Common Formatting Mistakes -->
-    <section class="doc-section" style="margin-bottom: 2.5rem;">
-      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1rem;">Common formatting
-        mistakes</h3>
-      <ul style="list-style: disc; padding-left: 1.5rem; color: var(--color-text-secondary); line-height: 2;">
-        <li>Using single quotes instead of double quotes around strings.</li>
-        <li>Leaving trailing commas in arrays or objects.</li>
-        <li>Forgetting to escape control characters in strings.</li>
-        <li>Assuming JSON allows comments (it does not).</li>
-        <li>Pasting JavaScript objects that are not valid JSON.</li>
-      </ul>
-      <p style="font-size: 1rem; line-height: 1.8; color: var(--color-text-secondary); margin-top: 1rem;">
-        If your input looks like a JavaScript object (with single quotes or trailing commas), ensure you convert it to
-        valid JSON. This
-        formatter
-        only accepts strict JSON, which improves reliability when using the output in APIs and config files.
-      </p>
-    </section>
-
-    <!-- Quick FAQs -->
-    <section class="doc-section" style="margin-bottom: 2.5rem;">
-      <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--color-text); margin-bottom: 1.25rem;">FAQs</h3>
-
-      <div style="margin-bottom: 1.25rem;">
-        <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">Does formatting
-          change the meaning of JSON?</h4>
-        <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">No. Formatting only changes
-          whitespace; it does not alter values or structure.</p>
-      </div>
-
-      <div style="margin-bottom: 1.25rem;">
-        <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">When should I
-          use
-          minify?</h4>
-        <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">Use minify for production
-          APIs or when you need the smallest possible payload.</p>
-      </div>
-
-      <div style="margin-bottom: 1.25rem;">
-        <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">What does the
-          Validate button do?</h4>
-        <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">It checks JSON syntax and
-          shows errors with line numbers so you can fix them quickly.</p>
-      </div>
-
-      <div style="margin-bottom: 1.25rem;">
-        <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">Can I format
-          very
-          large JSON?</h4>
-        <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">Yes. The tool uses the
-          Monaco
-          Editor engine (same as VS Code) which handles large files efficiently.</p>
-      </div>
-
-      <div style="margin-bottom: 1.25rem;">
-        <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem;">Is my JSON
-          uploaded anywhere?</h4>
-        <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">No. Formatting and
-          validation
-          happen locally in your browser. Your data never leaves your device.</p>
-      </div>
-
+    <!-- Content Grid -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3rem;">
+      <!-- Left Column -->
       <div>
-        <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary);">Usually due to invalid
-          syntax. Enable "Fix Trailing Commas" to repair common issues like trailing
-          commas.</p>
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">What you can do here</h3>
+        <ul style="padding-left: 1.25rem; margin-bottom: 2rem;">
+          <li style="margin-bottom: 0.5rem;">View and explore JSON in tree, code, and text modes.</li>
+          <li style="margin-bottom: 0.5rem;">Format and beautify unreadable JSON instantly.</li>
+          <li style="margin-bottom: 0.5rem;">Validate JSON and catch syntax errors early.</li>
+          <li style="margin-bottom: 0.5rem;">Minify JSON to reduce payload size.</li>
+          <li style="margin-bottom: 0.5rem;">Convert JSON to CSV, Excel, YAML, and XML.</li>
+          <li style="margin-bottom: 0.5rem;">Decode JWT tokens and inspect claims.</li>
+          <li style="margin-bottom: 0.5rem;">Generate UUIDs and encode or decode Base64 data.</li>
+        </ul>
+
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Why JSON tooling matters
+        </h3>
+        <p style="margin-bottom: 2rem;">
+          JSON is the de facto standard for APIs and web services, but it can be difficult to read, validate, or compare
+          at scale. A missing comma or mismatched brace can break an entire workflow. Formatting and validation help you
+          catch problems early, while conversion tools bridge JSON with other formats like YAML and CSV. Having all of
+          these utilities in one place saves time and reduces context switching when you are troubleshooting issues.
+        </p>
+
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Tool categories</h3>
+        <ul style="padding-left: 1.25rem; margin-bottom: 2rem;">
+          <li style="margin-bottom: 0.5rem;"><strong>Core JSON tools:</strong> Viewer, Formatter, Validator, Minifier,
+            Sort, Search.</li>
+          <li style="margin-bottom: 0.5rem;"><strong>Conversions:</strong> JSON to CSV, CSV to JSON, JSON to YAML, YAML
+            to JSON, JSON to XML.</li>
+          <li style="margin-bottom: 0.5rem;"><strong>Comparison:</strong> JSON Compare with side-by-side and semantic
+            diffs.</li>
+          <li style="margin-bottom: 0.5rem;"><strong>Utilities:</strong> Base64 Encoder/Decoder, JWT Decoder, UUID
+            Generator.</li>
+        </ul>
       </div>
-    </section>
 
-  </article>
-</section>
+      <!-- Right Column -->
+      <div>
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Example workflow</h3>
+        <p style="margin-bottom: 2rem;">
+          Imagine you receive a large API response that is failing in your frontend. Start by pasting the response into
+          the JSON Viewer to confirm the structure. If the viewer reports an error, use JSON Validator to locate the
+          issue. If the payload is minified and hard to read, format it for clarity. If you need to share the data with
+          a non-technical teammate, convert it to CSV so it can be opened in Excel or Google Sheets. This workflow
+          covers most real-world debugging scenarios and can be completed in minutes.
+        </p>
 
-<!-- Author Ownership Section -->
-<section class="content-section author-ownership"
-  style="margin-bottom: 1.5rem; padding: 1.5rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px;">
-  <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-text-secondary); margin: 0;">
-    <strong style="color: var(--color-text);">About this tool:</strong><br>
-    JSON Formatter Pro is built and maintained by <a href="https://linkedin.com/in/faisal-ahmad-44b37018a/"
-      target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: none;">Faisal Ahmad</a>, an
-    independent software developer, and focuses on fast, reliable JSON formatting and validation for everyday
-    development tasks.
-    <br><br>
-    <strong style="color: var(--color-text);">Why this tool exists:</strong>
-    Many online JSON formatters fail on real-world data. JSON Formatter Pro focuses on reliable formatting, automatic
-    fixes for common errors, and smooth performance for large JSON files all without uploading your data.
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Privacy-first by design
+        </h3>
+        <p style="margin-bottom: 2rem;">
+          Because everything runs in your browser, you can paste sensitive data without worrying about uploads. There
+          are no server logs, no hidden analytics of content, and no file retention. If you are working with production
+          data or internal configuration files, this local-only model is a strong safety feature.
+        </p>
 
-    <br><br>
-  <p style="font-size: 0.9rem; margin-bottom: 0.75rem;">
-    Working with escaped or stringified JSON? Try our
-    <a href="/string-json-to-json/" style="color: var(--color-primary); text-decoration: none;">
-      JSON string to JSON converter
-    </a>
-    to remove backslashes and decode nested JSON.
-  </p>
-</section>
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Tips for better results
+        </h3>
+        <ul style="padding-left: 1.25rem;">
+          <li style="margin-bottom: 0.5rem;">Validate JSON before converting it to another format.</li>
+          <li style="margin-bottom: 0.5rem;">Use the formatter when diffing or reviewing large payloads.</li>
+          <li style="margin-bottom: 0.5rem;">Minify JSON for production and keep formatted JSON for development.</li>
+          <li style="margin-bottom: 0.5rem;">Use consistent naming conventions to simplify conversions.</li>
+          <li style="margin-bottom: 0.5rem;">Check data types when moving between JSON and CSV.</li>
+        </ul>
+      </div>
+    </div>
 
-<!-- Related Tools Section -->
-<section class="content-section">
-  <h2>More Developer Tools</h2>
-  <p>Explore our complete suite of free developer tools designed to boost your productivity:</p>
-  <div class="related-tools-grid">
-    <a href="/json-diff/" class="tool-link-card">
-      <span class="tool-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z" />
-        </svg></span>
-      <h4>JSON Diff</h4>
-      <p>Compare two JSON files and highlight differences</p>
-    </a>
-    <a href="{% url 'json_schema_page' %}" class="tool-link-card">
-      <span class="tool-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
-        </svg></span>
-      <h4>JSON Schema Generator</h4>
-      <p>Generate JSON Schema from sample data</p>
-    </a>
-    <a href="/json-to-yaml/" class="tool-link-card">
-      <span class="tool-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z" />
-        </svg></span>
-      <h4>JSON ↔ YAML Converter</h4>
-      <p>Convert between JSON and YAML formats</p>
-    </a>
-    <a href="/dummy-json/" class="tool-link-card">
-      <span class="tool-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" />
-        </svg></span>
-      <h4>Dummy JSON Generator</h4>
-      <p>Generate random JSON data for development</p>
-    </a>
-    <a href="/json-path-tester/" class="tool-link-card">
-      <span class="tool-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-        </svg></span>
-      <h4>JSON Path Tester</h4>
-      <p>Test JSONPath expressions and extract data</p>
-    </a>
-    <a href="/yaml-formatter/" class="tool-link-card">
-      <span class="tool-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 9h-2V9.5L9.5 12 11 14.5V13h2v3.5L14.5 14 13 11.5V11zm2 9H6V4h7v5h5v11z" />
-        </svg></span>
-      <h4>YAML Formatter</h4>
-      <p>Format, beautify & validate YAML files online</p>
-    </a>
+    <!-- Middle Wide Section -->
+    <div style="margin-bottom: 3rem;">
+      <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Performance and large files
+      </h3>
+      <p>
+        Most tools support large JSON inputs, but extremely large files can be limited by browser memory and
+        performance. If a file is too large, consider splitting it into smaller chunks or using a server-side tool for
+        heavy processing. For day-to-day debugging and development, the in-browser tools are typically more than enough.
+      </p>
+    </div>
+
+    <!-- Bottom Grid -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3rem;">
+      <!-- Left Column -->
+      <div>
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Who this site is for</h3>
+        <p style="margin-bottom: 2rem;">
+          Developers use JSONFormattersPro to debug API responses and verify request payloads. QA teams use it to check
+          data consistency between environments. Analysts use it to convert JSON into CSV or Excel-friendly formats for
+          reporting. Students use it to learn JSON structure and best practices without installing complex tools.
+        </p>
+
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Workflow ideas</h3>
+        <ul style="padding-left: 1.25rem; margin-bottom: 2rem;">
+          <li style="margin-bottom: 0.5rem;">Paste a response into the JSON Viewer to check structure.</li>
+          <li style="margin-bottom: 0.5rem;">Validate it and fix errors before using it in an API call.</li>
+          <li style="margin-bottom: 0.5rem;">Convert it to CSV if you need to share it with business teams.</li>
+          <li style="margin-bottom: 0.5rem;">Compare two versions of a payload to review changes.</li>
+          <li style="margin-bottom: 0.5rem;">Minify the final output for production use.</li>
+        </ul>
+
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Safe conversions</h3>
+        <p>
+          When converting between formats, always verify the output structure. JSON to CSV is great for reports, but it
+          can flatten nested data. YAML to JSON preserves structure but removes comments. Knowing these tradeoffs helps
+          you choose the right tool and avoid surprises.
+        </p>
+      </div>
+
+      <!-- Right Column -->
+      <div>
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Reliability and
+          transparency</h3>
+        <p style="margin-bottom: 2rem;">
+          The tools are intentionally simple and focused. They do one thing well and keep the output predictable. You
+          can inspect the input and output side-by-side, which makes it easy to trust the conversion or validation
+          results. Because everything runs locally, you remain in control of your data throughout the entire workflow.
+        </p>
+
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Learn JSON faster</h3>
+        <p style="margin-bottom: 2rem;">
+          If you are new to JSON, start with small examples and use the viewer to explore nested objects and arrays. The
+          formatter makes structure easy to read, and the validator helps you understand common syntax mistakes. This is
+          a simple way to learn JSON without needing a full IDE setup.
+        </p>
+
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Feedback and support</h3>
+        <p>
+          If you notice a missing tool or want a new feature, capture a small example and share it with your team. Clear
+          examples make it easier to add improvements and keep the tools reliable for real-world workflows. Consistent
+          feedback helps prioritize the most useful tools for developers and data teams. That focus keeps the toolkit
+          fast and predictable. It also keeps results consistent.
+        </p>
+      </div>
+    </div>
+
+    <!-- FAQs Section -->
+    <div style="margin-bottom: 3rem;">
+      <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1.5rem;">FAQs</h3>
+      <div style="display: grid; gap: 1.5rem;">
+        <div>
+          <p style="margin-bottom: 0.25rem;"><strong>What is JSONFormattersPro.com used for?</strong></p>
+          <p>It helps you view, format, validate, and convert JSON directly in your browser.</p>
+        </div>
+        <div>
+          <p style="margin-bottom: 0.25rem;"><strong>Is my JSON data uploaded or stored?</strong></p>
+          <p>No. All processing is local and client-side only.</p>
+        </div>
+        <div>
+          <p style="margin-bottom: 0.25rem;"><strong>Which tools are available?</strong></p>
+          <p>Viewer, Formatter, Validator, Minifier, JSON conversions, JWT decoder, Base64 tools, UUID generator, and
+            JSON comparison.</p>
+        </div>
+        <div>
+          <p style="margin-bottom: 0.25rem;"><strong>Can I use it for large JSON files?</strong></p>
+          <p>Yes, but very large files may be limited by browser performance.</p>
+        </div>
+        <div>
+          <p style="margin-bottom: 0.25rem;"><strong>Which <span
+                style="border-bottom: 1px dotted #64748b; cursor: help;" title="Targeted browsers.">browsers</span> are
+              supported?</strong></p>
+          <p>Chrome, Edge, Firefox, Safari, and other modern browsers.</p>
+        </div>
+        <div>
+          <p style="margin-bottom: 0.25rem;"><strong>Do I need to install anything?</strong></p>
+          <p>No. Everything runs in the browser.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Tools Footer Box -->
+    <div style="background: #eff6ff; border-radius: 12px; padding: 1.5rem; border: 1px solid #dbeafe;">
+      <p style="margin: 0; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <strong>Related tools:</strong>
+        <a href="/json-validator/" style="color: #3b82f6; text-decoration: none;">JSON Validator</a>,
+        <a href="/json-minify/" style="color: #3b82f6; text-decoration: none;">JSON Minifier</a>,
+        <a href="/json-to-csv/" style="color: #3b82f6; text-decoration: none;">JSON to CSV</a>,
+        <a href="/csv-to-json/" style="color: #3b82f6; text-decoration: none;">CSV to JSON</a>
+      </p>
+    </div>
+
   </div>
-
 </section>
 
-
+</article>
 <style>
-  /* SEO FAQ Section - Clean White Background */
-  .faq-section-seo {
-    padding: 3rem 0;
-    margin-top: 2rem;
-  }
-
-  .faq-section-seo h2 {
-    text-align: center;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--color-text);
-    margin-bottom: 2.5rem;
-  }
-
-  .faq-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-  }
-
-  .faq-item-seo {
-    padding: 1.75rem;
-    border: 1px solid var(--color-border);
-    border-radius: 12px;
-    transition: all 0.3s ease;
-  }
-
-  .faq-item-seo:hover {
-    border-color: var(--color-primary);
-    box-shadow: 0 4px 20px var(--color-shadow);
-  }
-
-  .faq-item-seo h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--color-text);
-    margin-bottom: 1rem;
-    line-height: 1.4;
-  }
-
-  .faq-item-seo p {
-    font-size: 0.95rem;
-    color: var(--color-text-secondary);
-    line-height: 1.7;
-    margin-bottom: 0.75rem;
-  }
-
-  .faq-item-seo p:last-child {
-    margin-bottom: 0;
-  }
-
-  .faq-item-seo ul {
-    margin: 0.75rem 0;
-    padding-left: 1.25rem;
-  }
-
-  .faq-item-seo li {
-    font-size: 0.95rem;
-    color: var(--color-text-secondary);
-    line-height: 1.6;
-    margin-bottom: 0.5rem;
-  }
-
-  .faq-item-seo a {
-    color: var(--color-primary);
-    text-decoration: none;
-  }
-
-  .faq-item-seo a:hover {
-    text-decoration: underline;
-  }
-
-  .faq-item-seo strong {
-    color: var(--color-text);
-  }
-
-  /* Mobile Responsive */
+  /* Final cleanup styling for the new content wrapper */
   @media (max-width: 768px) {
-    .single-editor-panel {
-      margin-top: -55px !important;
-    }
-
-    .faq-grid {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-
-    .faq-section-seo {
-      padding: 2rem 0;
-    }
-
-    .faq-section-seo h2 {
-      font-size: 1.5rem;
-    }
-
-    .faq-item-seo {
-      padding: 1.25rem;
-    }
-
-    .faq-item-seo h3 {
-      font-size: 1rem;
+    .new-content-wrapper>div {
+      grid-template-columns: 1fr !important;
+      gap: 2rem !important;
     }
   }
 </style>
@@ -1666,17 +1463,6 @@ signup.{% endblock %}
             const formatBtn = document.getElementById('formatBtn');
             if (formatBtn) formatBtn.click();
           }, 300);
-        }
-
-        // Auto-scroll to editor on page load (with offset for navbar)
-        const editorPanel = document.querySelector('.single-editor-panel');
-        if (editorPanel) {
-          setTimeout(() => {
-            const navbarHeight = 60; // Account for sticky navbar
-            const elementPosition = editorPanel.getBoundingClientRect().top + window.pageYOffset;
-            const offsetPosition = elementPosition - navbarHeight - 20; // Extra 20px padding
-            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-          }, 100);
         }
 
         // Watch for theme changes and sync with editor
