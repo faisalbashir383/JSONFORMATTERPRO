@@ -953,6 +953,40 @@ class MockEndpoint(models.Model):
     # Custom headers (JSON)
     custom_headers = models.TextField(blank=True, default='{}', help_text="Custom response headers as JSON")
     
+    # Phase 2: Conditional Responses
+    conditional_rules = models.TextField(
+        blank=True, 
+        default='[]',
+        help_text="JSON array of conditional response rules. Each rule has conditions and response overrides."
+    )
+    
+    # Phase 2: Request Validation
+    validation_schema = models.TextField(
+        blank=True,
+        default='{}',
+        help_text="JSON schema for request validation (required headers, params, body fields)"
+    )
+    
+    # Phase 3: Authentication Simulation
+    auth_config = models.TextField(
+        blank=True,
+        default='{}',
+        help_text="JSON config for auth simulation: {type: 'api_key'|'bearer'|'basic', key/token/credentials}"
+    )
+    
+    # Phase 3: Shareable Links
+    is_public = models.BooleanField(
+        default=True,
+        help_text="If True, endpoint is publicly accessible. If False, requires share_token."
+    )
+    share_token = models.CharField(
+        max_length=64,
+        blank=True,
+        null=True,
+        db_index=True,
+        help_text="Secret token for sharing private endpoints"
+    )
+    
     # Metadata
     creator_ip = models.GenericIPAddressField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -1190,6 +1224,12 @@ class DummyJsonApiLog(models.Model):
             obj.request_count += 1
             obj.save(update_fields=['request_count', 'last_request'])
         return obj
+
+    @classmethod
+    def reset_quota(cls, endpoint, ip_address):
+        """Reset the request count for a specific IP and endpoint"""
+        cls.objects.filter(endpoint=endpoint, ip_address=ip_address).update(request_count=0)
+        return True
     
     @classmethod
     def get_stats(cls):

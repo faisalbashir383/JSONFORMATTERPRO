@@ -652,6 +652,13 @@
         <div class="sidebar-header">
             <h1 class="sidebar-title">🚀 API Playground</h1>
             <a href="/dummy-json-api/" class="back-link">← Back to Documentation</a>
+
+            <div id="quotaBadge"
+                style="margin-top: 1rem; padding: 0.5rem 0.75rem; background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: var(--color-text-secondary);">Quota: <strong id="quotaCount">0</strong>/30</span>
+                <button onclick="renewQuota()" id="sidebarRenewBtn"
+                    style="display: none; padding: 0.2rem 0.5rem; background: var(--color-primary); color: white; border: none; border-radius: var(--radius-sm); font-size: 0.75rem; cursor: pointer;">Renew</button>
+            </div>
         </div>
 
         <nav>
@@ -943,6 +950,7 @@
         renderFieldCheckboxes();
         updateGeneratedUrl();
         updateCodeSnippet();
+        updateQuotaDisplay();
 
         // API category switching
         document.querySelectorAll('.api-category-btn').forEach(btn => {
@@ -954,6 +962,7 @@
                 renderFieldCheckboxes();
                 updateGeneratedUrl();
                 updateCodeSnippet();
+                updateQuotaDisplay();
             });
         });
 
@@ -980,6 +989,37 @@
         const config = apiConfigs[currentApi];
         document.getElementById('apiTitle').textContent = config.title;
         document.getElementById('apiDescription').textContent = config.description;
+    }
+
+    async function updateQuotaDisplay() {
+        try {
+            const response = await fetch(`/api/dummy/quota-status/?endpoint=${currentApi}`);
+            const result = await response.json();
+            if (result.success) {
+                document.getElementById('quotaCount').textContent = result.request_count;
+                const renewBtn = document.getElementById('sidebarRenewBtn');
+                renewBtn.style.display = result.is_blocked ? 'block' : 'none';
+
+                // If blocked, update response area if it was ready or error
+                const statusEl = document.getElementById('responseStatus');
+                if (result.is_blocked && (statusEl.textContent === 'Ready' || statusEl.textContent === 'Error')) {
+                    const placeholder = document.getElementById('responsePlaceholder');
+                    const editorDiv = document.getElementById('monacoEditor');
+                    statusEl.textContent = 'Quota Exceeded';
+                    statusEl.className = 'response-status error';
+                    placeholder.innerHTML = `
+                        <div style="text-align: center; padding: 1rem;">
+                            <p style="color: #ef4444; font-weight: 600; margin-bottom: 1rem;">You have reached the limit of 30 requests for this endpoint.</p>
+                            <button onclick="renewQuota()" class="try-btn" style="background: var(--color-primary);">🔄 Renew Access Now (Free)</button>
+                        </div>
+                    `;
+                    placeholder.style.display = 'flex';
+                    editorDiv.style.display = 'none';
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching quota status:', error);
+        }
     }
 
     function renderFieldCheckboxes() {
@@ -1098,7 +1138,33 @@ func main() {
             const endTime = performance.now();
             const responseTime = Math.round(endTime - startTime + delay);
 
-            lastResponse = await response.json();
+            const result = await response.json();
+
+            // Update quota count if provided
+            if (result.request_count !== undefined) {
+                document.getElementById('quotaCount').textContent = result.request_count;
+                document.getElementById('sidebarRenewBtn').style.display = result.request_count >= 30 ? 'block' : 'none';
+            }
+
+            if (!response.ok) {
+                if (response.status === 403 && result.error === 'Quota Exceeded') {
+                    statusEl.textContent = 'Quota Exceeded';
+                    statusEl.className = 'response-status error';
+                    placeholder.innerHTML = `
+                        <div style="text-align: center; padding: 1rem;">
+                            <p style="color: #ef4444; font-weight: 600; margin-bottom: 1rem;">${result.message}</p>
+                            <button onclick="renewQuota()" class="try-btn" style="background: var(--color-primary);">🔄 Renew Access Now (Free)</button>
+                        </div>
+                    `;
+                    placeholder.style.display = 'flex';
+                    editorDiv.style.display = 'none';
+                    document.getElementById('sidebarRenewBtn').style.display = 'block';
+                    return;
+                }
+                throw new Error(result.message || `Error ${response.status}`);
+            }
+
+            lastResponse = result.data || result;
             lastResponseHeaders = {};
             response.headers.forEach((value, key) => {
                 lastResponseHeaders[key] = value;
@@ -1183,6 +1249,59 @@ func main() {
 
         updateGeneratedUrl();
         updateCodeSnippet();
+    }
+
+    async function renewQuota() {
+        try {
+            const btn = document.getElementById('sidebarRenewBtn');
+            const originalText = btn.textContent;
+            btn.textContent = '...';
+            btn.disabled = true;
+
+            const response = await fetch('/api/dummy/renew/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ endpoint: currentApi })
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                showToast('Quota renewed successfully!');
+                document.getElementById('quotaCount').textContent = '0';
+                btn.style.display = 'none';
+                // Automatically re-try the API if we were blocked
+                const statusEl = document.getElementById('responseStatus');
+                if (statusEl.textContent === 'Quota Exceeded') {
+                    tryApi();
+                }
+            } else {
+                showToast(result.error || 'Failed to renew quota', 'error');
+            }
+        } catch (error) {
+            showToast('Error renewing quota', 'error');
+        } finally {
+            const btn = document.getElementById('sidebarRenewBtn');
+            btn.textContent = 'Renew';
+            btn.disabled = false;
+        }
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
     }
 
     function copyUrl() {

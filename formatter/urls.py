@@ -146,6 +146,11 @@ urlpatterns = [
     path('api/mock/<str:endpoint_id>/info/', views.get_mock_endpoint_info, name='get_mock_endpoint_info'),
     path('api/mock/<str:endpoint_id>/update/', views.update_mock_endpoint, name='update_mock_endpoint'),
     path('api/mock/<str:endpoint_id>/delete/', views.delete_mock_endpoint, name='delete_mock_endpoint'),
+    # Sharing APIs
+    path('api/mock/share/<str:share_token>/', views.get_endpoint_config, name='get_endpoint_config'),
+    path('api/mock/clone/<str:share_token>/', views.clone_mock_endpoint, name='clone_mock_endpoint'),
+    path('api/dummy/renew/', views.renew_dummy_api_quota, name='renew_dummy_api_quota'),
+    path('api/dummy/quota-status/', views.get_dummy_quota_status, name='get_dummy_quota_status'),
     
     # Backward compatible - old style /api/mock/{uuid}/
     path('api/mock/<str:endpoint_id>/', views.serve_mock_endpoint, name='serve_mock_endpoint'),

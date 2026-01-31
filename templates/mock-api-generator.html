@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Mock API Generator – Free Fake REST Endpoints (AI-Assisted) [2026]{% endblock %}
-{% block meta_title %}Mock API Generator – Free Fake REST Endpoints (AI-Assisted) [2026]{% endblock %}
-{% block meta_description %}Free fake API generator to create fake REST API endpoints instantly. Includes AI-assisted
-smart generation, custom JSON responses, latency simulation, and error testing.{% endblock %}
-{% block meta_keywords %}mock api generator, fake api, rest api testing, api mock tool, json api{% endblock %}
+{% block title %}Mock API Generator – Free Fake REST API Endpoints for Testing [2026]{% endblock %}
+{% block meta_title %}Mock API Generator – Free Fake REST API Endpoints for Testing [2026]{% endblock %}
+{% block meta_description %}Free mock API generator to create fake REST API endpoints instantly. Perfect for frontend
+testing, API prototyping, and development without a backend. JSONPlaceholder alternative with latency simulation and
+error testing.{% endblock %}
+{% block meta_keywords %}mock api generator, fake api, rest api testing, api mock tool, json api, fake rest api, api
+testing without backend, jsonplaceholder alternative, frontend testing api{% endblock %}
 
 
 
@@ -17,7 +19,7 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Free Mock API Generator",
-   "description": "Generate mock REST API endpoints with custom responses, latency simulation, and AI-assisted smart configuration for testing and development",
+   "description": "Create fake REST API endpoints instantly for frontend testing and API prototyping. Features custom JSON responses, latency simulation, error testing, and request validation - the best JSONPlaceholder alternative.",
     "url": "https://jsonformatterspro.com/mock-api/",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web Browser",
@@ -35,13 +37,15 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
   },
   "featureList": [
     "Custom JSON response templates",
-    "Template variables (firstName, email, uuid, etc.)",
-    "Latency simulation",
+    "Dynamic template variables (firstName, email, uuid, etc.)",
+    "Latency and slow network simulation",
     "Error response simulation",
-    "Multiple HTTP methods",
+    "Multiple HTTP methods (GET, POST, PUT, DELETE)",
+    "Scenario presets (Success, Slow Network, Server Error, Flaky API)",
     "Request history tracking",
     "OpenAPI/Swagger export",
-    "Copy and download functionality"
+    "No signup required",
+    "100% free with unlimited endpoints"
   ]
 }
 </script>
@@ -163,23 +167,23 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
       "name": "Is there a JSONPlaceholder, Beeceptor, or MockAPI.io alternative?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes! Our mock API generator is a powerful alternative to JSONPlaceholder, Beeceptor, and MockAPI.io. It supports fully custom JSON responses, dynamic template variables, latency simulation, and error testing - all for free and without requiring a signup."
+        "text": "Yes! Our mock API generator is a powerful alternative to JSONPlaceholder, Beeceptor, and MockAPI.io. It supports fully custom JSON responses, dynamic template variables, latency simulation, scenario presets, and error testing - all for free and without requiring a signup."
       }
     },
     {
       "@type": "Question",
-      "name": "Does this Mock API Generator use AI?",
+      "name": "What are scenario presets?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. This tool includes AI-assisted generation to help automatically configure endpoints, responses, latency, and error scenarios based on your natural language input. Just describe your API in plain English and the tool generates a complete mock configuration."
+        "text": "Scenario presets are one-click configurations that instantly set up common API behaviors. Choose from Success (fast responses), Slow Network (2 second delay), Server Error (500 errors), or Flaky API (30% random failures) to test how your frontend handles different conditions."
       }
     },
     {
       "@type": "Question",
-      "name": "Can I use this tool without AI?",
+      "name": "Can I test my frontend without a real backend?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Absolutely. All features work manually without AI assistance. You can configure endpoints, write JSON templates, set latency, and error rates entirely by hand. The AI generation is optional and designed to speed up your workflow."
+        "text": "Absolutely! This mock API generator is designed specifically for frontend testing without a backend. Create fake REST endpoints that return realistic JSON data, simulate loading states with latency, and test error handling - all without writing any backend code."
       }
     }
   ]
@@ -734,11 +738,11 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
 {% block content %}
 {% verbatim %}
 <div class="tool-header">
-    <h1>Mock API Generator Online – AI-Assisted Smart Responses</h1>
+    <h1>Free Mock API Generator – Create Fake REST Endpoints Instantly</h1>
     <p>
-        Our Mock API Generator helps developers quickly create realistic API endpoints for testing and development. With
-        AI-assisted smart generation, you can describe your API in plain English and automatically generate mock
-        responses, latency, error scenarios, and dynamic JSON data all directly in your browser.
+        The best mock API generator for frontend developers. Create fake REST API endpoints in seconds for testing,
+        prototyping, and development without waiting for a backend. Features latency simulation, error testing,
+        dynamic JSON responses, and scenario presets. A powerful JSONPlaceholder alternative.
     </p>
 </div>
 
@@ -793,6 +797,29 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
         </div>
 
         <div class="config-section">
+            <span class="section-label">Scenario Presets</span>
+            <div class="scenario-presets"
+                style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-bottom: 1rem;">
+                <button type="button" class="scenario-btn active" data-scenario="success"
+                    style="padding: 0.6rem 0.75rem; font-size: 0.8rem; font-weight: 600; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-sm); cursor: pointer; transition: all 200ms ease; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                    <span>✅</span> Success
+                </button>
+                <button type="button" class="scenario-btn" data-scenario="slow_network"
+                    style="padding: 0.6rem 0.75rem; font-size: 0.8rem; font-weight: 600; background: var(--color-surface-alt); color: var(--color-text-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-sm); cursor: pointer; transition: all 200ms ease; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                    <span>🐢</span> Slow Network
+                </button>
+                <button type="button" class="scenario-btn" data-scenario="server_error"
+                    style="padding: 0.6rem 0.75rem; font-size: 0.8rem; font-weight: 600; background: var(--color-surface-alt); color: var(--color-text-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-sm); cursor: pointer; transition: all 200ms ease; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                    <span>💥</span> Server Error
+                </button>
+                <button type="button" class="scenario-btn" data-scenario="flaky_api"
+                    style="padding: 0.6rem 0.75rem; font-size: 0.8rem; font-weight: 600; background: var(--color-surface-alt); color: var(--color-text-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-sm); cursor: pointer; transition: all 200ms ease; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                    <span>🎲</span> Flaky API
+                </button>
+            </div>
+        </div>
+
+        <div class="config-section">
             <span class="section-label">Simulation Options</span>
 
             <div class="slider-group">
@@ -814,6 +841,189 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
             <div class="input-group">
                 <label class="input-label">Number of Records</label>
                 <input type="number" id="recordCount" class="input-field" value="5" min="1" max="100">
+            </div>
+        </div>
+
+        <!-- Phase 2: Conditional Response Rules -->
+        <div class="config-section"
+            style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: var(--radius-md); padding: 1rem;">
+            <span class="section-label"
+                style="display: flex; justify-content: space-between; align-items: center; color: #3b82f6;">
+                <span>🎯 Conditional Responses</span>
+                <button type="button" id="toggleConditionalRules"
+                    style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; font-size: 0.7rem; color: #3b82f6;">
+                    + Add Rules
+                </button>
+            </span>
+
+            <div id="conditionalRulesPanel" style="display: none; margin-top: 0.75rem;">
+                <div style="font-size: 0.75rem; color: var(--color-text-secondary); margin-bottom: 0.75rem;">
+                    Return different responses based on request headers, query params, or body fields.
+                </div>
+
+                <!-- Quick Presets -->
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+                    <button type="button" class="rule-preset-btn" data-preset="unauthorized"
+                        style="padding: 0.4rem 0.6rem; font-size: 0.7rem; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 4px; cursor: pointer;">
+                        🔒 401 No Auth
+                    </button>
+                    <button type="button" class="rule-preset-btn" data-preset="notfound"
+                        style="padding: 0.4rem 0.6rem; font-size: 0.7rem; background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 4px; cursor: pointer;">
+                        🔍 404 Missing ID
+                    </button>
+                </div>
+
+                <!-- Rules List -->
+                <div id="conditionalRulesList" style="margin-bottom: 0.75rem;"></div>
+
+                <!-- Add Rule Form -->
+                <div id="addRuleForm"
+                    style="background: var(--color-surface-alt); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+                    <div style="font-weight: 600; font-size: 0.8rem; margin-bottom: 0.5rem;">Add Custom Rule</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <select id="ruleConditionType" class="input-field" style="font-size: 0.8rem; padding: 0.4rem;">
+                            <option value="header">Header</option>
+                            <option value="query">Query Param</option>
+                            <option value="body">Body Field</option>
+                        </select>
+                        <input type="text" id="ruleConditionKey" class="input-field"
+                            placeholder="Key (e.g., Authorization)" style="font-size: 0.8rem; padding: 0.4rem;">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <select id="ruleConditionOperator" class="input-field"
+                            style="font-size: 0.8rem; padding: 0.4rem;">
+                            <option value="missing">Is Missing</option>
+                            <option value="present">Is Present</option>
+                            <option value="equals">Equals</option>
+                            <option value="contains">Contains</option>
+                        </select>
+                        <input type="text" id="ruleConditionValue" class="input-field" placeholder="Value (if needed)"
+                            style="font-size: 0.8rem; padding: 0.4rem;">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <select id="ruleResponseStatus" class="input-field" style="font-size: 0.8rem; padding: 0.4rem;">
+                            <option value="400">400</option>
+                            <option value="401">401</option>
+                            <option value="403">403</option>
+                            <option value="404">404</option>
+                            <option value="500">500</option>
+                        </select>
+                        <input type="text" id="ruleResponseMessage" class="input-field" placeholder="Error message"
+                            style="font-size: 0.8rem; padding: 0.4rem;">
+                    </div>
+                    <button type="button" id="addRuleBtn"
+                        style="width: 100%; padding: 0.5rem; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">
+                        + Add Rule
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 2: Request Validation -->
+        <div class="config-section"
+            style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--radius-md); padding: 1rem;">
+            <span class="section-label"
+                style="display: flex; justify-content: space-between; align-items: center; color: #10b981;">
+                <span>✅ Request Validation</span>
+                <button type="button" id="toggleValidation"
+                    style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; font-size: 0.7rem; color: #10b981;">
+                    Configure
+                </button>
+            </span>
+
+            <div id="validationPanel" style="display: none; margin-top: 0.75rem;">
+                <div style="font-size: 0.75rem; color: var(--color-text-secondary); margin-bottom: 0.75rem;">
+                    Validate incoming requests. Returns 400 Bad Request if validation fails.
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" style="font-size: 0.8rem;">Required Headers</label>
+                    <input type="text" id="validationHeaders" class="input-field"
+                        placeholder="Content-Type, Authorization" style="font-size: 0.85rem;">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" style="font-size: 0.8rem;">Required Query Params</label>
+                    <input type="text" id="validationParams" class="input-field" placeholder="userId, page"
+                        style="font-size: 0.85rem;">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" style="font-size: 0.8rem;">Required Body Fields (JSON)</label>
+                    <input type="text" id="validationBodyFields" class="input-field" placeholder="email, name, password"
+                        style="font-size: 0.85rem;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 3: Authentication Simulation -->
+        <div class="config-section"
+            style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: var(--radius-md); padding: 1rem;">
+            <span class="section-label"
+                style="display: flex; justify-content: space-between; align-items: center; color: #a855f7;">
+                <span>🔐 Authentication</span>
+                <button type="button" id="toggleAuth"
+                    style="background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; font-size: 0.7rem; color: #a855f7;">
+                    Configure
+                </button>
+            </span>
+
+            <div id="authPanel" style="display: none; margin-top: 0.75rem;">
+                <div style="font-size: 0.75rem; color: var(--color-text-secondary); margin-bottom: 0.75rem;">
+                    Simulate authentication. Requests without valid credentials will receive 401 Unauthorized.
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" style="font-size: 0.8rem;">Auth Type</label>
+                    <select id="authType" class="input-field" style="font-size: 0.85rem;">
+                        <option value="">None (No Auth)</option>
+                        <option value="api_key">API Key</option>
+                        <option value="bearer">Bearer Token</option>
+                        <option value="basic">Basic Auth</option>
+                    </select>
+                </div>
+
+                <!-- API Key Config -->
+                <div id="apiKeyConfig" style="display: none;">
+                    <div class="input-group">
+                        <label class="input-label" style="font-size: 0.8rem;">API Key</label>
+                        <input type="text" id="authApiKey" class="input-field" placeholder="your-secret-api-key"
+                            style="font-size: 0.85rem;">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" style="font-size: 0.8rem;">Header Name (optional)</label>
+                        <input type="text" id="authApiKeyHeader" class="input-field" placeholder="X-API-Key"
+                            style="font-size: 0.85rem;">
+                    </div>
+                </div>
+
+                <!-- Bearer Token Config -->
+                <div id="bearerConfig" style="display: none;">
+                    <div class="input-group">
+                        <label class="input-label" style="font-size: 0.8rem;">Bearer Token</label>
+                        <input type="text" id="authBearerToken" class="input-field"
+                            placeholder="eyJhbGciOiJIUzI1NiIs..." style="font-size: 0.85rem;">
+                        <div style="font-size: 0.7rem; color: var(--color-text-secondary); margin-top: 0.2rem;">
+                            Clients must send: Authorization: Bearer &lt;token&gt;
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Basic Auth Config -->
+                <div id="basicAuthConfig" style="display: none;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                        <div class="input-group">
+                            <label class="input-label" style="font-size: 0.8rem;">Username</label>
+                            <input type="text" id="authBasicUsername" class="input-field" placeholder="admin"
+                                style="font-size: 0.85rem;">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label" style="font-size: 0.8rem;">Password</label>
+                            <input type="text" id="authBasicPassword" class="input-field" placeholder="password123"
+                                style="font-size: 0.85rem;">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -879,6 +1089,25 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
             </div>
             <div id="createdEndpointInfo"
                 style="font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.5rem;"></div>
+
+            <!-- Sharing Section -->
+            <div id="sharingSectionDisplay"
+                style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(16, 185, 129, 0.2);">
+                <div style="font-size: 0.8rem; font-weight: 600; color: #3b82f6; margin-bottom: 0.5rem;">📤 Share
+                    Configuration</div>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <input type="text" id="shareUrlDisplay" class="input-field" readonly
+                        placeholder="Share URL will appear here"
+                        style="flex: 1; font-family: monospace; font-size: 0.75rem;">
+                    <button id="copyShareUrlBtn"
+                        style="padding: 0.5rem 0.75rem; font-size: 0.75rem; font-weight: 600; background: #3b82f6; color: white; border: none; border-radius: var(--radius-sm); cursor: pointer;">
+                        Copy Share
+                    </button>
+                </div>
+                <div style="font-size: 0.7rem; color: var(--color-text-secondary); margin-top: 0.25rem;">
+                    Share this link to let others clone your endpoint configuration
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1531,7 +1760,7 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
                     <td style="padding: 0.75rem; text-align: center; color: #ef4444; font-size: 1.25rem;">❌</td>
                 </tr>
                 <tr>
-                    <td style="padding: 0.75rem 1rem;">AI-Assisted Generation</td>
+                    <td style="padding: 0.75rem 1rem;">Scenario Presets</td>
                     <td style="padding: 0.75rem; text-align: center; color: #10b981; font-size: 1.25rem;">✅</td>
                     <td style="padding: 0.75rem; text-align: center; color: #ef4444; font-size: 1.25rem;">❌</td>
                     <td style="padding: 0.75rem; text-align: center; color: #ef4444; font-size: 1.25rem;">❌</td>
@@ -1568,8 +1797,8 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
         <div class="info-card">
             <h3>✨ Key Features</h3>
             <ul>
-                <li><strong>AI-Assisted Generation</strong> - Describe your API in plain English and generate mock
-                    responses automatically</li>
+                <li><strong>Scenario Presets</strong> - One-click configurations for Success, Slow Network, Server
+                    Error, and Flaky API testing scenarios</li>
                 <li><strong>Smart Template Variables</strong> - Use <code>{{firstName}}</code>, <code>{{email}}</code>
                     for realistic dynamic data</li>
                 <li><strong>Intelligent Latency & Error Simulation</strong> - Test loading states and error handling
@@ -1901,6 +2130,83 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
 
 </div>
 
+<!-- SEO Content: How to Create a Fake REST API -->
+<div class="info-section" style="margin-top: 3rem;">
+    <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; text-align: center;">How to Create a Fake
+        REST API for Testing</h2>
+    <div class="info-card" style="max-width: 900px; margin: 0 auto;">
+        <p style="margin-bottom: 1.5rem; color: var(--color-text-secondary);">
+            Creating a mock API endpoint takes just 4 simple steps. No signup, no backend code, no waiting.
+        </p>
+        <ol style="list-style-position: inside; color: var(--color-text); line-height: 2;">
+            <li><strong>Define Your Endpoint Path</strong> - Enter the URL path like <code>/api/users</code> or
+                <code>/api/products</code>
+            </li>
+            <li><strong>Choose Your HTTP Method</strong> - Select GET, POST, PUT, or DELETE depending on what you're
+                testing</li>
+            <li><strong>Configure Your Response</strong> - Write JSON with template variables like
+                <code>{{firstName}}</code>, <code>{{email}}</code>, <code>{{uuid}}</code> for dynamic data
+            </li>
+            <li><strong>Select a Scenario Preset</strong> - Choose Success, Slow Network, Server Error, or Flaky API to
+                simulate real-world conditions</li>
+            <li><strong>Generate & Use</strong> - Click Generate to create your endpoint and start making requests from
+                your frontend</li>
+        </ol>
+    </div>
+</div>
+
+<!-- SEO Content: Common Use Cases -->
+<div class="info-section" style="margin-top: 2.5rem;">
+    <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; text-align: center;">Common Use Cases for
+        Mock APIs</h2>
+    <div class="info-grid">
+        <div class="info-card">
+            <h3>🎨 Frontend Development</h3>
+            <p>Build React, Vue, Angular, or vanilla JS applications without waiting for backend APIs. Create fake
+                endpoints that return the exact data structure you need and iterate faster.</p>
+        </div>
+        <div class="info-card">
+            <h3>🧪 QA & Testing</h3>
+            <p>Test edge cases, error handling, and loading states. Use scenario presets to simulate slow networks,
+                server errors, and flaky connections your QA team needs to verify.</p>
+        </div>
+        <div class="info-card">
+            <h3>📱 Mobile App Development</h3>
+            <p>iOS and Android developers can prototype API integrations before the backend is ready. Test offline
+                behavior and error handling with realistic mock responses.</p>
+        </div>
+        <div class="info-card">
+            <h3>📚 Learning & Demos</h3>
+            <p>Students and educators can use fake REST APIs to learn API integration without setting up servers. Create
+                demo data for presentations and tutorials.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SEO Content: API Testing Without Backend -->
+<div class="info-section" style="margin-top: 2.5rem;">
+    <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; text-align: center;">API Testing Without a
+        Backend</h2>
+    <div class="info-card" style="max-width: 900px; margin: 0 auto;">
+        <p style="margin-bottom: 1rem; color: var(--color-text-secondary);">
+            <strong>Why test with mock APIs?</strong> In modern development, frontend and backend teams often work in
+            parallel.
+            Waiting for the backend to be completed before you can test your UI is inefficient and slows down your
+            delivery timeline.
+        </p>
+        <p style="margin-bottom: 1rem; color: var(--color-text-secondary);">
+            With a <strong>mock API generator</strong>, you can:
+        </p>
+        <ul style="color: var(--color-text-secondary); line-height: 1.8; padding-left: 1.5rem;">
+            <li><strong>Test loading states</strong> - Use latency simulation to show spinners and skeleton screens</li>
+            <li><strong>Handle errors gracefully</strong> - Simulate 400, 401, 404, and 500 errors to test your error UI
+            </li>
+            <li><strong>Generate realistic data</strong> - Dynamic template variables create believable test data</li>
+            <li><strong>Prototype faster</strong> - Build features without waiting for backend implementation</li>
+        </ul>
+    </div>
+</div>
+
 {% endverbatim %}
 {% endblock %}
 
@@ -2122,8 +2428,13 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
             validate: false
         });
 
+        // Check if we're loading from a share URL - if so, use empty template
+        // loadSharedEndpoint() will set the correct template after fetch
+        const shareToken = new URLSearchParams(window.location.search).get('share');
+        const initialTemplate = shareToken ? '{}' : defaultTemplate;
+
         monacoEditor = monaco.editor.create(document.getElementById('monacoEditorContainer'), {
-            value: defaultTemplate,
+            value: initialTemplate,
             language: 'json',
             theme: isDarkMode ? 'vs-dark' : 'vs',
             automaticLayout: true,
@@ -2653,6 +2964,42 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
             errorRateValue.textContent = errorRateSlider.value + '%';
         });
 
+        // Scenario Presets
+        const scenarioPresets = {
+            'success': { statusCode: '200', latency: 0, errorRate: 0, description: 'Fast, successful responses' },
+            'slow_network': { statusCode: '200', latency: 2000, errorRate: 0, description: 'Simulates slow 3G/poor connection' },
+            'server_error': { statusCode: '500', latency: 100, errorRate: 100, description: 'Always returns server error' },
+            'flaky_api': { statusCode: '200', latency: 500, errorRate: 30, description: '30% random failure rate' }
+        };
+
+        document.querySelectorAll('.scenario-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const scenario = btn.dataset.scenario;
+                const preset = scenarioPresets[scenario];
+
+                if (preset) {
+                    // Update form values
+                    statusCode.value = preset.statusCode;
+                    latencySlider.value = preset.latency;
+                    latencyValue.textContent = preset.latency + 'ms';
+                    errorRateSlider.value = preset.errorRate;
+                    errorRateValue.textContent = preset.errorRate + '%';
+
+                    // Update button styles
+                    document.querySelectorAll('.scenario-btn').forEach(b => {
+                        b.style.background = 'var(--color-surface-alt)';
+                        b.style.color = 'var(--color-text-secondary)';
+                        b.style.borderColor = 'var(--color-border)';
+                        b.classList.remove('active');
+                    });
+                    btn.style.background = 'rgba(16, 185, 129, 0.15)';
+                    btn.style.color = '#10b981';
+                    btn.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+                    btn.classList.add('active');
+                }
+            });
+        });
+
         // Template selector and HTTP method change handling
         const templateSelectorGroup = document.getElementById('templateSelectorGroup');
         const templateSelector = document.getElementById('templateSelector');
@@ -2670,9 +3017,9 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
                 .map(key => `<option value="${key}">${templates[key].name}</option>`)
                 .join('');
 
-            // Auto-select first template and update editor
+            // Auto-select first template and update editor (but skip if loading shared config)
             const firstKey = Object.keys(templates)[0];
-            if (monacoEditor && templates[firstKey]) {
+            if (monacoEditor && templates[firstKey] && !window.isLoadingSharedConfig) {
                 monacoEditor.setValue(templates[firstKey].template);
             }
         }
@@ -2877,6 +3224,176 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
             allowedIpsGroup.style.display = ipRestrictionEnabled.checked ? 'block' : 'none';
         });
 
+        // Phase 2: Conditional Rules Logic
+        const conditionalRules = [];
+        const toggleConditionalRules = document.getElementById('toggleConditionalRules');
+        const conditionalRulesPanel = document.getElementById('conditionalRulesPanel');
+        const conditionalRulesList = document.getElementById('conditionalRulesList');
+        const addRuleBtn = document.getElementById('addRuleBtn');
+
+        toggleConditionalRules.addEventListener('click', () => {
+            const isHidden = conditionalRulesPanel.style.display === 'none';
+            conditionalRulesPanel.style.display = isHidden ? 'block' : 'none';
+            toggleConditionalRules.textContent = isHidden ? '− Hide' : '+ Add Rules';
+        });
+
+        function renderRulesList() {
+            if (conditionalRules.length === 0) {
+                conditionalRulesList.innerHTML = '';
+                return;
+            }
+            conditionalRulesList.innerHTML = conditionalRules.map((rule, i) => `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 4px; margin-bottom: 0.5rem; font-size: 0.75rem;">
+                    <div>
+                        <span style="color: #3b82f6; font-weight: 600;">${rule.conditions[0].type}</span>
+                        <code style="background: var(--color-surface-alt); padding: 0.1rem 0.3rem; border-radius: 2px;">${rule.conditions[0].key}</code>
+                        <span style="color: var(--color-text-secondary);">${rule.conditions[0].operator}</span>
+                        → <span style="color: #ef4444; font-weight: 600;">${rule.response.status_code}</span>
+                    </div>
+                    <button onclick="removeRule(${i})" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1rem;">×</button>
+                </div>
+            `).join('');
+        }
+
+        window.removeRule = function (index) {
+            conditionalRules.splice(index, 1);
+            renderRulesList();
+        };
+
+        addRuleBtn.addEventListener('click', () => {
+            const type = document.getElementById('ruleConditionType').value;
+            const key = document.getElementById('ruleConditionKey').value.trim();
+            const operator = document.getElementById('ruleConditionOperator').value;
+            const value = document.getElementById('ruleConditionValue').value.trim();
+            const status = parseInt(document.getElementById('ruleResponseStatus').value);
+            const message = document.getElementById('ruleResponseMessage').value.trim() || 'Error';
+
+            if (!key) {
+                alert('Please enter a key for the condition');
+                return;
+            }
+
+            conditionalRules.push({
+                name: `${type}_${key}_${operator}`,
+                conditions: [{ type, key, operator, value }],
+                response: {
+                    status_code: status,
+                    body: { error: true, message, status }
+                }
+            });
+
+            renderRulesList();
+            document.getElementById('ruleConditionKey').value = '';
+            document.getElementById('ruleConditionValue').value = '';
+            document.getElementById('ruleResponseMessage').value = '';
+        });
+
+        // Preset rules
+        document.querySelectorAll('.rule-preset-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const preset = btn.dataset.preset;
+                if (preset === 'unauthorized') {
+                    conditionalRules.push({
+                        name: 'Unauthorized',
+                        conditions: [{ type: 'header', key: 'Authorization', operator: 'missing', value: '' }],
+                        response: { status_code: 401, body: { error: true, message: 'Missing Authorization header', status: 401 } }
+                    });
+                } else if (preset === 'notfound') {
+                    conditionalRules.push({
+                        name: 'Not Found',
+                        conditions: [{ type: 'query', key: 'id', operator: 'missing', value: '' }],
+                        response: { status_code: 404, body: { error: true, message: 'Resource not found - missing id parameter', status: 404 } }
+                    });
+                }
+                renderRulesList();
+            });
+        });
+
+        // Phase 2: Validation Logic
+        const toggleValidation = document.getElementById('toggleValidation');
+        const validationPanel = document.getElementById('validationPanel');
+
+        toggleValidation.addEventListener('click', () => {
+            const isHidden = validationPanel.style.display === 'none';
+            validationPanel.style.display = isHidden ? 'block' : 'none';
+            toggleValidation.textContent = isHidden ? 'Hide' : 'Configure';
+        });
+
+        function getValidationSchema() {
+            const headers = document.getElementById('validationHeaders').value.trim();
+            const params = document.getElementById('validationParams').value.trim();
+            const bodyFields = document.getElementById('validationBodyFields').value.trim();
+
+            const schema = {};
+            if (headers) schema.required_headers = headers.split(',').map(h => h.trim()).filter(h => h);
+            if (params) schema.required_params = params.split(',').map(p => p.trim()).filter(p => p);
+            if (bodyFields) {
+                schema.body_schema = {
+                    required: bodyFields.split(',').map(f => f.trim()).filter(f => f)
+                };
+            }
+            return Object.keys(schema).length > 0 ? schema : null;
+        }
+
+        // Phase 3: Authentication Logic
+        const toggleAuth = document.getElementById('toggleAuth');
+        const authPanel = document.getElementById('authPanel');
+        const authType = document.getElementById('authType');
+        const apiKeyConfig = document.getElementById('apiKeyConfig');
+        const bearerConfig = document.getElementById('bearerConfig');
+        const basicAuthConfig = document.getElementById('basicAuthConfig');
+
+        if (toggleAuth && authPanel) {
+            toggleAuth.addEventListener('click', () => {
+                const isHidden = authPanel.style.display === 'none';
+                authPanel.style.display = isHidden ? 'block' : 'none';
+                toggleAuth.textContent = isHidden ? 'Hide' : 'Configure';
+            });
+        }
+
+        if (authType && apiKeyConfig && bearerConfig && basicAuthConfig) {
+            authType.addEventListener('change', () => {
+                apiKeyConfig.style.display = 'none';
+                bearerConfig.style.display = 'none';
+                basicAuthConfig.style.display = 'none';
+
+                switch (authType.value) {
+                    case 'api_key':
+                        apiKeyConfig.style.display = 'block';
+                        break;
+                    case 'bearer':
+                        bearerConfig.style.display = 'block';
+                        break;
+                    case 'basic':
+                        basicAuthConfig.style.display = 'block';
+                        break;
+                }
+            });
+        }
+
+        function getAuthConfig() {
+            const type = authType.value;
+            if (!type) return null;
+
+            const config = { type };
+
+            if (type === 'api_key') {
+                config.api_key = document.getElementById('authApiKey').value.trim();
+                const headerName = document.getElementById('authApiKeyHeader').value.trim();
+                if (headerName) config.header_name = headerName;
+                if (!config.api_key) return null;
+            } else if (type === 'bearer') {
+                config.token = document.getElementById('authBearerToken').value.trim();
+                if (!config.token) return null;
+            } else if (type === 'basic') {
+                config.username = document.getElementById('authBasicUsername').value.trim();
+                config.password = document.getElementById('authBasicPassword').value.trim();
+                if (!config.username || !config.password) return null;
+            }
+
+            return config;
+        }
+
         // Create Server Endpoint
         createServerEndpointBtn.addEventListener('click', async () => {
             const path = endpointPath.value || '/api/users';
@@ -2899,6 +3416,9 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
             createServerEndpointBtn.innerHTML = '<span>⏳</span> Creating...';
 
             try {
+                const validationSchema = getValidationSchema();
+                const authConfig = getAuthConfig();
+
                 const payload = {
                     name: 'Mock Endpoint',
                     path: path,
@@ -2909,7 +3429,10 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
                     error_rate: errorRate,
                     record_count: parseInt(recordCount.value) || 5,
                     ip_restriction_enabled: ipEnabled,
-                    allowed_ips: allowedIps
+                    allowed_ips: allowedIps,
+                    conditional_rules: conditionalRules.length > 0 ? conditionalRules : [],
+                    validation_schema: validationSchema || {},
+                    auth_config: authConfig || {}
                 };
 
                 const response = await fetch('/api/mock/create/', {
@@ -2924,15 +3447,21 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
 
                 if (data.success) {
                     createdEndpointUrl.value = data.endpoint_url;
-                    createdEndpointInfo.innerHTML = `
-                        <strong>Method:</strong> ${data.method} | 
-                        <strong>IP Restricted:</strong> ${data.ip_restriction_enabled ? 'Yes (' + data.allowed_ips.join(', ') + ')' : 'No'} |
-                        <strong>Created:</strong> ${new Date(data.created_at).toLocaleString()}
-                    `;
+                    let featuresInfo = `<strong>Method:</strong> ${data.method}`;
+                    if (data.ip_restriction_enabled) featuresInfo += ` | <strong>IP:</strong> ✓`;
+                    if (data.has_conditional_rules) featuresInfo += ` | <strong>Rules:</strong> ✓`;
+                    if (data.has_validation) featuresInfo += ` | <strong>Validation:</strong> ✓`;
+                    if (data.has_auth) featuresInfo += ` | <strong>Auth:</strong> ✓`;
+                    createdEndpointInfo.innerHTML = featuresInfo;
                     createdEndpointSection.style.display = 'block';
+
+                    // Populate share URL
+                    document.getElementById('shareUrlDisplay').value = data.share_url || '';
 
                     // Update the endpoint display
                     endpointUrlDisplay.textContent = data.endpoint_url;
+
+                    showToast('Endpoint created successfully!', 'success');
                 } else {
                     showToast(data.error || 'Failed to create endpoint', 'error');
                 }
@@ -2952,6 +3481,104 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
             copyCreatedUrlBtn.textContent = 'Copied!';
             setTimeout(() => { copyCreatedUrlBtn.textContent = originalText; }, 1500);
         });
+
+        // Copy share URL
+        const copyShareUrlBtn = document.getElementById('copyShareUrlBtn');
+        if (copyShareUrlBtn) {
+            copyShareUrlBtn.addEventListener('click', () => {
+                const shareUrlInput = document.getElementById('shareUrlDisplay');
+                if (shareUrlInput) {
+                    shareUrlInput.select();
+                    document.execCommand('copy');
+                    showToast('Share URL copied! Send this to share your endpoint configuration', 'success');
+                }
+            });
+        }
+
+        // ==================== Clone from Share URL ====================
+        let pendingSharedConfig = null; // Store config if Monaco isn't ready yet
+
+        async function loadSharedEndpoint() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const shareToken = urlParams.get('share');
+
+            if (!shareToken) return;
+
+            // Set flag to prevent default template from overwriting shared config
+            window.isLoadingSharedConfig = true;
+
+            showToast('Loading shared endpoint configuration...', 'info');
+
+            try {
+                const response = await fetch(`/api/mock/share/${shareToken}/`);
+                const data = await response.json();
+
+                if (data.success && data.config) {
+                    const config = data.config;
+
+                    // Populate the form with shared configuration (with null checks)
+                    const endpointPath = document.getElementById('endpointPath');
+                    const httpMethodEl = document.getElementById('httpMethod');
+                    const statusCodeEl = document.getElementById('statusCode');
+                    const latencySliderEl = document.getElementById('latencySlider');
+                    const errorRateSliderEl = document.getElementById('errorRateSlider');
+                    const recordCountEl = document.getElementById('recordCount');
+                    const latencyValueEl = document.getElementById('latencyValue');
+                    const errorRateValueEl = document.getElementById('errorRateValue');
+
+                    if (endpointPath) endpointPath.value = config.path || '/api/users';
+                    if (httpMethodEl) httpMethodEl.value = config.method || 'GET';
+                    if (statusCodeEl) statusCodeEl.value = config.status_code || 200;
+                    if (latencySliderEl) latencySliderEl.value = config.latency_ms || 0;
+                    if (errorRateSliderEl) errorRateSliderEl.value = config.error_rate || 0;
+                    if (recordCountEl) recordCountEl.value = config.record_count || 5;
+
+                    // Update slider displays
+                    if (latencyValueEl) latencyValueEl.textContent = `${config.latency_ms || 0}ms`;
+                    if (errorRateValueEl) errorRateValueEl.textContent = `${config.error_rate || 0}%`;
+
+                    // Set response body in editor (handle Monaco async loading)
+                    if (config.response_body) {
+                        const setEditorValue = () => {
+                            if (window.monacoEditor && typeof window.monacoEditor.setValue === 'function') {
+                                window.monacoEditor.setValue(config.response_body);
+                                return true;
+                            }
+                            return false;
+                        };
+
+                        // Try immediately
+                        if (!setEditorValue()) {
+                            // Store for later and retry a few times
+                            pendingSharedConfig = config.response_body;
+                            let retries = 0;
+                            const retryInterval = setInterval(() => {
+                                retries++;
+                                if (setEditorValue() || retries > 20) {
+                                    clearInterval(retryInterval);
+                                    pendingSharedConfig = null;
+                                }
+                            }, 200);
+                        }
+                    }
+
+                    // Clean the share param from URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
+
+                    showToast('✅ Shared endpoint loaded! Click "Create Server Endpoint" to create your own copy.', 'success');
+                } else {
+                    showToast('Failed to load shared endpoint: ' + (data.message || 'Unknown error'), 'error');
+                }
+            } catch (e) {
+                showToast('Error loading shared endpoint: ' + e.message, 'error');
+            } finally {
+                // Reset flag after loading completes
+                window.isLoadingSharedConfig = false;
+            }
+        }
+
+        // Check for share parameter on page load
+        loadSharedEndpoint();
 
         // ==================== Saved Endpoints Functionality ====================
         const savedEndpointsList = document.getElementById('savedEndpointsList');
@@ -3136,20 +3763,28 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
         const aiPromptInput = document.getElementById('aiPromptInput');
         const aiStatus = document.getElementById('aiStatus');
 
-        // Open AI modal
-        aiGenerateBtn.addEventListener('click', () => {
-            aiModal.classList.add('active');
-            aiPromptInput.value = '';
-            aiStatus.style.display = 'none';
-            aiPromptInput.focus();
-        });
+        // Open AI modal (only if button exists)
+        if (aiGenerateBtn && aiModal) {
+            aiGenerateBtn.addEventListener('click', () => {
+                aiModal.classList.add('active');
+                if (aiPromptInput) aiPromptInput.value = '';
+                if (aiStatus) aiStatus.style.display = 'none';
+                if (aiPromptInput) aiPromptInput.focus();
+            });
+        }
 
-        // Close AI modal
-        aiModalClose.addEventListener('click', () => aiModal.classList.remove('active'));
-        aiModalCancelBtn.addEventListener('click', () => aiModal.classList.remove('active'));
-        aiModal.addEventListener('click', (e) => {
-            if (e.target === aiModal) aiModal.classList.remove('active');
-        });
+        // Close AI modal (only if elements exist)
+        if (aiModalClose && aiModal) {
+            aiModalClose.addEventListener('click', () => aiModal.classList.remove('active'));
+        }
+        if (aiModalCancelBtn && aiModal) {
+            aiModalCancelBtn.addEventListener('click', () => aiModal.classList.remove('active'));
+        }
+        if (aiModal) {
+            aiModal.addEventListener('click', (e) => {
+                if (e.target === aiModal) aiModal.classList.remove('active');
+            });
+        }
 
         // Handle example chip clicks
         document.querySelectorAll('.ai-example-chip').forEach(chip => {
@@ -3864,68 +4499,67 @@ smart generation, custom JSON responses, latency simulation, and error testing.{
         }
 
         // Handle AI generation
-        aiModalGenerateBtn.addEventListener('click', async () => {
-            const prompt = aiPromptInput.value.trim();
+        if (aiModalGenerateBtn && aiPromptInput && aiStatus) {
+            aiModalGenerateBtn.addEventListener('click', async () => {
+                const prompt = aiPromptInput.value.trim();
 
-            if (!prompt) {
-                showToast('Please describe the API you want to create', 'warning');
-                return;
-            }
+                if (!prompt) {
+                    showToast('Please describe the API you want to create', 'warning');
+                    return;
+                }
 
-            // Show processing state
-            aiModalGenerateBtn.disabled = true;
-            aiModalGenerateBtn.innerHTML = '<span>⏳</span> Generating...';
-            aiStatus.style.display = 'block';
-            aiStatus.style.background = 'rgba(59, 130, 246, 0.1)';
-            aiStatus.style.color = '#3b82f6';
-            aiStatus.innerHTML = '🔄 Analyzing your request...';
+                // Show processing state
+                aiModalGenerateBtn.disabled = true;
+                aiModalGenerateBtn.innerHTML = '<span>⏳</span> Generating...';
+                aiStatus.style.display = 'block';
+                aiStatus.style.background = 'rgba(59, 130, 246, 0.1)';
+                aiStatus.style.color = '#3b82f6';
+                aiStatus.innerHTML = '🔄 Analyzing your request...';
 
-            // Simulate a small delay for UX
-            await new Promise(resolve => setTimeout(resolve, 600));
+                // Simulate a small delay for UX
+                await new Promise(r => setTimeout(r, 500));
 
-            try {
-                // Track AI generation usage
-                fetch('/api/track/tool-usage/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tool_name: 'mock-api-generator', action: 'ai-generate' })
-                }).catch(() => { }); // Silent fail
+                try {
+                    const result = await generateMockFromPrompt(prompt);
 
-                // Generate config using our smart parser
-                const config = generateMockConfig(prompt);
+                    if (result.success) {
+                        // Apply generated configuration
+                        applyGeneratedConfig(result);
 
-                aiStatus.style.background = 'rgba(16, 185, 129, 0.1)';
-                aiStatus.style.color = '#10b981';
-                aiStatus.innerHTML = '✅ Configuration generated successfully!';
+                        // Show success
+                        aiStatus.style.background = 'rgba(16, 185, 129, 0.1)';
+                        aiStatus.style.color = '#10b981';
+                        aiStatus.innerHTML = '✅ Generated successfully!';
 
-                // Apply the config after a short delay
-                await new Promise(resolve => setTimeout(resolve, 400));
+                        // Close modal after delay
+                        setTimeout(() => {
+                            aiModal.classList.remove('active');
+                        }, 1000);
+                    } else {
+                        aiStatus.style.background = 'rgba(239, 68, 68, 0.1)';
+                        aiStatus.style.color = '#ef4444';
+                        aiStatus.innerHTML = '❌ ' + (result.error || 'Failed to generate');
+                    }
+                } catch (error) {
+                    aiStatus.style.background = 'rgba(239, 68, 68, 0.1)';
+                    aiStatus.style.color = '#ef4444';
+                    aiStatus.innerHTML = '❌ Failed to generate. Please try rephrasing.';
+                    console.error('AI Generation Error:', error);
+                }
 
-                applyGeneratedConfig(config);
+                // Reset button state
+                aiModalGenerateBtn.disabled = false;
+                aiModalGenerateBtn.innerHTML = '<span>✨</span> Generate';
+            });
 
-                // Close modal and show success
-                aiModal.classList.remove('active');
-                showToast('Mock API generated! Review and customize as needed.', 'success');
-
-            } catch (error) {
-                aiStatus.style.background = 'rgba(239, 68, 68, 0.1)';
-                aiStatus.style.color = '#ef4444';
-                aiStatus.innerHTML = '❌ Failed to generate. Please try rephrasing.';
-                console.error('AI Generation Error:', error);
-            }
-
-            // Reset button state
-            aiModalGenerateBtn.disabled = false;
-            aiModalGenerateBtn.innerHTML = '<span>✨</span> Generate';
-        });
-
-        // Handle Enter key in prompt input
-        aiPromptInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                aiModalGenerateBtn.click();
-            }
-        });
+            // Handle Enter key in prompt input
+            aiPromptInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    aiModalGenerateBtn.click();
+                }
+            });
+        }
     })();
 </script>
 {% endverbatim %}

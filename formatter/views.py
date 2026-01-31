@@ -7,6 +7,7 @@ import json
 import csv
 import io
 import base64
+import secrets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -498,12 +499,85 @@ def json_tools_page(request):
     return render(request, 'json-tools.html')
 
 
+def enforce_dummy_api_quota(endpoint, ip_address):
+    """
+    Check if an IP has exceeded the 30-request quota for a specific dummy API endpoint.
+    Returns (is_allowed, request_count).
+    """
+    from .models import DummyJsonApiLog
+    
+    # Get or create the log entry
+    obj, created = DummyJsonApiLog.objects.get_or_create(
+        endpoint=endpoint,
+        ip_address=ip_address
+    )
+    
+    # If not created, check the count
+    if not created and obj.request_count >= 30:
+        return False, obj.request_count
+    
+    return True, obj.request_count
+
+@api_view(['POST'])
+def renew_dummy_api_quota(request):
+    """Reset the quota for the requester's IP and a specific endpoint"""
+    from .models import DummyJsonApiLog
+    
+    endpoint = request.data.get('endpoint')
+    if not endpoint:
+        return Response({'success': False, 'error': 'Endpoint is required'}, status=400)
+    
+    # Valid endpoints check
+    valid_endpoints = [choice[0] for choice in DummyJsonApiLog.ENDPOINT_CHOICES]
+    if endpoint not in valid_endpoints:
+        return Response({'success': False, 'error': 'Invalid endpoint'}, status=400)
+    
+    ip = get_client_ip(request)
+    DummyJsonApiLog.reset_quota(endpoint, ip)
+    
+    return Response({
+        'success': True, 
+        'message': f'Quota reset for {endpoint}',
+        'endpoint': endpoint
+    })
+
+@api_view(['GET'])
+def get_dummy_quota_status(request):
+    """Get the current quota status for an IP and endpoint"""
+    endpoint = request.GET.get('endpoint')
+    if not endpoint:
+        return Response({'success': False, 'error': 'Endpoint is required'}, status=400)
+    
+    ip = get_client_ip(request)
+    is_allowed, req_count = enforce_dummy_api_quota(endpoint, ip)
+    
+    return Response({
+        'success': True,
+        'endpoint': endpoint,
+        'request_count': req_count,
+        'limit': 30,
+        'is_blocked': not is_allowed
+    })
+
+
 @api_view(['GET'])
 def dummy_json_users_api(request):
     """Generate random fake user data"""
     import random
     
     count = min(int(request.GET.get('count', 5)), 100)
+    
+    # Enforce quota
+    ip = get_client_ip(request)
+    is_allowed, req_count = enforce_dummy_api_quota('users', ip)
+    if not is_allowed:
+        return Response({
+            'success': False,
+            'error': 'Quota Exceeded',
+            'message': 'You have reached the limit of 30 requests for this endpoint. Please visit the playground to renew access.',
+            'renewal_url': f"{request.build_absolute_uri('/dummy-json-api/playground/')}?api=users",
+            'request_count': req_count
+        }, status=403)
     
     first_names = ['Emma', 'James', 'Sarah', 'Michael', 'Emily', 'David', 'Olivia', 'Daniel', 'Sophia', 'William', 'Ava', 'Alexander', 'Isabella', 'Matthew', 'Mia', 'Ethan', 'Charlotte', 'Andrew', 'Amelia', 'Joseph']
     last_names = ['Wilson', 'Rodriguez', 'Kim', 'Johnson', 'Chen', 'Smith', 'Brown', 'Davis', 'Garcia', 'Miller', 'Martinez', 'Taylor', 'Anderson', 'Thomas', 'Jackson', 'White', 'Harris', 'Martin', 'Thompson', 'Moore']
@@ -541,6 +615,18 @@ def dummy_json_products_api(request):
     import random
     
     count = min(int(request.GET.get('count', 10)), 100)
+    
+    # Enforce quota
+    ip = get_client_ip(request)
+    is_allowed, req_count = enforce_dummy_api_quota('products', ip)
+    if not is_allowed:
+        return Response({
+            'success': False,
+            'error': 'Quota Exceeded',
+            'message': 'You have reached the limit of 30 requests for this endpoint. Please visit the playground to renew access.',
+            'renewal_url': f"{request.build_absolute_uri('/dummy-json-api/playground/')}?api=products",
+            'request_count': req_count
+        }, status=403)
     
     products_list = [
         ('Wireless Headphones', 'Electronics'), ('Smart Watch', 'Electronics'), ('Bluetooth Speaker', 'Electronics'),
@@ -582,6 +668,18 @@ def dummy_json_posts_api(request):
     
     count = min(int(request.GET.get('count', 5)), 100)
     
+    # Enforce quota
+    ip = get_client_ip(request)
+    is_allowed, req_count = enforce_dummy_api_quota('posts', ip)
+    if not is_allowed:
+        return Response({
+            'success': False,
+            'error': 'Quota Exceeded',
+            'message': 'You have reached the limit of 30 requests for this endpoint. Please visit the playground to renew access.',
+            'renewal_url': f"{request.build_absolute_uri('/dummy-json-api/playground/')}?api=posts",
+            'request_count': req_count
+        }, status=403)
+    
     titles = ['Getting Started with React', 'Python Best Practices', 'Introduction to Machine Learning', 
               'Docker for Beginners', 'REST API Design Patterns', 'Building Microservices', 
               'JavaScript ES6 Features', 'Cloud Architecture Basics', 'Database Optimization Tips',
@@ -620,6 +718,18 @@ def dummy_json_comments_api(request):
     import random
     
     count = min(int(request.GET.get('count', 5)), 100)
+    
+    # Enforce quota
+    ip = get_client_ip(request)
+    is_allowed, req_count = enforce_dummy_api_quota('comments', ip)
+    if not is_allowed:
+        return Response({
+            'success': False,
+            'error': 'Quota Exceeded',
+            'message': 'You have reached the limit of 30 requests for this endpoint. Please visit the playground to renew access.',
+            'renewal_url': f"{request.build_absolute_uri('/dummy-json-api/playground/')}?api=comments",
+            'request_count': req_count
+        }, status=403)
     
     names = ['Alice Johnson', 'Bob Smith', 'Carol Williams', 'David Brown', 'Eva Martinez', 'Frank Lee', 'Grace Kim', 'Henry Davis']
     
@@ -660,6 +770,18 @@ def dummy_json_todos_api(request):
     
     count = min(int(request.GET.get('count', 5)), 100)
     
+    # Enforce quota
+    ip = get_client_ip(request)
+    is_allowed, req_count = enforce_dummy_api_quota('todos', ip)
+    if not is_allowed:
+        return Response({
+            'success': False,
+            'error': 'Quota Exceeded',
+            'message': 'You have reached the limit of 30 requests for this endpoint. Please visit the playground to renew access.',
+            'renewal_url': f"{request.build_absolute_uri('/dummy-json-api/playground/')}?api=todos",
+            'request_count': req_count
+        }, status=403)
+    
     tasks = [
         'Complete project documentation', 'Review pull request', 'Fix login bug',
         'Update dependencies', 'Write unit tests', 'Refactor authentication module',
@@ -695,6 +817,18 @@ def dummy_json_companies_api(request):
     import random
     
     count = min(int(request.GET.get('count', 5)), 100)
+    
+    # Enforce quota
+    ip = get_client_ip(request)
+    is_allowed, req_count = enforce_dummy_api_quota('companies', ip)
+    if not is_allowed:
+        return Response({
+            'success': False,
+            'error': 'Quota Exceeded',
+            'message': 'You have reached the limit of 30 requests for this endpoint. Please visit the playground to renew access.',
+            'renewal_url': f"{request.build_absolute_uri('/dummy-json-api/playground/')}?api=companies",
+            'request_count': req_count
+        }, status=403)
     
     company_names = ['TechCorp', 'DataVerse', 'CloudNine', 'ByteWorks', 'NexGen', 'SkyPeak', 'BlueShift', 'InnovateCo', 'FuturePath', 'QuantumLeap']
     industries = ['Technology', 'Finance', 'Healthcare', 'E-commerce', 'Manufacturing', 'Consulting', 'Education']
@@ -2625,21 +2759,31 @@ def create_mock_endpoint(request):
             ip_restriction_enabled=bool(data.get('ip_restriction_enabled', False)),
             allowed_ips=data.get('allowed_ips', ''),
             custom_headers=json.dumps(data.get('custom_headers', {})),
+            conditional_rules=json.dumps(data.get('conditional_rules', [])),
+            validation_schema=json.dumps(data.get('validation_schema', {})),
+            auth_config=json.dumps(data.get('auth_config', {})),
+            share_token=secrets.token_urlsafe(32),  # Generate unique share token
             creator_ip=client_ip
         )
         
         # Build the full endpoint URL using user's path
         site_url = request.build_absolute_uri('/').rstrip('/')
         endpoint_url = f"{site_url}/{user_path}/{endpoint.endpoint_id}/"
+        share_url = f"{site_url}/mock-api/?share={endpoint.share_token}"
         
         return JsonResponse({
             'success': True,
             'endpoint_id': endpoint.endpoint_id,
             'endpoint_url': endpoint_url,
+            'share_url': share_url,
+            'share_token': endpoint.share_token,
             'method': endpoint.method,
             'path': f"/{user_path}",
             'ip_restriction_enabled': endpoint.ip_restriction_enabled,
             'allowed_ips': endpoint.get_allowed_ips_list(),
+            'has_conditional_rules': bool(data.get('conditional_rules')),
+            'has_validation': bool(data.get('validation_schema')),
+            'has_auth': bool(data.get('auth_config', {}).get('type')),
             'created_at': endpoint.created_at.isoformat(),
             'message': 'Mock endpoint created successfully'
         }, status=201)
@@ -2649,6 +2793,91 @@ def create_mock_endpoint(request):
             'success': False,
             'error': str(e)
         }, status=500)
+
+
+@csrf_exempt
+def get_endpoint_config(request, share_token):
+    """
+    Get endpoint configuration for sharing/cloning.
+    Returns the full configuration of an endpoint given its share token.
+    """
+    try:
+        endpoint = MockEndpoint.objects.get(share_token=share_token)
+    except MockEndpoint.DoesNotExist:
+        return JsonResponse({
+            'error': 'Endpoint not found',
+            'message': 'Invalid or expired share token'
+        }, status=404)
+    
+    return JsonResponse({
+        'success': True,
+        'config': {
+            'name': endpoint.name,
+            'path': endpoint.path,
+            'method': endpoint.method,
+            'status_code': endpoint.status_code,
+            'response_body': endpoint.response_body,
+            'latency_ms': endpoint.latency_ms,
+            'error_rate': endpoint.error_rate,
+            'record_count': endpoint.record_count,
+            'conditional_rules': endpoint.conditional_rules,
+            'validation_schema': endpoint.validation_schema,
+            'auth_config': endpoint.auth_config,
+            'custom_headers': endpoint.custom_headers,
+        }
+    })
+
+
+@csrf_exempt
+def clone_mock_endpoint(request, share_token):
+    """
+    Clone an existing endpoint using its share token.
+    Creates a new endpoint with the same configuration.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+    
+    try:
+        original = MockEndpoint.objects.get(share_token=share_token)
+    except MockEndpoint.DoesNotExist:
+        return JsonResponse({
+            'error': 'Endpoint not found',
+            'message': 'Invalid or expired share token'
+        }, status=404)
+    
+    client_ip = get_client_ip(request)
+    
+    # Create a new endpoint with the same configuration
+    new_endpoint = MockEndpoint.objects.create(
+        name=f"{original.name} (Clone)" if original.name else "Cloned Endpoint",
+        path=original.path,
+        method=original.method,
+        status_code=original.status_code,
+        response_body=original.response_body,
+        latency_ms=original.latency_ms,
+        error_rate=original.error_rate,
+        record_count=original.record_count,
+        conditional_rules=original.conditional_rules,
+        validation_schema=original.validation_schema,
+        auth_config=original.auth_config,
+        custom_headers=original.custom_headers,
+        share_token=secrets.token_urlsafe(32),
+        creator_ip=client_ip
+    )
+    
+    site_url = request.build_absolute_uri('/').rstrip('/')
+    user_path = new_endpoint.path.strip('/')
+    endpoint_url = f"{site_url}/{user_path}/{new_endpoint.endpoint_id}/"
+    share_url = f"{site_url}/mock-api/?share={new_endpoint.share_token}"
+    
+    return JsonResponse({
+        'success': True,
+        'endpoint_id': new_endpoint.endpoint_id,
+        'endpoint_url': endpoint_url,
+        'share_url': share_url,
+        'share_token': new_endpoint.share_token,
+        'message': 'Endpoint cloned successfully'
+    }, status=201)
 
 
 def process_template_variables(template_str):
@@ -2799,11 +3028,245 @@ def serve_path_mock_endpoint(request, user_path='', endpoint_id=''):
     return serve_mock_endpoint(request, endpoint_id_str, subpath='')
 
 
+def validate_auth(request, auth_json):
+    """
+    Validate request authentication against auth_config.
+    Returns (is_valid, error_message) tuple.
+    
+    Auth config format:
+    {
+        "type": "api_key" | "bearer" | "basic",
+        "api_key": "your-api-key",           # for api_key
+        "header_name": "X-API-Key",          # for api_key (optional, defaults to X-API-Key)
+        "token": "your-bearer-token",        # for bearer
+        "username": "user",                  # for basic
+        "password": "pass"                   # for basic
+    }
+    """
+    try:
+        auth_config = json.loads(auth_json) if auth_json else {}
+    except (json.JSONDecodeError, TypeError):
+        return True, None  # No auth configured
+    
+    if not auth_config or not auth_config.get('type'):
+        return True, None  # No auth configured
+    
+    auth_type = auth_config.get('type', '').lower()
+    
+    if auth_type == 'api_key':
+        expected_key = auth_config.get('api_key', '')
+        header_name = auth_config.get('header_name', 'X-API-Key')
+        
+        # Check header first, then query param
+        provided_key = request.headers.get(header_name) or request.GET.get('api_key')
+        
+        if not provided_key:
+            return False, f"Missing API key. Provide via '{header_name}' header or 'api_key' query param"
+        if provided_key != expected_key:
+            return False, "Invalid API key"
+        return True, None
+    
+    elif auth_type == 'bearer':
+        expected_token = auth_config.get('token', '')
+        auth_header = request.headers.get('Authorization', '')
+        
+        if not auth_header:
+            return False, "Missing Authorization header"
+        if not auth_header.startswith('Bearer '):
+            return False, "Invalid Authorization header format. Expected: Bearer <token>"
+        
+        provided_token = auth_header[7:]  # Remove 'Bearer ' prefix
+        if provided_token != expected_token:
+            return False, "Invalid bearer token"
+        return True, None
+    
+    elif auth_type == 'basic':
+        expected_username = auth_config.get('username', '')
+        expected_password = auth_config.get('password', '')
+        auth_header = request.headers.get('Authorization', '')
+        
+        if not auth_header:
+            return False, "Missing Authorization header"
+        if not auth_header.startswith('Basic '):
+            return False, "Invalid Authorization header format. Expected: Basic <base64>"
+        
+        import base64
+        try:
+            credentials = base64.b64decode(auth_header[6:]).decode('utf-8')
+            username, password = credentials.split(':', 1)
+            
+            if username != expected_username or password != expected_password:
+                return False, "Invalid credentials"
+            return True, None
+        except Exception:
+            return False, "Invalid Basic auth encoding"
+    
+    return True, None  # Unknown auth type, allow
+
+
+def evaluate_conditional_rules(request, rules_json):
+    """
+    Evaluate conditional response rules against the request.
+    Returns (matched, response_override) where matched is True if a rule matches.
+    
+    Rule format:
+    {
+        "name": "Unauthorized",
+        "conditions": [
+            {"type": "header", "key": "Authorization", "operator": "missing"}
+        ],
+        "response": {
+            "status_code": 401,
+            "body": {"error": "Unauthorized", "message": "Missing Authorization header"}
+        }
+    }
+    """
+    try:
+        rules = json.loads(rules_json) if rules_json else []
+    except (json.JSONDecodeError, TypeError):
+        return False, None
+    
+    if not rules:
+        return False, None
+    
+    # Get request data
+    headers = request.headers
+    query_params = request.GET
+    
+    try:
+        body = json.loads(request.body) if request.body else {}
+    except:
+        body = {}
+    
+    for rule in rules:
+        conditions = rule.get('conditions', [])
+        all_match = True
+        
+        for condition in conditions:
+            cond_type = condition.get('type', '')
+            key = condition.get('key', '')
+            operator = condition.get('operator', 'equals')
+            value = condition.get('value', '')
+            
+            if cond_type == 'header':
+                header_value = headers.get(key, None)
+                
+                if operator == 'missing':
+                    all_match = all_match and (header_value is None or header_value == '')
+                elif operator == 'present':
+                    all_match = all_match and (header_value is not None and header_value != '')
+                elif operator == 'equals':
+                    all_match = all_match and (header_value == value)
+                elif operator == 'contains':
+                    all_match = all_match and (header_value and value in header_value)
+                    
+            elif cond_type == 'query':
+                param_value = query_params.get(key, None)
+                
+                if operator == 'missing':
+                    all_match = all_match and (param_value is None)
+                elif operator == 'present':
+                    all_match = all_match and (param_value is not None)
+                elif operator == 'equals':
+                    all_match = all_match and (param_value == value)
+                elif operator == 'contains':
+                    all_match = all_match and (param_value and value in param_value)
+                    
+            elif cond_type == 'body':
+                body_value = body.get(key, None)
+                
+                if operator == 'missing':
+                    all_match = all_match and (body_value is None)
+                elif operator == 'present':
+                    all_match = all_match and (body_value is not None)
+                elif operator == 'equals':
+                    all_match = all_match and (str(body_value) == str(value))
+                elif operator == 'contains':
+                    all_match = all_match and (body_value and value in str(body_value))
+        
+        if all_match and conditions:
+            return True, rule.get('response', {})
+    
+    return False, None
+
+
+def validate_request(request, validation_json):
+    """
+    Validate request against validation schema.
+    Returns (is_valid, errors) where errors is a list of validation error messages.
+    
+    Schema format:
+    {
+        "required_headers": ["Content-Type", "Authorization"],
+        "required_params": ["userId"],
+        "body_schema": {
+            "required": ["email", "name"],
+            "types": {"email": "string", "age": "number", "active": "boolean"}
+        }
+    }
+    """
+    try:
+        schema = json.loads(validation_json) if validation_json else {}
+    except (json.JSONDecodeError, TypeError):
+        return True, []
+    
+    if not schema:
+        return True, []
+    
+    errors = []
+    
+    # Validate required headers
+    required_headers = schema.get('required_headers', [])
+    for header in required_headers:
+        if not request.headers.get(header):
+            errors.append(f"Missing required header: {header}")
+    
+    # Validate required query params
+    required_params = schema.get('required_params', [])
+    for param in required_params:
+        if param not in request.GET:
+            errors.append(f"Missing required query parameter: {param}")
+    
+    # Validate body schema
+    body_schema = schema.get('body_schema', {})
+    if body_schema:
+        try:
+            body = json.loads(request.body) if request.body else {}
+        except:
+            if body_schema.get('required'):
+                errors.append("Invalid or missing request body (expected JSON)")
+            body = {}
+        
+        # Check required fields
+        required_fields = body_schema.get('required', [])
+        for field in required_fields:
+            if field not in body:
+                errors.append(f"Missing required body field: {field}")
+        
+        # Check types
+        type_checks = body_schema.get('types', {})
+        for field, expected_type in type_checks.items():
+            if field in body:
+                value = body[field]
+                if expected_type == 'string' and not isinstance(value, str):
+                    errors.append(f"Field '{field}' must be a string")
+                elif expected_type == 'number' and not isinstance(value, (int, float)):
+                    errors.append(f"Field '{field}' must be a number")
+                elif expected_type == 'boolean' and not isinstance(value, bool):
+                    errors.append(f"Field '{field}' must be a boolean")
+                elif expected_type == 'array' and not isinstance(value, list):
+                    errors.append(f"Field '{field}' must be an array")
+                elif expected_type == 'object' and not isinstance(value, dict):
+                    errors.append(f"Field '{field}' must be an object")
+    
+    return len(errors) == 0, errors
+
+
 @csrf_exempt
 def serve_mock_endpoint(request, endpoint_id, subpath=''):
     """
     Serve the mock endpoint response.
-    Handles IP restriction, latency simulation, and error rate.
+    Handles IP restriction, latency simulation, conditional rules, validation, and error rate.
     """
     # Convert UUID object to string if needed
     endpoint_id_str = str(endpoint_id)
@@ -2843,6 +3306,41 @@ def serve_mock_endpoint(request, endpoint_id, subpath=''):
             'message': f'This endpoint only accepts {endpoint.method} requests',
             'status': 405
         }, status=405)
+    
+    # Phase 3: Authentication Validation
+    auth_valid, auth_error = validate_auth(request, endpoint.auth_config)
+    if not auth_valid:
+        return JsonResponse({
+            'error': 'Unauthorized',
+            'message': auth_error,
+            'status': 401
+        }, status=401)
+    
+    # Phase 2: Request Validation
+    is_valid, validation_errors = validate_request(request, endpoint.validation_schema)
+    if not is_valid:
+        return JsonResponse({
+            'error': 'Bad Request',
+            'message': 'Request validation failed',
+            'validation_errors': validation_errors,
+            'status': 400
+        }, status=400)
+    
+    # Phase 2: Conditional Rules - Check before applying latency
+    rule_matched, response_override = evaluate_conditional_rules(request, endpoint.conditional_rules)
+    if rule_matched and response_override:
+        override_status = response_override.get('status_code', 200)
+        override_body = response_override.get('body', {})
+        
+        # Apply latency even for conditional responses
+        if endpoint.latency_ms > 0:
+            time.sleep(endpoint.latency_ms / 1000.0)
+        
+        endpoint.increment_request_count()
+        
+        response = JsonResponse(override_body, status=override_status, safe=False)
+        response['X-Mock-Rule-Matched'] = 'true'
+        return response
     
     # Apply latency simulation
     if endpoint.latency_ms > 0:
