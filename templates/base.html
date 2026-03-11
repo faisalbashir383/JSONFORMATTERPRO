@@ -277,7 +277,8 @@
             {% block navigation %}
             <!-- Sidebar Toggle Button -->
             <button id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Toggle sidebar">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
                     <line x1="3" y1="6" x2="21" y2="6"></line>
                     <line x1="3" y1="12" x2="21" y2="12"></line>
                     <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -426,10 +427,10 @@
                                     class="nav-logo" style="height: 40px; width: auto;">
                             </a>
                         </span>
-                        <span class="footer-name">JSON Formatter Pro</span>
+                        <span class="footer-name">JSON Formatters Pro</span>
                     </div>
                     <p class="footer-description">
-                        Free online JSON formatter to format and beautify JSON instantly. Built for developers, APIs,
+                        Free online JSON formatters to format and beautify JSON instantly. Built for developers, APIs,
                         and large JSON files.
                     </p>
 
@@ -461,84 +462,14 @@
 
                 <!-- Right: Link Columns -->
                 <div class="footer-links-grid">
-                    <!-- JSON Tools Column -->
+                    <!-- Tools Column -->
                     <div class="footer-column">
-                        <h4 class="footer-heading"><a href="/json-tools/"
-                                style="color: inherit; text-decoration: none;">JSON Tools</a></h4>
+                        <h4 class="footer-heading">Tools</h4>
                         <ul class="footer-links">
                             <li><a href="/" title="JSON Formatter">JSON Formatter</a></li>
-                            <li><a href="/json-formatter/">Format JSON Online</a></li>
-                            <li><a href="/json-visualizer/">JSON Visualizer</a></li>
-                            <li><a href="/json-diff/">JSON Diff</a></li>
-                            <li><a href="/json-to-yaml/">JSON to YAML</a></li>
-                            <li><a href="/json-to-string/">JSON to String</a></li>
-                            <li><a href="{% url 'json_schema_page' %}">Schema Validator</a></li>
-                            <li><a href="/json-tree/">Tree Viewer</a></li>
-                            <li><a href="/json-generator/">JSON Generator</a></li>
-                            <li><a href="/dummy-json/">Dummy JSON</a></li>
-                            <li><a href="/string-json-to-json/">String to JSON</a></li>
-                            <li><a href="{% url 'json_fixer_page' %}">JSON Fixer</a></li>
+                            <li><a href="/swagger-viewer/">Swagger Viewer</a></li>
                         </ul>
                     </div>
-
-                    <!-- Code Tools Column -->
-                    <div class="footer-column">
-                        <h4 class="footer-heading">Code Tools</h4>
-                        <ul class="footer-links">
-                            <li><a href="/base64/">Base64 Encoder</a></li>
-                            <li><a href="/cron-builder/">Cron Builder</a></li>
-                            <li><a href="/sql-formatter/">SQL Formatter</a></li>
-                            <li><a href="{% url 'comma_separator_page' %}">Comma Separator</a></li>
-                            <li><a href="{% url 'sqlite_viewer_page' %}">SQLite Viewer</a></li>
-                            <li><a href="{% url 'parquet_viewer_page' %}">Parquet Viewer</a></li>
-                            <li><a href="{% url 'openapi_builder_page' %}">OpenAPI Builder</a></li>
-                            <li><a href="{% url 'redoc_viewer_page' %}">ReDoc Viewer</a></li>
-                            <li><a href="/markdown-preview/">Markdown Preview</a></li>
-                            <li><a href="/password-generator/">Password Generator</a></li>
-                            <li><a href="/url-encoder/">URL Encoder</a></li>
-                            <li><a href="/log-analyzer/">Log Analyzer</a></li>
-                        </ul>
-                    </div>
-
-
-                    <!-- Web & Network Column -->
-                    <div class="footer-column">
-                        <h4 class="footer-heading">Web & Network</h4>
-                        <ul class="footer-links">
-                            <li><a href="/http-headers/">HTTP Headers</a></li>
-                            <li><a href="/ip-info/">IP Lookup</a></li>
-                            <li><a href="/dns-lookup/">DNS Lookup</a></li>
-                            <li><a href="/ssl-checker/">SSL Checker</a></li>
-                            <li><a href="/cors-checker/">CORS Checker</a></li>
-                            <li><a href="/meta-tag-generator/">Meta Tags</a></li>
-                            <li><a href="/webhook-tester/">Webhook Tester</a></li>
-                        </ul>
-                    </div>
-
-
-                    <!-- Domain Tools Column -->
-                    <div class="footer-column">
-                        <h4 class="footer-heading">Domain Tools</h4>
-                        <ul class="footer-links">
-                            <li><a href="/domain-age/">Domain Age Checker</a></li>
-                            <li><a href="/whois-lookup/">WHOIS Lookup</a></li>
-                            <li><a href="/domain-expiry-checker/">Domain Expiry</a></li>
-                        </ul>
-                    </div>
-
-
-                    <!--                    &lt;!&ndash; Calculators Column &ndash;&gt;-->
-                    <!--                    <div class="footer-column">-->
-                    <!--                        <h4 class="footer-heading">Calculators</h4>-->
-                    <!--                        <ul class="footer-links">-->
-                    <!--                            <li><a href="/calculator/">Simple Calculator</a></li>-->
-                    <!--                            <li><a href="/percentage-calculator/">Percentage</a></li>-->
-                    <!--                            <li><a href="/age-calculator/">Age Calculator</a></li>-->
-                    <!--                            <li><a href="/bmi-calculator/">BMI Calculator</a></li>-->
-                    <!--                            <li><a href="/loan-calculator/">Loan Calculator</a></li>-->
-                    <!--                            <li><a href="/sip-calculator/">SIP Calculator</a></li>-->
-                    <!--                        </ul>-->
-                    <!--                    </div>-->
 
                     <!-- Pages Column -->
                     <div class="footer-column">
@@ -570,7 +501,7 @@
                     Built and maintained by <a href="https://linkedin.com/in/faisal-ahmad-44b37018a/" target="_blank"
                         rel="noopener"
                         style="color: var(--color-primary); text-decoration: none; font-weight: 500;">Faisal Ahmad</a> •
-                    © <span id="currentYear"></span> JSON Formatter Pro
+                    © <span id="currentYear"></span> JSON Formatters Pro
                 </p>
             </div>
         </div>
