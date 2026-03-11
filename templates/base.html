@@ -538,9 +538,11 @@
         const hideSidebarBtn = document.getElementById('hideSidebarBtn');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-        // Restore sidebar state from localStorage
+        // Restore sidebar state from localStorage (desktop only; always collapsed on mobile)
         const sidebarState = localStorage.getItem('sidebarOpen');
-        if (sidebarState === 'false') {
+        if (window.innerWidth < 1024) {
+            document.body.classList.add('sidebar-collapsed');
+        } else if (sidebarState === 'false') {
             document.body.classList.add('sidebar-collapsed');
         } else {
             document.body.classList.remove('sidebar-collapsed');
