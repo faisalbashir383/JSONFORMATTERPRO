@@ -275,131 +275,19 @@
             </div>
 
             {% block navigation %}
-            <!-- Premium Hamburger Menu Button -->
-            <button id="hamburgerBtn" class="hamburger-btn" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
+            <!-- Sidebar Toggle Button -->
+            <button id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Toggle sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
             </button>
 
-            <!-- Navigation Menu -->
-            <div class="nav-menu" id="navMenu">
-                <!-- JSON Tools -->
-                <div class="nav-item dropdown">
-                    <a href="/json-tools/" class="nav-link" style="text-decoration: none;">JSON Tools ▾</a>
-                    <div class="dropdown-content wide">
-                        <a href="/json-diff/" class="dropdown-item">JSON Diff</a>
-                        <a href="{% url 'json_schema_page' %}" class="dropdown-item">Schema Validator</a>
-                        <a href="/json-tree/" class="dropdown-item">Tree Viewer</a>
-                        <a href="/json-visualizer/" class="dropdown-item">JSON Visualizer</a>
-                        <a href="/json-viewer/" class="dropdown-item">JSON Viewer</a>
-                        <a href="/json-path-tester/" class="dropdown-item">JSON Path Tester</a>
-                        <a href="/dummy-json/" class="dropdown-item">Dummy Json Generator</a>
-                        <a href="/json-generator/" class="dropdown-item">JSON Generator (100K+)</a>
-                        <a href="{% url 'json_editor_page' %}" class="dropdown-item">JSON Editor</a>
-                        <a href="{% url 'json_fixer_page' %}" class="dropdown-item">JSON Fixer</a>
-                    </div>
-                </div>
-
-                <!-- Converters -->
-                <div class="nav-item dropdown">
-                    <button class="nav-link">JSON Converters ▾</button>
-                    <div class="dropdown-content wide">
-                        <a href="{% url 'json_to_yaml_page' %}" class="dropdown-item">JSON
-                            to YAML</a>
-                        <a href="{% url 'csv_to_json_page' %}" class="dropdown-item">CSV
-                            to JSON</a>
-                        <a href="{% url 'xsd_to_json_schema_page' %}" class="dropdown-item">XSD
-                            to JSON Schema</a>
-                        <a href="{% url 'json_to_jsonl_page' %}" class="dropdown-item">JSON
-                            to JSONL</a>
-                        <a href="{% url 'json_to_code_page' %}" class="dropdown-item">JSON
-                            to Code (TS, Py, Go)</a>
-                        <a href="{% url 'image_to_base64_page' %}" class="dropdown-item">Image to Base64</a>
-                    </div>
-                </div>
-
-                <!-- Dev Tools -->
-                <div class="nav-item dropdown">
-                    <button class="nav-link">Dev Tools ▾</button>
-                    <div class="dropdown-content wide">
-                        <a href="/cron-builder/" class="dropdown-item">Cron Builder</a>
-                        <a href="/sql-formatter/" class="dropdown-item">SQL Formatter</a>
-                        <a href="{% url 'comma_separator_page' %}" class="dropdown-item">Comma Separator</a>
-                        <a href="{% url 'sqlite_viewer_page' %}" class="dropdown-item">SQLite Viewer</a>
-                        <a href="{% url 'parquet_viewer_page' %}" class="dropdown-item">Parquet Viewer</a>
-                        <a href="/markdown-preview/" class="dropdown-item">Markdown Preview</a>
-                        <a href="/qr-generator/" class="dropdown-item">QR Code Generator</a>
-                        <a href="{% url 'regex_tester_page' %}" class="dropdown-item">Regex Tester/Generator</a>
-                        <a href="/mock-api/" class="dropdown-item">Mock API Generator</a>
-                        <a href="/webhook-tester/" class="dropdown-item">Webhook Tester</a>
-                        <a href="/swagger-viewer/" class="dropdown-item">Swagger/OpenAPI Viewer</a>
-                        <a href="{% url 'openapi_builder_page' %}" class="dropdown-item">OpenAPI Builder</a>
-                        <a href="{% url 'redoc_viewer_page' %}" class="dropdown-item">ReDoc Viewer</a>
-                        <a href="/push-notification-tester/" class="dropdown-item">Push Notification Tester</a>
-                        <a href="/password-generator/" class="dropdown-item">Password Generator</a>
-                        <a href="/url-encoder/" class="dropdown-item">URL Encoder/Decoder</a>
-                        <a href="/typing-test/" class="dropdown-item">Typing Speed Test</a>
-                        <a href="/resume-builder/" class="dropdown-item">Resume Builder</a>
-                        <a href="/log-analyzer/" class="dropdown-item">Log Analyzer</a>
-                    </div>
-                </div>
-
-
-                <!-- Web & Network Tools (Merged) -->
-                <div class="nav-item dropdown">
-                    <button class="nav-link">Web & Network ▾</button>
-                    <div class="dropdown-content wide">
-                        <a href="/meta-tag-generator/" class="dropdown-item">Meta Tag Generator</a>
-                        <a href="/domain-age/" class="dropdown-item">Domain Age Checker</a>
-                        <a href="/lorem-ipsum/" class="dropdown-item">Lorem Ipsum Generator</a>
-                        <a href="/image-resizer/" class="dropdown-item">Image Resizer</a>
-                        <div class="dropdown-divider"></div>
-                        <a href="/http-headers/" class="dropdown-item">HTTP Headers Parser</a>
-                        <a href="/cors-checker/" class="dropdown-item">CORS Checker</a>
-                        <a href="/ip-info/" class="dropdown-item">IP Address Info</a>
-                        <a href="/dns-lookup/" class="dropdown-item">DNS Lookup</a>
-                        <a href="/ssl-checker/" class="dropdown-item">SSL Cert Checker</a>
-                        <a href="/api-response-tester/" class="dropdown-item">API Response Tester</a>
-                    </div>
-                </div>
-
-                <!-- Calculators -->
-                <!--                <div class="nav-item dropdown">-->
-                <!--                    <button class="nav-link">Calculators ▾</button>-->
-                <!--                    <div class="dropdown-content wide">-->
-                <!--                        <a href="/calculator/" class="dropdown-item">🔢 Simple Calculator</a>-->
-                <!--                        <a href="/percentage-calculator/" class="dropdown-item">📊 Percentage Calculator</a>-->
-                <!--                        <a href="/age-calculator/" class="dropdown-item">🎂 Age Calculator</a>-->
-                <!--                        <a href="/date-calculator/" class="dropdown-item">📅 Date Calculator</a>-->
-                <!--                        <div class="dropdown-divider"></div>-->
-                <!--                        <a href="/loan-calculator/" class="dropdown-item">💰 Loan Calculator</a>-->
-                <!--                        <a href="/mortgage-calculator/" class="dropdown-item">🏠 Mortgage Calculator</a>-->
-                <!--                        <a href="/car-payment-calculator/" class="dropdown-item">🚗 Car Payment Calculator</a>-->
-                <!--                        <a href="/sip-calculator/" class="dropdown-item">📈 SIP Calculator</a>-->
-                <!--                        <a href="/compound-interest-calculator/" class="dropdown-item">💹 Compound Interest</a>-->
-                <!--                        <div class="dropdown-divider"></div>-->
-                <!--                        <a href="/bmi-calculator/" class="dropdown-item">⚖️ BMI Calculator</a>-->
-                <!--                        <a href="/calorie-calculator/" class="dropdown-item">🔥 Calorie Calculator</a>-->
-                <!--                        <a href="/gpa-calculator/" class="dropdown-item">🎓 GPA Calculator</a>-->
-                <!--                        <a href="/unit-converter/" class="dropdown-item">📐 Unit Converter</a>-->
-                <!--                        <a href="/tip-calculator/" class="dropdown-item">💳 Tip Calculator</a>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-
-
-                <div class="nav-item dropdown">
-                    <button class="nav-link">Pages ▾</button>
-                    <div class="dropdown-content">
-                        <!--                            <li><a href="/tutorials/">Tutorials</a></li>-->
-                        <a href="/blog/" class="dropdown-item">Blog / Articles</a>
-                        <a href="/about/" class="dropdown-item">About Us</a>
-                        <a href="/contact/" class="dropdown-item">Contact</a>
-                        <a href="/privacy/" class="dropdown-item">Privacy Policy</a>
-                    </div>
-                </div>
-
-            </div>
+            <!-- Hide Sidebar Button (visible when sidebar is open) -->
+            <button id="hideSidebarBtn" class="hide-sidebar-btn" aria-label="Hide sidebar">
+                Hide Sidebar
+            </button>
 
             <!-- Theme Toggle -->
             <div class="nav-actions">
@@ -411,6 +299,110 @@
             {% endblock %}
         </div>
     </nav>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-inner">
+            <!-- CORE JSON -->
+            <div class="sidebar-category">
+                <span class="sidebar-category-label cat-core">CORE JSON</span>
+            </div>
+            <a href="/" class="sidebar-link">JSON Formatter</a>
+            <a href="/json-viewer/" class="sidebar-link">JSON Viewer</a>
+            <a href="/json-editor/" class="sidebar-link">JSON Editor</a>
+            <a href="/json-tree/" class="sidebar-link">JSON Tree Viewer</a>
+            <a href="/json-visualizer/" class="sidebar-link">JSON Visualizer</a>
+            <a href="/json-schema-validator/" class="sidebar-link">JSON Schema Validator</a>
+            <a href="/json-fixer/" class="sidebar-link">JSON Fixer</a>
+
+            <!-- COMPARE & DIFF -->
+            <div class="sidebar-category">
+                <span class="sidebar-category-label cat-compare">COMPARE & DIFF</span>
+            </div>
+            <a href="/json-diff/" class="sidebar-link">JSON Diff</a>
+            <a href="/json-path-tester/" class="sidebar-link">JSON Path Tester</a>
+
+            <!-- TRANSFORM & CONVERT -->
+            <div class="sidebar-category">
+                <span class="sidebar-category-label cat-transform">TRANSFORM & CONVERT</span>
+            </div>
+            <a href="/json-to-yaml/" class="sidebar-link">JSON to YAML</a>
+            <a href="/csv-to-json/" class="sidebar-link">CSV to JSON</a>
+            <a href="/json-to-jsonl/" class="sidebar-link">JSON to JSONL</a>
+            <a href="/json-to-code/" class="sidebar-link">JSON to Code</a>
+            <a href="/json-to-string/" class="sidebar-link">JSON to String</a>
+            <a href="/string-json-to-json/" class="sidebar-link">String to JSON</a>
+            <a href="/xsd-to-json-schema/" class="sidebar-link">XSD to JSON Schema</a>
+            <a href="/image-to-base64/" class="sidebar-link">Image to Base64</a>
+            <a href="/yaml-formatter/" class="sidebar-link">YAML Formatter</a>
+
+            <!-- GENERATE -->
+            <div class="sidebar-category">
+                <span class="sidebar-category-label cat-generate">GENERATE</span>
+            </div>
+            <a href="/dummy-json/" class="sidebar-link">Dummy JSON</a>
+            <a href="/json-generator/" class="sidebar-link">JSON Generator (100K+)</a>
+            <a href="/mock-api/" class="sidebar-link">Mock API Generator</a>
+            <a href="/lorem-ipsum/" class="sidebar-link">Lorem Ipsum Generator</a>
+
+            <!-- DEV TOOLS -->
+            <div class="sidebar-category">
+                <span class="sidebar-category-label cat-devtools">DEV TOOLS</span>
+            </div>
+            <a href="/cron-builder/" class="sidebar-link">Cron Builder</a>
+            <a href="/sql-formatter/" class="sidebar-link">SQL Formatter</a>
+            <a href="/regex-tester/" class="sidebar-link">Regex Tester</a>
+            <a href="/comma-separator/" class="sidebar-link">Comma Separator</a>
+            <a href="/sqlite-viewer/" class="sidebar-link">SQLite Viewer</a>
+            <a href="/parquet-viewer/" class="sidebar-link">Parquet Viewer</a>
+            <a href="/markdown-preview/" class="sidebar-link">Markdown Preview</a>
+            <a href="/qr-generator/" class="sidebar-link">QR Generator</a>
+            <a href="/base64/" class="sidebar-link">Base64 Encoder</a>
+            <a href="/password-generator/" class="sidebar-link">Password Generator</a>
+            <a href="/url-encoder/" class="sidebar-link">URL Encoder/Decoder</a>
+            <a href="/resume-builder/" class="sidebar-link">Resume Builder</a>
+            <a href="/log-analyzer/" class="sidebar-link">Log Analyzer</a>
+            <a href="/typing-test/" class="sidebar-link">Typing Speed Test</a>
+
+            <!-- API & NETWORK -->
+            <div class="sidebar-category">
+                <span class="sidebar-category-label cat-api">API & NETWORK</span>
+            </div>
+            <a href="/swagger-viewer/" class="sidebar-link">Swagger Viewer</a>
+            <a href="/openapi-builder/" class="sidebar-link">OpenAPI Builder</a>
+            <a href="/redoc-viewer/" class="sidebar-link">ReDoc Viewer</a>
+            <a href="/api-response-tester/" class="sidebar-link">API Response Tester</a>
+            <a href="/webhook-tester/" class="sidebar-link">Webhook Tester</a>
+            <a href="/push-notification-tester/" class="sidebar-link">Push Notifications</a>
+            <a href="/http-headers/" class="sidebar-link">HTTP Headers</a>
+            <a href="/cors-checker/" class="sidebar-link">CORS Checker</a>
+            <a href="/ip-info/" class="sidebar-link">IP Info</a>
+            <a href="/dns-lookup/" class="sidebar-link">DNS Lookup</a>
+            <a href="/ssl-checker/" class="sidebar-link">SSL Checker</a>
+
+            <!-- WEB TOOLS -->
+            <div class="sidebar-category">
+                <span class="sidebar-category-label cat-web">WEB TOOLS</span>
+            </div>
+            <a href="/meta-tag-generator/" class="sidebar-link">Meta Tag Generator</a>
+            <a href="/domain-age/" class="sidebar-link">Domain Age Checker</a>
+            <a href="/image-resizer/" class="sidebar-link">Image Resizer</a>
+            <a href="/whois-lookup/" class="sidebar-link">WHOIS Lookup</a>
+
+            <!-- PAGES -->
+            <div class="sidebar-category">
+                <span class="sidebar-category-label cat-pages">PAGES</span>
+            </div>
+            <a href="/blog/" class="sidebar-link">Blog</a>
+            <a href="/about/" class="sidebar-link">About</a>
+            <a href="/contact/" class="sidebar-link">Contact</a>
+            <a href="/privacy/" class="sidebar-link">Privacy Policy</a>
+            <a href="/terms/" class="sidebar-link">Terms</a>
+        </div>
+    </aside>
+
+    <!-- Sidebar overlay for mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- Main Content -->
     <main class="main-container" {% block main_attrs %}{% endblock %}>
@@ -597,7 +589,6 @@
         document.documentElement.setAttribute('data-theme', savedTheme);
 
         const themeToggle = document.getElementById('themeToggle');
-        const mobileThemeToggle = document.getElementById('mobileThemeToggle');
 
         function toggleTheme() {
             const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -610,69 +601,55 @@
             themeToggle.addEventListener('click', toggleTheme);
         }
 
-        if (mobileThemeToggle) {
-            mobileThemeToggle.addEventListener('click', () => {
-                toggleTheme();
-                // Close mobile menu after theme change
-                if (hamburgerBtn && navMenu) {
-                    hamburgerBtn.classList.remove('active');
-                    navMenu.classList.remove('active');
-                }
-            });
+        // Sidebar management
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+        const hideSidebarBtn = document.getElementById('hideSidebarBtn');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        // Restore sidebar state from localStorage
+        const sidebarState = localStorage.getItem('sidebarOpen');
+        if (sidebarState === 'false') {
+            document.body.classList.add('sidebar-collapsed');
+        } else {
+            document.body.classList.remove('sidebar-collapsed');
         }
 
-        // Hamburger menu
-        const hamburgerBtn = document.getElementById('hamburgerBtn');
-        const navMenu = document.getElementById('navMenu');
-
-        if (hamburgerBtn && navMenu) {
-            hamburgerBtn.addEventListener('click', () => {
-                hamburgerBtn.classList.toggle('active');
-                navMenu.classList.toggle('active');
-            });
+        function toggleSidebar() {
+            document.body.classList.toggle('sidebar-collapsed');
+            const isOpen = !document.body.classList.contains('sidebar-collapsed');
+            localStorage.setItem('sidebarOpen', isOpen);
         }
 
-        // Mobile dropdown toggle
-        const dropdownItems = document.querySelectorAll('.nav-item.dropdown');
-        dropdownItems.forEach(dropdown => {
-            const button = dropdown.querySelector('.nav-link');
-            if (button) {
-                button.addEventListener('click', (e) => {
-                    // Only toggle on mobile (when menu is active)
-                    if (window.innerWidth <= 1024) {
-                        e.preventDefault();
+        function closeSidebarMobile() {
+            if (window.innerWidth < 768) {
+                document.body.classList.add('sidebar-collapsed');
+                localStorage.setItem('sidebarOpen', 'false');
+            }
+        }
 
-                        // Close other dropdowns
-                        dropdownItems.forEach(item => {
-                            if (item !== dropdown) {
-                                item.classList.remove('active');
-                            }
-                        });
+        if (sidebarToggleBtn) {
+            sidebarToggleBtn.addEventListener('click', toggleSidebar);
+        }
+        if (hideSidebarBtn) {
+            hideSidebarBtn.addEventListener('click', toggleSidebar);
+        }
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeSidebarMobile);
+        }
 
-                        // Toggle this dropdown
-                        dropdown.classList.toggle('active');
-                    }
-                });
+        // Highlight active sidebar link
+        const currentPath = window.location.pathname;
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        sidebarLinks.forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+                // Scroll active link into view in sidebar
+                setTimeout(() => {
+                    link.scrollIntoView({ block: 'center', behavior: 'instant' });
+                }, 50);
             }
         });
-
-        // Close mobile menu when clicking on non-dropdown links or dropdown items
-        const allLinks = document.querySelectorAll('.nav-link:not(.nav-item.dropdown .nav-link), .dropdown-item');
-        allLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                if (hamburgerBtn && navMenu && window.innerWidth <= 1024) {
-                    // Use setTimeout to allow navigation to proceed first
-                    setTimeout(() => {
-                        hamburgerBtn.classList.remove('active');
-                        navMenu.classList.remove('active');
-                        // Close all dropdowns
-                        dropdownItems.forEach(item => item.classList.remove('active'));
-                    }, 100);
-                }
-            });
-        });
-
-        // FOUC prevention and preloader removed to improve CLS score
     </script>
 
     <style>

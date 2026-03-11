@@ -61,7 +61,7 @@ upload JSON, format it, and convert single or double quotes instantly.{% endbloc
 </script>
 {% endblock %}
 
-{% block navigation %}{% endblock %}
+
 
 {% block extra_css %}
 <style>
@@ -80,16 +80,24 @@ upload JSON, format it, and convert single or double quotes instantly.{% endbloc
         color: inherit;
     }
 
-    /* Full Screen Layout - edge to edge */
-    .navbar {
-        display: none !important;
-    }
-
+    /* Full Screen Layout - edge to edge, accounting for sidebar */
     .main-container {
         padding: 0 !important;
         margin: 0 !important;
         max-width: none !important;
         min-height: 100vh !important;
+    }
+
+    body:not(.sidebar-collapsed) .main-container {
+        margin-left: 220px !important;
+        width: calc(100% - 220px) !important;
+        max-width: calc(100% - 220px) !important;
+    }
+
+    .sidebar-collapsed .main-container {
+        margin-left: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
     }
 
     .json-viewer-wrapper {
@@ -101,7 +109,7 @@ upload JSON, format it, and convert single or double quotes instantly.{% endbloc
     .json-viewer-app {
         display: flex;
         flex-direction: column;
-        height: 100vh;
+        height: calc(100vh - 60px);
         background: var(--color-bg);
         overflow: hidden;
     }
@@ -606,6 +614,15 @@ upload JSON, format it, and convert single or double quotes instantly.{% endbloc
     .tool-name {
         font-size: 0.9rem;
         font-weight: 500;
+    }
+
+
+    @media (max-width: 1024px) {
+        body:not(.sidebar-collapsed) .main-container {
+            margin-left: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
     }
 
     @media (max-width: 768px) {
