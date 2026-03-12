@@ -133,13 +133,21 @@ signup.{% endblock %}
   }
 
   .page-h1 {
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 800;
     background: linear-gradient(135deg, #6366f1, #8b5cf6);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 0.25rem;
+    line-height: 1.3;
+  }
+
+  .page-subtitle {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+    line-height: 1.5;
   }
 
   /* Responsive margin for editor panel */
@@ -310,7 +318,7 @@ signup.{% endblock %}
     margin-bottom: 2rem;
     position: relative;
     z-index: 1;
-    margin-top: -48px;
+    margin-top: 0;
   }
 
   /* Editor container */
@@ -898,12 +906,10 @@ signup.{% endblock %}
   <h1 class="page-h1">
     JSON Formatter & Validator – Beautify and Format JSON Online
   </h1>
-  <noscript>
-    <p>
-      JSON Formatter is a free online tool to format, validate, and beautify JSON data.
-      Paste your JSON to instantly convert it into a readable structure.
-    </p>
-  </noscript>
+  <p class="page-subtitle">
+    Free online JSON formatter to format, validate, and beautify JSON data.
+    Paste your JSON to instantly convert it into a readable structure.
+  </p>
 </header>
 
 <!-- Hidden File Input -->
