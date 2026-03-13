@@ -498,6 +498,10 @@ def json_tools_page(request):
     """Render the JSON Tools pillar page"""
     return render(request, 'json-tools.html')
 
+def tools_hub_page(request):
+    """Render the Tools Hub page"""
+    return render(request, 'tools-hub.html')
+
 
 def enforce_dummy_api_quota(endpoint, ip_address):
     """

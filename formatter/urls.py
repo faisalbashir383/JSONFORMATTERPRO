@@ -25,7 +25,7 @@ urlpatterns = [
     path('base64/', views.base64_page, name='base64_page'),
     path('about/', views.about_page, name='about_page'),
     path('contact/', views.contact_page, name='contact_page'),
-    path('privacy/', views.privacy_page, name='privacy_page'),
+    path('privacy-policy/', views.privacy_page, name='privacy_page'),
     
     # JSON Tool Pages
     path('json-to-yaml/', views.json_to_yaml_page, name='json_to_yaml_page'),
@@ -44,6 +44,7 @@ urlpatterns = [
     path('dummy-json-api/playground/', views.dummy_json_api_playground_page, name='dummy_json_api_playground_page'),
     path('dummy-json-api/', views.dummy_json_api_page, name='dummy_json_api_page'),
     path('json-tools/', views.json_tools_page, name='json_tools_page'),
+    path('tools-hub/', views.tools_hub_page, name='tools_hub_page'),
     path('json-generator/', views.json_generator_page, name='json_generator_page'),
     path('json-formatter-online/', views.json_formatter_online_page, name='json_formatter_online_page'),
     path('json-formatter/', views.json_formatter_page, name='json_formatter_page'),
@@ -117,7 +118,7 @@ urlpatterns = [
     path('graphing-calculator/', views.graphing_calculator_page, name='graphing_calculator_page'),
     
     # Legal Pages
-    path('terms/', views.terms_page, name='terms_page'),
+    path('terms-and-conditions/', views.terms_page, name='terms_page'),
     path('code-of-conduct/', views.code_of_conduct_page, name='code_of_conduct_page'),
     
     # Security Tools
