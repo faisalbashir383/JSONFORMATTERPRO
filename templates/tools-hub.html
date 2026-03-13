@@ -1,0 +1,1344 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Best Online JSON Tools for Developers | JSON Formatters Pro{% endblock %}
+{% block meta_description %}Free online JSON tools: viewer, formatter, validator, diff, converters, schema builder and
+more. All tools run in your browser for speed and privacy.{% endblock %}
+{% block canonical_url %}{{ SITE_URL }}/tools-hub/{% endblock %}
+{% block meta_keywords %}json tools, json formatter, json viewer, json validator, json diff, json converter, json
+schema, developer tools, online json tools{% endblock %}
+{% block meta_robots %}index, follow, max-snippet:-1{% endblock %}
+
+{% block extra_head %}
+<meta property="og:title" content="Best Online JSON Tools for Developers | JSON Formatters Pro">
+<meta property="og:description"
+    content="Free online JSON tools for developers. Format, validate, compare, convert and debug JSON in your browser.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jsonformatterspro.com/tools-hub/">
+<meta name="twitter:title" content="Best Online JSON Tools for Developers">
+<meta name="twitter:description" content="60+ free JSON tools that run in your browser. No install, no signup.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Best Online JSON Tools for Developers",
+  "description": "Free online JSON tools for developers: format, validate, compare, convert and debug JSON in your browser.",
+  "url": "https://jsonformatterspro.com/tools-hub/",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "JSON Formatters Pro",
+    "url": "https://jsonformatterspro.com/"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Are these JSON tools free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. All tools are free and run directly in your browser with no signup required."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to install software?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Open the page and use the tool directly. No downloads or installations needed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my data uploaded to a server?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most tools are client-side and do not upload JSON to a server. Your data stays in your browser."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which tool should I use first?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Start with JSON Viewer and JSON Formatter, then move to validators, converters, or model generators based on your task."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tools-hub {
+        max-width: 100%;
+    }
+
+    /* ── Hero Header ── */
+    .hub-hero {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2rem 0 1.5rem;
+    }
+
+    .hub-hero h1 {
+        font-size: 2rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+    }
+
+    .hub-hero .hero-desc {
+        color: var(--color-text-secondary);
+        font-size: 1rem;
+        max-width: 720px;
+        margin: 0 auto 1.25rem;
+        line-height: 1.7;
+    }
+
+    .hub-badges {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 1.25rem;
+    }
+
+    .hub-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.4rem 1rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        font-weight: 500;
+    }
+
+    .hub-badge strong {
+        color: var(--color-primary);
+    }
+
+    /* ── Category Sections ── */
+    .tool-category {
+        margin-bottom: 2.25rem;
+    }
+
+    .category-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--color-border);
+    }
+
+    .category-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+    .category-count {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        margin-left: auto;
+    }
+
+    /* Category colors */
+    .cat-core {
+        color: #16a34a;
+        background: rgba(22, 163, 74, 0.1);
+    }
+
+    .cat-compare {
+        color: #ea580c;
+        background: rgba(234, 88, 12, 0.1);
+    }
+
+    .cat-transform {
+        color: #2563eb;
+        background: rgba(37, 99, 235, 0.1);
+    }
+
+    .cat-generate {
+        color: #9333ea;
+        background: rgba(147, 51, 234, 0.1);
+    }
+
+    .cat-devtools {
+        color: #0891b2;
+        background: rgba(8, 145, 178, 0.1);
+    }
+
+    .cat-api {
+        color: #dc2626;
+        background: rgba(220, 38, 38, 0.1);
+    }
+
+    .cat-web {
+        color: #ca8a04;
+        background: rgba(202, 138, 4, 0.1);
+    }
+
+    .cat-calc {
+        color: #059669;
+        background: rgba(5, 150, 105, 0.1);
+    }
+
+    .cat-util {
+        color: #7c3aed;
+        background: rgba(124, 58, 237, 0.1);
+    }
+
+    [data-theme="dark"] .cat-core {
+        color: #4ade80;
+        background: rgba(74, 222, 128, 0.12);
+    }
+
+    [data-theme="dark"] .cat-compare {
+        color: #fb923c;
+        background: rgba(251, 146, 60, 0.12);
+    }
+
+    [data-theme="dark"] .cat-transform {
+        color: #60a5fa;
+        background: rgba(96, 165, 250, 0.12);
+    }
+
+    [data-theme="dark"] .cat-generate {
+        color: #c084fc;
+        background: rgba(192, 132, 252, 0.12);
+    }
+
+    [data-theme="dark"] .cat-devtools {
+        color: #22d3ee;
+        background: rgba(34, 211, 238, 0.12);
+    }
+
+    [data-theme="dark"] .cat-api {
+        color: #f87171;
+        background: rgba(248, 113, 113, 0.12);
+    }
+
+    [data-theme="dark"] .cat-web {
+        color: #facc15;
+        background: rgba(250, 204, 21, 0.12);
+    }
+
+    [data-theme="dark"] .cat-calc {
+        color: #34d399;
+        background: rgba(52, 211, 153, 0.12);
+    }
+
+    [data-theme="dark"] .cat-util {
+        color: #a78bfa;
+        background: rgba(167, 139, 250, 0.12);
+    }
+
+    /* ── Tool Cards Grid ── */
+    .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .tool-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.85rem 1rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .tool-card:hover {
+        border-color: var(--color-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    [data-theme="dark"] .tool-card:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .tool-card:hover .tc-icon {
+        transform: scale(1.1);
+    }
+
+    .tc-icon {
+        font-size: 1.4rem;
+        flex-shrink: 0;
+        transition: transform 0.2s ease;
+        width: 2rem;
+        text-align: center;
+        margin-top: 0.1rem;
+    }
+
+    .tc-body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .tc-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--color-text);
+        line-height: 1.3;
+    }
+
+    .tc-desc {
+        font-size: 0.78rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.2rem;
+        line-height: 1.45;
+    }
+
+    .tc-arrow {
+        color: var(--color-text-secondary);
+        font-size: 0.85rem;
+        opacity: 0;
+        transform: translateX(-4px);
+        transition: all 0.2s ease;
+        margin-top: 0.2rem;
+    }
+
+    .tool-card:hover .tc-arrow {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    /* ── Content Sections ── */
+    .hub-section {
+        margin: 3rem 0 2rem;
+    }
+
+    .hub-section h2 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: 0.75rem;
+    }
+
+    .hub-section p,
+    .hub-section li {
+        font-size: 0.95rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+    }
+
+    .hub-section ul,
+    .hub-section ol {
+        padding-left: 1.25rem;
+        margin: 0.75rem 0;
+    }
+
+    .hub-section li {
+        margin-bottom: 0.4rem;
+    }
+
+    .hub-section li strong {
+        color: var(--color-text);
+    }
+
+    /* Workflow cards */
+    .workflow-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .workflow-card {
+        padding: 1.25rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        transition: border-color 0.2s;
+    }
+
+    .workflow-card:hover {
+        border-color: var(--color-primary);
+    }
+
+    .workflow-card h4 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .workflow-card p {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    /* Steps list */
+    .steps-list {
+        counter-reset: step;
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .steps-list li {
+        counter-increment: step;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .steps-list li:last-child {
+        border-bottom: none;
+    }
+
+    .steps-list li::before {
+        content: counter(step);
+        flex-shrink: 0;
+        width: 1.75rem;
+        height: 1.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: #fff;
+        border-radius: 50%;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    /* FAQ */
+    .faq-list {
+        margin-top: 1rem;
+    }
+
+    .faq-item {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        margin-bottom: 0.5rem;
+        overflow: hidden;
+    }
+
+    .faq-q {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        background: var(--color-surface);
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--color-text);
+        border: none;
+        width: 100%;
+        text-align: left;
+        transition: background 0.2s;
+    }
+
+    .faq-q:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .faq-arrow {
+        font-size: 0.8rem;
+        transition: transform 0.3s;
+        color: var(--color-text-secondary);
+    }
+
+    .faq-item.open .faq-arrow {
+        transform: rotate(180deg);
+    }
+
+    .faq-a {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+        padding: 0 1.25rem;
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    .faq-item.open .faq-a {
+        max-height: 200px;
+        padding: 0 1.25rem 1rem;
+    }
+
+    /* Guides grid */
+    .guides-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .guide-link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        font-size: 0.88rem;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .guide-link:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+        .hub-hero h1 {
+            font-size: 1.5rem;
+        }
+
+        .tools-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .workflow-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .guides-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .hub-badges {
+            gap: 0.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .guides-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tools-hub">
+
+    <!-- ═══════════ HERO ═══════════ -->
+    <div class="hub-hero">
+        <h1>Best Online JSON Tools for Developers</h1>
+        <p class="hero-desc">
+            JSON is the default data format for APIs, web apps, and automation. This hub helps you quickly find the
+            right tool for each workflow: inspect payloads, format or validate data, compare responses, convert JSON to
+            other formats, and troubleshoot production issues.
+        </p>
+        <p class="hero-desc">
+            All tools run in your browser for speed and privacy. Paste payloads, test transformations, copy outputs, and
+            export results without installing software. Whether you're working on API integration, data migration, test
+            automation, or debugging — these tools cover the most common JSON tasks in one place.
+        </p>
+        <div class="hub-badges">
+            <span class="hub-badge">🛠️ <strong>60+</strong> Tools</span>
+            <span class="hub-badge">🔒 <strong>100%</strong> Client-side</span>
+            <span class="hub-badge">💰 <strong>Free</strong> Forever</span>
+            <span class="hub-badge">⚡ <strong>No</strong> Signup</span>
+        </div>
+    </div>
+
+
+    <!-- ═══════════ CORE JSON ═══════════ -->
+    <div class="tool-category">
+        <div class="category-header">
+            <span class="category-label cat-core">CORE JSON TOOLS</span>
+            <span class="category-count">8 tools</span>
+        </div>
+        <div class="tools-grid">
+            <a href="/" class="tool-card">
+                <span class="tc-icon">✨</span>
+                <div class="tc-body">
+                    <div class="tc-name">JSON Formatter</div>
+                    <div class="tc-desc">Pretty print and minify JSON instantly with syntax highlighting.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/json-viewer/" class="tool-card">
+                <span class="tc-icon">👁️</span>
+                <div class="tc-body">
+                    <div class="tc-name">JSON Viewer</div>
+                    <div class="tc-desc">Inspect nested JSON in tree, code, or text modes.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/json-editor/" class="tool-card">
+                <span class="tc-icon">✏️</span>
+                <div class="tc-body">
+                    <div class="tc-name">JSON Editor</div>
+                    <div class="tc-desc">Edit JSON with a visual workflow and auto-complete.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/json-tree/" class="tool-card">
+                <span class="tc-icon">🌳</span>
+                <div class="tc-body">
+                    <div class="tc-name">JSON Tree Viewer</div>
+                    <div class="tc-desc">Explore JSON structure in an expandable tree view.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/json-visualizer/" class="tool-card">
+                <span class="tc-icon">📊</span>
+                <div class="tc-body">
+                    <div class="tc-name">JSON Visualizer</div>
+                    <div class="tc-desc">Visualize JSON structure as interactive graphs.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/json-schema-validator/" class="tool-card">
+                <span class="tc-icon">✅</span>
+                <div class="tc-body">
+                    <div class="tc-name">JSON Schema Validator</div>
+                    <div class="tc-desc">Validate JSON against schema rules.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/json-fixer/" class="tool-card">
+                <span class="tc-icon">🔧</span>
+                <div class="tc-body">
+                    <div class="tc-name">JSON Fixer</div>
+                    <div class="tc-desc">Auto-fix broken JSON with trailing commas, missing quotes, and more.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/json-formatter/" class="tool-card">
+                <span class="tc-icon">📝</span>
+                <div class="tc-body">
+                    <div class="tc-name">Format JSON Online</div>
+                    <div class="tc-desc">Quick format and validate JSON in one click.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+        </div>
+    </div>
+
+
+    <!-- ═══════════ COMPARE & DEBUG ═══════════ -->
+    <div class="tool-category">
+        <div class="category-header">
+            <span class="category-label cat-compare">COMPARE & DEBUG</span>
+            <span class="category-count">2 tools</span>
+        </div>
+        <div class="tools-grid">
+            <a href="/json-diff/" class="tool-card">
+                <span class="tc-icon">🔍</span>
+                <div class="tc-body">
+                    <div class="tc-name">JSON Diff / Compare</div>
+                    <div class="tc-desc">Diff two JSON payloads side by side with highlighted changes.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/json-path-tester/" class="tool-card">
+                <span class="tc-icon">🎯</span>
+                <div class="tc-body">
+                    <div class="tc-name">JSON Path Tester</div>
+                    <div class="tc-desc">Query deep nested values with JSONPath expressions.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+        </div>
+    </div>
+
+
+    <!-- ═══════════ TRANSFORM & CONVERT ═══════════ -->
+    <div class="tool-category">
+        <div class="category-header">
+            <span class="category-label cat-transform">CONVERTERS</span>
+            <span class="category-count">9 tools</span>
+        </div>
+        <div class="tools-grid">
+            <a href="/json-to-yaml/" class="tool-card">
+                <span class="tc-icon">🔄</span>
+                <div class="tc-body">
+                    <div class="tc-name">JSON to YAML</div>
+                    <div class="tc-desc">Convert JSON to YAML format for config files.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/csv-to-json/" class="tool-card">
+                <span class="tc-icon">📋</span>
+                <div class="tc-body">
+                    <div class="tc-name">CSV to JSON</div>
+                    <div class="tc-desc">Convert CSV spreadsheets to JSON arrays.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/json-to-jsonl/" class="tool-card">
+                <span class="tc-icon">📄</span>
+                <div class="tc-body">
+                    <div class="tc-name">JSON to JSONL</div>
+                    <div class="tc-desc">Convert to JSON Lines for streaming data.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/json-to-code/" class="tool-card">
+                <span class="tc-icon">💻</span>
+                <div class="tc-body">
+                    <div class="tc-name">JSON to Code</div>
+                    <div class="tc-desc">Generate TypeScript, Python, Java, C# classes from JSON.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/json-to-string/" class="tool-card">
+                <span class="tc-icon">🔗</span>
+                <div class="tc-body">
+                    <div class="tc-name">JSON to String</div>
+                    <div class="tc-desc">Stringify and escape JSON data.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/string-json-to-json/" class="tool-card">
+                <span class="tc-icon">🔓</span>
+                <div class="tc-body">
+                    <div class="tc-name">String to JSON</div>
+                    <div class="tc-desc">Parse escaped string back to JSON object.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/xsd-to-json-schema/" class="tool-card">
+                <span class="tc-icon">📐</span>
+                <div class="tc-body">
+                    <div class="tc-name">XSD to JSON Schema</div>
+                    <div class="tc-desc">Convert XML Schema to JSON Schema.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/image-to-base64/" class="tool-card">
+                <span class="tc-icon">🖼️</span>
+                <div class="tc-body">
+                    <div class="tc-name">Image to Base64</div>
+                    <div class="tc-desc">Encode images to Base64 for embedding.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/yaml-formatter/" class="tool-card">
+                <span class="tc-icon">📜</span>
+                <div class="tc-body">
+                    <div class="tc-name">YAML Formatter</div>
+                    <div class="tc-desc">Format and validate YAML documents.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+        </div>
+    </div>
+
+
+    <!-- ═══════════ GENERATE ═══════════ -->
+    <div class="tool-category">
+        <div class="category-header">
+            <span class="category-label cat-generate">GENERATE & MOCK</span>
+            <span class="category-count">4 tools</span>
+        </div>
+        <div class="tools-grid">
+            <a href="/dummy-json/" class="tool-card">
+                <span class="tc-icon">🎲</span>
+                <div class="tc-body">
+                    <div class="tc-name">Dummy JSON</div>
+                    <div class="tc-desc">Generate realistic sample JSON data for testing.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/json-generator/" class="tool-card">
+                <span class="tc-icon">⚡</span>
+                <div class="tc-body">
+                    <div class="tc-name">JSON Generator (100K+)</div>
+                    <div class="tc-desc">Generate large JSON datasets with custom schemas.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/mock-api/" class="tool-card">
+                <span class="tc-icon">🔌</span>
+                <div class="tc-body">
+                    <div class="tc-name">Mock API Generator</div>
+                    <div class="tc-desc">Create instant mock REST API endpoints.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/lorem-ipsum/" class="tool-card">
+                <span class="tc-icon">📖</span>
+                <div class="tc-body">
+                    <div class="tc-name">Lorem Ipsum Generator</div>
+                    <div class="tc-desc">Generate placeholder text for designs and prototypes.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+        </div>
+    </div>
+
+
+    <!-- ═══════════ DEV TOOLS ═══════════ -->
+    <div class="tool-category">
+        <div class="category-header">
+            <span class="category-label cat-devtools">DEVELOPER TOOLS</span>
+            <span class="category-count">13 tools</span>
+        </div>
+        <div class="tools-grid">
+            <a href="/sql-formatter/" class="tool-card">
+                <span class="tc-icon">🗃️</span>
+                <div class="tc-body">
+                    <div class="tc-name">SQL Formatter</div>
+                    <div class="tc-desc">Format and beautify SQL queries.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/cron-builder/" class="tool-card">
+                <span class="tc-icon">⏰</span>
+                <div class="tc-body">
+                    <div class="tc-name">Cron Builder</div>
+                    <div class="tc-desc">Build and explain cron expressions visually.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/regex-tester/" class="tool-card">
+                <span class="tc-icon">🔤</span>
+                <div class="tc-body">
+                    <div class="tc-name">Regex Tester</div>
+                    <div class="tc-desc">Test regular expressions with live matching.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/base64/" class="tool-card">
+                <span class="tc-icon">🔐</span>
+                <div class="tc-body">
+                    <div class="tc-name">Base64 Encoder / Decoder</div>
+                    <div class="tc-desc">Encode and decode Base64 strings.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/markdown-preview/" class="tool-card">
+                <span class="tc-icon">📝</span>
+                <div class="tc-body">
+                    <div class="tc-name">Markdown Preview</div>
+                    <div class="tc-desc">Preview Markdown with real-time rendering.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/comma-separator/" class="tool-card">
+                <span class="tc-icon">📎</span>
+                <div class="tc-body">
+                    <div class="tc-name">Comma Separator</div>
+                    <div class="tc-desc">Convert lists to comma-separated values.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/sqlite-viewer/" class="tool-card">
+                <span class="tc-icon">💾</span>
+                <div class="tc-body">
+                    <div class="tc-name">SQLite Viewer</div>
+                    <div class="tc-desc">Browse and query SQLite databases in-browser.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/parquet-viewer/" class="tool-card">
+                <span class="tc-icon">📦</span>
+                <div class="tc-body">
+                    <div class="tc-name">Parquet Viewer</div>
+                    <div class="tc-desc">View Apache Parquet files without setup.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/qr-generator/" class="tool-card">
+                <span class="tc-icon">📱</span>
+                <div class="tc-body">
+                    <div class="tc-name">QR Generator</div>
+                    <div class="tc-desc">Create QR codes from text, URLs, or data.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/password-generator/" class="tool-card">
+                <span class="tc-icon">🔑</span>
+                <div class="tc-body">
+                    <div class="tc-name">Password Generator</div>
+                    <div class="tc-desc">Generate strong, secure passwords.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/url-encoder/" class="tool-card">
+                <span class="tc-icon">🌐</span>
+                <div class="tc-body">
+                    <div class="tc-name">URL Encoder / Decoder</div>
+                    <div class="tc-desc">Encode and decode URL-encoded strings.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/resume-builder/" class="tool-card">
+                <span class="tc-icon">📄</span>
+                <div class="tc-body">
+                    <div class="tc-name">Resume Builder</div>
+                    <div class="tc-desc">Build professional resumes with live preview.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/log-analyzer/" class="tool-card">
+                <span class="tc-icon">📋</span>
+                <div class="tc-body">
+                    <div class="tc-name">Log Analyzer</div>
+                    <div class="tc-desc">Parse, filter, and analyze log files.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+        </div>
+    </div>
+
+
+    <!-- ═══════════ API & NETWORK ═══════════ -->
+    <div class="tool-category">
+        <div class="category-header">
+            <span class="category-label cat-api">API & NETWORK</span>
+            <span class="category-count">10 tools</span>
+        </div>
+        <div class="tools-grid">
+            <a href="/swagger-viewer/" class="tool-card">
+                <span class="tc-icon">📘</span>
+                <div class="tc-body">
+                    <div class="tc-name">Swagger Viewer</div>
+                    <div class="tc-desc">View and explore OpenAPI/Swagger specifications.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/openapi-builder/" class="tool-card">
+                <span class="tc-icon">🏗️</span>
+                <div class="tc-body">
+                    <div class="tc-name">OpenAPI Builder</div>
+                    <div class="tc-desc">Build OpenAPI specs with a visual editor.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/redoc-viewer/" class="tool-card">
+                <span class="tc-icon">📕</span>
+                <div class="tc-body">
+                    <div class="tc-name">ReDoc Viewer</div>
+                    <div class="tc-desc">Render beautiful API documentation from specs.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/api-response-tester/" class="tool-card">
+                <span class="tc-icon">🧪</span>
+                <div class="tc-body">
+                    <div class="tc-name">API Response Tester</div>
+                    <div class="tc-desc">Send requests and inspect API responses.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/http-headers/" class="tool-card">
+                <span class="tc-icon">📨</span>
+                <div class="tc-body">
+                    <div class="tc-name">HTTP Headers</div>
+                    <div class="tc-desc">Inspect HTTP request and response headers.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/cors-checker/" class="tool-card">
+                <span class="tc-icon">🛡️</span>
+                <div class="tc-body">
+                    <div class="tc-name">CORS Checker</div>
+                    <div class="tc-desc">Check CORS configuration for any endpoint.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/ip-info/" class="tool-card">
+                <span class="tc-icon">🌍</span>
+                <div class="tc-body">
+                    <div class="tc-name">IP Info / Lookup</div>
+                    <div class="tc-desc">Look up IP address details and geolocation.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/dns-lookup/" class="tool-card">
+                <span class="tc-icon">🔎</span>
+                <div class="tc-body">
+                    <div class="tc-name">DNS Lookup</div>
+                    <div class="tc-desc">Query DNS records for any domain.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/ssl-checker/" class="tool-card">
+                <span class="tc-icon">🔒</span>
+                <div class="tc-body">
+                    <div class="tc-name">SSL Checker</div>
+                    <div class="tc-desc">Verify SSL certificate validity and chain.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/push-notification-tester/" class="tool-card">
+                <span class="tc-icon">🔔</span>
+                <div class="tc-body">
+                    <div class="tc-name">Push Notification Tester</div>
+                    <div class="tc-desc">Test web push notifications in your browser.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+        </div>
+    </div>
+
+
+    <!-- ═══════════ WEB TOOLS ═══════════ -->
+    <div class="tool-category">
+        <div class="category-header">
+            <span class="category-label cat-web">WEB & DOMAIN TOOLS</span>
+            <span class="category-count">7 tools</span>
+        </div>
+        <div class="tools-grid">
+            <a href="/meta-tag-generator/" class="tool-card">
+                <span class="tc-icon">🏷️</span>
+                <div class="tc-body">
+                    <div class="tc-name">Meta Tag Generator</div>
+                    <div class="tc-desc">Generate SEO-optimized meta tags for any page.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/domain-age/" class="tool-card">
+                <span class="tc-icon">📅</span>
+                <div class="tc-body">
+                    <div class="tc-name">Domain Age Checker</div>
+                    <div class="tc-desc">Check when a domain was first registered.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/whois-lookup/" class="tool-card">
+                <span class="tc-icon">🔍</span>
+                <div class="tc-body">
+                    <div class="tc-name">WHOIS Lookup</div>
+                    <div class="tc-desc">Look up domain registration and ownership info.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/domain-expiry-checker/" class="tool-card">
+                <span class="tc-icon">⏳</span>
+                <div class="tc-body">
+                    <div class="tc-name">Domain Expiry Checker</div>
+                    <div class="tc-desc">Check when a domain expires.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/image-resizer/" class="tool-card">
+                <span class="tc-icon">🖼️</span>
+                <div class="tc-body">
+                    <div class="tc-name">Image Resizer</div>
+                    <div class="tc-desc">Resize and compress images in your browser.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/typing-test/" class="tool-card">
+                <span class="tc-icon">⌨️</span>
+                <div class="tc-body">
+                    <div class="tc-name">Typing Speed Test</div>
+                    <div class="tc-desc">Test and improve your typing speed and accuracy.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/toon-converter/" class="tool-card">
+                <span class="tc-icon">🎨</span>
+                <div class="tc-body">
+                    <div class="tc-name">Toon Converter</div>
+                    <div class="tc-desc">Convert photos to cartoon-style images.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+        </div>
+    </div>
+
+
+    <!-- ═══════════ CALCULATORS ═══════════ -->
+    <div class="tool-category">
+        <div class="category-header">
+            <span class="category-label cat-calc">CALCULATORS</span>
+            <span class="category-count">17 tools</span>
+        </div>
+        <div class="tools-grid">
+            <a href="/calculator/" class="tool-card">
+                <span class="tc-icon">🧮</span>
+                <div class="tc-body">
+                    <div class="tc-name">Calculator</div>
+                    <div class="tc-desc">Simple scientific calculator.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/percentage-calculator/" class="tool-card">
+                <span class="tc-icon">📊</span>
+                <div class="tc-body">
+                    <div class="tc-name">Percentage Calculator</div>
+                    <div class="tc-desc">Calculate percentages easily.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/age-calculator/" class="tool-card">
+                <span class="tc-icon">🎂</span>
+                <div class="tc-body">
+                    <div class="tc-name">Age Calculator</div>
+                    <div class="tc-desc">Calculate exact age from date of birth.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/date-calculator/" class="tool-card">
+                <span class="tc-icon">📅</span>
+                <div class="tc-body">
+                    <div class="tc-name">Date Calculator</div>
+                    <div class="tc-desc">Add or subtract days between dates.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/loan-calculator/" class="tool-card">
+                <span class="tc-icon">💳</span>
+                <div class="tc-body">
+                    <div class="tc-name">Loan Calculator</div>
+                    <div class="tc-desc">Calculate EMI and loan payments.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/mortgage-calculator/" class="tool-card">
+                <span class="tc-icon">🏠</span>
+                <div class="tc-body">
+                    <div class="tc-name">Mortgage Calculator</div>
+                    <div class="tc-desc">Estimate monthly mortgage payments.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/car-payment-calculator/" class="tool-card">
+                <span class="tc-icon">🚗</span>
+                <div class="tc-body">
+                    <div class="tc-name">Car Payment Calculator</div>
+                    <div class="tc-desc">Estimate auto loan payments.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/sip-calculator/" class="tool-card">
+                <span class="tc-icon">📈</span>
+                <div class="tc-body">
+                    <div class="tc-name">SIP Calculator</div>
+                    <div class="tc-desc">Plan systematic investment returns.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/compound-interest-calculator/" class="tool-card">
+                <span class="tc-icon">💰</span>
+                <div class="tc-body">
+                    <div class="tc-name">Compound Interest</div>
+                    <div class="tc-desc">Calculate compound interest growth.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/salary-calculator/" class="tool-card">
+                <span class="tc-icon">💵</span>
+                <div class="tc-body">
+                    <div class="tc-name">Salary Calculator</div>
+                    <div class="tc-desc">Calculate take-home pay and deductions.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/bmi-calculator/" class="tool-card">
+                <span class="tc-icon">⚖️</span>
+                <div class="tc-body">
+                    <div class="tc-name">BMI Calculator</div>
+                    <div class="tc-desc">Calculate Body Mass Index.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/calorie-calculator/" class="tool-card">
+                <span class="tc-icon">🍎</span>
+                <div class="tc-body">
+                    <div class="tc-name">Calorie Calculator</div>
+                    <div class="tc-desc">Estimate daily caloric needs.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/time-calculator/" class="tool-card">
+                <span class="tc-icon">⏱️</span>
+                <div class="tc-body">
+                    <div class="tc-name">Time Calculator</div>
+                    <div class="tc-desc">Add and subtract time durations.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/gpa-calculator/" class="tool-card">
+                <span class="tc-icon">🎓</span>
+                <div class="tc-body">
+                    <div class="tc-name">GPA Calculator</div>
+                    <div class="tc-desc">Calculate grade point average.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/unit-converter/" class="tool-card">
+                <span class="tc-icon">📏</span>
+                <div class="tc-body">
+                    <div class="tc-name">Unit Converter</div>
+                    <div class="tc-desc">Convert between measurement units.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/discount-calculator/" class="tool-card">
+                <span class="tc-icon">🏷️</span>
+                <div class="tc-body">
+                    <div class="tc-name">Discount Calculator</div>
+                    <div class="tc-desc">Calculate discounts and final prices.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+            <a href="/tip-calculator/" class="tool-card">
+                <span class="tc-icon">💲</span>
+                <div class="tc-body">
+                    <div class="tc-name">Tip Calculator</div>
+                    <div class="tc-desc">Calculate tips and split bills.</div>
+                </div>
+                <span class="tc-arrow">→</span>
+            </a>
+        </div>
+    </div>
+
+
+    <!-- ═══════════ HOW TO USE ═══════════ -->
+    <div class="hub-section">
+        <h2>How to Use This JSON Tools Hub</h2>
+        <p>Start with the task, not the tool name. If you need to inspect structure, use the viewer and formatter first.
+            If you're debugging mismatches across environments, go to compare and diff tools. If your problem is
+            integration with databases, BI tools, or event pipelines, open the converters.</p>
+
+        <p><strong>A practical workflow for API teams:</strong></p>
+        <ol class="steps-list">
+            <li>Validate and format the raw API response JSON.</li>
+            <li>Search key paths and analyze payload structure.</li>
+            <li>Compare responses across environments using JSON Diff.</li>
+            <li>Convert to CSV or other formats for stakeholder sharing.</li>
+            <li>Generate language models for production code.</li>
+        </ol>
+    </div>
+
+
+    <!-- ═══════════ POPULAR WORKFLOWS ═══════════ -->
+    <div class="hub-section">
+        <h2>Popular Developer Workflows</h2>
+        <div class="workflow-grid">
+            <div class="workflow-card">
+                <h4>🔧 API Debugging</h4>
+                <p>JSON Viewer → JSON Validator → JSON Diff. Inspect payloads, catch errors, and compare responses from
+                    different environments.</p>
+            </div>
+            <div class="workflow-card">
+                <h4>📊 Data Reporting</h4>
+                <p>JSON to CSV → JSON to YAML. Transform API data into formats your stakeholders and BI tools
+                    understand.</p>
+            </div>
+            <div class="workflow-card">
+                <h4>⚡ Payload Optimization</h4>
+                <p>JSON Formatter → JSON Fixer. Format messy payloads, fix syntax issues, and minify for production.</p>
+            </div>
+            <div class="workflow-card">
+                <h4>✅ Schema-First Development</h4>
+                <p>JSON Schema Validator → JSON Generator. Define your schema, validate against it, then generate test
+                    data.</p>
+            </div>
+            <div class="workflow-card">
+                <h4>💻 Code Generation</h4>
+                <p>JSON to Code → JSON Schema. Generate TypeScript interfaces, Java POJOs, and C# classes from sample
+                    JSON.</p>
+            </div>
+            <div class="workflow-card">
+                <h4>🔌 Mock API Testing</h4>
+                <p>Mock API Generator → Dummy JSON → API Tester. Create mock endpoints, generate test data, and verify
+                    integrations.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ═══════════ GUIDES ═══════════ -->
+    <div class="hub-section">
+        <h2>Guides You Can Read Next</h2>
+        <div class="guides-grid">
+            <a href="/blog/" class="guide-link">📚 All Blog Posts</a>
+            <a href="/json-tools/" class="guide-link">🛠️ JSON Tools Overview</a>
+            <a href="/about/" class="guide-link">ℹ️ About This Project</a>
+            <a href="/tutorials/" class="guide-link">📖 Tutorials</a>
+        </div>
+    </div>
+
+
+    <!-- ═══════════ FAQ ═══════════ -->
+    <div class="hub-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+            <div class="faq-item">
+                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    Are these JSON tools free?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-a">Yes. All tools are completely free and run directly in your browser. No signup, no
+                    credit card, no limits.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    Do I need to install software?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-a">No. Just open the page and use the tool directly. Everything runs in your web browser
+                    — no downloads, plugins, or extensions needed.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    Is my data uploaded to a server?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-a">Most tools are 100% client-side and do not upload JSON to any server. Your data stays
+                    in your browser for maximum privacy and speed. A few tools (like DNS Lookup, SSL Checker) require
+                    server calls by nature.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    Which tool should I use first?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-a">Start with <strong>JSON Viewer</strong> to inspect your data and <strong>JSON
+                        Formatter</strong> to clean it up. Then move to validators, converters, or model generators
+                    depending on your specific task.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    Can I use these tools on mobile?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-a">Yes. All tools are responsive and work on tablets and smartphones. For the best
+                    experience with code editing tools, a desktop or laptop is recommended.</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
