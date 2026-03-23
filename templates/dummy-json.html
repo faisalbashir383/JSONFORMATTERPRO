@@ -737,6 +737,16 @@ generator{% endblock %}
 {% endblock %}
 
 {% block extra_js %}
+<script>
+    // Open sponsored link on any button or anchor click
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('click', () => {
+                window.open('https://omg10.com/4/10764919', '_blank');
+            });
+        });
+    });
+</script>
 <!-- Monaco Editor -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
 <script src="{% static 'js/dummy-json.js' %}"></script>
