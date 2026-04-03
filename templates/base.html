@@ -129,7 +129,7 @@
     {% block extra_head %}{% endblock %}
 
     <!-- Preload Critical Resources -->
-    <link rel="preload" href="{% static 'css/bundle.min.css' %}" as="style">
+    <link rel="preload" href="{% static 'css/bundle.min.css' %}?v=2" as="style">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -185,6 +185,9 @@
             top: 0;
             z-index: 1000;
             padding: 0 2rem;
+            width: 100%;
+            left: 0;
+            right: 0;
         }
 
         .nav-container {
@@ -243,11 +246,47 @@
         [data-theme="dark"] .single-editor-panel {
             background: #1e1e2e;
         }
+
+        /* Force sidebar to respect navbar height and show close icon correctly, bypassing cache */
+        .sidebar {
+            top: 73px !important;
+            height: calc(100vh - 73px) !important;
+            padding-top: 0 !important;
+        }
+
+        .close-sidebar-btn {
+            background: var(--color-surface, #ffffff);
+            border: 1px solid var(--color-border, #e2e8f0);
+            border-radius: 9999px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--color-text-secondary, #64748b);
+            transition: all 0.15s ease;
+            position: absolute !important;
+            top: 10px !important;
+            right: 10px !important;
+            z-index: 1000 !important;
+        }
+
+        .close-sidebar-btn:hover {
+            background: var(--color-surface-alt, #f1f5f9);
+            color: var(--color-primary, #6366f1);
+        }
+
+        /* Ensure navbar doesn't shift itself around based on sidebar state */
+        body:not(.sidebar-collapsed) .navbar {
+            padding-left: 0 !important;
+            margin-left: 0 !important;
+        }
     </style>
 
     <!-- Main Stylesheet - Minified Bundle (style + homepage + fullscreen) -->
     <!-- Main Stylesheet - Minified Bundle (style + homepage + fullscreen) -->
-    <link rel="stylesheet" href="{% static 'css/bundle.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bundle.min.css' %}?v=2">
 
 
     <!-- Google Fonts -->
@@ -267,6 +306,13 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
+                <button id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Toggle sidebar" style="margin-left: 0; margin-right: 0.5rem;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
                 <a href="/"
                     style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
                     <img src="{% static 'images/favicon-512.png' %}" alt="JSON Formatters Pro Logo" class="nav-logo"
@@ -276,20 +322,7 @@
             </div>
 
             {% block navigation %}
-            <!-- Sidebar Toggle Button -->
-            <button id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Toggle sidebar">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-            </button>
-
-            <!-- Hide Sidebar Button (visible when sidebar is open) -->
-            <button id="hideSidebarBtn" class="hide-sidebar-btn" aria-label="Hide sidebar">
-                Hide Sidebar
-            </button>
+            <!-- Removed Hide Sidebar Button -->
 
             <!-- Theme Toggle -->
             <div class="nav-actions">
@@ -304,6 +337,12 @@
 
     <!-- Sidebar Navigation -->
     <aside class="sidebar" id="sidebar">
+        <button id="closeSidebarBtn" class="close-sidebar-btn" aria-label="Close sidebar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
         <div class="sidebar-inner">
             <!-- CORE JSON -->
             <div class="sidebar-category">
@@ -542,7 +581,7 @@
         // Sidebar management
         const sidebar = document.getElementById('sidebar');
         const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
-        const hideSidebarBtn = document.getElementById('hideSidebarBtn');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
 
         // Restore sidebar state from localStorage (desktop only; always collapsed on mobile)
@@ -571,8 +610,8 @@
         if (sidebarToggleBtn) {
             sidebarToggleBtn.addEventListener('click', toggleSidebar);
         }
-        if (hideSidebarBtn) {
-            hideSidebarBtn.addEventListener('click', toggleSidebar);
+        if (closeSidebarBtn) {
+            closeSidebarBtn.addEventListener('click', toggleSidebar);
         }
         if (sidebarOverlay) {
             sidebarOverlay.addEventListener('click', closeSidebarMobile);
