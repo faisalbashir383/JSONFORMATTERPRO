@@ -107,7 +107,8 @@ class StaticViewSitemap(Sitemap):
             'parquet_viewer_page',
             'apiutils:webhook_tester',
             'log_analyzer_page',
-            'yaml_formatter_page'
+            'yaml_formatter_page',
+            'swagger_editor_page'
         ]
 
 

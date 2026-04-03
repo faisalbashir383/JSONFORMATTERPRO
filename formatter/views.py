@@ -1145,6 +1145,11 @@ def swagger_viewer_page(request):
     return render(request, 'swagger-viewer.html')
 
 
+def swagger_editor_page(request):
+    """Render the Swagger Editor SEO landing page (redirects to Swagger Viewer)"""
+    return render(request, 'swagger-editor.html')
+
+
 def openapi_builder_page(request):
     """Render the OpenAPI Builder/Editor page"""
     return render(request, 'openapi-builder.html')
