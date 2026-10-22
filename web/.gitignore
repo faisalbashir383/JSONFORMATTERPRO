@@ -2,3 +2,7 @@ node_modules/
 dist/
 .astro/
 .wrangler/
+
+# The root .gitignore (Python template) ignores lib/ and static/; this site needs both.
+!src/lib/
+!public/static/
