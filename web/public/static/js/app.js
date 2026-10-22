@@ -251,6 +251,55 @@ function updateCharCount() {
 // API Calls
 // ====================
 
+// Runs each operation in the browser. Same response shapes as the old Django /api/ endpoints
+// (formatter/views.py), so the callers below didn't need to change.
+function runLocally(endpoint, data) {
+    const noData = { success: false, error: 'No JSON data provided.' };
+    const parse = () => {
+        try {
+            return { ok: true, value: JSON.parse(data) };
+        } catch (e) {
+            return { ok: false, error: `Invalid JSON: ${e.message}` };
+        }
+    };
+    switch (endpoint) {
+        case 'format': {
+            if (!data) return noData;
+            const p = parse();
+            return p.ok ? { success: true, formatted: JSON.stringify(p.value, null, 2) } : { success: false, error: p.error };
+        }
+        case 'minify': {
+            if (!data) return noData;
+            const p = parse();
+            return p.ok ? { success: true, minified: JSON.stringify(p.value) } : { success: false, error: p.error };
+        }
+        case 'validate': {
+            if (!data) return { success: false, valid: false, message: noData.error };
+            const p = parse();
+            return p.ok
+                ? { success: true, valid: true, message: '✓ Valid JSON! Your JSON is correctly structured.', data: p.value }
+                : { success: false, valid: false, message: p.error };
+        }
+        case 'base64/encode': {
+            if (!data) return { success: false, error: 'No data provided.' };
+            const bytes = new TextEncoder().encode(data);
+            return { success: true, encoded: btoa(String.fromCharCode(...bytes)) };
+        }
+        case 'base64/decode': {
+            if (!data) return { success: false, error: 'No data provided.' };
+            try {
+                const binary = atob(data.replace(/\s/g, ''));
+                const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+                return { success: true, decoded: new TextDecoder('utf-8', { fatal: true }).decode(bytes) };
+            } catch (e) {
+                return { success: false, error: `Invalid Base64 data: ${e.message}` };
+            }
+        }
+        default:
+            return { success: false, error: `This conversion (${endpoint}) is not available.` };
+    }
+}
+
 async function makeApiCall(endpoint, data, loadingBtn) {
     try {
         // Clear any previous errors
@@ -261,34 +310,7 @@ async function makeApiCall(endpoint, data, loadingBtn) {
             loadingBtn.classList.add('loading');
         }
 
-        // Get CSRF token from cookie or hidden input
-        let csrfToken = document.cookie
-            .split('; ')
-            .find(row => row.startsWith('csrftoken='))
-            ?.split('=')[1];
-
-        // Fallback: try to get from hidden input
-        if (!csrfToken) {
-            const csrfInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
-            csrfToken = csrfInput?.value || '';
-        }
-
-        // Fallback: try meta tag
-        if (!csrfToken) {
-            const csrfMeta = document.querySelector('meta[name="csrf-token"]');
-            csrfToken = csrfMeta?.content || '';
-        }
-
-        const response = await fetch(`${API_BASE}/api/${endpoint}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken || '',
-            },
-            body: JSON.stringify({ data })
-        });
-
-        const result = await response.json();
+        const result = runLocally(endpoint, data);
 
         // Remove loading state
         if (loadingBtn) {
@@ -505,15 +527,7 @@ async function base64Encode() {
         const tempBtn = elements.formatBtn;
         tempBtn.classList.add('loading');
 
-        const response = await fetch(`${API_BASE}/api/base64/encode/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ data: input })
-        });
-
-        const result = await response.json();
+        const result = runLocally('base64/encode', input);
         tempBtn.classList.remove('loading');
 
         if (result.success) {
@@ -548,15 +562,7 @@ async function base64Decode() {
         const tempBtn = elements.minifyBtn;
         tempBtn.classList.add('loading');
 
-        const response = await fetch(`${API_BASE}/api/base64/decode/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ data: input })
-        });
-
-        const result = await response.json();
+        const result = runLocally('base64/decode', input);
         tempBtn.classList.remove('loading');
 
         if (result.success) {

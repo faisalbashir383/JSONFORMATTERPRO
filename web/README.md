@@ -92,23 +92,44 @@ After adding your domain, create a Redirect Rule for `www.jsonformatterspro.com/
 
 ## Not working yet on the static site
 
-Server endpoints live in `functions/` (Cloudflare Pages Functions, same domain, free plan). Done so far:
-`/api/dns-lookup/`, `/api/dummy-json/<resource>/`, `/api/dummy/*`, `/api/contact/`,
-`/api/careers/apply/` and `/api/typing-test/{submit,leaderboard}/`. The QR generator runs in the
-browser, and tool-usage tracking is a Google Analytics `tool_use` event.
+Server endpoints live in `functions/` (Cloudflare Pages Functions, same domain, free plan), with shared
+code in `server/`. No page calls the old Django server any more:
 
-The form and typing-test functions write to Supabase with **`SUPABASE_SECRET_KEY`** (Supabase →
-Project Settings → API Keys → Secret keys). Add it in Cloudflare → Settings → Variables and Secrets as
-an **encrypted** variable, for Production and Preview. For local testing put both values in
-`web/.dev.vars` (git-ignored), then run `npm run build && npx wrangler pages dev dist`:
+| Endpoint | Notes |
+|---|---|
+| `/api/dns-lookup/` | Cloudflare DNS-over-HTTPS + ip-api.com locations |
+| `/api/dummy-json/<resource>/`, `/api/dummy/*` | public fake-data API, no quota |
+| `/api/contact/`, `/api/careers/apply/` | Supabase, honeypot spam check |
+| `/api/typing-test/{submit,leaderboard}/` | Supabase, `tt_sid` cookie for "your best" |
+| `/api/ip-lookup/`, `/api/my-ip/` | own IP from Cloudflare data; other IPs via ip-api.com (free tier is non-commercial) |
+| `/api/cors-checker/` | OPTIONS + GET with the test Origin |
+| `/api/ssl-checker/` | live HTTPS check + Certificate Transparency logs (Cert Spotter); no serial number |
+| `/api/domain-age/`, `/api/top-domains/` | RDAP (IANA bootstrap) instead of port-43 WHOIS, cached 24 h |
+| `/api/ai/generate-json/` | OpenRouter; `mode: "explain"` returns plain text (Log Analyzer) |
+| `/api/webhook/*`, `/hook/<id>/` | Webhook Tester; owner = browser cookie `wh_sid` |
+| `/api/mock/*`, `/api/<path>/<id>/` | Mock API; mocks are always served under `/api/` |
+
+The homepage formatter (`static/js/app.js`) and the QR generator run entirely in the browser; tool-usage
+tracking is a Google Analytics `tool_use` event.
+
+**Cloudflare variables** (Settings → Variables and Secrets; encrypt the secrets):
+
+| Variable | Needed for |
+|---|---|
+| `SUPABASE_URL`, `SUPABASE_ANON_KEY` | building blog/tutorials/careers |
+| `SUPABASE_SECRET_KEY` | forms, typing test, webhooks, mocks, top domains |
+| `OPENROUTER_API_KEY` | AI JSON generator / Log Analyzer explanations |
+| `OPENROUTER_MODEL` | optional; comma-separated fallback list. Default: `nvidia/nemotron-3.5-lightning:free,poolside/laguna-s-2.1:free,google/gemma-4-31b-it:free` |
+| `CERTSPOTTER_API_KEY` | optional; raises the SSL checker's 100 lookups/hour limit |
+
+For local testing put the same values in `web/.dev.vars` (git-ignored), then run
+`npm run build && npx wrangler pages dev dist`:
 
 ```
 SUPABASE_URL=https://<project-ref>.supabase.co
 SUPABASE_SECRET_KEY=sb_secret_...
+OPENROUTER_API_KEY=sk-or-...
 ```
-
-Still calling old Django `/api/...` endpoints (Phase 4): webhook-tester, domain-age-checker,
-cors-checker, ssl-checker, ip-info, mock-api-generator and the AI JSON generator (log-analyzer).
 
 Also not working without a server yet: the job application form (Phase 3), and the domain-age result
 pages `/domain-age/<domain>/`, which need live WHOIS data (Phase 4; also left out of sitemap.xml until then).
