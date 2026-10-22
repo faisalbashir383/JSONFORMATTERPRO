@@ -1,11 +1,10 @@
 ---
-// /blog/, /blog/page/N/, /blog/category/<slug>/[page/N/] and /blog/<slug>/, built from Supabase.
-import { hasData } from '../../lib/db';
+// /blog/, /blog/page/N/, /blog/category/<slug>/[page/N/] and /blog/<slug>/, built from the
+// Markdown posts in src/content/blog plus any published posts in Supabase.
 import { blogDetailPages, blogListPages } from '../../lib/views';
 import { renderTemplate } from '../../lib/render';
 
 export async function getStaticPaths() {
-  if (!hasData) return [];
   const list = (await blogListPages()).map((p) => ({ ...p, template: 'blog_list' }));
   const detail = (await blogDetailPages()).map((p) => ({ ...p, template: 'blog_detail' }));
   return [...list, ...detail].map(({ url, context, template }) => ({
