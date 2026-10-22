@@ -338,7 +338,40 @@ qr code scanner, qr reader, scan qr code, instant qr code, quick qr generator, e
 </div>
 <!--@end:content-->
 <!--@block:extra_js-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>
+    // Draws the QR code on a canvas and returns a PNG data URL. Same settings as the old
+    // server version: error correction L, 4-module quiet zone, square size x size pixels.
+    function renderQrPng(text, size, fgColor, bgColor) {
+        if (qrcode.stringToBytesFuncs && qrcode.stringToBytesFuncs['UTF-8']) {
+            qrcode.stringToBytes = qrcode.stringToBytesFuncs['UTF-8'];
+        }
+        const qr = qrcode(0, 'L');
+        qr.addData(text);
+        qr.make();
+
+        const modules = qr.getModuleCount();
+        const border = 4;
+        const cell = size / (modules + border * 2);
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = bgColor;
+        ctx.fillRect(0, 0, size, size);
+        ctx.fillStyle = fgColor;
+        for (let row = 0; row < modules; row++) {
+            for (let col = 0; col < modules; col++) {
+                if (!qr.isDark(row, col)) continue;
+                // Round both edges so neighbouring cells meet without hairline gaps.
+                const x0 = Math.round((col + border) * cell), x1 = Math.round((col + border + 1) * cell);
+                const y0 = Math.round((row + border) * cell), y1 = Math.round((row + border + 1) * cell);
+                ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
+            }
+        }
+        return canvas.toDataURL('image/png');
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         const qrContent = document.getElementById('qrContent');
         const qrSize = document.getElementById('qrSize');
@@ -390,31 +423,13 @@ qr code scanner, qr reader, scan qr code, instant qr code, quick qr generator, e
             setLoading(true);
 
             try {
-                const response = await fetch('/api/qr-generator/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        content: content,
-                        size: parseInt(qrSize.value),
-                        fg_color: fgColor.value,
-                        bg_color: '#FFFFFF'
-                    })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    currentQRImage = data.image;
-                    qrDisplay.innerHTML = `<img src="${data.image}" alt="QR Code" />`;
-                    downloadBtn.disabled = false;
-                } else {
-                    showError(data.error || 'Failed to generate QR code. Please try again.');
-                }
+                const size = Math.max(64, Math.min(parseInt(qrSize.value) || 256, 1024));
+                currentQRImage = renderQrPng(content, size, fgColor.value, '#FFFFFF');
+                qrDisplay.innerHTML = `<img src="${currentQRImage}" alt="QR Code" />`;
+                downloadBtn.disabled = false;
             } catch (error) {
                 console.error('Error:', error);
-                showError('Failed to connect to the server. Please try again.');
+                showError('This text is too long for a QR code. Try a shorter text or URL.');
             } finally {
                 setLoading(false);
             }

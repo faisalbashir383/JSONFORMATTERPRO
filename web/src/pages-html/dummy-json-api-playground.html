@@ -1126,7 +1126,9 @@ func main() {
         const startTime = performance.now();
 
         try {
-            const response = await fetch(url);
+            // baseUrl is the public address shown in the snippets; the request itself goes to
+            // whichever host is serving this page, so previews and local builds work too.
+            const response = await fetch(url.replace(baseUrl, ''));
             const endTime = performance.now();
             const responseTime = Math.round(endTime - startTime + delay);
 

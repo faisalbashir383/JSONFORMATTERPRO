@@ -92,9 +92,12 @@ After adding your domain, create a Redirect Rule for `www.jsonformatterspro.com/
 
 ## Not working yet on the static site
 
-These pages call Django `/api/...` endpoints and need Phase 3/4 (Supabase tables or Edge Functions):
-webhook-tester, domain-age-checker, dns-lookup, cors-checker, ssl-checker, ip-info,
-dummy-json-api-playground, mock-api-generator, qr-generator, typing-test (score submit/leaderboard),
+Server endpoints live in `functions/` (Cloudflare Pages Functions, same domain, free plan). Done so far:
+`/api/dns-lookup/`, `/api/dummy-json/<resource>/` and `/api/dummy/*`. The QR generator now runs in the
+browser. Test them locally with `npm run build && npx wrangler pages dev dist`.
+
+Still calling old Django `/api/...` endpoints (Phase 3/4): webhook-tester, domain-age-checker,
+cors-checker, ssl-checker, ip-info, mock-api-generator, typing-test (score submit/leaderboard),
 contact (form POST), and the tool-usage tracking calls in json-viewer, log-analyzer and swagger-viewer.
 
 Also not working without a server yet: the job application form (Phase 3), and the domain-age result
