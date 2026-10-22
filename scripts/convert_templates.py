@@ -34,6 +34,12 @@ DYNAMIC_TEMPLATES = {
     'tutorials-list.html', 'tutorial-detail.html', 'domain-age-result.html',
 }
 SKIP_TEMPLATES = {'base.html', '500.html', 'test.html'}
+# Translated to Nunjucks (web/src/templates/*.njk) and rendered from Supabase data.
+# domain-age-result.html needs live WHOIS data, so it waits for Phase 4.
+NUNJUCKS_TEMPLATES = [
+    'blog_list.html', 'blog_detail.html', 'careers.html', 'job-detail.html',
+    'tutorials-list.html', 'tutorial-detail.html',
+]
 
 TAG_RE = re.compile(r'\{%\s*(.*?)\s*%\}', re.S)
 VAR_RE = re.compile(r'\{\{\s*(.*?)\s*\}\}', re.S)
@@ -76,7 +82,18 @@ def load_view_templates():
     return routes
 
 
+def load_url_routes():
+    """Map Django URL names to routes, keeping parameters (e.g. 'blog/<slug:slug>/')."""
+    routes = {}
+    for f in ('formatter/urls.py', 'apiutils/urls.py'):
+        src = (ROOT / f).read_text()
+        for m in re.finditer(r"path\(\s*'([^']*)'\s*,\s*[\w.]+\s*,\s*name='([^']+)'", src):
+            routes[m.group(2)] = '/' + m.group(1)
+    return routes
+
+
 URL_NAMES = load_url_names()
+URL_ROUTES = load_url_routes()
 
 
 # ---------------------------------------------------------------- rendering
@@ -213,6 +230,124 @@ def convert_page(path):
     return '\n'.join(parts) + '\n'
 
 
+# ---------------------------------------------------------------- Nunjucks
+
+COMPARISON_OPS = {'==', '!=', '<', '>', '<=', '>=', 'in'}
+PATH_RE = re.compile(r'^[A-Za-z_][\w.]*$')
+
+# Pagination links: ?page=N only works with a server, so the static site uses /page/N/ URLs.
+PAGINATION_LINKS = {
+    '?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}':
+        '{{ page_obj.previous_page_url }}',
+    '?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}':
+        '{{ page_obj.next_page_url }}',
+}
+
+
+def nj_filters(expr):
+    """Django 'a|f:arg|g' -> Nunjucks 'a|f(arg)|g', with Django's output rules applied."""
+    parts = [p.strip() for p in re.split(r'\|(?=(?:[^"\']|"[^"]*"|\'[^\']*\')*$)', expr)]
+    head = re.sub(r'^(.*)\.count$', r'\1|length', parts[0])
+    head = re.sub(r'\.all$', '', head)
+    out = [head]
+    for f in parts[1:]:
+        name, _, arg = f.partition(':')
+        out.append(f'{name}({arg})' if arg else name)
+    return out
+
+
+def nj_var(expr):
+    """{{ expr }}: Django prints True/False/None, so finish with the |py filter (before |safe)."""
+    parts = nj_filters(expr)
+    if parts[-1] == 'safe':
+        parts.insert(len(parts) - 1, 'py')
+    else:
+        parts.append('py')
+    return '{{ ' + '|'.join(parts) + ' }}'
+
+
+def nj_condition(cond):
+    """Wrap bare operands in |pytruth: empty lists are falsy in Django but truthy in JS."""
+    tokens = cond.split()
+    out = []
+    for i, tok in enumerate(tokens):
+        prev = tokens[i - 1] if i else None
+        nxt = tokens[i + 1] if i + 1 < len(tokens) else None
+        if (PATH_RE.match(tok) and tok not in ('and', 'or', 'not', 'True', 'False', 'None')
+                and prev not in COMPARISON_OPS and nxt not in COMPARISON_OPS):
+            out.append(f'({"|".join(nj_filters(tok))}|pytruth)')
+        else:
+            out.append({'True': 'true', 'False': 'false', 'None': 'none'}.get(tok, tok))
+    return ' '.join(out)
+
+
+def nj_url(args):
+    name, *params = args.split()
+    route = URL_ROUTES.get(name.strip('\'"'))
+    if route is None:
+        warnings.append(f'nunjucks: unknown url name {name}')
+        return '#'
+    values = [p.split('=', 1)[-1] for p in params]
+    for v in values:
+        route = re.sub(r'<[^>]+>', '{{ ' + v + ' }}', route, count=1)
+    return route
+
+
+def nj_tag(tag, where):
+    kind, _, rest = tag.partition(' ')
+    rest = rest.strip()
+    if kind in ('load', 'csrf_token'):
+        return ''
+    if kind == 'static':
+        return '/static/' + rest.strip('\'"')
+    if kind == 'url':
+        return nj_url(rest)
+    if kind in ('if', 'elif'):
+        return '{% ' + kind + ' ' + nj_condition(rest) + ' %}'
+    if kind == 'for':
+        target, _, iterable = rest.partition(' in ')
+        iterable = '|'.join(nj_filters(iterable.strip()))
+        if iterable == 'page_obj':
+            iterable = 'page_obj.object_list'
+        return '{% for ' + target.strip() + ' in ' + iterable + ' %}'
+    if kind == 'empty':
+        return '{% else %}'
+    if kind in ('else', 'endif', 'endfor'):
+        return '{% ' + kind + ' %}'
+    warnings.append(f'{where}: unsupported tag {{% {tag} %}} removed')
+    return ''
+
+
+def to_nunjucks(text, where):
+    for old, new in PAGINATION_LINKS.items():
+        text = text.replace(old, new)
+    text = COMMENT_RE.sub('', text)
+    text = text.replace('forloop.counter', 'loop.index').replace('forloop.last', 'loop.last')
+    text = text.replace('forloop.first', 'loop.first')
+
+    def var(m):
+        expr = m.group(1)
+        if expr in ('SITE_URL', 'SITE_NAME'):
+            return {'SITE_URL': SITE_URL, 'SITE_NAME': SITE_NAME}[expr]
+        if expr == 'csrf_token':
+            return ''
+        return nj_var(expr)
+
+    # Variables first: the tag pass emits Nunjucks {{ }} (e.g. url slugs) that must stay as-is.
+    text = VAR_RE.sub(var, text)
+    return TAG_RE.sub(lambda m: nj_tag(m.group(1), where), text)
+
+
+def convert_nunjucks(path):
+    raw = path.read_text()
+    blocks, _ = parse_blocks(raw)
+    where = path.name
+    parts = []
+    for name, body in blocks.items():
+        parts.append(f'<!--@block:{name}-->{to_nunjucks(body, where)}<!--@end:{name}-->')
+    return '\n'.join(parts) + '\n'
+
+
 def main():
     (WEB / 'src/layouts').mkdir(parents=True, exist_ok=True)
     (WEB / 'src/pages-html').mkdir(parents=True, exist_ok=True)
@@ -239,7 +374,22 @@ def main():
 
     (WEB / 'src/data/routes.json').write_text(json.dumps(routes, indent=2) + '\n')
 
-    print(f'converted {len(routes)} pages + 404')
+    # Static part of sitemap.xml, in the order of StaticViewSitemap.items() in formatter/sitemaps.py.
+    sitemap_src = (ROOT / 'formatter/sitemaps.py').read_text()
+    items = re.search(r'class StaticViewSitemap.*?return \[(.*?)\]', sitemap_src, re.S).group(1)
+    names = [n.split(':')[-1] for n in re.findall(r"'([^']+)'", items)]
+    missing = [n for n in names if n not in URL_NAMES]
+    if missing:
+        warnings.append(f'sitemap: unknown url names {missing}')
+    sitemap_paths = [URL_NAMES[n] for n in names if n in URL_NAMES]
+    (WEB / 'src/data/sitemap-static.json').write_text(json.dumps(sitemap_paths, indent=2) + '\n')
+
+    (WEB / 'src/templates').mkdir(parents=True, exist_ok=True)
+    for tpl in NUNJUCKS_TEMPLATES:
+        out = WEB / 'src/templates' / tpl.replace('.html', '.njk')
+        out.write_text(convert_nunjucks(TEMPLATES / tpl))
+
+    print(f'converted {len(routes)} pages + 404, {len(NUNJUCKS_TEMPLATES)} Nunjucks templates')
     for w in warnings:
         print('warning:', w, file=sys.stderr)
 

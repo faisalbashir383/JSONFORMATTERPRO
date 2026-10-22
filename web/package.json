@@ -9,6 +9,10 @@
     "convert": "python3 ../scripts/convert_templates.py"
   },
   "dependencies": {
-    "astro": "5.18.2"
+    "astro": "5.18.2",
+    "nunjucks": "3.2.4"
+  },
+  "devDependencies": {
+    "@types/nunjucks": "3.2.6"
   }
 }
