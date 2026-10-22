@@ -1,19 +1,10 @@
 """
 URL Configuration for the formatter app
 """
-import os
-
-from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.http import FileResponse
 from django.urls import path, re_path
 from django.views.generic.base import RedirectView
 from . import views
-
-def serve_sw_js(request):
-    """Serve the sw.js file for Monetag verification"""
-    sw_path = os.path.join(settings.BASE_DIR, 'sw.js')
-    return FileResponse(open(sw_path, 'rb'), content_type='application/javascript')
 
 urlpatterns = [
     # path('favicon.ico', RedirectView.as_view(
@@ -21,7 +12,6 @@ urlpatterns = [
     #     permanent=True
     # )),
     # API endpoints
-    path('sw.js', serve_sw_js, name='service_worker'),  # Monetag verification
     path('api/format/', views.format_json, name='format_json'),
     path('api/minify/', views.minify_json, name='minify_json'),
     path('api/validate/', views.validate_json, name='validate_json'),
