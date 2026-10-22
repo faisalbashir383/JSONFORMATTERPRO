@@ -1,0 +1,807 @@
+<!--@block:title-->JSON to TOON Converter - Reduce LLM Tokens by 60% [2025]<!--@end:title-->
+<!--@block:meta_title-->JSON to TOON Converter - Token Optimization for LLMs Free<!--@end:meta_title-->
+<!--@block:meta_description-->Free JSON to TOON converter for developers. Reduce GPT-4, Claude, and Gemini API token usage
+by 30-60%. Real-time token counter. 100% client-side and private.<!--@end:meta_description-->
+<!--@block:meta_keywords-->json to toon, toon converter, token oriented object notation, reduce llm tokens, gpt-4 token
+saver, llm cost reduction, compact json for ai<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/toon-converter/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "JSON to TOON Converter",
+  "description": "Convert JSON to TOON format to reduce LLM API token usage by 30-60%.",
+  "url": "https://jsonformatterspro.com/toon-converter/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "JSON to TOON Conversion",
+    "TOON to JSON Conversion",
+    "Real-time Token Counter",
+    "LLM Cost Calculator",
+    "Tabular Array Detection"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is TOON format?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "TOON (Token-Oriented Object Notation) is a compact data format designed to reduce token usage when sending data to LLMs like GPT-4, Claude, and Gemini. It typically reduces tokens by 30-60% compared to JSON."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much can I save with TOON?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "TOON typically reduces token usage by 30-60%, which directly translates to cost savings on LLM API calls. For uniform arrays of objects, savings can exceed 50%."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is TOON conversion lossless?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. You can convert JSON to TOON and back to JSON without losing any data. TOON preserves all data types including strings, numbers, booleans, null values, arrays, and nested objects."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When should I use TOON vs JSON?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use TOON when sending data to LLMs to reduce API costs. Use JSON for standard API communication and configuration files. TOON is optimized specifically for LLM input."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my data secure?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. All conversion happens in your browser. Your data never leaves your device."
+      }
+    }
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.08) 50%, rgba(20, 184, 166, 0.1) 100%);
+        border-radius: var(--radius-lg);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #10b981 0%, #059669 50%, #14b8a6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .savings-badge {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.5rem 1.25rem;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .stats-bar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem;
+        text-align: center;
+        transition: all 300ms ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px var(--color-shadow);
+    }
+
+    .stat-card.savings {
+        border-color: rgba(16, 185, 129, 0.3);
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.05));
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #10b981, #059669);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .stat-card.json .stat-value {
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .stat-card.toon .stat-value {
+        background: linear-gradient(135deg, #10b981, #059669);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 0.25rem;
+    }
+
+    .converter-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .panel {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        background: var(--color-bg);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .panel-title {
+        font-weight: 700;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .panel-title.json {
+        color: #6366f1;
+    }
+
+    .panel-title.toon {
+        color: #10b981;
+    }
+
+    .panel-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .panel-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.8rem;
+        background: var(--color-surface);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .panel-btn:hover {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+    }
+
+    .editor-area {
+        flex: 1;
+        min-height: 350px;
+        padding: 1rem;
+        font-family: 'SF Mono', 'Monaco', 'Menlo', monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: none;
+        resize: none;
+        width: 100%;
+    }
+
+    .editor-area:focus {
+        outline: none;
+    }
+
+    .action-row {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .convert-btn {
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: white;
+        border: none;
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        transition: all 300ms ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .convert-btn.to-toon {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    .convert-btn.to-toon:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+    }
+
+    .convert-btn.to-json {
+        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    }
+
+    .convert-btn.to-json:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+    }
+
+    .secondary-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        background: var(--color-surface);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+    }
+
+    .secondary-btn:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    .cost-calculator {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .calc-header {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .calc-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .calc-item {
+        background: var(--color-bg);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        text-align: center;
+    }
+
+    .calc-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #10b981;
+    }
+
+    .calc-label {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.25rem;
+    }
+
+    /* New Feature / Related / FAQ Sections */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .info-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #10b981;
+        font-weight: bold;
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tool-link {
+        display: block;
+        padding: 1rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tool-link:hover {
+        border-color: #10b981;
+        transform: translateY(-2px);
+    }
+
+    .related-articles {
+        margin-bottom: 2rem;
+    }
+
+    .articles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+    }
+
+    .article-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem;
+        transition: all 300ms ease;
+        text-decoration: none;
+        display: block;
+    }
+
+    .article-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px var(--color-shadow);
+        border-color: #10b981;
+    }
+
+    .article-card h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+    }
+
+    .article-card p {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        line-height: 1.5;
+    }
+
+    .faq-section {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .faq-section>h2 {
+        padding: 1.25rem 1.5rem;
+        font-size: 1.25rem;
+        font-weight: 700;
+        border-bottom: 1px solid var(--color-border);
+        background: var(--color-bg);
+        margin: 0;
+    }
+
+    .faq-item {
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .faq-item:last-child {
+        border-bottom: none;
+    }
+
+    .faq-question {
+        padding: 1rem 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        transition: background 200ms;
+    }
+
+    .faq-question:hover {
+        background: rgba(16, 185, 129, 0.05);
+    }
+
+    .faq-question .icon {
+        font-size: 1.25rem;
+        transition: transform 200ms;
+        color: #10b981;
+    }
+
+    .faq-item.open .faq-question .icon {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        display: none;
+        padding: 0 1.5rem 1rem 1.5rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+    }
+
+    .faq-item.open .faq-answer {
+        display: block;
+    }
+
+    .toast {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: #10b981;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        z-index: 1000;
+        display: none;
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+    }
+
+    @media (max-width: 900px) {
+        .converter-container {
+            grid-template-columns: 1fr;
+        }
+
+        .tool-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header">
+    <h1>🔄 JSON to TOON Converter</h1>
+    <p>Convert JSON to Token-Oriented Object Notation and reduce your LLM API costs</p>
+    <div class="savings-badge">💰 Save 30-60% on LLM Tokens</div>
+</div>
+
+<div class="stats-bar">
+    <div class="stat-card json">
+        <div class="stat-value" id="jsonTokens">0</div>
+        <div class="stat-label">JSON Tokens</div>
+    </div>
+    <div class="stat-card toon">
+        <div class="stat-value" id="toonTokens">0</div>
+        <div class="stat-label">TOON Tokens</div>
+    </div>
+    <div class="stat-card savings">
+        <div class="stat-value" id="tokenSavings">0%</div>
+        <div class="stat-label">Token Savings</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value" id="monthlySavings">$0</div>
+        <div class="stat-label">Est. Monthly Savings*</div>
+    </div>
+</div>
+
+<div class="converter-container">
+    <div class="panel">
+        <div class="panel-header"><span class="panel-title json">📝 JSON Input</span>
+            <div class="panel-actions"><button class="panel-btn" id="sampleBtn">📄 Sample</button><button
+                    class="panel-btn" id="clearJsonBtn">🗑️ Clear</button></div>
+        </div>
+        <textarea id="jsonInput" class="editor-area" placeholder='Paste your JSON here...'></textarea>
+    </div>
+    <div class="panel">
+        <div class="panel-header"><span class="panel-title toon">⚡ TOON Output</span>
+            <div class="panel-actions"><button class="panel-btn" id="copyToonBtn">📋 Copy</button><button
+                    class="panel-btn" id="downloadToonBtn">💾 Download</button></div>
+        </div>
+        <textarea id="toonOutput" class="editor-area" placeholder="TOON output will appear here..." readonly></textarea>
+    </div>
+</div>
+
+<div class="action-row">
+    <button class="convert-btn to-toon" id="convertToToonBtn">⚡ Convert to TOON</button>
+    <button class="convert-btn to-json" id="convertToJsonBtn">🔄 Convert to JSON</button>
+    <button class="secondary-btn" id="swapBtn">↔️ Swap</button>
+</div>
+
+<div class="cost-calculator">
+    <div class="calc-header">💰 LLM Cost Calculator</div>
+    <div class="calc-grid">
+        <div class="calc-item">
+            <div class="calc-value" id="gpt4Cost">$0.00</div>
+            <div class="calc-label">GPT-4 Turbo Savings/Request</div>
+        </div>
+        <div class="calc-item">
+            <div class="calc-value" id="claudeCost">$0.00</div>
+            <div class="calc-label">Claude 3.5 Savings/Request</div>
+        </div>
+        <div class="calc-item">
+            <div class="calc-value" id="geminiCost">$0.00</div>
+            <div class="calc-label">Gemini 1.5 Savings/Request</div>
+        </div>
+        <div class="calc-item">
+            <div class="calc-value" id="yearSavings">$0</div>
+            <div class="calc-label">Est. Yearly Savings (100 req/day)</div>
+        </div>
+    </div>
+    <p style="font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 1rem;">* Estimates based on 100
+        requests/day. Actual savings depend on your data structure.</p>
+</div>
+
+<div class="info-grid">
+    <div class="info-card">
+        <h2 class="section-title"><svg class="section-icon" width="20" height="20" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg> Tool Features</h2>
+        <ul class="feature-list">
+            <li><strong>Bidirectional:</strong> Convert JSON to TOON and TOON back to JSON.</li>
+            <li><strong>Token Counter:</strong> Real-time token count comparison.</li>
+            <li><strong>Cost Estimator:</strong> See estimated savings for GPT-4, Claude, and Gemini.</li>
+            <li><strong>100% Private:</strong> All processing happens in your browser.</li>
+        </ul>
+    </div>
+    <div class="info-card">
+        <h2 class="section-title"><svg class="section-icon" width="20" height="20" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6A4.997 4.997 0 0 1 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z" />
+            </svg> When to Use TOON</h2>
+        <p style="color: var(--color-text-secondary); margin-bottom: 1rem;">TOON is ideal for sending structured data to
+            LLMs as context.</p>
+        <ul class="feature-list">
+            <li><strong>User lists, product catalogs:</strong> Uniform arrays of objects see the biggest savings.</li>
+            <li><strong>RAG context:</strong> Summarize retrieved documents more efficiently.</li>
+            <li><strong>Agent state:</strong> Pass complex state objects with fewer tokens.</li>
+        </ul>
+    </div>
+</div>
+
+<div class="info-card" style="margin-top: 2rem;">
+    <h2 class="section-title"><svg class="section-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path
+                d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z" />
+        </svg> Related Developer Tools</h2>
+    <div class="related-tools">
+        <a href="/" class="tool-link"><svg class="tool-icon" width="16" height="16" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z" />
+            </svg> JSON Formatter</a>
+        <a href="/" class="tool-link"><svg class="tool-icon" width="16" height="16" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
+            </svg> JSON Minifier</a>
+        <a href="/" class="tool-link"><svg class="tool-icon" width="16" height="16" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+            </svg> JSON Validator</a>
+    </div>
+</div>
+
+<div class="related-articles" style="margin-top: 2rem;">
+    <h2 class="section-title">📚 Learn More About TOON</h2>
+    <div class="articles-grid">
+        <a href="/blog/toon-format-token-oriented-object-notation-complete-guide/" class="article-card">
+            <h3>TOON Format: Complete Guide</h3>
+            <p>Learn everything about TOON syntax, benefits, and conversion with code examples.</p>
+        </a>
+        <a href="/blog/json-to-toon-conversion-step-by-step-tutorial-with-examples/" class="article-card">
+            <h3>JSON to TOON Tutorial</h3>
+            <p>Step-by-step conversion tutorial with JavaScript and Python implementations.</p>
+        </a>
+        <a href="/blog/optimizing-llm-costs-with-toon-practical-token-reduction-strategies/" class="article-card">
+            <h3>Optimizing LLM Costs</h3>
+            <p>Practical strategies to reduce API costs by 30-60% using TOON format.</p>
+        </a>
+    </div>
+</div>
+
+<div class="faq-section">
+    <h2>❓ Frequently Asked Questions</h2>
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"><span>What is TOON
+                (Token-Oriented Object Notation)?</span><span class="icon">+</span></div>
+        <div class="faq-answer">TOON is a compact data format designed for LLMs. It uses 30-60% fewer tokens than JSON
+            by eliminating braces, brackets, and excessive quotes.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"><span>How does TOON reduce token
+                usage?</span><span class="icon">+</span></div>
+        <div class="faq-answer">TOON uses indentation instead of braces, converts uniform arrays to CSV-like tables, and
+            removes unnecessary quotes.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"><span>Is TOON conversion
+                lossless?</span><span class="icon">+</span></div>
+        <div class="faq-answer">Yes! TOON preserves all data types. JSON → TOON → JSON round trips are fully lossless.
+        </div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"><span>When should I use TOON vs
+                JSON?</span><span class="icon">+</span></div>
+        <div class="faq-answer">Use TOON for LLM context. Use JSON for APIs and configuration files.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')"><span>Is my data
+                secure?</span><span class="icon">+</span></div>
+        <div class="faq-answer">All conversion is 100% client-side. Your data never leaves your browser.</div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const jsonInput = document.getElementById('jsonInput');
+        const toonOutput = document.getElementById('toonOutput');
+        const jsonTokensEl = document.getElementById('jsonTokens');
+        const toonTokensEl = document.getElementById('toonTokens');
+        const tokenSavingsEl = document.getElementById('tokenSavings');
+        const monthlySavingsEl = document.getElementById('monthlySavings');
+        const toast = document.getElementById('toast');
+        const sampleData = { "users": [{ "id": 1, "name": "Alice Johnson", "email": "alice@example.com", "role": "Developer", "active": true }, { "id": 2, "name": "Bob Smith", "email": "bob@example.com", "role": "Designer", "active": true }, { "id": 3, "name": "Charlie Brown", "email": "charlie@example.com", "role": "Manager", "active": false }], "metadata": { "version": "1.0", "generated": "2024-01-15" } };
+
+        document.getElementById('sampleBtn').addEventListener('click', () => { jsonInput.value = JSON.stringify(sampleData, null, 2); convertToToon(); });
+        document.getElementById('clearJsonBtn').addEventListener('click', () => { jsonInput.value = ''; toonOutput.value = ''; updateStats(0, 0); });
+        document.getElementById('convertToToonBtn').addEventListener('click', convertToToon);
+        document.getElementById('convertToJsonBtn').addEventListener('click', convertToJson);
+        document.getElementById('copyToonBtn').addEventListener('click', () => { navigator.clipboard.writeText(toonOutput.value); showToast('TOON copied to clipboard!'); });
+        document.getElementById('downloadToonBtn').addEventListener('click', () => { const blob = new Blob([toonOutput.value], { type: 'text/plain' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'data.toon'; link.click(); });
+        document.getElementById('swapBtn').addEventListener('click', () => { const temp = jsonInput.value; jsonInput.value = toonOutput.value; toonOutput.value = temp; });
+
+        function countTokens(str) { return str.split(/[\s\[\]{},:\"]+/).filter(s => s.length > 0).length + (str.match(/[\[\]{},:\"]/g) || []).length; }
+        function updateStats(jsonCount, toonCount) {
+            jsonTokensEl.textContent = jsonCount; toonTokensEl.textContent = toonCount;
+            const savings = jsonCount > 0 ? Math.round((1 - toonCount / jsonCount) * 100) : 0;
+            tokenSavingsEl.textContent = savings + '%';
+            const savedTokens = jsonCount - toonCount;
+            const monthlySaves = Math.round(savedTokens * 0.00001 * 100 * 30);
+            monthlySavingsEl.textContent = '$' + monthlySaves;
+            document.getElementById('gpt4Cost').textContent = '$' + (savedTokens * 0.00001).toFixed(4);
+            document.getElementById('claudeCost').textContent = '$' + (savedTokens * 0.000003).toFixed(4);
+            document.getElementById('geminiCost').textContent = '$' + (savedTokens * 0.0000005).toFixed(5);
+            document.getElementById('yearSavings').textContent = '$' + (monthlySaves * 12);
+        }
+
+        function jsonToToon(obj, indent = 0) {
+            const pad = '  '.repeat(indent);
+            if (obj === null) return 'null';
+            if (typeof obj === 'boolean') return obj.toString();
+            if (typeof obj === 'number') return obj.toString();
+            if (typeof obj === 'string') return /[\n:,\[\]{}]/.test(obj) ? JSON.stringify(obj) : obj;
+            if (Array.isArray(obj)) {
+                if (obj.length === 0) return '[]';
+                if (obj.every(item => typeof item === 'object' && item !== null && !Array.isArray(item))) {
+                    const keys = [...new Set(obj.flatMap(item => Object.keys(item)))];
+                    if (keys.length > 0) {
+                        let result = `[${obj.length}]\n${pad}  @${keys.join(',')}\n`;
+                        obj.forEach(item => { result += pad + '  ' + keys.map(k => jsonToToon(item[k] !== undefined ? item[k] : null, 0)).join(',') + '\n'; });
+                        return result.trimEnd();
+                    }
+                }
+                return '[\n' + obj.map(item => pad + '  ' + jsonToToon(item, indent + 1)).join('\n') + '\n' + pad + ']';
+            }
+            if (typeof obj === 'object') {
+                const entries = Object.entries(obj);
+                if (entries.length === 0) return '{}';
+                return entries.map(([k, v]) => `${pad}${k}: ${jsonToToon(v, indent + 1)}`).join('\n');
+            }
+            return String(obj);
+        }
+
+        function convertToToon() {
+            try {
+                const json = JSON.parse(jsonInput.value);
+                const toon = jsonToToon(json);
+                toonOutput.value = toon;
+                updateStats(countTokens(jsonInput.value), countTokens(toon));
+            } catch (e) { toonOutput.value = 'Error: Invalid JSON\n' + e.message; }
+        }
+
+        function convertToJson() { showToast('TOON to JSON requires parsing TOON grammar. Paste JSON in left panel.'); }
+        function showToast(msg) { toast.textContent = msg; toast.style.display = 'block'; setTimeout(() => { toast.style.display = 'none'; }, 3000); }
+    });
+</script>
+<!--@end:extra_js-->

@@ -1,0 +1,2261 @@
+<!--@block:title-->Free Resume Builder - Create Professional Resume Online | JSON Formatters Pro<!--@end:title-->
+<!--@block:meta_title-->Free Resume Builder Online - Create ATS-Friendly Resume PDF | No Signup<!--@end:meta_title-->
+<!--@block:meta_description-->Build your professional resume for free with our online resume builder. Multiple templates,
+ATS-optimized, PDF export. No signup required. 100% client-side and private.<!--@end:meta_description-->
+<!--@block:meta_keywords-->resume builder, free resume builder, free resume builder for developers, software engineer
+resume builder, tech resume builder, ats resume builder no signup, resume builder privacy-first, resume builder JSON
+export, resume builder client-side, resume builder PDF download free, developer resume, resume builder no signup, pdf
+resume maker, ats-friendly resume<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/resume-builder/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Free Resume Builder for Developers",
+  "description": "Build ATS-friendly developer resumes with GitHub/LinkedIn integration. PDF export. 100% client-side.",
+  "url": "https://jsonformatterspro.com/resume-builder/",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Web Browser",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "featureList": ["4 Templates (Modern, Professional, Developer, Creative)", "ATS-Optimized Output", "PDF Export", "GitHub & LinkedIn Links", "100% Client-Side", "Auto-Save to Browser"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Is this resume builder really free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, 100% free! No hidden fees, no premium plans, no watermarks. Create unlimited resumes and download as PDF without any cost." } },
+    { "@type": "Question", "name": "Do I need to create an account?", "acceptedAnswer": { "@type": "Answer", "text": "No! Start building immediately without signing up. Your data is saved locally in your browser." } },
+    { "@type": "Question", "name": "Is my data secure and private?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely! All data stays in your browser - we never upload or store your personal information on any server." } },
+    { "@type": "Question", "name": "What is an ATS-friendly resume?", "acceptedAnswer": { "@type": "Answer", "text": "ATS (Applicant Tracking System) is software employers use to scan resumes. Our templates use clean formatting that ATS systems can easily read and parse." } },
+    { "@type": "Question", "name": "Can I add GitHub and LinkedIn links?", "acceptedAnswer": { "@type": "Answer", "text": "Yes! Our tool has dedicated fields for GitHub, LinkedIn, and personal portfolio links - perfect for developer resumes." } }
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<style>
+    .resume-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        min-height: calc(100vh - 200px);
+    }
+
+    @media (max-width: 1024px) {
+        .resume-container {
+            grid-template-columns: 1fr;
+        }
+    }
+
+
+    /* Mobile Responsiveness - Fit content in viewport with scroll where needed */
+    @media (max-width: 768px) {
+
+        /* Main container - single column, no overflow issues */
+        .resume-container {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        /* Form panel - fit viewport */
+        .form-panel {
+            width: 100%;
+            max-width: 100vw;
+        }
+
+        .form-sections {
+            max-height: none;
+            padding: 0.75rem;
+        }
+
+        /* Form row - stack inputs vertically */
+        .form-row {
+            grid-template-columns: 1fr !important;
+        }
+
+        /* Preview panel wrapper - scrollable container */
+        .preview-panel {
+            width: 100%;
+            max-width: 100vw;
+        }
+
+        /* Preview header - stack vertically */
+        .preview-header {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 0.75rem;
+            gap: 0.75rem;
+        }
+
+        /* Template selector - wrap buttons */
+        .template-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .template-btn {
+            flex: 1 1 auto;
+            min-width: 80px;
+            text-align: center;
+            padding: 0.4rem 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        /* Export buttons - wrap */
+        .export-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .export-btn {
+            flex: 1 1 auto;
+            min-width: 70px;
+            justify-content: center;
+            padding: 0.4rem 0.6rem;
+            font-size: 0.75rem;
+        }
+
+        /* Preview content - scrollable in both directions */
+        .preview-content {
+            max-height: 60vh;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 0.75rem;
+        }
+
+        /* Resume preview - scale down, keep aspect ratio */
+        .resume-preview {
+            max-width: 100%;
+            min-width: auto;
+            padding: 1rem;
+            font-size: 0.85rem;
+            transform-origin: top left;
+        }
+
+        /* Tool header compact */
+        .tool-header {
+            padding: 1rem;
+        }
+
+        .tool-header h1 {
+            font-size: 1.25rem;
+        }
+
+        .tool-header p {
+            font-size: 0.85rem;
+        }
+
+        /* Form inputs full width */
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Section content compact */
+        .section-content {
+            padding: 0.75rem;
+        }
+    }
+
+    /* Form Panel */
+    .form-panel {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+    }
+
+    .form-panel-header {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        padding: 1rem 1.5rem;
+        color: white;
+    }
+
+    .form-panel-header h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .form-sections {
+        max-height: calc(100vh - 250px);
+        overflow-y: auto;
+        padding: 1rem;
+    }
+
+    .form-section {
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        background: var(--color-surface-alt);
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .section-header:hover {
+        background: var(--color-border);
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .section-toggle {
+        transition: transform 0.2s;
+    }
+
+    .section-header.collapsed .section-toggle {
+        transform: rotate(-90deg);
+    }
+
+    .section-content {
+        padding: 1rem;
+        display: block;
+    }
+
+    .section-header.collapsed+.section-content {
+        display: none;
+    }
+
+    /* Form Elements */
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .form-row.single {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.25rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+        background: var(--color-surface);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #6366f1;
+    }
+
+    .form-group textarea {
+        min-height: 80px;
+        resize: vertical;
+    }
+
+    /* Experience/Education Items */
+    .item-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        position: relative;
+    }
+
+    .item-card:last-child {
+        margin-bottom: 0;
+    }
+
+    .item-remove {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: #ef4444;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .add-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0.75rem;
+        background: var(--color-surface);
+        color: #6366f1;
+        border: 2px dashed var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s;
+        margin-top: 0.75rem;
+    }
+
+    .add-btn:hover {
+        border-color: #6366f1;
+        background: rgba(99, 102, 241, 0.05);
+    }
+
+    /* Skills Tags */
+    .skills-input-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        min-height: 42px;
+    }
+
+    .skill-tag {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        border-radius: var(--radius-sm);
+        font-size: 0.8rem;
+    }
+
+    .skill-tag button {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+    }
+
+    .skill-input {
+        flex: 1;
+        min-width: 100px;
+        border: none !important;
+        background: transparent !important;
+        padding: 0.25rem !important;
+    }
+
+    .skill-input:focus {
+        outline: none;
+    }
+
+    /* Preview Panel */
+    .preview-panel {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .preview-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.5rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .template-selector {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .template-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .template-btn:hover {
+        border-color: #6366f1;
+    }
+
+    .template-btn.active {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        border-color: transparent;
+    }
+
+    .export-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .export-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .export-btn:hover {
+        border-color: #6366f1;
+    }
+
+    .export-btn.primary {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border-color: transparent;
+    }
+
+    .preview-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.5rem;
+        background: #f1f5f9;
+        max-height: calc(100vh - 300px);
+    }
+
+    [data-theme="dark"] .preview-content {
+        background: #1e293b;
+    }
+
+    /* Resume Preview Styles */
+    .resume-preview {
+        background: white;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 1.5rem 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #1f2937;
+    }
+
+    /* Print/PDF specific styles */
+    /* Remove browser print headers/footers (date, title, URL) */
+    @page {
+        margin: 0;
+    }
+
+    @media print {
+        body {
+            padding: 15mm;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .resume-preview {
+            box-shadow: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Prevent orphaned section titles - keep heading with at least some content */
+        .section-title {
+            page-break-after: avoid;
+            break-after: avoid;
+        }
+
+        /* Keep individual items together (don't break mid-item) */
+        .experience-item,
+        .education-item,
+        .skills-list {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        /* Prevent page break right after header */
+        .resume-header {
+            page-break-after: avoid;
+            break-after: avoid;
+        }
+    }
+
+    /* Modern Template */
+    .template-modern .resume-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 2px solid #6366f1;
+    }
+
+    .template-modern .resume-name {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+
+    .template-modern .resume-contact {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        font-size: 0.9rem;
+        color: #6b7280;
+    }
+
+    .template-modern .resume-contact a {
+        color: #6366f1;
+        text-decoration: none;
+    }
+
+    .template-modern .resume-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .template-modern .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #6366f1;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.25rem;
+        border-bottom: 1px solid #e5e7eb;
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    .template-modern .experience-item,
+    .template-modern .education-item {
+        margin-bottom: 1rem;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .template-modern .item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 0.25rem;
+    }
+
+    .template-modern .item-title {
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .template-modern .item-date {
+        color: #6b7280;
+        font-size: 0.85rem;
+    }
+
+    .template-modern .item-subtitle {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .template-modern .item-bullets {
+        padding-left: 1.25rem;
+        margin: 0;
+    }
+
+    .template-modern .item-bullets li {
+        margin-bottom: 0.25rem;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .template-modern .skills-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .template-modern .skill-badge {
+        padding: 0.25rem 0.75rem;
+        background: #f3f4f6;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: #374151;
+    }
+
+    /* Professional Template */
+    .template-professional .resume-header {
+        background: #1f2937;
+        color: white;
+        padding: 1.5rem;
+        margin: -2rem -2rem 1.5rem -2rem;
+    }
+
+    .template-professional .resume-name {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .template-professional .resume-contact {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        font-size: 0.85rem;
+        color: #d1d5db;
+    }
+
+    .template-professional .resume-contact a {
+        color: #93c5fd;
+    }
+
+    .template-professional .section-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1f2937;
+        text-transform: uppercase;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.25rem;
+        border-bottom: 2px solid #1f2937;
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    /* Developer Template */
+    .template-developer {
+        background: #0f172a;
+        color: #e2e8f0;
+    }
+
+    .template-developer .resume-header {
+        border-left: 4px solid #10b981;
+        padding-left: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .template-developer .resume-name {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #10b981;
+    }
+
+    .template-developer .resume-contact {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        font-size: 0.85rem;
+        color: #94a3b8;
+    }
+
+    .template-developer .resume-contact a {
+        color: #38bdf8;
+    }
+
+    .template-developer .section-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #10b981;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 0.75rem;
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    .template-developer .skill-badge {
+        background: #1e293b;
+        color: #38bdf8;
+        border: 1px solid #334155;
+    }
+
+    /* Creative Template */
+    .template-creative .resume-header {
+        text-align: left;
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+
+    .template-creative .resume-header::after {
+        content: '';
+        position: absolute;
+        bottom: -0.75rem;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, #f59e0b, #ef4444);
+        border-radius: 2px;
+    }
+
+    .template-creative .resume-name {
+        font-size: 2.25rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .template-creative .section-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #f59e0b;
+        margin-bottom: 0.75rem;
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    .template-creative .skill-badge {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        color: #92400e;
+    }
+
+    /* Info Section */
+    .info-section {
+        margin-top: 2rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+    }
+
+    .info-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem;
+    }
+
+    .info-card h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-card ul {
+        margin: 0;
+        padding-left: 1.25rem;
+    }
+
+    .info-card li {
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+        margin-bottom: 0.35rem;
+    }
+
+    /* Tool Header */
+    .tool-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* Auto-save indicator */
+    .autosave-indicator {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .autosave-indicator.saved {
+        color: #10b981;
+    }
+
+    /* Bullets Input */
+    .bullets-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .bullet-row {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .bullet-row input {
+        flex: 1;
+    }
+
+    .bullet-remove {
+        padding: 0.5rem;
+        background: #fee2e2;
+        color: #ef4444;
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+    }
+
+    .add-bullet-btn {
+        padding: 0.5rem;
+        background: var(--color-surface-alt);
+        color: var(--color-text-secondary);
+        border: 1px dashed var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-size: 0.85rem;
+    }
+
+    .add-bullet-btn:hover {
+        border-color: #6366f1;
+        color: #6366f1;
+    }
+
+    /* Modal Confirmation Styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .modal {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.2s ease;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .modal-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.75rem;
+    }
+
+    .modal-message {
+        color: var(--color-text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+    }
+
+    .modal-buttons {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: flex-end;
+    }
+
+    .modal-btn {
+        padding: 0.6rem 1.25rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+    }
+
+    .modal-btn-cancel {
+        background: var(--color-surface-alt);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+    }
+
+    .modal-btn-cancel:hover {
+        background: var(--color-border);
+    }
+
+    .modal-btn-confirm {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+
+    .modal-btn-confirm:hover {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        transform: translateY(-1px);
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="tool-header">
+    <h1>Free Resume Builder (No Signup, ATS-Friendly PDF)</h1>
+    <p>Create a professional, ATS-friendly resume in minutes. No signup required. 100% free with PDF export.</p>
+</div>
+
+<div class="resume-container">
+    <!-- Form Panel -->
+    <div class="form-panel">
+        <div class="form-panel-header">
+            <h2>📋 Build Your Resume</h2>
+            <div class="autosave-indicator" id="autosaveIndicator">
+                <span>💾</span> Auto-saved
+            </div>
+        </div>
+        <div class="form-sections">
+            <!-- Personal Info -->
+            <div class="form-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span class="section-title">👤 Personal Information</span>
+                    <span class="section-toggle">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="fullName" placeholder="John Doe" oninput="updatePreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>Job Title</label>
+                            <input type="text" id="jobTitle" placeholder="Software Engineer" oninput="updatePreview()">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="email" placeholder="john@example.com" oninput="updatePreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="phone" placeholder="+1 234 567 8900" oninput="updatePreview()">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" id="location" placeholder="New York, USA" oninput="updatePreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>LinkedIn</label>
+                            <input type="url" id="linkedin" placeholder="linkedin.com/in/johndoe"
+                                oninput="updatePreview()">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>GitHub</label>
+                            <input type="url" id="github" placeholder="github.com/johndoe" oninput="updatePreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>Portfolio/Website</label>
+                            <input type="url" id="portfolio" placeholder="johndoe.com" oninput="updatePreview()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="form-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span class="section-title">📋 Professional Summary</span>
+                    <span class="section-toggle">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="form-row single">
+                        <div class="form-group">
+                            <label>Summary (2-4 sentences)</label>
+                            <textarea id="summary"
+                                placeholder="Experienced software engineer with 5+ years of expertise in building scalable web applications..."
+                                oninput="updatePreview()"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Experience -->
+            <div class="form-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span class="section-title">💼 Work Experience</span>
+                    <span class="section-toggle">▼</span>
+                </div>
+                <div class="section-content">
+                    <div id="experienceList"></div>
+                    <button class="add-btn" onclick="addExperience()">
+                        <span>+</span> Add Experience
+                    </button>
+                </div>
+            </div>
+
+            <!-- Education -->
+            <div class="form-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span class="section-title">🎓 Education</span>
+                    <span class="section-toggle">▼</span>
+                </div>
+                <div class="section-content">
+                    <div id="educationList"></div>
+                    <button class="add-btn" onclick="addEducation()">
+                        <span>+</span> Add Education
+                    </button>
+                </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="form-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span class="section-title">🛠️ Skills</span>
+                    <span class="section-toggle">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="form-row single">
+                        <div class="form-group">
+                            <label>Technical Skills (press Enter to add)</label>
+                            <div class="skills-input-container" id="technicalSkillsContainer">
+                                <input type="text" class="skill-input" id="technicalSkillInput"
+                                    placeholder="JavaScript, Python, React..."
+                                    onkeydown="handleSkillInput(event, 'technical')">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row single">
+                        <div class="form-group">
+                            <label>Soft Skills</label>
+                            <div class="skills-input-container" id="softSkillsContainer">
+                                <input type="text" class="skill-input" id="softSkillInput"
+                                    placeholder="Leadership, Communication..."
+                                    onkeydown="handleSkillInput(event, 'soft')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects -->
+            <div class="form-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span class="section-title">📁 Projects</span>
+                    <span class="section-toggle">▼</span>
+                </div>
+                <div class="section-content">
+                    <div id="projectsList"></div>
+                    <button class="add-btn" onclick="addProject()">
+                        <span>+</span> Add Project
+                    </button>
+                </div>
+            </div>
+
+            <!-- Certifications -->
+            <div class="form-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span class="section-title">🏆 Certifications</span>
+                    <span class="section-toggle">▼</span>
+                </div>
+                <div class="section-content">
+                    <div id="certificationsList"></div>
+                    <button class="add-btn" onclick="addCertification()">
+                        <span>+</span> Add Certification
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Panel -->
+    <div class="preview-panel">
+        <div class="preview-header">
+            <div class="template-selector">
+                <button class="template-btn active" onclick="setTemplate('modern')"
+                    data-template="modern">Modern</button>
+                <button class="template-btn" onclick="setTemplate('professional')"
+                    data-template="professional">Professional</button>
+                <button class="template-btn" onclick="setTemplate('developer')"
+                    data-template="developer">Developer</button>
+                <button class="template-btn" onclick="setTemplate('creative')"
+                    data-template="creative">Creative</button>
+            </div>
+            <div class="export-buttons">
+                <button class="export-btn" onclick="resetResume()" title="Clear all data">🗑️ Reset</button>
+                <button class="export-btn" onclick="printResume()" title="Print resume">🖨️ Print</button>
+                <button class="export-btn" onclick="exportJSON()">💾 JSON</button>
+                <button class="export-btn" onclick="importJSON()">📤 Import</button>
+                <button class="export-btn primary" onclick="exportPDF()">📥 Download PDF</button>
+            </div>
+        </div>
+        <div class="preview-content">
+            <div class="resume-preview template-modern" id="resumePreview">
+                <!-- Preview will be rendered here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="handleJSONImport(event)">
+
+<!-- Internal Linking Section (Right Below Tool) -->
+<section
+    style="margin: 1.5rem auto; padding: 1.25rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
+    <h2
+        style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--color-text); text-align: center;">
+        🔗 Related Resources
+    </h2>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;">
+        <a href="/careers/"
+            style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; text-decoration: none; border-radius: var(--radius-sm); font-weight: 500; font-size: 0.85rem;">
+            Browse Job Listings
+        </a>
+        <a href="/"
+            style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; background: var(--color-surface-alt); color: var(--color-text); text-decoration: none; border-radius: var(--radius-sm); font-weight: 500; font-size: 0.85rem; border: 1px solid var(--color-border);">
+            JSON Formatter
+        </a>
+        <a href="/about/"
+            style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; background: var(--color-surface-alt); color: var(--color-text); text-decoration: none; border-radius: var(--radius-sm); font-weight: 500; font-size: 0.85rem; border: 1px solid var(--color-border);">
+            About Us
+        </a>
+    </div>
+    <p style="text-align: center; margin-top: 0.75rem; font-size: 0.8rem; color: var(--color-text-secondary);">
+        Looking for open roles? Visit our <a href="/careers/"
+            style="color: #6366f1; text-decoration: none; font-weight: 500;">careers page</a> to explore current opportunities
+and apply with your newly created resume.
+    </p>
+</section>
+
+<!-- SEO Content Sections - Long-Tail Keywords & AI Search Optimization -->
+<div style="margin: 2rem auto; padding: 0 1rem;">
+
+    <!-- Why Different Section (AI Search Optimization) -->
+    <section
+        style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">
+            🎯 Why This Resume Builder Is Different
+        </h2>
+        <ul style="margin: 0; padding-left: 1.25rem; line-height: 1.8; color: var(--color-text-secondary);">
+            <li><strong>100% client-side</strong> – your data never leaves your device, ever</li>
+            <li><strong>No signup, no tracking, no watermarks</strong> – start building immediately</li>
+            <li><strong>ATS-optimized templates</strong> tested with real applicant tracking systems</li>
+            <li><strong>JSON export</strong> for developers who want data portability</li>
+            <li><strong>PDF download</strong> – high-quality, print-ready resumes in one click</li>
+            <li><strong>Auto-save to browser</strong> – never lose your progress</li>
+        </ul>
+        <p style="margin-top: 1rem; font-size: 0.95rem; color: var(--color-text-secondary);">
+            <strong>Best for:</strong> Software developers, tech professionals, privacy-conscious job seekers, and
+            anyone who wants a professional resume without the hassle of signups or subscriptions.
+        </p>
+    </section>
+
+    <!-- Developer Resume Section -->
+    <section
+        style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">
+            👨‍💻 Free Resume Builder for Developers & Tech Professionals
+        </h2>
+        <p style="line-height: 1.7; color: var(--color-text-secondary); margin-bottom: 1rem;">
+            Built specifically for <strong>software engineers, developers, and tech professionals</strong>. This free
+            resume builder includes dedicated fields for GitHub, LinkedIn, and portfolio links – essential for developer
+            resumes. Choose from 4 templates including a dark-mode "Developer" theme that showcases your technical
+            skills.
+        </p>
+        <p style="line-height: 1.7; color: var(--color-text-secondary);">
+            Unlike generic resume builders, we understand that <strong>tech resumes need to highlight projects,
+                technical skills, and code contributions</strong>. Export your resume data as JSON for version control
+            or to build custom integrations – perfect for developers who want maximum flexibility.
+        </p>
+    </section>
+
+    <!-- ATS Section -->
+    <section
+        style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">
+            ✅ ATS-Friendly Resume Builder (No Signup Required)
+        </h2>
+        <p style="line-height: 1.7; color: var(--color-text-secondary); margin-bottom: 1rem;">
+            ATS (Applicant Tracking Systems) are software that companies use to scan and filter resumes before a human
+            ever sees them. Our templates are <strong>ATS-optimized</strong> with clean formatting, standard section
+            headers, and machine-readable fonts – ensuring your resume passes automated screening.
+        </p>
+        <p style="line-height: 1.7; color: var(--color-text-secondary);">
+            <strong>No signup or account required.</strong> Simply start typing, see your resume update in real-time,
+            and download as PDF. Your data stays in your browser – we never collect, store, or sell your personal
+            information. This is the most <strong>privacy-first resume builder</strong> available online.
+        </p>
+    </section>
+
+    <!-- Tool Comparison (AI Search Optimization) -->
+    <section
+        style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">
+            ⚖️ How We Compare to Other Resume Builders
+        </h2>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <thead>
+                    <tr style="background: var(--color-surface-alt);">
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid var(--color-border);">
+                            Feature</th>
+                        <th style="padding: 0.75rem; text-align: center; border-bottom: 2px solid var(--color-border);">
+                            JSON Formatter Pro</th>
+                        <th style="padding: 0.75rem; text-align: center; border-bottom: 2px solid var(--color-border);">
+                            Typical Resume Builders</th>
+                    </tr>
+                </thead>
+                <tbody style="color: var(--color-text-secondary);">
+                    <tr>
+                        <td style="padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border);">Price</td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border); color: #10b981; font-weight: 600;">
+                            100% Free</td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border);">
+                            Free trial, then $10-30/mo</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border);">Signup
+                            Required</td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border); color: #10b981; font-weight: 600;">
+                            No</td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border);">
+                            Yes</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border);">Data Privacy
+                        </td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border); color: #10b981; font-weight: 600;">
+                            Client-side only</td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border);">
+                            Uploaded to servers</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border);">PDF Download
+                        </td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border); color: #10b981; font-weight: 600;">
+                            Free, no watermark</td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border);">
+                            Paid or watermarked</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border);">JSON Export
+                        </td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border); color: #10b981; font-weight: 600;">
+                            Yes</td>
+                        <td
+                            style="padding: 0.6rem 0.75rem; text-align: center; border-bottom: 1px solid var(--color-border);">
+                            Rarely</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.6rem 0.75rem;">GitHub/LinkedIn Fields</td>
+                        <td style="padding: 0.6rem 0.75rem; text-align: center; color: #10b981; font-weight: 600;">
+                            Built-in</td>
+                        <td style="padding: 0.6rem 0.75rem; text-align: center;">Sometimes</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+
+<!-- Info Section -->
+<div class="info-section">
+    <div class="info-card">
+        <h3>✨ Features</h3>
+        <ul>
+            <li><strong>4 Templates</strong> - Modern, Professional, Developer, Creative</li>
+            <li><strong>Real-time Preview</strong> - See changes instantly</li>
+            <li><strong>ATS-Friendly</strong> - Passes applicant tracking systems</li>
+            <li><strong>PDF Export</strong> - High-quality download</li>
+        </ul>
+    </div>
+    <div class="info-card">
+        <h3>🔒 Privacy First</h3>
+        <ul>
+            <li><strong>No Upload</strong> - All processing in your browser</li>
+            <li><strong>No Signup</strong> - Start building immediately</li>
+            <li><strong>Auto-Save</strong> - Data saved locally</li>
+            <li><strong>JSON Export</strong> - Take your data anywhere</li>
+        </ul>
+    </div>
+    <div class="info-card">
+        <h3>💡 Tips</h3>
+        <ul>
+            <li>Use action verbs in experience bullets</li>
+            <li>Quantify achievements when possible</li>
+            <li>Keep summary to 2-4 sentences</li>
+            <li>Tailor skills to job description</li>
+        </ul>
+    </div>
+    <div class="info-card">
+        <h3>⌨️ Keyboard Shortcuts</h3>
+        <ul>
+            <li><strong>Enter</strong> - Add skill tag</li>
+            <li><strong>Ctrl+S</strong> - Force save</li>
+            <li><strong>Ctrl+P</strong> - Print/PDF</li>
+        </ul>
+    </div>
+</div>
+
+<!-- EEAT Trust / Authority Section -->
+<section
+    style="max-width: 800px; margin: 2rem auto; padding: 1.5rem; background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%); border: 1px solid var(--color-border); border-radius: var(--radius-lg); text-align: center;">
+    <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--color-text);">
+        🔒 Built With Privacy & Developers in Mind
+    </h2>
+    <p style="line-height: 1.7; color: var(--color-text-secondary); margin: 0;">
+        This resume builder is designed by <strong><a href="https://www.linkedin.com/in/faisal-ahmad-44b37018a/"
+                target="_blank" rel="noopener" style="color: #6366f1; text-decoration: none;">Faisal Ahmad</a></strong>,
+        a developer who values privacy, transparency, and control over personal data. No tracking, no accounts required,
+        no hidden monetization. Your resume stays on your device – always.
+    </p>
+</section>
+
+<!-- FAQ Section -->
+<div class="faq-section" style="margin-top: 2rem;">
+    <h2
+        style="text-align: center; font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+        Frequently Asked Questions</h2>
+
+    <div style="margin: 0 auto;">
+        <details
+            style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: 0.75rem; overflow: hidden;">
+            <summary
+                style="padding: 1rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                Is this resume builder really free?</summary>
+            <div style="padding: 0 1rem 1rem 1rem; color: var(--color-text-secondary);">
+                Yes, 100% free! No hidden fees, no premium plans, no watermarks. You can create unlimited resumes and
+                download them as PDF without any cost.
+            </div>
+        </details>
+
+        <details
+            style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: 0.75rem; overflow: hidden;">
+            <summary
+                style="padding: 1rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                Do I need to create an account?</summary>
+            <div style="padding: 0 1rem 1rem 1rem; color: var(--color-text-secondary);">
+                No! You can start building your resume immediately without signing up. Your data is saved locally in
+                your browser.
+            </div>
+        </details>
+
+        <details
+            style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: 0.75rem; overflow: hidden;">
+            <summary
+                style="padding: 1rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                Is my data secure and private?</summary>
+            <div style="padding: 0 1rem 1rem 1rem; color: var(--color-text-secondary);">
+                Absolutely! All your data stays in your browser - we never upload or store your personal information on
+                any server. Your resume is 100% private.
+            </div>
+        </details>
+
+        <details
+            style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: 0.75rem; overflow: hidden;">
+            <summary
+                style="padding: 1rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                What is an ATS-friendly resume?</summary>
+            <div style="padding: 0 1rem 1rem 1rem; color: var(--color-text-secondary);">
+                ATS (Applicant Tracking System) is software used by employers to scan resumes. Our templates use clean
+                formatting, standard fonts, and proper structure that ATS systems can easily read and parse.
+            </div>
+        </details>
+
+        <details
+            style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: 0.75rem; overflow: hidden;">
+            <summary
+                style="padding: 1rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                Can I save my resume and edit it later?</summary>
+            <div style="padding: 0 1rem 1rem 1rem; color: var(--color-text-secondary);">
+                Yes! Your resume auto-saves every 5 seconds to your browser. You can also export it as JSON and import
+                it anytime to continue editing.
+            </div>
+        </details>
+
+        <details
+            style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: 0.75rem; overflow: hidden;">
+            <summary
+                style="padding: 1rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                What file formats can I download?</summary>
+            <div style="padding: 0 1rem 1rem 1rem; color: var(--color-text-secondary);">
+                You can download your resume as a high-quality PDF file, perfect for job applications. You can also
+                export your data as JSON for backup.
+            </div>
+        </details>
+
+        <details
+            style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: 0.75rem; overflow: hidden;">
+            <summary
+                style="padding: 1rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                How do I switch between templates?</summary>
+            <div style="padding: 0 1rem 1rem 1rem; color: var(--color-text-secondary);">
+                Simply click on the template buttons (Modern, Professional, Developer, Creative) at the top of the
+                preview panel. Your content stays the same - only the design changes!
+            </div>
+        </details>
+
+        <details
+            style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: 0.75rem; overflow: hidden;">
+            <summary
+                style="padding: 1rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                Can I add multiple work experiences?</summary>
+            <div style="padding: 0 1rem 1rem 1rem; color: var(--color-text-secondary);">
+                Yes! Click "Add Experience" to add as many work experiences as you need. You can also add multiple
+                education entries, projects, and certifications.
+            </div>
+        </details>
+
+        <details
+            style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: 0.75rem; overflow: hidden;">
+            <summary
+                style="padding: 1rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                How do I add skills?</summary>
+            <div style="padding: 0 1rem 1rem 1rem; color: var(--color-text-secondary);">
+                Type a skill in the input field and press Enter to add it as a tag. You can add both technical and soft
+                skills separately.
+            </div>
+        </details>
+
+        <details
+            style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: 0.75rem; overflow: hidden;">
+            <summary
+                style="padding: 1rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                What should I include in my resume?</summary>
+            <div style="padding: 0 1rem 1rem 1rem; color: var(--color-text-secondary);">
+                Focus on: Contact info, a strong summary, relevant work experience with quantified achievements,
+                education, key skills, and notable projects. Tailor your content to the job you're applying for.
+            </div>
+        </details>
+    </div>
+</div>
+
+<!-- html2pdf.js for PDF export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+    // Toast Notification System
+    function showToast(message, type = 'success', duration = 3000) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+
+        const icons = {
+            success: '✅',
+            error: '❌',
+            info: 'ℹ️'
+        };
+
+        toast.innerHTML = `
+            <span class="toast-icon">${icons[type]}</span>
+            <span>${message}</span>
+            <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+        `;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.animation = 'slideOut 0.3s ease forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
+    }
+
+    // Modal Confirmation System
+    function showModal(title, message, onConfirm) {
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-title">⚠️ ${title}</div>
+            <div class="modal-message">${message}</div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel">Cancel</button>
+                <button class="modal-btn modal-btn-confirm">Confirm</button>
+            </div>
+        `;
+
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+
+        // Cancel button
+        modal.querySelector('.modal-btn-cancel').addEventListener('click', () => {
+            overlay.remove();
+        });
+
+        // Confirm button
+        modal.querySelector('.modal-btn-confirm').addEventListener('click', () => {
+            overlay.remove();
+            onConfirm();
+        });
+
+        // Close on overlay click
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.remove();
+        });
+
+        // Close on Escape key
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                overlay.remove();
+                document.removeEventListener('keydown', escHandler);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
+    }
+
+    // Resume Data
+    let resumeData = {
+        personal: {
+            fullName: '',
+            jobTitle: '',
+            email: '',
+            phone: '',
+            location: '',
+            linkedin: '',
+            github: '',
+            portfolio: ''
+        },
+        summary: '',
+        experience: [],
+        education: [],
+        skills: {
+            technical: [],
+            soft: []
+        },
+        projects: [],
+        certifications: []
+    };
+
+    let currentTemplate = 'modern';
+    let experienceId = 0;
+    let educationId = 0;
+    let projectId = 0;
+    let certificationId = 0;
+
+    // Load saved data on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        loadFromLocalStorage();
+        updatePreview();
+
+        // Auto-save every 5 seconds
+        setInterval(saveToLocalStorage, 5000);
+
+        // Collapse all sections by default on mobile
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.section-header').forEach(function (header) {
+                header.classList.add('collapsed');
+            });
+        }
+    });
+
+    // Toggle section collapse
+    function toggleSection(header) {
+        header.classList.toggle('collapsed');
+    }
+
+    // Update preview
+    function updatePreview() {
+        // Get personal info
+        resumeData.personal.fullName = document.getElementById('fullName').value;
+        resumeData.personal.jobTitle = document.getElementById('jobTitle').value;
+        resumeData.personal.email = document.getElementById('email').value;
+        resumeData.personal.phone = document.getElementById('phone').value;
+        resumeData.personal.location = document.getElementById('location').value;
+        resumeData.personal.linkedin = document.getElementById('linkedin').value;
+        resumeData.personal.github = document.getElementById('github').value;
+        resumeData.personal.portfolio = document.getElementById('portfolio').value;
+        resumeData.summary = document.getElementById('summary').value;
+
+        renderPreview();
+    }
+
+    // Render preview
+    function renderPreview() {
+        const preview = document.getElementById('resumePreview');
+        const p = resumeData.personal;
+
+        let contactItems = [];
+        if (p.email) contactItems.push(`<span>📧 ${p.email}</span>`);
+        if (p.phone) contactItems.push(`<span>📱 ${p.phone}</span>`);
+        if (p.location) contactItems.push(`<span>📍 ${p.location}</span>`);
+        if (p.linkedin) contactItems.push(`<a href="${p.linkedin}" target="_blank">LinkedIn</a>`);
+        if (p.github) contactItems.push(`<a href="${p.github}" target="_blank">GitHub</a>`);
+        if (p.portfolio) contactItems.push(`<a href="${p.portfolio}" target="_blank">Portfolio</a>`);
+
+        let html = `
+            <div class="resume-header">
+                <div class="resume-name">${p.fullName || 'Your Name'}</div>
+                ${p.jobTitle ? `<div style="font-size: 1.1rem; color: #6b7280; margin-bottom: 0.5rem;">${p.jobTitle}</div>` : ''}
+                <div class="resume-contact">${contactItems.join(' | ')}</div>
+            </div>
+        `;
+
+        // Summary
+        if (resumeData.summary) {
+            html += `
+                <div class="resume-section">
+                    <div class="section-title">Professional Summary</div>
+                    <p style="margin: 0; line-height: 1.6;">${resumeData.summary}</p>
+                </div>
+            `;
+        }
+
+        // Experience
+        if (resumeData.experience.length > 0) {
+            html += `<div class="resume-section"><div class="section-title">Work Experience</div>`;
+            resumeData.experience.forEach(exp => {
+                html += `
+                    <div class="experience-item">
+                        <div class="item-header">
+                            <span class="item-title">${exp.title || 'Job Title'}</span>
+                            <span class="item-date">${exp.startDate || 'Start'} - ${exp.current ? 'Present' : (exp.endDate || 'End')}</span>
+                        </div>
+                        <div class="item-subtitle">${exp.company || 'Company'}${exp.location ? ` | ${exp.location}` : ''}</div>
+                        ${exp.bullets.length > 0 ? `<ul class="item-bullets">${exp.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
+                    </div>
+                `;
+            });
+            html += `</div>`;
+        }
+
+        // Education
+        if (resumeData.education.length > 0) {
+            html += `<div class="resume-section"><div class="section-title">Education</div>`;
+            resumeData.education.forEach(edu => {
+                html += `
+                    <div class="education-item">
+                        <div class="item-header">
+                            <span class="item-title">${edu.degree || 'Degree'}</span>
+                            <span class="item-date">${edu.year || 'Year'}</span>
+                        </div>
+                        <div class="item-subtitle">${edu.school || 'School'}${edu.gpa ? ` | GPA: ${edu.gpa}` : ''}</div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+        }
+
+        // Skills
+        if (resumeData.skills.technical.length > 0 || resumeData.skills.soft.length > 0) {
+            html += `<div class="resume-section"><div class="section-title">Skills</div><div class="skills-list">`;
+            resumeData.skills.technical.forEach(skill => {
+                html += `<span class="skill-badge">${skill}</span>`;
+            });
+            resumeData.skills.soft.forEach(skill => {
+                html += `<span class="skill-badge">${skill}</span>`;
+            });
+            html += `</div></div>`;
+        }
+
+        // Projects
+        if (resumeData.projects.length > 0) {
+            html += `<div class="resume-section"><div class="section-title">Projects</div>`;
+            resumeData.projects.forEach(proj => {
+                html += `
+                    <div class="experience-item">
+                        <div class="item-header">
+                            <span class="item-title">${proj.name || 'Project Name'}</span>
+                            ${proj.github || proj.liveUrl ? `<span class="item-date">${proj.github ? '<a href="' + proj.github + '" target="_blank">GitHub</a>' : ''} ${proj.liveUrl ? '<a href="' + proj.liveUrl + '" target="_blank">Live</a>' : ''}</span>` : ''}
+                        </div>
+                        <p style="margin: 0.25rem 0; font-size: 0.9rem;">${proj.description || ''}</p>
+                        ${proj.techStack ? `<div style="font-size: 0.85rem; color: #6b7280;">Tech: ${proj.techStack}</div>` : ''}
+                    </div>
+                `;
+            });
+            html += `</div>`;
+        }
+
+        // Certifications
+        if (resumeData.certifications.length > 0) {
+            html += `<div class="resume-section"><div class="section-title">Certifications</div>`;
+            resumeData.certifications.forEach(cert => {
+                html += `
+                    <div class="experience-item">
+                        <div class="item-header">
+                            <span class="item-title">${cert.name || 'Certification'}</span>
+                            <span class="item-date">${cert.date || ''}</span>
+                        </div>
+                        <div class="item-subtitle">${cert.issuer || 'Issuer'}</div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+        }
+
+        preview.innerHTML = html;
+    }
+
+    // Set template
+    function setTemplate(template) {
+        currentTemplate = template;
+        const preview = document.getElementById('resumePreview');
+        preview.className = `resume-preview template-${template}`;
+
+        document.querySelectorAll('.template-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.template === template) {
+                btn.classList.add('active');
+            }
+        });
+    }
+
+    // Add Experience
+    function addExperience() {
+        const id = experienceId++;
+        const exp = { id, title: '', company: '', location: '', startDate: '', endDate: '', current: false, bullets: [] };
+        resumeData.experience.push(exp);
+
+        const container = document.getElementById('experienceList');
+        const div = document.createElement('div');
+        div.className = 'item-card';
+        div.id = `exp-${id}`;
+        div.innerHTML = `
+            <button class="item-remove" onclick="removeExperience(${id})">×</button>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Job Title</label>
+                    <input type="text" placeholder="Software Engineer" oninput="updateExperience(${id}, 'title', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>Company</label>
+                    <input type="text" placeholder="Google" oninput="updateExperience(${id}, 'company', this.value)">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="text" placeholder="Jan 2020" oninput="updateExperience(${id}, 'startDate', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>End Date</label>
+                    <input type="text" placeholder="Present" oninput="updateExperience(${id}, 'endDate', this.value)">
+                </div>
+            </div>
+            <div class="form-row single">
+                <div class="form-group">
+                    <label>Achievements (one per line)</label>
+                    <textarea placeholder="Led team of 5 engineers to deliver feature on time&#10;Increased performance by 40%" oninput="updateExperienceBullets(${id}, this.value)"></textarea>
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+        renderPreview();
+    }
+
+    function updateExperience(id, field, value) {
+        const exp = resumeData.experience.find(e => e.id === id);
+        if (exp) {
+            exp[field] = value;
+            renderPreview();
+        }
+    }
+
+    function updateExperienceBullets(id, value) {
+        const exp = resumeData.experience.find(e => e.id === id);
+        if (exp) {
+            exp.bullets = value.split('\n').filter(b => b.trim());
+            renderPreview();
+        }
+    }
+
+    function removeExperience(id) {
+        resumeData.experience = resumeData.experience.filter(e => e.id !== id);
+        document.getElementById(`exp-${id}`).remove();
+        renderPreview();
+    }
+
+    // Add Education
+    function addEducation() {
+        const id = educationId++;
+        const edu = { id, degree: '', school: '', year: '', gpa: '' };
+        resumeData.education.push(edu);
+
+        const container = document.getElementById('educationList');
+        const div = document.createElement('div');
+        div.className = 'item-card';
+        div.id = `edu-${id}`;
+        div.innerHTML = `
+            <button class="item-remove" onclick="removeEducation(${id})">×</button>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Degree</label>
+                    <input type="text" placeholder="B.S. Computer Science" oninput="updateEducation(${id}, 'degree', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>School</label>
+                    <input type="text" placeholder="MIT" oninput="updateEducation(${id}, 'school', this.value)">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Year</label>
+                    <input type="text" placeholder="2020" oninput="updateEducation(${id}, 'year', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>GPA (optional)</label>
+                    <input type="text" placeholder="3.8" oninput="updateEducation(${id}, 'gpa', this.value)">
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+        renderPreview();
+    }
+
+    function updateEducation(id, field, value) {
+        const edu = resumeData.education.find(e => e.id === id);
+        if (edu) {
+            edu[field] = value;
+            renderPreview();
+        }
+    }
+
+    function removeEducation(id) {
+        resumeData.education = resumeData.education.filter(e => e.id !== id);
+        document.getElementById(`edu-${id}`).remove();
+        renderPreview();
+    }
+
+    // Skills handling
+    function handleSkillInput(event, type) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const input = event.target;
+            const skill = input.value.trim();
+            if (skill) {
+                resumeData.skills[type].push(skill);
+                addSkillTag(type, skill);
+                input.value = '';
+                renderPreview();
+            }
+        }
+    }
+
+    function addSkillTag(type, skill) {
+        const container = document.getElementById(`${type}SkillsContainer`);
+        const input = container.querySelector('.skill-input');
+        const tag = document.createElement('span');
+        tag.className = 'skill-tag';
+        tag.innerHTML = `${skill} <button onclick="removeSkill('${type}', '${skill}', this.parentElement)">×</button>`;
+        container.insertBefore(tag, input);
+    }
+
+    function removeSkill(type, skill, element) {
+        resumeData.skills[type] = resumeData.skills[type].filter(s => s !== skill);
+        element.remove();
+        renderPreview();
+    }
+
+    // Add Project
+    function addProject() {
+        const id = projectId++;
+        const proj = { id, name: '', description: '', techStack: '', github: '', liveUrl: '' };
+        resumeData.projects.push(proj);
+
+        const container = document.getElementById('projectsList');
+        const div = document.createElement('div');
+        div.className = 'item-card';
+        div.id = `proj-${id}`;
+        div.innerHTML = `
+            <button class="item-remove" onclick="removeProject(${id})">×</button>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Project Name</label>
+                    <input type="text" placeholder="E-commerce Platform" oninput="updateProject(${id}, 'name', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>Tech Stack</label>
+                    <input type="text" placeholder="React, Node.js, MongoDB" oninput="updateProject(${id}, 'techStack', this.value)">
+                </div>
+            </div>
+            <div class="form-row single">
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea placeholder="Built a full-stack e-commerce platform..." oninput="updateProject(${id}, 'description', this.value)"></textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>GitHub URL</label>
+                    <input type="url" placeholder="github.com/..." oninput="updateProject(${id}, 'github', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>Live URL</label>
+                    <input type="url" placeholder="myproject.com" oninput="updateProject(${id}, 'liveUrl', this.value)">
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+        renderPreview();
+    }
+
+    function updateProject(id, field, value) {
+        const proj = resumeData.projects.find(p => p.id === id);
+        if (proj) {
+            proj[field] = value;
+            renderPreview();
+        }
+    }
+
+    function removeProject(id) {
+        resumeData.projects = resumeData.projects.filter(p => p.id !== id);
+        document.getElementById(`proj-${id}`).remove();
+        renderPreview();
+    }
+
+    // Add Certification
+    function addCertification() {
+        const id = certificationId++;
+        const cert = { id, name: '', issuer: '', date: '' };
+        resumeData.certifications.push(cert);
+
+        const container = document.getElementById('certificationsList');
+        const div = document.createElement('div');
+        div.className = 'item-card';
+        div.id = `cert-${id}`;
+        div.innerHTML = `
+            <button class="item-remove" onclick="removeCertification(${id})">×</button>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Certification Name</label>
+                    <input type="text" placeholder="AWS Solutions Architect" oninput="updateCertification(${id}, 'name', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>Issuer</label>
+                    <input type="text" placeholder="Amazon Web Services" oninput="updateCertification(${id}, 'issuer', this.value)">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="text" placeholder="Dec 2023" oninput="updateCertification(${id}, 'date', this.value)">
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+        renderPreview();
+    }
+
+    function updateCertification(id, field, value) {
+        const cert = resumeData.certifications.find(c => c.id === id);
+        if (cert) {
+            cert[field] = value;
+            renderPreview();
+        }
+    }
+
+    function removeCertification(id) {
+        resumeData.certifications = resumeData.certifications.filter(c => c.id !== id);
+        document.getElementById(`cert-${id}`).remove();
+        renderPreview();
+    }
+
+    // LocalStorage
+    function saveToLocalStorage() {
+        localStorage.setItem('resumeBuilderData', JSON.stringify(resumeData));
+        const indicator = document.getElementById('autosaveIndicator');
+        indicator.classList.add('saved');
+        indicator.innerHTML = '<span>✓</span> Saved';
+        setTimeout(() => {
+            indicator.classList.remove('saved');
+            indicator.innerHTML = '<span>💾</span> Auto-saved';
+        }, 2000);
+    }
+
+    function loadFromLocalStorage() {
+        const saved = localStorage.getItem('resumeBuilderData');
+        if (saved) {
+            try {
+                const data = JSON.parse(saved);
+                resumeData = data;
+                populateForm();
+            } catch (e) {
+                console.error('Error loading saved data:', e);
+            }
+        }
+    }
+
+    function populateForm() {
+        // Personal info
+        document.getElementById('fullName').value = resumeData.personal.fullName || '';
+        document.getElementById('jobTitle').value = resumeData.personal.jobTitle || '';
+        document.getElementById('email').value = resumeData.personal.email || '';
+        document.getElementById('phone').value = resumeData.personal.phone || '';
+        document.getElementById('location').value = resumeData.personal.location || '';
+        document.getElementById('linkedin').value = resumeData.personal.linkedin || '';
+        document.getElementById('github').value = resumeData.personal.github || '';
+        document.getElementById('portfolio').value = resumeData.personal.portfolio || '';
+        document.getElementById('summary').value = resumeData.summary || '';
+
+        // Rebuild experience, education, skills, projects, certifications
+        resumeData.experience.forEach(exp => {
+            // Recreate experience items (simplified - just update IDs)
+        });
+
+        // Skills
+        resumeData.skills.technical.forEach(skill => addSkillTag('technical', skill));
+        resumeData.skills.soft.forEach(skill => addSkillTag('soft', skill));
+    }
+
+    // Export functions
+    function exportPDF() {
+        const element = document.getElementById('resumePreview');
+
+        // Clone the element to avoid modifying the original
+        const clone = element.cloneNode(true);
+        clone.style.padding = '0';
+        clone.style.boxShadow = 'none';
+        clone.style.width = '210mm'; // A4 width
+
+        const opt = {
+            margin: [10, 10, 10, 10], // top, left, bottom, right in mm
+            filename: `${resumeData.personal.fullName || 'resume'}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                letterRendering: true,
+                scrollY: 0,
+                windowHeight: element.scrollHeight
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: 'css', avoid: '.section-title' }
+        };
+
+        html2pdf().set(opt).from(element).save();
+    }
+
+    // Reset resume
+    function resetResume() {
+        console.log("Resetting resume...");
+        showModal('Reset Resume', 'Are you sure you want to reset? This will clear all your resume data.', () => {
+            // Clear localStorage
+            localStorage.removeItem('resumeBuilderData');
+
+            // Reset data object
+            resumeData = {
+                personal: {
+                    fullName: '',
+                    jobTitle: '',
+                    email: '',
+                    phone: '',
+                    location: '',
+                    linkedin: '',
+                    github: '',
+                    portfolio: ''
+                },
+                summary: '',
+                experience: [],
+                education: [],
+                skills: {
+                    technical: [],
+                    soft: []
+                },
+                projects: [],
+                certifications: []
+            };
+
+            // Clear form fields
+            document.getElementById('fullName').value = '';
+            document.getElementById('jobTitle').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('linkedin').value = '';
+            document.getElementById('github').value = '';
+            document.getElementById('portfolio').value = '';
+            document.getElementById('summary').value = '';
+
+            // Clear dynamic sections
+            document.getElementById('experienceList').innerHTML = '';
+            document.getElementById('educationList').innerHTML = '';
+            document.getElementById('projectsList').innerHTML = '';
+            document.getElementById('certificationsList').innerHTML = '';
+
+            // Clear skill tags
+            document.querySelectorAll('.skill-tag').forEach(tag => tag.remove());
+
+            // Reset IDs
+            experienceId = 0;
+            educationId = 0;
+            projectId = 0;
+            certificationId = 0;
+
+            // Update preview
+            renderPreview();
+
+            showToast('Resume has been reset!', 'success');
+        });
+    }
+
+    // Print resume
+    function printResume() {
+        const element = document.getElementById('resumePreview');
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>${resumeData.personal.fullName || 'Resume'}</title>
+                <style>
+                    @page { margin: 0; }
+                    body { 
+                        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                        padding: 15mm;
+                        margin: 0;
+                        color: #1f2937;
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                    }
+                    .resume-header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 2px solid #6366f1; }
+                    .resume-name { font-size: 2rem; font-weight: 700; color: #1f2937; margin-bottom: 0.5rem; }
+                    .resume-contact { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; font-size: 0.9rem; color: #6b7280; }
+                    .resume-contact a { color: #6366f1; text-decoration: none; }
+                    .resume-section { margin-bottom: 1.5rem; }
+                    .section-title { font-size: 1.1rem; font-weight: 600; color: #6366f1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; padding-bottom: 0.25rem; border-bottom: 1px solid #e5e7eb; page-break-after: avoid; break-after: avoid; }
+                    .experience-item, .education-item { margin-bottom: 1rem; page-break-inside: avoid; break-inside: avoid; }
+                    .item-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.25rem; }
+                    .item-title { font-weight: 600; color: #1f2937; }
+                    .item-date { color: #6b7280; font-size: 0.85rem; }
+                    .item-subtitle { color: #6b7280; font-size: 0.9rem; margin-bottom: 0.5rem; }
+                    .item-bullets { padding-left: 1.25rem; margin: 0; }
+                    .item-bullets li { margin-bottom: 0.25rem; font-size: 0.9rem; line-height: 1.5; }
+                    .skills-list { display: flex; flex-wrap: wrap; gap: 0.5rem; page-break-inside: avoid; break-inside: avoid; }
+                    .skill-badge { padding: 0.25rem 0.75rem; background: #f3f4f6; border-radius: 20px; font-size: 0.85rem; color: #374151; }
+                </style>
+            </head>
+            <body>
+                ${element.innerHTML}
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
+    }
+
+    function exportJSON() {
+        const dataStr = JSON.stringify(resumeData, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${resumeData.personal.fullName || 'resume'}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function importJSON() {
+        document.getElementById('jsonFileInput').click();
+    }
+
+    function handleJSONImport(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    resumeData = data;
+                    populateForm();
+                    renderPreview();
+                    saveToLocalStorage();
+                    showToast('Resume imported successfully!', 'success');
+                } catch (err) {
+                    showToast('Error importing file. Please use a valid JSON file.', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function (e) {
+        if (e.ctrlKey && e.key === 's') {
+            e.preventDefault();
+            saveToLocalStorage();
+        }
+        if (e.ctrlKey && e.key === 'p') {
+            e.preventDefault();
+            exportPDF();
+        }
+    });
+</script>
+<!--@end:content-->

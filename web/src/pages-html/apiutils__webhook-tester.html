@@ -1,0 +1,1819 @@
+<!--@block:title-->Webhook Tester Online – Capture, Debug & Test Webhooks Free<!--@end:title-->
+<!--@block:meta_title-->Webhook Tester Online – Capture, Debug & Test Webhooks Free<!--@end:meta_title-->
+<!--@block:meta_description-->
+Free webhook tester online to capture, debug, and test webhooks. Generate instant URLs, inspect requests, and send test events. No signup required.
+<!--@end:meta_description-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/webhook-tester/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Webhook Tester Online",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "featureList": ["Generate unique webhook URLs", "Capture incoming requests", "Send test webhooks", "No signup required"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a Webhook Tester?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A webhook tester is a tool that allows you to capture and inspect HTTP requests sent by third-party services like Stripe, GitHub, or Slack. It helps developers debug payloads, headers, and authentication issues in real-time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I test a webhook online?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To test a webhook, simply generate a unique URL using our tool, paste it into the webhook settings of the service you are testing, and trigger an event. You can then view the captured request data instantly in our dashboard."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I test Stripe webhooks with this tool?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, this tool is perfect for testing Stripe webhooks. You can capture Stripe events, inspect the JSON payload, and verify that your integration is receiving the correct data."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this webhook tester free to use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, our Webhook Tester is 100% free and requires no signup. You can generate multiple URLs and capture as many requests as you need for debugging."
+      }
+    }
+  ]
+}
+</script>
+
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<style>
+    /* Layout */
+    .webhook-app {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        height: calc(100vh - 80px);
+        max-height: calc(100vh - 80px);
+        background: var(--color-bg);
+        overflow: hidden;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        background: var(--color-surface);
+        border-right: 1px solid var(--color-border);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .sidebar-header {
+        padding: 1.25rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .sidebar-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--color-primary) 0%, #a855f7 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin: 0 0 0.25rem 0;
+    }
+
+    .sidebar-header p {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        margin: 0;
+    }
+
+    .sidebar-actions {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .btn-create {
+        width: 100%;
+        padding: 0.7rem 1rem;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all 0.2s;
+    }
+
+    .btn-create:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+
+    .btn-create svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .endpoints-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0.75rem;
+    }
+
+    .endpoints-section-title {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--color-text-secondary);
+        padding: 0.5rem 0.5rem 0.75rem;
+    }
+
+    .endpoint-item {
+        padding: 0.75rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.15s;
+        margin-bottom: 0.25rem;
+        position: relative;
+    }
+
+    .endpoint-item:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .endpoint-item.active {
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid var(--color-primary);
+    }
+
+    .endpoint-name {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--color-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 0.2rem;
+    }
+
+    .endpoint-url {
+        font-family: 'Fira Code', monospace;
+        font-size: 0.7rem;
+        color: var(--color-text-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 0.35rem;
+    }
+
+
+    .endpoint-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.7rem;
+        color: var(--color-text-secondary);
+    }
+
+    .endpoint-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.15rem 0.4rem;
+        border-radius: 4px;
+        font-size: 0.65rem;
+        font-weight: 600;
+    }
+
+    .status-active {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-expired {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .endpoint-requests {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .endpoint-delete {
+        position: absolute;
+        right: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        padding: 0.25rem;
+        border-radius: 4px;
+        opacity: 0;
+        transition: all 0.15s;
+    }
+
+    .endpoint-item:hover .endpoint-delete {
+        opacity: 1;
+    }
+
+    .endpoint-delete:hover {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .endpoint-delete svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .empty-endpoints {
+        text-align: center;
+        padding: 2rem 1rem;
+        color: var(--color-text-secondary);
+    }
+
+    .empty-endpoints svg {
+        width: 40px;
+        height: 40px;
+        opacity: 0.3;
+        margin-bottom: 0.75rem;
+    }
+
+    .empty-endpoints p {
+        font-size: 0.85rem;
+        margin: 0.25rem 0;
+    }
+
+    /* Main Content */
+    .main-content {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        height: 100%;
+        padding: 0 !important;
+    }
+
+    .page-title {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        margin: 0;
+        padding: 0.5rem 1.5rem;
+        background: var(--color-surface);
+        border-bottom: 1px solid var(--color-border);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .content-header {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--color-border);
+        background: var(--color-surface);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .mode-tabs {
+        display: flex;
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        padding: 3px;
+    }
+
+    .mode-tab {
+        padding: 0.5rem 1rem;
+        border: none;
+        background: transparent;
+        color: var(--color-text-secondary);
+        font-weight: 600;
+        font-size: 0.8rem;
+        cursor: pointer;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: all 0.15s;
+    }
+
+    .mode-tab svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .mode-tab.active {
+        background: var(--color-primary);
+        color: white;
+    }
+
+    .mode-tab:not(.active):hover {
+        background: var(--color-border);
+    }
+
+    .url-display {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex: 1;
+        max-width: 500px;
+    }
+
+    .url-display input {
+        flex: 1;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--color-border);
+        border-radius: 6px;
+        background: var(--color-bg);
+        font-family: 'Fira Code', monospace;
+        font-size: 0.8rem;
+        color: var(--color-text);
+    }
+
+    .btn-icon {
+        padding: 0.5rem;
+        border: 1px solid var(--color-border);
+        background: var(--color-surface-alt);
+        border-radius: 6px;
+        cursor: pointer;
+        color: var(--color-text-secondary);
+        transition: all 0.15s;
+    }
+
+    .btn-icon:hover {
+        background: var(--color-border);
+        color: var(--color-text);
+    }
+
+    .btn-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .content-body {
+        flex: 1;
+        overflow: hidden;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mode-panel {
+        display: none;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .mode-panel.active {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #requestsPanel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    #requestList {
+        flex: 1;
+        overflow-y: auto;
+        max-height: calc(100vh - 280px);
+    }
+
+    /* Request List */
+    .request-list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .request-list-title {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: var(--color-text-secondary);
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-sm {
+        padding: 0.4rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        border: 1px solid var(--color-border);
+        background: var(--color-surface);
+        color: var(--color-text-secondary);
+        transition: all 0.15s;
+    }
+
+    .btn-sm:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .btn-sm svg {
+        width: 12px;
+        height: 12px;
+    }
+
+    .btn-sm.danger {
+        border-color: #fecaca;
+        color: #dc2626;
+    }
+
+    .btn-sm.danger:hover {
+        background: #fee2e2;
+    }
+
+    .request-item {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        margin-bottom: 0.75rem;
+        overflow: hidden;
+    }
+
+    .request-header {
+        padding: 0.75rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: background 0.15s;
+    }
+
+    .request-header:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .request-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .method-badge {
+        font-weight: 700;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.7rem;
+    }
+
+    .method-get {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+
+    .method-post {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .method-put {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .method-delete {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .method-patch {
+        background: #e9d5ff;
+        color: #7c3aed;
+    }
+
+    .request-time {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+    }
+
+    .request-body {
+        display: none;
+        padding: 1rem;
+        border-top: 1px solid var(--color-border);
+        background: var(--color-bg);
+    }
+
+    .request-item.expanded .request-body {
+        display: block;
+    }
+
+    .code-block {
+        background: #1e1e1e;
+        color: #e0e0e0;
+        padding: 0.875rem;
+        border-radius: 6px;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.75rem;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
+        max-height: 180px;
+        overflow-y: auto;
+    }
+
+    .section-label {
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--color-text-secondary);
+        margin: 0.75rem 0 0.35rem 0;
+    }
+
+    .section-label:first-child {
+        margin-top: 0;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--color-text-secondary);
+    }
+
+    .empty-state svg {
+        width: 48px;
+        height: 48px;
+        opacity: 0.3;
+        margin-bottom: 0.75rem;
+    }
+
+    .empty-state p {
+        margin: 0.25rem 0;
+    }
+
+    /* Send Mode Form */
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.65rem 0.875rem;
+        border: 1px solid var(--color-border);
+        border-radius: 6px;
+        background: var(--color-surface);
+        color: var(--color-text);
+        font-family: 'Fira Code', monospace;
+        font-size: 0.8rem;
+        box-sizing: border-box;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    select.form-input {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236b7280' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        cursor: pointer;
+    }
+
+    textarea.form-input {
+        min-height: 100px;
+        resize: vertical;
+        line-height: 1.5;
+    }
+
+    textarea.form-input.small {
+        min-height: 70px;
+    }
+
+    .btn-primary {
+        width: 100%;
+        padding: 0.75rem;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .btn-primary:hover {
+        opacity: 0.9;
+    }
+
+    .btn-primary svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .response-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        margin-top: 1.5rem;
+        overflow: hidden;
+    }
+
+    .response-header {
+        padding: 0.75rem 1rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .response-status {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.75rem;
+    }
+
+    .status-success {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-error {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .response-body {
+        padding: 1rem;
+    }
+
+    /* Toast */
+    .toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+
+    .toast {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+        animation: slideIn 0.25s ease;
+        font-size: 0.85rem;
+    }
+
+    .toast svg {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+    }
+
+    .toast.success svg {
+        color: #10b981;
+    }
+
+    .toast.error svg {
+        color: #ef4444;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .spinner {
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.5s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .visually-hidden {
+        position: absolute !important;
+        height: 1px;
+        width: 1px;
+        overflow: hidden;
+        clip: rect(1px, 1px, 1px, 1px);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .webhook-app {
+            grid-template-columns: 240px 1fr;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .webhook-app {
+            grid-template-columns: 1fr;
+            height: auto;
+            max-height: none;
+            min-height: calc(100vh - 80px);
+        }
+
+        #requestList {
+            max-height: 50vh;
+        }
+
+
+        .sidebar {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: var(--color-surface);
+            border-right: none;
+        }
+
+        .sidebar.open {
+            display: flex;
+        }
+
+        .content-header {
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .url-display {
+            width: 100%;
+            order: 3;
+        }
+
+        .url-display input {
+            font-size: 0.7rem;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .content-header {
+            padding: 0.75rem 1rem;
+        }
+
+        .content-body {
+            padding: 1rem;
+        }
+
+        .mode-tabs {
+            width: 100%;
+        }
+
+        .mode-tab {
+            flex: 1;
+            font-size: 0.75rem;
+            padding: 0.4rem 0.5rem;
+        }
+
+        .mode-tab svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .request-list-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.75rem;
+        }
+
+        .btn-group {
+            justify-content: flex-end;
+        }
+
+        .code-block {
+            font-size: 0.65rem;
+            padding: 0.75rem;
+        }
+
+        .modal-content {
+            max-width: 95%;
+            margin: 1rem;
+        }
+    }
+
+    /* Mobile Endpoints Button */
+    .mobile-endpoints-btn {
+        display: none;
+        padding: 0.5rem;
+        border: 1px solid var(--color-border);
+        background: var(--color-surface-alt);
+        border-radius: 6px;
+        cursor: pointer;
+        color: var(--color-text);
+    }
+
+    .mobile-endpoints-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    @media (max-width: 900px) {
+        .mobile-endpoints-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+    }
+
+    /* Sidebar close button for mobile */
+    .sidebar-close {
+        display: none;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--color-text-secondary);
+        padding: 0.25rem;
+    }
+
+    .sidebar-close svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    @media (max-width: 900px) {
+        .sidebar-close {
+            display: block;
+        }
+
+        .sidebar {
+            position: fixed;
+        }
+    }
+
+
+    /* Create Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    .modal-content {
+        background: var(--color-surface);
+        border-radius: 12px;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+        animation: modalSlide 0.2s ease;
+    }
+
+    @keyframes modalSlide {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .modal-header {
+        padding: 1.25rem;
+        border-bottom: 1px solid var(--color-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-header h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--color-text-secondary);
+        padding: 0.25rem;
+    }
+
+    .modal-close:hover {
+        color: var(--color-text);
+    }
+
+    .modal-close svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .modal-body {
+        padding: 1.25rem;
+    }
+
+    .modal-footer {
+        padding: 1rem 1.25rem;
+        border-top: 1px solid var(--color-border);
+        display: flex;
+        gap: 0.75rem;
+        justify-content: flex-end;
+    }
+
+    .modal-btn {
+        padding: 0.6rem 1.25rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        border: none;
+    }
+
+    .modal-btn-secondary {
+        background: var(--color-surface-alt);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+    }
+
+    .modal-btn-primary {
+        background: var(--color-primary);
+        color: white;
+    }
+
+    .modal-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+</style>
+
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="webhook-app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <button class="sidebar-close" onclick="closeSidebar()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+        </button>
+        <div class="sidebar-header">
+            <div class="sidebar-title">Webhook Tester</div>
+            <p>Debug webhooks instantly</p>
+        </div>
+        <div class="sidebar-actions">
+            <button class="btn-create" onclick="showCreatePopup()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                New Webhook URL
+            </button>
+        </div>
+
+        <div class="endpoints-list" id="endpointsList">
+            <div class="endpoints-section-title">Your Endpoints</div>
+            <div id="endpointsContainer"></div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">Webhook Tester Online — Capture, Debug & Send Webhooks</h1>
+        <div class="content-header">
+            <!-- Mobile Endpoints Button -->
+            <button class="mobile-endpoints-btn" onclick="openSidebar()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+                Endpoints
+            </button>
+            <div class="mode-tabs">
+                <button class="mode-tab active" data-mode="receive" onclick="switchMode('receive')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    Receive
+                </button>
+                <button class="mode-tab" data-mode="send" onclick="switchMode('send')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13" />
+                        <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                    </svg>
+                    Send
+                </button>
+            </div>
+            <div class="url-display" id="urlDisplay" style="display: none;">
+                <input type="text" id="currentUrl" readonly placeholder="Select an endpoint">
+                <button class="btn-icon" onclick="copyUrl()" title="Copy URL">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" />
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="content-body">
+            <!-- Receive Mode -->
+            <div id="receiveMode" class="mode-panel active">
+                <div id="noEndpointState" class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg>
+                    <p><strong>No endpoint selected</strong></p>
+                    <p style="font-size: 0.85rem;">Create a new webhook URL or select one from the sidebar.</p>
+                </div>
+
+                <div id="requestsPanel" style="display: none;">
+                    <div class="request-list-header">
+                        <span class="request-list-title">Captured Requests <span id="requestCount">(0)</span></span>
+                        <div class="btn-group">
+                            <button class="btn-sm" onclick="refreshRequests()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10" />
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                                </svg>
+                                Refresh
+                            </button>
+                            <button class="btn-sm danger" onclick="clearRequests()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6" />
+                                    <path
+                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                </svg>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                    <div id="requestList"></div>
+                </div>
+            </div>
+
+            <!-- Send Mode -->
+            <div id="sendMode" class="mode-panel">
+                <div class="form-group">
+                    <label class="form-label">Webhook URL</label>
+                    <input type="url" id="targetUrl" class="form-input" placeholder="https://your-server.com/webhook">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Method</label>
+                        <select id="requestMethod" class="form-input">
+                            <option value="POST">POST</option>
+                            <option value="GET">GET</option>
+                            <option value="PUT">PUT</option>
+                            <option value="PATCH">PATCH</option>
+                            <option value="DELETE">DELETE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Content-Type</label>
+                        <select id="contentType" class="form-input">
+                            <option value="application/json">application/json</option>
+                            <option value="application/x-www-form-urlencoded">form-urlencoded</option>
+                            <option value="text/plain">text/plain</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Headers (JSON)</label>
+                    <textarea id="requestHeaders" class="form-input small">{}</textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Body</label>
+                    <textarea id="requestBody" class="form-input" placeholder='{"event": "test"}'></textarea>
+                </div>
+                <button class="btn-primary" onclick="sendRequest()" id="sendBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13" />
+                        <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                    </svg>
+                    Send Request
+                </button>
+
+                <div class="response-card" id="responseCard" style="display: none;">
+                    <div class="response-header">
+                        <span id="responseStatus"></span>
+                        <span id="responseTime" style="font-size: 0.75rem; color: var(--color-text-secondary);"></span>
+                    </div>
+                    <div class="response-body">
+                        <div class="section-label">Headers</div>
+                        <div class="code-block" id="responseHeaders"></div>
+                        <div class="section-label">Body</div>
+                        <div class="code-block" id="responseBody"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Create Webhook Modal -->
+<div class="modal" id="createModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Create Webhook URL</h3>
+            <button class="modal-close" onclick="hideCreatePopup()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Webhook Name</label>
+                <input type="text" id="webhookName" class="form-input"
+                    placeholder="E.g., Stripe Payments, GitHub Webhooks" autofocus>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn modal-btn-secondary" onclick="hideCreatePopup()">Cancel</button>
+            <button class="modal-btn modal-btn-primary" id="createBtn" onclick="createEndpoint()">Generate URL</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+
+<!-- SEO Content Section -->
+<section class="seo-content">
+    <h2>How to Test Webhooks Online</h2>
+    <p>
+      This webhook tester online lets developers capture, inspect, and debug HTTP webhook
+      requests directly in the browser. No installation or signup is required. Whether you
+      are testing Stripe webhooks, GitHub events, or automation workflows, this online webhook
+      testing tool provides real-time visibility into headers, payloads, and delivery timing.
+    </p>
+
+    <h3>How This Webhook Tester Works</h3>
+    <p>Testing your webhook integration is a simple four-step process:</p>
+    <ol>
+        <li><strong>Generate a URL:</strong> Create a unique, private webhook endpoint instantly.</li>
+        <li><strong>Configure Your Service:</strong> Paste the generated URL into your provider's webhook settings
+            (e.g., Stripe, Shopify, GitHub).</li>
+        <li><strong>Trigger an Event:</strong> Perform an action in the source system to send a test event.</li>
+        <li><strong>Inspect in Real-Time:</strong> View headers, query parameters, and the raw JSON body as they arrive
+            in your dashboard.</li>
+    </ol>
+
+    <h3>Common Use Cases for Webhook Debugging</h3>
+    <ul>
+        <li><strong>Stripe Integration:</strong> Debug payment success, subscription updates, and refund events.</li>
+        <li><strong>GitHub Webhooks:</strong> Test push events, pull requests, and automated deployment triggers.</li>
+        <li><strong>Slack Apps:</strong> Verify interactive messages and slash command payloads.</li>
+        <li><strong>E-commerce Platforms:</strong> Monitor Shopify, WooCommerce, or BigCommerce order notifications.
+        </li>
+        <li><strong>Automation:</strong> Debug complex multi-step workflows in Zapier or Make (formerly Integromat).
+        </li>
+    </ul>
+
+    <h3>Frequently Asked Questions</h3>
+    <div class="faq-grid">
+        <div class="faq-card">
+            <h4>What exactly is a Webhook?</h4>
+            <p>A webhook is a "reverse API" that allows one application to provide real-time data to another. Instead of
+                polling an API for updates, the source system "pushes" data to a specific URL when an event occurs.</p>
+        </div>
+        <div class="faq-card">
+            <h4>Are these webhook URLs private?</h4>
+            <p>Yes, each URL generated is unique. While the URL is technically public, it is not listed anywhere and is
+                intended for temporary debugging. Avoid sending sensitive production data during testing.</p>
+        </div>
+        <div class="faq-card">
+            <h4>Do I need an account to test webhooks?</h4>
+            <p>No, our tool is 100% free and requires no signup. You can start capturing and debugging webhooks
+                immediately
+                without any friction.</p>
+        </div>
+        <div class="faq-card">
+            <h4>How long do you store captured requests?</h4>
+            <p>Requests are stored in your browser's session and temporarily on our server for debugging. They are
+                cleared
+                periodically to ensure system performance and privacy.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Related Tools Section -->
+<section class="related-tools-section">
+    <h2 class="related-tools-title">Related Developer Tools</h2>
+    <div class="related-tools-grid">
+        <a href="/" class="related-tool-card">
+            <div class="related-tool-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+            </div>
+            <h3>JSON Formatter</h3>
+            <p>Format, validate, and beautify JSON data with syntax highlighting</p>
+        </a>
+        <a href="/mock-api/" class="related-tool-card">
+            <div class="related-tool-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" />
+                    <line x1="8" y1="21" x2="16" y2="21" />
+                    <line x1="12" y1="17" x2="12" y2="21" />
+                </svg>
+            </div>
+            <h3>Mock API Generator</h3>
+            <p>Create instant mock REST APIs with custom endpoints and data</p>
+        </a>
+        <a href="/swagger-viewer/" class="related-tool-card">
+            <div class="related-tool-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                </svg>
+            </div>
+            <h3>Swagger Viewer</h3>
+            <p>Visualize and explore OpenAPI/Swagger specifications</p>
+        </a>
+        <a href="/api-response-tester/" class="related-tool-card">
+            <div class="related-tool-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                </svg>
+            </div>
+            <h3>API Response Tester</h3>
+            <p>Test API endpoints and analyze response times and data</p>
+        </a>
+        <a href="/dummy-json/" class="related-tool-card">
+            <div class="related-tool-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path
+                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                </svg>
+            </div>
+            <h3>Dummy JSON API</h3>
+            <p>Generate fake JSON data for testing and prototyping</p>
+        </a>
+    </div>
+</section>
+
+<style>
+    .related-tools-section {
+        padding: 3rem 2rem;
+        background: var(--color-surface);
+        border-top: 1px solid var(--color-border);
+    }
+
+    .related-tools-title {
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        color: var(--color-text);
+    }
+
+    .related-tools-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.25rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .related-tool-card {
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.2s;
+    }
+
+    .related-tool-card:hover {
+        border-color: var(--color-primary);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.12);
+    }
+
+    .related-tool-icon {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, var(--color-primary) 0%, #a855f7 100%);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .related-tool-icon svg {
+        width: 22px;
+        height: 22px;
+        stroke: white;
+    }
+
+    .related-tool-card h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem 0;
+        color: var(--color-text);
+    }
+
+    .related-tool-card p {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    @media (max-width: 600px) {
+        .related-tools-section {
+            padding: 2rem 1rem;
+        }
+
+        .related-tools-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* SEO Content Section */
+    .seo-content {
+        padding: 4rem 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+        line-height: 1.7;
+    }
+
+    .seo-content h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--color-text);
+        text-align: center;
+    }
+
+    .seo-content h3 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin: 2.5rem 0 1rem;
+        color: var(--color-text);
+    }
+
+    .seo-content p {
+        margin-bottom: 1.25rem;
+        color: var(--color-text-secondary);
+        font-size: 1.05rem;
+    }
+
+    .seo-content ul,
+    .seo-content ol {
+        margin-bottom: 1.5rem;
+        padding-left: 1.5rem;
+        color: var(--color-text-secondary);
+    }
+
+    .seo-content li {
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+    }
+
+    .faq-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .faq-card {
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: transform 0.2s;
+    }
+
+    .faq-card:hover {
+        transform: translateY(-2px);
+    }
+
+    .faq-card h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: var(--color-text);
+    }
+
+    .faq-card p {
+        margin-bottom: 0;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+        .seo-content {
+            padding: 3rem 1.25rem;
+        }
+
+        .seo-content h2 {
+            font-size: 1.75rem;
+        }
+
+        .faq-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+
+<script>
+    let selectedEndpointId = null;
+    let pollInterval = null;
+    let endpoints = [];
+    let expandedRequestIds = new Set(); // Track expanded requests
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', loadEndpoints);
+
+    // Mobile sidebar functions
+    function openSidebar() {
+        document.getElementById('sidebar').classList.add('open');
+    }
+
+    function closeSidebar() {
+        document.getElementById('sidebar').classList.remove('open');
+    }
+
+
+
+    function showToast(msg, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icons = {
+            success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+            error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
+        };
+        toast.innerHTML = `${icons[type]}<span>${msg}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    async function loadEndpoints() {
+        try {
+            const res = await fetch('/api/webhook/list/');
+            const data = await res.json();
+            endpoints = data.endpoints;
+            renderEndpoints();
+            if (endpoints.length > 0 && !selectedEndpointId) {
+                selectEndpoint(endpoints[0].id);
+            }
+        } catch (e) {
+            console.error('Failed to load endpoints:', e);
+        }
+    }
+
+    function renderEndpoints() {
+        const container = document.getElementById('endpointsContainer');
+        if (endpoints.length === 0) {
+            container.innerHTML = `
+            <div class="empty-endpoints">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                <p>No endpoints yet</p>
+                <p style="font-size: 0.75rem;">Create one to get started</p>
+            </div>`;
+            return;
+        }
+
+        container.innerHTML = endpoints.map(e => `
+        <div class="endpoint-item ${e.id === selectedEndpointId ? 'active' : ''}" onclick="selectEndpoint('${e.id}')">
+            <div class="endpoint-name">${e.name || 'Unnamed Webhook'}</div>
+            <div class="endpoint-url">/hook/${e.id.substring(0, 8)}...</div>
+            <div class="endpoint-meta">
+                <span class="endpoint-status ${e.is_expired ? 'status-expired' : 'status-active'}">${e.is_expired ? 'Expired' : 'Active'}</span>
+                <span class="endpoint-requests">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    ${e.request_count}
+                </span>
+            </div>
+            <button class="endpoint-delete" onclick="deleteEndpoint('${e.id}', event)" title="Delete">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+        </div>
+    `).join('');
+    }
+
+    function selectEndpoint(id) {
+        selectedEndpointId = id;
+        const endpoint = endpoints.find(e => e.id === id);
+        if (!endpoint) return;
+
+        renderEndpoints();
+        document.getElementById('noEndpointState').style.display = 'none';
+        document.getElementById('requestsPanel').style.display = 'block';
+        document.getElementById('urlDisplay').style.display = 'flex';
+        document.getElementById('currentUrl').value = endpoint.url;
+
+        // Auto-populate Send form with selected URL
+        document.getElementById('targetUrl').value = endpoint.url;
+        document.getElementById('requestBody').value = JSON.stringify({
+            event: "test.webhook",
+            timestamp: new Date().toISOString(),
+            data: { id: "sample_123", status: "active" }
+        }, null, 2);
+
+        startPolling();
+        closeSidebar(); // Close sidebar on mobile after selection
+    }
+
+
+    // Show create popup
+    function showCreatePopup() {
+        const modal = document.getElementById('createModal');
+        document.getElementById('webhookName').value = '';
+        modal.style.display = 'flex';
+        document.getElementById('webhookName').focus();
+    }
+
+    function hideCreatePopup() {
+        document.getElementById('createModal').style.display = 'none';
+    }
+
+    async function createEndpoint() {
+        const name = document.getElementById('webhookName').value.trim() || 'My Webhook';
+        const btn = document.getElementById('createBtn');
+        btn.disabled = true;
+        btn.textContent = 'Creating...';
+
+        try {
+            const res = await fetch('/api/webhook/create/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name })
+            });
+            const data = await res.json();
+            endpoints.unshift(data);
+            renderEndpoints();
+            selectEndpoint(data.id);
+            hideCreatePopup();
+            showToast('Webhook URL created!');
+        } catch (e) {
+            showToast('Failed to create endpoint', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Generate URL';
+        }
+    }
+
+    async function deleteEndpoint(id, event) {
+        event.stopPropagation();
+        try {
+            await fetch(`/api/webhook/${id}/delete/`, { method: 'POST' });
+            endpoints = endpoints.filter(e => e.id !== id);
+            if (selectedEndpointId === id) {
+                selectedEndpointId = null;
+                document.getElementById('noEndpointState').style.display = 'block';
+                document.getElementById('requestsPanel').style.display = 'none';
+                document.getElementById('urlDisplay').style.display = 'none';
+                if (pollInterval) clearInterval(pollInterval);
+            }
+            renderEndpoints();
+            showToast('Endpoint deleted');
+        } catch (e) {
+            showToast('Failed to delete', 'error');
+        }
+    }
+
+    function copyUrl() {
+        const url = document.getElementById('currentUrl').value;
+        navigator.clipboard.writeText(url);
+        showToast('URL copied!');
+    }
+
+    function switchMode(mode) {
+        document.querySelectorAll('.mode-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+        document.querySelectorAll('.mode-panel').forEach(p => p.classList.toggle('active', p.id === mode + 'Mode'));
+    }
+
+    function startPolling() {
+        if (pollInterval) clearInterval(pollInterval);
+        refreshRequests();
+        pollInterval = setInterval(refreshRequests, 3000);
+    }
+
+    async function refreshRequests() {
+        if (!selectedEndpointId) return;
+        try {
+            const res = await fetch(`/api/webhook/${selectedEndpointId}/requests/`);
+            const data = await res.json();
+            renderRequests(data.requests);
+        } catch (e) { console.error(e); }
+    }
+
+    function toggleRequest(id, el) {
+        if (expandedRequestIds.has(id)) {
+            expandedRequestIds.delete(id);
+            el.classList.remove('expanded');
+        } else {
+            expandedRequestIds.add(id);
+            el.classList.add('expanded');
+        }
+    }
+
+    function renderRequests(requests) {
+        document.getElementById('requestCount').textContent = `(${requests.length})`;
+        const container = document.getElementById('requestList');
+
+        if (requests.length === 0) {
+            container.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg><p><strong>No requests yet</strong></p><p style="font-size:0.85rem">Send a webhook to the URL above</p></div>`;
+            return;
+        }
+
+        container.innerHTML = requests.map(r => `
+        <div class="request-item ${expandedRequestIds.has(r.id) ? 'expanded' : ''}" onclick="toggleRequest(${r.id}, this)">
+            <div class="request-header">
+                <div class="request-meta">
+                    <span class="method-badge method-${r.method.toLowerCase()}">${r.method}</span>
+                    <span style="font-size:0.75rem;color:var(--color-text-secondary)">${r.content_type || 'no content-type'}</span>
+                </div>
+                <span class="request-time">${formatTime(r.received_at)}</span>
+            </div>
+            <div class="request-body">
+                <div class="section-label">Headers</div>
+                <div class="code-block">${formatJson(r.headers)}</div>
+                ${r.body ? `<div class="section-label">Body</div><div class="code-block">${formatBody(r.body)}</div>` : ''}
+            </div>
+        </div>
+    `).join('');
+    }
+
+    async function clearRequests() {
+        if (!selectedEndpointId) return;
+        await fetch(`/api/webhook/${selectedEndpointId}/clear/`, { method: 'POST' });
+        expandedRequestIds.clear();
+        refreshRequests();
+        showToast('Requests cleared');
+    }
+
+    async function sendRequest() {
+        const url = document.getElementById('targetUrl').value;
+        if (!url) { showToast('Enter a URL', 'error'); return; }
+
+        const btn = document.getElementById('sendBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<div class="spinner"></div> Sending...';
+
+        let headers = {};
+        try { headers = JSON.parse(document.getElementById('requestHeaders').value || '{}'); }
+        catch { showToast('Invalid headers JSON', 'error'); btn.disabled = false; btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send Request'; return; }
+
+        headers['Content-Type'] = document.getElementById('contentType').value;
+
+        try {
+            const res = await fetch('/api/webhook/send/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    url, method: document.getElementById('requestMethod').value,
+                    headers, body: document.getElementById('requestBody').value
+                })
+            });
+            const data = await res.json();
+            displayResponse(data);
+            showToast('Request sent!');
+        } catch (e) {
+            displayResponse({ error: e.message });
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send Request';
+        }
+    }
+
+    function displayResponse(data) {
+        document.getElementById('responseCard').style.display = 'block';
+        if (data.error) {
+            document.getElementById('responseStatus').innerHTML = `<span class="response-status status-error">Error</span>`;
+            document.getElementById('responseHeaders').textContent = '-';
+            document.getElementById('responseBody').textContent = data.error;
+            document.getElementById('responseTime').textContent = '';
+        } else {
+            const cls = data.status < 300 ? 'status-success' : 'status-error';
+            document.getElementById('responseStatus').innerHTML = `<span class="response-status ${cls}">${data.status} ${data.status_text}</span>`;
+            document.getElementById('responseHeaders').textContent = formatJson(data.headers);
+            document.getElementById('responseBody').textContent = formatBody(data.body);
+            document.getElementById('responseTime').textContent = `${data.time_ms}ms`;
+        }
+    }
+
+    function formatJson(obj) { try { return JSON.stringify(obj, null, 2); } catch { return String(obj); } }
+    function formatBody(body) { try { return JSON.stringify(JSON.parse(body), null, 2); } catch { return body; } }
+    function formatTime(iso) {
+        const d = Math.floor((new Date() - new Date(iso)) / 1000);
+        if (d < 60) return d + 's ago';
+        if (d < 3600) return Math.floor(d / 60) + 'm ago';
+        if (d < 86400) return Math.floor(d / 3600) + 'h ago';
+        return new Date(iso).toLocaleString();
+    }
+
+    // Close modal on outside click
+    document.addEventListener('click', (e) => {
+        const modal = document.getElementById('createModal');
+        if (e.target === modal) hideCreatePopup();
+    });
+
+    // Enter key to submit
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && document.getElementById('createModal').style.display === 'flex') {
+            createEndpoint();
+        }
+        if (e.key === 'Escape') hideCreatePopup();
+    });
+</script>
+
+<!--@end:content-->

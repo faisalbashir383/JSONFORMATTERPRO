@@ -1,0 +1,354 @@
+[
+  {
+    "path": "/",
+    "page": "index"
+  },
+  {
+    "path": "/about/",
+    "page": "about"
+  },
+  {
+    "path": "/age-calculator/",
+    "page": "age-calculator"
+  },
+  {
+    "path": "/api-response-tester/",
+    "page": "api-response-tester"
+  },
+  {
+    "path": "/base64/",
+    "page": "base64"
+  },
+  {
+    "path": "/bmi-calculator/",
+    "page": "bmi-calculator"
+  },
+  {
+    "path": "/calculator/",
+    "page": "calculator"
+  },
+  {
+    "path": "/calorie-calculator/",
+    "page": "calorie-calculator"
+  },
+  {
+    "path": "/car-payment-calculator/",
+    "page": "car-payment-calculator"
+  },
+  {
+    "path": "/code-of-conduct/",
+    "page": "code-of-conduct"
+  },
+  {
+    "path": "/comma-separator/",
+    "page": "comma-separator"
+  },
+  {
+    "path": "/compound-interest-calculator/",
+    "page": "compound-interest-calculator"
+  },
+  {
+    "path": "/concrete-calculator/",
+    "page": "concrete-calculator"
+  },
+  {
+    "path": "/contact/",
+    "page": "contact"
+  },
+  {
+    "path": "/cors-checker/",
+    "page": "cors-checker"
+  },
+  {
+    "path": "/cron-builder/",
+    "page": "cron-builder"
+  },
+  {
+    "path": "/csv-to-json/",
+    "page": "csv-to-json"
+  },
+  {
+    "path": "/currency-calculator/",
+    "page": "currency-calculator"
+  },
+  {
+    "path": "/date-calculator/",
+    "page": "date-calculator"
+  },
+  {
+    "path": "/discount-calculator/",
+    "page": "discount-calculator"
+  },
+  {
+    "path": "/dns-lookup/",
+    "page": "dns-lookup"
+  },
+  {
+    "path": "/domain-age/",
+    "page": "domain-age-checker"
+  },
+  {
+    "path": "/domain-expiry-checker/",
+    "page": "domain-expiry-checker"
+  },
+  {
+    "path": "/dummy-json-api/",
+    "page": "dummy-json-api"
+  },
+  {
+    "path": "/dummy-json-api/playground/",
+    "page": "dummy-json-api-playground"
+  },
+  {
+    "path": "/dummy-json/",
+    "page": "dummy-json"
+  },
+  {
+    "path": "/gpa-calculator/",
+    "page": "gpa-calculator"
+  },
+  {
+    "path": "/graphing-calculator/",
+    "page": "graphing-calculator"
+  },
+  {
+    "path": "/http-headers/",
+    "page": "http-headers"
+  },
+  {
+    "path": "/image-resizer/",
+    "page": "image-resizer"
+  },
+  {
+    "path": "/image-to-base64/",
+    "page": "image-to-base64"
+  },
+  {
+    "path": "/ip-info/",
+    "page": "ip-info"
+  },
+  {
+    "path": "/json-diff/",
+    "page": "json-diff"
+  },
+  {
+    "path": "/json-editor/",
+    "page": "json-editor"
+  },
+  {
+    "path": "/json-fixer/",
+    "page": "json-fixer"
+  },
+  {
+    "path": "/json-formatter-online/",
+    "page": "json-formatter-online"
+  },
+  {
+    "path": "/json-formatter/",
+    "page": "json-formatter"
+  },
+  {
+    "path": "/json-generator/",
+    "page": "json-generator"
+  },
+  {
+    "path": "/json-path-tester/",
+    "page": "json-path-tester"
+  },
+  {
+    "path": "/json-schema-validator/",
+    "page": "json-schema"
+  },
+  {
+    "path": "/json-to-code/",
+    "page": "json-to-code"
+  },
+  {
+    "path": "/json-to-jsonl/",
+    "page": "json-to-jsonl"
+  },
+  {
+    "path": "/json-to-string/",
+    "page": "json-to-string"
+  },
+  {
+    "path": "/json-to-yaml/",
+    "page": "json-to-yaml"
+  },
+  {
+    "path": "/json-tools/",
+    "page": "json-tools"
+  },
+  {
+    "path": "/json-tree/",
+    "page": "json-tree"
+  },
+  {
+    "path": "/json-viewer/",
+    "page": "json-viewer"
+  },
+  {
+    "path": "/json-visualizer/",
+    "page": "json-visualizer"
+  },
+  {
+    "path": "/loan-calculator/",
+    "page": "loan-calculator"
+  },
+  {
+    "path": "/log-analyzer/",
+    "page": "log-analyzer"
+  },
+  {
+    "path": "/lorem-ipsum/",
+    "page": "lorem-ipsum"
+  },
+  {
+    "path": "/markdown-preview/",
+    "page": "markdown-preview"
+  },
+  {
+    "path": "/meta-tag-generator/",
+    "page": "meta-tag-generator"
+  },
+  {
+    "path": "/mock-api/",
+    "page": "mock-api-generator"
+  },
+  {
+    "path": "/mortgage-calculator/",
+    "page": "mortgage-calculator"
+  },
+  {
+    "path": "/openapi-builder/",
+    "page": "openapi-builder"
+  },
+  {
+    "path": "/parquet-viewer/",
+    "page": "parquet-viewer"
+  },
+  {
+    "path": "/password-generator/",
+    "page": "password-generator"
+  },
+  {
+    "path": "/percentage-calculator/",
+    "page": "percentage-calculator"
+  },
+  {
+    "path": "/privacy-policy/",
+    "page": "privacy"
+  },
+  {
+    "path": "/push-notification-tester/",
+    "page": "push-notification-tester"
+  },
+  {
+    "path": "/qr-generator/",
+    "page": "qr-generator"
+  },
+  {
+    "path": "/redoc-viewer/",
+    "page": "redoc-viewer"
+  },
+  {
+    "path": "/regex-tester/",
+    "page": "regex-tester"
+  },
+  {
+    "path": "/resume-builder/",
+    "page": "resume-builder"
+  },
+  {
+    "path": "/salary-calculator/",
+    "page": "salary-calculator"
+  },
+  {
+    "path": "/sip-calculator/",
+    "page": "sip-calculator"
+  },
+  {
+    "path": "/sql-formatter/",
+    "page": "sql-formatter"
+  },
+  {
+    "path": "/sqlite-viewer/",
+    "page": "sqlite-viewer"
+  },
+  {
+    "path": "/ssl-checker/",
+    "page": "ssl-checker"
+  },
+  {
+    "path": "/string-json-to-json/",
+    "page": "string-json-to-json"
+  },
+  {
+    "path": "/swagger-editor-online/",
+    "page": "swagger-editor"
+  },
+  {
+    "path": "/swagger-viewer/",
+    "page": "swagger-viewer"
+  },
+  {
+    "path": "/terms-and-conditions/",
+    "page": "terms"
+  },
+  {
+    "path": "/time-calculator/",
+    "page": "time-calculator"
+  },
+  {
+    "path": "/tip-calculator/",
+    "page": "tip-calculator"
+  },
+  {
+    "path": "/tools-hub/",
+    "page": "tools-hub"
+  },
+  {
+    "path": "/toon-converter/",
+    "page": "toon-converter"
+  },
+  {
+    "path": "/typing-test/",
+    "page": "typing-test"
+  },
+  {
+    "path": "/unit-converter/",
+    "page": "unit-converter"
+  },
+  {
+    "path": "/url-encoder/",
+    "page": "url-encoder"
+  },
+  {
+    "path": "/webhook-tester/",
+    "page": "apiutils__webhook-tester"
+  },
+  {
+    "path": "/whois-api/",
+    "page": "whois-api"
+  },
+  {
+    "path": "/whois-lookup/",
+    "page": "whois-lookup"
+  },
+  {
+    "path": "/xsd-complextype-to-json-schema/",
+    "page": "xsd-complextype-to-json-schema"
+  },
+  {
+    "path": "/xsd-to-json-schema-example/",
+    "page": "xsd-to-json-schema-example"
+  },
+  {
+    "path": "/xsd-to-json-schema/",
+    "page": "xsd-to-json-schema"
+  },
+  {
+    "path": "/yaml-formatter/",
+    "page": "yaml-formatter"
+  }
+]

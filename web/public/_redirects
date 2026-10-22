@@ -1,0 +1,3 @@
+# Ported from formatter/urls.py RedirectView entries.
+# www -> non-www is a Cloudflare Redirect Rule on the zone, not a file rule.
+/json-schema/  /json-schema-validator/  301

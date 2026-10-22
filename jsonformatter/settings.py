@@ -96,7 +96,23 @@ WSGI_APPLICATION = 'jsonformatter.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-if os.getenv("env", "production") == "production":
+if os.getenv("DATABASE_URL"):
+    # Supabase (or any Postgres) connection string, e.g.
+    # postgresql://postgres.<ref>:<password>@aws-0-<region>.pooler.supabase.com:5432/postgres
+    from urllib.parse import urlparse, unquote
+    db_url = urlparse(os.getenv("DATABASE_URL"))
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': db_url.path.lstrip('/') or 'postgres',
+            'USER': unquote(db_url.username or ''),
+            'PASSWORD': unquote(db_url.password or ''),
+            'HOST': db_url.hostname,
+            'PORT': db_url.port or 5432,
+            'OPTIONS': {'sslmode': 'require'},
+        }
+    }
+elif os.getenv("env", "production") == "production":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',

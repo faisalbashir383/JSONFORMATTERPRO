@@ -1,0 +1,9 @@
+---
+import layout from '../layouts/base.html?raw';
+import page from '../pages-html/404.html?raw';
+import { parseBlocks, renderPage } from '../lib/blocks';
+
+// 404.html is a standalone document; it only goes through the layout if it uses blocks.
+const html = page.includes('<!--@block:') ? renderPage(layout, parseBlocks(page)) : page;
+---
+<Fragment set:html={html} />

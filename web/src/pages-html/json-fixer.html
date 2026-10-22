@@ -1,0 +1,1665 @@
+<!--@block:title-->JSON Fixer Online – Fix & Repair Broken JSON Instantly<!--@end:title-->
+<!--@block:meta_title-->JSON Fixer Online – Fix & Repair Broken JSON Instantly<!--@end:meta_title-->
+<!--@block:meta_description-->Fix invalid and broken JSON online in seconds. Repair syntax errors, missing quotes, and trailing commas instantly. 100% private and client-side.<!--@end:meta_description-->
+<!--@block:meta_keywords-->json fixer, fix json online, json repair tool, fix json errors, malformed json fixer, broken
+json fix, json syntax error fixer, trailing commas json, missing quotes json<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/json-fixer/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<!--@super-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "JSON Fixer Online",
+  "applicationCategory": "DeveloperApplication",
+  "applicationSubCategory": "Data Repair Tool",
+  "operatingSystem": "Web Browser",
+  "description": "Fix and repair broken, invalid, or malformed JSON online. Automatically fixes trailing commas, missing quotes, Python-style values, and syntax errors. 100% client-side and secure.",
+  "url": "https://jsonformatterspro.com/json-fixer/",
+  "browserRequirements": "Requires JavaScript. Works in Chrome, Firefox, Safari, Edge.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "creator": {
+    "@type": "Organization",
+    "name": "JSON Formatters Pro",
+    "url": "https://jsonformatterspro.com"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a JSON Fixer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A JSON Fixer is an online tool that automatically detects and repairs common JSON syntax errors like trailing commas, missing quotes, unescaped characters, and mismatched brackets."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this JSON Fixer free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, our JSON Fixer is 100% free to use. There are no limitations on the size of JSON or number of fixes you can perform."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my JSON data safe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely. All JSON processing happens locally in your browser using JavaScript. Your data never leaves your computer, ensuring complete privacy and security."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What JSON errors can this tool fix?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our tool can fix trailing commas, missing quotes on keys, single quotes (converts to double quotes), unescaped special characters, missing colons, and mismatched brackets or braces."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I fix JSON from an API response?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Simply paste your broken API response into the editor, and our tool will detect and fix the errors. You can then copy the corrected JSON or download it as a file."
+      }
+    },
+      {
+      "@type": "Question",
+      "name": "How do I fix a JSON syntax error?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paste the JSON with the syntax error into our JSON Fixer. The tool will highlight the problem and automatically repair missing commas, quotes, and brackets."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does invalid JSON mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Invalid JSON means the data does not follow JSON syntax rules and cannot be parsed. Our JSON Fixer converts invalid JSON into valid JSON instantly."
+      }
+    }
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:main_attrs-->class="json-fixer-wrapper"<!--@end:main_attrs-->
+<!--@block:extra_css-->
+<style>
+    .json-fixer-wrapper {
+        flex: 1;
+        width: 100%;
+        padding: 0 40px;
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 1400px) {
+        .json-fixer-wrapper {
+            padding: 0 20px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .json-fixer-wrapper {
+            padding: 0 16px;
+        }
+    }
+
+    .tool-header {
+        margin-bottom: 2.5rem;
+        text-align: center;
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--color-primary) 0%, #a855f7 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+        line-height: 1.2;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .tool-header p {
+            font-size: 1rem;
+        }
+    }
+
+    .fixer-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+        height: 550px;
+    }
+
+    @media (max-width: 992px) {
+        .fixer-container {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            height: auto;
+        }
+    }
+
+    .editor-panel {
+        display: flex;
+        flex-direction: column;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+        overflow: hidden;
+        height: 100%;
+        min-height: 0;
+    }
+
+    @media (max-width: 992px) {
+        .editor-panel {
+            height: 400px;
+        }
+    }
+
+    .panel-header {
+        padding: 0.75rem 1rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        position: relative;
+        z-index: 10;
+    }
+
+    .panel-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--color-text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .panel-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-action {
+        padding: 0.4rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 1px solid transparent;
+        white-space: nowrap;
+    }
+
+    .btn-action svg {
+        width: 14px;
+        height: 14px;
+        fill: currentColor;
+    }
+
+    .btn-primary {
+        background: var(--color-primary);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        filter: brightness(1.1);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+    }
+
+    .btn-secondary {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        color: var(--color-text);
+    }
+
+    .btn-secondary:hover {
+        background: var(--color-surface-alt);
+        border-color: var(--color-text-secondary);
+    }
+
+    .btn-success {
+        background: #10b981;
+        color: white;
+    }
+
+    .btn-success:hover {
+        filter: brightness(1.1);
+    }
+
+    .btn-danger {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+    }
+
+    .btn-danger:hover {
+        background: #fecaca;
+    }
+
+    .editor-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        min-height: 0;
+        overflow: hidden;
+        margin-top: 0;
+    }
+
+    /* Code Editor with Line Numbers */
+    .code-editor-wrapper {
+        display: flex;
+        flex: 1;
+        min-height: 0;
+        overflow: clip;
+        position: relative;
+    }
+
+    .line-numbers {
+        padding: 1rem 0.75rem;
+        background: var(--color-surface-alt);
+        border-right: 1px solid var(--color-border);
+        font-family: 'Fira Code', 'Cascadia Code', Consolas, monospace;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--color-text-secondary);
+        text-align: right;
+        user-select: none;
+        overflow-y: auto;
+        min-width: 45px;
+    }
+
+    .line-numbers .line-num {
+        display: block;
+        padding-right: 0.5rem;
+    }
+
+    .line-numbers .line-num.error {
+        background: #fef2f2;
+        color: #dc2626;
+        font-weight: 700;
+        margin-left: -0.75rem;
+        padding-left: 0.75rem;
+        margin-right: -0.75rem;
+        padding-right: 1.25rem;
+        animation: errorPulse 1.5s ease-in-out;
+    }
+
+    [data-theme="dark"] .line-numbers .line-num.error {
+        background: #450a0a;
+        color: #f87171;
+    }
+
+    @keyframes errorPulse {
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.6;
+        }
+    }
+
+    .code-input-wrapper {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+        min-width: 0;
+    }
+
+    .json-textarea {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        padding: 1rem;
+        border: none;
+        background: transparent;
+        color: var(--color-text);
+        font-family: 'Fira Code', 'Cascadia Code', Consolas, monospace;
+        font-size: 13px;
+        line-height: 1.6;
+        resize: none;
+        outline: none;
+        overflow-y: auto;
+        overflow-x: auto;
+        white-space: pre;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .json-textarea::placeholder {
+        color: var(--color-text-secondary);
+        opacity: 0.6;
+    }
+
+    /* Error card clickable styling */
+    .error-card {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        animation: slideIn 0.3s ease;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .error-card:hover {
+        border-color: #f87171;
+        box-shadow: 0 2px 8px rgba(220, 38, 38, 0.15);
+    }
+
+    /* Error Panel Styles */
+    .error-panel {
+        background: var(--color-surface);
+    }
+
+    .errors-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+        min-height: 0;
+    }
+
+    .no-errors {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: var(--color-text-secondary);
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .no-errors .icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .no-errors h3 {
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+    }
+
+    .error-card {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        animation: slideIn 0.3s ease;
+    }
+
+    [data-theme="dark"] .error-card {
+        background: #2d1f1f;
+        border-color: #5c2323;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .error-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.5rem;
+    }
+
+    .error-type {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #dc2626;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    [data-theme="dark"] .error-type {
+        color: #f87171;
+    }
+
+    .error-location {
+        font-size: 0.7rem;
+        color: var(--color-text-secondary);
+        background: var(--color-surface-alt);
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+    }
+
+    .error-message {
+        font-size: 0.85rem;
+        color: var(--color-text);
+        margin-bottom: 0.75rem;
+        line-height: 1.5;
+    }
+
+    .error-preview {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 6px;
+        padding: 0.5rem 0.75rem;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        overflow-x: auto;
+        margin-bottom: 0.75rem;
+    }
+
+    .error-preview .highlight {
+        color: #dc2626;
+        font-weight: 600;
+        text-decoration: underline wavy;
+    }
+
+    /* Success State */
+    .success-card {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 8px;
+        padding: 1.5rem;
+        text-align: center;
+        animation: slideIn 0.3s ease;
+    }
+
+    [data-theme="dark"] .success-card {
+        background: #14532d;
+        border-color: #166534;
+    }
+
+    .success-card .icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .success-card h3 {
+        color: #166534;
+        margin-bottom: 0.5rem;
+    }
+
+    [data-theme="dark"] .success-card h3 {
+        color: #86efac;
+    }
+
+    .success-card p {
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+        padding: 0.5rem 1rem;
+        background: var(--color-surface-alt);
+        border-top: 1px solid var(--color-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .stat-item strong {
+        color: var(--color-text);
+    }
+
+    /* SEO Content */
+    .seo-content {
+        margin-top: 4rem;
+        padding: 3rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 16px;
+        line-height: 1.8;
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .seo-content h2 {
+        font-size: 1.75rem;
+        color: var(--color-text);
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+    }
+
+    .seo-content h3 {
+        font-size: 1.25rem;
+        color: var(--color-text);
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .seo-content p {
+        color: var(--color-text-secondary);
+        margin-bottom: 1.5rem;
+    }
+
+    .seo-content ul {
+        margin-bottom: 1.5rem;
+        padding-left: 1.5rem;
+        list-style-type: none;
+    }
+
+    .seo-content li {
+        color: var(--color-text-secondary);
+        margin-bottom: 0.5rem;
+        position: relative;
+        padding-left: 1.5rem;
+    }
+
+    .seo-content li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--color-success);
+        font-weight: bold;
+    }
+
+    /* Related Tools */
+    .info-section {
+        margin-top: 4rem;
+        text-align: center;
+    }
+
+    .info-section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--color-text);
+    }
+
+    .related-tools {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .related-tool-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        color: var(--color-text);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .related-tool-link:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .related-tool-link svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+    }
+
+    /* Toast Notification */
+    .toast {
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: var(--color-text);
+        color: var(--color-bg);
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 1000;
+    }
+
+    .toast.show {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+
+    /* Fullscreen Preview Modal */
+    .preview-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 2000;
+        padding: 1rem;
+    }
+
+    .preview-modal.show {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .preview-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background: var(--color-surface);
+        border-radius: 8px 8px 0 0;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .preview-modal-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .preview-modal-close {
+        background: transparent;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--color-text-secondary);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        transition: all 0.2s;
+    }
+
+    .preview-modal-close:hover {
+        background: var(--color-surface-alt);
+        color: var(--color-text);
+    }
+
+    .preview-modal-body {
+        flex: 1;
+        background: var(--color-surface);
+        border-radius: 0 0 8px 8px;
+        overflow: hidden;
+        min-height: 0;
+    }
+
+    #monacoPreview {
+        width: 100%;
+        height: 100%;
+    }
+
+    .btn-format {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+
+    .btn-format:hover {
+        filter: brightness(1.1);
+        transform: translateY(-1px);
+    }
+
+    .btn-preview {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        color: white;
+    }
+
+    .btn-preview:hover {
+        filter: brightness(1.1);
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 640px) {
+        .panel-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .panel-actions {
+            width: 100%;
+        }
+
+        .btn-action {
+            flex: 1;
+            justify-content: center;
+        }
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header">
+    <h1>JSON Fixer – Fix Broken JSON Online</h1>
+    <p>Fix broken JSON instantly. Detect syntax errors, repair malformed data, and get valid JSON in seconds.</p>
+</div>
+
+<div class="fixer-container">
+    <!-- Input Panel -->
+    <div class="editor-panel">
+        <div class="panel-header">
+            <span class="panel-title">
+                <svg viewBox="0 0 24 24" width="16" height="16">
+                    <path fill="currentColor"
+                        d="M5,3H7V5H5V10A2,2 0 0,1 3,12A2,2 0 0,1 5,14V19H7V21H5C3.93,20.73 3,20.1 3,19V15A2,2 0 0,0 1,13H0V11H1A2,2 0 0,0 3,9V5A2,2 0 0,1 5,3M19,3A2,2 0 0,1 21,5V9A2,2 0 0,0 23,11H24V13H23A2,2 0 0,0 21,15V19A2,2 0 0,1 19,21H17V19H19V14A2,2 0 0,1 21,12A2,2 0 0,1 19,10V5H17V3H19Z" />
+                </svg>
+                Input JSON
+            </span>
+            <div class="panel-actions">
+                <button class="btn-action btn-secondary" onclick="loadSample()">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C7.13 19 4 15.87 4 12S7.13 5 11 5C12.86 5 14.63 5.75 15.9 7.1L13 10H20V3L17.4 5.6C15.68 3.94 13.39 3 11 3C6.03 3 2 7.03 2 12Z" />
+                    </svg>
+                    Sample
+                </button>
+                <button class="btn-action btn-secondary" onclick="clearInput()">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+                    </svg>
+
+                </button>
+                <button class="btn-action btn-format" onclick="formatJson()">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="M5,3H7V5H5V10A2,2 0 0,1 3,12A2,2 0 0,1 5,14V19H7V21H5C3.93,20.73 3,20.1 3,19V15A2,2 0 0,0 1,13H0V11H1A2,2 0 0,0 3,9V5A2,2 0 0,1 5,3M19,3A2,2 0 0,1 21,5V9A2,2 0 0,0 23,11H24V13H23A2,2 0 0,0 21,15V19A2,2 0 0,1 19,21H17V19H19V14A2,2 0 0,1 21,12A2,2 0 0,1 19,10V5H17V3H19Z" />
+                    </svg>
+                    Format
+                </button>
+                <button class="btn-action btn-preview" onclick="openPreview()">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="M5,5H10V7H7V10H5V5M14,5H19V10H17V7H14V5M17,14H19V19H14V17H17V14M10,17V19H5V14H7V17H10Z" />
+                    </svg>
+                    Preview
+                </button>
+            </div>
+        </div>
+        <div class="editor-area">
+            <div class="code-editor-wrapper">
+                <div class="line-numbers" id="lineNumbers"></div>
+                <div class="code-input-wrapper">
+                    <textarea id="inputJson" class="json-textarea" placeholder='Paste your broken JSON here...
+
+Example:
+{
+  "name": "John",
+  "age": 30,    // trailing comma issue
+}'></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="stats-bar">
+            <span class="stat-item">Lines: <strong id="lineCount">0</strong></span>
+            <span class="stat-item">Characters: <strong id="charCount">0</strong></span>
+        </div>
+    </div>
+
+    <!-- Output/Error Panel -->
+    <div class="editor-panel error-panel">
+        <div class="panel-header">
+            <span class="panel-title">
+                <svg viewBox="0 0 24 24" width="16" height="16">
+                    <path fill="currentColor"
+                        d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+                </svg>
+                <span id="panelTitleText">Errors & Fixes</span>
+            </span>
+            <div class="panel-actions">
+                <button class="btn-action btn-success" id="fixAllBtn" onclick="fixAll()" style="display: none;">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
+                    </svg>
+                    Fix All
+                </button>
+                <button class="btn-action btn-secondary" id="copyBtn" onclick="copyOutput()" style="display: none;">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                    </svg>
+                </button>
+                <button class="btn-action btn-secondary" id="downloadBtn" onclick="downloadOutput()"
+                    style="display: none;">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="errors-list" id="errorsContainer">
+            <div class="no-errors">
+                <div class="icon">📝</div>
+                <h3>Ready to Fix</h3>
+                <p>Paste your JSON in the left panel to detect and fix errors automatically.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Related Tools Section -->
+<div class="info-section">
+    <h2>Related Tools</h2>
+    <div class="related-tools">
+        <a href="/" class="related-tool-link">
+            JSON Formatter
+        </a>
+        <a href="/json-viewer/" class="related-tool-link">
+            <svg viewBox="0 0 24 24">
+                <path fill-rule="evenodd"
+                    d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />
+            </svg>
+            JSON Viewer
+        </a>
+        <a href="/json-schema-validator/" class="related-tool-link">
+            <svg viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
+            </svg>
+            JSON Validator
+        </a>
+        <a href="/json-tree/" class="related-tool-link">
+            <svg viewBox="0 0 24 24">
+                <path fill-rule="evenodd"
+                    d="M3,3H9V7H3V3M15,10H21V14H15V10M15,17H21V21H15V17M13,13H7V18H13V20H7L5,20V9H7V11H13V13Z" />
+            </svg>
+            JSON Tree
+        </a>
+    </div>
+</div>
+
+<!-- SEO Content -->
+<section class="seo-content">
+    <h2>Fix Broken JSON Online – Free JSON Repair Tool</h2>
+    <p>
+        <strong>Quick Summary:</strong> Our JSON Fixer is an intelligent online tool that automatically detects and
+        repairs
+        common JSON syntax errors. Paste your broken JSON, see exactly what's wrong, and fix it with a single click.
+        All processing happens in your browser—your data never leaves your computer.
+    </p>
+
+    <h3>Common JSON Errors We Fix</h3>
+    <ul>
+        <li><strong>Trailing Commas</strong> – Extra commas after the last item in arrays or objects</li>
+        <li><strong>Missing Quotes</strong> – Unquoted keys or values that should be strings</li>
+        <li><strong>Single Quotes</strong> – Converts Python-style single quotes to valid double quotes</li>
+        <li><strong>Unescaped Characters</strong> – Fixes backslashes, newlines, and special characters</li>
+        <li><strong>Mismatched Brackets</strong> – Detects unclosed arrays [ ] and objects { }</li>
+        <li><strong>Invalid Numbers</strong> – Fixes leading zeros and other number format issues</li>
+    </ul>
+
+    <h3>Example of Broken JSON</h3>
+    <pre>
+        {
+          "name": "John"
+          "age": 30,
+          "city": "NY
+        }
+    </pre>
+
+    <h3>Fixed JSON</h3>
+    <pre>
+        {
+            "name": "John",
+            "age": 30,
+            "city": "NY"
+        }
+    </pre>
+
+    <h3>Fix JSON Syntax Errors</h3>
+    <p>
+    A JSON syntax error happens when your JSON is not written in the strict format required by the JSON specification.
+    This includes missing commas, unquoted keys, invalid numbers, broken strings, and mismatched brackets.
+    If your code editor, API, or browser says <strong>“JSON syntax error”</strong>, paste the JSON here and this tool will
+    detect and repair it instantly.
+    </p>
+
+    <h3>Fix Invalid JSON</h3>
+    <p>
+    Invalid JSON means your data cannot be parsed by JSON.parse() or any JSON validator.
+    This usually happens because of trailing commas, single quotes, missing quotes, or Python-style values like
+    <code>True</code>, <code>False</code>, and <code>None</code>.
+    Our JSON Fixer converts invalid JSON into valid, standards-compliant JSON automatically.
+    </p>
+
+    <h3>How This JSON Repair Tool Works</h3>
+    <p>
+        Simply paste your malformed JSON into the input panel. Our tool uses intelligent parsing to detect syntax errors
+        and displays them with precise line and column numbers. You'll see a preview of the problematic code and a clear
+        description of the issue. Click "Fix All" to automatically repair all detected errors, or fix them one by one.
+    </p>
+
+    <h3>Why Use Our JSON Fixer?</h3>
+    <ul>
+        <li><strong>100% Client-Side</strong> – Your JSON is processed locally. We never see or store your data.</li>
+        <li><strong>Instant Results</strong> – Real-time error detection and fixes as you type.</li>
+        <li><strong>Developer-Friendly</strong> – Precise error locations with line and column numbers.</li>
+        <li><strong>Multiple Fix Types</strong> – Handles trailing commas, quotes, brackets, and more.</li>
+        <li><strong>Copy & Download</strong> – Get your fixed JSON instantly in any format.</li>
+    </ul>
+
+    <h3>When Should You Use This Tool?</h3>
+    <ul>
+        <li>When you receive a malformed API response that won't parse</li>
+        <li>When copying JSON from documentation that uses single quotes</li>
+        <li>When debugging configuration files with trailing commas</li>
+        <li>When manually editing JSON and introducing syntax errors</li>
+        <li>When converting Python dictionaries that use True/False/None</li>
+    </ul>
+</section>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- Fullscreen Preview Modal -->
+<div id="previewModal" class="preview-modal">
+    <div class="preview-modal-header">
+        <span class="preview-modal-title">
+            <svg viewBox="0 0 24 24" width="20" height="20">
+                <path fill="currentColor"
+                    d="M5,3H7V5H5V10A2,2 0 0,1 3,12A2,2 0 0,1 5,14V19H7V21H5C3.93,20.73 3,20.1 3,19V15A2,2 0 0,0 1,13H0V11H1A2,2 0 0,0 3,9V5A2,2 0 0,1 5,3M19,3A2,2 0 0,1 21,5V9A2,2 0 0,0 23,11H24V13H23A2,2 0 0,0 21,15V19A2,2 0 0,1 19,21H17V19H19V14A2,2 0 0,1 21,12A2,2 0 0,1 19,10V5H17V3H19Z" />
+            </svg>
+            JSON Preview
+        </span>
+        <button class="preview-modal-close" onclick="closePreview()">&times;</button>
+    </div>
+    <div class="preview-modal-body">
+        <div id="monacoPreview"></div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script>
+    (function () {
+        const inputTextarea = document.getElementById('inputJson');
+        const errorsContainer = document.getElementById('errorsContainer');
+        const panelTitleText = document.getElementById('panelTitleText');
+        const fixAllBtn = document.getElementById('fixAllBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const lineCount = document.getElementById('lineCount');
+        const charCount = document.getElementById('charCount');
+        const lineNumbersContainer = document.getElementById('lineNumbers');
+
+        let currentErrors = [];
+        let fixedJson = '';
+        let highlightedLines = [];
+
+        // Sample broken JSON
+        const sampleJson = `{
+  "name": "John Doe",
+  "age": 30,
+  'email': 'john@example.com',
+  "active": True,
+  "tags": ["developer", "designer",],
+  "address": {
+    "city": "New York"
+    "country": "USA"
+  }
+}`;
+
+        // Render line numbers
+        function renderLineNumbers() {
+            const text = inputTextarea.value;
+            const lines = text.split('\n');
+            let html = '';
+
+            for (let i = 1; i <= lines.length; i++) {
+                const isError = highlightedLines.includes(i);
+                html += `<span class="line-num${isError ? ' error' : ''}">${i}</span>`;
+            }
+
+            lineNumbersContainer.innerHTML = html;
+        }
+
+        // Sync scroll between textarea and line numbers
+        function syncScroll() {
+            lineNumbersContainer.scrollTop = inputTextarea.scrollTop;
+        }
+
+        // Highlight a specific line
+        function highlightLine(lineNum) {
+            highlightedLines = [lineNum];
+            renderLineNumbers();
+
+            // Scroll to the error line in textarea
+            const text = inputTextarea.value;
+            const lines = text.split('\n');
+            let charPos = 0;
+            for (let i = 0; i < lineNum - 1 && i < lines.length; i++) {
+                charPos += lines[i].length + 1; // +1 for newline
+            }
+
+            // Set cursor position
+            inputTextarea.focus();
+            inputTextarea.setSelectionRange(charPos, charPos + (lines[lineNum - 1] || '').length);
+
+            // Scroll to make the line visible
+            const lineHeight = 20.8; // ~13px font * 1.6 line-height
+            const scrollPos = (lineNum - 3) * lineHeight; // Show 3 lines before error
+            inputTextarea.scrollTop = Math.max(0, scrollPos);
+            lineNumbersContainer.scrollTop = inputTextarea.scrollTop;
+        }
+
+        // Clear highlights
+        function clearHighlights() {
+            highlightedLines = [];
+            renderLineNumbers();
+        }
+
+        // Update stats
+        function updateStats() {
+            const text = inputTextarea.value;
+            lineCount.textContent = text ? text.split('\n').length : 0;
+            charCount.textContent = text.length.toLocaleString();
+            renderLineNumbers();
+        }
+
+        // Parse and show errors
+        function analyzeJson() {
+            const input = inputTextarea.value.trim();
+
+            if (!input) {
+                showEmptyState();
+                return;
+            }
+
+            currentErrors = [];
+
+            // Try to parse directly first
+            try {
+                JSON.parse(input);
+                showSuccess(input);
+                return;
+            } catch (e) {
+                // Continue with error detection
+            }
+
+            // Detect common errors
+            detectErrors(input);
+
+            if (currentErrors.length > 0) {
+                showErrors();
+            } else {
+                // Generic parse error
+                try {
+                    JSON.parse(input);
+                } catch (e) {
+                    currentErrors.push({
+                        type: 'Syntax Error',
+                        message: e.message,
+                        line: extractLineNumber(e.message),
+                        fixable: false
+                    });
+                    showErrors();
+                }
+            }
+        }
+
+        function extractLineNumber(message) {
+            const match = message.match(/position (\d+)/);
+            if (match) {
+                const pos = parseInt(match[1]);
+                const text = inputTextarea.value.substring(0, pos);
+                return text.split('\n').length;
+            }
+            return null;
+        }
+
+        function detectErrors(input) {
+            // Check for trailing commas
+            const trailingCommaRegex = /,(\s*[\}\]])/g;
+            let match;
+            while ((match = trailingCommaRegex.exec(input)) !== null) {
+                const line = input.substring(0, match.index).split('\n').length;
+                currentErrors.push({
+                    type: 'Trailing Comma',
+                    message: 'Remove the trailing comma before closing bracket',
+                    line: line,
+                    fixable: true,
+                    fix: () => input.replace(trailingCommaRegex, '$1')
+                });
+                break; // Only show one of this type
+            }
+
+            // Check for single quotes - find the first occurrence line
+            const singleQuoteMatch = input.match(/(?<!\\)'/);
+            if (singleQuoteMatch) {
+                const singleQuoteLine = input.substring(0, singleQuoteMatch.index).split('\n').length;
+                currentErrors.push({
+                    type: 'Single Quotes',
+                    message: 'JSON requires double quotes. Single quotes are not valid.',
+                    line: singleQuoteLine,
+                    fixable: true,
+                    fix: () => fixSingleQuotes(input)
+                });
+            }
+
+            // Check for Python True/False/None - find the first occurrence line
+            const pythonMatch = input.match(/:\s*(True|False|None)\b/);
+            if (pythonMatch) {
+                const pythonLine = input.substring(0, pythonMatch.index).split('\n').length;
+                currentErrors.push({
+                    type: 'Python Values',
+                    message: 'Found Python-style True/False/None. Should be lowercase or null.',
+                    line: pythonLine,
+                    fixable: true,
+                    fix: () => input
+                        .replace(/:\s*True\b/g, ': true')
+                        .replace(/:\s*False\b/g, ': false')
+                        .replace(/:\s*None\b/g, ': null')
+                });
+            }
+
+            // Check for Python datetime objects
+            const datetimeMatch = input.match(/datetime\.datetime\s*\(/);
+            if (datetimeMatch) {
+                const datetimeLine = input.substring(0, datetimeMatch.index).split('\n').length;
+                currentErrors.push({
+                    type: 'Python Datetime',
+                    message: `Found Python datetime.datetime() on line ${datetimeLine}. Will convert to ISO 8601 string.`,
+                    line: datetimeLine,
+                    fixable: true,
+                    fix: () => fixPythonDatetime(input)
+                });
+            }
+
+            // Check for missing commas - improved detection for numbers, strings, objects, arrays
+            const missingCommaMatch = input.match(/(["\d\}\]elsu])\s*\n(\s*")/);
+
+            if (missingCommaMatch) {
+                const missingCommaLine = input.substring(0, missingCommaMatch.index).split('\n').length;
+                currentErrors.push({
+                    type: 'Missing Comma',
+                    message: `Missing comma after value on line ${missingCommaLine}`,
+                    line: missingCommaLine,
+                    fixable: true,
+                    fix: () => input.replace(/(["\d\}\]elsu])\s*\n(\s*")/g, '$1,\n$2')
+                });
+            }
+
+            // Check for unquoted keys (simplified)
+            const unquotedKeyRegex = /^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:/m;
+            const unquotedKeyMatch = input.match(unquotedKeyRegex);
+            if (unquotedKeyMatch && !input.includes('"' + unquotedKeyMatch[1] + '"')) {
+                const unquotedLine = input.substring(0, unquotedKeyMatch.index).split('\n').length;
+                currentErrors.push({
+                    type: 'Unquoted Key',
+                    message: `Key "${unquotedKeyMatch[1]}" should be wrapped in double quotes`,
+                    line: unquotedLine,
+                    fixable: true,
+                    fix: () => input.replace(/^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:/gm, '"$1":')
+                });
+            }
+
+            // Check for missing closing quotes on string values
+            // Detects: "key": "value, or "key": "value\n (missing closing quote)
+            // The string content should not contain a closing quote before comma/newline
+            const lines = input.split('\n');
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                // Check for pattern: ": "something, or ": "something at end of line
+                // where there's no closing quote before the comma or end
+                const missingQuoteMatch = line.match(/:\s*"([^"]+),/);
+                if (missingQuoteMatch) {
+                    // Verify it's actually missing (not a value like "a,b")
+                    const afterColon = line.substring(line.indexOf('": "') + 3);
+                    const quoteCount = (afterColon.match(/"/g) || []).length;
+                    // If odd number of quotes after the key's quote, there's a mismatch
+                    if (quoteCount % 2 !== 0) {
+                        currentErrors.push({
+                            type: 'Missing Quote',
+                            message: `Missing closing quote before comma on line ${i + 1}`,
+                            line: i + 1,
+                            fixable: true,
+                            fix: () => {
+                                // Find strings followed by comma without closing quote and fix them
+                                return input.replace(/(:\s*")([^"]+)(,\s*\n)/g, '$1$2"$3');
+                            }
+                        });
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Convert Python datetime objects to ISO 8601 strings
+        function fixPythonDatetime(str) {
+            // Match datetime.datetime(year, month, day, hour, min, sec, microsec, tzinfo=...)
+            return str.replace(
+                /datetime\.datetime\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*(\d+))?(?:\s*,\s*(\d+))?(?:\s*,\s*(\d+))?(?:\s*,\s*(\d+))?(?:\s*,\s*tzinfo\s*=\s*[^)]+)?\s*\)/g,
+                function (match, year, month, day, hour, min, sec, microsec) {
+                    const y = year.padStart(4, '0');
+                    const m = month.padStart(2, '0');
+                    const d = day.padStart(2, '0');
+                    const h = (hour || '0').padStart(2, '0');
+                    const mi = (min || '0').padStart(2, '0');
+                    const s = (sec || '0').padStart(2, '0');
+
+                    let dateStr = `${y}-${m}-${d}T${h}:${mi}:${s}`;
+
+                    // Add milliseconds if microseconds provided
+                    if (microsec) {
+                        const ms = Math.floor(parseInt(microsec) / 1000).toString().padStart(3, '0');
+                        dateStr += `.${ms}`;
+                    }
+
+                    dateStr += 'Z';
+                    return `"${dateStr}"`;
+                }
+            ).replace(
+                // Also handle datetime.date(year, month, day)
+                /datetime\.date\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/g,
+                function (match, year, month, day) {
+                    const y = year.padStart(4, '0');
+                    const m = month.padStart(2, '0');
+                    const d = day.padStart(2, '0');
+                    return `"${y}-${m}-${d}"`;
+                }
+            );
+        }
+
+
+        function fixSingleQuotes(str) {
+            let result = str;
+            let output = '';
+            let inString = false;
+            let stringChar = null;
+
+            for (let i = 0; i < result.length; i++) {
+                const char = result[i];
+                const prevChar = i > 0 ? result[i - 1] : '';
+
+                if (!inString) {
+                    if (char === '"' || char === "'") {
+                        inString = true;
+                        stringChar = char;
+                        output += '"';
+                    } else {
+                        output += char;
+                    }
+                } else {
+                    if (char === stringChar && prevChar !== '\\') {
+                        inString = false;
+                        output += '"';
+                        stringChar = null;
+                    } else if (char === '"' && stringChar === "'") {
+                        output += '\\"';
+                    } else {
+                        output += char;
+                    }
+                }
+            }
+
+            return output;
+        }
+
+        function showEmptyState() {
+            errorsContainer.innerHTML = `
+            <div class="no-errors">
+                <div class="icon">📝</div>
+                <h3>Ready to Fix</h3>
+                <p>Paste your JSON in the left panel to detect and fix errors automatically.</p>
+            </div>
+        `;
+            panelTitleText.textContent = 'Errors & Fixes';
+            fixAllBtn.style.display = 'none';
+            copyBtn.style.display = 'none';
+            downloadBtn.style.display = 'none';
+            fixedJson = '';
+        }
+
+        function showSuccess(json) {
+            // Clear all error highlights when JSON is valid
+            clearHighlights();
+
+            try {
+                fixedJson = JSON.stringify(JSON.parse(json), null, 2);
+            } catch (e) {
+                fixedJson = json;
+            }
+
+            errorsContainer.innerHTML = `
+            <div class="success-card">
+                <div class="icon">✅</div>
+                <h3>Valid JSON!</h3>
+                <p>Your JSON is valid and ready to use. Copy or download it using the buttons above.</p>
+            </div>
+        `;
+            panelTitleText.textContent = 'Valid JSON';
+            fixAllBtn.style.display = 'none';
+            copyBtn.style.display = 'inline-flex';
+            downloadBtn.style.display = 'inline-flex';
+        }
+
+        function showErrors() {
+            let html = '';
+
+            // Auto-highlight all error lines on the left side
+            highlightedLines = currentErrors
+                .filter(e => e.line)
+                .map(e => e.line);
+            renderLineNumbers();
+
+            currentErrors.forEach((error, index) => {
+                html += `
+                <div class="error-card" onclick="goToError(${index})" data-line="${error.line || ''}">
+                    <div class="error-header">
+                        <span class="error-type">
+                            <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/></svg>
+                            ${error.type}
+                        </span>
+                        ${error.line ? `<span class="error-location">Line ${error.line}</span>` : ''}
+                    </div>
+                    <div class="error-message">${error.message}</div>
+                    ${error.fixable ? `<button class="btn-action btn-success" onclick="event.stopPropagation(); applyFix(${index})">
+                        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>
+                        Fix This
+                    </button>` : ''}
+                </div>
+            `;
+            });
+
+            errorsContainer.innerHTML = html;
+            panelTitleText.textContent = `${currentErrors.length} Error${currentErrors.length > 1 ? 's' : ''} Found`;
+
+            const hasFixable = currentErrors.some(e => e.fixable);
+            fixAllBtn.style.display = hasFixable ? 'inline-flex' : 'none';
+            copyBtn.style.display = 'none';
+            downloadBtn.style.display = 'none';
+        }
+
+        window.applyFix = function (index) {
+            const error = currentErrors[index];
+            if (error && error.fix) {
+                let fixed = error.fix();
+                inputTextarea.value = fixed;
+                updateStats();
+                analyzeJson();
+                showToast('Fix applied!');
+            }
+        };
+
+        window.fixAll = function () {
+            let input = inputTextarea.value;
+
+            // Apply all fixes in order
+            // 1. Fix Python values
+            input = input
+                .replace(/:\s*True\b/g, ': true')
+                .replace(/:\s*False\b/g, ': false')
+                .replace(/:\s*None\b/g, ': null');
+
+            // 2. Fix single quotes
+            input = fixSingleQuotes(input);
+
+            // 3. Fix trailing commas
+            input = input.replace(/,(\s*[\}\]])/g, '$1');
+
+            // 4. Fix missing commas
+            input = input.replace(/(")\s*\n(\s*")/g, '$1,\n$2');
+
+            // 5. Try to format if valid
+            try {
+                const parsed = JSON.parse(input);
+                input = JSON.stringify(parsed, null, 2);
+            } catch (e) {
+                // Keep as-is if still invalid
+            }
+
+            inputTextarea.value = input;
+            inputTextarea.scrollTop = 0;
+            lineNumbersContainer.scrollTop = 0;
+            updateStats();
+            analyzeJson();
+            showToast('All fixes applied!');
+        };
+
+        window.loadSample = function () {
+            inputTextarea.value = sampleJson;
+            inputTextarea.scrollTop = 0;
+            lineNumbersContainer.scrollTop = 0;
+            updateStats();
+            analyzeJson();
+            showToast('Sample loaded');
+        };
+
+        window.clearInput = function () {
+            inputTextarea.value = '';
+            updateStats();
+            showEmptyState();
+            showToast('Cleared');
+        };
+
+        window.copyOutput = function () {
+            navigator.clipboard.writeText(fixedJson || inputTextarea.value);
+            showToast('Copied to clipboard!');
+        };
+
+        window.downloadOutput = function () {
+            const content = fixedJson || inputTextarea.value;
+            const blob = new Blob([content], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'fixed.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Downloaded!');
+        };
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // Event listeners
+        inputTextarea.addEventListener('input', () => {
+            clearHighlights();
+            updateStats();
+            analyzeJson();
+            // Always scroll to top to show beginning of JSON
+            inputTextarea.scrollTop = 0;
+            lineNumbersContainer.scrollTop = 0;
+        });
+
+        // Scroll to top when user pastes content
+        inputTextarea.addEventListener('paste', () => {
+            // Immediate reset
+            inputTextarea.scrollTop = 0;
+            lineNumbersContainer.scrollTop = 0;
+            // Delayed reset to catch browser updates
+            setTimeout(() => {
+                inputTextarea.scrollTop = 0;
+                lineNumbersContainer.scrollTop = 0;
+            }, 10);
+            setTimeout(() => {
+                inputTextarea.scrollTop = 0;
+                lineNumbersContainer.scrollTop = 0;
+            }, 100);
+        });
+
+        // Sync scroll between textarea and line numbers
+        inputTextarea.addEventListener('scroll', syncScroll);
+
+        // Go to error line (called from error card click)
+        window.goToError = function (index) {
+            const error = currentErrors[index];
+            if (error && error.line) {
+                highlightLine(error.line);
+                showToast(`Jumped to line ${error.line}`);
+            }
+        };
+
+        // Initialize
+        updateStats();
+        renderLineNumbers();
+
+        // Monaco editor instance
+        let monacoEditor = null;
+        let monacoLoaded = false;
+
+        // Format JSON function
+        window.formatJson = function () {
+            const input = inputTextarea.value.trim();
+            if (!input) {
+                showToast('No JSON to format');
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(input);
+                const formatted = JSON.stringify(parsed, null, 2);
+                inputTextarea.value = formatted;
+                inputTextarea.scrollTop = 0; // Reset scroll to top
+                lineNumbersContainer.scrollTop = 0;
+                updateStats();
+                analyzeJson();
+                showToast('JSON formatted!');
+            } catch (e) {
+                showToast('Fix errors first to format');
+            }
+        };
+
+        // Open fullscreen preview with Monaco
+        window.openPreview = function () {
+            const input = inputTextarea.value.trim() || fixedJson;
+            if (!input) {
+                showToast('No JSON to preview');
+                return;
+            }
+
+            const modal = document.getElementById('previewModal');
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+
+            // Initialize Monaco if not loaded
+            if (!monacoLoaded) {
+                require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+                require(['vs/editor/editor.main'], function () {
+                    monacoLoaded = true;
+                    createMonacoEditor(input);
+                });
+            } else {
+                // Update existing editor
+                if (monacoEditor) {
+                    monacoEditor.setValue(input);
+                } else {
+                    createMonacoEditor(input);
+                }
+            }
+        };
+
+        function createMonacoEditor(content) {
+            const container = document.getElementById('monacoPreview');
+            container.innerHTML = '';
+
+            // Try to format the content if valid
+            let displayContent = content;
+            try {
+                displayContent = JSON.stringify(JSON.parse(content), null, 2);
+            } catch (e) {
+                // Keep original if not valid JSON
+            }
+
+            const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'vs-dark' : 'vs';
+
+            monacoEditor = monaco.editor.create(container, {
+                value: displayContent,
+                language: 'json',
+                theme: theme,
+                readOnly: true,
+                automaticLayout: true,
+                minimap: { enabled: true },
+                fontSize: 14,
+                lineNumbers: 'on',
+                scrollBeyondLastLine: false,
+                wordWrap: 'on',
+                folding: true,
+                renderWhitespace: 'none',
+                tabSize: 2
+            });
+        }
+
+        // Close preview
+        window.closePreview = function () {
+            const modal = document.getElementById('previewModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        };
+
+        // Close on ESC key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closePreview();
+            }
+        });
+    })();
+</script>
+<!--@end:extra_js-->

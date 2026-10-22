@@ -1,0 +1,1588 @@
+<!--@block:title-->OpenAPI & Swagger Builder – Create API Documentation Online (Free)<!--@end:title-->
+<!--@block:meta_title-->OpenAPI Builder Online - Free OpenAPI & Swagger Doc Generator<!--@end:meta_title-->
+<!--@block:meta_description-->Free online OpenAPI builder. Create Swagger documentation via a simple form. Define
+endpoints, models, and parameters easily. No signup required.<!--@end:meta_description-->
+<!--@block:meta_keywords-->openapi builder, swagger generator, create openapi spec, api documentation tool, swagger editor
+online<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/openapi-builder/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "OpenAPI Builder",
+  "description": "Free online tool to create OpenAPI and Swagger documentation via a form-based interface.",
+  "url": "https://jsonformatterspro.com/openapi-builder/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is this OpenAPI Builder free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. This OpenAPI Builder is completely free, runs entirely in the browser, and does not require signup or account creation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between Swagger and OpenAPI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "OpenAPI is the specification standard used to describe REST APIs, while Swagger refers to a suite of tools built around the OpenAPI specification, such as Swagger UI. This builder generates OpenAPI 3.x compliant specifications."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I import an existing OpenAPI or Swagger file?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. You can import an existing OpenAPI or Swagger JSON specification using the Import Spec feature. The builder will parse the file and populate the editor automatically."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What formats does this OpenAPI Builder export?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This tool exports OpenAPI specifications in both JSON and YAML formats, fully compatible with Swagger UI, Postman, Redoc, and API gateways."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When should I use this OpenAPI Builder instead of a Swagger Viewer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use this OpenAPI Builder when you need to create or modify an API specification. If you already have a completed OpenAPI or Swagger file and only want to view or explore it, a Swagger Viewer is more appropriate."
+      }
+    }
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<!-- Swagger UI CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui.min.css">
+<!-- Prism.js Tomorrow Theme for code highlighting -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<style>
+    :root {
+        --builder-primary: #f97316;
+        --builder-primary-hover: #ea580c;
+        --builder-bg-alt: var(--color-surface-alt);
+    }
+
+    .builder-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        min-height: calc(100vh - 80px);
+        background: var(--color-bg);
+    }
+
+    /* Left Panel: Form Editor */
+    .editor-pane {
+        padding: 2rem;
+        border-right: 1px solid var(--color-border);
+        overflow-y: auto;
+        max-height: calc(100vh - 80px);
+    }
+
+    /* Right Panel: Preview */
+    .preview-pane {
+        background: var(--color-surface);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        height: calc(100vh - 80px);
+    }
+
+    .preview-tabs {
+        display: flex;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+        padding: 0 1rem;
+    }
+
+    .preview-tab {
+        padding: 1rem 1.5rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+    }
+
+    .preview-tab.active {
+        color: var(--builder-primary);
+        border-bottom-color: var(--builder-primary);
+    }
+
+    .preview-content {
+        flex: 1;
+        overflow-y: auto;
+        position: relative;
+    }
+
+    .preview-content-item {
+        display: none;
+        height: 100%;
+    }
+
+    .preview-content-item.active {
+        display: block;
+    }
+
+    /* Form Styles */
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--color-text);
+    }
+
+    .form-section {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 12px var(--color-shadow);
+    }
+
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        transition: all 0.2s;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+        outline: none;
+        border-color: var(--builder-primary);
+        box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    }
+
+    /* Operations / Paths List */
+    .op-item {
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+
+    .op-header {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .method-tag {
+        padding: 0.25rem 0.6rem;
+        font-size: 0.75rem;
+        font-weight: 800;
+        border-radius: 4px;
+        color: white;
+        text-transform: uppercase;
+    }
+
+    .method-get {
+        background: #61affe;
+    }
+
+    .method-post {
+        background: #49cc90;
+    }
+
+    .method-put {
+        background: #fca130;
+    }
+
+    .method-delete {
+        background: #f93e3e;
+    }
+
+    .method-patch {
+        background: #50e3c2;
+    }
+
+    .btn-add {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1.25rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        background: transparent;
+        border: 2px dashed var(--color-border);
+        color: var(--color-text-secondary);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-add:hover {
+        border-color: var(--builder-primary);
+        color: var(--builder-primary);
+        background: rgba(249, 115, 22, 0.05);
+    }
+
+    .btn-remove {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        color: #ef4444;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+    }
+
+    /* JSON/YAML Preview */
+    .preview-code-container {
+        position: relative;
+        height: 100%;
+        overflow: hidden;
+        background: #1e1e2e;
+    }
+
+    #spec-code-preview {
+        padding: 1rem;
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin: 0;
+        background: transparent !important;
+        height: 100%;
+        overflow: auto;
+    }
+
+    #spec-edit-area {
+        width: 100%;
+        height: 100%;
+        padding: 1rem;
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        background: #1e1e2e;
+        color: #cdd6f4;
+        border: none;
+        resize: none;
+        display: none;
+        outline: none;
+    }
+
+    .copy-btn {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-text {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border-radius: 8px;
+        border: 1px solid var(--color-border);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .btn-text:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+
+    /* Swagger UI Overrides */
+    .swagger-ui .topbar {
+        display: none;
+    }
+
+    .swagger-ui .info {
+        margin: 2rem 0;
+    }
+
+    #swagger-ui {
+        min-height: 500px;
+    }
+
+    @media (max-width: 1024px) {
+        .builder-container {
+            grid-template-columns: 1fr;
+        }
+
+        .editor-pane,
+        .preview-pane {
+            height: auto;
+            max-height: none;
+        }
+
+        .preview-pane {
+            min-height: 600px;
+        }
+    }
+
+    /* SEO Utilities */
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    /* SEO Section */
+    .seo-section {
+        max-width: 1000px;
+        margin: 4rem auto;
+        padding: 0 2rem;
+        color: var(--color-text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.7;
+    }
+
+    .seo-section h2 {
+        font-size: 1.8rem;
+        color: var(--color-text);
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .seo-section h3 {
+        font-size: 1.4rem;
+        color: var(--color-text);
+        margin: 2.5rem 0 1rem;
+    }
+
+    .faq-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .faq-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        padding: 0;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px var(--color-shadow);
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .faq-header {
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--color-surface);
+        transition: background 0.2s;
+    }
+
+    .faq-card:hover .faq-header {
+        background: var(--color-surface-alt);
+    }
+
+    .faq-header h4 {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--color-text);
+    }
+
+    .faq-icon {
+        width: 20px;
+        height: 20px;
+        transition: transform 0.3s;
+        color: var(--color-text-secondary);
+    }
+
+    .faq-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out, padding 0.3s;
+        padding: 0 1.5rem;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: var(--color-text-secondary);
+    }
+
+    .faq-card.active .faq-content {
+        max-height: 300px;
+        padding: 0 1.5rem 1.5rem;
+    }
+
+    .faq-card.active .faq-icon {
+        transform: rotate(180deg);
+        color: var(--builder-primary);
+    }
+
+    /* Recommendation Cards */
+    .recommendation-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin: 3rem 0;
+    }
+
+    .recommendation-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        padding: 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px var(--color-shadow);
+        transition: transform 0.2s;
+    }
+
+    .recommendation-card:hover {
+        transform: translateY(-4px);
+    }
+
+    .recommendation-card h2 {
+        font-size: 1.35rem !important;
+        text-align: left !important;
+        margin-bottom: 1.5rem !important;
+        color: var(--builder-primary) !important;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .recommendation-card ul {
+        padding-left: 1.25rem;
+        margin: 0;
+    }
+
+    .recommendation-card li {
+        margin-bottom: 0.75rem;
+        color: var(--color-text-secondary);
+        line-height: 1.5;
+    }
+
+    .recommendation-btn-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .recommendation-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        background: var(--builder-primary);
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+    }
+
+    .recommendation-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(249, 115, 22, 0.3);
+        color: white;
+        background: #ea580c;
+    }
+
+    @media (max-width: 991px) {
+        .recommendation-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .seo-section {
+            padding: 0 1.25rem;
+            margin: 3rem auto;
+        }
+
+        .seo-section h2 {
+            font-size: 1.5rem;
+        }
+    }
+
+    /* Comparison Section Styling */
+    .comparison-box {
+        background: var(--color-surface-alt);
+        border-left: 4px solid var(--builder-primary);
+        padding: 1.5rem 2rem;
+        border-radius: 0 12px 12px 0;
+        margin: 2rem 0;
+    }
+
+    .comparison-box h3 {
+        margin-top: 0 !important;
+        color: var(--color-text) !important;
+        font-size: 1.25rem !important;
+    }
+
+    .comparison-box p {
+        margin-bottom: 0 !important;
+        line-height: 1.7;
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<section class="sr-only">
+    <h1 class="sr-only">OpenAPI & Swagger Specification Builder — Create API Documentation Online</h1>
+    <p>
+        The OpenAPI & Swagger Specification Builder is a free, browser-based tool that lets developers
+        create OpenAPI (Swagger) specifications using a no-code form interface.
+        It generates valid OpenAPI JSON or YAML files that can be used with Swagger UI,
+        Postman, API gateways, and code generators.
+    </p>
+</section>
+<div class="builder-container">
+    <!-- Editor Pane -->
+    <div class="editor-pane">
+        <div class="section-title" style="justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="width:24px;height:24px">
+                    <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                </svg>
+                OpenAPI Spec Builder
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button onclick="loadTemplate('petstore')" class="btn-text"
+                    style="background: var(--color-surface-alt); color: var(--color-text);">Petstore Sample</button>
+                <button onclick="openImportModal()" class="btn-text"
+                    style="background: var(--color-surface-alt); color: var(--color-text);">Import Spec</button>
+            </div>
+        </div>
+
+        <!-- General Info Section -->
+        <div class="form-section">
+            <h3 class="form-label" style="font-size: 1.1rem; margin-bottom: 1rem;">API Information</h3>
+            <div class="form-group">
+                <label class="form-label">API Title</label>
+                <input type="text" id="api-title" class="form-input" placeholder="e.g. My Awesome API" value="My API"
+                    oninput="updateSpec()">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea id="api-description" class="form-textarea" rows="3" placeholder="What does this API do?"
+                    oninput="updateSpec()">API Description</textarea>
+            </div>
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label class="form-label">Version</label>
+                    <input type="text" id="api-version" class="form-input" placeholder="1.0.0" value="1.0.0"
+                        oninput="updateSpec()">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Format</label>
+                    <select id="output-format" class="form-select" onchange="updateSpec()">
+                        <option value="json">JSON</option>
+                        <option value="yaml">YAML</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Servers Section -->
+        <div class="form-section">
+            <h3 class="form-label" style="font-size: 1.1rem; margin-bottom: 1rem;">Servers</h3>
+            <div id="servers-list">
+                <!-- Servers will be added here -->
+            </div>
+            <button class="btn-add" onclick="addServer()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    style="width:14px;height:14px">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                Add Server URL
+            </button>
+        </div>
+
+        <!-- Paths Section -->
+        <div class="form-section">
+            <h3 class="form-label" style="font-size: 1.1rem; margin-bottom: 1rem;">Endpoints (Paths)</h3>
+            <div id="paths-list">
+                <!-- Paths will be added here -->
+            </div>
+            <button class="btn-add" onclick="addPath()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    style="width:14px;height:14px">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                Add New Endpoint
+            </button>
+        </div>
+
+        <!-- Security Section -->
+        <div class="form-section">
+            <h3 class="form-label" style="font-size: 1.1rem; margin-bottom: 1rem;">Security Schemes</h3>
+            <div id="security-list">
+                <!-- Security schemes will be added here -->
+            </div>
+            <button class="btn-add" onclick="addSecurityScheme()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    style="width:14px;height:14px">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                Add Security Scheme
+            </button>
+        </div>
+
+        <!-- Danger Zone -->
+        <div style="margin-top: 3rem; padding: 1.5rem; border: 1px dashed #ef4444; border-radius: 12px; opacity: 0.7;">
+            <p style="font-size: 0.85rem; color: #ef4444; margin-bottom: 1rem;"><strong>Danger Zone:</strong> This will
+                clear all your progress and reset the editor to defaults.</p>
+            <button onclick="resetEditor()"
+                style="background: #ef4444; color: white; border: none; padding: 0.6rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; width: 100%;">Reset
+                Editor</button>
+        </div>
+    </div>
+
+    <!-- Preview Pane -->
+    <div class="preview-pane">
+        <div class="preview-tabs">
+            <div class="preview-tab active" onclick="switchPreviewTab('doc')">Documentation</div>
+            <div class="preview-tab" onclick="switchPreviewTab('code')">Specification Code</div>
+        </div>
+        <div class="preview-content">
+            <!-- Documentation Preview -->
+            <div class="preview-content-item active" id="tab-doc">
+                <div id="swagger-ui"></div>
+            </div>
+            <!-- Code Preview -->
+            <div class="preview-content-item" id="tab-code">
+                <div class="preview-actions"
+                    style="position: absolute; top: 1rem; right: 1rem; z-index: 10; display: flex; gap: 0.5rem;">
+                    <button class="copy-btn" id="edit-btn" title="Edit Specification"
+                        style="position: static; background: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.4);"
+                        onclick="toggleEditMode()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            style="width:18px;height:18px">
+                            <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                        </svg>
+                    </button>
+                    <button class="copy-btn" style="position: static;" onclick="copySpec()" title="Copy Code">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            style="width:18px;height:18px">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
+                    <button class="copy-btn" style="position: static; background: var(--builder-primary);"
+                        onclick="downloadSpec()" title="Download Specification">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            style="width:18px;height:18px">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="preview-code-container">
+                    <pre id="spec-code-preview"><code id="spec-code-block" class="language-json"></code></pre>
+                    <textarea id="spec-edit-area" spellcheck="false"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SEO Section -->
+<section class="seo-section">
+    <div class="recommendation-grid">
+        <div class="recommendation-card">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    style="width:20px;height:20px">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                When to Use This OpenAPI Builder
+            </h2>
+            <ul>
+                <li>Create a new OpenAPI or Swagger specification from scratch</li>
+                <li>Generate API documentation without writing JSON or YAML manually</li>
+                <li>Prototype REST APIs before backend implementation</li>
+                <li>Produce Swagger files for Swagger UI, Postman, or API gateways</li>
+            </ul>
+            <div class="recommendation-btn-container">
+                <a href="#api-title" class="recommendation-btn"
+                    style="background: var(--color-text); box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        style="width:18px;height:18px">
+                        <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                    </svg>
+                    Start Designing
+                </a>
+            </div>
+        </div>
+
+        <div class="recommendation-card">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    style="width:20px;height:20px">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                When to Use a Swagger Viewer Instead
+            </h2>
+            <ul>
+                <li>You already have an OpenAPI or Swagger file</li>
+                <li>You want to view or test an existing API specification</li>
+                <li>You need an interactive Swagger UI to explore endpoints</li>
+            </ul>
+            <div class="recommendation-btn-container" style="gap: 1rem;">
+                <a href="/swagger-viewer/" class="recommendation-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        style="width:18px;height:18px">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    Swagger Viewer
+                </a>
+                <a href="/redoc-viewer/" class="recommendation-btn"
+                    style="background: linear-gradient(135deg, #10b981, #059669);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        style="width:18px;height:18px">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                    ReDoc Viewer
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <h2>Create OpenAPI & Swagger Specifications Online</h2>
+    <p>Creating accurate, standard-compliant API documentation is critical for modern software development. Our
+        <strong>OpenAPI Builder</strong> (also known as a <strong>Swagger Editor Online</strong>) allows you to
+        build comprehensive API specifications without touching a single line of JSON or YAML. Whether you're a
+        frontend developer mocking a backend or a backend engineer documenting a REST API, this tool simplifies
+        the process through a clean, form-based interface.
+    </p>
+
+    <h3>Key Features of the Online OpenAPI Editor</h3>
+    <ul style="padding-left: 1.5rem; margin-bottom: 2rem;">
+        <li style="margin-bottom: 0.75rem;"><strong>No-Code Interface:</strong> Define endpoints, methods, and
+            parameters via simple inputs.</li>
+        <li style="margin-bottom: 0.75rem;"><strong>Real-Time Swagger UI:</strong> See exactly how your
+            documentation will look to users as you build it.</li>
+        <li style="margin-bottom: 0.75rem;"><strong>Dual Export:</strong> Generate standard-compliant JSON or
+            YAML files with one click.</li>
+        <li style="margin-bottom: 0.75rem;"><strong>OpenAPI 3.0 Support:</strong> Built on the latest standards
+            for maximum compatibility with modern tools.</li>
+        <li style="margin-bottom: 0.75rem;"><strong>Standards-Compliant Output:</strong> Generates valid OpenAPI 3.x
+            specifications</li>
+        <li style="margin-bottom: 0.75rem;"><strong>Compatible Everywhere:</strong> Works with Swagger UI, Postman,
+            Redoc, and API gateways</li>
+        <li style="margin-bottom: 0.75rem;"><strong>Privacy First:</strong> Your API design stays in your
+            browser. No data is sent to our servers.</li>
+    </ul>
+
+    <h3>How to Create a Swagger Specification Step-by-Step</h3>
+    <ol style="padding-left: 1.5rem; margin-bottom: 2rem;">
+        <li style="margin-bottom: 0.75rem;"><strong>Define API Meta Info:</strong> Start by giving your API a
+            title, version, and a helpful description.</li>
+        <li style="margin-bottom: 0.75rem;"><strong>Configure Servers:</strong> Add your production and staging
+            URLs so users can test the API.</li>
+        <li style="margin-bottom: 0.75rem;"><strong>Add Endpoints:</strong> Create paths like
+            <code>/users</code> or <code>/login</code> and choose the appropriate HTTP methods (GET, POST,
+            etc.).
+        </li>
+        <li style="margin-bottom: 0.75rem;"><strong>Define Parameters:</strong> Add query strings, path
+            variables, or headers that your API expects.</li>
+        <li style="margin-bottom: 0.75rem;"><strong>Provide Request Samples:</strong> For POST/PUT requests,
+            paste a JSON sample of the expected request body.</li>
+        <li style="margin-bottom: 0.75rem;"><strong>Preview & Export:</strong> Switch to the "Code" tab to copy
+            your YAML/JSON or download it for your project.</li>
+    </ol>
+
+    <h3>Example Use Case</h3>
+    <p>
+        If you need to create an OpenAPI specification for a REST API with endpoints like
+        <code>/users</code> or <code>/orders</code>, this builder allows you to define methods,
+        parameters, and request bodies and instantly generate Swagger JSON or YAML.
+    </p>
+
+    <div class="comparison-box">
+        <h3>How This Compares to Other API Documentation Tools</h3>
+        <p>
+            This OpenAPI Builder focuses on <strong>creating</strong> OpenAPI and Swagger specifications using a
+            structured, no-code form interface. Traditional tools like <strong>Swagger Editor</strong> are designed
+            primarily for manual YAML or JSON editing, which can be error-prone for beginners. Tools such as
+            <strong>Redocly</strong> excel at rendering and publishing API documentation, but they assume you already
+            have a valid OpenAPI file. Meanwhile, <strong>Postman</strong> focuses on API testing and collaboration,
+            with OpenAPI support as part of a broader workflow. This builder fills the gap by helping developers
+            generate a clean, standards-compliant OpenAPI specification from scratch—before testing, publishing, or
+            sharing it with other tools.
+        </p>
+    </div>
+
+    <h3>Frequently Asked Questions</h3>
+    <div class="faq-grid">
+        <div class="faq-card" onclick="this.classList.toggle('active')">
+            <div class="faq-header">
+                <h4>Is this OpenAPI Builder free?</h4>
+                <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-content">
+                <p>
+                    Yes. This OpenAPI Builder is completely free, runs entirely in the browser,
+                    and does not require signup or account creation.
+                </p>
+            </div>
+        </div>
+
+        <div class="faq-card" onclick="this.classList.toggle('active')">
+            <div class="faq-header">
+                <h4>What is the difference between Swagger and OpenAPI?</h4>
+                <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-content">
+                <p>OpenAPI is the specification itself (the standard), while Swagger is a suite
+                    of tools (like Swagger UI) used to implement that specification. This builder supports the
+                    OpenAPI 3.0 standard.</p>
+            </div>
+        </div>
+
+        <div class="faq-card" onclick="this.classList.toggle('active')">
+            <div class="faq-header">
+                <h4>Can I import an existing file?</h4>
+                <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-content">
+                <p>Yes! Use the "Import Spec" button at the top of the editor. Currently, this tool is optimized for
+                    building and refining specifications. If you want to view an existing file without editing, we
+                    recommend using our <a href="/swagger-viewer/"
+                        style="color: var(--builder-primary);">Swagger
+                        Viewer</a>.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Import Modal -->
+<div id="import-modal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 1rem;">
+    <div
+        style="background: var(--color-surface); width: 100%; max-width: 600px; border-radius: 16px; padding: 2rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+        <h3 style="margin-bottom: 1rem;">Import OpenAPI Specification</h3>
+        <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 1rem;">Paste your OpenAPI
+            JSON
+            spec here to populate the editor.</p>
+        <textarea id="import-area" class="form-textarea" rows="10" placeholder='{ "openapi": "3.0.0", ... }'
+            style="font-family: monospace; font-size: 0.8rem;"></textarea>
+        <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
+            <button onclick="closeImportModal()" class="btn-text"
+                style="background: var(--color-bg); color: var(--color-text);">Cancel</button>
+            <button onclick="processImport()" class="btn-text"
+                style="background: var(--builder-primary); color: white; border-color: var(--builder-primary);">Import
+                Now</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast for notifications -->
+<div id="toast"
+    style="position:fixed; bottom:2rem; right:2rem; background:#1e293b; color:white; padding:0.75rem 1.5rem; border-radius:8px; display:none; z-index:100; box-shadow:0 10px 15px -3px rgba(0,0,0,0.1)">
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<!-- JS-YAML for YAML generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<!-- Swagger UI Bundle -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-bundle.min.js"></script>
+<!-- Prism.js for syntax highlighting (deferred for performance) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js" defer></script>
+
+<script>
+    let spec = {
+        openapi: "3.0.0",
+        info: {
+            title: "My API",
+            description: "API Description",
+            version: "1.0.0"
+        },
+        servers: [],
+        paths: {},
+        components: {
+            securitySchemes: {}
+        },
+        security: []
+    };
+
+    let isEditingCode = false;
+
+    let servers = [
+        { url: "https://api.example.com", description: "Production server" }
+    ];
+    let securitySchemes = [
+        { name: "ApiKeyAuth", type: "apiKey", in: "header", schemeName: "X-API-Key" }
+    ];
+    let endpoints = [
+        {
+            path: "/users",
+            method: "get",
+            summary: "Get all users",
+            description: "Returns a list of users",
+            tags: "Users",
+            parameters: [{ name: "limit", in: "query", description: "Max users to return", required: false, type: "integer" }],
+            requestBody: "",
+            responses: [
+                { code: "200", description: "Successful response" },
+                { code: "400", description: "Bad Request" }
+            ]
+        }
+    ];
+
+    function init() {
+        // Load from localStorage if exists
+        const savedServers = localStorage.getItem('openapi_servers');
+        const savedEndpoints = localStorage.getItem('openapi_endpoints');
+        const savedInfo = localStorage.getItem('openapi_info');
+        const savedSecurity = localStorage.getItem('openapi_security');
+
+        if (savedServers) servers = JSON.parse(savedServers);
+        if (savedEndpoints) endpoints = JSON.parse(savedEndpoints);
+        if (savedSecurity) securitySchemes = JSON.parse(savedSecurity);
+        if (savedInfo) {
+            const info = JSON.parse(savedInfo);
+            document.getElementById('api-title').value = info.title || "";
+            document.getElementById('api-description').value = info.description || "";
+            document.getElementById('api-version').value = info.version || "";
+        }
+
+        renderServers();
+        renderPaths();
+        renderSecurity();
+        // Safer delay for initial render to wait for Swagger UI library
+        setTimeout(updateSpec, 300);
+    }
+
+    function saveToLocal() {
+        localStorage.setItem('openapi_servers', JSON.stringify(servers));
+        localStorage.setItem('openapi_endpoints', JSON.stringify(endpoints));
+        localStorage.setItem('openapi_security', JSON.stringify(securitySchemes));
+        localStorage.setItem('openapi_info', JSON.stringify({
+            title: document.getElementById('api-title').value,
+            description: document.getElementById('api-description').value,
+            version: document.getElementById('api-version').value
+        }));
+    }
+
+    function resetEditor() {
+        if (confirm("Are you sure you want to reset the editor? All progress will be lost.")) {
+            localStorage.clear();
+            location.reload();
+        }
+    }
+
+    // Ensure all assets are fully loaded before initializing
+    window.onload = init;
+
+    function addServer() {
+        servers.push({ url: "", description: "" });
+        renderServers();
+        updateSpec();
+    }
+
+    function removeServer(index) {
+        servers.splice(index, 1);
+        renderServers();
+        updateSpec();
+    }
+
+    function addPath() {
+        endpoints.push({
+            path: "/new-endpoint",
+            method: "get",
+            summary: "",
+            description: "",
+            tags: "",
+            parameters: [],
+            requestBody: "",
+            responses: [{ code: "200", description: "Successful response" }]
+        });
+        renderPaths();
+        updateSpec();
+    }
+
+    function removePath(index) {
+        endpoints.splice(index, 1);
+        renderPaths();
+        updateSpec();
+    }
+
+    function addParameter(pathIndex) {
+        endpoints[pathIndex].parameters.push({ name: "", in: "query", description: "", required: false, type: "string" });
+        renderPaths();
+        updateSpec();
+    }
+
+    function removeParameter(pathIndex, paramIndex) {
+        endpoints[pathIndex].parameters.splice(paramIndex, 1);
+        renderPaths();
+        updateSpec();
+    }
+
+    function addResponse(pathIndex) {
+        endpoints[pathIndex].responses.push({ code: "400", description: "Error" });
+        renderPaths();
+        updateSpec();
+    }
+
+    function removeResponse(pathIndex, resIndex) {
+        endpoints[pathIndex].responses.splice(resIndex, 1);
+        renderPaths();
+        updateSpec();
+    }
+
+    function openImportModal() {
+        document.getElementById('import-modal').style.display = 'flex';
+    }
+
+    function closeImportModal() {
+        document.getElementById('import-modal').style.display = 'none';
+        document.getElementById('import-area').value = '';
+    }
+
+    function processImport() {
+        const text = document.getElementById('import-area').value;
+        if (!text) return;
+        try {
+            const imported = JSON.parse(text);
+            if (!imported.openapi && !imported.swagger) {
+                alert("Invalid specification: missing 'openapi' or 'swagger' version.");
+                return;
+            }
+
+            // Map basic info
+            if (imported.info) {
+                document.getElementById('api-title').value = imported.info.title || "";
+                document.getElementById('api-description').value = imported.info.description || "";
+                document.getElementById('api-version').value = imported.info.version || "";
+            }
+
+            // Map servers
+            if (imported.servers) {
+                servers = imported.servers.map(s => ({ url: s.url, description: s.description || "" }));
+            }
+
+            // Map paths (basic mapping)
+            endpoints = [];
+            if (imported.paths) {
+                for (const path in imported.paths) {
+                    for (const method in imported.paths[path]) {
+                        const op = imported.paths[path][method];
+                        endpoints.push({
+                            path: path,
+                            method: method,
+                            summary: op.summary || "",
+                            description: op.description || "",
+                            tags: op.tags ? op.tags.join(', ') : "",
+                            parameters: op.parameters ? op.parameters.map(p => ({
+                                name: p.name,
+                                in: p.in,
+                                description: p.description || "",
+                                required: !!p.required,
+                                type: (p.schema && p.schema.type) ? p.schema.type : "string"
+                            })) : [],
+                            responses: op.responses ? Object.keys(op.responses).map(code => ({
+                                code: code,
+                                description: op.responses[code].description || ""
+                            })) : [{ code: "200", description: "OK" }],
+                            requestBody: "" // Simplified mapping
+                        });
+                    }
+                }
+            }
+
+            renderServers();
+            renderPaths();
+            updateSpec();
+            closeImportModal();
+            showToast("Specification imported successfully!");
+        } catch (e) {
+            alert("Error parsing JSON: " + e.message);
+        }
+    }
+
+    function loadTemplate(type) {
+        if (type === 'petstore') {
+            document.getElementById('api-title').value = "Swagger Petstore";
+            document.getElementById('api-description').value = "This is a sample server Petstore server.";
+            document.getElementById('api-version').value = "1.0.0";
+
+            servers = [{ url: "https://petstore.swagger.io/v2", description: "Default Petstore server" }];
+
+            endpoints = [
+                {
+                    path: "/pet",
+                    method: "post",
+                    summary: "Add a new pet to the store",
+                    description: "",
+                    tags: "pet",
+                    parameters: [],
+                    requestBody: JSON.stringify({ name: "doggie", photoUrls: ["string"] }, null, 2),
+                    responses: [{ code: "200", description: "Successful operation" }, { code: "405", description: "Invalid input" }]
+                },
+                {
+                    path: "/pet/findByStatus",
+                    method: "get",
+                    summary: "Finds Pets by status",
+                    description: "Multiple status values can be provided with comma separated strings",
+                    tags: "pet",
+                    parameters: [{ name: "status", in: "query", description: "Status values that need to be considered for filter", required: true, type: "string" }],
+                    requestBody: "",
+                    responses: [{ code: "200", description: "successful operation" }, { code: "400", description: "Invalid status value" }]
+                }
+            ];
+
+            renderServers();
+            renderPaths();
+            updateSpec();
+            showToast("Petstore template loaded!");
+        }
+    }
+
+    function addSecurityScheme() {
+        securitySchemes.push({ name: "BearerAuth", type: "http", in: "header", schemeName: "bearer" });
+        renderSecurity();
+        updateSpec();
+    }
+
+    function removeSecurityScheme(index) {
+        securitySchemes.splice(index, 1);
+        renderSecurity();
+        updateSpec();
+    }
+
+    function renderServers() {
+        const container = document.getElementById('servers-list');
+        container.innerHTML = servers.map((s, i) => `
+            <div class="op-item" style="padding: 1rem 2.5rem 1rem 1rem;">
+                <button class="btn-remove" onclick="removeServer(${i})" title="Remove Server">×</button>
+                <div class="form-group" style="margin-bottom: 0.5rem;">
+                    <input type="text" class="form-input" placeholder="https://api.example.com" value="${s.url}" oninput="servers[${i}].url = this.value; updateSpec()">
+                </div>
+                <input type="text" class="form-input" style="font-size: 0.8rem; height: 1.8rem;" placeholder="Description (Production, Sandbox...)" value="${s.description}" oninput="servers[${i}].description = this.value; updateSpec()">
+            </div>
+        `).join('');
+    }
+
+    function renderSecurity() {
+        const container = document.getElementById('security-list');
+        container.innerHTML = securitySchemes.map((s, i) => `
+            <div class="form-group" style="background: var(--color-bg); padding: 1rem; border: 1px solid var(--color-border); border-radius: 8px; margin-bottom: 1rem; position: relative;">
+                <button class="btn-remove" onclick="removeSecurityScheme(${i})">×</button>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <div>
+                        <label class="form-label" style="font-size: 0.75rem;">Scheme ID</label>
+                        <input type="text" class="form-input" style="font-size: 0.85rem;" placeholder="e.g. ApiKey" value="${s.name}" oninput="securitySchemes[${i}].name = this.value; updateSpec()">
+                    </div>
+                    <div>
+                        <label class="form-label" style="font-size: 0.75rem;">Type</label>
+                        <select class="form-select" style="font-size: 0.85rem;" onchange="securitySchemes[${i}].type = this.value; updateSpec()">
+                            <option value="apiKey" ${s.type === 'apiKey' ? 'selected' : ''}>API Key</option>
+                            <option value="http" ${s.type === 'http' ? 'selected' : ''}>HTTP (Bearer Cache)</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label" style="font-size: 0.75rem;">Header Name / Format</label>
+                    <input type="text" class="form-input" style="font-size: 0.85rem;" placeholder="${s.type === 'apiKey' ? 'X-API-KEY' : 'bearer'}" value="${s.schemeName}" oninput="securitySchemes[${i}].schemeName = this.value; updateSpec()">
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function renderPaths() {
+        const container = document.getElementById('paths-list');
+        container.innerHTML = endpoints.map((e, i) => `
+            <div class="op-item">
+                <button class="btn-remove" onclick="removePath(${i})" title="Remove Endpoint">×</button>
+                <div class="op-header">
+                    <select class="form-select" style="width: auto; font-weight: 700; border-color: transparent; background: var(--builder-bg-alt);" onchange="endpoints[${i}].method = this.value; updateSpec()">
+                        <option value="get" ${e.method === 'get' ? 'selected' : ''}>GET</option>
+                        <option value="post" ${e.method === 'post' ? 'selected' : ''}>POST</option>
+                        <option value="put" ${e.method === 'put' ? 'selected' : ''}>PUT</option>
+                        <option value="delete" ${e.method === 'delete' ? 'selected' : ''}>DELETE</option>
+                        <option value="patch" ${e.method === 'patch' ? 'selected' : ''}>PATCH</option>
+                    </select>
+                    <input type="text" class="form-input" placeholder="/users" value="${e.path}" oninput="endpoints[${i}].path = this.value; updateSpec()">
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <input type="text" class="form-input" style="font-size: 0.85rem;" placeholder="Summary (e.g. List all users)" value="${e.summary}" oninput="endpoints[${i}].summary = this.value; updateSpec()">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <input type="text" class="form-input" style="font-size: 0.85rem;" placeholder="Tags (e.g. Users, Auth)" value="${e.tags || ''}" oninput="endpoints[${i}].tags = this.value; updateSpec()">
+                </div>
+                
+                <!-- Parameters -->
+                <div style="margin-top: 1rem;">
+                    <label class="form-label" style="font-size: 0.8rem; opacity: 0.8;">Parameters</label>
+                    <div id="params-${i}">
+                        ${e.parameters.map((p, pi) => `
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;">
+                                <input type="text" class="form-input" style="font-size: 0.8rem; padding: 0.4rem 0.6rem;" placeholder="Name" value="${p.name}" oninput="endpoints[${i}].parameters[${pi}].name = this.value; updateSpec()">
+                                <select class="form-select" style="font-size: 0.8rem; padding: 0.4rem 0.6rem;" onchange="endpoints[${i}].parameters[${pi}].in = this.value; updateSpec()">
+                                    <option value="query" ${p.in === 'query' ? 'selected' : ''}>Query</option>
+                                    <option value="path" ${p.in === 'path' ? 'selected' : ''}>Path</option>
+                                    <option value="header" ${p.in === 'header' ? 'selected' : ''}>Header</option>
+                                </select>
+                                <select class="form-select" style="font-size: 0.8rem; padding: 0.4rem 0.6rem;" onchange="endpoints[${i}].parameters[${pi}].type = this.value; updateSpec()">
+                                    <option value="string" ${p.type === 'string' ? 'selected' : ''}>String</option>
+                                    <option value="integer" ${p.type === 'integer' ? 'selected' : ''}>Integer</option>
+                                    <option value="boolean" ${p.type === 'boolean' ? 'selected' : ''}>Boolean</option>
+                                </select>
+                                <button style="color: #ef4444; background: none; border: none; font-size: 1.2rem; cursor: pointer;" onclick="removeParameter(${i}, ${pi})">×</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn-add" style="padding: 0.4rem; font-size: 0.75rem; border-style: solid; margin-top: 0.5rem;" onclick="addParameter(${i})">+ Add Param</button>
+                </div>
+
+                <!-- Responses -->
+                <div style="margin-top: 1.5rem;">
+                    <label class="form-label" style="font-size: 0.8rem; opacity: 0.8;">Responses</label>
+                    <div id="responses-${i}">
+                        ${e.responses.map((r, ri) => `
+                            <div style="display: grid; grid-template-columns: 80px 1fr auto; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;">
+                                <input type="text" class="form-input" style="font-size: 0.8rem; padding: 0.4rem 0.6rem;" placeholder="200" value="${r.code}" oninput="endpoints[${i}].responses[${ri}].code = this.value; updateSpec()">
+                                <input type="text" class="form-input" style="font-size: 0.8rem; padding: 0.4rem 0.6rem;" placeholder="Description" value="${r.description}" oninput="endpoints[${i}].responses[${ri}].description = this.value; updateSpec()">
+                                <button style="color: #ef4444; background: none; border: none; font-size: 1.2rem; cursor: pointer;" onclick="removeResponse(${i}, ${ri})">×</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn-add" style="padding: 0.4rem; font-size: 0.75rem; border-style: solid; margin-top: 0.5rem;" onclick="addResponse(${i})">+ Add Response</button>
+                </div>
+
+                ${['post', 'put', 'patch'].includes(e.method) ? `
+                    <div style="margin-top: 1rem;">
+                        <label class="form-label" style="font-size: 0.8rem; opacity: 0.8;">Request Body (JSON Sample)</label>
+                        <textarea class="form-textarea" style="font-size: 0.8rem; height: 80px;" placeholder='{"name": "John Doe"}' oninput="endpoints[${i}].requestBody = this.value; updateSpec()">${e.requestBody}</textarea>
+                    </div>
+                ` : ''}
+            </div>
+        `).join('');
+    }
+
+    function updateSpec() {
+        if (isEditingCode) return; // Don't auto-regenerate while editing
+
+        const title = document.getElementById('api-title').value || "My API";
+        const desc = document.getElementById('api-description').value || "API Description";
+        const ver = document.getElementById('api-version').value || "1.0.0";
+        const format = document.getElementById('output-format').value;
+
+        spec.info.title = title;
+        spec.info.description = desc;
+        spec.info.version = ver;
+
+        spec.servers = servers.filter(s => s.url).map(s => ({ url: s.url, description: s.description }));
+
+        // Security Components
+        spec.components = { securitySchemes: {} };
+        spec.security = [];
+        securitySchemes.forEach(s => {
+            if (!s.name) return;
+            const scheme = {
+                type: s.type,
+                in: s.in || "header",
+            };
+            if (s.type === 'apiKey') {
+                scheme.name = s.schemeName || "X-API-KEY";
+            } else if (s.type === 'http') {
+                scheme.scheme = "bearer";
+                scheme.bearerFormat = s.schemeName || "JWT";
+            }
+            spec.components.securitySchemes[s.name] = scheme;
+
+            // Apply globally
+            const globalReq = {};
+            globalReq[s.name] = [];
+            spec.security.push(globalReq);
+        });
+
+        spec.paths = {};
+        endpoints.forEach(e => {
+            if (!e.path) return;
+            if (!spec.paths[e.path]) spec.paths[e.path] = {};
+
+            const operation = {
+                summary: e.summary,
+                description: e.description,
+                tags: e.tags ? e.tags.split(',').map(tag => tag.trim()) : [],
+                parameters: e.parameters.filter(p => p.name).map(p => ({
+                    name: p.name,
+                    in: p.in,
+                    required: p.in === 'path' ? true : p.required,
+                    schema: { type: p.type }
+                })),
+                responses: {}
+            };
+
+            if (e.responses && e.responses.length > 0) {
+                e.responses.forEach(r => {
+                    if (r.code) {
+                        operation.responses[r.code] = {
+                            description: r.description || "Response description"
+                        };
+                    }
+                });
+            } else {
+                operation.responses["200"] = { description: "Successful response" };
+            }
+
+            if (['post', 'put', 'patch'].includes(e.method) && e.requestBody) {
+                try {
+                    const bodySample = JSON.parse(e.requestBody);
+                    operation.requestBody = {
+                        content: {
+                            "application/json": {
+                                example: bodySample
+                            }
+                        }
+                    };
+                } catch (err) {
+                    // If not valid JSON, treat as raw text or ignore if empty
+                    if (e.requestBody.trim()) {
+                        operation.requestBody = {
+                            content: {
+                                "text/plain": {
+                                    example: e.requestBody
+                                }
+                            }
+                        };
+                    }
+                }
+            }
+
+            spec.paths[e.path][e.method] = operation;
+        });
+
+        renderPreview();
+        // Auto-save
+        saveToLocal();
+        refreshSwaggerUI();
+    }
+
+    function renderPreview() {
+        const format = document.getElementById('output-format').value;
+        const codeBlock = document.getElementById('spec-code-block');
+        const output = format === 'yaml' ? jsyaml.dump(spec) : JSON.stringify(spec, null, 2);
+
+        codeBlock.textContent = output;
+        codeBlock.className = `language-${format}`;
+
+        if (window.Prism) {
+            Prism.highlightElement(codeBlock);
+        }
+    }
+
+    function refreshSwaggerUI() {
+        try {
+            SwaggerUIBundle({
+                spec: spec,
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIBundle.SwaggerUIStandalonePreset
+                ],
+                layout: "BaseLayout"
+            });
+        } catch (err) {
+            console.error("Swagger UI Error:", err);
+        }
+    }
+
+    function toggleEditMode() {
+        const preview = document.getElementById('spec-code-preview');
+        const editArea = document.getElementById('spec-edit-area');
+        const editBtn = document.getElementById('edit-btn');
+        const format = document.getElementById('output-format').value;
+
+        const editIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px;height:18px">
+                            <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                        </svg>`;
+        const saveIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px;height:18px">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>`;
+
+        if (!isEditingCode) {
+            // Enter Edit Mode
+            isEditingCode = true;
+            const currentOutput = format === 'yaml' ? jsyaml.dump(spec) : JSON.stringify(spec, null, 2);
+            editArea.value = currentOutput;
+            preview.style.display = 'none';
+            editArea.style.display = 'block';
+            editBtn.innerHTML = saveIcon;
+            editBtn.title = "Save Changes";
+            editBtn.style.background = 'var(--builder-primary)';
+            editBtn.style.color = 'white';
+        } else {
+            // Save Changes
+            try {
+                const editedContent = editArea.value;
+                const newSpec = format === 'yaml' ? jsyaml.load(editedContent) : JSON.parse(editedContent);
+
+                if (newSpec && typeof newSpec === 'object') {
+                    spec = newSpec;
+                    isEditingCode = false;
+                    preview.style.display = 'block';
+                    editArea.style.display = 'none';
+                    editBtn.innerHTML = editIcon;
+                    editBtn.title = "Edit Specification";
+                    editBtn.style.background = 'rgba(59, 130, 246, 0.2)';
+                    editBtn.style.color = 'inherit';
+
+                    renderPreview();
+                    refreshSwaggerUI();
+                    saveToLocal();
+                    showToast("Code overrides saved!");
+                }
+            } catch (e) {
+                alert("Invalid format: " + e.message);
+            }
+        }
+    }
+
+
+    function switchPreviewTab(tab) {
+        document.querySelectorAll('.preview-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.preview-content-item').forEach(c => c.classList.remove('active'));
+
+        const target = event.target;
+        target.classList.add('active');
+        document.getElementById('tab-' + tab).classList.add('active');
+
+        // If switching to code, ensure it's up to date
+        if (tab === 'code' && !isEditingCode) {
+            updateSpec();
+        }
+    }
+
+    function copySpec() {
+        let text;
+        if (isEditingCode) {
+            text = document.getElementById('spec-edit-area').value;
+        } else {
+            text = document.getElementById('spec-code-block').textContent;
+        }
+        navigator.clipboard.writeText(text).then(() => {
+            showToast("Specification copied to clipboard!");
+        });
+    }
+
+    function downloadSpec() {
+        let text;
+        if (isEditingCode) {
+            text = document.getElementById('spec-edit-area').value;
+        } else {
+            text = document.getElementById('spec-code-block').textContent;
+        }
+        const format = document.getElementById('output-format').value;
+        const filename = `api-spec.${format}`;
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        showToast(`Started download: ${filename}`);
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.innerText = msg;
+        t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 3000);
+    }
+
+    // Run on window load to ensure all libraries are fully ready
+    window.onload = init;
+</script>
+<!--@end:extra_js-->

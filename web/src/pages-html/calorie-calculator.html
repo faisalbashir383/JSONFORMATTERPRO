@@ -1,0 +1,662 @@
+<!--@block:title-->Calorie Calculator - Daily Calorie Needs & TDEE [2025]<!--@end:title-->
+<!--@block:meta_title-->Calorie Calculator - Calculate Calories for Weight Loss & Gain<!--@end:meta_title-->
+<!--@block:meta_description-->Free Calorie Calculator. Accurately calculate your daily calorie needs (TDEE) and BMR. Get
+personalized plans for weight loss, maintenance, or muscle gain.<!--@end:meta_description-->
+<!--@block:meta_keywords-->calorie calculator, daily calorie needs, tdee calculator, bmr calculator, weight loss
+calculator, calorie deficit calculator, maintenance calories, macro calculator<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/calorie-calculator/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Calorie Calculator Pro",
+  "description": "Calculate daily calorie needs for weight loss, maintenance, or gain.",
+  "url": "https://jsonformatterspro.com/calorie-calculator/",
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Mifflin-St Jeor Accuracy",
+    "Personalized Weight Loss Plans",
+    "BMR & TDEE Calculation",
+    "Activity Level Adjustment",
+    "Muscle Gain Recommendations"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How many calories should I eat to lose weight?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To lose weight safely (about 0.5kg per week), you should ideally consume 500 calories less than your Total Daily Energy Expenditure (TDEE). This creates a sustainable calorie deficit without starving your body."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between BMR and TDEE?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "BMR (Basal Metabolic Rate) is the calories you burn at complete rest just to keep your organs functioning. TDEE (Total Daily Energy Expenditure) is your BMR plus the calories you burn through daily movement and exercise. TDEE is the number you need to eat to maintain your current weight."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the Mifflin-St Jeor formula accurate?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, the Mifflin-St Jeor equation is widely considered the most accurate formula for estimating calorie needs in clinical settings. It varies by about +/- 10% for most individuals."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "should I eat back my exercise calories?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Generally, no. If you selected an activity level like 'Moderate' or 'Active', your exercise calories are already accounted for in your TDEE. Eating them back would lead to double-counting and stall weight loss."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a safe rate of weight loss?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A safe and sustainable rate of weight loss is 0.5 kg to 1.0 kg (1-2 lbs) per week. Losing weight faster than this can lead to muscle loss and nutritional deficiencies."
+      }
+    }
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(245, 158, 11, 0.1) 50%, rgba(16, 185, 129, 0.1) 100%);
+        border-radius: var(--radius-lg);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ef4444, #f59e0b, #10b981);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .calculator-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .calc-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 32px var(--color-shadow);
+    }
+
+    .calc-card:hover {
+        transform: translateY(-2px);
+    }
+
+    [data-theme="dark"] .calc-card {
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    .calc-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .input-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .input-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 0.9rem;
+        font-size: 1rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #ef4444;
+    }
+
+    .gender-toggle {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .gender-btn {
+        flex: 1;
+        padding: 0.75rem;
+        font-weight: 600;
+        border: 2px solid var(--color-border);
+        background: var(--color-bg);
+        color: var(--color-text);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .gender-btn.active {
+        background: linear-gradient(135deg, #ef4444, #f59e0b);
+        color: white;
+        border-color: transparent;
+    }
+
+    .result-card {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(16, 185, 129, 0.1));
+        border: 2px solid rgba(239, 68, 68, 0.2);
+        display: none;
+    }
+
+    .result-card.show {
+        display: block;
+        animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .result-main {
+        text-align: center;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+    }
+
+    .result-value {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #ef4444;
+        margin-bottom: 0.5rem;
+    }
+
+    .result-label {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        font-weight: 600;
+    }
+
+    .calorie-goals {
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .goal-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem;
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+        align-items: center;
+    }
+
+    .goal-label {
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .goal-value {
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .goal-value.loss {
+        color: #10b981;
+    }
+
+    .goal-value.gain {
+        color: #ef4444;
+    }
+
+    .calc-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+        font-weight: 700;
+        color: white;
+        background: linear-gradient(135deg, #ef4444, #f59e0b);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .calc-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+    }
+
+    /* New Common Sections */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .info-section,
+    .faq-section {
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .section-title,
+    .faq-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #ef4444;
+        font-weight: bold;
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tool-link {
+        display: block;
+        padding: 1rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tool-link:hover {
+        border-color: #ef4444;
+        transform: translateY(-2px);
+    }
+
+    /* FAQ Section */
+    .faq-section {
+        margin-top: 2rem;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%);
+    }
+
+    .faq-title {
+        margin-bottom: 1.5rem;
+    }
+
+    .faq-item {
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+        margin-bottom: 0.75rem;
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+    }
+
+    .faq-question {
+        padding: 1.25rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .faq-question:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .faq-toggle {
+        font-size: 1.25rem;
+        transition: transform 0.3s;
+        color: #ef4444;
+    }
+
+    .faq-item.open .faq-toggle {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+    }
+
+    .faq-item.open .faq-answer {
+        max-height: 500px;
+        transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
+    }
+
+    .faq-answer-content {
+        padding: 0 1.25rem 1.25rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        border-top: 1px solid var(--color-border);
+    }
+
+    @media (max-width: 900px) {
+        .calculator-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header">
+    <h1>🔥 Calorie Calculator</h1>
+    <p>Calculate your daily calorie needs based on your personal stats, activity level, and goals.</p>
+</div>
+
+<div class="calculator-layout">
+    <div class="calc-card">
+        <h2 class="calc-title">📝 Your Details</h2>
+
+        <div class="input-group">
+            <label class="input-label">Gender</label>
+            <div class="gender-toggle">
+                <button class="gender-btn active" id="maleBtn" onclick="setGender('male')">👨 Male</button>
+                <button class="gender-btn" id="femaleBtn" onclick="setGender('female')">👩 Female</button>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Age (years)</label>
+            <input type="number" id="age" class="input-field" value="30" min="15" max="100">
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Weight (kg)</label>
+            <input type="number" id="weight" class="input-field" value="70" min="30" max="300">
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Height (cm)</label>
+            <input type="number" id="height" class="input-field" value="170" min="100" max="250">
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Activity Level</label>
+            <select id="activity" class="input-field">
+                <option value="1.2">Sedentary (little or no exercise)</option>
+                <option value="1.375">Light (exercise 1-3 days/week)</option>
+                <option value="1.55" selected>Moderate (exercise 3-5 days/week)</option>
+                <option value="1.725">Active (exercise 6-7 days/week)</option>
+                <option value="1.9">Very Active (intense exercise daily)</option>
+            </select>
+        </div>
+
+        <button class="calc-btn" onclick="calculate()">🔥 Calculate Calories</button>
+    </div>
+
+    <div class="calc-card result-card" id="resultCard">
+        <h2 class="calc-title">📊 Your Daily Needs</h2>
+
+        <div class="result-main">
+            <div class="result-value" id="tdee">2,200</div>
+            <div class="result-label">Maintenance Calories (TDEE)</div>
+        </div>
+
+        <div class="calorie-goals">
+            <div class="goal-row">
+                <span class="goal-label">Mild Weight Loss (-0.25 kg/week)</span>
+                <span class="goal-value loss" id="mildLoss">1,950</span>
+            </div>
+            <div class="goal-row">
+                <span class="goal-label">Weight Loss (-0.5 kg/week)</span>
+                <span class="goal-value loss" id="loss">1,700</span>
+            </div>
+            <div class="goal-row">
+                <span class="goal-label">Weight Gain (+0.25 kg/week)</span>
+                <span class="goal-value gain" id="mildGain">2,450</span>
+            </div>
+            <div class="goal-row">
+                <span class="goal-label">Weight Gain (+0.5 kg/week)</span>
+                <span class="goal-value gain" id="gain">2,700</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="info-grid">
+    <div class="info-section">
+        <h2 class="section-title"><svg class="section-icon" width="20" height="20" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg> Tool Features</h2>
+        <ul class="feature-list">
+            <li><strong>Scientifically Accurate:</strong> Uses the Mifflin-St Jeor equation, the gold standard in
+                calorie estimation.</li>
+            <li><strong>Personalized Goals:</strong> Get specific numbers for mild or standard weight loss paths.</li>
+            <li><strong>Activity Adjustment:</strong> Accounts for your unique lifestyle and exercise habits.</li>
+            <li><strong>Complete Picture:</strong> See numbers for loss, maintenance, and gain in one view.</li>
+        </ul>
+    </div>
+
+    <div class="info-section">
+        <h2 class="section-title"><svg class="section-icon" width="20" height="20" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h1v9l3-2.25L13 13V4h5v16z" />
+            </svg> Understanding Calories</h2>
+        <p><strong>BMR (Basal Metabolic Rate):</strong> Calories your body burns at rest to maintain basic functions
+            like breathing and circulation.</p>
+        <p><strong>TDEE (Total Daily Energy Expenditure):</strong> Your TDEE is how many calories you burn in a typical
+            day including activity. This is your "Maintenance Level".</p>
+        <p><strong>The Math of Weight Loss:</strong> To lose 1kg of fat, you need a deficit of roughly 7,700 calories. A
+            daily deficit of 500 calories leads to roughly 0.5kg weight loss per week.</p>
+    </div>
+</div>
+
+<!-- Related Tools -->
+<div class="info-section" style="margin-top: 2rem;">
+    <h2 class="section-title"><svg class="section-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path
+                d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z" />
+        </svg> Related Calculators</h2>
+    <div class="related-tools">
+        <a href="/bmi-calculator/" class="tool-link"><svg class="tool-icon" width="16" height="16" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M12 3c-1.27 0-2.4.8-2.82 2H3v2h1.95L2 14c-.47 0-.86.5-.86 1.25 0 1.06.68 1.75 1.75 1.75S4.75 16.31 4.75 15.25c0-.75-.39-1.25-.86-1.25L1 7h5.12c.28.83.95 1.5 1.78 1.82L6 11l-2.5 2.5 1.41 1.41L7.41 12.5 8 11.88V11l2-2.41V7.18c.83-.32 1.5-.99 1.78-1.82L17 5.05l-2.89 6.81c-.47 0-.86.5-.86 1.25 0 1.06.68 1.75 1.75 1.75s1.75-.69 1.75-1.75c0-.75-.39-1.25-.86-1.25L13.06 5.05 17 5V5.05L21.95 7H24V5h-6.18c-.42-1.2-1.55-2-2.82-2z" />
+            </svg> BMI Calculator</a>
+        <a href="/age-calculator/" class="tool-link"><svg class="tool-icon" width="16" height="16" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M12 6c1.11 0 2-.9 2-2 0-.38-.1-.73-.29-1.03L12 0l-1.71 2.97c-.19.3-.29.65-.29 1.03 0 1.1.9 2 2 2zm4.6 9.99l-1.07-1.07-1.08 1.07c-1.3 1.3-3.58 1.31-4.89 0l-1.07-1.07-1.09 1.07C6.75 16.64 5.88 17 4.96 17c-.73 0-1.4-.23-1.96-.61V21c0 .55.45 1 1 1h16c.55 0 1-.45 1-1v-4.61c-.56.38-1.23.61-1.96.61-.92 0-1.79-.36-2.44-1.01zM18 9h-5V7h-2v2H6c-1.66 0-3 1.34-3 3v1.54c0 1.08.88 1.96 1.96 1.96.52 0 1.02-.2 1.38-.57l2.14-2.13 2.13 2.13c.74.74 2.03.74 2.77 0l2.14-2.13 2.13 2.13c.37.37.86.57 1.38.57 1.08 0 1.96-.88 1.96-1.96V12C21 10.34 19.66 9 18 9z" />
+            </svg> Age Calculator</a>
+        <a href="/percentage-calculator/" class="tool-link"><svg class="tool-icon" width="16" height="16"
+                viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M7.5 11C9.43 11 11 9.43 11 7.5S9.43 4 7.5 4 4 5.57 4 7.5 5.57 11 7.5 11zm0-5C8.33 6 9 6.67 9 7.5S8.33 9 7.5 9 6 8.33 6 7.5 6.67 6 7.5 6zM4.41 20L20 4.41 18.59 3 3 18.59 4.41 20zM16.5 13c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+            </svg> Percentage Calculator</a>
+    </div>
+</div>
+
+<div class="faq-section">
+    <h2 class="faq-title">❓ Frequently Asked Questions</h2>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">How many calories should I eat to lose weight?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                To lose weight safely (about 0.5kg per week), you should ideally consume 500 calories less than your
+                Total Daily Energy Expenditure (TDEE). This creates a sustainable calorie deficit without starving your
+                body.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">What is the difference between BMR and TDEE?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                BMR (Basal Metabolic Rate) is the calories you burn at complete rest just to keep your organs
+                functioning. TDEE (Total Daily Energy Expenditure) is your BMR plus the calories you burn through daily
+                movement and exercise. TDEE is the number you need to eat to maintain your current weight.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Is the Mifflin-St Jeor formula accurate?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Yes, the Mifflin-St Jeor equation is widely considered the most accurate formula for estimating calorie
+                needs in clinical settings. It varies by about +/- 10% for most individuals.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Should I eat back my exercise calories?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Generally, no. If you selected an activity level like 'Moderate' or 'Active', your exercise calories are
+                already accounted for in your TDEE. Eating them back would lead to double-counting and stall weight
+                loss.
+            </div>
+        </div>
+    </div>
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script>
+    (function () {
+        let gender = 'male';
+
+        window.setGender = function (g) {
+            gender = g;
+            document.getElementById('maleBtn').classList.toggle('active', g === 'male');
+            document.getElementById('femaleBtn').classList.toggle('active', g === 'female');
+        };
+
+        window.calculate = function () {
+            const age = parseFloat(document.getElementById('age').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const activity = parseFloat(document.getElementById('activity').value);
+
+            if (!age || !weight || !height) return;
+
+            // Mifflin-St Jeor Equation
+            let bmr;
+            if (gender === 'male') {
+                bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+            } else {
+                bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+            }
+
+            const tdee = bmr * activity;
+
+            document.getElementById('tdee').textContent = Math.round(tdee).toLocaleString();
+            document.getElementById('mildLoss').textContent = Math.round(tdee - 250).toLocaleString();
+            document.getElementById('loss').textContent = Math.round(tdee - 500).toLocaleString();
+            document.getElementById('mildGain').textContent = Math.round(tdee + 250).toLocaleString();
+            document.getElementById('gain').textContent = Math.round(tdee + 500).toLocaleString();
+
+            document.getElementById('resultCard').classList.add('show');
+            document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        // FAQ Toggle
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => item.classList.toggle('open'));
+        });
+    })();
+</script>
+<!--@end:extra_js-->

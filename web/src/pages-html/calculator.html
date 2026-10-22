@@ -1,0 +1,1394 @@
+<!--@block:title-->Simple Calculator Online - Free Basic & Scientific Calculator | JSON Formatters Pro<!--@end:title-->
+<!--@block:meta_title-->Simple Calculator Online - Free Basic & Scientific Calculator 2026<!--@end:meta_title-->
+<!--@block:meta_description-->Free online calculator with basic and scientific modes. Perform arithmetic, trigonometry,
+logarithms, and complex calculations instantly. No download required, works on all devices.<!--@end:meta_description-->
+<!--@block:meta_keywords-->simple calculator, online calculator, free calculator, basic calculator, scientific calculator,
+calculator online free, math calculator, arithmetic calculator, web calculator, browser calculator,
+addition calculator, subtraction calculator, multiplication calculator, division calculator,
+sin cos tan calculator, trigonometry calculator, logarithm calculator, log calculator,
+square root calculator, power calculator, exponent calculator, factorial calculator,
+percentage calculator online, decimal calculator, fraction calculator,
+calculator with memory, calculator history, scientific notation calculator,
+calculator 2026, best online calculator 2026, free scientific calculator 2026,
+calculator app online, virtual calculator, digital calculator, internet calculator,
+quick calculator, easy calculator, fast calculator, instant calculator,
+calculator for students, calculator for work, calculator for math,
+add subtract multiply divide, BODMAS calculator, PEMDAS calculator,
+expression calculator, equation calculator, formula calculator,
+pi calculator, euler number calculator, degrees radians calculator,
+inverse trig calculator, arcsin arccos arctan, hyperbolic functions,
+engineering calculator, advanced calculator, professional calculator,
+calculator no download, calculator no install, calculator browser based,
+mobile calculator online, phone calculator web, tablet calculator online,
+calculation tool, compute online, solve math online, math solver calculator<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/calculator/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Simple Calculator Online",
+  "description": "Free online calculator with basic and scientific calculation modes",
+  "url": "https://jsonformatterspro.com/calculator/",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Basic arithmetic operations",
+    "Scientific calculations",
+    "Trigonometric functions",
+    "Logarithmic functions",
+    "Memory functions",
+    "Calculation history",
+    "Keyboard support"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I use this online calculator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Simply click the number buttons or type on your keyboard to enter numbers. Use operation buttons (+, -, ×, ÷) to perform calculations. Press = or Enter to see the result. Toggle between Basic and Scientific modes for more functions."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between Basic and Scientific mode?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Basic mode offers standard arithmetic operations (add, subtract, multiply, divide). Scientific mode adds advanced functions like trigonometry (sin, cos, tan), logarithms (log, ln), powers, square roots, factorials, and constants like π and e."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use keyboard shortcuts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Use number keys (0-9) for digits, +, -, *, / for operations, Enter for equals, Backspace to delete, and Escape to clear all. The calculator fully supports keyboard input."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this calculator accurate for scientific calculations?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, our calculator uses JavaScript's built-in Math library which provides high precision for scientific calculations. It handles up to 15-17 significant digits of precision."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the calculator work offline?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Once the page is loaded, all calculations are performed locally in your browser. However, you need an internet connection to initially load the calculator page."
+      }
+    }
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 50%, rgba(99, 102, 241, 0.1) 100%);
+        border-radius: var(--radius-lg);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tool-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+        animation: float-bg 20s linear infinite;
+    }
+
+    @keyframes float-bg {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #3b82f6 0%, #10b981 50%, #6366f1 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+        position: relative;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    /* Floating decorations */
+    .floating-decor {
+        position: absolute;
+        font-size: 2rem;
+        opacity: 0.15;
+        animation: float-element 6s ease-in-out infinite;
+    }
+
+    .floating-decor:nth-child(1) {
+        top: 20%;
+        left: 10%;
+        animation-delay: 0s;
+    }
+
+    .floating-decor:nth-child(2) {
+        top: 60%;
+        left: 5%;
+        animation-delay: 1s;
+    }
+
+    .floating-decor:nth-child(3) {
+        top: 30%;
+        right: 8%;
+        animation-delay: 2s;
+    }
+
+    .floating-decor:nth-child(4) {
+        top: 70%;
+        right: 12%;
+        animation-delay: 3s;
+    }
+
+    @keyframes float-element {
+
+        0%,
+        100% {
+            transform: translateY(0) rotate(0deg);
+        }
+
+        50% {
+            transform: translateY(-15px) rotate(10deg);
+        }
+    }
+
+    /* Calculator Container */
+    .calculator-wrapper {
+        max-width: 450px;
+        margin: 0 auto 2rem;
+    }
+
+    /* Mode Toggle */
+    .mode-toggle {
+        display: flex;
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+        padding: 0.25rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid var(--color-border);
+    }
+
+    .mode-btn {
+        flex: 1;
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        border: none;
+        background: transparent;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        border-radius: var(--radius-sm);
+        transition: all 0.3s ease;
+    }
+
+    .mode-btn.active {
+        background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .mode-btn:hover:not(.active) {
+        background: var(--color-surface-alt);
+        color: var(--color-text);
+    }
+
+    /* Calculator Body */
+    .calculator {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        box-shadow: 0 8px 32px var(--color-shadow);
+        overflow: hidden;
+    }
+
+    [data-theme="dark"] .calculator {
+        background: rgba(15, 23, 42, 0.95);
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Display */
+    .calc-display {
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        min-height: 120px;
+    }
+
+    .calc-expression {
+        font-size: 1rem;
+        color: #94a3b8;
+        min-height: 1.5rem;
+        word-break: break-all;
+        text-align: right;
+        font-family: 'SF Mono', 'Consolas', monospace;
+    }
+
+    .calc-result {
+        font-size: 2.75rem;
+        font-weight: 700;
+        color: white;
+        text-align: right;
+        word-break: break-all;
+        font-family: 'SF Mono', 'Consolas', monospace;
+        line-height: 1.2;
+        margin-top: 0.5rem;
+    }
+
+    /* Keypad */
+    .calc-keypad {
+        padding: 1rem;
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .calc-keypad.basic {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .calc-keypad.scientific {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .calc-btn {
+        padding: 1rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--color-surface-alt);
+        color: var(--color-text);
+    }
+
+    .calc-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px var(--color-shadow);
+    }
+
+    .calc-btn:active {
+        transform: scale(0.98);
+    }
+
+    .calc-btn.number {
+        background: var(--color-bg);
+    }
+
+    .calc-btn.operator {
+        background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+        color: white;
+    }
+
+    .calc-btn.operator:hover {
+        box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+    }
+
+    .calc-btn.equals {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        grid-column: span 2;
+    }
+
+    .calc-btn.equals:hover {
+        box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+    }
+
+    .calc-btn.clear {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+
+    .calc-btn.function {
+        background: var(--color-surface);
+        color: var(--color-primary);
+        font-size: 0.9rem;
+        border: 1px solid var(--color-border);
+    }
+
+    .calc-btn.function:hover {
+        background: var(--color-primary);
+        color: white;
+    }
+
+    /* Scientific buttons styling */
+    .calc-keypad.scientific .calc-btn {
+        padding: 0.8rem 0.5rem;
+        font-size: 1rem;
+    }
+
+    .calc-keypad.scientific .calc-btn.function {
+        font-size: 0.8rem;
+    }
+
+    /* History Section */
+    .history-section {
+        margin-top: 1.5rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+    }
+
+    .history-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .history-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    .history-clear {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .history-clear:hover {
+        color: #ef4444;
+    }
+
+    .history-list {
+        max-height: 200px;
+        overflow-y: auto;
+        padding: 0.75rem;
+    }
+
+    .history-item {
+        padding: 0.75rem;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-bottom: 0.25rem;
+    }
+
+    .history-item:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .history-expr {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        font-family: 'SF Mono', 'Consolas', monospace;
+    }
+
+    .history-result {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        font-family: 'SF Mono', 'Consolas', monospace;
+    }
+
+    .history-empty {
+        text-align: center;
+        padding: 2rem;
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+    }
+
+    /* Info Section */
+    .info-section {
+        margin-top: 3rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.25rem;
+        margin-top: 1.5rem;
+    }
+
+    .info-card {
+        padding: 1.25rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+        transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px var(--color-shadow);
+    }
+
+    .info-card h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-card p {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .faq-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--color-text);
+    }
+
+    .faq-item {
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+        margin-bottom: 0.75rem;
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+    }
+
+    .faq-question {
+        padding: 1.25rem;
+        font-weight: 600;
+        color: var(--color-text);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background 0.2s;
+    }
+
+    .faq-question:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .faq-toggle {
+        font-size: 1.25rem;
+        transition: transform 0.3s;
+    }
+
+    .faq-item.open .faq-toggle {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .faq-item.open .faq-answer {
+        max-height: 300px;
+    }
+
+    .faq-answer-content {
+        padding: 0 1.25rem 1.25rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+    }
+
+    /* Keyboard Shortcuts */
+    .shortcuts-section {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .shortcuts-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .shortcuts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .shortcut-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .shortcut-key {
+        padding: 0.25rem 0.5rem;
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        font-family: 'SF Mono', 'Consolas', monospace;
+        font-size: 0.8rem;
+        color: var(--color-text);
+    }
+
+    .shortcut-desc {
+        color: var(--color-text-secondary);
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.85rem;
+        }
+
+        .floating-decor {
+            display: none;
+        }
+
+        .calc-result {
+            font-size: 2rem;
+        }
+
+        .calc-btn {
+            padding: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .calc-keypad.scientific .calc-btn {
+            padding: 0.6rem 0.3rem;
+            font-size: 0.85rem;
+        }
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header">
+    <span class="floating-decor">🔢</span>
+    <span class="floating-decor">➕</span>
+    <span class="floating-decor">✖️</span>
+    <span class="floating-decor">📊</span>
+    <h1>🔢 Simple Calculator Online</h1>
+    <p>Free online calculator with basic and scientific modes. Perform all your calculations instantly in your browser.
+    </p>
+</div>
+
+<div class="calculator-wrapper">
+    <!-- Mode Toggle -->
+    <div class="mode-toggle">
+        <button class="mode-btn active" id="basicModeBtn">🔢 Basic</button>
+        <button class="mode-btn" id="scientificModeBtn">🔬 Scientific</button>
+    </div>
+
+    <!-- Calculator -->
+    <div class="calculator">
+        <div class="calc-display">
+            <div class="calc-expression" id="expression"></div>
+            <div class="calc-result" id="result">0</div>
+        </div>
+
+        <!-- Basic Keypad -->
+        <div class="calc-keypad basic" id="basicKeypad">
+            <button class="calc-btn clear" data-action="clear">C</button>
+            <button class="calc-btn function" data-action="backspace">⌫</button>
+            <button class="calc-btn function" data-action="percent">%</button>
+            <button class="calc-btn operator" data-action="divide">÷</button>
+
+            <button class="calc-btn number" data-value="7">7</button>
+            <button class="calc-btn number" data-value="8">8</button>
+            <button class="calc-btn number" data-value="9">9</button>
+            <button class="calc-btn operator" data-action="multiply">×</button>
+
+            <button class="calc-btn number" data-value="4">4</button>
+            <button class="calc-btn number" data-value="5">5</button>
+            <button class="calc-btn number" data-value="6">6</button>
+            <button class="calc-btn operator" data-action="subtract">−</button>
+
+            <button class="calc-btn number" data-value="1">1</button>
+            <button class="calc-btn number" data-value="2">2</button>
+            <button class="calc-btn number" data-value="3">3</button>
+            <button class="calc-btn operator" data-action="add">+</button>
+
+            <button class="calc-btn number" data-value="0">0</button>
+            <button class="calc-btn number" data-action="decimal">.</button>
+            <button class="calc-btn equals" data-action="equals">=</button>
+        </div>
+
+        <!-- Scientific Keypad -->
+        <div class="calc-keypad scientific" id="scientificKeypad" style="display: none;">
+            <button class="calc-btn function" data-action="sin">sin</button>
+            <button class="calc-btn function" data-action="cos">cos</button>
+            <button class="calc-btn function" data-action="tan">tan</button>
+            <button class="calc-btn clear" data-action="clear">C</button>
+            <button class="calc-btn function" data-action="backspace">⌫</button>
+
+            <button class="calc-btn function" data-action="asin">sin⁻¹</button>
+            <button class="calc-btn function" data-action="acos">cos⁻¹</button>
+            <button class="calc-btn function" data-action="atan">tan⁻¹</button>
+            <button class="calc-btn function" data-action="percent">%</button>
+            <button class="calc-btn operator" data-action="divide">÷</button>
+
+            <button class="calc-btn function" data-action="log">log</button>
+            <button class="calc-btn function" data-action="ln">ln</button>
+            <button class="calc-btn function" data-action="sqrt">√</button>
+            <button class="calc-btn number" data-value="7">7</button>
+            <button class="calc-btn number" data-value="8">8</button>
+
+            <button class="calc-btn function" data-action="pow">xʸ</button>
+            <button class="calc-btn function" data-action="square">x²</button>
+            <button class="calc-btn function" data-action="factorial">n!</button>
+            <button class="calc-btn number" data-value="9">9</button>
+            <button class="calc-btn operator" data-action="multiply">×</button>
+
+            <button class="calc-btn function" data-action="pi">π</button>
+            <button class="calc-btn function" data-action="e">e</button>
+            <button class="calc-btn function" data-action="paren">( )</button>
+            <button class="calc-btn number" data-value="4">4</button>
+            <button class="calc-btn number" data-value="5">5</button>
+
+            <button class="calc-btn function" data-action="negate">±</button>
+            <button class="calc-btn function" data-action="abs">|x|</button>
+            <button class="calc-btn function" data-action="exp">EXP</button>
+            <button class="calc-btn number" data-value="6">6</button>
+            <button class="calc-btn operator" data-action="subtract">−</button>
+
+            <button class="calc-btn function" data-action="inv">1/x</button>
+            <button class="calc-btn function" data-action="mod">mod</button>
+            <button class="calc-btn number" data-value="0">0</button>
+            <button class="calc-btn number" data-value="1">1</button>
+            <button class="calc-btn number" data-value="2">2</button>
+
+            <button class="calc-btn number" data-value="3">3</button>
+            <button class="calc-btn operator" data-action="add">+</button>
+            <button class="calc-btn number" data-action="decimal">.</button>
+            <button class="calc-btn equals" data-action="equals">=</button>
+        </div>
+    </div>
+
+    <!-- History -->
+    <div class="history-section">
+        <div class="history-header">
+            <span class="history-title">📋 History</span>
+            <button class="history-clear" id="clearHistory">Clear All</button>
+        </div>
+        <div class="history-list" id="historyList">
+            <div class="history-empty">No calculations yet</div>
+        </div>
+    </div>
+
+    <!-- Keyboard Shortcuts -->
+    <div class="shortcuts-section">
+        <h3 class="shortcuts-title">⌨️ Keyboard Shortcuts</h3>
+        <div class="shortcuts-grid">
+            <div class="shortcut-item">
+                <span class="shortcut-key">0-9</span>
+                <span class="shortcut-desc">Numbers</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="shortcut-key">+ - * /</span>
+                <span class="shortcut-desc">Operations</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="shortcut-key">Enter</span>
+                <span class="shortcut-desc">Calculate</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="shortcut-key">Backspace</span>
+                <span class="shortcut-desc">Delete</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="shortcut-key">Esc</span>
+                <span class="shortcut-desc">Clear All</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="shortcut-key">.</span>
+                <span class="shortcut-desc">Decimal</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Info Section -->
+<div class="info-section">
+    <h2>📚 About Simple Calculator Online</h2>
+    <p>
+        Our free online calculator provides both basic and scientific calculation modes, making it perfect for
+        students, professionals, and anyone who needs quick calculations. Whether you're doing simple arithmetic
+        or complex trigonometric functions, this calculator has you covered.
+    </p>
+    <p>
+        The calculator works entirely in your browser with no downloads required. It supports keyboard input
+        for faster calculations and maintains a history of your recent computations for easy reference.
+    </p>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <h3>🔢 Basic Mode</h3>
+            <p>Standard arithmetic operations including addition, subtraction, multiplication, division, and
+                percentages. Perfect for everyday calculations.</p>
+        </div>
+        <div class="info-card">
+            <h3>🔬 Scientific Mode</h3>
+            <p>Advanced functions including trigonometry (sin, cos, tan), logarithms (log, ln), powers, roots,
+                factorials, and mathematical constants.</p>
+        </div>
+        <div class="info-card">
+            <h3>⌨️ Keyboard Support</h3>
+            <p>Full keyboard support for faster input. Use number keys, operators, Enter for equals, and Escape to
+                clear.</p>
+        </div>
+        <div class="info-card">
+            <h3>📋 Calculation History</h3>
+            <p>View and reuse your previous calculations. Click any history item to load it back into the calculator.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="faq-section">
+    <h2 class="faq-title">❓ Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>How do I use this online calculator?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">
+                Simply click the number buttons or type on your keyboard to enter numbers. Use operation buttons (+, -,
+                ×, ÷) to perform calculations. Press = or Enter to see the result. Toggle between Basic and Scientific
+                modes for additional functions like trigonometry and logarithms.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>What is the difference between Basic and Scientific mode?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">
+                Basic mode offers standard arithmetic operations: addition, subtraction, multiplication, and division.
+                Scientific mode adds advanced functions including trigonometric functions (sin, cos, tan and their
+                inverses), logarithms (log base 10 and natural log), powers and roots, factorials, and mathematical
+                constants like π (pi) and e (Euler's number).
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Can I use keyboard shortcuts?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">
+                Yes! The calculator fully supports keyboard input. Use number keys (0-9) for digits, +, -, *, / for
+                operations, Enter or = for equals, Backspace to delete the last character, and Escape to clear all. You
+                can also use parentheses for grouping.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Is this calculator accurate for scientific calculations?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">
+                Yes! Our calculator uses JavaScript's built-in Math library which provides IEEE 754 double-precision
+                floating-point arithmetic. This means it handles up to 15-17 significant digits of precision, which is
+                suitable for most scientific and engineering calculations.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Are trigonometric functions in degrees or radians?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">
+                The calculator uses radians by default, which is the standard for mathematical calculations. To convert
+                from degrees to radians, multiply by π/180. For example, sin(90°) would be entered as sin(90 × π ÷ 180).
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Does the calculator work offline?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">
+                Once the page is loaded in your browser, all calculations are performed locally without needing an
+                internet connection. However, you do need an internet connection to initially load the calculator page.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>How do I calculate percentages?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">
+                Use the % button after entering a number. For example, to find 20% of 150, enter 150 × 20 %. The
+                calculator will compute 150 × 0.20 = 30. You can also use percentages in addition and subtraction: 100 +
+                15% will add 15% to 100.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>What does the factorial (n!) function do?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">
+                The factorial function (n!) multiplies all positive integers from 1 to n. For example, 5! = 5 × 4 × 3 ×
+                2 × 1 = 120. Factorials are commonly used in probability, combinatorics, and statistics calculations.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Can I view my calculation history?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">
+                Yes! The calculator maintains a history of your recent calculations shown below the keypad. Click on any
+                history item to load that result back into the calculator. Use the "Clear All" button to remove the
+                history.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Is my calculation data stored or shared?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <div class="faq-answer-content">
+                No. All calculations are performed entirely in your web browser. We do not store, transmit, or have
+                access to any of your calculations. Your calculation history is stored only in your browser's memory and
+                is cleared when you close the page.
+            </div>
+        </div>
+    </div>
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script>
+    (function () {
+        // DOM Elements
+        const expressionEl = document.getElementById('expression');
+        const resultEl = document.getElementById('result');
+        const historyList = document.getElementById('historyList');
+        const clearHistoryBtn = document.getElementById('clearHistory');
+        const basicKeypad = document.getElementById('basicKeypad');
+        const scientificKeypad = document.getElementById('scientificKeypad');
+        const basicModeBtn = document.getElementById('basicModeBtn');
+        const scientificModeBtn = document.getElementById('scientificModeBtn');
+
+        // Calculator State
+        let currentValue = '0';
+        let previousValue = '';
+        let operation = null;
+        let shouldResetScreen = false;
+        let expression = '';
+        let history = [];
+        let openParens = 0;
+        let isScientificMode = false;
+
+        // Initialize
+        function init() {
+            addEventListeners();
+            setupKeyboard();
+            setupFAQ();
+        }
+
+        // Event Listeners
+        function addEventListeners() {
+            // Number buttons
+            document.querySelectorAll('.calc-btn[data-value]').forEach(btn => {
+                btn.addEventListener('click', () => appendNumber(btn.dataset.value));
+            });
+
+            // Action buttons
+            document.querySelectorAll('.calc-btn[data-action]').forEach(btn => {
+                btn.addEventListener('click', () => handleAction(btn.dataset.action));
+            });
+
+            // Mode toggle
+            basicModeBtn.addEventListener('click', () => setMode('basic'));
+            scientificModeBtn.addEventListener('click', () => setMode('scientific'));
+
+            // Clear history
+            clearHistoryBtn.addEventListener('click', clearHistory);
+        }
+
+        // Mode switching
+        function setMode(mode) {
+            isScientificMode = mode === 'scientific';
+
+            if (isScientificMode) {
+                basicKeypad.style.display = 'none';
+                scientificKeypad.style.display = 'grid';
+                scientificModeBtn.classList.add('active');
+                basicModeBtn.classList.remove('active');
+            } else {
+                basicKeypad.style.display = 'grid';
+                scientificKeypad.style.display = 'none';
+                basicModeBtn.classList.add('active');
+                scientificModeBtn.classList.remove('active');
+            }
+        }
+
+        // Append number
+        function appendNumber(number) {
+            if (shouldResetScreen) {
+                currentValue = '';
+                shouldResetScreen = false;
+            }
+            if (currentValue === '0' && number !== '.') {
+                currentValue = number;
+            } else if (number === '.' && currentValue.includes('.')) {
+                return;
+            } else {
+                currentValue += number;
+            }
+            updateDisplay();
+        }
+
+        // Handle actions
+        function handleAction(action) {
+            switch (action) {
+                case 'clear':
+                    clear();
+                    break;
+                case 'backspace':
+                    backspace();
+                    break;
+                case 'decimal':
+                    appendNumber('.');
+                    break;
+                case 'add':
+                case 'subtract':
+                case 'multiply':
+                case 'divide':
+                    setOperation(action);
+                    break;
+                case 'equals':
+                    calculate();
+                    break;
+                case 'percent':
+                    percentage();
+                    break;
+                // Scientific functions
+                case 'sin':
+                    applyFunction('sin', Math.sin);
+                    break;
+                case 'cos':
+                    applyFunction('cos', Math.cos);
+                    break;
+                case 'tan':
+                    applyFunction('tan', Math.tan);
+                    break;
+                case 'asin':
+                    applyFunction('sin⁻¹', Math.asin);
+                    break;
+                case 'acos':
+                    applyFunction('cos⁻¹', Math.acos);
+                    break;
+                case 'atan':
+                    applyFunction('tan⁻¹', Math.atan);
+                    break;
+                case 'log':
+                    applyFunction('log', Math.log10);
+                    break;
+                case 'ln':
+                    applyFunction('ln', Math.log);
+                    break;
+                case 'sqrt':
+                    applyFunction('√', Math.sqrt);
+                    break;
+                case 'square':
+                    applyFunction('²', x => x * x);
+                    break;
+                case 'pow':
+                    setOperation('pow');
+                    break;
+                case 'factorial':
+                    applyFactorial();
+                    break;
+                case 'pi':
+                    insertConstant(Math.PI, 'π');
+                    break;
+                case 'e':
+                    insertConstant(Math.E, 'e');
+                    break;
+                case 'negate':
+                    negate();
+                    break;
+                case 'abs':
+                    applyFunction('|x|', Math.abs);
+                    break;
+                case 'inv':
+                    applyFunction('1/', x => 1 / x);
+                    break;
+                case 'mod':
+                    setOperation('mod');
+                    break;
+                case 'exp':
+                    setOperation('exp');
+                    break;
+                case 'paren':
+                    toggleParen();
+                    break;
+            }
+        }
+
+        // Clear
+        function clear() {
+            currentValue = '0';
+            previousValue = '';
+            operation = null;
+            expression = '';
+            openParens = 0;
+            updateDisplay();
+        }
+
+        // Backspace
+        function backspace() {
+            if (currentValue.length === 1 || (currentValue.length === 2 && currentValue[0] === '-')) {
+                currentValue = '0';
+            } else {
+                currentValue = currentValue.slice(0, -1);
+            }
+            updateDisplay();
+        }
+
+        // Set operation
+        function setOperation(op) {
+            if (operation !== null) {
+                calculate();
+            }
+            previousValue = currentValue;
+            operation = op;
+            expression = currentValue + ' ' + getOperatorSymbol(op);
+            shouldResetScreen = true;
+            updateDisplay();
+        }
+
+        // Get operator symbol
+        function getOperatorSymbol(op) {
+            const symbols = {
+                'add': '+',
+                'subtract': '−',
+                'multiply': '×',
+                'divide': '÷',
+                'pow': '^',
+                'mod': 'mod',
+                'exp': 'E'
+            };
+            return symbols[op] || op;
+        }
+
+        // Calculate
+        function calculate() {
+            if (operation === null || previousValue === '') return;
+
+            const prev = parseFloat(previousValue);
+            const curr = parseFloat(currentValue);
+            let result;
+
+            switch (operation) {
+                case 'add':
+                    result = prev + curr;
+                    break;
+                case 'subtract':
+                    result = prev - curr;
+                    break;
+                case 'multiply':
+                    result = prev * curr;
+                    break;
+                case 'divide':
+                    result = prev / curr;
+                    break;
+                case 'pow':
+                    result = Math.pow(prev, curr);
+                    break;
+                case 'mod':
+                    result = prev % curr;
+                    break;
+                case 'exp':
+                    result = prev * Math.pow(10, curr);
+                    break;
+                default:
+                    return;
+            }
+
+            const fullExpression = expression + ' ' + currentValue;
+            addToHistory(fullExpression, result);
+
+            currentValue = formatNumber(result);
+            operation = null;
+            previousValue = '';
+            expression = '';
+            shouldResetScreen = true;
+            updateDisplay();
+        }
+
+        // Percentage
+        function percentage() {
+            const curr = parseFloat(currentValue);
+            if (previousValue !== '') {
+                currentValue = formatNumber((parseFloat(previousValue) * curr) / 100);
+            } else {
+                currentValue = formatNumber(curr / 100);
+            }
+            updateDisplay();
+        }
+
+        // Apply scientific function
+        function applyFunction(name, fn) {
+            const curr = parseFloat(currentValue);
+            const result = fn(curr);
+            const expr = `${name}(${currentValue})`;
+
+            addToHistory(expr, result);
+            currentValue = formatNumber(result);
+            shouldResetScreen = true;
+            updateDisplay();
+        }
+
+        // Factorial
+        function applyFactorial() {
+            const n = parseInt(currentValue);
+            if (n < 0 || n > 170) {
+                currentValue = 'Error';
+                updateDisplay();
+                return;
+            }
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
+            }
+            addToHistory(`${n}!`, result);
+            currentValue = formatNumber(result);
+            shouldResetScreen = true;
+            updateDisplay();
+        }
+
+        // Insert constant
+        function insertConstant(value, symbol) {
+            currentValue = formatNumber(value);
+            expression += symbol;
+            shouldResetScreen = true;
+            updateDisplay();
+        }
+
+        // Negate
+        function negate() {
+            currentValue = formatNumber(parseFloat(currentValue) * -1);
+            updateDisplay();
+        }
+
+        // Toggle parenthesis
+        function toggleParen() {
+            if (openParens === 0 || shouldResetScreen) {
+                currentValue = '(';
+                openParens++;
+                shouldResetScreen = false;
+            } else {
+                currentValue += ')';
+                openParens--;
+            }
+            updateDisplay();
+        }
+
+        // Format number
+        function formatNumber(num) {
+            if (isNaN(num) || !isFinite(num)) {
+                return 'Error';
+            }
+
+            // Handle very large or small numbers
+            if (Math.abs(num) > 1e12 || (Math.abs(num) < 1e-12 && num !== 0)) {
+                return num.toExponential(6);
+            }
+
+            // Round to avoid floating point errors
+            const rounded = Math.round(num * 1e10) / 1e10;
+            return rounded.toString();
+        }
+
+        // Update display
+        function updateDisplay() {
+            resultEl.textContent = currentValue;
+            expressionEl.textContent = expression;
+        }
+
+        // Add to history
+        function addToHistory(expr, result) {
+            const formattedResult = formatNumber(result);
+            history.unshift({ expression: expr, result: formattedResult });
+            if (history.length > 10) history.pop();
+            renderHistory();
+        }
+
+        // Render history
+        function renderHistory() {
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="history-empty">No calculations yet</div>';
+                return;
+            }
+
+            historyList.innerHTML = history.map((item, index) => `
+            <div class="history-item" data-index="${index}">
+                <div class="history-expr">${item.expression} =</div>
+                <div class="history-result">${item.result}</div>
+            </div>
+        `).join('');
+
+            // Add click handlers
+            historyList.querySelectorAll('.history-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const index = parseInt(item.dataset.index);
+                    currentValue = history[index].result;
+                    shouldResetScreen = true;
+                    updateDisplay();
+                });
+            });
+        }
+
+        // Clear history
+        function clearHistory() {
+            history = [];
+            renderHistory();
+        }
+
+        // Setup keyboard
+        function setupKeyboard() {
+            document.addEventListener('keydown', (e) => {
+                if (e.key >= '0' && e.key <= '9') {
+                    appendNumber(e.key);
+                } else if (e.key === '.') {
+                    appendNumber('.');
+                } else if (e.key === '+') {
+                    handleAction('add');
+                } else if (e.key === '-') {
+                    handleAction('subtract');
+                } else if (e.key === '*') {
+                    handleAction('multiply');
+                } else if (e.key === '/') {
+                    e.preventDefault();
+                    handleAction('divide');
+                } else if (e.key === 'Enter' || e.key === '=') {
+                    e.preventDefault();
+                    handleAction('equals');
+                } else if (e.key === 'Escape') {
+                    handleAction('clear');
+                } else if (e.key === 'Backspace') {
+                    handleAction('backspace');
+                } else if (e.key === '%') {
+                    handleAction('percent');
+                } else if (e.key === '(' || e.key === ')') {
+                    handleAction('paren');
+                }
+            });
+        }
+
+        // Setup FAQ
+        function setupFAQ() {
+            document.querySelectorAll('.faq-item').forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    item.classList.toggle('open');
+                });
+            });
+        }
+
+        // Initialize
+        init();
+    })();
+</script>
+<!--@end:extra_js-->

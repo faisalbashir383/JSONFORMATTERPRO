@@ -1,0 +1,14 @@
+{
+  "name": "jsonformatterspro-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "wrangler pages dev dist",
+    "convert": "python3 ../scripts/convert_templates.py"
+  },
+  "dependencies": {
+    "astro": "5.18.2"
+  }
+}

@@ -1,0 +1,1225 @@
+<!--@block:title-->Comma Separator Online – Convert Lists to CSV & Delimited Text<!--@end:title-->
+<!--@block:meta_title-->Comma Separator Online – Convert Lists to CSV & Delimited Text<!--@end:meta_title-->
+<!--@block:meta_description-->Comma separator online tool to convert lists into comma separated or CSV format. Split text
+by delimiter instantly, securely, and client-side.<!--@end:meta_description-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/comma-separator/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Comma Separator Online",
+  "applicationCategory": "UtilityApplication",
+  "applicationSubCategory": "Text Processing Tool",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "description": "Convert lists and text data into comma-separated, pipe-separated, or custom delimited formats instantly.",
+  "featureList": [
+    "Convert newlines to comma-separated lists",
+    "Switch between common delimiters (Pipe, Semicolon, Tab)",
+    "Custom delimiter support",
+    "CSV-safe quoting for professional data export",
+    "100% client-side for maximum privacy"
+  ],
+  "softwareVersion": "1.0"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a comma separator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A comma separator is a tool or process that takes a list of items (often one per line) and combines them into a single string separated by commas. This format is commonly used for CSV files, SQL IN clauses, and data importing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a comma delimited list?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A comma delimited list is a set of data values separated by the comma character. It is the foundation of the CSV (Comma-Separated Values) format used across almost all spreadsheet and database applications."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this comma separator tool free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, our Comma Separator tool is 100% free to use. There are no limitations on list size or the number of conversions you can perform."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are my files uploaded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. All processing is done locally in your browser using JavaScript. Your data never leaves your computer, ensuring complete security and privacy."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I convert to CSV?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, once you convert your list to a comma-separated format, you can download the result as a .csv file directly from the tool."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to convert a list into comma-separated values",
+  "step": [
+    { "@type": "HowToStep", "text": "Paste your list into the input box." },
+    { "@type": "HowToStep", "text": "Choose a delimiter such as comma or pipe." },
+    { "@type": "HowToStep", "text": "Enable options like trimming or deduplication." },
+    { "@type": "HowToStep", "text": "Copy or download the output." }
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<style>
+    /* Visually hidden - for SEO content accessible to search engines & screen readers */
+    .visually-hidden {
+        position: absolute !important;
+        height: 1px;
+        width: 1px;
+        overflow: hidden;
+        clip: rect(1px, 1px, 1px, 1px);
+        white-space: nowrap;
+    }
+
+    .comma-wrapper {
+
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .tool-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        .comma-wrapper {
+            padding: 1.5rem 1rem;
+        }
+
+        .tool-header {
+            margin-bottom: 2rem;
+        }
+    }
+
+    .tool-header h1 {
+        font-size: 2.75rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--color-primary) 0%, #a855f7 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.75rem;
+        line-height: 1.2;
+        word-wrap: break-word;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .tool-header p {
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .tool-header h1 {
+            font-size: 1.5rem;
+        }
+    }
+
+    .comma-container {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 2rem;
+        width: 100%;
+    }
+
+    @media (max-width: 992px) {
+        .comma-container {
+            grid-template-columns: 100%;
+            gap: 1.5rem;
+        }
+    }
+
+    .main-tool-area {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        min-width: 0;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .editor-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        width: 100%;
+        min-width: 0;
+    }
+
+    .editor-header {
+        padding: 0.75rem 1.25rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        width: 100%;
+        min-width: 0;
+    }
+
+    @media (max-width: 640px) {
+        .editor-header {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 1rem;
+            gap: 1rem;
+        }
+    }
+
+    .textarea-wrapper {
+        position: relative;
+    }
+
+    textarea.comma-input {
+        width: 100%;
+        height: 250px;
+        padding: 1.25rem;
+        border: none;
+        background: transparent;
+        color: var(--color-text);
+        font-family: 'Fira Code', 'Cascadia Code', Consolas, monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        resize: vertical;
+        outline: none;
+    }
+
+    @media (max-width: 768px) {
+        textarea.comma-input {
+            height: 200px;
+            padding: 1rem;
+        }
+    }
+
+    .control-panel {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        position: sticky;
+        top: 2rem;
+        max-height: calc(100vh - 4rem);
+        overflow-y: auto;
+        min-width: 0;
+        width: 100%;
+    }
+
+    @media (max-width: 992px) {
+        .control-panel {
+            position: relative;
+            top: 0;
+            max-height: none;
+            overflow-y: visible;
+        }
+    }
+
+    /* Custom scrollbar for Sidebar */
+    .control-panel::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .control-panel::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .control-panel::-webkit-scrollbar-thumb {
+        background: var(--color-border);
+        border-radius: 10px;
+    }
+
+    .control-panel::-webkit-scrollbar-thumb:hover {
+        background: var(--color-text-secondary);
+    }
+
+    .control-group h3 {
+        font-size: 0.875rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--color-text-secondary);
+        margin-bottom: 1rem;
+    }
+
+    .delimiter-scroll-container {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.5rem;
+        cursor: grab;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Hide scrollbar but keep functionality */
+    .delimiter-scroll-container::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .delimiter-scroll-container::-webkit-scrollbar-track {
+        background: var(--color-surface-alt);
+        border-radius: 10px;
+    }
+
+    .delimiter-scroll-container::-webkit-scrollbar-thumb {
+        background: var(--color-border);
+        border-radius: 10px;
+    }
+
+    .delimiter-scroll-container::-webkit-scrollbar-thumb:hover {
+        background: var(--color-text-secondary);
+    }
+
+    .delimiter-list {
+        display: flex;
+        gap: 0.5rem;
+        width: max-content;
+        min-width: 100%;
+    }
+
+    .del-btn {
+        padding: 0.6rem 1rem;
+        white-space: nowrap;
+        border: 1px solid var(--color-border);
+        background: var(--color-surface-alt);
+        border-radius: 8px;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: var(--color-text);
+        flex-shrink: 0;
+    }
+
+    .del-btn:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    .del-btn.active {
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+        color: white;
+    }
+
+    .custom-del-input {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid var(--color-border);
+        background: var(--color-surface-alt);
+        border-radius: 8px;
+        margin-top: 0.5rem;
+        outline: none;
+        color: var(--color-text);
+    }
+
+    .custom-del-input:focus {
+        border-color: var(--color-primary);
+    }
+
+    .option-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        font-size: 0.95rem;
+        color: var(--color-text);
+    }
+
+    .option-item input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--color-primary);
+    }
+
+    .action-row {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .btn-pro {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background: var(--color-primary);
+        color: white;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+        background: var(--color-surface-alt);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+    }
+
+    .btn-secondary:hover {
+        background: var(--color-border);
+    }
+
+    .btn-danger {
+        background: #fee2e2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+    }
+
+    .btn-danger:hover {
+        background: #fecaca;
+    }
+
+    /* SEO Section */
+    .seo-section {
+        margin-top: 5rem;
+        padding-top: 3rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .seo-content {
+        max-width: 900px;
+        margin: 0 auto;
+        line-height: 1.8;
+    }
+
+    .seo-content h2 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        font-weight: 800;
+    }
+
+    .seo-content h3 {
+        font-size: 1.5rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .seo-content p {
+        color: var(--color-text-secondary);
+        margin-bottom: 1.5rem;
+    }
+
+    .seo-content ul {
+        padding-left: 1.5rem;
+        margin-bottom: 1.5rem;
+        list-style: disc;
+        color: var(--color-text-secondary);
+    }
+
+    /* Modern Intro Section */
+    .seo-intro {
+        max-width: 800px;
+        margin: 1.5rem auto 0;
+        text-align: center;
+    }
+
+    .seo-intro p {
+        font-size: 1.05rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+    }
+
+    .seo-intro strong {
+        color: var(--color-text);
+    }
+
+    .seo-intro code {
+        background: var(--color-surface-alt);
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        color: var(--color-primary);
+        font-family: 'Fira Code', monospace;
+    }
+
+
+    .preview-info {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    .stats-item {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .stats-item strong {
+        color: var(--color-text);
+    }
+
+    /* Warning / Success Inline */
+    .smart-msg {
+        display: none;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        animation: fadeIn 0.2s ease;
+    }
+
+    .smart-msg.visible {
+        display: flex;
+    }
+
+    .smart-msg.warning {
+        background: #fffbeb;
+        color: #92400e;
+        border: 1px solid #fef3c7;
+    }
+
+    .smart-msg.success {
+        background: #f0fdf4;
+        color: #166534;
+        border: 1px solid #dcfce7;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-5px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    @media (max-width: 640px) {
+        .header-right {
+            width: 100%;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .preview-info {
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .header-actions {
+            width: 100%;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .btn-header {
+            flex: 1 1 auto;
+            justify-content: center;
+            min-width: 120px;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .btn-header {
+            padding: 0.35rem 0.5rem;
+            font-size: 0.7rem;
+            min-width: 100px;
+        }
+
+        .stats-item {
+            font-size: 0.7rem;
+        }
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 0.4rem;
+    }
+
+    .btn-header {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.35rem 0.6rem;
+        border-radius: 6px;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        color: var(--color-text-secondary);
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-header:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+        background: var(--color-surface-alt);
+    }
+
+    .btn-header.btn-primary-alt {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+    }
+
+    .btn-header.btn-primary-alt:hover {
+        opacity: 0.9;
+        background: var(--color-primary);
+        color: white;
+    }
+
+    .btn-header svg {
+        width: 14px;
+        height: 14px;
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="comma-wrapper">
+    <div class="tool-header">
+        <h1>Comma Separator Online</h1>
+        <div class="seo-intro">
+        <p>
+            This free <strong>comma separator online</strong> tool helps you convert
+            <strong>lists into comma-separated values (CSV)</strong> for Excel,
+            Google Sheets, SQL <code>IN (...)</code> clauses, APIs, and databases.
+            Paste your list, choose a delimiter, and get clean output instantly —
+            no uploads, no tracking, 100% browser-based.
+        </p>
+            <p>
+This tool focuses on text formatting and does not validate database schemas or CSV dialect differences between spreadsheet software.
+</p>
+        </div>
+
+        <!-- Visually hidden SEO content for search engines & LLMs -->
+        <div class="visually-hidden">
+            <h2>What Does This Comma Separator Tool Do?</h2>
+            <p>
+                This free comma separator online tool converts lists of text into comma-separated
+                values (CSV) or other delimiter-separated formats. It supports trimming whitespace,
+                removing duplicates, sorting values, quoting output, and generating JSON arrays —
+                all directly in your browser with no data uploaded to any server.
+            </p>
+
+            <h2>Common Use Cases for Comma Separator</h2>
+            <ul>
+                <li>Convert newline lists into comma-separated values (CSV)</li>
+                <li>Create SQL IN (...) clauses from text lists</li>
+                <li>Prepare data for Excel and Google Sheets import</li>
+                <li>Generate JSON arrays from text lists</li>
+                <li>Clean, sort, and deduplicate text data</li>
+                <li>Convert pipe-delimited or tab-delimited data to CSV</li>
+                <li>Format data for API requests and database imports</li>
+            </ul>
+
+            <h2>Supported Delimiters</h2>
+            <p>
+                This tool supports comma, pipe, semicolon, tab, space, newline, colon, dash,
+                underscore, slash, and custom delimiters for maximum flexibility.
+            </p>
+        </div>
+    </div>
+
+
+    <div class="comma-container" id="tool-start">
+
+        <div class="main-tool-area">
+            <!-- Input Area -->
+            <div class="editor-card">
+                <div class="editor-header">
+                    <span>INPUT LIST</span>
+                    <div class="header-actions">
+                        <button class="btn-header" onclick="loadSample()">
+                            <svg viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C7.13 19 4 15.87 4 12C4 8.13 7.13 5 11 5C12.86 5 14.63 5.75 15.9 7.1L13 10H20V3L17.4 5.6C15.68 3.94 13.39 3 11 3C6.03 3 2 7.03 2 12Z" />
+                            </svg>
+                            Load Sample
+                        </button>
+                    </div>
+                </div>
+                <div class="textarea-wrapper">
+                    <textarea id="inputText" class="comma-input"
+                        placeholder="Paste your list here (one item per line, or any text)..."></textarea>
+                </div>
+            </div>
+
+            <!-- Output Area -->
+            <div class="editor-card">
+                <div class="editor-header">
+                    <span>OUTPUT DATA</span>
+                    <div class="header-right">
+                        <div id="smartMsg" class="smart-msg">
+                            <svg style="width:14px;height:14px" viewBox="0 0 24 24">
+                                <path id="smartIcon" fill="currentColor"
+                                    d="M12,2L1,21H23M12,6L19.53,19H4.47M11,10V14H13V10M11,16V18H13V16" />
+                            </svg>
+                            <span id="smartText"></span>
+                        </div>
+                        <div class="preview-info" id="statsPanel">
+                            <span class="stats-item">Items: <strong id="statItems">0</strong></span>
+                            <span class="stats-item">|</span>
+                            <span class="stats-item">Del: <strong id="statDelName">Comma</strong></span>
+                        </div>
+                        <div class="header-actions">
+                            <button class="btn-header" onclick="clearAll()" title="Clear Both">
+                                <svg viewBox="0 0 24 24">
+                                    <path fill="currentColor"
+                                        d="M19.36,2.72L20.78,4.14L15.06,9.85C16.13,11.39 16.28,13.24 15.38,14.44L9.06,8.12C10.26,7.22 12.11,7.37 13.65,8.44L19.36,2.72M5.93,17.57C3.92,15.56 2.69,13.16 2.35,10.92L7.23,8.83L14.67,16.27L12.58,21.15C10.34,20.81 7.94,19.58 5.93,17.57Z" />
+                                </svg>
+                                Clear
+                            </button>
+                            <button class="btn-header" onclick="downloadFile('csv')" title="Download CSV">
+                                <svg viewBox="0 0 24 24">
+                                    <path fill="currentColor"
+                                        d="M14,2L20,8V20A2,2 0 0118,22H6A2,2 0 014,20V4A2,2 0 016,2H14M18,20V9H13V4H6V20H18M10.18,15.83L11,17L8.5,18.5L6,17L6.82,15.83L7.75,16.38V12.5H9.25V16.38L10.18,15.83M13.25,12.5H16V13.75H14.5V14.5H16V15.75H14.5V16.5H16V17.75H13.25V12.5Z" />
+                                </svg>
+                                CSV
+                            </button>
+                            <button class="btn-header btn-primary-alt" onclick="copyResult()" title="Copy to Clipboard">
+                                <svg viewBox="0 0 24 24">
+                                    <path fill="currentColor"
+                                        d="M19,21H8V7H19M19,5H8A2,2 0 006,7V21A2,2 0 008,23H19A2,2 0 0021,21V7A2,2 0 0019,5M16,1H4A2,2 0 002,3V17H4V3H16V1Z" />
+                                </svg>
+                                Copy Output
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="textarea-wrapper">
+                    <textarea id="outputText" class="comma-input" readonly
+                        placeholder="Output will appear here..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-column">
+            <div class="control-panel">
+                <div class="control-group">
+                    <h3>Delimiter Selection</h3>
+                    <div class="delimiter-scroll-container">
+                        <div class="delimiter-list">
+                            <button class="del-btn active" data-del=",">Comma (,)</button>
+                            <button class="del-btn" data-del="|">Pipe (|)</button>
+                            <button class="del-btn" data-del=";">Semicolon (;)</button>
+                            <button class="del-btn" data-del="\t">Tab</button>
+                            <button class="del-btn" data-del=" ">Space</button>
+                            <button class="del-btn" data-del="\n">Newline</button>
+                            <button class="del-btn" data-del=":">Colon (:)</button>
+                            <button class="del-btn" data-del="-">Dash (-)</button>
+                            <button class="del-btn" data-del="_">Underscore (_)</button>
+                            <button class="del-btn" data-del="/">Slash (/)</button>
+                        </div>
+                    </div>
+                    <input type="text" id="customDel" class="custom-del-input" placeholder="Custom delimiter...">
+                </div>
+
+                <div class="control-group">
+                    <h3>Options</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <label class="option-item">
+                            <input type="checkbox" id="optTrim" checked>
+                            Trim Whitespace
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" id="optRemoveEmpty" checked>
+                            Remove Empty Values
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" id="optRemoveDuplicates">
+                            Remove Duplicates
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" id="optQuotes">
+                            Quote All Values
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" id="optDoubleQuotes">
+                            Double Quotes (CSV Safe)
+                        </label>
+                        <label class="option-item" style="color: var(--color-primary); font-weight: 600;">
+                            <input type="checkbox" id="optArray">
+                            JSON Array Format ( [ ... ] )
+                        </label>
+                        <hr style="border: none; border-top: 1px solid var(--color-border); margin: 0.5rem 0;">
+                        <label class="option-item">
+                            <input type="checkbox" id="optSort">
+                            Sort Alphabetically (A → Z)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <h3>Source Parsing</h3>
+                    <div class="delimiter-grid"
+                        style="grid-template-columns: 1fr; gap: 0.5rem; margin-bottom: 0.75rem;">
+                        <label class="option-item" style="font-size: 0.8rem;">
+                            <input type="checkbox" id="optAutoDetect" checked>
+                            Smart Auto-Detect Delimiter
+                        </label>
+                    </div>
+                    <p style="font-size: 0.75rem; color: var(--color-text-secondary); margin-bottom: 0.5rem;">Or select
+                        manual source split:</p>
+                    <div class="delimiter-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                        <button class="del-btn active" id="btnSplitRow" data-source-split="newline">Split by
+                            Line</button>
+                        <button class="del-btn" id="btnSplitAny" data-source-split="any">Any Space</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <section class="seo-section">
+        <div class="seo-content">
+            <h2>Convert Lists to Comma-Separated Values (CSV)</h2>
+            <p>
+                Use this comma separator tool to quickly convert newline-based lists
+                into <strong>comma-separated values</strong> (CSV) that can be imported
+                into Excel, Google Sheets, Airtable, or databases without formatting errors.
+            </p>
+
+            <h2>Create SQL IN Clauses from Text Lists</h2>
+            <p>
+                Developers can turn plain text lists into properly quoted,
+                comma-separated values for SQL <code>IN (...)</code> clauses.
+                Supports trimming, deduplication, and CSV-safe quoting.
+            </p>
+
+            <h2>Format Data for Excel and Google Sheets</h2>
+            <p>
+                Prepare clean, delimiter-separated data for spreadsheet tools.
+                Remove duplicates, sort alphabetically, or switch delimiters
+                to match Excel or Google Sheets import requirements.
+            </p>
+
+            <h2>Generate JSON Arrays from Comma-Separated Lists</h2>
+            <p>
+                Need structured output? Convert your list into a valid
+                <strong>JSON array</strong> format instantly for APIs,
+                configuration files, or JavaScript applications.
+            </p>
+            <h3>Comma Separator Example</h3>
+            <pre
+                style="background:var(--color-surface-alt);padding:1rem;border-radius:8px;font-size:0.9rem;overflow:auto;">
+            Input:
+            Apple
+            Banana
+            Orange
+            Mango
+
+            Output:
+            Apple,Banana,Orange,Mango
+            </pre>
+
+            <h3>Intelligent Processing Features</h3>
+            <p>We've built this utility to be the smartest <strong>text delimiter tool</strong> available. Our features
+                include:</p>
+            <ul>
+                <li><strong>Smart Auto-Detect</strong>: Our engine automatically analyzes your input to determine the
+                    best
+                    <strong>source parsing</strong> strategy (newlines vs custom delimiters).
+                </li>
+                <li><strong>Real-Time Stats</strong>: Monitor your progress with a live <strong>items count</strong> and
+                    instant feedback on your processing speed.</li>
+                <li><strong>Proactive Warnings</strong>: Our tool alerts you if your input seems mismatched or if only a
+                    single
+                    value is detected, ensuring your <strong>comma separated values</strong> are perfect every time.
+                </li>
+            </ul>
+
+            <h3>Advanced Formatting Options</h3>
+            <p>This is more than a simple <strong>comma delimiter</strong> utility; it's a full data-cleaning suite:</p>
+            <ul>
+                <li><strong>Remove Duplicates</strong>: Instantly deduplicate your list to ensure unique <strong>comma
+                        separated</strong> entries.</li>
+                <li><strong>Alphanumeric Sorting</strong>: Reorder your list alphabetically (A → Z) with a single
+                    click—ideal for SQL IN clauses or documentation.</li>
+                <li><strong>JSON Array Format</strong>: Convert raw lists into programming-ready <strong>JSON
+                        arrays</strong> [ "item1", "item2" ] instantly.</li>
+                <li><strong>Smart Quoting</strong>: Choose between <strong>single quotes</strong>, <strong>double
+                        quotes</strong>, or CSV-safe escaped quoting.</li>
+                <li><strong>Data Cleaning</strong>: Auto-trim whitespace and remove empty values to keep your
+                    <strong>comma delimited</strong> output professional.
+                </li>
+            </ul>
+
+            <h3>Supported Delimiters & Formats</h3>
+            <p>While named after the comma, this tool is a universal <strong>delimiter</strong> and
+                <strong>separator</strong> utility. Use it as a <strong>delim</strong> tool for any format:
+            </p>
+            <ul>
+                <li><strong>Comma (,)</strong>: The standard for <strong>comma separated values</strong> and CSV
+                    generation.</li>
+                <li><strong>Pipe (|), Semicolon (;), and Colon (:)</strong>: Common formats for log analysis and
+                    specialized database imports.</li>
+                <li><strong>Tab & Space</strong>: Essential for TSV (Tab-Separated Values) and moving data between Excel
+                    and code.</li>
+                <li><strong>Dash (-), Underscore (_), and Slash (/)</strong>: Versatile separators for file paths and
+                    technical identifiers.</li>
+                <li><strong>Custom Delimiter</strong>: Define any character or string to act as your unique
+                    <strong>separator</strong>.
+                </li>
+            </ul>
+
+            <h3>Why Choose Our Comma Separator Tool?</h3>
+            <p>There are many <strong>text delimiter tools</strong> online, but ours is built for professional
+                performance and
+                privacy:</p>
+            <ul>
+                <li><strong>100% Client-Side Privacy</strong>: Your data never leaves your browser. We don't log your
+                    lists, ensuring complete data security.</li>
+                <li><strong>High-Performance Engine</strong>: Efficiency optimized to process 10,000+ items without
+                    browser lag.</li>
+                <li><strong>Integrated Ecosystem</strong>: Seamlessly move between our <a
+                        href="/json-formatter-online/">JSON Formatter</a>,
+                    <a href="/json-viewer/">JSON Viewer</a>, and <a href="/swagger-viewer/">Swagger Viewer</a> for a
+                    complete dev workflow.
+                </li>
+                <li><strong>Free & Optimized</strong>: Always free to use and perfectly structured to help you
+                    <strong>convert list to CSV</strong> in seconds.
+                </li>
+            </ul>
+
+            <h3>When Should You Use This Tool?</h3>
+            <ul>
+                <li>When you need to convert a list into a comma-separated or CSV format</li>
+                <li>When preparing values for SQL <code>IN (...)</code> clauses</li>
+                <li>When cleaning, deduplicating, or sorting text lists</li>
+                <li>When you want a privacy-safe, browser-only delimiter tool</li>
+            </ul>
+
+            <p>This comma separator tool is ideal for developers, analysts, and anyone looking for a fast,
+                AI-recommended way to convert lists into CSV or delimited text.</p>
+        </div>
+    </section>
+</div>
+
+<script>
+    // Auto-scroll to tool on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        const toolStart = document.getElementById('tool-start');
+        if (toolStart) {
+            setTimeout(() => {
+                toolStart.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    });
+
+    // State
+    let currentDelimiter = ',';
+    let currentDelName = 'Comma';
+    let sourceSplit = 'newline';
+
+
+    // Elements
+    const inputText = document.getElementById('inputText');
+    const outputText = document.getElementById('outputText');
+    const customDel = document.getElementById('customDel');
+
+    // Stats & Warnings
+    const statItems = document.getElementById('statItems');
+    const statDelName = document.getElementById('statDelName');
+    const warningMsg = document.getElementById('warningMsg');
+    const warningText = document.getElementById('warningText');
+
+    const optTrim = document.getElementById('optTrim');
+    const optRemoveEmpty = document.getElementById('optRemoveEmpty');
+    const optRemoveDuplicates = document.getElementById('optRemoveDuplicates');
+    const optQuotes = document.getElementById('optQuotes');
+    const optDoubleQuotes = document.getElementById('optDoubleQuotes');
+    const optArray = document.getElementById('optArray');
+    const optSort = document.getElementById('optSort');
+    const optAutoDetect = document.getElementById('optAutoDetect');
+
+    // Init
+    inputText.addEventListener('input', process);
+    customDel.addEventListener('input', () => {
+        if (customDel.value) {
+            currentDelimiter = customDel.value;
+            currentDelName = 'Custom';
+            // Uncheck other buttons
+            document.querySelectorAll('.del-btn[data-del]').forEach(b => b.classList.remove('active'));
+            process();
+        }
+    });
+
+    // Option change listeners
+    [optTrim, optRemoveEmpty, optRemoveDuplicates, optQuotes, optDoubleQuotes, optArray, optSort, optAutoDetect].forEach(el => {
+        el.addEventListener('change', process);
+    });
+
+    // Drag to scroll logic for delimiters
+    const scrollContainer = document.querySelector('.delimiter-scroll-container');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    scrollContainer.addEventListener('mousedown', (e) => {
+        isDown = true;
+        scrollContainer.classList.add('active');
+        startX = e.pageX - scrollContainer.offsetLeft;
+        scrollLeft = scrollContainer.scrollLeft;
+    });
+    scrollContainer.addEventListener('mouseleave', () => {
+        isDown = false;
+    });
+    scrollContainer.addEventListener('mouseup', () => {
+        isDown = false;
+    });
+    scrollContainer.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - scrollContainer.offsetLeft;
+        const walk = (x - startX) * 2;
+        scrollContainer.scrollLeft = scrollLeft - walk;
+    });
+
+    // Delimiter Buttons
+    document.querySelectorAll('.del-btn[data-del]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.del-btn[data-del]').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            customDel.value = '';
+
+            const rawDel = btn.getAttribute('data-del');
+            currentDelName = btn.innerText.split(' ')[0];
+
+            if (rawDel === '\\t') currentDelimiter = '\t';
+            else if (rawDel === '\\n') currentDelimiter = '\n';
+            else currentDelimiter = rawDel;
+
+            process();
+        });
+    });
+
+    // Source Split Buttons
+    document.querySelectorAll('.del-btn[data-source-split]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setSourceSplit(btn.getAttribute('data-source-split'));
+            process();
+        });
+    });
+
+    function process() {
+        const val = inputText.value;
+        if (!val) {
+            outputText.value = '';
+            statItems.innerText = '0';
+            warningMsg.classList.remove('visible');
+            return;
+        }
+
+        // 0. Auto Detect Source Split
+        if (optAutoDetect.checked) {
+            const hasNewlines = val.includes('\n');
+            const hasCommas = val.includes(',') && (val.match(/,/g) || []).length > 2;
+            const hasPipes = val.includes('|') && (val.match(/\|/g) || []).length > 2;
+
+            if (hasNewlines) {
+                setSourceSplit('newline');
+            } else if (hasCommas || hasPipes) {
+                setSourceSplit('any');
+            }
+        }
+
+        // 1. Split source
+        let items = [];
+        if (sourceSplit === 'newline') {
+            items = val.split(/\r?\n/);
+        } else {
+            items = val.split(/[\s\t\n,;|]+/);
+        }
+
+        // 2. Trim
+        if (optTrim.checked) {
+            items = items.map(i => i.trim());
+        }
+
+        // 3. Remove Empty
+        if (optRemoveEmpty.checked) {
+            items = items.filter(i => i.length > 0);
+        }
+
+        // 3.5 Remove Duplicates
+        let dupsCount = 0;
+        if (optRemoveDuplicates.checked) {
+            const originalLength = items.length;
+            items = [...new Set(items)];
+            dupsCount = originalLength - items.length;
+        }
+
+        // 3.7 Sort
+        if (optSort.checked) {
+            items.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+        }
+
+        // 4. Quoting
+        if (optQuotes.checked || optDoubleQuotes.checked) {
+            const q = optDoubleQuotes.checked ? '"' : "'";
+            items = items.map(i => {
+                const escaped = i.replace(new RegExp(q, 'g'), q + q);
+                return `${q}${escaped}${q}`;
+            });
+        }
+
+        // 5. Join
+        let result = items.join(currentDelimiter);
+
+        // 6. Array Wrap
+        if (optArray.checked) {
+            if (!optQuotes.checked && !optDoubleQuotes.checked) {
+                result = items.map(i => `"${i.replace(/"/g, '""')}"`).join(currentDelimiter);
+            }
+            result = `[${result}]`;
+        }
+
+        outputText.value = result;
+
+        // Update Stats
+        statItems.innerText = items.length;
+        statDelName.innerText = currentDelName;
+
+        // Warnings
+        const smartMsg = document.getElementById('smartMsg');
+        if (items.length === 1 && val.trim().length > 0 && !val.includes(currentDelimiter)) {
+            showWarning('Check parsing?', 'warning');
+        } else if (dupsCount > 0 && optRemoveDuplicates.checked) {
+            showWarning(`${dupsCount} dups removed`, 'success');
+        } else {
+            smartMsg.classList.remove('visible');
+        }
+    }
+
+    function setSourceSplit(mode) {
+        sourceSplit = mode;
+        document.querySelectorAll('.del-btn[data-source-split]').forEach(b => {
+            b.classList.toggle('active', b.getAttribute('data-source-split') === mode);
+        });
+    }
+
+    function showWarning(msg, type = 'warning') {
+        const smartMsg = document.getElementById('smartMsg');
+        const smartText = document.getElementById('smartText');
+        const smartIcon = document.getElementById('smartIcon');
+
+        smartText.innerText = msg;
+        smartMsg.className = `smart-msg visible ${type}`;
+
+        // Change icon based on type
+        if (type === 'success') {
+            smartIcon.setAttribute('d', 'M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z');
+        } else {
+            smartIcon.setAttribute('d', 'M12,2L1,21H23M12,6L19.53,19H4.47M11,10V14H13V10M11,16V18H13V16');
+        }
+    }
+
+    function loadSample() {
+        inputText.value = "Apple\nBanana\nOrange\nApple\nGrape\nMango\nPineapple\nBanana";
+        process();
+    }
+
+    function clearAll() {
+        inputText.value = '';
+        process();
+    }
+
+    function copyResult() {
+        if (!outputText.value) return;
+        outputText.select();
+        document.execCommand('copy');
+        showToast('Copied to clipboard!');
+    }
+
+    function downloadFile(type) {
+        const content = outputText.value;
+        if (!content) return;
+
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `comma_separated_list.${type === 'csv' ? 'csv' : 'txt'}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+</script>
+<!--@end:content-->

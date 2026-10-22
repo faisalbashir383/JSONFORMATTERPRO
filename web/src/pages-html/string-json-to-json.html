@@ -1,0 +1,917 @@
+<!--@block:title-->Convert JSON String to JSON Formatter Online (Free)<!--@end:title-->
+<!--@block:meta_title-->Convert JSON String to JSON Formatter Online (Free)<!--@end:meta_title-->
+<!--@block:meta_description-->Convert escaped JSON strings to formatted JSON online. Remove backslashes, fix escaped
+quotes, and parse JSON stored as a string. Free, client-side processing.<!--@end:meta_description-->
+<!--@block:meta_keywords-->string json to json, json string formatter, convert string to json, escaped json formatter,
+parse json string online, format json string<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/string-json-to-json/<!--@end:canonical_url-->
+<!--@block:robots-->
+<meta name="robots" content="index, follow"><!--@end:robots-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a JSON string?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A JSON string is valid JSON that has been serialized and wrapped inside another string. This causes the JSON to contain escaped quotes and backslashes, making it unreadable until parsed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does my JSON have backslashes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Backslashes appear when JSON is stored as a string inside another JSON structure or database field. The serialization process escapes special characters like quotes, resulting in sequences like backslash-quote."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I convert a JSON string to JSON?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To convert a JSON string to JSON, you need to parse it using JSON.parse() which removes the outer quotes and unescapes the internal characters, returning a proper JSON object that can then be formatted."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can JSON.parse handle escaped JSON automatically?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes and no. A single JSON.parse() call handles standard stringified JSON. However, if JSON was double-encoded (stringified twice), you need to call JSON.parse() twice. Our tool automatically detects double-encoding and applies the correct number of parse operations."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is it safe to parse JSON strings online?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, when using a client-side tool. Our converter processes everything in your browser using JavaScript. Your data never leaves your device or gets sent to any server."
+      }
+    }
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_head-->
+<meta name="author" content="JSON Formatters Pro">
+<meta property="og:title" content="Convert JSON String to JSON Formatter Online (Free)">
+<meta property="og:description"
+    content="Convert escaped JSON strings to formatted JSON online. Remove backslashes, fix escaped quotes, and parse JSON stored as a string.">
+<meta property="og:url" content="https://jsonformatterspro.com/string-json-to-json/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Convert JSON String to JSON Formatter Online">
+<meta name="twitter:description"
+    content="Convert escaped JSON strings to formatted JSON. Remove backslashes and parse JSON stored as a string.">
+<!--@end:extra_head-->
+<!--@block:extra_css-->
+<style>
+    .seo-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    .seo-hero {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-top: 1rem;
+    }
+
+    .seo-hero h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: 0.75rem;
+        line-height: 1.3;
+    }
+
+    .trust-signal {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 1rem;
+    }
+
+    .seo-intro {
+        font-size: 1.05rem;
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        max-width: 800px;
+        margin: 0 auto 1.5rem;
+    }
+
+    .cta-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.875rem 1.5rem;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        color: white;
+    }
+
+    .seo-section {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 1.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .seo-section h2 {
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 1rem;
+    }
+
+    .seo-section h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 1.25rem 0 0.5rem;
+    }
+
+    .seo-section p {
+        font-size: 0.95rem;
+        color: var(--color-text-secondary);
+        line-height: 1.75;
+        margin-bottom: 0.75rem;
+    }
+
+    .seo-section ul,
+    .seo-section ol {
+        padding-left: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .seo-section li {
+        font-size: 0.95rem;
+        color: var(--color-text-secondary);
+        line-height: 1.75;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Code Example Styles */
+    .code-example {
+        background: #1e1e2e;
+        border-radius: 8px;
+        margin: 1rem 0;
+        overflow: hidden;
+    }
+
+    .code-header {
+        background: #313244;
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #cdd6f4;
+        border-bottom: 1px solid #45475a;
+    }
+
+    .code-content {
+        padding: 1rem;
+        overflow-x: auto;
+    }
+
+    .code-content pre {
+        margin: 0;
+        font-family: 'Consolas', 'Monaco', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        color: #cdd6f4;
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+
+    .code-content .string {
+        color: #a6e3a1;
+    }
+
+    .code-content .key {
+        color: #cba6f7;
+    }
+
+    .code-content .number {
+        color: #fab387;
+    }
+
+    /* Comparison Grid */
+    .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+    }
+
+    @media (max-width: 768px) {
+        .comparison-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .comparison-box {
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .comparison-box.input {
+        border-color: #ef4444;
+    }
+
+    .comparison-box.output {
+        border-color: #10b981;
+    }
+
+    .comparison-label {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .comparison-box.input .comparison-label {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+
+    .comparison-box.output .comparison-label {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    /* Steps */
+    .steps-list {
+        counter-reset: step;
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .steps-list li {
+        counter-increment: step;
+        padding-left: 2.5rem;
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .steps-list li::before {
+        content: counter(step);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1.75rem;
+        height: 1.75rem;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+
+    /* Tool Section - Side by Side */
+    .tool-section {
+        margin: 2rem 0;
+    }
+
+    .tool-container {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .tool-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .tool-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .tool-btn {
+        padding: 0.5rem 0.75rem;
+        background: #3b3b52;
+        color: #cdd6f4;
+        border: 1px solid #4b4b6b;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: background 0.2s;
+    }
+
+    .tool-btn:hover {
+        background: #4b4b6b;
+    }
+
+    .tool-btn.primary {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        border: none;
+        color: white;
+    }
+
+    .tool-btn.primary:hover {
+        opacity: 0.9;
+    }
+
+    .tool-status {
+        font-size: 0.85rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+    }
+
+    .tool-status.success {
+        color: #10b981;
+        background: rgba(16, 185, 129, 0.1);
+    }
+
+    .tool-status.error {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+    }
+
+    .tool-panels {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 400px;
+    }
+
+    @media (max-width: 900px) {
+        .tool-panels {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .tool-panel {
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid var(--color-border);
+    }
+
+    .tool-panel:last-child {
+        border-right: none;
+    }
+
+    .panel-header {
+        padding: 0.5rem 1rem;
+        background: #313244;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #cdd6f4;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .panel-header.input-header {
+        background: rgba(239, 68, 68, 0.15);
+        color: #fca5a5;
+    }
+
+    .panel-header.output-header {
+        background: rgba(16, 185, 129, 0.15);
+        color: #6ee7b7;
+    }
+
+    .tool-textarea {
+        flex: 1;
+        width: 100%;
+        padding: 1rem;
+        font-family: 'Consolas', 'Monaco', monospace;
+        font-size: 13px;
+        line-height: 1.6;
+        background: #1e1e2e;
+        color: #cdd6f4;
+        border: none;
+        resize: none;
+        box-sizing: border-box;
+    }
+
+    [data-theme="light"] .tool-textarea {
+        background: #f8f9fa;
+        color: #1e1e2e;
+    }
+
+    .tool-textarea:focus {
+        outline: 2px solid #6366f1;
+        outline-offset: -2px;
+    }
+
+    .tool-textarea::placeholder {
+        color: #6c7086;
+    }
+
+    .tool-textarea.output {
+        background: #1a1a2e;
+    }
+
+    [data-theme="light"] .tool-textarea.output {
+        background: #f0f4f8;
+    }
+
+    /* FAQ Styles */
+    .faq-item {
+        border-bottom: 1px solid var(--color-border);
+        padding: 1.25rem 0;
+    }
+
+    .faq-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .faq-item h3 {
+        margin: 0 0 0.5rem;
+        font-size: 1.05rem;
+    }
+
+    .faq-item p {
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    /* Internal Link Styles */
+    .internal-link {
+        color: #6366f1;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .internal-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Final CTA Section */
+    .final-cta {
+        text-align: center;
+        padding: 2.5rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        border-radius: 12px;
+        margin: 2rem 0;
+    }
+
+    .final-cta h2 {
+        font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-text);
+    }
+
+    .final-cta p {
+        color: var(--color-text-secondary);
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .seo-hero h1 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="seo-page">
+
+    <!-- Hero Section -->
+    <header class="seo-hero">
+        <h1>Convert JSON String to JSON Formatter Online</h1>
+        <p class="trust-signal">Safely decode and format escaped JSON in your browser.</p>
+        <p class="seo-intro">
+            Ever encountered JSON that looks broken—full of backslashes and escaped quotes? That's stringified JSON:
+            valid
+            JSON that's been serialized and wrapped inside another string. APIs, logs, webhooks, and database exports
+            often return data in this escaped format. Our tool detects, parses, and formats these serialized JSON values
+            into
+            clean, readable output—all processed client-side for complete privacy.
+        </p>
+        <a href="#tool" class="cta-button"
+            onclick="document.querySelector('.tool-section').scrollIntoView({behavior: 'smooth'}); return false;">🔄
+            Convert JSON String Now ↓</a>
+    </header>
+
+    <!-- Core Example Section -->
+    <section class="seo-section">
+        <h2>JSON String vs Formatted JSON: Before & After</h2>
+        <p>
+            When JSON is stored as a string inside another data structure, it gets "escaped"—quotes become
+            backslash-quote, and the entire JSON is wrapped in outer quotes. Here's what that looks like and how our
+            formatter fixes it:
+        </p>
+
+        <div class="comparison-grid">
+            <div class="comparison-box input">
+                <div class="comparison-label">❌ INPUT: Escaped JSON String</div>
+                <div class="code-example" style="margin: 0; border-radius: 0;">
+                    <div class="code-content">
+                        <pre>"[{\"id\":1,\"name\":\"Tom Cruise\",\"age\":61},{\"id\":2,\"name\":\"Justin Timberlake\",\"age\":42},{\"id\":3,\"name\":\"Elon Musk\",\"age\":52}]"</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison-box output">
+                <div class="comparison-label">✅ OUTPUT: Formatted JSON</div>
+                <div class="code-example" style="margin: 0; border-radius: 0;">
+                    <div class="code-content">
+                        <pre>[
+  {
+    <span class="key">"id"</span>: <span class="number">1</span>,
+    <span class="key">"name"</span>: <span class="string">"Tom Cruise"</span>,
+    <span class="key">"age"</span>: <span class="number">61</span>
+  },
+  {
+    <span class="key">"id"</span>: <span class="number">2</span>,
+    <span class="key">"name"</span>: <span class="string">"Justin Timberlake"</span>,
+    <span class="key">"age"</span>: <span class="number">42</span>
+  },
+  {
+    <span class="key">"id"</span>: <span class="number">3</span>,
+    <span class="key">"name"</span>: <span class="string">"Elon Musk"</span>,
+    <span class="key">"age"</span>: <span class="number">52</span>
+  }
+]</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>What Happened?</h3>
+        <ul>
+            <li><strong>Outer quotes removed:</strong> The surrounding double quotes that made it a string were stripped
+            </li>
+            <li><strong>Escaped characters decoded:</strong> All <code>\"</code> sequences converted back to regular
+                quotes</li>
+            <li><strong>Parsed as JSON:</strong> The string was parsed using <code>JSON.parse()</code> to validate
+                structure</li>
+            <li><strong>Pretty-printed:</strong> Proper indentation and line breaks added for readability</li>
+        </ul>
+    </section>
+
+    <!-- How It Works -->
+    <section class="seo-section">
+        <h2>How JSON String to JSON Conversion Works</h2>
+        <p>
+            Converting a JSON string back to formatted JSON involves several steps. Our tool handles this automatically:
+        </p>
+
+        <ol class="steps-list">
+            <li><strong>Detect JSON wrapped in a string:</strong> The tool identifies when your input starts and ends
+                with quotes, indicating it's a stringified JSON value.</li>
+            <li><strong>Remove outer quotes:</strong> The enclosing double quotes are stripped from the beginning and
+                end.</li>
+            <li><strong>Unescape special characters:</strong> Backslash sequences like <code>\"</code> are converted
+                back to their original characters.</li>
+            <li><strong>Parse with JSON.parse():</strong> The unescaped string is parsed to validate it's proper JSON
+                and convert it to a JavaScript object.</li>
+            <li><strong>Format with indentation:</strong> The parsed object is stringified back with proper indentation
+                for human readability.</li>
+        </ol>
+
+        <p>
+            <strong>100% Client-Side:</strong> All processing happens in your browser using JavaScript. No data is ever
+            sent to a server, making it safe for API keys, tokens, and sensitive configuration data.
+        </p>
+    </section>
+
+    <!-- JSON String Converter Tool -->
+    <section class="tool-section">
+        <div class="tool-container">
+            <div class="tool-header">
+                <div class="tool-actions">
+                    <button id="convertBtn" class="tool-btn primary">🔄 Convert & Format</button>
+                    <button id="copyBtn" class="tool-btn">📋 Copy Output</button>
+                    <button id="clearBtn" class="tool-btn">✕ Clear All</button>
+                    <button id="sampleBtn" class="tool-btn">📝 Load Sample</button>
+                </div>
+                <span id="statusMsg" class="tool-status"></span>
+            </div>
+            <div class="tool-panels">
+                <div class="tool-panel">
+                    <div class="panel-header input-header">
+                        <span>⬅️ INPUT: Escaped JSON String</span>
+                    </div>
+                    <textarea id="inputArea" class="tool-textarea" placeholder='"[{\"id\":1,\"name\":\"Tom Cruise\",\"age\":61}]"
+
+Paste your escaped JSON string here.
+The tool will remove outer quotes, unescape characters, and format the result.'></textarea>
+                </div>
+                <div class="tool-panel">
+                    <div class="panel-header output-header">
+                        <span>➡️ OUTPUT: Formatted JSON</span>
+                    </div>
+                    <textarea id="outputArea" class="tool-textarea output" readonly
+                        placeholder="Formatted JSON will appear here..."></textarea>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Common Use Cases -->
+    <section class="seo-section">
+        <h2>When You'll Encounter JSON Strings</h2>
+        <p>
+            JSON strings appear in many common development scenarios. Here's where you'll typically find them:
+        </p>
+
+        <h3>API Responses</h3>
+        <p>
+            Some APIs return JSON data as a string within another JSON wrapper. This is common when an API proxies data
+            from another service or when response bodies are stored as text fields.
+        </p>
+
+        <h3>Log Files & Debugging</h3>
+        <p>
+            Application logs often serialize JSON objects as strings for single-line storage. When you copy these from
+            log viewers or monitoring tools, they contain escaped characters.
+        </p>
+
+        <h3>Database JSON Fields</h3>
+        <p>
+            Databases like MySQL, PostgreSQL, and SQLite sometimes store JSON as text strings rather than native JSON
+            types. Exporting or querying these fields returns escaped JSON.
+        </p>
+
+        <h3>Webhooks & Event Payloads</h3>
+        <p>
+            Webhook services like Stripe, GitHub, and Slack often include nested JSON as string fields within their
+            payloads, especially for metadata or custom attributes.
+        </p>
+
+        <h3>Copy-Paste from HTML or Logs</h3>
+        <p>
+            Copying JSON from HTML attributes, JavaScript variables, or formatted log output often includes escape
+            sequences that weren't visible in the source.
+        </p>
+    </section>
+
+    <!-- UI Behavior Section -->
+    <section class="seo-section">
+        <h2>How Our Formatter Handles JSON Strings</h2>
+        <p>
+            Our <a href="/" class="internal-link">JSON formatter</a> includes automatic detection for JSON strings.
+            Here's what to expect:
+        </p>
+        <ul>
+            <li><strong>Left panel:</strong> Paste your escaped JSON string in the input area</li>
+            <li><strong>Auto-detection:</strong> The formatter recognizes JSON wrapped in quotes</li>
+            <li><strong>One-click conversion:</strong> Click Format to parse and beautify in one step</li>
+            <li><strong>Clear output:</strong> See properly formatted, readable JSON instantly</li>
+            <li><strong>Validation included:</strong> Any parsing errors are highlighted with line numbers</li>
+        </ul>
+        <p>
+            The formatter also fixes common issues like trailing commas and single quotes while processing your JSON
+            string.
+        </p>
+    </section>
+
+    <!-- JSON String vs JSON Object Section -->
+    <section class="seo-section">
+        <h2>JSON String vs JSON Object (Quick Explanation)</h2>
+        <p>
+            Understanding the difference between a JSON string and a JSON object is essential for debugging data issues:
+        </p>
+
+        <h3>JSON Object</h3>
+        <p>
+            A JSON object is a structured data format that JavaScript (and most languages) can work with directly. It
+            has proper key-value pairs, arrays, and nested structures. When you work with API data in code, you're
+            typically handling JSON objects.
+        </p>
+
+        <h3>JSON String (Stringified JSON)</h3>
+        <p>
+            A JSON string is a JSON object that has been converted to plain text using <code>JSON.stringify()</code>.
+            This serialization adds outer quotes and escapes internal special characters. It's commonly used for:
+        </p>
+        <ul>
+            <li><strong>Storage:</strong> Databases often store JSON as text in VARCHAR or TEXT columns</li>
+            <li><strong>Transmission:</strong> Some APIs wrap response data in an outer string for consistency</li>
+            <li><strong>Logging:</strong> Log systems serialize objects to single-line strings for easier parsing</li>
+            <li><strong>Caching:</strong> Redis and other caches store JSON as string values</li>
+        </ul>
+
+        <h3>Why This Matters</h3>
+        <p>
+            When you receive stringified JSON instead of a JSON object, calling methods like <code>.map()</code> or
+            accessing properties will fail. You first need to parse the string back into an object using
+            <code>JSON.parse()</code>—which is exactly what our converter does automatically. If you need the reverse
+            operation, try our <a href="/json-to-string/" class="internal-link">JSON to String converter</a>.
+        </p>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="seo-section">
+        <h2>Frequently Asked Questions</h2>
+
+        <article class="faq-item">
+            <h3>What is a JSON string?</h3>
+            <p>
+                A JSON string is valid JSON data that has been serialized and wrapped inside another string. This
+                process escapes internal quotes with backslashes and adds outer quotes, making the JSON look "broken"
+                until it's properly parsed.
+            </p>
+        </article>
+
+        <article class="faq-item">
+            <h3>Why does my JSON have backslashes?</h3>
+            <p>
+                Backslashes appear when JSON is serialized as a string value. The serialization process must escape
+                special characters—particularly double quotes—so they don't break the outer string. This is normal
+                behavior, not corruption.
+            </p>
+        </article>
+
+        <article class="faq-item">
+            <h3>How do I convert a JSON string to JSON?</h3>
+            <p>
+                Use <code>JSON.parse()</code> to convert a JSON string back to a JSON object. Our formatter does this
+                automatically—just paste your escaped JSON and click Convert. The tool removes outer quotes, unescapes
+                characters, and formats the result.
+            </p>
+        </article>
+
+        <article class="faq-item">
+            <h3>Can JSON.parse handle escaped JSON automatically?</h3>
+            <p>
+                Yes and no. A single <code>JSON.parse()</code> call handles standard stringified JSON. However, if JSON
+                was double-encoded (stringified twice), you'll need to call <code>JSON.parse()</code> twice. Our tool
+                automatically detects double-encoding and applies the correct number of parse operations.
+            </p>
+        </article>
+
+        <article class="faq-item">
+            <h3>Is it safe to parse JSON strings online?</h3>
+            <p>
+                Yes, when using client-side tools like ours. All processing happens in your browser—your data never
+                touches a server. This makes it safe for API keys, tokens, and any sensitive configuration data.
+            </p>
+        </article>
+    </section>
+
+    <!-- Internal Links -->
+    <section class="seo-section">
+        <h2>Related JSON Tools</h2>
+        <p>
+            Explore our other JSON tools for different formatting and validation needs:
+        </p>
+        <ul>
+            <li><a href="/" class="internal-link">JSON Formatter</a> – Format, validate, and beautify any JSON</li>
+            <li><a href="/json-to-string/" class="internal-link">JSON to String Converter</a> – Convert JSON objects to
+                escaped strings (reverse operation)</li>
+            <li><a href="/json-schema-validator/" class="internal-link">JSON Schema Validator</a> – Validate JSON
+                against a schema</li>
+            <li><a href="/json-to-yaml/" class="internal-link">JSON to YAML Converter</a> – Convert JSON to YAML format
+            </li>
+        </ul>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2>Ready to Convert Your JSON String?</h2>
+        <p>Parse escaped JSON strings and format them instantly with our free online tool.</p>
+        <a href="#tool" class="cta-button"
+            onclick="document.querySelector('.tool-section').scrollIntoView({behavior: 'smooth'}); return false;">Convert
+            JSON String Now ↑</a>
+    </section>
+
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script defer>
+    (function () {
+        'use strict';
+
+        const inputArea = document.getElementById('inputArea');
+        const outputArea = document.getElementById('outputArea');
+        const convertBtn = document.getElementById('convertBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const statusMsg = document.getElementById('statusMsg');
+
+        function showStatus(msg, type) {
+            if (statusMsg) {
+                statusMsg.textContent = msg;
+                statusMsg.className = 'tool-status ' + type;
+            }
+        }
+
+        function parseJsonString(str) {
+            let input = str.trim();
+
+            // Check if it's wrapped in quotes (JSON string)
+            if ((input.startsWith('"') && input.endsWith('"')) ||
+                (input.startsWith("'") && input.endsWith("'"))) {
+                // Try to parse as a JSON string first
+                try {
+                    // JSON.parse will handle unescaping
+                    const parsed = JSON.parse(input);
+                    // If result is a string, it might be double-encoded
+                    if (typeof parsed === 'string') {
+                        return JSON.parse(parsed);
+                    }
+                    return parsed;
+                } catch (e) {
+                    // Manual unescape: remove outer quotes and unescape
+                    input = input.slice(1, -1);
+                    input = input
+                        .replace(/\\\\/g, '\\')  // \\ -> \
+                        .replace(/\\"/g, '"')   // \" -> "
+                        .replace(/\\n/g, '\n')  // \n -> newline
+                        .replace(/\\t/g, '\t')  // \t -> tab
+                        .replace(/\\r/g, '\r'); // \r -> return
+                }
+            }
+
+            // Try parsing as regular JSON
+            return JSON.parse(input);
+        }
+
+        if (convertBtn) {
+            convertBtn.addEventListener('click', () => {
+                const input = inputArea.value.trim();
+
+                if (!input) {
+                    showStatus('⚠ Please enter a JSON string', 'error');
+                    outputArea.value = '';
+                    return;
+                }
+
+                try {
+                    const parsed = parseJsonString(input);
+                    const formatted = JSON.stringify(parsed, null, 2);
+                    outputArea.value = formatted;
+                    showStatus('✓ Converted & Formatted Successfully', 'success');
+                } catch (e) {
+                    outputArea.value = '';
+                    showStatus('✗ Error: ' + e.message, 'error');
+                }
+            });
+        }
+
+        if (copyBtn) {
+            copyBtn.addEventListener('click', async () => {
+                const output = outputArea.value;
+                if (!output) {
+                    showStatus('⚠ Nothing to copy', 'error');
+                    return;
+                }
+                try {
+                    await navigator.clipboard.writeText(output);
+                    showStatus('✓ Copied to clipboard', 'success');
+                } catch (e) {
+                    showStatus('✗ Copy failed', 'error');
+                }
+            });
+        }
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                inputArea.value = '';
+                outputArea.value = '';
+                showStatus('', '');
+            });
+        }
+
+        // Sample JSON string
+        const sampleJson = '"[{\\"id\\":1,\\"name\\":\\"Tom Cruise\\",\\"age\\":61},{\\"id\\":2,\\"name\\":\\"Justin Timberlake\\",\\"age\\":42},{\\"id\\":3,\\"name\\":\\"Elon Musk\\",\\"age\\":52}]"';
+
+        const sampleBtn = document.getElementById('sampleBtn');
+        if (sampleBtn) {
+            sampleBtn.addEventListener('click', () => {
+                inputArea.value = sampleJson;
+                outputArea.value = '';
+                showStatus('✓ Sample loaded - click Convert to format', 'success');
+            });
+        }
+    })();
+</script>
+<!--@end:extra_js-->

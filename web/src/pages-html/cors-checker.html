@@ -1,0 +1,414 @@
+<!--@block:title-->CORS Checker - Test Cross-Origin Resource Sharing | JSON Formatters Pro<!--@end:title-->
+<!--@block:meta_title-->CORS Checker - Test Cross-Origin Resource Sharing | JSON Formatters Pro<!--@end:meta_title-->
+<!--@block:meta_description-->Test CORS configuration for any URL. Check Access-Control-Allow-Origin headers and CORS
+policy. Debug cross-origin issues with our free CORS tester tool.<!--@end:meta_description-->
+<!--@block:meta_keywords-->cors checker, cors tester, test cors online, cors policy checker, access-control-allow-origin
+tester,
+cross-origin resource sharing, cors error checker, cors headers test, cors debugger, cors validation, cors preflight
+test,
+cors configuration tester, check cors headers, cors issue debugger, cors policy tester, free cors checker, cors access
+control,
+cors checker 2026, best cors tester 2026, cors debugger 2026, free cors checker 2026, online cors test 2026,
+cors online, cors test online, cors headers checker, cors request tester, cors response checker, cors error fixer,
+cors api tester, cors endpoint tester, cors url checker, test cors policy, verify cors headers, cors analyzer,
+cors inspector, cors troubleshooter, cors diagnostic tool, cross origin test, cors no signup, instant cors check
+<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/cors-checker/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "CORS Checker Tool",
+  "description": "Free online tool to test CORS configuration and headers",
+  "url": "https://jsonformatterspro.com/cors-checker/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+<!-- Network Tools Category Sitelinks -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Network Tools",
+  "itemListElement": [
+    {"@type": "SiteNavigationElement", "position": 1, "name": "HTTP Headers Parser", "url": "https://jsonformatterspro.com/http-headers/"},
+    {"@type": "SiteNavigationElement", "position": 2, "name": "CORS Checker", "url": "https://jsonformatterspro.com/cors-checker/"},
+    {"@type": "SiteNavigationElement", "position": 3, "name": "IP Address Lookup", "url": "https://jsonformatterspro.com/ip-info/"},
+    {"@type": "SiteNavigationElement", "position": 4, "name": "DNS Lookup", "url": "https://jsonformatterspro.com/dns-lookup/"},
+    {"@type": "SiteNavigationElement", "position": 5, "name": "SSL Certificate Checker", "url": "https://jsonformatterspro.com/ssl-checker/"},
+    {"@type": "SiteNavigationElement", "position": 6, "name": "API Response Tester", "url": "https://jsonformatterspro.com/api-response-tester/"}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What is CORS?", "acceptedAnswer": { "@type": "Answer", "text": "CORS (Cross-Origin Resource Sharing) is a security mechanism that allows web pages to make requests to a different domain than the one that served the page. It uses HTTP headers to control access." } },
+    { "@type": "Question", "name": "Why am I getting a CORS error?", "acceptedAnswer": { "@type": "Answer", "text": "CORS errors occur when the server doesn't include the Access-Control-Allow-Origin header or doesn't allow your origin. Configure the server to include proper CORS headers." } },
+    { "@type": "Question", "name": "What is a preflight request?", "acceptedAnswer": { "@type": "Answer", "text": "A preflight request is an OPTIONS request sent before the actual request to check if the server allows the cross-origin request. It's required for requests with custom headers or non-simple methods." } },
+    { "@type": "Question", "name": "How do I fix CORS in my API?", "acceptedAnswer": { "@type": "Answer", "text": "Add Access-Control-Allow-Origin header to your server responses. Set it to '*' for public APIs or to specific origins for restricted access." } },
+    { "@type": "Question", "name": "Is using '*' for Access-Control-Allow-Origin safe?", "acceptedAnswer": { "@type": "Answer", "text": "Using '*' allows any origin, which is fine for public APIs without authentication. For APIs with credentials, you must specify exact origins instead of '*'." } }
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(249, 115, 22, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .checker-container {
+        max-width: 800px;
+        margin: 0 auto 2rem;
+    }
+
+    .input-group {
+        margin-bottom: 1rem;
+    }
+
+    .input-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.5rem;
+    }
+
+    .url-input,
+    .origin-input {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        font-size: 1rem;
+        background: var(--color-surface);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        transition: all 200ms ease;
+    }
+
+    .url-input:focus,
+    .origin-input:focus {
+        outline: none;
+        border-color: #f59e0b;
+    }
+
+    .check-btn {
+        width: 100%;
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+        margin-top: 1rem;
+    }
+
+    .check-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+    }
+
+    .check-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .result-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+        box-shadow: 0 4px 16px var(--color-shadow);
+        margin-top: 2rem;
+    }
+
+    [data-theme="dark"] .result-card {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .status-header {
+        padding: 1.5rem;
+        text-align: center;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .status-header.enabled {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+    }
+
+    .status-header.disabled {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+    }
+
+    .status-icon {
+        font-size: 3rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .status-text {
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
+    .status-header.enabled .status-text {
+        color: #22c55e;
+    }
+
+    .status-header.disabled .status-text {
+        color: #ef4444;
+    }
+
+    .status-desc {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.5rem;
+    }
+
+    .headers-section {
+        padding: 1.5rem;
+    }
+
+    .headers-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 1rem;
+    }
+
+    .header-row {
+        display: flex;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        background: var(--color-bg);
+        border-radius: var(--radius-sm);
+        margin-bottom: 0.5rem;
+        align-items: flex-start;
+    }
+
+    .header-name {
+        font-weight: 600;
+        color: var(--color-primary);
+        min-width: 280px;
+        font-size: 0.85rem;
+    }
+
+    .header-value {
+        color: var(--color-text);
+        font-family: 'SF Mono', monospace;
+        font-size: 0.85rem;
+        word-break: break-all;
+        flex: 1;
+    }
+
+    .header-value.empty {
+        color: var(--color-text-secondary);
+        font-style: italic;
+    }
+
+    .loading {
+        text-align: center;
+        padding: 3rem;
+        color: var(--color-text-secondary);
+    }
+
+    .loading .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid var(--color-border);
+        border-top-color: #f59e0b;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .error-message {
+        text-align: center;
+        padding: 2rem;
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        border-radius: var(--radius-md);
+        margin-top: 1.5rem;
+    }
+
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .header-row {
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .header-name {
+            min-width: auto;
+        }
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header">
+    <h1>🔄 CORS Checker</h1>
+    <p>Test Cross-Origin Resource Sharing configuration and debug CORS issues</p>
+</div>
+
+<div class="checker-container">
+    <div class="input-group">
+        <label class="input-label">URL to Test</label>
+        <input type="text" id="urlInput" class="url-input" placeholder="https://api.example.com/endpoint">
+    </div>
+
+    <div class="input-group">
+        <label class="input-label">Test Origin (optional)</label>
+        <input type="text" id="originInput" class="origin-input" placeholder="https://yoursite.com"
+            value="https://example.com">
+    </div>
+
+    <button id="checkBtn" class="check-btn">🔍 Check CORS</button>
+
+    <div id="resultContainer">
+        <div class="result-card" style="display: none;" id="resultCard">
+            <div class="status-header" id="statusHeader">
+                <div class="status-icon" id="statusIcon">✅</div>
+                <div class="status-text" id="statusText">CORS Enabled</div>
+                <div class="status-desc" id="statusDesc">-</div>
+            </div>
+            <div class="headers-section">
+                <div class="headers-title">CORS Headers</div>
+                <div id="headersContainer"></div>
+            </div>
+        </div>
+
+        <div id="loadingState" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Testing CORS configuration...</p>
+        </div>
+
+        <div id="errorState" class="error-message" style="display: none;"></div>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>💡 About CORS</h2>
+    <p>
+        CORS (Cross-Origin Resource Sharing) is a security mechanism that allows web pages to make requests
+        to a different domain than the one that served the page. It's implemented via HTTP headers that
+        indicate which origins are permitted to read the response.
+    </p>
+    <p>
+        <strong>Key CORS Headers:</strong><br>
+        <strong>Access-Control-Allow-Origin:</strong> Specifies which origins can access the resource<br>
+        <strong>Access-Control-Allow-Methods:</strong> Allowed HTTP methods (GET, POST, etc.)<br>
+        <strong>Access-Control-Allow-Headers:</strong> Allowed request headers<br>
+        <strong>Access-Control-Allow-Credentials:</strong> Whether credentials can be included
+    </p>
+    <p>
+        <strong>Common CORS Errors:</strong> "No 'Access-Control-Allow-Origin' header present" - This means
+        the server hasn't enabled CORS for your origin.
+    </p>
+    <p>
+        To identify the server's origin and network details, try our
+        <a href="/ip-info/" style="color: var(--color-primary); font-weight: 500;">IP Address Lookup</a> tool.
+    </p>
+</div>
+
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>❓ Frequently Asked Questions</h2>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What is CORS?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">CORS (Cross-Origin Resource Sharing) is a
+            security mechanism that allows web pages to make requests to a different domain than the one that served the
+            page. It uses HTTP headers to control access.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">Why am I getting a CORS error?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">CORS errors occur when the server doesn't
+            include the Access-Control-Allow-Origin header or doesn't allow your origin. Configure the server to include
+            proper CORS headers.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">What is a preflight request?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">A preflight request is an OPTIONS request sent
+            before the actual request to check if the server allows the cross-origin request. It's required for requests
+            with custom headers or non-simple methods like PUT/DELETE.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">How do I fix CORS in my API?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">Add Access-Control-Allow-Origin header to your
+            server responses. Set it to '*' for public APIs or to specific origins for restricted access. Most
+            frameworks have CORS middleware available.</p>
+    </details>
+    <details style="margin-bottom: 0.75rem;">
+        <summary style="cursor: pointer; font-weight: 600; padding: 0.75rem 0;">Is using '*' for
+            Access-Control-Allow-Origin safe?</summary>
+        <p style="padding: 0.5rem 0; color: var(--color-text-secondary);">Using '*' allows any origin, which is fine for
+            public APIs without authentication. For APIs with credentials (cookies, authorization headers), you must
+            specify exact origins instead of '*'.</p>
+    </details>
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script src="/static/js/cors-checker.js"></script>
+<!--@end:extra_js-->

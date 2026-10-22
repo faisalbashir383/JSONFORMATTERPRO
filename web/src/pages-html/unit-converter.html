@@ -1,0 +1,270 @@
+<!--@block:title-->Unit Converter - Free Online Conversion Calculator | JSON Formatters Pro<!--@end:title-->
+<!--@block:meta_title-->Unit Converter - Convert Length, Weight, Temperature Free 2026<!--@end:meta_title-->
+<!--@block:meta_description-->Free online unit converter. Convert between length, weight, temperature, volume, area, and
+more. Instant conversions with accuracy.<!--@end:meta_description-->
+<!--@block:meta_keywords-->unit converter, conversion calculator, length converter, weight converter, temperature
+converter,
+metric converter, imperial converter, unit converter 2026, online unit converter free,
+km to miles, kg to lbs, celsius to fahrenheit, liters to gallons<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/unit-converter/<!--@end:canonical_url-->
+<!--@block:extra_css-->
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #3b82f6, #10b981);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .converter-container {
+        max-width: 600px;
+        margin: 0 auto 2rem;
+    }
+
+    .calc-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 2rem;
+    }
+
+    [data-theme="dark"] .calc-card {
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    .category-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .category-tab {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border: 2px solid var(--color-border);
+        background: var(--color-bg);
+        color: var(--color-text);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .category-tab.active {
+        background: linear-gradient(135deg, #3b82f6, #10b981);
+        color: white;
+        border-color: transparent;
+    }
+
+    .input-group {
+        margin-bottom: 1rem;
+    }
+
+    .input-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.25rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        text-align: center;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #3b82f6;
+    }
+
+    select.input-field {
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .swap-btn {
+        display: block;
+        margin: 1rem auto;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 2px solid var(--color-border);
+        background: var(--color-bg);
+        color: var(--color-text);
+        cursor: pointer;
+        font-size: 1.5rem;
+        transition: all 0.2s;
+    }
+
+    .swap-btn:hover {
+        background: #3b82f6;
+        color: white;
+        border-color: transparent;
+        transform: rotate(180deg);
+    }
+
+    .result-display {
+        margin-top: 1.5rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+        border-radius: var(--radius-lg);
+        text-align: center;
+    }
+
+    .result-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #3b82f6;
+    }
+
+    .result-formula {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.5rem;
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header">
+    <h1>🔄 Unit Converter</h1>
+    <p>Convert between different units of measurement instantly. Supports length, weight, temperature, and more.</p>
+</div>
+
+<div class="converter-container">
+    <div class="calc-card">
+        <div class="category-tabs">
+            <button class="category-tab active" data-category="length">📏 Length</button>
+            <button class="category-tab" data-category="weight">⚖️ Weight</button>
+            <button class="category-tab" data-category="temperature">🌡️ Temp</button>
+            <button class="category-tab" data-category="volume">🧪 Volume</button>
+            <button class="category-tab" data-category="area">📐 Area</button>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">From</label>
+            <input type="number" id="fromValue" class="input-field" value="1" oninput="convert()">
+            <select id="fromUnit" class="input-field" style="margin-top: 0.5rem;" onchange="convert()"></select>
+        </div>
+
+        <button class="swap-btn" onclick="swapUnits()">⇅</button>
+
+        <div class="input-group">
+            <label class="input-label">To</label>
+            <select id="toUnit" class="input-field" onchange="convert()"></select>
+        </div>
+
+        <div class="result-display">
+            <div class="result-value" id="result">1 km = 0.621 mi</div>
+            <div class="result-formula" id="formula">1 kilometer = 0.621371 miles</div>
+        </div>
+    </div>
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script>
+    (function () {
+        const units = {
+            length: {
+                meter: 1, kilometer: 1000, centimeter: 0.01, millimeter: 0.001,
+                mile: 1609.344, yard: 0.9144, foot: 0.3048, inch: 0.0254
+            },
+            weight: {
+                kilogram: 1, gram: 0.001, milligram: 0.000001,
+                pound: 0.453592, ounce: 0.0283495, ton: 1000
+            },
+            temperature: { celsius: 'C', fahrenheit: 'F', kelvin: 'K' },
+            volume: {
+                liter: 1, milliliter: 0.001, gallon: 3.78541,
+                quart: 0.946353, cup: 0.236588, 'fluid ounce': 0.0295735
+            },
+            area: {
+                'square meter': 1, 'square kilometer': 1000000, 'square foot': 0.092903,
+                'square yard': 0.836127, acre: 4046.86, hectare: 10000
+            }
+        };
+
+        let currentCategory = 'length';
+
+        function updateUnits() {
+            const fromSelect = document.getElementById('fromUnit');
+            const toSelect = document.getElementById('toUnit');
+            const unitList = Object.keys(units[currentCategory]);
+
+            fromSelect.innerHTML = unitList.map(u => `<option value="${u}">${u}</option>`).join('');
+            toSelect.innerHTML = unitList.map((u, i) => `<option value="${u}" ${i === 1 ? 'selected' : ''}>${u}</option>`).join('');
+            convert();
+        }
+
+        window.convert = function () {
+            const fromVal = parseFloat(document.getElementById('fromValue').value) || 0;
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+
+            let result;
+            if (currentCategory === 'temperature') {
+                result = convertTemp(fromVal, fromUnit, toUnit);
+            } else {
+                const baseValue = fromVal * units[currentCategory][fromUnit];
+                result = baseValue / units[currentCategory][toUnit];
+            }
+
+            const formatted = result.toLocaleString(undefined, { maximumFractionDigits: 6 });
+            document.getElementById('result').textContent = `${fromVal} ${fromUnit} = ${formatted} ${toUnit}`;
+            document.getElementById('formula').textContent = `Conversion factor applied`;
+        };
+
+        function convertTemp(val, from, to) {
+            let celsius;
+            if (from === 'celsius') celsius = val;
+            else if (from === 'fahrenheit') celsius = (val - 32) * 5 / 9;
+            else celsius = val - 273.15;
+
+            if (to === 'celsius') return celsius;
+            if (to === 'fahrenheit') return celsius * 9 / 5 + 32;
+            return celsius + 273.15;
+        }
+
+        window.swapUnits = function () {
+            const from = document.getElementById('fromUnit');
+            const to = document.getElementById('toUnit');
+            [from.value, to.value] = [to.value, from.value];
+            convert();
+        };
+
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentCategory = tab.dataset.category;
+                updateUnits();
+            });
+        });
+
+        updateUnits();
+    })();
+</script>
+<!--@end:extra_js-->

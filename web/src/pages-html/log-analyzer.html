@@ -1,0 +1,3200 @@
+<!--@block:title-->Free Log file Analyzer Online – JSON, Nginx, Apache Logs<!--@end:title-->
+<!--@block:meta_title-->Free Log file Analyzer Online – JSON, Nginx, Apache Logs<!--@end:meta_title-->
+<!--@block:meta_description-->Free log file analyzer online to parse, view & debug logs instantly. Supports JSON, Nginx, Apache & more. No upload required.<!--@end:meta_description-->
+<!--@block:meta_keywords-->log analyzer, log parser online, log viewer, nginx log analyzer, json log viewer, error log
+parser, server log analyzer, parse logs online<!--@end:meta_keywords-->
+<!--@block:author-->Faisal Ahmad<!--@end:author-->
+<!--@block:og_title-->Log Analyzer Online – Parse & Debug Logs Instantly<!--@end:og_title-->
+<!--@block:og_description-->Free online log analyzer to parse, view, and debug server logs. Supports JSON, Apache, Nginx,
+Syslog, Docker. No upload required.<!--@end:og_description-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/log-analyzer/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Log Analyzer Online",
+  "description": "Free online log analyzer to parse, view, and debug server logs instantly",
+  "url": "https://jsonformatterspro.com/log-analyzer/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Faisal Ahmad"
+  },
+  "featureList": [
+    "Multi-format log parsing",
+    "Syntax highlighting",
+    "Error filtering",
+    "Regex search",
+    "JSON extraction",
+    "Statistics dashboard",
+    "Export to TXT/JSON/CSV",
+    "Log anonymizer"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is this log analyzer free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, completely free with no signup required. Analyze unlimited logs directly in your browser."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my log data secure?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "All processing happens locally in your browser. Your logs are never uploaded to any server, ensuring complete privacy."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What log formats are supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We support JSON, Apache, Nginx, Syslog, Docker, PM2, Python, Java, and most common application log formats."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I analyze large log files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, the analyzer efficiently handles files up to 10MB+ using optimized rendering techniques."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://jsonformatterspro.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Developer Tools",
+      "item": "https://jsonformatterspro.com/#tools"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Log Analyzer",
+      "item": "https://jsonformatterspro.com/log-analyzer/"
+    }
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<style>
+    /* Fix navbar element clickability */
+    .navbar {
+        z-index: 1000;
+    }
+
+    .navbar .nav-actions {
+        position: relative;
+        z-index: 1001;
+        pointer-events: auto;
+    }
+
+    .navbar .theme-toggle {
+        position: relative;
+        z-index: 1002;
+        pointer-events: auto;
+        cursor: pointer;
+    }
+
+    /* Main Sidebar Layout */
+    .log-analyzer-container {
+        max-width: 1800px;
+    }
+
+    /* Page Header - compact visible style */
+    .page-header {
+        padding: 0.75rem 0 0.5rem 0;
+        margin: 0;
+    }
+
+    .page-header h1 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 0 0 0.25rem 0;
+        color: var(--color-text);
+    }
+
+    .page-header p {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        margin: 0;
+    }
+
+    /* App Layout - Sidebar + Main */
+    .app-layout {
+        display: flex;
+    }
+
+    /* Left Sidebar */
+    .log-analyzer-container .sidebar {
+        width: 215px;
+        flex-shrink: 0;
+        background: linear-gradient(180deg, #1e1e2e 0%, #181825 100%);
+        border: 1px solid var(--color-border);
+        border-radius: 16px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        overflow-y: auto;
+        max-height: calc(100vh - 80px);
+        position: sticky;
+        top: 60px;
+    }
+
+    .sidebar-section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .sidebar-section-title {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #6b7280;
+        margin-bottom: 0.25rem;
+    }
+
+    .sidebar-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.7rem 1rem;
+        border: none;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        width: 100%;
+        text-align: left;
+    }
+
+    .sidebar-btn.primary {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+    }
+
+    .sidebar-btn.secondary {
+        background: rgba(255, 255, 255, 0.05);
+        color: #cdd6f4;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar-btn:hover {
+        transform: translateX(4px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar-btn.danger {
+        background: rgba(239, 68, 68, 0.15);
+        color: #fca5a5;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .sidebar-btn.success {
+        background: rgba(16, 185, 129, 0.15);
+        color: #6ee7b7;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .sidebar-input {
+        width: 100%;
+        padding: 0.6rem 0.8rem;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.3);
+        color: #cdd6f4;
+        font-size: 0.85rem;
+    }
+
+    .sidebar-input:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    /* Date Filter Popup */
+    .date-filter-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        padding: 0;
+        z-index: 2000;
+        min-width: 320px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        animation: popupFadeIn 0.2s ease-out;
+    }
+
+    .date-filter-popup.hidden {
+        display: none;
+    }
+
+    @keyframes popupFadeIn {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -48%);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+    }
+
+    .date-popup-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        font-weight: 600;
+        color: #cdd6f4;
+    }
+
+    .date-popup-close {
+        background: none;
+        border: none;
+        color: #6b7280;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.25rem;
+        line-height: 1;
+    }
+
+    .date-popup-close:hover {
+        color: #ef4444;
+    }
+
+    .date-popup-body {
+        padding: 1.25rem;
+    }
+
+    .date-popup-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .date-popup-label {
+        min-width: 45px;
+        font-size: 0.85rem;
+        color: #9ca3af;
+    }
+
+    .date-popup-row .sidebar-input {
+        flex: 1;
+    }
+
+    .date-popup-presets {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .date-preset-btn {
+        background: rgba(99, 102, 241, 0.15);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        color: #a5b4fc;
+        padding: 0.4rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .date-preset-btn:hover {
+        background: rgba(99, 102, 241, 0.3);
+        border-color: #6366f1;
+    }
+
+    .date-popup-footer {
+        display: flex;
+        gap: 0.75rem;
+        padding: 1rem 1.25rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        justify-content: flex-end;
+    }
+
+    .date-popup-footer .sidebar-btn {
+        padding: 0.5rem 1rem;
+    }
+
+    /* Popup Backdrop */
+    .date-popup-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(2px);
+        z-index: 1999;
+    }
+
+    .date-popup-backdrop.hidden {
+        display: none;
+    }
+
+    .sidebar-select {
+        width: 100%;
+        padding: 0.6rem 0.8rem;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.3);
+        color: #cdd6f4;
+        font-size: 0.85rem;
+        cursor: pointer;
+    }
+
+    /* Main Content Area */
+    .main-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-width: 0;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        padding: 1rem 1.25rem;
+        background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        font-size: 0.875rem;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .stat-label {
+        color: #9ca3af;
+    }
+
+    .stat-value {
+        font-weight: 700;
+    }
+
+    .stat-value.total {
+        color: #cdd6f4;
+    }
+
+    .stat-value.error {
+        color: #ef4444;
+    }
+
+    .stat-value.warn {
+        color: #f59e0b;
+    }
+
+    .stat-value.info {
+        color: #3b82f6;
+    }
+
+    /* Log Viewer */
+    .log-panel {
+        flex: 1;
+        background: #1e1e2e;
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .log-viewer {
+        flex: 1;
+        overflow: auto;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        min-height: 500px;
+        max-height: calc(100vh - 200px);
+    }
+
+    /* Toolbar */
+    .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        padding: 1rem;
+        background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+        border-bottom: 1px solid var(--color-border);
+        align-items: center;
+    }
+
+    .toolbar-group {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .toolbar-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .toolbar-btn.primary {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+    }
+
+    .toolbar-btn.secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: #cdd6f4;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .toolbar-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .toolbar-btn.success {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+    }
+
+    .toolbar-btn.danger {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+    }
+
+    /* Filter Dropdown */
+    .filter-select {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+        color: #cdd6f4;
+        font-size: 0.875rem;
+        cursor: pointer;
+    }
+
+    /* Search Input */
+    .search-input {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+        color: #cdd6f4;
+        font-size: 0.875rem;
+        min-width: 200px;
+    }
+
+    .search-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        padding: 0.75rem 1rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+        font-size: 0.875rem;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .stat-label {
+        color: var(--color-text-secondary);
+    }
+
+    .stat-value {
+        font-weight: 600;
+    }
+
+    .stat-value.total {
+        color: var(--color-text);
+    }
+
+    .stat-value.error {
+        color: #ef4444;
+    }
+
+    .stat-value.warn {
+        color: #f59e0b;
+    }
+
+    .stat-value.info {
+        color: #3b82f6;
+    }
+
+    .stat-value.debug {
+        color: #6b7280;
+    }
+
+    /* Log Viewer */
+    .log-viewer {
+        min-height: 400px;
+        max-height: 600px;
+        overflow: auto;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        background: #1e1e2e;
+        color: #cdd6f4;
+    }
+
+    .log-line {
+        display: flex;
+        padding: 0.25rem 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        transition: background 0.15s;
+    }
+
+    .log-line:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .line-number {
+        color: #6b7280;
+        min-width: 50px;
+        user-select: none;
+        text-align: right;
+        padding-right: 1rem;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        margin-right: 1rem;
+    }
+
+    .line-content {
+        flex: 1;
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+
+    /* Log Levels */
+    .log-line.error {
+        background: rgba(239, 68, 68, 0.1);
+    }
+
+    .log-line.error .line-content {
+        color: #fca5a5;
+    }
+
+    .log-line.warn {
+        background: rgba(245, 158, 11, 0.1);
+    }
+
+    .log-line.warn .line-content {
+        color: #fcd34d;
+    }
+
+    .log-line.info .line-content {
+        color: #93c5fd;
+    }
+
+    .log-line.debug .line-content {
+        color: #9ca3af;
+    }
+
+    /* Empty State */
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 2rem;
+        text-align: center;
+        color: #6b7280;
+    }
+
+    .empty-state-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .empty-state h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: #cdd6f4;
+    }
+
+    /* Actions Bar */
+    .actions-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        padding: 1rem;
+        background: var(--color-surface-alt);
+        border-top: 1px solid var(--color-border);
+    }
+
+    /* Toggle Switch */
+    .toggle-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #cdd6f4;
+        font-size: 0.875rem;
+    }
+
+    .toggle-switch {
+        position: relative;
+        width: 44px;
+        height: 24px;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 24px;
+        transition: 0.3s;
+    }
+
+    .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background: white;
+        border-radius: 50%;
+        transition: 0.3s;
+    }
+
+    .toggle-switch input:checked+.toggle-slider {
+        background: #10b981;
+    }
+
+    .toggle-switch input:checked+.toggle-slider:before {
+        transform: translateX(20px);
+    }
+
+    /* SEO Content */
+    .seo-content {
+        max-width: 900px;
+        margin: 3rem auto;
+        padding: 0 1rem;
+    }
+
+    .seo-section {
+        margin-bottom: 2.5rem;
+    }
+
+    .seo-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--color-border);
+    }
+
+    .seo-section h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 1.5rem 0 0.75rem;
+    }
+
+    .seo-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .seo-section ul {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .seo-section li {
+        margin-bottom: 0.5rem;
+    }
+
+    .seo-section code {
+        background: var(--color-surface-alt);
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.875rem;
+    }
+
+    .seo-section pre {
+        background: #1e1e2e;
+        color: #cdd6f4;
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 0.85rem;
+        margin: 1rem 0;
+    }
+
+    /* Features Grid */
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+    }
+
+    .feature-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-card h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .feature-card p {
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 2rem;
+        margin: 2rem 0;
+    }
+
+    .faq-item {
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .faq-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .faq-item h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+    }
+
+    .faq-item p {
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    /* Related Tools */
+    .related-tools {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 2rem;
+        margin-top: 2rem;
+    }
+
+    .related-tools h2 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--color-text);
+    }
+
+    .related-tools-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .related-tool-link {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        background: var(--color-surface-alt);
+        border-radius: 8px;
+        text-decoration: none;
+        color: var(--color-text);
+        transition: all 0.2s;
+    }
+
+    .related-tool-link:hover {
+        background: var(--color-primary);
+        color: white;
+        transform: translateX(4px);
+    }
+
+    .related-tool-link svg {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .app-layout {
+            flex-direction: column;
+        }
+
+        .log-analyzer-container .sidebar {
+            width: 100%;
+            position: static;
+            max-height: none;
+            order: 1;
+        }
+
+        .main-panel {
+            order: 0;
+        }
+
+        .sidebar-section {
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .sidebar-btn {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .page-header h1 {
+            font-size: 1.2rem;
+        }
+
+        .toolbar {
+            padding: 0.75rem;
+        }
+
+        .toolbar-group {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .search-input {
+            width: 100%;
+            min-width: unset;
+        }
+
+        .stats-bar {
+            justify-content: center;
+        }
+
+        .log-viewer {
+            min-height: 300px;
+            font-size: 0.75rem;
+        }
+
+        .line-number {
+            min-width: 35px;
+            padding-right: 0.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .actions-bar {
+            justify-content: center;
+        }
+
+        .seo-section h2 {
+            font-size: 1.25rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .toolbar-btn span {
+            display: none;
+        }
+
+        .toolbar-btn {
+            padding: 0.5rem;
+        }
+
+        .filter-select {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.6rem;
+        }
+    }
+
+    /* Hidden file input */
+    .file-input-hidden {
+        display: none;
+    }
+
+    /* Highlight animation */
+    @keyframes highlight {
+        0% {
+            background: rgba(99, 102, 241, 0.3);
+        }
+
+        100% {
+            background: transparent;
+        }
+    }
+
+    .log-line.highlighted {
+        animation: highlight 1s ease;
+    }
+
+    /* JSON highlight */
+    .json-extract {
+        color: #a6e3a1;
+        cursor: pointer;
+    }
+
+    .json-extract:hover {
+        text-decoration: underline;
+    }
+
+    /* Advanced Toolbar */
+    .advanced-toolbar {
+        background: linear-gradient(135deg, #2a2a3e 0%, #1e1e2e 100%);
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .filter-input {
+        padding: 0.4rem 0.75rem;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+        color: #cdd6f4;
+        font-size: 0.8rem;
+    }
+
+    .filter-input:focus {
+        outline: none;
+        border-color: #6366f1;
+    }
+
+    /* Analytics Panel */
+    .analytics-panel {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .analytics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .analytics-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .analytics-card h4 {
+        font-size: 0.75rem;
+        color: #9ca3af;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .analytics-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #cdd6f4;
+    }
+
+    .analytics-value.error {
+        color: #ef4444;
+    }
+
+    .analytics-value.warn {
+        color: #f59e0b;
+    }
+
+    .analytics-list {
+        font-size: 0.8rem;
+        color: #cdd6f4;
+        line-height: 1.4;
+    }
+
+    .chart-container {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 10px;
+        padding: 1rem;
+    }
+
+    /* AI Modal */
+    .ai-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .ai-modal-content {
+        background: #1e1e2e;
+        border-radius: 16px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .ai-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .ai-modal-header h3 {
+        color: #cdd6f4;
+        font-size: 1.25rem;
+    }
+
+    .ai-modal-close {
+        background: none;
+        border: none;
+        color: #9ca3af;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .ai-explanation {
+        color: #cdd6f4;
+        line-height: 1.7;
+        white-space: pre-wrap;
+    }
+
+    @media (max-width: 768px) {
+        .advanced-toolbar {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-input {
+            width: 100%;
+        }
+
+        .analytics-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* Modern Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        backdrop-filter: blur(4px);
+        animation: fadeIn 0.2s ease;
+    }
+
+    .modal-container {
+        background: linear-gradient(145deg, #1e1e2e, #2a2a3e);
+        border-radius: 16px;
+        width: 90%;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow: hidden;
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        animation: slideUp 0.3s ease;
+    }
+
+    .modal-container.small {
+        max-width: 400px;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-header h3 {
+        color: #cdd6f4;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .modal-close {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: #9ca3af;
+        font-size: 1.25rem;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-close:hover {
+        background: rgba(239, 68, 68, 0.2);
+        color: #ef4444;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .modal-textarea {
+        width: 100%;
+        min-height: 250px;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        color: #cdd6f4;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.85rem;
+        padding: 1rem;
+        resize: vertical;
+        line-height: 1.5;
+    }
+
+    .modal-textarea:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .modal-textarea::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .modal-label {
+        display: block;
+        color: #9ca3af;
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .modal-input {
+        width: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        color: #cdd6f4;
+        font-size: 0.95rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .modal-input:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        padding: 1rem 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-btn {
+        padding: 0.6rem 1.25rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+    }
+
+    .modal-btn.primary {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+    }
+
+    .modal-btn.primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+
+    .modal-btn.secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: #cdd6f4;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-btn.secondary:hover {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Quick Start Banner */
+    .quick-start-banner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1));
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .quick-start-banner .step {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #cdd6f4;
+        font-size: 0.9rem;
+    }
+
+    .quick-start-banner .step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+        border-radius: 50%;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: white;
+    }
+
+    .quick-start-banner .step-arrow {
+        color: #6b7280;
+        font-size: 1.2rem;
+    }
+
+    .quick-start-banner .dismiss-btn {
+        background: none;
+        border: none;
+        color: #6b7280;
+        cursor: pointer;
+        padding: 0.25rem;
+        margin-left: auto;
+        font-size: 1.2rem;
+        line-height: 1;
+    }
+
+    .quick-start-banner .dismiss-btn:hover {
+        color: #cdd6f4;
+    }
+
+    .quick-start-banner.hidden {
+        display: none;
+    }
+
+    /* Ensure Quick Start banner is above other elements */
+    .quick-start-banner {
+        position: relative;
+        z-index: 10;
+    }
+
+    .quick-start-banner .dismiss-btn {
+        z-index: 11;
+        pointer-events: auto;
+    }
+
+    /* Loading Progress Overlay */
+    .loading-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(30, 30, 46, 0.95);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        gap: 1rem;
+    }
+
+    .loading-overlay.hidden {
+        display: none;
+    }
+
+    .loading-spinner {
+        width: 48px;
+        height: 48px;
+        border: 4px solid rgba(99, 102, 241, 0.2);
+        border-top-color: #6366f1;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .loading-text {
+        color: #cdd6f4;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .loading-subtext {
+        color: #9ca3af;
+        font-size: 0.85rem;
+    }
+
+    .progress-container {
+        width: 80%;
+        max-width: 300px;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #6366f1, #8b5cf6);
+        border-radius: 4px;
+        transition: width 0.2s ease;
+        width: 0%;
+    }
+
+    .loading-cancel {
+        margin-top: 0.5rem;
+        padding: 0.5rem 1.5rem;
+        background: rgba(239, 68, 68, 0.2);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+    }
+
+    .loading-cancel:hover {
+        background: rgba(239, 68, 68, 0.3);
+    }
+
+    /* Virtual Scrolling */
+    .virtual-container {
+        position: relative;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .virtual-spacer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1px;
+        visibility: hidden;
+    }
+
+    .virtual-viewport {
+        position: relative;
+    }
+
+    /* Virtual scrolling log line overrides - horizontal scroll for full content */
+    .virtual-viewport .log-line {
+        white-space: nowrap;
+        box-sizing: border-box;
+        align-items: center;
+    }
+
+    .virtual-viewport .line-content {
+        white-space: pre;
+        overflow-x: auto;
+        overflow-y: hidden;
+        word-break: normal;
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* IE/Edge */
+    }
+
+    .virtual-viewport .line-content::-webkit-scrollbar {
+        height: 3px;
+    }
+
+    .virtual-viewport .line-content::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .virtual-viewport .line-content::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+    }
+
+    .virtual-viewport .line-content::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.4);
+    }
+
+    .virtual-viewport .line-number {
+        flex-shrink: 0;
+    }
+
+    .sidebar-btn.active {
+        border-color: #6366f1;
+        color: #6366f1;
+        background: rgba(99, 102, 241, 0.1);
+    }
+
+    .text-left {
+        text-align: left;
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="log-analyzer-container">
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>Log File Analyzer Online – Parse & Debug Logs Instantly</h1>
+        <p>Free online tool to analyze server logs, find errors, and debug issues. Supports JSON, Apache, Nginx, Syslog,
+            Docker, and more.</p>
+    </header>
+
+    <!-- App Layout: Sidebar + Main -->
+    <div class="app-layout">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <!-- Input Section -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">📂 Input</div>
+                <button id="uploadBtn" class="sidebar-btn primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z" />
+                    </svg>
+                    Upload File
+                </button>
+                <button id="pasteBtn" class="sidebar-btn secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M19 2h-4.18C14.4.84 13.3 0 12 0c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 18H5V4h2v3h10V4h2v16z" />
+                    </svg>
+                    Paste Logs
+                </button>
+                <button id="sampleBtn" class="sidebar-btn secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" />
+                    </svg>
+                    Load Sample
+                </button>
+                <button id="clearBtn" class="sidebar-btn danger">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+                    </svg>
+                    Clear All
+                </button>
+            </div>
+
+            <!-- Filters Section -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">🔍 Filters</div>
+                <input type="text" id="searchInput" class="sidebar-input" placeholder="Search logs...">
+                <label style="display:flex;align-items:center;gap:0.5rem;color:#9ca3af;font-size:0.8rem;">
+                    <input type="checkbox" id="regexToggle"> Use Regex
+                </label>
+                <select id="levelFilter" class="sidebar-select">
+                    <option value="all">All Log Levels</option>
+                    <option value="error">🔴 Errors Only</option>
+                    <option value="warn">🟡 Warnings</option>
+                    <option value="info">🔵 Info</option>
+                    <option value="debug">⚪ Debug</option>
+                </select>
+                <input type="text" id="serviceFilter" class="sidebar-input" placeholder="Filter by service/host">
+
+                <!-- Date Range Filter Button -->
+                <button id="dateFilterBtn" class="sidebar-btn secondary" style="margin-top: 0.5rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z" />
+                    </svg>
+                    <span id="dateFilterLabel">Date Range</span>
+                </button>
+            </div>
+
+
+
+            <!-- Saved Queries -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">💾 Saved Queries</div>
+                <select id="savedQueries" class="sidebar-select">
+                    <option value="">Select saved query...</option>
+                </select>
+                <button id="saveQueryBtn" class="sidebar-btn secondary">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M17 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" />
+                    </svg>
+                    Save Current Query
+                </button>
+            </div>
+
+            <!-- AI Features -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">🤖 AI Features</div>
+                <button id="aiExplainBtn" class="sidebar-btn primary">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                    </svg>
+                    AI Explain Errors
+                </button>
+                <p style="font-size: 0.75rem; color: #6b7280; margin: 0.5rem 0 0.75rem; text-align: center;">Best for
+                    first-level debugging & pattern recognition</p>
+                <button id="analyticsBtn" class="sidebar-btn secondary">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" />
+                    </svg>
+                    Toggle Analytics
+                </button>
+            </div>
+
+            <!-- Export Section -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">📤 Export</div>
+                <button id="copyBtn" class="sidebar-btn secondary">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+                    </svg>
+                    Copy to Clipboard
+                </button>
+                <button id="downloadBtn" class="sidebar-btn secondary">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                    </svg>
+                    Download Logs
+                </button>
+                <button id="anonymizeBtn" class="sidebar-btn secondary">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
+                    </svg>
+                    Anonymize Data
+                </button>
+                <button id="extractJsonBtn" class="sidebar-btn success">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z" />
+                    </svg>
+                    Extract JSON
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-panel">
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat-item"><span class="stat-label">Total:</span><span class="stat-value total"
+                        id="totalCount">0</span></div>
+                <div class="stat-item"><span class="stat-label">Errors:</span><span class="stat-value error"
+                        id="errorCount">0</span></div>
+                <div class="stat-item"><span class="stat-label">Warnings:</span><span class="stat-value warn"
+                        id="warnCount">0</span></div>
+                <div class="stat-item"><span class="stat-label">Info:</span><span class="stat-value info"
+                        id="infoCount">0</span></div>
+                <div class="stat-item"><span class="stat-label">Format:</span><span class="stat-value"
+                        id="formatDetected">Auto-detect</span></div>
+            </div>
+
+            <!-- Analytics Panel (hidden by default) -->
+            <div id="analyticsPanel" class="analytics-panel" style="display:none;">
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h4>Error Rate</h4>
+                        <div class="analytics-value error" id="errorRate">0%</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h4>Warning Rate</h4>
+                        <div class="analytics-value warn" id="warnRate">0%</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h4>Log Frequency</h4>
+                        <div class="analytics-value" id="logFreq">0/min</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h4>Top Services</h4>
+                        <div class="analytics-list" id="topServices">-</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="timeChart" height="150"></canvas>
+                </div>
+            </div>
+
+            <!-- Quick Start Banner -->
+            <div class="quick-start-banner" id="quickStartBanner">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <span>Upload logs</span>
+                </div>
+                <span class="step-arrow">→</span>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <span>Filter errors</span>
+                </div>
+                <span class="step-arrow">→</span>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <span>Export results</span>
+                </div>
+                <button class="dismiss-btn" id="dismissQuickStart" title="Dismiss">×</button>
+            </div>
+
+            <!-- Log Viewer -->
+            <div class="log-panel">
+                <!-- Loading Overlay -->
+                <div class="loading-overlay hidden" id="loadingOverlay">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text" id="loadingText">Processing logs...</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <div class="loading-subtext" id="loadingSubtext">0% complete</div>
+                    <button class="loading-cancel" id="loadingCancel">Cancel</button>
+                </div>
+                <div class="log-viewer virtual-container" id="logViewer">
+                    <div class="virtual-spacer" id="virtualSpacer"></div>
+                    <div class="virtual-viewport" id="virtualViewport">
+                        <div class="empty-state" id="emptyState">
+                            <div class="empty-state-icon">📋</div>
+                            <h3>No logs to display</h3>
+                            <p>Upload a log file, paste content, or load a sample to get started.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Hidden File Input -->
+    <input type="file" id="fileInput" class="file-input-hidden" accept=".log,.txt,.json">
+
+    <!-- Date Filter Popup -->
+    <div id="dateFilterPopup" class="date-filter-popup hidden">
+        <div class="date-popup-header">
+            <span>📅 Filter by Date Range</span>
+            <button id="closeDatePopup" class="date-popup-close">×</button>
+        </div>
+        <div class="date-popup-body">
+            <div class="date-popup-row">
+                <label class="date-popup-label">From:</label>
+                <input type="datetime-local" id="startDate" class="sidebar-input">
+            </div>
+            <div class="date-popup-row">
+                <label class="date-popup-label">To:</label>
+                <input type="datetime-local" id="endDate" class="sidebar-input">
+            </div>
+            <div class="date-popup-presets">
+                <button class="date-preset-btn" data-preset="today">Today</button>
+                <button class="date-preset-btn" data-preset="7days">Last 7 Days</button>
+                <button class="date-preset-btn" data-preset="24h">Last 24h</button>
+                <button class="date-preset-btn" data-preset="1h">Last Hour</button>
+            </div>
+        </div>
+        <div class="date-popup-footer">
+            <button id="clearDateFilter" class="sidebar-btn secondary">Clear</button>
+            <button id="applyDateFilter" class="sidebar-btn primary">Apply</button>
+        </div>
+    </div>
+
+    <!-- Popup Backdrop -->
+    <div id="datePopupBackdrop" class="date-popup-backdrop hidden"></div>
+
+    <!-- Paste Modal -->
+    <div id="pasteModal" class="modal-overlay" style="display:none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>📋 Paste Log Content</h3>
+                <button class="modal-close" data-modal="pasteModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="pasteTextarea" class="modal-textarea"
+                    placeholder="Paste your log content here..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn secondary" data-modal="pasteModal">Cancel</button>
+                <button id="pasteConfirmBtn" class="modal-btn primary">Load Logs</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Query Modal -->
+    <div id="saveQueryModal" class="modal-overlay" style="display:none;">
+        <div class="modal-container small">
+            <div class="modal-header">
+                <h3>💾 Save Query</h3>
+                <button class="modal-close" data-modal="saveQueryModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label class="modal-label">Query Name</label>
+                <input type="text" id="queryNameInput" class="modal-input" placeholder="e.g., Error logs last hour">
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn secondary" data-modal="saveQueryModal">Cancel</button>
+                <button id="saveQueryConfirmBtn" class="modal-btn primary">Save Query</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEO Content -->
+    <div class="seo-content">
+        <!-- What is Log Analyzer -->
+        <section class="seo-section">
+            <h2>What is a Log Analyzer?</h2>
+            <p>A log analyzer is an essential developer tool that helps parse, view, and analyze log files from servers,
+                applications, and services. Log files contain crucial information about system behavior, errors,
+                warnings, and user activities that are vital for debugging and monitoring.</p>
+            <p>Common use cases include:</p>
+            <ul>
+                <li><strong>Debugging errors</strong> in application logs to identify and fix issues</li>
+                <li><strong>Monitoring server health</strong> through access and error logs</li>
+                <li><strong>Security analysis</strong> by reviewing authentication and access logs</li>
+                <li><strong>Performance optimization</strong> by identifying slow requests and bottlenecks</li>
+                <li><strong>Compliance auditing</strong> by tracking user activities and system changes</li>
+            </ul>
+        </section>
+
+        <section class="seo-section">
+            <h2>Log File Analyzer Online (Free Tool)</h2>
+
+            <p>
+                This free log file analyzer online allows you to parse, view, and debug server logs instantly without installing any software.
+                Whether you're analyzing application logs, Apache access logs, or Nginx error logs, this tool helps you identify issues quickly.
+            </p>
+
+            <p>
+                Unlike traditional log analysis tools, this online log file analyzer works directly in your browser, ensuring your data stays private and secure.
+                You can filter logs by level, search using regex, and export results for further analysis.
+            </p>
+
+            <h3>Key Features:</h3>
+            <ul>
+                <li>Analyze log files online without uploading data</li>
+                <li>Supports JSON, Apache, Nginx, Syslog, and more</li>
+                <li>Filter logs by error, warning, info, or debug levels</li>
+                <li>Search logs using keywords or regex</li>
+                <li>Export filtered logs in multiple formats</li>
+            </ul>
+        </section>
+
+        <!-- Features Section -->
+        <section class="seo-section">
+            <h2>What This Log Analyzer Can Do</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h4>🔍 Multi-Format Detection</h4>
+                    <p>Automatically detects JSON, Apache, Nginx, Syslog, Docker, PM2, and more.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎨 Syntax Highlighting</h4>
+                    <p>Color-coded log levels make it easy to spot errors and warnings instantly.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔎 Powerful Filtering</h4>
+                    <p>Filter by log level (ERROR, WARN, INFO, DEBUG) or search with regex patterns.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 Statistics Dashboard</h4>
+                    <p>See error and warning counts at a glance with real-time statistics.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📦 JSON Extraction</h4>
+                    <p>Extract and beautify JSON objects embedded within log lines.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔒 Log Anonymizer</h4>
+                    <p>Remove sensitive data like IPs, emails, and tokens before sharing.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How to Use -->
+        <section class="seo-section">
+            <h2>How to Analyze Logs Online</h2>
+            <h3>Step 1: Paste or Upload Logs</h3>
+            <p>Paste your log content directly into the editor or drag and drop a log file (.log, .txt, or .json).</p>
+
+            <h3>Step 2: Auto-Detection</h3>
+            <p>The analyzer automatically detects your log format and applies appropriate parsing and highlighting.</p>
+
+            <h3>Step 3: Filter and Search</h3>
+            <p>Use the filter dropdown to show only ERROR or WARN level logs. Search for specific keywords or use regex
+                patterns for advanced matching.</p>
+
+            <h3>Step 4: Analyze</h3>
+            <p>View statistics, identify patterns, and extract JSON objects from log lines for further inspection.</p>
+
+            <h3>Step 5: Export</h3>
+            <p>Download or copy your filtered results for reporting or further analysis. Anonymize sensitive data before
+                sharing.</p>
+        </section>
+
+        <!-- Supported Formats -->
+        <section class="seo-section">
+            <h2>Supported Log Formats</h2>
+
+            <h3>JSON Logs (Structured Logging)</h3>
+            <p>Modern applications often use structured JSON logging for better parsing:</p>
+            <pre>{"level":"error","message":"Database connection failed","timestamp":"2024-01-24T10:00:00Z","service":"api"}</pre>
+
+            <h3>Apache/Nginx Access Logs</h3>
+            <p>Web server access logs follow the common log format:</p>
+            <pre>192.168.1.1 - - [24/Jan/2024:10:00:00 +0000] "GET /api/users HTTP/1.1" 500 1234</pre>
+
+            <h3>Syslog Format</h3>
+            <p>System logs from Linux servers:</p>
+            <pre>Jan 24 10:00:00 server sshd[1234]: Failed password for root from 192.168.1.1</pre>
+
+            <h3>Docker/Container Logs</h3>
+            <p>Container logs with timestamps:</p>
+            <pre>2024-01-24T10:00:00.000000000Z stdout F Application started on port 3000</pre>
+
+            <h3>Application Logs</h3>
+            <p>Common application log formats from Java, Python, Node.js:</p>
+            <pre>2024-01-24 10:00:00 ERROR [main] com.app.Service - Failed to connect to database</pre>
+        </section>
+
+        <!-- Long-tail SEO H2 Sections -->
+        <section class="seo-section">
+            <h2>Free Nginx Log Analyzer Online</h2>
+
+            <p>
+                This free Nginx log analyzer online helps you quickly parse, filter, and debug Nginx access and error logs directly in your browser.
+                Whether you're troubleshooting 500 errors, analyzing traffic patterns, or identifying slow requests, this tool makes log analysis simple and fast.
+            </p>
+
+            <p>
+                The analyzer automatically detects Nginx log formats (common and combined), highlights HTTP status codes, and lets you filter logs by error level, IP address, or request path.
+                No upload is required — all processing happens locally for maximum security.
+            </p>
+
+            <h3>What you can do with this Nginx log analyzer:</h3>
+            <ul>
+                <li>Analyze Nginx access logs online without installing any software</li>
+                <li>Filter 4xx and 5xx errors instantly</li>
+                <li>Identify slow API endpoints and performance issues</li>
+                <li>Search logs using keywords or regex patterns</li>
+                <li>Extract and inspect JSON data from log entries</li>
+            </ul>
+
+            <h3>Example Nginx Log Format:</h3>
+            <pre>
+        192.168.1.1 - - [24/Jan/2024:10:00:00 +0000] "GET /api/users HTTP/1.1" 500 1234
+            </pre>
+        </section>
+
+        <section class="seo-section">
+            <h2>JSON Log Viewer & Parser</h2>
+            <p>View and parse structured JSON logs from modern applications. The JSON log viewer formats nested objects,
+                extracts key fields like timestamps, levels, and messages, and allows filtering by any JSON property.
+                Ideal for applications using Winston, Pino, Bunyan, or any structured logging library.</p>
+        </section>
+
+        <section class="seo-section">
+            <h2>Apache Access Log Analyzer</h2>
+            <p>Parse Apache httpd access logs in common or combined log format. Quickly identify top URLs, client IPs,
+                user agents, and HTTP status codes. Filter by response codes to find errors, or search for specific
+                request patterns. Supports both Apache 2.2 and 2.4 log formats.</p>
+        </section>
+
+        <section class="seo-section">
+            <h2>Docker Log Analyzer Online</h2>
+            <p>Analyze Docker container logs and Kubernetes pod logs. Supports Docker JSON log driver output and
+                standard container log formats. Filter by stdout/stderr, search for specific error messages, and
+                extract timestamps from containerized application output.</p>
+        </section>
+
+        <section class="seo-section">
+        <h2>Why Use This Log Analyzer vs Other Tools?</h2>
+
+        <ul>
+        <li>No upload required (privacy-first)</li>
+        <li>Faster than desktop log analyzers</li>
+        <li>Supports JSON, Apache, Nginx, Docker</li>
+        <li>Built-in filtering & regex search</li>
+        </ul>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="seo-section">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-section">
+                <div class="faq-item">
+                    <h3>Is this log analyzer free?</h3>
+                    <p>Yes, completely free with no signup required. Analyze unlimited logs directly in your browser
+                        without any restrictions.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Is my log data secure?</h3>
+                    <p>All processing happens locally in your browser. Your logs are never uploaded to any server,
+                        ensuring complete privacy for sensitive data including credentials and user information.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>What log formats are supported?</h3>
+                    <p>We support JSON, Apache, Nginx, Syslog, Docker, PM2, Python, Java, Ruby, and most common
+                        application log formats. Format detection is automatic.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Can I analyze large log files?</h3>
+                    <p>Yes, the analyzer efficiently handles files up to 10MB+ using virtualized rendering and optimized
+                        parsing techniques for smooth performance.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Can I export the filtered results?</h3>
+                    <p>Yes, you can download filtered logs as TXT or copy to clipboard. Use the anonymize feature to
+                        remove sensitive data before sharing.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Tools -->
+        <section class="related-tools">
+            <h2>Related Developer Tools</h2>
+            <div class="related-tools-grid">
+                <a href="/mock-api/" class="related-tool-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+                    </svg>
+                    Mock API Generator
+                </a>
+                <a href="/sqlite-viewer/" class="related-tool-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 3C7.58 3 4 4.79 4 7v10c0 2.21 3.59 4 8 4s8-1.79 8-4V7c0-2.21-3.58-4-8-4zm0 2c3.87 0 6 1.5 6 2s-2.13 2-6 2-6-1.5-6-2 2.13-2 6-2zm6 12c0 .5-2.13 2-6 2s-6-1.5-6-2v-2.23c1.61.78 3.72 1.23 6 1.23s4.39-.45 6-1.23V17zm0-4c0 .5-2.13 2-6 2s-6-1.5-6-2v-2.23c1.61.78 3.72 1.23 6 1.23s4.39-.45 6-1.23V13zm0-4c0 .5-2.13 2-6 2s-6-1.5-6-2V6.77c1.61.78 3.72 1.23 6 1.23s4.39-.45 6-1.23V9z" />
+                    </svg>
+                    SQLite Viewer
+                </a>
+                <a href="/redoc-viewer/" class="related-tool-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                    </svg>
+                    ReDoc Viewer
+                </a>
+                <a href="/" class="related-tool-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z" />
+                    </svg>
+                    JSON Formatter
+                </a>
+                <a href="/json-diff/" class="related-tool-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z" />
+                    </svg>
+                    JSON Diff
+                </a>
+                <a href="/regex-tester/" class="related-tool-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                    </svg>
+                    Regex Tester
+                </a>
+            </div>
+        </section>
+    </div>
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script>
+    // Open sponsored link on any button or anchor click
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('click', () => {
+                window.open('https://omg10.com/4/10764919', '_blank');
+            });
+        });
+    });
+</script>
+<!-- Chart.js is now lazy-loaded when analytics panel is opened -->
+<script>
+    (function () {
+        'use strict';
+
+        // DOM Elements - Core
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const pasteBtn = document.getElementById('pasteBtn');
+        const sampleBtn = document.getElementById('sampleBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const levelFilter = document.getElementById('levelFilter');
+        const searchInput = document.getElementById('searchInput');
+        const regexToggle = document.getElementById('regexToggle');
+        const logViewer = document.getElementById('logViewer');
+        const emptyState = document.getElementById('emptyState');
+        const copyBtn = document.getElementById('copyBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const anonymizeBtn = document.getElementById('anonymizeBtn');
+        const extractJsonBtn = document.getElementById('extractJsonBtn');
+
+        // DOM Elements - Advanced Filters
+        const startDate = document.getElementById('startDate');
+        const endDate = document.getElementById('endDate');
+        const serviceFilter = document.getElementById('serviceFilter');
+        const savedQueries = document.getElementById('savedQueries');
+        const saveQueryBtn = document.getElementById('saveQueryBtn');
+        const analyticsBtn = document.getElementById('analyticsBtn');
+        const aiExplainBtn = document.getElementById('aiExplainBtn');
+        const analyticsPanel = document.getElementById('analyticsPanel');
+
+        // Stats elements
+        const totalCount = document.getElementById('totalCount');
+        const errorCount = document.getElementById('errorCount');
+        const warnCount = document.getElementById('warnCount');
+        const infoCount = document.getElementById('infoCount');
+        const formatDetected = document.getElementById('formatDetected');
+
+        // Analytics elements
+        const errorRateEl = document.getElementById('errorRate');
+        const warnRateEl = document.getElementById('warnRate');
+        const logFreqEl = document.getElementById('logFreq');
+        const topServicesEl = document.getElementById('topServices');
+
+        // State
+        let rawLogs = '';
+        let parsedLines = [];
+        let filteredLines = [];
+        let detectedFormat = 'unknown';
+        let timeChart = null;
+        let savedQueriesData = JSON.parse(localStorage.getItem('logAnalyzerQueries') || '[]');
+
+        // Virtual scrolling state
+        const LINE_HEIGHT = 26; // Fixed line height in pixels
+        const BUFFER_SIZE = 20; // Extra lines above/below viewport
+        let scrollTop = 0;
+        let viewportHeight = 0;
+
+        // File loading state
+        let loadingCancelled = false;
+        const CHUNK_SIZE = 512 * 1024; // 512KB chunks
+
+        // Loading overlay elements
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingText = document.getElementById('loadingText');
+        const progressBar = document.getElementById('progressBar');
+        const loadingSubtext = document.getElementById('loadingSubtext');
+        const loadingCancel = document.getElementById('loadingCancel');
+        const virtualViewport = document.getElementById('virtualViewport');
+        const virtualSpacer = document.getElementById('virtualSpacer');
+
+        // Sample logs for demo
+        const sampleLogs = `2024-01-24 10:00:01 INFO  [main] Application starting up...
+2024-01-24 10:00:02 INFO  [main] Loading configuration from /etc/app/config.yml
+2024-01-24 10:00:03 DEBUG [db] Connecting to database at localhost:5432
+2024-01-24 10:00:04 INFO  [db] Database connection established
+2024-01-24 10:00:05 INFO  [http] Starting HTTP server on port 3000
+2024-01-24 10:00:06 WARN  [http] Rate limiting not configured
+2024-01-24 10:00:07 INFO  [http] Server ready to accept connections
+2024-01-24 10:00:15 INFO  [http] GET /api/users 200 45ms
+2024-01-24 10:00:16 INFO  [http] {"method":"POST","path":"/api/login","status":200,"duration":120}
+2024-01-24 10:00:20 WARN  [auth] Failed login attempt for user: admin from IP: 192.168.1.100
+2024-01-24 10:00:25 ERROR [db] Query timeout after 30000ms: SELECT * FROM large_table
+2024-01-24 10:00:26 ERROR [api] Unhandled exception in /api/process
+java.lang.NullPointerException: Cannot invoke method on null object
+    at com.app.service.UserService.getUser(UserService.java:45)
+    at com.app.controller.ApiController.processRequest(ApiController.java:123)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+2024-01-24 10:00:30 INFO  [http] GET /health 200 2ms
+2024-01-24 10:00:35 WARN  [cache] Cache miss rate above threshold: 45%
+2024-01-24 10:00:40 ERROR [email] Failed to send notification email: SMTP connection refused
+2024-01-24 10:00:45 INFO  [scheduler] Running scheduled task: cleanup_temp_files
+2024-01-24 10:00:50 DEBUG [db] Query executed: DELETE FROM sessions WHERE expires_at < NOW()
+2024-01-24 10:00:55 INFO  [http] POST /api/orders 201 89ms`;
+
+        // Log level detection patterns
+        const levelPatterns = {
+            error: /\b(ERROR|FATAL|CRITICAL|SEVERE|error|fatal|"level"\s*:\s*"error")/i,
+            warn: /\b(WARN|WARNING|warn|warning|"level"\s*:\s*"warn")/i,
+            info: /\b(INFO|NOTICE|info|notice|"level"\s*:\s*"info")/i,
+            debug: /\b(DEBUG|TRACE|VERBOSE|debug|trace|"level"\s*:\s*"debug")/i
+        };
+
+        // Format detection
+        function detectFormat(text) {
+            const lines = text.split('\n').slice(0, 10);
+
+            // JSON format
+            if (lines.some(l => l.trim().startsWith('{'))) {
+                return 'JSON';
+            }
+
+            // Apache/Nginx
+            if (lines.some(l => /^\d+\.\d+\.\d+\.\d+\s+-\s+-\s+\[/.test(l))) {
+                return 'Apache/Nginx';
+            }
+
+            // Syslog
+            if (lines.some(l => /^[A-Z][a-z]{2}\s+\d+\s+\d+:\d+:\d+/.test(l))) {
+                return 'Syslog';
+            }
+
+            // Docker
+            if (lines.some(l => /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z\s+(stdout|stderr)/.test(l))) {
+                return 'Docker';
+            }
+
+            // Standard app logs
+            if (lines.some(l => /^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}/.test(l))) {
+                return 'Application';
+            }
+
+            return 'Unknown';
+        }
+
+        // Parse log level
+        function getLogLevel(line) {
+            if (levelPatterns.error.test(line)) return 'error';
+            if (levelPatterns.warn.test(line)) return 'warn';
+            if (levelPatterns.info.test(line)) return 'info';
+            if (levelPatterns.debug.test(line)) return 'debug';
+            return 'default';
+        }
+
+        // Parse logs
+        function parseLogs(text) {
+            rawLogs = text;
+            detectedFormat = detectFormat(text);
+            formatDetected.textContent = detectedFormat;
+
+            const lines = text.split('\n');
+            parsedLines = lines.map((line, index) => ({
+                number: index + 1,
+                content: line,
+                level: getLogLevel(line),
+                hasJson: /\{[^}]+\}/.test(line)
+            }));
+
+            updateStats();
+            applyFilters();
+        }
+
+        // Update statistics
+        function updateStats() {
+            const stats = { total: 0, error: 0, warn: 0, info: 0 };
+
+            parsedLines.forEach(line => {
+                if (line.content.trim()) {
+                    stats.total++;
+                    if (line.level === 'error') stats.error++;
+                    if (line.level === 'warn') stats.warn++;
+                    if (line.level === 'info') stats.info++;
+                }
+            });
+
+            totalCount.textContent = stats.total;
+            errorCount.textContent = stats.error;
+            warnCount.textContent = stats.warn;
+            infoCount.textContent = stats.info;
+        }
+
+        // Extract timestamp from log line
+        function extractTimestamp(line) {
+            // ISO format: 2024-01-24T10:00:01.123Z or 2024-01-24 10:00:01
+            const isoMatch = line.match(/(\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}:\d{2})/);
+            if (isoMatch) return new Date(isoMatch[1].replace(' ', 'T'));
+
+            // Common log format: [24/Jan/2024:10:00:01 +0000]
+            const clfMatch = line.match(/\[(\d{2})\/([A-Za-z]{3})\/(\d{4}):(\d{2}):(\d{2}):(\d{2})/);
+            if (clfMatch) {
+                const months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+                return new Date(clfMatch[3], months[clfMatch[2]], clfMatch[1], clfMatch[4], clfMatch[5], clfMatch[6]);
+            }
+
+            // Syslog format: Jan 24 10:00:01
+            const syslogMatch = line.match(/^([A-Za-z]{3})\s+(\d+)\s+(\d{2}):(\d{2}):(\d{2})/);
+            if (syslogMatch) {
+                const months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+                const date = new Date();
+                date.setMonth(months[syslogMatch[1]]);
+                date.setDate(parseInt(syslogMatch[2]));
+                date.setHours(parseInt(syslogMatch[3]), parseInt(syslogMatch[4]), parseInt(syslogMatch[5]));
+                return date;
+            }
+
+            // Unix timestamp (seconds or milliseconds)
+            const unixMatch = line.match(/^\s*(\d{10,13})\s/);
+            if (unixMatch) {
+                const ts = parseInt(unixMatch[1]);
+                return new Date(ts > 9999999999 ? ts : ts * 1000);
+            }
+
+            return null;
+        }
+
+        // Check if line timestamp is within range
+        function isWithinDateRange(line, startDate, endDate) {
+            if (!startDate && !endDate) return true;
+
+            const timestamp = extractTimestamp(line.content);
+            if (!timestamp) return true; // If no timestamp found, include the line
+
+            if (startDate && timestamp < startDate) return false;
+            if (endDate && timestamp > endDate) return false;
+            return true;
+        }
+
+        // Apply filters - async chunked for large datasets
+        let filterAbortController = null;
+
+        async function applyFilters() {
+            // Cancel any previous filter operation
+            if (filterAbortController) {
+                filterAbortController.abort();
+            }
+            filterAbortController = new AbortController();
+            const signal = filterAbortController.signal;
+
+            const levelFilterValue = levelFilter.value;
+            const searchTerm = searchInput.value.trim();
+            const useRegex = regexToggle.checked;
+            const serviceFilterValue = serviceFilter?.value?.trim().toLowerCase() || '';
+
+            // Date range filtering
+            const startDateValue = startDate?.value ? new Date(startDate.value) : null;
+            const endDateValue = endDate?.value ? new Date(endDate.value) : null;
+
+            // For small datasets or no search, use fast sync filtering
+            if (parsedLines.length < 50000 || !searchTerm) {
+                filteredLines = parsedLines.filter(line => {
+                    if (levelFilterValue !== 'all' && line.level !== levelFilterValue) return false;
+                    if (serviceFilterValue && !line.content.toLowerCase().includes(serviceFilterValue)) return false;
+                    if (!isWithinDateRange(line, startDateValue, endDateValue)) return false;
+                    if (searchTerm) {
+                        try {
+                            if (useRegex) {
+                                const regex = new RegExp(searchTerm, 'i');
+                                if (!regex.test(line.content)) return false;
+                            } else {
+                                if (!line.content.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+                            }
+                        } catch (e) { }
+                    }
+                    return true;
+                });
+                renderLogs();
+                return;
+            }
+
+            // For large datasets, use async chunked filtering
+            filteredLines = [];
+            const FILTER_CHUNK_SIZE = 10000;
+            let compiled = null;
+            const searchLower = searchTerm.toLowerCase();
+
+            if (useRegex) {
+                try { compiled = new RegExp(searchTerm, 'i'); } catch (e) { return; }
+            }
+
+            loadingOverlay.classList.remove('hidden');
+            loadingText.textContent = 'Searching...';
+            progressBar.style.width = '0%';
+            loadingSubtext.textContent = '0% complete';
+
+            try {
+                for (let i = 0; i < parsedLines.length; i += FILTER_CHUNK_SIZE) {
+                    if (signal.aborted) return;
+
+                    const chunk = parsedLines.slice(i, i + FILTER_CHUNK_SIZE);
+                    const matches = chunk.filter(line => {
+                        if (levelFilterValue !== 'all' && line.level !== levelFilterValue) return false;
+                        if (serviceFilterValue && !line.content.toLowerCase().includes(serviceFilterValue)) return false;
+                        if (!isWithinDateRange(line, startDateValue, endDateValue)) return false;
+                        if (compiled) {
+                            if (!compiled.test(line.content)) return false;
+                        } else {
+                            if (!line.content.toLowerCase().includes(searchLower)) return false;
+                        }
+                        return true;
+                    });
+
+                    filteredLines.push(...matches);
+
+                    // Update progress
+                    const progress = Math.min(100, ((i + FILTER_CHUNK_SIZE) / parsedLines.length) * 100);
+                    progressBar.style.width = progress + '%';
+                    loadingSubtext.textContent = `${Math.round(progress)}% • ${filteredLines.length.toLocaleString()} matches`;
+
+                    // Yield to UI
+                    await new Promise(r => setTimeout(r, 0));
+                }
+
+                if (!signal.aborted) {
+                    renderLogs();
+                    showToast(`Found ${filteredLines.length.toLocaleString()} matching lines`);
+                }
+            } finally {
+                loadingOverlay.classList.add('hidden');
+            }
+        }
+
+        // Debounced filter trigger
+        let filterDebounceTimer = null;
+        function debouncedFilter() {
+            if (filterDebounceTimer) clearTimeout(filterDebounceTimer);
+            filterDebounceTimer = setTimeout(() => {
+                applyFilters();
+            }, 300);
+        }
+
+        // Render logs with virtual scrolling
+        function renderLogs() {
+            if (filteredLines.length === 0) {
+                virtualSpacer.style.height = '0px';
+                if (parsedLines.length === 0) {
+                    emptyState.style.display = 'flex';
+                    virtualViewport.innerHTML = '';
+                    virtualViewport.appendChild(emptyState);
+                } else {
+                    emptyState.style.display = 'none';
+                    virtualViewport.innerHTML = '<div class="empty-state"><h3>No matching logs</h3><p>Try adjusting your filters or search term.</p></div>';
+                }
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            // Set up virtual scrolling
+            const totalHeight = filteredLines.length * LINE_HEIGHT;
+            virtualSpacer.style.height = totalHeight + 'px';
+            viewportHeight = logViewer.clientHeight;
+            scrollTop = logViewer.scrollTop;
+
+            // Calculate visible range
+            const startIndex = Math.max(0, Math.floor(scrollTop / LINE_HEIGHT) - BUFFER_SIZE);
+            const endIndex = Math.min(filteredLines.length, Math.ceil((scrollTop + viewportHeight) / LINE_HEIGHT) + BUFFER_SIZE);
+
+            // Render only visible lines
+            const visibleLines = filteredLines.slice(startIndex, endIndex);
+            const html = visibleLines.map((line, idx) => {
+                const escapedContent = escapeHtml(line.content);
+                const highlightedContent = highlightSearch(escapedContent);
+                const topOffset = (startIndex + idx) * LINE_HEIGHT;
+
+                return `<div class="log-line ${line.level}" style="position:absolute;top:${topOffset}px;left:0;right:0;height:${LINE_HEIGHT}px;">
+                    <span class="line-number">${line.number}</span>
+                    <span class="line-content">${highlightedContent}</span>
+                </div>`;
+            }).join('');
+
+            virtualViewport.innerHTML = html;
+        }
+
+        // Debounced scroll handler for virtual scrolling
+        let scrollTimeout = null;
+        logViewer.addEventListener('scroll', () => {
+            if (scrollTimeout) return;
+            scrollTimeout = setTimeout(() => {
+                scrollTimeout = null;
+                if (filteredLines.length > 0) {
+                    renderLogs();
+                }
+            }, 16); // ~60fps
+        });
+
+        // Escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Highlight search matches
+        function highlightSearch(text) {
+            const searchTerm = searchInput.value.trim();
+            if (!searchTerm) return text;
+
+            try {
+                const useRegex = regexToggle.checked;
+                const regex = useRegex
+                    ? new RegExp(`(${searchTerm})`, 'gi')
+                    : new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+
+                return text.replace(regex, '<mark>$1</mark>');
+            } catch (e) {
+                return text;
+            }
+        }
+
+        // Anonymize logs
+        function anonymizeLogs() {
+            if (!rawLogs) return;
+
+            let anonymized = rawLogs;
+
+            // IP addresses
+            anonymized = anonymized.replace(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g, '[IP_REDACTED]');
+
+            // Email addresses
+            anonymized = anonymized.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[EMAIL_REDACTED]');
+
+            // JWT tokens
+            anonymized = anonymized.replace(/eyJ[a-zA-Z0-9_-]*\.eyJ[a-zA-Z0-9_-]*\.[a-zA-Z0-9_-]*/g, '[JWT_REDACTED]');
+
+            // API keys (common patterns)
+            anonymized = anonymized.replace(/[a-zA-Z0-9]{32,}/g, match => {
+                if (match.length > 30 && /[a-f0-9]/i.test(match)) {
+                    return '[KEY_REDACTED]';
+                }
+                return match;
+            });
+
+            parseLogs(anonymized);
+            showToast('Logs anonymized: IPs, emails, and tokens removed');
+        }
+
+        // Extract JSON
+        function extractJson() {
+            const jsonMatches = [];
+
+            filteredLines.forEach(line => {
+                const matches = line.content.match(/\{[^{}]*\}/g);
+                if (matches) {
+                    matches.forEach(m => {
+                        try {
+                            const parsed = JSON.parse(m);
+                            jsonMatches.push(JSON.stringify(parsed, null, 2));
+                        } catch (e) {
+                            // Not valid JSON
+                        }
+                    });
+                }
+            });
+
+            if (jsonMatches.length === 0) {
+                showToast('No valid JSON found in logs');
+                return;
+            }
+
+            // Open JSON Formatter with extracted JSON
+            const combined = jsonMatches.join('\n\n');
+            localStorage.setItem('pendingJSON', combined);
+            window.open('/', '_blank');
+            showToast(`Extracted ${jsonMatches.length} JSON objects`);
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e1e2e;
+      color: #cdd6f4;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      z-index: 10000;
+      animation: fadeIn 0.3s ease;
+    `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Event Listeners
+        uploadBtn.addEventListener('click', () => fileInput.click());
+
+        // Chunked file reading for large files
+        async function processLargeFile(file) {
+            loadingCancelled = false;
+            loadingOverlay.classList.remove('hidden');
+            loadingText.textContent = `Processing ${file.name}...`;
+            progressBar.style.width = '0%';
+            loadingSubtext.textContent = '0% complete';
+
+            let offset = 0;
+            let lineNumber = 0;
+            let buffer = '';
+            let formatSample = ''; // Only store sample for format detection
+            const startTime = Date.now();
+
+            parsedLines = [];
+            rawLogs = ''; // Keep empty for large files to avoid memory issues
+
+            try {
+                while (offset < file.size && !loadingCancelled) {
+                    const chunk = file.slice(offset, offset + CHUNK_SIZE);
+                    const text = await chunk.text();
+                    buffer += text;
+
+                    // Only sample first chunk for format detection
+                    if (offset === 0) {
+                        formatSample = text.substring(0, 2000);
+                    }
+
+                    // Process complete lines, keep incomplete line in buffer
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop(); // Keep last incomplete line
+
+                    for (const line of lines) {
+                        parsedLines.push({
+                            number: ++lineNumber,
+                            content: line,
+                            level: getLogLevel(line),
+                            hasJson: /\{[^}]+\}/.test(line)
+                        });
+                    }
+
+                    offset += CHUNK_SIZE;
+
+                    // Update progress
+                    const progress = Math.min(100, (offset / file.size) * 100);
+                    progressBar.style.width = progress + '%';
+                    loadingSubtext.textContent = `${Math.round(progress)}% complete • ${parsedLines.length.toLocaleString()} lines`;
+
+                    // Allow UI to update
+                    await new Promise(r => setTimeout(r, 0));
+                }
+
+                // Process remaining buffer
+                if (buffer && !loadingCancelled) {
+                    parsedLines.push({
+                        number: ++lineNumber,
+                        content: buffer,
+                        level: getLogLevel(buffer),
+                        hasJson: /\{[^}]+\}/.test(buffer)
+                    });
+                }
+
+                if (!loadingCancelled) {
+                    detectedFormat = detectFormat(formatSample);
+                    formatDetected.textContent = detectedFormat;
+                    updateStats();
+                    applyFilters();
+
+                    const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+                    showToast(`Loaded ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB, ${parsedLines.length.toLocaleString()} lines) in ${elapsed}s`);
+                }
+            } catch (err) {
+                console.error('Error processing file:', err);
+                showToast('Error processing file: ' + err.message);
+            } finally {
+                loadingOverlay.classList.add('hidden');
+            }
+        }
+
+        // Cancel button handler
+        loadingCancel.addEventListener('click', () => {
+            loadingCancelled = true;
+            showToast('File loading cancelled');
+        });
+
+        // File input handler - use chunked reading for large files (> 5MB)
+        const LARGE_FILE_THRESHOLD = 5 * 1024 * 1024; // 5MB
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > LARGE_FILE_THRESHOLD) {
+                await processLargeFile(file);
+            } else {
+                // Small files - use standard FileReader
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    parseLogs(e.target.result);
+                    showToast(`Loaded ${file.name}`);
+                };
+                reader.readAsText(file);
+            }
+            fileInput.value = ''; // Reset for same file upload
+        });
+
+        pasteBtn.addEventListener('click', () => {
+            document.getElementById('pasteModal').style.display = 'flex';
+            document.getElementById('pasteTextarea').value = '';
+            document.getElementById('pasteTextarea').focus();
+        });
+
+        sampleBtn.addEventListener('click', () => {
+            parseLogs(sampleLogs);
+            showToast('Sample logs loaded');
+        });
+
+        clearBtn.addEventListener('click', () => {
+            rawLogs = '';
+            parsedLines = [];
+            filteredLines = [];
+            virtualViewport.innerHTML = '';
+            virtualSpacer.style.height = '0px';
+            virtualViewport.appendChild(emptyState);
+            emptyState.style.display = 'flex';
+            totalCount.textContent = '0';
+            errorCount.textContent = '0';
+            warnCount.textContent = '0';
+            infoCount.textContent = '0';
+            formatDetected.textContent = 'Auto-detect';
+            searchInput.value = '';
+            levelFilter.value = 'all';
+            showToast('Logs cleared');
+        });
+
+        levelFilter.addEventListener('change', applyFilters);
+        searchInput.addEventListener('input', debouncedFilter);
+        regexToggle.addEventListener('change', applyFilters);
+
+        copyBtn.addEventListener('click', () => {
+            const text = filteredLines.map(l => l.content).join('\n');
+            navigator.clipboard.writeText(text);
+            showToast('Copied to clipboard');
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            const text = filteredLines.map(l => l.content).join('\n');
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'filtered-logs.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Logs downloaded');
+        });
+
+        anonymizeBtn.addEventListener('click', anonymizeLogs);
+        extractJsonBtn.addEventListener('click', extractJson);
+
+        // Drag and drop
+        logViewer.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            logViewer.style.background = 'rgba(99,102,241,0.2)';
+        });
+
+        logViewer.addEventListener('dragleave', () => {
+            logViewer.style.background = '';
+        });
+
+        logViewer.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            logViewer.style.background = '';
+
+            const file = e.dataTransfer.files[0];
+            if (!file) return;
+
+            if (file.size > LARGE_FILE_THRESHOLD) {
+                await processLargeFile(file);
+            } else {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    parseLogs(e.target.result);
+                    showToast(`Loaded ${file.name}`);
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // Add CSS for animations
+        const style = document.createElement('style');
+        style.textContent = `
+    @keyframes fadeIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+    mark { background: #fbbf24; color: #1e1e2e; padding: 0 2px; border-radius: 2px; }
+  `;
+        document.head.appendChild(style);
+
+        // ================== ADVANCED FEATURES ==================
+
+        // Update analytics panel
+        function updateAnalytics() {
+            if (parsedLines.length === 0) return;
+
+            const total = parsedLines.filter(l => l.content.trim()).length;
+            const errors = parsedLines.filter(l => l.level === 'error').length;
+            const warns = parsedLines.filter(l => l.level === 'warn').length;
+
+            // Calculate rates
+            const errRate = total > 0 ? ((errors / total) * 100).toFixed(1) : 0;
+            const warnRate = total > 0 ? ((warns / total) * 100).toFixed(1) : 0;
+
+            errorRateEl.textContent = errRate + '%';
+            warnRateEl.textContent = warnRate + '%';
+
+            // Extract services
+            const services = {};
+            parsedLines.forEach(line => {
+                const match = line.content.match(/\[([a-zA-Z0-9_-]+)\]/);
+                if (match) {
+                    services[match[1]] = (services[match[1]] || 0) + 1;
+                }
+            });
+
+            const topServices = Object.entries(services)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3)
+                .map(([name, count]) => `${name}: ${count}`)
+                .join('<br>') || '-';
+
+            topServicesEl.innerHTML = topServices;
+            logFreqEl.textContent = total + ' lines';
+
+            // Update chart
+            updateChart();
+        }
+
+        // Update time series chart
+        function updateChart() {
+            const ctx = document.getElementById('timeChart');
+            if (!ctx) return;
+
+            // Group by hour/minute
+            const timeGroups = {};
+            parsedLines.forEach(line => {
+                const match = line.content.match(/\d{2}:\d{2}/);
+                if (match) {
+                    const time = match[0];
+                    if (!timeGroups[time]) timeGroups[time] = { error: 0, warn: 0, info: 0 };
+                    if (line.level === 'error') timeGroups[time].error++;
+                    else if (line.level === 'warn') timeGroups[time].warn++;
+                    else if (line.level === 'info') timeGroups[time].info++;
+                }
+            });
+
+            const labels = Object.keys(timeGroups).sort();
+            const errorData = labels.map(t => timeGroups[t].error);
+            const warnData = labels.map(t => timeGroups[t].warn);
+
+            if (timeChart) timeChart.destroy();
+
+            if (typeof Chart !== 'undefined' && labels.length > 0) {
+                timeChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            { label: 'Errors', data: errorData, borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.1)', tension: 0.3, fill: true },
+                            { label: 'Warnings', data: warnData, borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', tension: 0.3, fill: true }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { labels: { color: '#cdd6f4' } } },
+                        scales: {
+                            x: { ticks: { color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                            y: { ticks: { color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Quick Start Banner dismiss
+        const quickStartBanner = document.getElementById('quickStartBanner');
+        const dismissQuickStart = document.getElementById('dismissQuickStart');
+
+        if (localStorage.getItem('logAnalyzerQuickStartDismissed')) {
+            quickStartBanner?.classList.add('hidden');
+        }
+
+        dismissQuickStart?.addEventListener('click', () => {
+            quickStartBanner?.classList.add('hidden');
+            localStorage.setItem('logAnalyzerQuickStartDismissed', 'true');
+        });
+
+        // Lazy load Chart.js
+        let chartJsLoaded = false;
+        function loadChartJs() {
+            return new Promise((resolve, reject) => {
+                if (chartJsLoaded || typeof Chart !== 'undefined') {
+                    chartJsLoaded = true;
+                    resolve();
+                    return;
+                }
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js';
+                script.onload = () => {
+                    chartJsLoaded = true;
+                    resolve();
+                };
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+
+        // Toggle analytics panel with lazy Chart.js loading
+        analyticsBtn?.addEventListener('click', async () => {
+            const isVisible = analyticsPanel.style.display !== 'none';
+            if (isVisible) {
+                analyticsPanel.style.display = 'none';
+            } else {
+                analyticsPanel.style.display = 'block';
+                if (!chartJsLoaded) {
+                    try {
+                        await loadChartJs();
+                        updateAnalytics();
+                    } catch (e) {
+                        console.error('Failed to load Chart.js:', e);
+                        showToast('Failed to load analytics chart');
+                    }
+                } else {
+                    updateAnalytics();
+                }
+            }
+        });
+
+        // Advanced filters
+        // startDate?.addEventListener('change', applyFilters);
+        // endDate?.addEventListener('change', applyFilters);
+        serviceFilter?.addEventListener('input', applyFilters);
+
+        // Saved queries
+        function loadSavedQueries() {
+            savedQueries.innerHTML = '<option value="">📁 Saved Queries</option>';
+            savedQueriesData.forEach((q, i) => {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = q.name;
+                savedQueries.appendChild(opt);
+            });
+        }
+
+        saveQueryBtn?.addEventListener('click', () => {
+            document.getElementById('saveQueryModal').style.display = 'flex';
+            document.getElementById('queryNameInput').value = '';
+            document.getElementById('queryNameInput').focus();
+        });
+
+        savedQueries?.addEventListener('change', (e) => {
+            const idx = parseInt(e.target.value);
+            if (isNaN(idx)) return;
+
+            const q = savedQueriesData[idx];
+            if (q) {
+                searchInput.value = q.search || '';
+                levelFilter.value = q.level || 'all';
+                if (serviceFilter) serviceFilter.value = q.service || '';
+                applyFilters();
+                showToast('Query loaded');
+            }
+        });
+
+        // AI Explain errors
+        aiExplainBtn?.addEventListener('click', async () => {
+            const errors = filteredLines.filter(l => l.level === 'error').slice(0, 5);
+            if (errors.length === 0) {
+                showToast('No errors found to explain');
+                return;
+            }
+
+            const errorText = errors.map(e => e.content).join('\n');
+
+            // Show modal with loading
+            const modal = document.createElement('div');
+            modal.className = 'ai-modal';
+            modal.innerHTML = `
+                <div class="ai-modal-content">
+                    <div class="ai-modal-header">
+                        <h3>🤖 AI Error Analysis</h3>
+                        <button class="ai-modal-close">&times;</button>
+                    </div>
+                    <div class="ai-explanation">Analyzing errors...</div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            modal.querySelector('.ai-modal-close').onclick = () => modal.remove();
+            modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+
+            try {
+                const response = await fetch('/api/ai/generate-json/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        prompt: `Analyze these error logs and explain what's happening, possible causes, and how to fix them. Be concise and practical:\n\n${errorText}`
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    modal.querySelector('.ai-explanation').textContent = data.content || data.result || 'Analysis complete. Check console for details.';
+                } else {
+                    modal.querySelector('.ai-explanation').textContent = `Error Analysis Summary:\n\n${errors.length} errors found.\n\nCommon issues detected:\n• Check database connections\n• Review null pointer references\n• Verify external service availability\n\nTip: Search for specific error messages for more targeted debugging.`;
+                }
+            } catch (e) {
+                modal.querySelector('.ai-explanation').textContent = `Error Analysis Summary:\n\n${errors.length} errors detected in logs.\n\nRecommendations:\n• Check stack traces for root cause\n• Review recent code changes\n• Check service dependencies\n• Monitor resource usage`;
+            }
+        });
+
+        // Initialize saved queries
+        loadSavedQueries();
+
+        // ================== MODAL HANDLERS ==================
+
+        // Close modal helper
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close buttons
+        document.querySelectorAll('.modal-close, .modal-btn.secondary[data-modal]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const modalId = btn.dataset.modal;
+                if (modalId) closeModal(modalId);
+            });
+        });
+
+        // Click outside to close
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.style.display = 'none';
+                }
+            });
+        });
+
+        // Paste Modal - Load Logs button
+        document.getElementById('pasteConfirmBtn')?.addEventListener('click', () => {
+            const text = document.getElementById('pasteTextarea').value.trim();
+            if (text) {
+                parseLogs(text);
+                showToast('Logs loaded successfully');
+            } else {
+                showToast('Please paste log content first');
+            }
+            closeModal('pasteModal');
+        });
+
+        // Save Query Modal - Save button
+        document.getElementById('saveQueryConfirmBtn')?.addEventListener('click', () => {
+            const name = document.getElementById('queryNameInput').value.trim();
+            if (!name) {
+                showToast('Please enter a query name');
+                return;
+            }
+
+            savedQueriesData.push({
+                name: name,
+                search: searchInput.value,
+                level: levelFilter.value,
+                service: serviceFilter?.value || ''
+            });
+            localStorage.setItem('logAnalyzerQueries', JSON.stringify(savedQueriesData));
+            loadSavedQueries();
+            showToast('Query saved!');
+            closeModal('saveQueryModal');
+        });
+
+        // Enter key support for modals
+        document.getElementById('pasteTextarea')?.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                document.getElementById('pasteConfirmBtn').click();
+            }
+        });
+
+        document.getElementById('queryNameInput')?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('saveQueryConfirmBtn').click();
+            }
+        });
+
+        // Date Filter Popup Logic
+        const dateFilterBtn = document.getElementById('dateFilterBtn');
+        const dateFilterPopup = document.getElementById('dateFilterPopup');
+        const datePopupBackdrop = document.getElementById('datePopupBackdrop');
+        const closeDatePopup = document.getElementById('closeDatePopup');
+        const applyDateFilter = document.getElementById('applyDateFilter');
+        const clearDateFilter = document.getElementById('clearDateFilter');
+        const dateFilterLabel = document.getElementById('dateFilterLabel');
+        const datePresets = document.querySelectorAll('.date-preset-btn');
+        // Re-select inputs since they might have been redefined or we need to span scope
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+
+        function openDatePopup() {
+            dateFilterPopup.classList.remove('hidden');
+            datePopupBackdrop.classList.remove('hidden');
+        }
+
+        function closePopup() {
+            dateFilterPopup.classList.add('hidden');
+            datePopupBackdrop.classList.add('hidden');
+        }
+
+        dateFilterBtn?.addEventListener('click', openDatePopup);
+        closeDatePopup?.addEventListener('click', closePopup);
+        datePopupBackdrop?.addEventListener('click', closePopup);
+
+        // Date Presets
+        datePresets.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const preset = btn.dataset.preset;
+                const now = new Date();
+                let start = new Date();
+
+                switch (preset) {
+                    case 'today':
+                        start.setHours(0, 0, 0, 0);
+                        break;
+                    case '7days':
+                        start.setDate(now.getDate() - 7);
+                        break;
+                    case '24h':
+                        start.setHours(now.getHours() - 24);
+                        break;
+                    case '1h':
+                        start.setHours(now.getHours() - 1);
+                        break;
+                }
+
+                // Format for datetime-local: YYYY-MM-DDTHH:mm
+                const format = (d) => {
+                    const pad = (n) => n.toString().padStart(2, '0');
+                    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+                };
+
+                if (startDateInput) startDateInput.value = format(start);
+                if (endDateInput) endDateInput.value = format(now);
+            });
+        });
+
+        // Apply Filter
+        applyDateFilter?.addEventListener('click', () => {
+            applyFilters();
+            closePopup();
+
+            // Update button label
+            if (startDateInput.value && endDateInput.value) {
+                const start = new Date(startDateInput.value);
+                const end = new Date(endDateInput.value);
+                dateFilterLabel.textContent = `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
+                dateFilterBtn.classList.add('active');
+                dateFilterBtn.style.textAlign = 'left';
+            } else if (startDateInput.value) {
+                dateFilterLabel.textContent = `From ${new Date(startDateInput.value).toLocaleDateString()}`;
+                dateFilterBtn.classList.add('active');
+            } else {
+                dateFilterLabel.textContent = 'Date Range';
+                dateFilterBtn.classList.remove('active');
+            }
+        });
+
+        // Clear Filter
+        clearDateFilter?.addEventListener('click', () => {
+            if (startDateInput) startDateInput.value = '';
+            if (endDateInput) endDateInput.value = '';
+            applyFilters();
+            closePopup();
+            dateFilterLabel.textContent = 'Date Range';
+            dateFilterBtn.classList.remove('active');
+        });
+
+    })();
+</script>
+<!--@end:extra_js-->
