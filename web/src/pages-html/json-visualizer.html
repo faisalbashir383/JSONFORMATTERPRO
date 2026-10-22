@@ -1,0 +1,1270 @@
+<!--@block:title-->JSON Visualizer Online - Interactive Graph View Free [2026]<!--@end:title-->
+<!--@block:meta_title-->JSON Visualizer Online - Free Interactive Graph View<!--@end:meta_title-->
+<!--@block:meta_description-->Free JSON visualizer to view JSON data as an interactive graph. Switch between tree, chart,
+and editor views. No signup required - try now!<!--@end:meta_description-->
+<!--@block:meta_keywords-->json visualizer, json graph view, json visualization, interactive json viewer, json diagram
+<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/json-visualizer/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "JSON Visualizer Online",
+  "description": "Free online tool to visualize JSON data as an interactive graph with nodes and connections",
+  "url": "https://jsonformatterspro.com/json-visualizer/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "1056",
+    "bestRating": "5",
+    "worstRating": "1"
+  },
+  "featureList": [
+    "Interactive graph visualization",
+    "Tree view mode",
+    "JSON editor mode",
+    "Zoom and pan controls",
+    "Node expand/collapse",
+    "Dark theme support"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Visualize JSON as a Graph",
+  "description": "Steps to create an interactive visual graph from JSON data",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Paste JSON",
+      "text": "Paste or type your JSON data in the input panel"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Click Visualize",
+      "text": "Click the Visualize button to generate the graph"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Explore Graph",
+      "text": "Use zoom, pan, and click nodes to expand/collapse branches"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Switch Views",
+      "text": "Toggle between Chart, Tree, and Editor views"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a JSON visualizer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A JSON visualizer is a tool that displays JSON data as an interactive graph or diagram, making it easier to understand complex nested structures by representing keys and values as connected nodes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I visualize JSON data?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paste your JSON into the input field and click Visualize. The tool will create an interactive graph where you can zoom, pan, and click nodes to explore your data structure."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What views are available?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Three views: Chart view (interactive node graph), Tree view (collapsible hierarchy), and Editor view (formatted JSON with syntax highlighting)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I expand and collapse nodes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, click on any object or array node to expand or collapse its children. This helps focus on specific parts of large JSON structures."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the JSON visualizer free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, 100% free with no signup required. All visualization happens in your browser, so your data stays private."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What do the different colors mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Each data type has a unique color: Purple for objects, Blue for arrays, Green for strings, Orange for numbers, Pink for booleans, and Gray for null values."
+      }
+    }
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<style>
+    /* Premium Dark Theme Variables */
+    .visualizer-wrapper {
+        --viz-bg: #0d1117;
+        --viz-surface: #161b22;
+        --viz-border: #30363d;
+        --viz-text: #c9d1d9;
+        --viz-text-muted: #8b949e;
+        --viz-primary: #6366f1;
+        --viz-accent: #22c55e;
+        --viz-node-object: #a855f7;
+        --viz-node-array: #3b82f6;
+        --viz-node-string: #22c55e;
+        --viz-node-number: #f59e0b;
+        --viz-node-boolean: #ec4899;
+        --viz-node-null: #6b7280;
+        --viz-line: #22c55e;
+    }
+
+    [data-theme="light"] .visualizer-wrapper {
+        --viz-bg: #f8fafc;
+        --viz-surface: #ffffff;
+        --viz-border: #e2e8f0;
+        --viz-text: #1e293b;
+        --viz-text-muted: #64748b;
+    }
+
+    .visualizer-wrapper {
+        background: var(--viz-bg);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        border: 1px solid var(--viz-border);
+        margin-bottom: 2rem;
+    }
+
+    /* Header Bar */
+    .viz-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background: var(--viz-surface);
+        border-bottom: 1px solid var(--viz-border);
+    }
+
+    .viz-path {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.85rem;
+        color: var(--viz-text-muted);
+        background: var(--viz-bg);
+        padding: 0.4rem 0.75rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--viz-border);
+    }
+
+    .viz-path-icon {
+        opacity: 0.6;
+    }
+
+    .viz-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .viz-tabs {
+        display: flex;
+        background: var(--viz-bg);
+        border-radius: var(--radius-sm);
+        padding: 0.25rem;
+        border: 1px solid var(--viz-border);
+    }
+
+    .viz-tab {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--viz-text-muted);
+        background: transparent;
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .viz-tab:hover {
+        color: var(--viz-text);
+    }
+
+    .viz-tab.active {
+        background: var(--viz-primary);
+        color: white;
+    }
+
+    .viz-settings-btn {
+        padding: 0.4rem;
+        background: transparent;
+        border: 1px solid var(--viz-border);
+        border-radius: var(--radius-sm);
+        color: var(--viz-text-muted);
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .viz-settings-btn:hover {
+        color: var(--viz-text);
+        border-color: var(--viz-text-muted);
+    }
+
+    /* Main Content Area */
+    .viz-content {
+        display: flex;
+        min-height: 600px;
+    }
+
+    /* Input Panel */
+    .viz-input-panel {
+        width: 350px;
+        border-right: 1px solid var(--viz-border);
+        display: flex;
+        flex-direction: column;
+        background: var(--viz-surface);
+    }
+
+    .viz-input-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--viz-border);
+    }
+
+    .viz-input-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--viz-text);
+    }
+
+    .viz-input-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .viz-action-btn {
+        padding: 0.35rem 0.65rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        background: var(--viz-bg);
+        color: var(--viz-text-muted);
+        border: 1px solid var(--viz-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .viz-action-btn:hover {
+        color: var(--viz-text);
+        border-color: var(--viz-primary);
+    }
+
+    .viz-action-btn.primary {
+        background: var(--viz-primary);
+        color: white;
+        border-color: var(--viz-primary);
+    }
+
+    .viz-action-btn.primary:hover {
+        background: #5558e6;
+    }
+
+    .viz-textarea {
+        flex: 1;
+        width: 100%;
+        padding: 1rem;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        background: var(--viz-bg);
+        color: var(--viz-text);
+        border: none;
+        resize: none;
+    }
+
+    .viz-textarea:focus {
+        outline: none;
+    }
+
+    .viz-textarea::placeholder {
+        color: var(--viz-text-muted);
+    }
+
+    /* Canvas Container */
+    .viz-canvas-container {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+        background: var(--viz-bg);
+    }
+
+    #vizCanvas {
+        display: block;
+        cursor: grab;
+    }
+
+    #vizCanvas:active {
+        cursor: grabbing;
+    }
+
+    /* Zoom Controls */
+    .viz-zoom-controls {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+        display: flex;
+        gap: 0.5rem;
+        z-index: 10;
+    }
+
+    .viz-zoom-btn {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--viz-surface);
+        border: 1px solid var(--viz-border);
+        border-radius: var(--radius-sm);
+        color: var(--viz-text);
+        cursor: pointer;
+        font-size: 1.1rem;
+        transition: all 200ms ease;
+    }
+
+    .viz-zoom-btn:hover {
+        background: var(--viz-primary);
+        color: white;
+        border-color: var(--viz-primary);
+    }
+
+    .viz-zoom-level {
+        padding: 0.5rem 0.75rem;
+        background: var(--viz-surface);
+        border: 1px solid var(--viz-border);
+        border-radius: var(--radius-sm);
+        color: var(--viz-text);
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    /* Tree View Panel */
+    .viz-tree-panel {
+        display: none;
+        flex: 1;
+        padding: 1.5rem;
+        overflow: auto;
+        background: var(--viz-bg);
+    }
+
+    .viz-tree-panel.active {
+        display: block;
+    }
+
+    /* JSON Editor Panel */
+    .viz-editor-panel {
+        display: none;
+        flex: 1;
+        background: var(--viz-bg);
+    }
+
+    .viz-editor-panel.active {
+        display: flex;
+    }
+
+    .viz-full-textarea {
+        flex: 1;
+        width: 100%;
+        padding: 1.5rem;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        background: var(--viz-bg);
+        color: var(--viz-text);
+        border: none;
+        resize: none;
+    }
+
+    .viz-full-textarea:focus {
+        outline: none;
+    }
+
+    /* Tree Node Styles */
+    .tree-node {
+        margin-left: 1.5rem;
+    }
+
+    .tree-item {
+        padding: 0.3rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.9rem;
+    }
+
+    .tree-toggle {
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--viz-primary);
+        font-weight: bold;
+        user-select: none;
+    }
+
+    .tree-toggle:hover {
+        color: var(--viz-accent);
+    }
+
+    .tree-key {
+        color: var(--viz-node-object);
+        font-weight: 600;
+    }
+
+    .tree-value-string {
+        color: var(--viz-node-string);
+    }
+
+    .tree-value-number {
+        color: var(--viz-node-number);
+    }
+
+    .tree-value-boolean {
+        color: var(--viz-node-boolean);
+    }
+
+    .tree-value-null {
+        color: var(--viz-node-null);
+        font-style: italic;
+    }
+
+    .tree-type {
+        color: var(--viz-text-muted);
+        font-size: 0.8rem;
+    }
+
+    /* Info Section */
+    .viz-info {
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        margin-top: 2rem;
+    }
+
+    .viz-info h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .viz-info p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .viz-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .viz-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .viz-legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+
+    .viz-legend-dot.object {
+        background: #a855f7;
+    }
+
+    .viz-legend-dot.array {
+        background: #3b82f6;
+    }
+
+    .viz-legend-dot.string {
+        background: #22c55e;
+    }
+
+    .viz-legend-dot.number {
+        background: #f59e0b;
+    }
+
+    .viz-legend-dot.boolean {
+        background: #ec4899;
+    }
+
+    .viz-legend-dot.null {
+        background: #6b7280;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .viz-content {
+            flex-direction: column;
+        }
+
+        .viz-input-panel {
+            width: 100%;
+            border-right: none;
+            border-bottom: 1px solid var(--viz-border);
+            max-height: 300px;
+        }
+
+        .viz-canvas-container {
+            min-height: 400px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .viz-header {
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .viz-path {
+            width: 100%;
+            order: 2;
+        }
+
+        .viz-controls {
+            width: 100%;
+            order: 1;
+            justify-content: space-between;
+        }
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header"
+    style="text-align: center; margin-bottom: 2rem; padding: 2rem; border-radius: var(--radius-lg);">
+    <h1
+        style="font-size: 2.25rem; font-weight: 700; background: linear-gradient(135deg, #6366f1 0%, #22c55e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.75rem;">
+        JSON Visualizer Online - Interactive Graph View Free</h1>
+    <p style="color: var(--color-text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Transform JSON
+        data into interactive graphs with tree and chart views</p>
+</div>
+
+<div class="visualizer-wrapper">
+    <!-- Header Bar -->
+    <div class="viz-header">
+        <div class="viz-path">
+            <span class="viz-path-icon">📍</span>
+            <span id="currentPath">ROOT</span>
+        </div>
+        <div class="viz-controls">
+            <div class="viz-tabs">
+                <button class="viz-tab" id="treeTabBtn">🌳 Tree</button>
+                <button class="viz-tab active" id="chartTabBtn">📊 Chart</button>
+                <button class="viz-tab" id="editorTabBtn">📝 JSON Editor</button>
+            </div>
+            <button class="viz-settings-btn" title="Settings" id="fitToScreenBtn">⛶</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="viz-content">
+        <!-- Input Panel -->
+        <div class="viz-input-panel" id="inputPanel">
+            <div class="viz-input-header">
+                <span class="viz-input-title">JSON Input</span>
+                <div class="viz-input-actions">
+                    <button class="viz-action-btn" id="clearBtn">Clear</button>
+                    <button class="viz-action-btn" id="sampleBtn">Sample</button>
+                    <button class="viz-action-btn primary" id="visualizeBtn">Visualize</button>
+                </div>
+            </div>
+            <textarea id="jsonInput" class="viz-textarea" placeholder='Paste your JSON here...
+
+Example:
+{
+  "name": "Project",
+  "version": "1.0.0",
+  "dependencies": {
+    "react": "^18.0.0"
+  }
+}'></textarea>
+        </div>
+
+        <!-- Chart View (Canvas) -->
+        <div class="viz-canvas-container" id="chartPanel">
+            <canvas id="vizCanvas"></canvas>
+            <div class="viz-zoom-controls">
+                <button class="viz-zoom-btn" id="zoomOutBtn" title="Zoom Out">−</button>
+                <span class="viz-zoom-level" id="zoomLevel">100%</span>
+                <button class="viz-zoom-btn" id="zoomInBtn" title="Zoom In">+</button>
+                <button class="viz-zoom-btn" id="resetViewBtn" title="Reset View">⟲</button>
+            </div>
+        </div>
+
+        <!-- Tree View -->
+        <div class="viz-tree-panel" id="treePanel">
+            <div id="treeContent" style="color: var(--viz-text-muted);">
+                Enter JSON and click "Visualize" to see tree view
+            </div>
+        </div>
+
+        <!-- JSON Editor View -->
+        <div class="viz-editor-panel" id="editorPanel">
+            <textarea id="editorTextarea" class="viz-full-textarea"
+                placeholder="JSON will appear here after visualization..."></textarea>
+        </div>
+    </div>
+</div>
+
+<!-- Info Section -->
+<div class="viz-info">
+    <h2>JSON Visualizer Features</h2>
+    <p>
+        The JSON Visualizer transforms your JSON data into an interactive graphical representation.
+        Each node represents a key-value pair, with curved lines connecting parent nodes to their children.
+    </p>
+    <ul style="color: var(--color-text-secondary); line-height: 2; padding-left: 1.5rem; margin-bottom: 1rem;">
+        <li><strong>Interactive Graph:</strong> Zoom, pan, and click nodes to explore your data</li>
+        <li><strong>Three Views:</strong> Switch between Chart, Tree, and Editor modes</li>
+        <li><strong>Color-Coded Types:</strong> Instantly identify objects, arrays, strings, numbers</li>
+        <li><strong>Expand/Collapse:</strong> Focus on specific parts of large structures</li>
+        <li><strong>No Signup:</strong> 100% free, no registration required</li>
+    </ul>
+    <div class="viz-legend">
+        <div class="viz-legend-item"><span class="viz-legend-dot object"></span> Objects</div>
+        <div class="viz-legend-item"><span class="viz-legend-dot array"></span> Arrays</div>
+        <div class="viz-legend-item"><span class="viz-legend-dot string"></span> Strings</div>
+        <div class="viz-legend-item"><span class="viz-legend-dot number"></span> Numbers</div>
+        <div class="viz-legend-item"><span class="viz-legend-dot boolean"></span> Booleans</div>
+        <div class="viz-legend-item"><span class="viz-legend-dot null"></span> Null</div>
+    </div>
+</div>
+
+<!-- Related JSON Tools Section -->
+<div class="viz-info" style="margin-top: 1.5rem;">
+    <h2>🔧 Related JSON Tools</h2>
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <a href="/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>📝 JSON Formatter</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Format & beautify
+                JSON</p>
+        </a>
+        <a href="/json-tree/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>🌳 JSON Tree Viewer</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Collapsible tree view
+            </p>
+        </a>
+        <a href="/json-diff/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>🔍 JSON Diff</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Compare two JSON
+                files</p>
+        </a>
+        <a href="/dummy-json/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>🎲 Dummy JSON Generator</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Generate fake JSON
+                data</p>
+        </a>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="viz-info" style="margin-top: 1.5rem;">
+    <h2>JSON Visualizer FAQ</h2>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What is a JSON visualizer?</h3>
+        <p style="margin: 0;">A JSON visualizer displays JSON data as an interactive graph or diagram, making it easier
+            to understand complex nested structures by representing keys and values as connected nodes.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">How do I visualize JSON data?</h3>
+        <p style="margin: 0;">Paste your JSON into the input field and click Visualize. The tool will create an
+            interactive graph where you can zoom, pan, and click nodes to explore your data.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What views are available?</h3>
+        <p style="margin: 0;">Three views: Chart view (interactive node graph), Tree view (collapsible hierarchy), and
+            Editor view (formatted JSON with syntax highlighting).</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Can I expand and collapse nodes?</h3>
+        <p style="margin: 0;">Yes, click on any object or array node to expand or collapse its children. This helps
+            focus on specific parts of large JSON structures.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What do the different colors mean?</h3>
+        <p style="margin: 0;">Each data type has a unique color: Purple for objects, Blue for arrays, Green for strings,
+            Orange for numbers, Pink for booleans, and Gray for null values.</p>
+    </div>
+
+    <div style="padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Is the JSON visualizer free?</h3>
+        <p style="margin: 0;">Yes, 100% free with no signup required. All visualization happens in your browser, so your
+            data stays private.</p>
+    </div>
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script>
+    (function () {
+        // DOM Elements
+        const jsonInput = document.getElementById('jsonInput');
+        const vizCanvas = document.getElementById('vizCanvas');
+        const ctx = vizCanvas.getContext('2d');
+        const visualizeBtn = document.getElementById('visualizeBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const sampleBtn = document.getElementById('sampleBtn');
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+        const resetViewBtn = document.getElementById('resetViewBtn');
+        const fitToScreenBtn = document.getElementById('fitToScreenBtn');
+        const zoomLevelSpan = document.getElementById('zoomLevel');
+        const currentPathSpan = document.getElementById('currentPath');
+        const treeContent = document.getElementById('treeContent');
+        const editorTextarea = document.getElementById('editorTextarea');
+
+        // View Tabs
+        const treeTabBtn = document.getElementById('treeTabBtn');
+        const chartTabBtn = document.getElementById('chartTabBtn');
+        const editorTabBtn = document.getElementById('editorTabBtn');
+        const chartPanel = document.getElementById('chartPanel');
+        const treePanel = document.getElementById('treePanel');
+        const editorPanel = document.getElementById('editorPanel');
+        const inputPanel = document.getElementById('inputPanel');
+
+        // Visualization State
+        let nodes = [];
+        let parsedData = null;
+        let zoom = 1;
+        let panX = 50;
+        let panY = 0;
+        let isDragging = false;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+
+        // Colors
+        const colors = {
+            object: '#a855f7',
+            array: '#3b82f6',
+            string: '#22c55e',
+            number: '#f59e0b',
+            boolean: '#ec4899',
+            null: '#6b7280',
+            line: '#22c55e',
+            text: '#c9d1d9',
+            bg: '#0d1117'
+        };
+
+        // Node Configuration
+        const nodeConfig = {
+            nodeRadius: 6,
+            horizontalSpacing: 180,
+            verticalSpacing: 28,
+            fontSize: 12,
+            labelOffset: 14
+        };
+
+        // Initialize canvas size
+        function initCanvas() {
+            const container = chartPanel;
+            vizCanvas.width = container.clientWidth;
+            vizCanvas.height = container.clientHeight;
+            draw();
+        }
+
+        // Get type of value
+        function getType(value) {
+            if (value === null) return 'null';
+            if (Array.isArray(value)) return 'array';
+            return typeof value;
+        }
+
+        // Build node tree from JSON
+        function buildNodeTree(key, value, depth = 0, parentY = 0, yOffset = { value: 0 }) {
+            const type = getType(value);
+            const x = depth * nodeConfig.horizontalSpacing;
+            const y = yOffset.value * nodeConfig.verticalSpacing;
+
+            const node = {
+                key: key,
+                value: value,
+                type: type,
+                x: x,
+                y: y,
+                depth: depth,
+                children: [],
+                collapsed: false
+            };
+
+            if (type === 'object' && value !== null) {
+                const keys = Object.keys(value);
+                keys.forEach((k, i) => {
+                    yOffset.value++;
+                    const childNode = buildNodeTree(k, value[k], depth + 1, y, yOffset);
+                    node.children.push(childNode);
+                });
+            } else if (type === 'array') {
+                value.forEach((item, i) => {
+                    yOffset.value++;
+                    const childNode = buildNodeTree(`[${i}]`, item, depth + 1, y, yOffset);
+                    node.children.push(childNode);
+                });
+            }
+
+            return node;
+        }
+
+        // Flatten nodes for rendering
+        function flattenNodes(node, result = []) {
+            result.push(node);
+            if (!node.collapsed) {
+                node.children.forEach(child => flattenNodes(child, result));
+            }
+            return result;
+        }
+
+        // Recalculate Y positions
+        function recalculatePositions(node, yOffset = { value: 0 }) {
+            node.y = yOffset.value * nodeConfig.verticalSpacing;
+            if (!node.collapsed) {
+                node.children.forEach(child => {
+                    yOffset.value++;
+                    recalculatePositions(child, yOffset);
+                });
+            }
+        }
+
+        // Draw bezier curve between nodes
+        function drawConnection(fromX, fromY, toX, toY) {
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+
+            const controlX1 = fromX + (toX - fromX) * 0.5;
+            const controlX2 = fromX + (toX - fromX) * 0.5;
+
+            ctx.bezierCurveTo(controlX1, fromY, controlX2, toY, toX, toY);
+            ctx.strokeStyle = colors.line;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+        }
+
+        // Draw a node
+        function drawNode(node) {
+            const x = (node.x + panX) * zoom;
+            const y = (node.y + panY + 50) * zoom;
+            const radius = nodeConfig.nodeRadius * zoom;
+
+            // Draw node circle
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fillStyle = colors[node.type] || colors.object;
+            ctx.fill();
+
+            // Draw label
+            ctx.font = `${nodeConfig.fontSize * zoom}px 'SF Mono', monospace`;
+            ctx.fillStyle = colors.text;
+            ctx.textBaseline = 'middle';
+
+            let label = node.key !== null ? String(node.key) : 'ROOT';
+
+            // Add value preview for primitives
+            if (node.type === 'string' || node.type === 'number' || node.type === 'boolean' || node.type === 'null') {
+                let valueStr = node.type === 'string' ? `"${node.value}"` : String(node.value);
+                if (valueStr.length > 20) valueStr = valueStr.substring(0, 17) + '...';
+                label = label;
+                ctx.fillText(label, x + nodeConfig.labelOffset * zoom, y);
+
+                // Draw value in appropriate color
+                const labelWidth = ctx.measureText(label + ': ').width;
+            } else if (node.children.length > 0) {
+                const count = node.children.length;
+                const suffix = node.collapsed ? ` ▶ (${count})` : '';
+                ctx.fillText(label + suffix, x + nodeConfig.labelOffset * zoom, y);
+            } else {
+                ctx.fillText(label, x + nodeConfig.labelOffset * zoom, y);
+            }
+        }
+
+        // Main draw function
+        function draw() {
+            // Clear canvas
+            ctx.fillStyle = colors.bg;
+            ctx.fillRect(0, 0, vizCanvas.width, vizCanvas.height);
+
+            if (!parsedData) {
+                // Draw placeholder text
+                ctx.font = '14px Inter, sans-serif';
+                ctx.fillStyle = '#8b949e';
+                ctx.textAlign = 'center';
+                ctx.fillText('Enter JSON and click "Visualize" to see the graph', vizCanvas.width / 2, vizCanvas.height / 2);
+                ctx.textAlign = 'left';
+                return;
+            }
+
+            // Draw connections first (below nodes)
+            function drawConnections(node) {
+                if (!node.collapsed) {
+                    node.children.forEach(child => {
+                        const fromX = (node.x + panX) * zoom + nodeConfig.nodeRadius * zoom;
+                        const fromY = (node.y + panY + 50) * zoom;
+                        const toX = (child.x + panX) * zoom - nodeConfig.nodeRadius * zoom;
+                        const toY = (child.y + panY + 50) * zoom;
+
+                        drawConnection(fromX, fromY, toX, toY);
+                        drawConnections(child);
+                    });
+                }
+            }
+
+            if (rootNode) {
+                drawConnections(rootNode);
+            }
+
+            // Draw nodes
+            const allNodes = rootNode ? flattenNodes(rootNode) : [];
+            allNodes.forEach(node => drawNode(node));
+
+            // Update zoom level display
+            zoomLevelSpan.textContent = Math.round(zoom * 100) + '%';
+        }
+
+        let rootNode = null;
+
+        // Visualize JSON
+        function visualize() {
+            const input = jsonInput.value.trim();
+
+            if (!input) {
+                alert('Please enter JSON to visualize');
+                return;
+            }
+
+            try {
+                parsedData = JSON.parse(input);
+                const yOffset = { value: 0 };
+                rootNode = buildNodeTree('ROOT', parsedData, 0, 0, yOffset);
+                recalculatePositions(rootNode);
+
+                // Reset view
+                zoom = 1;
+                panX = 50;
+                panY = 0;
+
+                draw();
+                updateTreeView();
+                editorTextarea.value = JSON.stringify(parsedData, null, 2);
+                currentPathSpan.textContent = 'ROOT';
+            } catch (e) {
+                alert('Invalid JSON: ' + e.message);
+            }
+        }
+
+        // Update Tree View
+        function updateTreeView() {
+            if (!parsedData) {
+                treeContent.innerHTML = '<span style="color: var(--viz-text-muted);">Enter JSON and click "Visualize" to see tree view</span>';
+                return;
+            }
+
+            function renderNode(key, value, isLast = true) {
+                const type = getType(value);
+                let html = '';
+
+                if (type === 'object' || type === 'array') {
+                    const isEmpty = type === 'object' ? Object.keys(value).length === 0 : value.length === 0;
+                    const bracket = type === 'object' ? ['{', '}'] : ['[', ']'];
+                    const count = type === 'object' ? Object.keys(value).length : value.length;
+
+                    if (isEmpty) {
+                        html = `<div class="tree-item">
+                        <span class="tree-toggle"></span>
+                        ${key !== null ? `<span class="tree-key">"${escapeHtml(key)}"</span>: ` : ''}
+                        <span class="tree-type">${bracket[0]}${bracket[1]}</span>
+                    </div>`;
+                    } else {
+                        html = `<div class="tree-item tree-expandable">
+                        <span class="tree-toggle" onclick="this.parentElement.classList.toggle('collapsed'); this.textContent = this.textContent === '▼' ? '▶' : '▼';">▼</span>
+                        ${key !== null ? `<span class="tree-key">"${escapeHtml(key)}"</span>: ` : ''}
+                        <span class="tree-type">${bracket[0]} ${count} ${type === 'object' ? 'properties' : 'items'}</span>
+                    </div>
+                    <div class="tree-node tree-children">`;
+
+                        if (type === 'object') {
+                            const keys = Object.keys(value);
+                            keys.forEach((k, i) => {
+                                html += renderNode(k, value[k], i === keys.length - 1);
+                            });
+                        } else {
+                            value.forEach((item, i) => {
+                                html += renderNode(i, item, i === value.length - 1);
+                            });
+                        }
+
+                        html += '</div>';
+                    }
+                } else {
+                    let valueClass = 'tree-value-' + type;
+                    let displayValue = type === 'string' ? `"${escapeHtml(value)}"` :
+                        type === 'null' ? 'null' :
+                            String(value);
+
+                    html = `<div class="tree-item">
+                    <span class="tree-toggle"></span>
+                    ${key !== null ? `<span class="tree-key">"${escapeHtml(String(key))}"</span>: ` : ''}
+                    <span class="${valueClass}">${displayValue}</span>
+                </div>`;
+                }
+
+                return html;
+            }
+
+            function escapeHtml(str) {
+                return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            }
+
+            treeContent.innerHTML = renderNode(null, parsedData);
+        }
+
+        // Event Listeners
+        visualizeBtn.addEventListener('click', visualize);
+
+        clearBtn.addEventListener('click', () => {
+            jsonInput.value = '';
+            parsedData = null;
+            rootNode = null;
+            draw();
+            treeContent.innerHTML = '<span style="color: var(--viz-text-muted);">Enter JSON and click "Visualize" to see tree view</span>';
+            editorTextarea.value = '';
+            currentPathSpan.textContent = 'ROOT';
+        });
+
+        sampleBtn.addEventListener('click', () => {
+            const sample = {
+                "rb-rwl-devices-store": {
+                    "customDevices": []
+                },
+                "version": "1.0.0",
+                "generatedAt": "2024-01-15T10:30:00Z",
+                "generatedBy": "system",
+                "state": {
+                    "rb-rwl-workspace-store": {
+                        "workspaces": ["workspace[0]", "workspace[1]"],
+                        "selectedWorkspaceId": "ws-001",
+                        "selectedScreenId": "screen-01",
+                        "_hasHydrated": true
+                    },
+                    "rb-rwl-settings": {
+                        "downloadDirectory": "/downloads",
+                        "imageFormat": "png",
+                        "fileNameSuffix": "_export"
+                    },
+                    "rb-rwl-feature-toggle": {
+                        "_activeFeatures": ["activeFeatures[0]"],
+                        "_hasHydrated": true
+                    },
+                    "rb-rwl-ui-config": {
+                        "version": "2.0",
+                        "scale": 1.0,
+                        "fitToScreenScale": true,
+                        "zoomLevel": 100,
+                        "_hasHydrated": true,
+                        "onBoardingInfo": {
+                            "onboardedAt": "2024-01-01",
+                            "onBoardedVersion": "1.0"
+                        }
+                    }
+                }
+            };
+            jsonInput.value = JSON.stringify(sample, null, 2);
+        });
+
+        // Zoom controls
+        zoomInBtn.addEventListener('click', () => {
+            zoom = Math.min(zoom * 1.2, 3);
+            draw();
+        });
+
+        zoomOutBtn.addEventListener('click', () => {
+            zoom = Math.max(zoom / 1.2, 0.3);
+            draw();
+        });
+
+        resetViewBtn.addEventListener('click', () => {
+            zoom = 1;
+            panX = 50;
+            panY = 0;
+            draw();
+        });
+
+        fitToScreenBtn.addEventListener('click', () => {
+            zoom = 1;
+            panX = 50;
+            panY = 0;
+            draw();
+        });
+
+        // Mouse wheel zoom
+        vizCanvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? 0.9 : 1.1;
+            zoom = Math.max(0.3, Math.min(3, zoom * delta));
+            draw();
+        });
+
+        // Pan with mouse drag
+        vizCanvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+            vizCanvas.style.cursor = 'grabbing';
+        });
+
+        vizCanvas.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const dx = (e.clientX - lastMouseX) / zoom;
+                const dy = (e.clientY - lastMouseY) / zoom;
+                panX += dx;
+                panY += dy;
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+                draw();
+            }
+        });
+
+        vizCanvas.addEventListener('mouseup', () => {
+            isDragging = false;
+            vizCanvas.style.cursor = 'grab';
+        });
+
+        vizCanvas.addEventListener('mouseleave', () => {
+            isDragging = false;
+            vizCanvas.style.cursor = 'grab';
+        });
+
+        // Node click handling
+        vizCanvas.addEventListener('click', (e) => {
+            if (!rootNode) return;
+
+            const rect = vizCanvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            const allNodes = flattenNodes(rootNode);
+
+            for (const node of allNodes) {
+                const nodeX = (node.x + panX) * zoom;
+                const nodeY = (node.y + panY + 50) * zoom;
+                const radius = nodeConfig.nodeRadius * zoom * 2; // Larger hit area
+
+                const distance = Math.sqrt((mouseX - nodeX) ** 2 + (mouseY - nodeY) ** 2);
+
+                if (distance <= radius && node.children.length > 0) {
+                    node.collapsed = !node.collapsed;
+                    recalculatePositions(rootNode);
+                    draw();
+                    break;
+                }
+            }
+        });
+
+        // View Tab Switching
+        function switchView(view) {
+            treeTabBtn.classList.remove('active');
+            chartTabBtn.classList.remove('active');
+            editorTabBtn.classList.remove('active');
+
+            chartPanel.style.display = 'none';
+            treePanel.classList.remove('active');
+            editorPanel.classList.remove('active');
+
+            if (view === 'tree') {
+                treeTabBtn.classList.add('active');
+                treePanel.classList.add('active');
+                inputPanel.style.display = 'flex';
+            } else if (view === 'chart') {
+                chartTabBtn.classList.add('active');
+                chartPanel.style.display = 'block';
+                inputPanel.style.display = 'flex';
+                initCanvas();
+            } else if (view === 'editor') {
+                editorTabBtn.classList.add('active');
+                editorPanel.classList.add('active');
+                inputPanel.style.display = 'none';
+            }
+        }
+
+        treeTabBtn.addEventListener('click', () => switchView('tree'));
+        chartTabBtn.addEventListener('click', () => switchView('chart'));
+        editorTabBtn.addEventListener('click', () => switchView('editor'));
+
+        // Sync editor changes back
+        editorTextarea.addEventListener('input', () => {
+            jsonInput.value = editorTextarea.value;
+        });
+
+        // Initialize
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+
+        // Allow Enter key in JSON input to auto-visualize (with Shift)
+        jsonInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.shiftKey) {
+                e.preventDefault();
+                visualize();
+            }
+        });
+    })();
+</script>
+<!--@end:extra_js-->

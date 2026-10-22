@@ -1,0 +1,644 @@
+<!--@block:title-->Age Calculator - Calculate Exact Age & Next Birthday [2025]<!--@end:title-->
+<!--@block:meta_title-->Age Calculator - Calculate Your Exact Age Online Free<!--@end:meta_title-->
+<!--@block:meta_description-->Free age calculator. Calculate your exact age in years, months, days, and even minutes. Find
+out your next birthday countdown.<!--@end:meta_description-->
+<!--@block:meta_keywords-->age calculator, exact age calculator, chronological age, days until birthday, birthday
+countdown, how old am i, date of birth calculator<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/age-calculator/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Age Calculator Pro",
+  "description": "Calculate exact age from date of birth, next birthday countdown, and total days lived.",
+  "url": "https://jsonformatterspro.com/age-calculator/",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Exact age in years, months, days",
+    "Next birthday countdown",
+    "Total days/hours lived",
+    "Age at specific date",
+    "Leap year support"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How does this age calculator work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This calculator finds the difference between your birth date and the target date. It accounts for leap years and varying month lengths to give you a precise age."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I calculate age between two dates?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Simply change the 'Calculate Age As Of' date to any future or past date to see how old you were or will be at that time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is chronological age?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Chronological age is the amount of time that has passed from your birth to the given date. It is your age measured in years, months, and days."
+      }
+    }
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(139, 92, 246, 0.1) 50%, rgba(59, 130, 246, 0.1) 100%);
+        border-radius: var(--radius-lg);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .calculator-container {
+        max-width: 700px;
+        margin: 0 auto 2rem;
+    }
+
+    .calc-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 2rem;
+        box-shadow: 0 8px 32px var(--color-shadow);
+        transition: all 0.3s ease;
+    }
+
+    .calc-card:hover {
+        transform: translateY(-2px);
+    }
+
+    [data-theme="dark"] .calc-card {
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    .input-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .input-group label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 0.9rem 1rem;
+        font-size: 1rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #ec4899;
+    }
+
+    .calc-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: white;
+        background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 300ms ease;
+    }
+
+    .calc-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+    }
+
+    /* Result Section */
+    .result-section {
+        margin-top: 2rem;
+        display: none;
+    }
+
+    .result-section.show {
+        display: block;
+        animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .age-display {
+        text-align: center;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        border-radius: var(--radius-lg);
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(236, 72, 153, 0.2);
+    }
+
+    .age-main {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .age-unit {
+        text-align: center;
+    }
+
+    .age-value {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ec4899, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1;
+    }
+
+    .age-label {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.25rem;
+    }
+
+    .age-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1rem;
+    }
+
+    .detail-card {
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        text-align: center;
+        border: 1px solid var(--color-border);
+    }
+
+    .detail-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #8b5cf6;
+    }
+
+    .detail-label {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.25rem;
+    }
+
+    .birthday-info {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-md);
+        text-align: center;
+        border: 1px solid var(--color-border);
+    }
+
+    .birthday-text {
+        font-size: 1rem;
+        color: var(--color-text);
+    }
+
+    .birthday-text strong {
+        color: #ec4899;
+    }
+
+    /* New Common Sections */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .info-section,
+    .faq-section {
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .faq-section {
+        margin-top: 2rem;
+        background: linear-gradient(135deg, rgba(236, 72, 153, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+    }
+
+    .section-title,
+    .faq-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #ec4899;
+        /* Pink check */
+        font-weight: bold;
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tool-link {
+        display: block;
+        padding: 1rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tool-link:hover {
+        border-color: #ec4899;
+        transform: translateY(-2px);
+    }
+
+    .faq-item {
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+        margin-bottom: 0.75rem;
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+    }
+
+    .faq-question {
+        padding: 1.25rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .faq-question:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .faq-toggle {
+        font-size: 1.25rem;
+        color: #ec4899;
+        transition: transform 0.3s;
+    }
+
+    .faq-item.open .faq-toggle {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+    }
+
+    .faq-item.open .faq-answer {
+        max-height: 500px;
+        transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
+    }
+
+    .faq-answer-content {
+        padding: 0 1.25rem 1.25rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        border-top: 1px solid var(--color-border);
+    }
+
+    @media (max-width: 600px) {
+        .input-row {
+            grid-template-columns: 1fr;
+        }
+
+        .age-value {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header">
+    <h1>🎂 Age Calculator</h1>
+    <p>Calculate your exact age in years, months, days, and hours. See your next birthday countdown instantly.</p>
+</div>
+
+<div class="calculator-container">
+    <div class="calc-card">
+        <div class="input-row">
+            <div class="input-group">
+                <label>📅 Date of Birth</label>
+                <input type="date" id="birthDate" class="input-field">
+            </div>
+            <div class="input-group">
+                <label>📆 Calculate Age As Of</label>
+                <input type="date" id="targetDate" class="input-field">
+            </div>
+        </div>
+
+        <button class="calc-btn" onclick="calculateAge()">🎂 Calculate My Age</button>
+
+        <div class="result-section" id="resultSection">
+            <div class="age-display">
+                <div class="age-main">
+                    <div class="age-unit">
+                        <div class="age-value" id="ageYears">0</div>
+                        <div class="age-label">Years</div>
+                    </div>
+                    <div class="age-unit">
+                        <div class="age-value" id="ageMonths">0</div>
+                        <div class="age-label">Months</div>
+                    </div>
+                    <div class="age-unit">
+                        <div class="age-value" id="ageDays">0</div>
+                        <div class="age-label">Days</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="age-details">
+                <div class="detail-card">
+                    <div class="detail-value" id="totalMonths">0</div>
+                    <div class="detail-label">Total Months</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-value" id="totalWeeks">0</div>
+                    <div class="detail-label">Total Weeks</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-value" id="totalDays">0</div>
+                    <div class="detail-label">Total Days</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-value" id="totalHours">0</div>
+                    <div class="detail-label">Total Hours</div>
+                </div>
+            </div>
+
+            <div class="birthday-info" id="birthdayInfo"></div>
+        </div>
+    </div>
+</div>
+
+<div class="info-grid">
+    <div class="info-section">
+        <h2 class="section-title"><svg class="section-icon" width="20" height="20" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg> Tool Features</h2>
+        <ul class="feature-list">
+            <li><strong>Precision:</strong> Calculate age down to the day and hour.</li>
+            <li><strong>Flexible:</strong> "Age As Of" feature lets you calculate age for past or future dates.</li>
+            <li><strong>Countdown:</strong> Shows exactly how many days until your next birthday.</li>
+            <li><strong>Breakdown:</strong> See how many total weeks, days, or hours you've lived.</li>
+        </ul>
+    </div>
+
+    <div class="info-section">
+        <h2 class="section-title"><svg class="section-icon" width="20" height="20" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+            </svg> How Age is Calculated</h2>
+        <p>Your age is calculated by finding the difference between your birthdate and today's date (or a specified
+            date). The result is broken down into years, months, and days for a precise chronological age.</p>
+        <p>This tool accounts for variations in month lengths and leap years to ensure accuracy.</p>
+    </div>
+</div>
+
+<!-- Related Tools -->
+<div class="info-section" style="margin-top: 2rem;">
+    <h2 class="section-title"><svg class="section-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path
+                d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z" />
+        </svg> Related Calculators</h2>
+    <div class="related-tools">
+        <a href="/date-calculator/" class="tool-link"><svg class="tool-icon" width="16" height="16" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z" />
+            </svg> Date Calculator</a>
+        <a href="/time-calculator/" class="tool-link"><svg class="tool-icon" width="16" height="16" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+            </svg> Time Calculator</a>
+        <a href="/percentage-calculator/" class="tool-link"><svg class="tool-icon" width="16" height="16"
+                viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M7.5 11C9.43 11 11 9.43 11 7.5S9.43 4 7.5 4 4 5.57 4 7.5 5.57 11 7.5 11zm0-5C8.33 6 9 6.67 9 7.5S8.33 9 7.5 9 6 8.33 6 7.5 6.67 6 7.5 6zM4.41 20L20 4.41 18.59 3 3 18.59 4.41 20zM16.5 13c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+            </svg> Percentage Calculator</a>
+    </div>
+</div>
+
+<div class="faq-section">
+    <h2 class="faq-title">❓ Frequently Asked Questions</h2>
+
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">How does this age calculator work?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                This calculator finds the difference between your birth date and the target date (default: today). It
+                calculates your exact age in years, months, and days, plus totals in months, weeks, days, and hours.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Is this calculator accurate for all dates?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Yes! It accounts for leap years and varying month lengths to give you an accurate age calculation for
+                any valid date combination.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Can I calculate age between two specific dates?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Yes! Simply change the "Calculate Age As Of" date to any date you want. This lets you find your age at
+                any point in time, past or future.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">What is chronological age?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Chronological age is your actual age measured in years, months, and days from your date of birth. It is
+                distinct from biological age which measures health status.
+            </div>
+        </div>
+    </div>
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script>
+    (function () {
+        // Set default dates
+        document.getElementById('targetDate').valueAsDate = new Date();
+
+        window.calculateAge = function () {
+            const birthDate = new Date(document.getElementById('birthDate').value);
+            const targetDate = new Date(document.getElementById('targetDate').value);
+
+            if (isNaN(birthDate.getTime())) {
+                alert('Please enter a valid date of birth');
+                return;
+            }
+
+            if (birthDate > targetDate) {
+                alert('Birth date cannot be in the future');
+                return;
+            }
+
+            // Calculate age
+            let years = targetDate.getFullYear() - birthDate.getFullYear();
+            let months = targetDate.getMonth() - birthDate.getMonth();
+            let days = targetDate.getDate() - birthDate.getDate();
+
+            if (days < 0) {
+                months--;
+                const prevMonth = new Date(targetDate.getFullYear(), targetDate.getMonth(), 0);
+                days += prevMonth.getDate();
+            }
+
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            // Calculate totals
+            const diffMs = targetDate - birthDate;
+            const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const totalWeeks = Math.floor(totalDays / 7);
+            const totalMonths = years * 12 + months;
+            const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+            // Update display
+            document.getElementById('ageYears').textContent = years;
+            document.getElementById('ageMonths').textContent = months;
+            document.getElementById('ageDays').textContent = days;
+            document.getElementById('totalMonths').textContent = totalMonths.toLocaleString();
+            document.getElementById('totalWeeks').textContent = totalWeeks.toLocaleString();
+            document.getElementById('totalDays').textContent = totalDays.toLocaleString();
+            document.getElementById('totalHours').textContent = totalHours.toLocaleString();
+
+            // Calculate next birthday
+            const nextBirthday = new Date(targetDate.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+            if (nextBirthday <= targetDate) {
+                nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+            }
+            const daysUntilBirthday = Math.ceil((nextBirthday - targetDate) / (1000 * 60 * 60 * 24));
+            const nextAge = years + (months > 0 || (months === 0 && days > 0) ? 1 : 1);
+
+            document.getElementById('birthdayInfo').innerHTML =
+                `🎉 Your next birthday is in <strong>${daysUntilBirthday}</strong> days. You will turn <strong>${nextAge}</strong>!`;
+
+            document.getElementById('resultSection').classList.add('show');
+        };
+
+        // Setup FAQ
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => item.classList.toggle('open'));
+        });
+    })();
+</script>
+<!--@end:extra_js-->

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /static/admin/
+Disallow: /api/
+Disallow: /internal/
+
+Sitemap: https://jsonformatterspro.com/sitemap.xml

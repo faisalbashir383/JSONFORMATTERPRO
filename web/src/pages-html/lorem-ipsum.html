@@ -1,0 +1,997 @@
+<!--@block:title-->Lorem Ipsum Generator - Free Placeholder Text Generator Online | JSON Formatters Pro<!--@end:title-->
+<!--@block:meta_title-->Lorem Ipsum Generator - Free Dummy Text & Placeholder Content Online<!--@end:meta_title-->
+<!--@block:meta_description-->Generate lorem ipsum placeholder text instantly. Create paragraphs, sentences, or words of
+dummy text for your website mockups, designs, and projects. Customizable, free, no signup required.<!--@end:meta_description-->
+<!--@block:meta_keywords-->lorem ipsum generator, dummy text generator, placeholder text, latin text generator, filler
+text,
+sample text generator, blind text, greeking text, lipsum generator, lorem ipsum online, free lorem ipsum, random text
+generator,
+paragraph generator, word generator, sentence generator, text placeholder, website mockup text, design placeholder,
+lorem ipsum copy paste, custom lorem ipsum, lorem ipsum paragraphs, lorem ipsum words, lorem ipsum sentences,
+typesetting text, printing industry text, dummy content generator, web design text, lipsum, dolor sit amet,
+placeholder content, filler content, mock text, blind text generator, design text, prototype text, wireframe text,
+lorem ipsum 2026, best lorem ipsum 2026, text generator 2026, placeholder text 2026, dummy text 2026<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/lorem-ipsum/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Lorem Ipsum Generator",
+  "description": "Free online lorem ipsum placeholder text generator for designers, developers, and content creators",
+  "url": "https://jsonformatterspro.com/lorem-ipsum/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Generate paragraphs of Lorem Ipsum",
+    "Generate sentences or words",
+    "Customizable text length",
+    "Option to start with Lorem Ipsum",
+    "One-click copy to clipboard",
+    "Download as TXT file",
+    "Live word and character count"
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(139, 92, 246, 0.1) 50%, rgba(99, 102, 241, 0.1) 100%);
+        border-radius: var(--radius-lg);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tool-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(236, 72, 153, 0.05) 0%, transparent 50%);
+        animation: float-bg 20s linear infinite;
+    }
+
+    @keyframes float-bg {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #6366f1 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+        position: relative;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    /* Floating decorations */
+    .floating-decor {
+        position: absolute;
+        font-size: 2rem;
+        opacity: 0.15;
+        animation: float-element 6s ease-in-out infinite;
+    }
+
+    .floating-decor:nth-child(1) {
+        top: 20%;
+        left: 10%;
+        animation-delay: 0s;
+    }
+
+    .floating-decor:nth-child(2) {
+        top: 60%;
+        left: 5%;
+        animation-delay: 1s;
+    }
+
+    .floating-decor:nth-child(3) {
+        top: 30%;
+        right: 8%;
+        animation-delay: 2s;
+    }
+
+    .floating-decor:nth-child(4) {
+        top: 70%;
+        right: 12%;
+        animation-delay: 3s;
+    }
+
+    .floating-decor:nth-child(5) {
+        bottom: 15%;
+        left: 15%;
+        animation-delay: 4s;
+    }
+
+    @keyframes float-element {
+
+        0%,
+        100% {
+            transform: translateY(0) rotate(0deg);
+        }
+
+        50% {
+            transform: translateY(-15px) rotate(10deg);
+        }
+    }
+
+    .generator-container {
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Settings Panel */
+    .settings-panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1.75rem;
+        box-shadow: 0 4px 20px var(--color-shadow);
+        height: fit-content;
+        transition: all 0.3s ease;
+    }
+
+    .settings-panel:hover {
+        box-shadow: 0 8px 30px var(--color-shadow);
+    }
+
+    [data-theme="dark"] .settings-panel {
+        background: rgba(15, 23, 42, 0.95);
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .settings-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .setting-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .setting-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.6rem;
+    }
+
+    .setting-select,
+    .setting-input {
+        width: 100%;
+        padding: 0.85rem 1rem;
+        font-size: 0.95rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        transition: all 200ms ease;
+        font-family: inherit;
+    }
+
+    .setting-select:focus,
+    .setting-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    /* Toggle Switch */
+    .toggle-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+    }
+
+    .toggle-label {
+        font-size: 0.9rem;
+        color: var(--color-text);
+        font-weight: 500;
+    }
+
+    .toggle-switch {
+        position: relative;
+        width: 52px;
+        height: 28px;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--color-border);
+        border-radius: 28px;
+        transition: 0.3s;
+    }
+
+    .toggle-slider::before {
+        position: absolute;
+        content: "";
+        height: 22px;
+        width: 22px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        border-radius: 50%;
+        transition: 0.3s;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle-switch input:checked+.toggle-slider {
+        background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+    }
+
+    .toggle-switch input:checked+.toggle-slider::before {
+        transform: translateX(24px);
+    }
+
+    .generate-btn {
+        width: 100%;
+        padding: 1.1rem;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: white;
+        background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #6366f1 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 300ms ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        margin-top: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .generate-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: 0.5s;
+    }
+
+    .generate-btn:hover::before {
+        left: 100%;
+    }
+
+    .generate-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+    }
+
+    /* Output Panel */
+    .output-panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 20px var(--color-shadow);
+        overflow: hidden;
+    }
+
+    [data-theme="dark"] .output-panel {
+        background: rgba(15, 23, 42, 0.95);
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        background: linear-gradient(135deg, rgba(236, 72, 153, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .panel-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin: 0;
+    }
+
+    .panel-actions {
+        display: flex;
+        gap: 0.6rem;
+    }
+
+    .action-btn {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        transition: all 200ms ease;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .action-btn:hover {
+        background: linear-gradient(135deg, #ec4899, #8b5cf6);
+        color: white;
+        border-color: transparent;
+        transform: translateY(-2px);
+    }
+
+    .output-textarea {
+        width: 100%;
+        min-height: 400px;
+        flex: 1;
+        padding: 1.5rem;
+        font-family: 'Georgia', 'Times New Roman', serif;
+        font-size: 1.05rem;
+        line-height: 1.9;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: none;
+        resize: vertical;
+    }
+
+    [data-theme="dark"] .output-textarea {
+        background: rgba(10, 15, 26, 0.95);
+    }
+
+    .output-textarea:focus {
+        outline: none;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+        display: flex;
+        gap: 1.5rem;
+        padding: 1rem 1.5rem;
+        background: var(--color-surface-alt);
+        border-top: 1px solid var(--color-border);
+        flex-wrap: wrap;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .stat-value {
+        font-weight: 700;
+        color: var(--color-primary);
+    }
+
+    .stat-label {
+        color: var(--color-text-secondary);
+    }
+
+    /* Fun Facts Section */
+    .facts-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .facts-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1.25rem;
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .facts-carousel {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .fact-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        border: 1px solid var(--color-border);
+        display: none;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .fact-card.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fact-card p {
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        font-size: 0.95rem;
+    }
+
+    .fact-card strong {
+        color: var(--color-primary);
+    }
+
+    .facts-nav {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .fact-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--color-border);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .fact-dot.active {
+        background: linear-gradient(135deg, #ec4899, #8b5cf6);
+        transform: scale(1.2);
+    }
+
+    /* Info Section */
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.25rem;
+        margin-top: 1.5rem;
+    }
+
+    .info-card {
+        padding: 1.25rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+        transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px var(--color-shadow);
+    }
+
+    .info-card h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-card p {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .generator-container {
+            grid-template-columns: 1fr;
+        }
+
+        .settings-panel {
+            order: 1;
+        }
+
+        .output-panel {
+            order: 2;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.85rem;
+        }
+
+        .tool-header p {
+            font-size: 1rem;
+        }
+
+        .floating-decor {
+            display: none;
+        }
+
+        .output-textarea {
+            min-height: 300px;
+        }
+
+        .stats-bar {
+            gap: 1rem;
+        }
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header">
+    <span class="floating-decor">📜</span>
+    <span class="floating-decor">✍️</span>
+    <span class="floating-decor">📝</span>
+    <span class="floating-decor">🔤</span>
+    <span class="floating-decor">📖</span>
+    <h1>📏 Lorem Ipsum Generator</h1>
+    <p>Generate professional placeholder text for your websites, mockups, and designs. Customizable paragraphs,
+        sentences, or words.</p>
+</div>
+
+<div class="generator-container">
+    <!-- Settings Panel -->
+    <div class="settings-panel">
+        <h2 class="settings-title">⚙️ Generator Settings</h2>
+
+        <div class="setting-group">
+            <label class="setting-label">Generation Type</label>
+            <select id="generationType" class="setting-select">
+                <option value="paragraphs">📄 Paragraphs</option>
+                <option value="sentences">📝 Sentences</option>
+                <option value="words">🔤 Words</option>
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label class="setting-label">Amount</label>
+            <input type="number" id="amount" class="setting-input" value="5" min="1" max="100">
+        </div>
+
+        <div class="setting-group" id="sentencesPerParagraphGroup">
+            <label class="setting-label">Sentences per Paragraph</label>
+            <select id="sentencesPerParagraph" class="setting-select">
+                <option value="3">Short (3-4 sentences)</option>
+                <option value="5" selected>Medium (5-7 sentences)</option>
+                <option value="8">Long (8-12 sentences)</option>
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label class="setting-label">Options</label>
+            <div class="toggle-group">
+                <span class="toggle-label">Start with "Lorem ipsum"</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="startWithLorem" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <button id="generateBtn" class="generate-btn">
+            <span>✨</span> Generate Lorem Ipsum
+        </button>
+    </div>
+
+    <!-- Output Panel -->
+    <div class="output-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">Generated Text</h2>
+            <div class="panel-actions">
+                <button id="copyBtn" class="action-btn">📋 Copy</button>
+                <button id="downloadBtn" class="action-btn">⬇️ Download</button>
+            </div>
+        </div>
+        <textarea id="loremOutput" class="output-textarea" readonly
+            placeholder="Click 'Generate Lorem Ipsum' to create placeholder text..."></textarea>
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-value" id="paragraphCount">0</span>
+                <span class="stat-label">Paragraphs</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="sentenceCount">0</span>
+                <span class="stat-label">Sentences</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="wordCount">0</span>
+                <span class="stat-label">Words</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="charCount">0</span>
+                <span class="stat-label">Characters</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Fun Facts Section -->
+<div class="facts-section">
+    <h2 class="facts-title">💡 Did You Know?</h2>
+    <div class="facts-carousel">
+        <div class="fact-card active">
+            <p><strong>Lorem Ipsum has been used since the 1500s!</strong> It originated from a Latin text by Cicero
+                from 45 BC, making it over 2000 years old. The scrambled version became standard dummy text in the
+                printing industry.</p>
+        </div>
+        <div class="fact-card">
+            <p><strong>"Lorem ipsum dolor sit amet..."</strong> is derived from "de Finibus Bonorum et Malorum" (The
+                Extremes of Good and Evil) by Cicero, written in 45 BC. It's a treatise on the theory of ethics.</p>
+        </div>
+        <div class="fact-card">
+            <p><strong>It became popular in the 1960s</strong> when Letraset released sheets containing Lorem Ipsum
+                passages. Later, desktop publishing software like Aldus PageMaker included versions of it.</p>
+        </div>
+        <div class="fact-card">
+            <p><strong>The text is intentionally nonsensical.</strong> This helps designers and developers focus on
+                visual elements without being distracted by readable content. It's called "greeking" or using "blind
+                text".</p>
+        </div>
+        <div class="fact-card">
+            <p><strong>There's no real meaning.</strong> While Lorem Ipsum looks like Latin, most of it is scrambled and
+                meaningless. However, some words like "dolor" (pain) and "amet" (love) are real Latin words!</p>
+        </div>
+    </div>
+    <div class="facts-nav" id="factsNav"></div>
+</div>
+
+<!-- Info Section -->
+<div class="info-section">
+    <h2>📚 About Lorem Ipsum Generator</h2>
+    <p>
+        Our Lorem Ipsum generator creates professional placeholder text for web designers, developers, graphic artists,
+        and content creators. Whether you need dummy text for website mockups, app prototypes, or print layouts,
+        this free tool generates high-quality Latin-style filler content instantly.
+    </p>
+    <p>
+        Use placeholder text to focus on design without being distracted by meaningful content. Lorem ipsum has been
+        the industry standard since the 1500s and remains the go-to solution for typographic samples and visual mockups.
+    </p>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <h3>🎨 For Designers</h3>
+            <p>Create mockups and wireframes with realistic text length. Test typography, line spacing, and layout flow
+                without final content.</p>
+        </div>
+        <div class="info-card">
+            <h3>💻 For Developers</h3>
+            <p>Populate databases, test APIs, and prototype interfaces. Realistic placeholder data helps catch layout
+                issues early.</p>
+        </div>
+        <div class="info-card">
+            <h3>📱 For Prototypes</h3>
+            <p>Build interactive prototypes with proper text density. Show stakeholders how the final product will look
+                and feel.</p>
+        </div>
+        <div class="info-card">
+            <h3>🖨️ For Print</h3>
+            <p>Set up print layouts, brochures, and magazines. Test how content flows across pages before final copy is
+                ready.</p>
+        </div>
+    </div>
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script>
+    (function () {
+        // Lorem Ipsum word bank
+        const loremWords = [
+            'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit',
+            'sed', 'do', 'eiusmod', 'tempor', 'incididunt', 'ut', 'labore', 'et', 'dolore',
+            'magna', 'aliqua', 'enim', 'ad', 'minim', 'veniam', 'quis', 'nostrud',
+            'exercitation', 'ullamco', 'laboris', 'nisi', 'aliquip', 'ex', 'ea', 'commodo',
+            'consequat', 'duis', 'aute', 'irure', 'in', 'reprehenderit', 'voluptate',
+            'velit', 'esse', 'cillum', 'fugiat', 'nulla', 'pariatur', 'excepteur', 'sint',
+            'occaecat', 'cupidatat', 'non', 'proident', 'sunt', 'culpa', 'qui', 'officia',
+            'deserunt', 'mollit', 'anim', 'id', 'est', 'laborum', 'nullam', 'dictum',
+            'felis', 'donec', 'pede', 'justo', 'fringilla', 'vel', 'aliquet', 'nec',
+            'vulputate', 'eget', 'arcu', 'maecenas', 'nec', 'odio', 'ante', 'tincidunt',
+            'primis', 'orci', 'luctus', 'ultrices', 'posuere', 'cubilia', 'curae',
+            'mauris', 'vitae', 'ultricies', 'leo', 'integer', 'malesuada', 'fames',
+            'turpis', 'egestas', 'proin', 'pretium', 'nisl', 'vivamus', 'elementum',
+            'semper', 'cras', 'pellentesque', 'dignissim', 'ac', 'sem', 'neque', 'auctor',
+            'gravida', 'bibendum', 'diam', 'quam', 'congue', 'lacus', 'volutpat',
+            'massa', 'suscipit', 'euismod', 'vestibulum', 'sodales', 'viverra', 'sagittis'
+        ];
+
+        const standardStart = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+
+        function getRandomWord() {
+            return loremWords[Math.floor(Math.random() * loremWords.length)];
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function generateSentence(minWords = 8, maxWords = 15) {
+            const numWords = Math.floor(Math.random() * (maxWords - minWords + 1)) + minWords;
+            let words = [];
+            for (let i = 0; i < numWords; i++) {
+                words.push(getRandomWord());
+            }
+            words[0] = capitalize(words[0]);
+
+            // Add comma randomly
+            if (numWords > 6 && Math.random() > 0.5) {
+                const commaPos = Math.floor(numWords / 2) + Math.floor(Math.random() * 3) - 1;
+                words[commaPos] = words[commaPos] + ',';
+            }
+
+            return words.join(' ') + '.';
+        }
+
+        function generateParagraph(sentenceCount) {
+            let sentences = [];
+            for (let i = 0; i < sentenceCount; i++) {
+                sentences.push(generateSentence());
+            }
+            return sentences.join(' ');
+        }
+
+        function generateLoremIpsum(type, amount, sentencesPerPara, startWithLorem) {
+            let result = [];
+
+            if (type === 'paragraphs') {
+                for (let i = 0; i < amount; i++) {
+                    const numSentences = sentencesPerPara + Math.floor(Math.random() * 3);
+                    let para = generateParagraph(numSentences);
+
+                    // Replace first sentence with standard Lorem Ipsum start
+                    if (i === 0 && startWithLorem) {
+                        const firstPeriod = para.indexOf('.');
+                        para = standardStart + '.' + para.slice(firstPeriod + 1);
+                    }
+
+                    result.push(para);
+                }
+                return result.join('\n\n');
+            } else if (type === 'sentences') {
+                for (let i = 0; i < amount; i++) {
+                    let sentence = generateSentence();
+                    if (i === 0 && startWithLorem) {
+                        sentence = standardStart + '.';
+                    }
+                    result.push(sentence);
+                }
+                return result.join(' ');
+            } else if (type === 'words') {
+                let words = [];
+                if (startWithLorem) {
+                    words = ['Lorem', 'ipsum', 'dolor', 'sit', 'amet'];
+                    for (let i = words.length; i < amount; i++) {
+                        words.push(getRandomWord());
+                    }
+                } else {
+                    for (let i = 0; i < amount; i++) {
+                        words.push(getRandomWord());
+                    }
+                }
+                return words.slice(0, amount).join(' ');
+            }
+        }
+
+        function updateStats(text) {
+            const paragraphs = text.split('\n\n').filter(p => p.trim()).length;
+            const sentences = (text.match(/[.!?]+/g) || []).length;
+            const words = text.trim().split(/\s+/).filter(w => w).length;
+            const chars = text.length;
+
+            document.getElementById('paragraphCount').textContent = paragraphs;
+            document.getElementById('sentenceCount').textContent = sentences;
+            document.getElementById('wordCount').textContent = words.toLocaleString();
+            document.getElementById('charCount').textContent = chars.toLocaleString();
+        }
+
+        // Handle generation type change
+        const typeSelect = document.getElementById('generationType');
+        const sentencesGroup = document.getElementById('sentencesPerParagraphGroup');
+        const amountInput = document.getElementById('amount');
+
+        typeSelect.addEventListener('change', function () {
+            if (this.value === 'paragraphs') {
+                sentencesGroup.style.display = 'block';
+                amountInput.value = 5;
+                amountInput.max = 50;
+            } else if (this.value === 'sentences') {
+                sentencesGroup.style.display = 'none';
+                amountInput.value = 10;
+                amountInput.max = 100;
+            } else {
+                sentencesGroup.style.display = 'none';
+                amountInput.value = 50;
+                amountInput.max = 500;
+            }
+        });
+
+        // Generate button
+        document.getElementById('generateBtn').addEventListener('click', function () {
+            const type = document.getElementById('generationType').value;
+            const amount = parseInt(document.getElementById('amount').value) || 5;
+            const sentencesPerPara = parseInt(document.getElementById('sentencesPerParagraph').value) || 5;
+            const startWithLorem = document.getElementById('startWithLorem').checked;
+
+            const text = generateLoremIpsum(type, amount, sentencesPerPara, startWithLorem);
+            document.getElementById('loremOutput').value = text;
+            updateStats(text);
+
+            // Visual feedback
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
+
+        // Copy button
+        document.getElementById('copyBtn').addEventListener('click', function () {
+            const output = document.getElementById('loremOutput');
+            if (!output.value) {
+                showMessage('Generate text first!', 'warning');
+                return;
+            }
+
+            navigator.clipboard.writeText(output.value).then(() => {
+                showMessage('Copied to clipboard!', 'success');
+                this.innerHTML = '✅ Copied!';
+                setTimeout(() => {
+                    this.innerHTML = '📋 Copy';
+                }, 2000);
+            }).catch(() => {
+                output.select();
+                document.execCommand('copy');
+                showMessage('Copied to clipboard!', 'success');
+            });
+        });
+
+        // Download button
+        document.getElementById('downloadBtn').addEventListener('click', function () {
+            const output = document.getElementById('loremOutput').value;
+            if (!output) {
+                showMessage('Generate text first!', 'warning');
+                return;
+            }
+
+            const blob = new Blob([output], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'lorem-ipsum.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showMessage('Downloaded!', 'success');
+        });
+
+        // Facts carousel
+        const factCards = document.querySelectorAll('.fact-card');
+        const factsNav = document.getElementById('factsNav');
+        let currentFact = 0;
+
+        // Create dots
+        factCards.forEach((_, index) => {
+            const dot = document.createElement('span');
+            dot.className = 'fact-dot' + (index === 0 ? ' active' : '');
+            dot.addEventListener('click', () => showFact(index));
+            factsNav.appendChild(dot);
+        });
+
+        function showFact(index) {
+            factCards.forEach((card, i) => {
+                card.classList.toggle('active', i === index);
+            });
+            document.querySelectorAll('.fact-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+            currentFact = index;
+        }
+
+        // Auto-rotate facts
+        setInterval(() => {
+            currentFact = (currentFact + 1) % factCards.length;
+            showFact(currentFact);
+        }, 8000);
+
+        // Show message helper
+        function showMessage(text, type) {
+            const container = document.getElementById('messageContainer');
+            if (!container) return;
+
+            const msg = document.createElement('div');
+            msg.className = 'message';
+            msg.innerHTML = `
+            <span class="message-icon">${type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️'}</span>
+            <div class="message-content">
+                <div class="message-text">${text}</div>
+            </div>
+        `;
+            container.appendChild(msg);
+
+            setTimeout(() => {
+                msg.style.animation = 'slideOut 0.3s ease forwards';
+                setTimeout(() => msg.remove(), 300);
+            }, 3000);
+        }
+    })();
+</script>
+<!--@end:extra_js-->

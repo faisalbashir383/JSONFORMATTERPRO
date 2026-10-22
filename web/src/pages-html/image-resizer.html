@@ -1,0 +1,1513 @@
+<!--@block:title-->Free Image Resizer & Background Remover| JSON Formatters Pro<!--@end:title-->
+<!--@block:meta_title-->Free Image Resizer & Background Remover Online | JSON Formatters Pro<!--@end:meta_title-->
+<!--@block:meta_description-->Free online image resizer and AI background remover. Resize images for Instagram, Facebook,
+Twitter. Remove backgrounds instantly with AI. No signup, 100% secure, works in browser.<!--@end:meta_description-->
+<!--@block:meta_keywords-->image resizer, resize image, image resize online, photo resizer, picture resizer,
+resize image online free, resize image for instagram, resize image without losing quality, bulk image resizer online,
+resize multiple images at once, image resizer for social media, resize image to specific size, compress and resize
+image,
+remove background instantly, one click background remover, smart background remover, neural network background remover,
+deep learning background remover, browser background remover, no upload background remover, private background remover
+<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/image-resizer/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Image Resizer",
+  "description": "Free online tool to resize images for social media, web, and custom dimensions. Multiple output sizes, batch download as ZIP.",
+  "url": "https://jsonformatterspro.com/image-resizer/",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": ["Resize to multiple sizes", "Social media presets", "Custom dimensions", "Batch download", "Format conversion", "Quality control"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Resize an Image Online",
+  "description": "Step-by-step guide to resize images using our free online tool",
+  "step": [
+    {"@type": "HowToStep", "position": 1, "name": "Upload Image", "text": "Drag and drop your image or click to upload. Supports JPG, PNG, WebP, GIF up to 20MB."},
+    {"@type": "HowToStep", "position": 2, "name": "Choose Size", "text": "Select preset sizes for social media, enter custom dimensions, or choose percentage scale."},
+    {"@type": "HowToStep", "position": 3, "name": "Adjust Settings", "text": "Set output format (JPG, PNG, WebP) and quality level."},
+    {"@type": "HowToStep", "position": 4, "name": "Download", "text": "Download individual sizes or all at once as a ZIP file."}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Is this image resizer free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, completely free with no limits. No signup required."}},
+    {"@type": "Question", "name": "Is my image data secure?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, all processing happens in your browser. Images are never uploaded to any server."}},
+    {"@type": "Question", "name": "What image formats are supported?", "acceptedAnswer": {"@type": "Answer", "text": "We support JPG, PNG, WebP, and GIF formats for input and output."}},
+    {"@type": "Question", "name": "Can I resize multiple images?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, you can generate multiple sizes from one image and download all as a ZIP file."}},
+    {"@type": "Question", "name": "How does the AI background remover work?", "acceptedAnswer": {"@type": "Answer", "text": "Our AI background remover uses machine learning to automatically detect and remove backgrounds from images. It runs entirely in your browser for privacy."}},
+    {"@type": "Question", "name": "Is the background remover really AI-powered?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, it uses a neural network model that runs locally in your browser. The first use downloads the AI model (~40MB), which is then cached."}},
+    {"@type": "Question", "name": "What types of images work best with background removal?", "acceptedAnswer": {"@type": "Answer", "text": "The AI works best with photos of people, products, animals, and objects with clear edges. Complex backgrounds or similar colors may be challenging."}},
+    {"@type": "Question", "name": "Can I resize and remove background at the same time?", "acceptedAnswer": {"@type": "Answer", "text": "Yes! First remove the background, then resize. The transparent background is preserved in PNG format."}}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://jsonformatterspro.com/"},
+    {"@type": "ListItem", "position": 2, "name": "Image Resizer", "item": "https://jsonformatterspro.com/image-resizer/"}
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.05rem;
+    }
+
+    .resizer-grid {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .upload-panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .upload-zone {
+        border: 2px dashed var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 3rem 2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 200ms ease;
+        background: var(--color-bg);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 300px;
+    }
+
+    .upload-zone:hover,
+    .upload-zone.dragover {
+        border-color: #a855f7;
+        background: rgba(168, 85, 247, 0.05);
+    }
+
+    .upload-zone.has-image {
+        padding: 1rem;
+    }
+
+    .upload-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .upload-text {
+        font-size: 1.1rem;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+    }
+
+    .upload-hint {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+    }
+
+    #imagePreview {
+        max-width: 100%;
+        max-height: 350px;
+        border-radius: var(--radius-md);
+        display: none;
+    }
+
+    .image-info {
+        display: none;
+        gap: 1rem;
+        margin-top: 1rem;
+        padding: 1rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-md);
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .image-info.active {
+        display: flex;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+    }
+
+    .info-value {
+        color: var(--color-text);
+        font-weight: 600;
+    }
+
+    /* Options Panel */
+    .options-panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        max-height: 600px;
+        overflow-y: auto;
+    }
+
+    .option-section {
+        border-bottom: 1px solid var(--color-border);
+        padding-bottom: 1.25rem;
+    }
+
+    .option-section:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .option-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .dimension-inputs {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .dim-input {
+        width: 100%;
+        padding: 0.6rem 0.75rem;
+        font-size: 0.9rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        color: var(--color-text);
+    }
+
+    .dim-input:focus {
+        outline: none;
+        border-color: #a855f7;
+    }
+
+    .dim-x {
+        color: var(--color-text-secondary);
+        font-weight: 600;
+    }
+
+    .lock-btn {
+        padding: 0.5rem;
+        background: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        color: var(--color-text-secondary);
+        transition: all 200ms ease;
+    }
+
+    .lock-btn.active {
+        background: #a855f7;
+        color: white;
+        border-color: #a855f7;
+    }
+
+    .scale-buttons {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .scale-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        color: var(--color-text);
+        transition: all 200ms ease;
+    }
+
+    .scale-btn:hover,
+    .scale-btn.active {
+        background: #a855f7;
+        color: white;
+        border-color: #a855f7;
+    }
+
+    .preset-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    .preset-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 200ms ease;
+        font-size: 0.85rem;
+    }
+
+    .preset-item:hover {
+        border-color: #a855f7;
+    }
+
+    .preset-item.selected {
+        background: rgba(168, 85, 247, 0.1);
+        border-color: #a855f7;
+    }
+
+    .preset-item input {
+        accent-color: #a855f7;
+    }
+
+    .preset-size {
+        color: var(--color-text-secondary);
+        font-size: 0.75rem;
+    }
+
+    .format-row {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    .format-select {
+        flex: 1;
+        padding: 0.6rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        color: var(--color-text);
+        font-size: 0.9rem;
+    }
+
+    .quality-slider {
+        flex: 1;
+    }
+
+    .quality-slider input {
+        width: 100%;
+        accent-color: #a855f7;
+    }
+
+    .quality-value {
+        font-size: 0.85rem;
+        color: var(--color-text-secondary);
+        min-width: 40px;
+        text-align: right;
+    }
+
+    /* Action Buttons */
+    .actions-bar {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .resize-btn {
+        padding: 1rem 2.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .resize-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+    }
+
+    .resize-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .download-all-btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--color-text);
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .download-all-btn.active {
+        display: flex;
+    }
+
+    .download-all-btn:hover {
+        border-color: #a855f7;
+        color: #a855f7;
+    }
+
+    .reset-btn {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--color-text);
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .reset-btn.active {
+        display: flex;
+    }
+
+    .reset-btn:hover {
+        border-color: #ef4444;
+        color: #ef4444;
+    }
+
+    .remove-bg-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: white;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .remove-bg-btn:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+
+    .remove-bg-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .bg-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .toggle-switch {
+        position: relative;
+        width: 48px;
+        height: 24px;
+        background: var(--color-border);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .toggle-switch.active {
+        background: #10b981;
+    }
+
+    .toggle-switch::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        transition: all 200ms ease;
+    }
+
+    .toggle-switch.active::after {
+        left: 26px;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+        display: none;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .progress-container.active {
+        display: block;
+    }
+
+    .progress-bar {
+        height: 8px;
+        background: var(--color-bg);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ec4899, #a855f7);
+        width: 0%;
+        transition: width 100ms ease;
+    }
+
+    .progress-text {
+        text-align: center;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+    }
+
+    /* Output Gallery */
+    .output-section {
+        display: none;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .output-section.active {
+        display: block;
+    }
+
+    .output-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .output-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 1rem;
+    }
+
+    .output-item {
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        transition: all 200ms ease;
+    }
+
+    .output-item:hover {
+        border-color: #a855f7;
+        transform: translateY(-2px);
+    }
+
+    .output-preview {
+        width: 100%;
+        height: 120px;
+        object-fit: contain;
+        background: #1a1a2e;
+        padding: 0.5rem;
+    }
+
+    .output-info {
+        padding: 0.75rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .output-size {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    .output-filesize {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+    }
+
+    .output-download {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+        background: #a855f7;
+        color: white;
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .output-download:hover {
+        background: #9333ea;
+    }
+
+    /* Info Section */
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 900px) {
+        .resizer-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .options-panel {
+            max-height: none;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .preset-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header">
+    <h1>📸 Image Resizer & Background remover</h1>
+    <p>Resize images online for free. Multiple sizes, social media presets, batch download, AI image background remover
+    </p>
+</div>
+
+<div class="resizer-grid">
+    <!-- Upload Panel -->
+    <div class="upload-panel">
+        <div class="upload-zone" id="uploadZone">
+            <input type="file" id="imageInput" accept="image/*" style="display: none;">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">Drop image here or click to upload</div>
+            <div class="upload-hint">Supports JPG, PNG, WebP, GIF • Max 20MB</div>
+            <img id="imagePreview" alt="Preview">
+        </div>
+        <div class="image-info" id="imageInfo">
+            <div class="info-item">📐 <span class="info-value" id="origDimensions">-</span></div>
+            <div class="info-item">📦 <span class="info-value" id="origSize">-</span></div>
+            <div class="info-item">🖼️ <span class="info-value" id="origFormat">-</span></div>
+            <div class="info-item">🔲 <span class="info-value" id="origAspect">-</span></div>
+        </div>
+    </div>
+
+    <!-- Options Panel -->
+    <div class="options-panel">
+        <div class="option-section">
+            <div class="option-title">📐 Custom Size</div>
+            <div class="dimension-inputs">
+                <input type="number" class="dim-input" id="customWidth" placeholder="Width" min="1" max="10000">
+                <span class="dim-x">×</span>
+                <input type="number" class="dim-input" id="customHeight" placeholder="Height" min="1" max="10000">
+                <button class="lock-btn active" id="lockAspect" title="Lock Aspect Ratio">🔒</button>
+            </div>
+        </div>
+
+        <div class="option-section">
+            <div class="option-title">📊 Scale by Percentage</div>
+            <div class="scale-buttons">
+                <button class="scale-btn" data-scale="25">25%</button>
+                <button class="scale-btn" data-scale="50">50%</button>
+                <button class="scale-btn" data-scale="75">75%</button>
+                <button class="scale-btn" data-scale="100">100%</button>
+                <button class="scale-btn" data-scale="150">150%</button>
+                <button class="scale-btn" data-scale="200">200%</button>
+            </div>
+        </div>
+
+        <div class="option-section">
+            <div class="option-title">📱 Social Media Presets</div>
+            <div class="preset-grid">
+                <label class="preset-item">
+                    <input type="checkbox" data-width="1080" data-height="1080" class="preset-check">
+                    <span>Instagram Post</span>
+                    <span class="preset-size">1080×1080</span>
+                </label>
+                <label class="preset-item">
+                    <input type="checkbox" data-width="1080" data-height="1920" class="preset-check">
+                    <span>Instagram Story</span>
+                    <span class="preset-size">1080×1920</span>
+                </label>
+                <label class="preset-item">
+                    <input type="checkbox" data-width="1200" data-height="630" class="preset-check">
+                    <span>Facebook Post</span>
+                    <span class="preset-size">1200×630</span>
+                </label>
+                <label class="preset-item">
+                    <input type="checkbox" data-width="820" data-height="312" class="preset-check">
+                    <span>Facebook Cover</span>
+                    <span class="preset-size">820×312</span>
+                </label>
+                <label class="preset-item">
+                    <input type="checkbox" data-width="1200" data-height="675" class="preset-check">
+                    <span>Twitter Post</span>
+                    <span class="preset-size">1200×675</span>
+                </label>
+                <label class="preset-item">
+                    <input type="checkbox" data-width="1500" data-height="500" class="preset-check">
+                    <span>Twitter Header</span>
+                    <span class="preset-size">1500×500</span>
+                </label>
+                <label class="preset-item">
+                    <input type="checkbox" data-width="1200" data-height="627" class="preset-check">
+                    <span>LinkedIn Post</span>
+                    <span class="preset-size">1200×627</span>
+                </label>
+                <label class="preset-item">
+                    <input type="checkbox" data-width="1280" data-height="720" class="preset-check">
+                    <span>YouTube Thumbnail</span>
+                    <span class="preset-size">1280×720</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="option-section">
+            <div class="option-title">🎨 Output Format</div>
+            <div class="format-row">
+                <select class="format-select" id="outputFormat">
+                    <option value="jpeg">JPG</option>
+                    <option value="png">PNG</option>
+                    <option value="webp">WebP</option>
+                </select>
+                <div class="quality-slider">
+                    <input type="range" id="qualitySlider" min="10" max="100" value="85">
+                </div>
+                <span class="quality-value" id="qualityValue">85%</span>
+            </div>
+        </div>
+
+        <div class="option-section">
+            <div class="option-title">🎭 Background Removal</div>
+            <div class="bg-toggle">
+                <div class="toggle-switch" id="bgToggle"></div>
+                <span>Remove background (transparent PNG)</span>
+            </div>
+            <div style="margin-top: 0.75rem;">
+                <label
+                    style="font-size: 0.85rem; color: var(--color-text-secondary); display: block; margin-bottom: 0.5rem;">
+                    Tolerance: <span id="toleranceValue">30</span>%
+                </label>
+                <input type="range" id="toleranceSlider" min="5" max="80" value="30" style="width: 100%;">
+            </div>
+            <button class="remove-bg-btn" id="removeBgBtn" disabled style="margin-top: 0.75rem;">
+                <span>✨</span> Remove Background Now
+            </button>
+            <div style="font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 0.5rem;">
+                Removes background color from corners. Adjust tolerance for better results.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress-container" id="progressContainer">
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">Processing...</div>
+</div>
+
+<!-- Action Buttons -->
+<div class="actions-bar">
+    <button class="resize-btn" id="resizeBtn" disabled>
+        <span>🔄</span> Resize Image
+    </button>
+    <button class="download-all-btn" id="downloadAllBtn">
+        <span>📦</span> Download All (ZIP)
+    </button>
+    <button class="reset-btn" id="resetBtn">
+        <span>🗑️</span> Reset
+    </button>
+</div>
+
+<!-- Output Gallery -->
+<div class="output-section" id="outputSection">
+    <div class="output-title">📦 Resized Images</div>
+    <div class="output-grid" id="outputGrid"></div>
+</div>
+
+<!-- Info Section -->
+<div class="info-section">
+    <h2>💡 About Image Resizer & Background Remover</h2>
+    <p>
+        Our free online image resizer lets you resize images for any purpose - social media, websites,
+        emails, or printing. All processing happens in your browser, so your images are never uploaded
+        to any server. Your privacy is guaranteed.
+    </p>
+    <p>
+        <strong>Features:</strong> Custom dimensions • Social media presets • Percentage scaling •
+        Multiple output formats (JPG, PNG, WebP) • Quality control • Batch download as ZIP •
+        Aspect ratio lock • AI Background Removal • Works with large images
+    </p>
+</div>
+
+<!-- FAQ Section -->
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>❓ Frequently Asked Questions</h2>
+
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">Is this image resizer free?</h3>
+        <p style="margin: 0;">Yes, completely free with no limits. No signup or registration required. Use it as many
+            times as you need.</p>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">Is my image data secure?</h3>
+        <p style="margin: 0;">Absolutely! All processing happens in your browser using JavaScript. Your images are never
+            uploaded to any server - they stay on your device.</p>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">What image formats are
+            supported?</h3>
+        <p style="margin: 0;">We support JPG, PNG, WebP, and GIF formats for input. You can output in JPG, PNG, or WebP
+            format with adjustable quality.</p>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">Can I resize to multiple sizes
+            at once?</h3>
+        <p style="margin: 0;">Yes! Select multiple social media presets or enter custom dimensions. All resized images
+            can be downloaded individually or as a ZIP file.</p>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">How does the AI background
+            remover work?</h3>
+        <p style="margin: 0;">Our AI background remover uses a machine learning neural network that runs entirely in
+            your browser. It automatically detects the subject and removes the background, creating a transparent PNG.
+        </p>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">Why does background removal take
+            time on first use?</h3>
+        <p style="margin: 0;">The first time you use background removal, the AI model (~40MB) is downloaded to your
+            browser. This is cached, so subsequent uses are much faster.</p>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">What types of images work best
+            with AI background removal?</h3>
+        <p style="margin: 0;">The AI works best with photos of people, products, animals, and objects with clear edges
+            against distinct backgrounds. Very complex or camouflaged subjects may be challenging.</p>
+    </div>
+
+    <div style="margin-bottom: 0;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-text);">Can I resize and remove
+            background together?</h3>
+        <p style="margin: 0;">Yes! First remove the background to get a transparent image, then resize it to your
+            desired dimensions. The transparency is preserved when you output as PNG.</p>
+    </div>
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<!-- Background Removal Library - works with any image -->
+<script type="module">
+    (function () {
+        // Elements
+        const uploadZone = document.getElementById('uploadZone');
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const imageInfo = document.getElementById('imageInfo');
+        const customWidth = document.getElementById('customWidth');
+        const customHeight = document.getElementById('customHeight');
+        const lockAspect = document.getElementById('lockAspect');
+        const qualitySlider = document.getElementById('qualitySlider');
+        const qualityValue = document.getElementById('qualityValue');
+        const resizeBtn = document.getElementById('resizeBtn');
+        const downloadAllBtn = document.getElementById('downloadAllBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const removeBgBtn = document.getElementById('removeBgBtn');
+        const bgToggle = document.getElementById('bgToggle');
+        const outputSection = document.getElementById('outputSection');
+        const outputGrid = document.getElementById('outputGrid');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+
+        let originalImage = null;
+        let originalImageDataUrl = null;
+        let originalWidth = 0;
+        let originalHeight = 0;
+        let aspectRatio = 1;
+        let resizedImages = [];
+        let removeBgEnabled = false;
+
+        // Reset Function
+        function resetAll() {
+            originalImage = null;
+            originalImageDataUrl = null;
+            originalWidth = 0;
+            originalHeight = 0;
+            aspectRatio = 1;
+            resizedImages = [];
+            removeBgEnabled = false;
+
+            // Reset upload zone
+            imagePreview.style.display = 'none';
+            imagePreview.src = '';
+            uploadZone.classList.remove('has-image');
+            uploadZone.querySelector('.upload-icon').style.display = 'block';
+            uploadZone.querySelector('.upload-text').style.display = 'block';
+            uploadZone.querySelector('.upload-hint').style.display = 'block';
+            imageInfo.classList.remove('active');
+
+            // Reset inputs
+            imageInput.value = '';
+            customWidth.value = '';
+            customHeight.value = '';
+            qualitySlider.value = 85;
+            qualityValue.textContent = '85%';
+            document.getElementById('outputFormat').value = 'jpeg';
+
+            // Reset checkboxes and buttons
+            document.querySelectorAll('.preset-check').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+            bgToggle.classList.remove('active');
+
+            // Reset buttons
+            resizeBtn.disabled = true;
+            removeBgBtn.disabled = true;
+            downloadAllBtn.classList.remove('active');
+            resetBtn.classList.remove('active');
+
+            // Clear output
+            outputGrid.innerHTML = '';
+            outputSection.classList.remove('active');
+            progressContainer.classList.remove('active');
+        }
+
+        // Upload Zone Events
+        uploadZone.addEventListener('click', () => imageInput.click());
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                handleImageUpload(file);
+            }
+        });
+
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) handleImageUpload(file);
+        });
+
+        function handleImageUpload(file) {
+            if (file.size > 20 * 1024 * 1024) {
+                alert('File too large. Maximum size is 20MB.');
+                return;
+            }
+
+            // Reset everything when new image is uploaded
+            resetAll();
+
+            progressContainer.classList.add('active');
+            progressFill.style.width = '0%';
+            progressText.textContent = 'Loading image... 0%';
+
+            const reader = new FileReader();
+
+            reader.onprogress = (e) => {
+                if (e.lengthComputable) {
+                    const percent = Math.round((e.loaded / e.total) * 100);
+                    progressFill.style.width = percent + '%';
+                    progressText.textContent = `Loading image... ${percent}%`;
+                }
+            };
+
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    originalImage = img;
+                    originalImageDataUrl = e.target.result;
+                    originalWidth = img.width;
+                    originalHeight = img.height;
+                    aspectRatio = img.width / img.height;
+
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                    uploadZone.classList.add('has-image');
+                    uploadZone.querySelector('.upload-icon').style.display = 'none';
+                    uploadZone.querySelector('.upload-text').style.display = 'none';
+                    uploadZone.querySelector('.upload-hint').style.display = 'none';
+
+                    // Show image info
+                    document.getElementById('origDimensions').textContent = `${img.width} × ${img.height}`;
+                    document.getElementById('origSize').textContent = formatFileSize(file.size);
+                    document.getElementById('origFormat').textContent = file.type.split('/')[1].toUpperCase();
+                    document.getElementById('origAspect').textContent = getAspectRatioLabel(aspectRatio);
+                    imageInfo.classList.add('active');
+
+                    // Set custom dimensions
+                    customWidth.value = img.width;
+                    customHeight.value = img.height;
+
+                    // Enable buttons
+                    resizeBtn.disabled = false;
+                    removeBgBtn.disabled = false;
+                    resetBtn.classList.add('active');
+                    progressContainer.classList.remove('active');
+                };
+                img.src = e.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1024 / 1024).toFixed(2) + ' MB';
+        }
+
+        // CSP-safe function to convert data URL to Blob without fetch()
+        function dataURLtoBlob(dataURL) {
+            const parts = dataURL.split(',');
+            const mime = parts[0].match(/:(.*?);/)[1];
+            const bstr = atob(parts[1]);
+            let n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new Blob([u8arr], { type: mime });
+        }
+
+        function getAspectRatioLabel(ratio) {
+            if (Math.abs(ratio - 1) < 0.01) return '1:1 Square';
+            if (Math.abs(ratio - 16 / 9) < 0.1) return '16:9';
+            if (Math.abs(ratio - 4 / 3) < 0.1) return '4:3';
+            if (Math.abs(ratio - 3 / 2) < 0.1) return '3:2';
+            if (ratio > 1) return 'Landscape';
+            return 'Portrait';
+        }
+
+        // Lock Aspect Ratio
+        lockAspect.addEventListener('click', () => {
+            lockAspect.classList.toggle('active');
+        });
+
+        customWidth.addEventListener('input', () => {
+            if (lockAspect.classList.contains('active') && originalImage) {
+                customHeight.value = Math.round(customWidth.value / aspectRatio);
+            }
+        });
+
+        customHeight.addEventListener('input', () => {
+            if (lockAspect.classList.contains('active') && originalImage) {
+                customWidth.value = Math.round(customHeight.value * aspectRatio);
+            }
+        });
+
+        // Scale Buttons
+        document.querySelectorAll('.scale-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (!originalImage) return;
+                const scale = parseInt(btn.dataset.scale) / 100;
+                customWidth.value = Math.round(originalWidth * scale);
+                customHeight.value = Math.round(originalHeight * scale);
+
+                document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // Quality Slider
+        qualitySlider.addEventListener('input', () => {
+            qualityValue.textContent = qualitySlider.value + '%';
+        });
+
+        // Resize Button
+        resizeBtn.addEventListener('click', async () => {
+            if (!originalImage) return;
+
+            resizedImages = [];
+            outputGrid.innerHTML = '';
+            outputSection.classList.remove('active');
+            downloadAllBtn.classList.remove('active');
+
+            const sizes = [];
+            const format = document.getElementById('outputFormat').value;
+            const quality = qualitySlider.value / 100;
+
+            // Add custom size
+            const cw = parseInt(customWidth.value);
+            const ch = parseInt(customHeight.value);
+            if (cw > 0 && ch > 0) {
+                sizes.push({ width: cw, height: ch, label: 'Custom' });
+            }
+
+            // Add preset sizes
+            document.querySelectorAll('.preset-check:checked').forEach(checkbox => {
+                sizes.push({
+                    width: parseInt(checkbox.dataset.width),
+                    height: parseInt(checkbox.dataset.height),
+                    label: checkbox.parentElement.querySelector('span:not(.preset-size)').textContent
+                });
+            });
+
+            if (sizes.length === 0) {
+                alert('Please select at least one size option.');
+                return;
+            }
+
+            progressContainer.classList.add('active');
+            let completed = 0;
+
+            for (const size of sizes) {
+                progressFill.style.width = (completed / sizes.length * 100) + '%';
+                progressText.textContent = `Resizing to ${size.width}×${size.height}...`;
+
+                await new Promise(resolve => setTimeout(resolve, 50));
+
+                const canvas = document.createElement('canvas');
+                canvas.width = size.width;
+                canvas.height = size.height;
+                const ctx = canvas.getContext('2d');
+
+                // Draw with smoothing
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+                ctx.drawImage(originalImage, 0, 0, size.width, size.height);
+
+                const mimeType = 'image/' + format;
+                const dataUrl = canvas.toDataURL(mimeType, quality);
+                const blob = dataURLtoBlob(dataUrl);
+
+                resizedImages.push({
+                    label: size.label,
+                    width: size.width,
+                    height: size.height,
+                    dataUrl: dataUrl,
+                    blob: blob,
+                    size: blob.size
+                });
+
+                // Add to gallery
+                const item = document.createElement('div');
+                item.className = 'output-item';
+                item.innerHTML = `
+                <img src="${dataUrl}" class="output-preview" alt="${size.label}">
+                <div class="output-info">
+                    <div>
+                        <div class="output-size">${size.width}×${size.height}</div>
+                        <div class="output-filesize">${formatFileSize(blob.size)}</div>
+                    </div>
+                    <button class="output-download" data-index="${resizedImages.length - 1}">⬇️</button>
+                </div>
+            `;
+                outputGrid.appendChild(item);
+
+                completed++;
+            }
+
+            progressFill.style.width = '100%';
+            progressText.textContent = `Done! ${sizes.length} image(s) resized.`;
+
+            setTimeout(() => {
+                progressContainer.classList.remove('active');
+            }, 1000);
+
+            outputSection.classList.add('active');
+            if (resizedImages.length > 1) {
+                downloadAllBtn.classList.add('active');
+            }
+        });
+
+        // Download Individual
+        outputGrid.addEventListener('click', (e) => {
+            if (e.target.classList.contains('output-download')) {
+                const index = parseInt(e.target.dataset.index);
+                const img = resizedImages[index];
+                const format = document.getElementById('outputFormat').value;
+                const link = document.createElement('a');
+                link.href = img.dataUrl;
+                link.download = `resized_${img.width}x${img.height}.${format === 'jpeg' ? 'jpg' : format}`;
+                link.click();
+            }
+        });
+
+        // Download All as ZIP
+        downloadAllBtn.addEventListener('click', async () => {
+            if (resizedImages.length === 0) return;
+
+            downloadAllBtn.disabled = true;
+            downloadAllBtn.innerHTML = '<span>⏳</span> Creating ZIP...';
+
+            const zip = new JSZip();
+            const format = document.getElementById('outputFormat').value;
+            const ext = format === 'jpeg' ? 'jpg' : format;
+
+            resizedImages.forEach((img, i) => {
+                zip.file(`${img.label.replace(/\s+/g, '_')}_${img.width}x${img.height}.${ext}`, img.blob);
+            });
+
+            const content = await zip.generateAsync({ type: 'blob' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = 'resized_images.zip';
+            link.click();
+
+            downloadAllBtn.disabled = false;
+            downloadAllBtn.innerHTML = '<span>📦</span> Download All (ZIP)';
+        });
+
+        // Reset Button
+        resetBtn.addEventListener('click', resetAll);
+
+        // Background Removal Toggle
+        bgToggle.addEventListener('click', () => {
+            bgToggle.classList.toggle('active');
+            removeBgEnabled = bgToggle.classList.contains('active');
+            if (removeBgEnabled) {
+                document.getElementById('outputFormat').value = 'png';
+            }
+        });
+
+        // Helper function to scale down image for faster AI processing
+        function scaleImageForProcessing(img, maxDimension = 1024) {
+            const { width, height } = img;
+
+            // If image is already small enough, return original
+            if (width <= maxDimension && height <= maxDimension) {
+                return { canvas: null, scaleFactor: 1 };
+            }
+
+            // Calculate scale factor
+            const scaleFactor = Math.min(maxDimension / width, maxDimension / height);
+            const newWidth = Math.round(width * scaleFactor);
+            const newHeight = Math.round(height * scaleFactor);
+
+            // Create scaled canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+            return { canvas, scaleFactor, newWidth, newHeight };
+        }
+
+        // Helper function to scale result back to original dimensions
+        function scaleResultToOriginal(resultImg, targetWidth, targetHeight) {
+            const canvas = document.createElement('canvas');
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(resultImg, 0, 0, targetWidth, targetHeight);
+            return canvas.toDataURL('image/png');
+        }
+
+        // Tolerance slider
+        const toleranceSlider = document.getElementById('toleranceSlider');
+        const toleranceValue = document.getElementById('toleranceValue');
+        toleranceSlider.addEventListener('input', () => {
+            toleranceValue.textContent = toleranceSlider.value;
+        });
+
+        // Helper: Get pixel color at x,y
+        function getPixelColor(pixels, x, y, width) {
+            const i = (y * width + x) * 4;
+            return { r: pixels[i], g: pixels[i + 1], b: pixels[i + 2], a: pixels[i + 3] };
+        }
+
+        // Helper: Calculate color distance
+        function colorDistance(c1, c2) {
+            return Math.sqrt(
+                Math.pow(c1.r - c2.r, 2) +
+                Math.pow(c1.g - c2.g, 2) +
+                Math.pow(c1.b - c2.b, 2)
+            );
+        }
+
+        // Helper: Get most common color from samples
+        function getMostCommonColor(samples) {
+            // For simplicity, average the colors that are similar
+            let avgR = 0, avgG = 0, avgB = 0, count = 0;
+            for (const c of samples) {
+                avgR += c.r;
+                avgG += c.g;
+                avgB += c.b;
+                count++;
+            }
+            return { r: Math.round(avgR / count), g: Math.round(avgG / count), b: Math.round(avgB / count) };
+        }
+
+        // Helper: Flood fill algorithm using iterative approach
+        function floodFill(pixels, visited, toRemove, startX, startY, width, height, targetColor, tolerance) {
+            const stack = [[startX, startY]];
+
+            while (stack.length > 0) {
+                const [x, y] = stack.pop();
+
+                if (x < 0 || x >= width || y < 0 || y >= height) continue;
+
+                const idx = y * width + x;
+                if (visited[idx]) continue;
+                visited[idx] = 1;
+
+                const currentColor = getPixelColor(pixels, x, y, width);
+                const distance = colorDistance(currentColor, targetColor);
+
+                if (distance <= tolerance) {
+                    toRemove[idx] = 1;
+                    // Add neighbors to stack
+                    stack.push([x + 1, y]);
+                    stack.push([x - 1, y]);
+                    stack.push([x, y + 1]);
+                    stack.push([x, y - 1]);
+                }
+            }
+        }
+
+        // Remove Background Button
+        removeBgBtn.addEventListener('click', async () => {
+            if (!originalImage || !originalImageDataUrl) return;
+
+            removeBgBtn.disabled = true;
+            removeBgBtn.innerHTML = '<span>⏳</span> Removing background...';
+            progressContainer.classList.add('active');
+            progressFill.style.width = '0%';
+            progressText.textContent = 'Processing image...';
+
+            try {
+                const origW = originalImage.width;
+                const origH = originalImage.height;
+                const tolerance = parseInt(document.getElementById('toleranceSlider').value) / 100 * 255;
+
+                progressFill.style.width = '20%';
+                progressText.textContent = 'Analyzing background color...';
+
+                // Create canvas for processing
+                const canvas = document.createElement('canvas');
+                canvas.width = origW;
+                canvas.height = origH;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(originalImage, 0, 0);
+
+                const imageData = ctx.getImageData(0, 0, origW, origH);
+                const pixels = imageData.data;
+
+                // Sample background colors from corners
+                const cornerSamples = [
+                    getPixelColor(pixels, 0, 0, origW),                    // Top-left
+                    getPixelColor(pixels, origW - 1, 0, origW),            // Top-right
+                    getPixelColor(pixels, 0, origH - 1, origW),            // Bottom-left
+                    getPixelColor(pixels, origW - 1, origH - 1, origW)     // Bottom-right
+                ];
+
+                // Find the most common corner color (likely background)
+                const bgColor = getMostCommonColor(cornerSamples);
+
+                progressFill.style.width = '40%';
+                progressText.textContent = 'Removing background...';
+
+                // Create visited array for flood fill
+                const visited = new Uint8Array(origW * origH);
+                const toRemove = new Uint8Array(origW * origH);
+
+                // Flood fill from all corners
+                const startPoints = [
+                    [0, 0], [origW - 1, 0], [0, origH - 1], [origW - 1, origH - 1],
+                    [Math.floor(origW / 2), 0], [Math.floor(origW / 2), origH - 1],
+                    [0, Math.floor(origH / 2)], [origW - 1, Math.floor(origH / 2)]
+                ];
+
+                for (const [sx, sy] of startPoints) {
+                    floodFill(pixels, visited, toRemove, sx, sy, origW, origH, bgColor, tolerance);
+                }
+
+                progressFill.style.width = '70%';
+                progressText.textContent = 'Creating transparent image...';
+
+                // Apply transparency
+                for (let i = 0; i < toRemove.length; i++) {
+                    if (toRemove[i]) {
+                        pixels[i * 4 + 3] = 0; // Set alpha to 0
+                    }
+                }
+
+                ctx.putImageData(imageData, 0, 0);
+
+                progressFill.style.width = '90%';
+                progressText.textContent = 'Finalizing...';
+
+                const resultDataUrl = canvas.toDataURL('image/png');
+
+                // Create result blob for size calculation
+                const resultBlob = dataURLtoBlob(resultDataUrl);
+
+                // Add to resized images array
+                resizedImages.push({
+                    label: 'Background Removed',
+                    width: origW,
+                    height: origH,
+                    dataUrl: resultDataUrl,
+                    blob: resultBlob,
+                    size: resultBlob.size
+                });
+
+                // Add to output gallery
+                const item = document.createElement('div');
+                item.className = 'output-item';
+                item.innerHTML = `
+                    <img src="${resultDataUrl}" class="output-preview" alt="Background Removed" style="background: repeating-conic-gradient(#808080 0% 25%, transparent 0% 50%) 50% / 20px 20px;">
+                    <div class="output-info">
+                        <div>
+                            <div class="output-size">${origW}×${origH}</div>
+                            <div class="output-filesize">${formatFileSize(resultBlob.size)} • Transparent</div>
+                        </div>
+                        <button class="output-download" data-index="${resizedImages.length - 1}">⬇️</button>
+                    </div>
+                `;
+                outputGrid.appendChild(item);
+
+                // Show output section
+                outputSection.classList.add('active');
+                downloadAllBtn.classList.add('active');
+
+                document.getElementById('outputFormat').value = 'png';
+                bgToggle.classList.add('active');
+                removeBgEnabled = true;
+
+                progressFill.style.width = '100%';
+                progressText.textContent = 'Background removed! See result below.';
+
+                setTimeout(() => {
+                    progressContainer.classList.remove('active');
+                    outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 1000);
+
+                removeBgBtn.disabled = false;
+                removeBgBtn.innerHTML = '<span>✨</span> Remove Background Now';
+
+            } catch (error) {
+                console.error('Background removal failed:', error);
+                let errorMsg = 'Error: Could not remove background. Try a different image.';
+                if (error.message === 'timeout') {
+                    errorMsg = 'Processing took too long. Try a smaller image or simpler photo.';
+                } else if (error.message.includes('fetch')) {
+                    errorMsg = 'Failed to download AI model. Check your internet connection.';
+                }
+                progressText.textContent = errorMsg;
+                progressFill.style.width = '0%';
+                setTimeout(() => {
+                    progressContainer.classList.remove('active');
+                }, 4000);
+
+                removeBgBtn.disabled = false;
+                removeBgBtn.innerHTML = '<span>✨</span> Remove Background Now';
+            }
+        });
+    })();
+</script>
+<!--@end:extra_js-->

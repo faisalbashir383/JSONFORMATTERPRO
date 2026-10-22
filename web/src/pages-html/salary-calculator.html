@@ -1,0 +1,238 @@
+<!--@block:title-->Salary Calculator - Hourly to Annual Salary Converter | JSON Formatters Pro<!--@end:title-->
+<!--@block:meta_title-->Salary Calculator - Convert Hourly to Annual Salary Free 2026<!--@end:meta_title-->
+<!--@block:meta_description-->Free salary calculator. Convert between hourly, weekly, monthly, and annual salary.
+Calculate take-home pay and compare job offers.<!--@end:meta_description-->
+<!--@block:meta_keywords-->salary calculator, hourly to salary calculator, annual salary calculator, wage calculator,
+pay calculator, income calculator, salary converter, take home pay calculator,
+salary calculator 2026, weekly to annual salary, monthly to yearly salary<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/salary-calculator/<!--@end:canonical_url-->
+<!--@block:extra_css-->
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #10b981, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .calculator-container {
+        max-width: 600px;
+        margin: 0 auto 2rem;
+    }
+
+    .calc-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 2rem;
+    }
+
+    [data-theme="dark"] .calc-card {
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    .input-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .input-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-row {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .input-field {
+        flex: 1;
+        padding: 1rem;
+        font-size: 1.25rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        text-align: center;
+        font-weight: 700;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #10b981;
+    }
+
+    select.input-field {
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .result-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .result-card {
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+        padding: 1.25rem;
+        text-align: center;
+        border: 1px solid var(--color-border);
+    }
+
+    .result-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #10b981;
+    }
+
+    .result-label {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.25rem;
+    }
+
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header">
+    <h1>💼 Salary Calculator</h1>
+    <p>Convert between hourly, weekly, monthly, and annual salary. See your income from every angle.</p>
+</div>
+
+<div class="calculator-container">
+    <div class="calc-card">
+        <div class="input-group">
+            <label class="input-label">💰 Enter Your Pay</label>
+            <div class="input-row">
+                <input type="number" id="amount" class="input-field" placeholder="50000" step="0.01"
+                    oninput="calculate()">
+                <select id="payPeriod" class="input-field" onchange="calculate()">
+                    <option value="hourly">per Hour</option>
+                    <option value="weekly">per Week</option>
+                    <option value="biweekly">Bi-Weekly</option>
+                    <option value="monthly">per Month</option>
+                    <option value="annual" selected>per Year</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">⏰ Hours per Week</label>
+            <input type="number" id="hoursPerWeek" class="input-field" value="40" min="1" max="168"
+                oninput="calculate()">
+        </div>
+
+        <div class="result-grid">
+            <div class="result-card">
+                <div class="result-value" id="hourly">$0</div>
+                <div class="result-label">Hourly</div>
+            </div>
+            <div class="result-card">
+                <div class="result-value" id="daily">$0</div>
+                <div class="result-label">Daily</div>
+            </div>
+            <div class="result-card">
+                <div class="result-value" id="weekly">$0</div>
+                <div class="result-label">Weekly</div>
+            </div>
+            <div class="result-card">
+                <div class="result-value" id="biweekly">$0</div>
+                <div class="result-label">Bi-Weekly</div>
+            </div>
+            <div class="result-card">
+                <div class="result-value" id="monthly">$0</div>
+                <div class="result-label">Monthly</div>
+            </div>
+            <div class="result-card">
+                <div class="result-value" id="annual">$0</div>
+                <div class="result-label">Annual</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>📚 How It Works</h2>
+    <p>This calculator converts your salary between different pay periods based on standard assumptions: 52 weeks per
+        year, 12 months per year, and your specified hours per week.</p>
+    <p><strong>Standard work year:</strong> 52 weeks × 40 hours = 2,080 working hours per year</p>
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script>
+    (function () {
+        function formatCurrency(amount) {
+            return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+        }
+
+        window.calculate = function () {
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const period = document.getElementById('payPeriod').value;
+            const hoursPerWeek = parseFloat(document.getElementById('hoursPerWeek').value) || 40;
+
+            let annual;
+            switch (period) {
+                case 'hourly': annual = amount * hoursPerWeek * 52; break;
+                case 'weekly': annual = amount * 52; break;
+                case 'biweekly': annual = amount * 26; break;
+                case 'monthly': annual = amount * 12; break;
+                case 'annual': default: annual = amount; break;
+            }
+
+            const hourly = annual / (hoursPerWeek * 52);
+            const daily = annual / 260; // 5 days × 52 weeks
+            const weekly = annual / 52;
+            const biweekly = annual / 26;
+            const monthly = annual / 12;
+
+            document.getElementById('hourly').textContent = formatCurrency(hourly);
+            document.getElementById('daily').textContent = formatCurrency(daily);
+            document.getElementById('weekly').textContent = formatCurrency(weekly);
+            document.getElementById('biweekly').textContent = formatCurrency(biweekly);
+            document.getElementById('monthly').textContent = formatCurrency(monthly);
+            document.getElementById('annual').textContent = formatCurrency(annual);
+        };
+    })();
+</script>
+<!--@end:extra_js-->

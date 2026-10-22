@@ -1,0 +1,772 @@
+<!--@block:title-->JSON Schema Validator – Validate JSON Against Schema Online<!--@end:title-->
+<!--@block:meta_title-->JSON Schema Validator Online<!--@end:meta_title-->
+<!--@block:meta_description-->Validate JSON against a JSON Schema to ensure correct structure, required fields, and data
+types. Supports Draft 4, 7, and 2020-12.
+<!--@end:meta_description-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/json-schema-validator/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "JSON Schema Validator Online",
+  "description": "Free online tool to validate JSON data against JSON Schema",
+  "url": "https://jsonformatterspro.com/json-schema-validator/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "956",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is JSON Schema?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "JSON Schema is a vocabulary that allows you to annotate and validate JSON documents. It defines the structure, data types, and constraints that your JSON data must follow."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I validate JSON against a schema?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paste your JSON data in the JSON Data tab, switch to the Schema tab to paste your JSON Schema, then click Validate. The tool will show you if your JSON is valid or list any errors."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this JSON Schema validator free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, this JSON Schema validator is 100% free with no signup required. All processing happens in your browser, so your data stays completely private."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between JSON Schema Draft 7 and Draft 2020-12?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Draft 2020-12 introduces prefixItems for tuple validation, $dynamicRef for dynamic references, and removes definitions in favor of $defs. It also has improved vocabularies and better support for conditional validation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I use required fields in JSON Schema?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Add a 'required' array at the object level containing the names of properties that must be present. For example: { 'type': 'object', 'required': ['name', 'email'], 'properties': {...} }"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I validate nested JSON objects with JSON Schema?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, JSON Schema supports nested object validation. Define nested schemas within the 'properties' of parent objects, or use '$ref' to reference reusable schema definitions."
+      }
+    },
+
+    {
+      "@type": "Question",
+      "name": "How do I validate email format in JSON Schema?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use the 'format' keyword with 'email' value: { 'type': 'string', 'format': 'email' }. Other supported formats include 'uri', 'date', 'date-time', 'uuid', 'ipv4', and 'ipv6'."
+      }
+    }
+  ]
+}
+</script>
+<!-- JSON Tools Category Sitelinks -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "JSON Tools",
+  "itemListElement": [
+    {"@type": "SiteNavigationElement", "position": 1, "name": "JSON Formatter", "url": "https://jsonformatterspro.com/"},
+    {"@type": "SiteNavigationElement", "position": 2, "name": "JSON Schema Validator", "url": "https://jsonformatterspro.com/json-schema-validator/"},
+    {"@type": "SiteNavigationElement", "position": 3, "name": "JSON to YAML", "url": "https://jsonformatterspro.com/json-to-yaml/"},
+    {"@type": "SiteNavigationElement", "position": 4, "name": "JSON Diff", "url": "https://jsonformatterspro.com/json-diff/"},
+    {"@type": "SiteNavigationElement", "position": 5, "name": "JSON Tree Viewer", "url": "https://jsonformatterspro.com/json-tree/"},
+    {"@type": "SiteNavigationElement", "position": 6, "name": "JSON Visualizer", "url": "https://jsonformatterspro.com/json-visualizer/"},
+    {"@type": "SiteNavigationElement", "position": 7, "name": "Dummy JSON Generator", "url": "https://jsonformatterspro.com/dummy-json/"},
+    {"@type": "SiteNavigationElement", "position": 8, "name": "JSON Editor", "url": "https://jsonformatterspro.com/json-editor/"}
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<!-- CodeMirror CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--color-primary) 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* Main Layout Container */
+    .main-layout {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .schema-panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 16px var(--color-shadow);
+        overflow: hidden;
+    }
+
+    [data-theme="dark"] .schema-panel {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    [data-theme="dark"] .panel-header {
+        background: rgba(30, 41, 59, 0.7);
+    }
+
+    .panel-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 0;
+    }
+
+    /* CodeMirror Styling */
+    .CodeMirror {
+        height: 450px;
+        font-size: 14px;
+        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+
+    [data-theme="light"] .CodeMirror {
+        background: #fafafa;
+    }
+
+    .editor-container {
+        display: none;
+    }
+
+    .editor-container.active {
+        display: block;
+    }
+
+    /* Results Panel */
+    .results-panel {
+        flex: 1;
+        min-width: 250px;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1rem;
+        height: fit-content;
+        position: sticky;
+        top: 1rem;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .main-layout {
+            flex-direction: column;
+        }
+
+        .results-panel {
+            position: static;
+            order: 2;
+        }
+
+        .CodeMirror {
+            height: 300px;
+        }
+
+        .tool-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .tool-header {
+            padding: 1.5rem 1rem;
+        }
+
+        .panel-header {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .tab-buttons {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .action-buttons {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    .actions-bar {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 1.5rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        margin-bottom: 1.5rem;
+    }
+
+    .validate-btn {
+        padding: 1rem 2.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 250ms ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .validate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    }
+
+    .action-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--color-text);
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .action-btn:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    /* Validation Results */
+    .validation-results {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        display: none;
+    }
+
+    .validation-results.active {
+        display: block;
+    }
+
+    .validation-results h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .result-success {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid #10b981;
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        color: #10b981;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .result-success .icon {
+        font-size: 2rem;
+    }
+
+    .result-error {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid #ef4444;
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+    }
+
+    .error-header {
+        color: #ef4444;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .error-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .error-item {
+        padding: 0.75rem 1rem;
+        background: rgba(239, 68, 68, 0.05);
+        border-radius: var(--radius-sm);
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+        font-family: 'SF Mono', monospace;
+        font-size: 0.875rem;
+    }
+
+    .error-path {
+        color: #ef4444;
+        font-weight: 600;
+    }
+
+    .info-section {
+        margin-top: 3rem;
+        padding: 2.5rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .schema-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .schema-textarea {
+            min-height: 250px;
+        }
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header">
+    <h1>JSON Schema Validator Online - Validate JSON Free</h1>
+    <p>Free online tool to validate your JSON data against a JSON Schema definition. Supports Draft 4, 7, and 2020-12.
+    </p>
+</div>
+
+<div class="info-section" style="margin-bottom: 1.5rem;">
+    <p>
+        A JSON Schema Validator checks whether a JSON document follows a defined structure,
+        required fields, and data types. It helps catch invalid data early before it causes
+        API failures, application bugs, or unexpected behavior.
+    </p>
+    <p>
+        By validating JSON against a schema, developers can ensure consistent data formats
+        and receive clear error messages when something doesn’t match the expected rules.
+    </p>
+</div>
+
+<!-- Main Layout: Editor (75%) + Results (25%) -->
+<div class="main-layout">
+
+    <!-- Editor Panel (75%) -->
+    <div class="schema-panel" style="flex: 3; min-width: 0;">
+        <div class="panel-header">
+            <div class="tab-buttons" style="display: flex; gap: 0;">
+                <button id="tabJsonData" class="tab-btn active" onclick="switchTab('jsonData')"
+                    style="padding: 0.75rem 1.5rem; background: var(--color-primary); color: white; border: none; border-radius: var(--radius-md) 0 0 0; cursor: pointer; font-weight: 600;">📄
+                    JSON Data</button>
+                <button id="tabJsonSchema" class="tab-btn" onclick="switchTab('jsonSchema')"
+                    style="padding: 0.75rem 1.5rem; background: var(--color-surface-alt); color: var(--color-text); border: none; border-radius: 0; cursor: pointer; font-weight: 600;">📐
+                    Schema</button>
+            </div>
+
+            <!-- Action Buttons on Right -->
+            <div class="action-buttons" style="display: flex; gap: 0.5rem; align-items: center;">
+                <button id="validateBtn"
+                    style="padding: 0.5rem 1.25rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: var(--radius-md); cursor: pointer; font-weight: 600; font-size: 0.9rem;">
+                    ✓ Validate
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div class="dropdown" style="position: relative;">
+                    <button onclick="event.stopPropagation(); toggleDropdown();"
+                        style="padding: 0.5rem 0.75rem; background: var(--color-surface-alt); color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--radius-md); cursor: pointer; font-size: 0.9rem;">
+                        ⋮
+                    </button>
+                    <div id="dropdownMenu"
+                        style="display: none; position: absolute; right: 0; top: 100%; margin-top: 0.25rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 150px; z-index: 100;">
+                        <button onclick="loadSample(); toggleDropdown();"
+                            style="width: 100%; padding: 0.75rem 1rem; background: none; border: none; text-align: left; cursor: pointer; color: var(--color-text); font-size: 0.9rem;">📥
+                            Load Sample</button>
+                        <button onclick="clearAll(); toggleDropdown();"
+                            style="width: 100%; padding: 0.75rem 1rem; background: none; border: none; text-align: left; cursor: pointer; color: var(--color-text); font-size: 0.9rem; border-top: 1px solid var(--color-border);">🗑️
+                            Clear All</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CodeMirror Editors -->
+        <div id="jsonDataPanel" class="editor-container active">
+            <textarea id="jsonData"></textarea>
+        </div>
+
+        <div id="jsonSchemaPanel" class="editor-container">
+            <textarea id="jsonSchema"></textarea>
+        </div>
+    </div>
+
+    <!-- Results Panel (25%) -->
+    <div id="validationResults" class="results-panel">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--color-text);">📊 Results</h3>
+        <div id="resultContent" style="font-size: 0.9rem;">
+            <p style="color: var(--color-text-secondary); margin: 0;">Click <strong>Validate</strong> to check your JSON
+                against the schema.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Related JSON Tools Section -->
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>🔧 Related JSON Tools</h2>
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <a href="/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); transition: transform 0.2s;">
+            <strong>📝 JSON Formatter</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Format & beautify
+                JSON</p>
+        </a>
+        <a href="/json-diff/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); transition: transform 0.2s;">
+            <strong>🔍 JSON Diff</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Compare two JSON
+                files</p>
+        </a>
+        <a href="/json-tree/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); transition: transform 0.2s;">
+            <strong>🌳 JSON Tree Viewer</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Visual tree structure
+            </p>
+        </a>
+        <a href="/json-to-yaml/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); transition: transform 0.2s;">
+            <strong>🔄 JSON to YAML</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Convert JSON to YAML
+            </p>
+        </a>
+        <a href="/dummy-json/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); transition: transform 0.2s;">
+            <strong>🎲 Dummy JSON Generator</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Generate fake JSON
+                data</p>
+        </a>
+        <a href="/json-visualizer/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); transition: transform 0.2s;">
+            <strong>📊 JSON Visualizer</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Graph view of JSON
+            </p>
+        </a>
+        <a href="/json-path-tester/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); transition: transform 0.2s;">
+            <strong>🎯 JSON Path Tester</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Test JSONPath
+                expressions
+            </p>
+        </a>
+    </div>
+</div>
+
+<!-- What Is JSON Schema Section -->
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>What is JSON Schema?</h2>
+    <p>
+        JSON Schema is a declarative language for defining the structure and constraints of JSON data. It acts as a
+        contract between systems, specifying what properties are allowed, their data types, required fields, and
+        acceptable value ranges.
+    </p>
+    <p>
+        Developers use JSON Schema primarily for three purposes: validating API request and response payloads, enforcing
+        configuration file formats, and documenting data structures in a machine-readable way. When you define a schema,
+        any JSON document can be checked against it to ensure compliance before processing.
+    </p>
+    <p>
+        The schema itself is written in JSON, making it easy to parse, generate, and integrate into existing toolchains.
+        Common keywords include <code>type</code>, <code>properties</code>, <code>required</code>, <code>minimum</code>,
+        <code>maximum</code>, <code>pattern</code>, and <code>format</code>.
+    </p>
+</div>
+
+<!-- JSON Schema Validation Examples Section -->
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>JSON Schema Validation Examples</h2>
+
+    <p style="margin-bottom: 1rem;">Below is a simple schema that requires a <code>name</code> (string) and
+        <code>age</code> (integer, minimum 0).
+    </p>
+
+    <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--color-text-secondary);">Schema
+        Definition</h4>
+    <pre
+        style="background: var(--color-surface-alt); padding: 1rem; border-radius: var(--radius-md); overflow-x: auto; font-size: 0.875rem; margin-bottom: 1.5rem;"><code>{
+  "type": "object",
+  "required": ["name", "age"],
+  "properties": {
+    "name": { "type": "string", "minLength": 1 },
+    "age": { "type": "integer", "minimum": 0 }
+  }
+}</code></pre>
+
+    <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; color: #10b981;">✓ Valid JSON</h4>
+    <pre
+        style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: var(--radius-md); overflow-x: auto; font-size: 0.875rem; border: 1px solid #10b981; margin-bottom: 1.5rem;"><code>{
+  "name": "Alice",
+  "age": 28
+}</code></pre>
+    <p style="margin-bottom: 1.5rem; font-size: 0.9rem;">This passes because both required fields are present with
+        correct types and <code>age</code> meets the minimum constraint.</p>
+
+    <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; color: #ef4444;">✗ Invalid JSON</h4>
+    <pre
+        style="background: rgba(239, 68, 68, 0.1); padding: 1rem; border-radius: var(--radius-md); overflow-x: auto; font-size: 0.875rem; border: 1px solid #ef4444; margin-bottom: 1rem;"><code>{
+  "name": "Bob",
+  "age": -5
+}</code></pre>
+    <p style="font-size: 0.9rem;">This fails validation because <code>age</code> is below the minimum value of 0 defined
+        in the schema.</p>
+</div>
+
+<!-- JSON Schema Validator FAQs Section -->
+<div class="info-section" style="margin-top: 1.5rem;">
+    <h2>JSON Schema Validator FAQs</h2>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Is this JSON Schema validator free to use?
+        </h3>
+        <p style="margin: 0;">Yes, this tool is completely free with no registration required. You can validate as many
+            schemas as needed without any usage limits or hidden costs.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Is my JSON data secure when validating
+            schemas?</h3>
+        <p style="margin: 0;">All validation happens locally in your browser. Your JSON data never leaves your machine
+            or gets transmitted to any server, ensuring complete privacy.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Can I validate large JSON Schema files?
+        </h3>
+        <p style="margin: 0;">The validator handles reasonably large schemas and JSON documents efficiently. For
+            extremely large files, performance depends on your browser's memory and processing capabilities.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What JSON Schema versions are supported?
+        </h3>
+        <p style="margin: 0;">This validator supports Draft 4, Draft 6, Draft 7, and Draft 2020-12. The version is
+            auto-detected from the <code>$schema</code> keyword in your schema definition.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What errors can a JSON Schema validator
+            detect?</h3>
+        <p style="margin: 0;">It detects type mismatches, missing required properties, values outside defined ranges,
+            pattern violations, invalid formats, and structural issues like incorrect nesting or array constraints.</p>
+    </div>
+
+    <div style="padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">How do I validate JSON against a schema
+            online?</h3>
+        <p style="margin: 0;">Paste your JSON data in the JSON Data tab, switch to the Schema tab and paste your schema,
+            then click Validate. Results appear instantly in the panel on the right.</p>
+    </div>
+</div>
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<!-- CodeMirror JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+<script src="/static/js/json-schema.js"></script>
+<script>
+    // CodeMirror editors
+    let jsonDataEditor, jsonSchemaEditor;
+
+    // Initialize CodeMirror on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+        jsonDataEditor = CodeMirror.fromTextArea(document.getElementById('jsonData'), {
+            mode: 'application/json',
+            theme: isDark ? 'dracula' : 'default',
+            lineNumbers: true,
+            lineWrapping: true,
+            matchBrackets: true,
+            autoCloseBrackets: true
+        });
+
+        jsonSchemaEditor = CodeMirror.fromTextArea(document.getElementById('jsonSchema'), {
+            mode: 'application/json',
+            theme: isDark ? 'dracula' : 'default',
+            lineNumbers: true,
+            lineWrapping: true,
+            matchBrackets: true,
+            autoCloseBrackets: true
+        });
+
+        // Auto-paste JSON from CSV converter if available
+        const csvJson = sessionStorage.getItem('csvToJsonOutput');
+        if (csvJson) {
+            jsonDataEditor.setValue(csvJson);
+            sessionStorage.removeItem('csvToJsonOutput');
+        }
+
+        // Update validate button to use CodeMirror values
+        document.getElementById('validateBtn').addEventListener('click', function () {
+            const jsonDataEl = document.getElementById('jsonData');
+            const jsonSchemaEl = document.getElementById('jsonSchema');
+            if (jsonDataEl && jsonSchemaEl) {
+                jsonDataEl.value = jsonDataEditor.getValue();
+                jsonSchemaEl.value = jsonSchemaEditor.getValue();
+            }
+        });
+    });
+
+    // Tab switching function
+    function switchTab(tabName) {
+        const tabs = ['jsonData', 'jsonSchema'];
+        tabs.forEach(tab => {
+            const panel = document.getElementById(tab + 'Panel');
+            const btn = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1));
+            if (tab === tabName) {
+                panel.classList.add('active');
+                btn.style.background = 'var(--color-primary)';
+                btn.style.color = 'white';
+                // Refresh CodeMirror when tab becomes visible
+                if (tab === 'jsonData' && jsonDataEditor) jsonDataEditor.refresh();
+                if (tab === 'jsonSchema' && jsonSchemaEditor) jsonSchemaEditor.refresh();
+            } else {
+                panel.classList.remove('active');
+                btn.style.background = 'var(--color-surface-alt)';
+                btn.style.color = 'var(--color-text)';
+            }
+        });
+    }
+
+    // Dropdown toggle
+    function toggleDropdown() {
+        const menu = document.getElementById('dropdownMenu');
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function (e) {
+        const dropdown = document.querySelector('.dropdown');
+        const menu = document.getElementById('dropdownMenu');
+        if (dropdown && !dropdown.contains(e.target)) {
+            menu.style.display = 'none';
+        }
+    });
+
+    // Clear all function
+    function clearAll() {
+        if (jsonDataEditor) jsonDataEditor.setValue('');
+        if (jsonSchemaEditor) jsonSchemaEditor.setValue('');
+        document.getElementById('resultContent').innerHTML = '<p style="color: var(--color-text-secondary); margin: 0;">Click <strong>Validate</strong> to check your JSON against the schema.</p>';
+    }
+
+    // Load sample function
+    function loadSample() {
+        const sampleData = JSON.stringify({
+            "name": "John Doe",
+            "age": 30,
+            "email": "john@example.com",
+            "isActive": true
+        }, null, 2);
+
+        const sampleSchema = JSON.stringify({
+            "type": "object",
+            "required": ["name", "email"],
+            "properties": {
+                "name": { "type": "string", "minLength": 1 },
+                "age": { "type": "integer", "minimum": 0 },
+                "email": { "type": "string", "format": "email" },
+                "isActive": { "type": "boolean" }
+            }
+        }, null, 2);
+
+        if (jsonDataEditor) jsonDataEditor.setValue(sampleData);
+        if (jsonSchemaEditor) jsonSchemaEditor.setValue(sampleSchema);
+    }
+</script>
+<!--@end:extra_js-->

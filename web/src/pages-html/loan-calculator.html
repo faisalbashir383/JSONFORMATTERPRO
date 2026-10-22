@@ -1,0 +1,583 @@
+<!--@block:title-->Loan EMI Calculator - Calculate Monthly Payments [2025]<!--@end:title-->
+<!--@block:meta_title-->Loan Calculator - Calculate EMI, Interest & Total Payment Free<!--@end:meta_title-->
+<!--@block:meta_description-->Free online loan calculator. Calculate monthly EMI, total interest payable, and final
+repayment amount for personal, home, and car loans.<!--@end:meta_description-->
+<!--@block:meta_keywords-->loan calculator, emi calculator, personal loan calculator, home loan emi, calculate monthly
+payments, loan interest calculator, emi formula<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/loan-calculator/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Loan EMI Calculator Pro",
+  "description": "Calculate monthly loan EMI, total interest, and repayment amount.",
+  "url": "https://jsonformatterspro.com/loan-calculator/",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Instant EMI Calculation",
+    "Total Interest Breakdown",
+    "Visual Slider Inputs",
+    "Principal vs Interest Analysis",
+    "Supports High Loan Amounts"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is EMI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EMI (Equated Monthly Installment) is a fixed payment amount made by a borrower to a lender at a specified date each calendar month. Equated monthly installments are used to pay off both interest and principal each month like other loans."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is loan EMI calculated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EMI is calculated using the formula: P x R x (1+R)^N / [(1+R)^N-1], where P is Principal Loan Amount, R is Monthly Interest Rate, and N is Loan Tenure in months."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this work for home loans?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, this calculator works for home loans, personal loans, car loans, and education loans. Just input your specific loan amount and interest rate."
+      }
+    }
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(239, 68, 68, 0.1) 50%, rgba(139, 92, 246, 0.1) 100%);
+        border-radius: var(--radius-lg);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #f59e0b 0%, #ef4444 50%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .calculator-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .calc-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 2rem;
+        box-shadow: 0 8px 32px var(--color-shadow);
+        transition: all 0.3s ease;
+    }
+
+    .calc-card:hover {
+        transform: translateY(-2px);
+    }
+
+    [data-theme="dark"] .calc-card {
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    .calc-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .input-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .input-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-value {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #f59e0b;
+    }
+
+    .input-slider {
+        width: 100%;
+        height: 8px;
+        -webkit-appearance: none;
+        background: var(--color-border);
+        border-radius: 4px;
+        outline: none;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f59e0b, #ef4444);
+        cursor: pointer;
+    }
+
+    /* Result Card */
+    .result-card {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        border: 2px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .emi-display {
+        text-align: center;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .emi-value {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #f59e0b, #ef4444);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1;
+    }
+
+    .emi-label {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.5rem;
+    }
+
+    .result-stats {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .stat-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem;
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+    }
+
+    .stat-label {
+        color: var(--color-text-secondary);
+    }
+
+    .stat-value {
+        font-weight: 700;
+        color: var(--color-text);
+    }
+
+    .stat-value.interest {
+        color: #ef4444;
+    }
+
+    .stat-value.total {
+        color: #8b5cf6;
+    }
+
+    /* New Common Sections */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .info-section,
+    .faq-section {
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .section-title,
+    .faq-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #f59e0b;
+        font-weight: bold;
+    }
+
+    .formula-box {
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 1rem 1.5rem;
+        font-family: 'SF Mono', monospace;
+        margin: 1rem 0;
+        text-align: center;
+    }
+
+    .formula-box span {
+        color: #f59e0b;
+        font-weight: 600;
+    }
+
+    .related-tools {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tool-link {
+        display: block;
+        padding: 1rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        text-decoration: none;
+        transition: all 0.2s;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tool-link:hover {
+        border-color: #f59e0b;
+        transform: translateY(-2px);
+    }
+
+    /* FAQ Section */
+    .faq-section {
+        margin-top: 2rem;
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+    }
+
+    .faq-title {
+        margin-bottom: 1.5rem;
+    }
+
+    .faq-item {
+        background: var(--color-surface);
+        border-radius: var(--radius-md);
+        margin-bottom: 0.75rem;
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+    }
+
+    .faq-question {
+        padding: 1.25rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .faq-question:hover {
+        background: var(--color-surface-alt);
+    }
+
+    .faq-toggle {
+        font-size: 1.25rem;
+        transition: transform 0.3s;
+        color: #f59e0b;
+    }
+
+    .faq-item.open .faq-toggle {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+    }
+
+    .faq-item.open .faq-answer {
+        max-height: 500px;
+        transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
+    }
+
+    .faq-answer-content {
+        padding: 0 1.25rem 1.25rem;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        border-top: 1px solid var(--color-border);
+    }
+
+    @media (max-width: 900px) {
+        .calculator-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header">
+    <h1>💰 Loan EMI Calculator</h1>
+    <p>Calculate your monthly EMI, total interest, and amortization for any loan. Plan your finances with precision.</p>
+</div>
+
+<div class="calculator-layout">
+    <div class="calc-card">
+        <h2 class="calc-title">📝 Loan Details</h2>
+
+        <div class="input-group">
+            <div class="input-label">
+                <span>Loan Amount</span>
+                <span class="input-value" id="loanAmountValue">₹10,00,000</span>
+            </div>
+            <input type="range" class="input-slider" id="loanAmount" min="10000" max="10000000" value="1000000"
+                step="10000" oninput="updateLoan()">
+        </div>
+
+        <div class="input-group">
+            <div class="input-label">
+                <span>Interest Rate (% p.a.)</span>
+                <span class="input-value" id="interestRateValue">10%</span>
+            </div>
+            <input type="range" class="input-slider" id="interestRate" min="1" max="30" value="10" step="0.25"
+                oninput="updateLoan()">
+        </div>
+
+        <div class="input-group">
+            <div class="input-label">
+                <span>Loan Tenure (Years)</span>
+                <span class="input-value" id="tenureValue">5 years</span>
+            </div>
+            <input type="range" class="input-slider" id="tenure" min="1" max="30" value="5" step="1"
+                oninput="updateLoan()">
+        </div>
+    </div>
+
+    <div class="calc-card result-card">
+        <h2 class="calc-title">📊 Your EMI</h2>
+
+        <div class="emi-display">
+            <div class="emi-value" id="emiValue">₹21,247</div>
+            <div class="emi-label">Monthly EMI</div>
+        </div>
+
+        <div class="result-stats">
+            <div class="stat-row">
+                <span class="stat-label">Principal Amount</span>
+                <span class="stat-value" id="principalAmount">₹10,00,000</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Total Interest</span>
+                <span class="stat-value interest" id="totalInterest">₹2,74,823</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Total Amount Payable</span>
+                <span class="stat-value total" id="totalAmount">₹12,74,823</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="info-grid">
+    <div class="info-section">
+        <h2 class="section-title"><svg class="section-icon" width="20" height="20" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg> Tool Features</h2>
+        <ul class="feature-list">
+            <li><strong>Instant EMI:</strong> Get real-time updates as you adjust the sliders.</li>
+            <li><strong>Total Breakdown:</strong> See exactly how much interest you'll pay over the loan term.</li>
+            <li><strong>Compounding:</strong> Accurately calculates monthly reducing balance.</li>
+            <li><strong>Visual:</strong> Clean, easy-to-read layout for better financial planning.</li>
+        </ul>
+    </div>
+
+    <div class="info-section">
+        <h2 class="section-title"><svg class="section-icon" width="20" height="20" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 14h-2v-4H9.82L8 15.82V17H6v-2.49l2-2.01V9h2v3h4V9h2v8z" />
+            </svg> Understanding EMI</h2>
+        <p>EMI (Equated Monthly Installment) is a fixed monthly payment made to repay a loan. Each EMI consists of two
+            parts: principal repayment and interest payment.</p>
+        <div class="formula-box"><span>EMI</span> = [P × r × (1+r)^n] / [(1+r)^n - 1]</div>
+        <p style="font-size: 0.9rem;">Where: P = Principal, r = Monthly Interest Rate, n = Months</p>
+    </div>
+</div>
+
+<!-- Related Tools -->
+<div class="info-section" style="margin-top: 2rem;">
+    <h2 class="section-title"><svg class="section-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path
+                d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z" />
+        </svg> Related Calculators</h2>
+    <div class="related-tools">
+        <a href="/percentage-calculator/" class="tool-link"><svg class="tool-icon" width="16" height="16"
+                viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M7.5 11C9.43 11 11 9.43 11 7.5S9.43 4 7.5 4 4 5.57 4 7.5 5.57 11 7.5 11zm0-5C8.33 6 9 6.67 9 7.5S8.33 9 7.5 9 6 8.33 6 7.5 6.67 6 7.5 6zM4.41 20L20 4.41 18.59 3 3 18.59 4.41 20zM16.5 13c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+            </svg> Percentage Calculator</a>
+        <a href="/discount-calculator/" class="tool-link"><svg class="tool-icon" width="16" height="16"
+                viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z" />
+            </svg> Discount Calculator</a>
+        <a href="/tip-calculator/" class="tool-link"><svg class="tool-icon" width="16" height="16" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z" />
+            </svg> Tip Calculator</a>
+    </div>
+</div>
+
+<div class="faq-section">
+    <h2 class="faq-title">❓ Frequently Asked Questions</h2>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">What is EMI?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                EMI stands for Equated Monthly Installment. It's a fixed amount you pay every month to repay your loan
+                over a specified period. Each EMI includes both principal and interest components.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">How is EMI calculated?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                EMI is calculated using the reducing balance method formula: E = P x r x (1+r)^n / ((1+r)^n - 1). This
+                ensures your loan is paid off completely by the end of the tenure.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">Can I reduce my EMI?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Yes! You can reduce EMI by choosing a longer tenure, negotiating a lower interest rate, or making a
+                larger down payment. However, keep in mind that a longer tenure increases the total interest you pay.
+            </div>
+        </div>
+    </div>
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <div class="faq-question">
+            <span itemprop="name">What happens if I prepay my loan?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="faq-answer-content" itemprop="text">
+                Prepayment reduces your outstanding principal, which in turn decreases the total interest payable. You
+                can choose to either reduce your EMI amount or shorten the loan tenure after a prepayment.
+            </div>
+        </div>
+    </div>
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script>
+    (function () {
+        function formatCurrency(amount) {
+            return '₹' + amount.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+        }
+
+        window.updateLoan = function () {
+            const principal = parseFloat(document.getElementById('loanAmount').value);
+            const annualRate = parseFloat(document.getElementById('interestRate').value);
+            const years = parseFloat(document.getElementById('tenure').value);
+
+            document.getElementById('loanAmountValue').textContent = formatCurrency(principal);
+            document.getElementById('interestRateValue').textContent = annualRate + '%';
+            document.getElementById('tenureValue').textContent = years + ' years';
+
+            const monthlyRate = annualRate / 12 / 100;
+            const months = years * 12;
+
+            const emi = principal * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
+            const totalAmount = emi * months;
+            const totalInterest = totalAmount - principal;
+
+            document.getElementById('emiValue').textContent = formatCurrency(emi);
+            document.getElementById('principalAmount').textContent = formatCurrency(principal);
+            document.getElementById('totalInterest').textContent = formatCurrency(totalInterest);
+            document.getElementById('totalAmount').textContent = formatCurrency(totalAmount);
+        };
+
+        updateLoan();
+
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => item.classList.toggle('open'));
+        });
+    })();
+</script>
+<!--@end:extra_js-->

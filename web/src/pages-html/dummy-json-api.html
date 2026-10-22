@@ -1,0 +1,738 @@
+<!--@block:title-->Dummy JSON API – Free JSON API for Testing & Development<!--@end:title-->
+<!--@block:meta_title-->Dummy JSON API – Free JSON API for Testing & Development<!--@end:meta_title-->
+<!--@block:meta_description-->Free JSON API for developers. Ready-to-use fake JSON endpoints for testing,
+prototyping, and frontend/backend development. No auth required.<!--@end:meta_description-->
+<!--@block:meta_keywords-->dummy json api, fake json api, mock json api, json api for testing, sample json api, json api
+endpoint<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/dummy-json-api/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Dummy JSON API",
+  "description": "Free JSON API that returns fake JSON data for testing and development. Ready-to-use endpoints for users, products, posts, comments, todos, and companies.",
+  "url": "https://jsonformatterspro.com/dummy-json-api/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "JSON Formatters Pro"
+  },
+    "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jsonformatterspro.com/dummy-json-api/"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://jsonformatterspro.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Dummy JSON API",
+      "item": "https://jsonformatterspro.com/dummy-json-api/"
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a dummy JSON API?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A dummy JSON API is a web service that returns fake but realistic-looking JSON data. Developers use it for testing, prototyping, and development without needing real backend data or authentication."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this Dummy JSON API free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, this Dummy JSON API is completely free to use. There's no signup, no API key required, and no usage limits for reasonable development use."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need authentication to use this API?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No authentication is required. Simply make HTTP requests to the API endpoints and receive JSON responses immediately."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is this different from a JSON generator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A JSON generator is a UI tool where you manually configure and generate data. A JSON API is an endpoint you call programmatically from your code to get fake data automatically."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use this API in production?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This API is designed for testing and development only. Do not use it in production environments as uptime and data consistency are not guaranteed."
+      }
+    }
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .content-section {
+        max-width: 900px;
+        margin: 0 auto 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .content-section h2 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+
+    .content-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .content-section ul {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .content-section li {
+        margin-bottom: 0.5rem;
+    }
+
+    .endpoint-box {
+        background: #1e1e2e;
+        border-radius: var(--radius-md);
+        padding: 1.25rem;
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .endpoint-method {
+        display: inline-block;
+        background: #22c55e;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+    }
+
+    .endpoint-url {
+        color: #cdd6f4;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.95rem;
+    }
+
+    .json-response {
+        background: #1e1e2e;
+        color: #cdd6f4;
+        padding: 1.25rem;
+        border-radius: var(--radius-md);
+        overflow-x: auto;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        margin: 1rem 0;
+        white-space: pre;
+    }
+
+    /* Endpoints Grid */
+    .endpoints-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .endpoint-card {
+        padding: 1.25rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+        transition: all 0.2s ease;
+    }
+
+    .endpoint-card:hover {
+        border-color: var(--color-primary);
+    }
+
+    .endpoint-card h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .endpoint-card code {
+        display: block;
+        padding: 0.5rem 0.75rem;
+        background: var(--color-bg);
+        border-radius: var(--radius-sm);
+        font-size: 0.8rem;
+        margin-bottom: 0.75rem;
+        font-family: 'SF Mono', monospace;
+        color: var(--color-primary);
+    }
+
+    .endpoint-card p {
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
+    /* Use Cases Grid */
+    .use-case-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .use-case-card {
+        padding: 1rem;
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+    }
+
+    .use-case-card strong {
+        display: block;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+    }
+
+    .use-case-card p {
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    /* Playground CTA */
+    .playground-cta {
+        text-align: center;
+        padding: 2.5rem 2rem;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        margin: 2rem auto;
+        max-width: 900px;
+    }
+
+    .playground-cta h2 {
+        font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-text);
+    }
+
+    .playground-cta p {
+        color: var(--color-text-secondary);
+        margin-bottom: 1.5rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .playground-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border: none;
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        transition: all 250ms ease;
+    }
+
+    .playground-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    /* Code Examples */
+    .lang-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .lang-tab {
+        padding: 0.5rem 1rem;
+        background: var(--color-surface-alt);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        color: var(--color-text-secondary);
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .lang-tab:hover {
+        border-color: var(--color-primary);
+        color: var(--color-text);
+    }
+
+    .lang-tab.active {
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+        color: white;
+    }
+
+    .lang-code {
+        position: relative;
+    }
+
+    .copy-code-btn {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        background: rgba(99, 102, 241, 0.3);
+        border: 1px solid rgba(99, 102, 241, 0.5);
+        color: #a5b4fc;
+        padding: 0.5rem;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .copy-code-btn:hover {
+        background: rgba(99, 102, 241, 0.5);
+        border-color: var(--color-primary);
+    }
+
+    /* FAQ Section */
+    .faq-item {
+        border-bottom: 1px solid var(--color-border);
+        padding: 1rem 0;
+    }
+
+    .faq-item:last-child {
+        border-bottom: none;
+    }
+
+    .faq-item h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+    }
+
+    .faq-item p {
+        margin: 0;
+    }
+
+    @media (max-width: 768px) {
+        .tool-header h1 {
+            font-size: 1.75rem;
+        }
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header">
+    <h1>Dummy JSON API – Free JSON API for Testing</h1>
+    <p>Free fake JSON API for developers. Get realistic mock data from ready-to-use API endpoints for testing,
+        prototyping, and development. No authentication required.</p>
+</div>
+
+<!-- How It Works Section -->
+<div class="content-section">
+    <h2>How It Works</h2>
+    <p>
+        Using the Dummy JSON API is simple. Just make an HTTP GET request to any of our endpoints, and you'll receive
+        JSON data instantly. Here's the basic workflow:
+    </p>
+
+    <div class="use-case-grid" style="margin-bottom: 1.5rem;">
+        <div class="use-case-card">
+            <strong>1️⃣ Choose an Endpoint</strong>
+            <p>Pick from Users, Products, Posts, Comments, Todos, or Companies</p>
+        </div>
+        <div class="use-case-card">
+            <strong>2️⃣ Make a Request</strong>
+            <p>Call the endpoint URL from your browser, cURL, or code</p>
+        </div>
+        <div class="use-case-card">
+            <strong>3️⃣ Get JSON Data</strong>
+            <p>Receive realistic, randomly-generated JSON response</p>
+        </div>
+        <div class="use-case-card">
+            <strong>4️⃣ Use in Your App</strong>
+            <p>Parse the data and use it in your frontend or tests</p>
+        </div>
+    </div>
+
+    <p><strong>Key Features:</strong></p>
+    <ul>
+        <li><strong>No Authentication:</strong> Just call the URL – no API keys, tokens, or signup required</li>
+        <li><strong>Customizable Count:</strong> Use <code>?count=10</code> to specify how many records you want (1-100)
+        </li>
+        <li><strong>Field Selection:</strong> Use <code>?fields=id,name,email</code> to return only specific fields</li>
+        <li><strong>CORS Enabled:</strong> Works directly from browser-based JavaScript applications</li>
+        <li><strong>Realistic Data:</strong> Names, emails, dates, and IDs that look real for better testing</li>
+        <li><strong>Image URLs:</strong> User avatars, product images, and company logos included</li>
+    </ul>
+
+    <div class="endpoint-box">
+        <span class="endpoint-method">GET</span>
+        <span class="endpoint-url">https://jsonformatterspro.com/api/dummy-json/users/?count=5&fields=id,name,email</span>
+    </div>
+</div>
+
+<!-- Prominent Playground CTA at Top -->
+<div class="playground-cta" style="margin-top: 0; margin-bottom: 2rem;">
+    <h2>🚀 Try the Interactive Playground</h2>
+    <p>Test all endpoints live in your browser, generate code snippets, and explore API responses in real-time.</p>
+    <a href="/dummy-json-api/playground/" class="playground-btn">
+        Open API Playground →
+    </a>
+</div>
+
+<!-- Introduction -->
+<div class="content-section">
+    <h2>What is the Dummy JSON API?</h2>
+    <p>
+        The <strong>Dummy JSON API</strong> is a free web service that returns fake but realistic-looking JSON data.
+        Unlike a UI-based generator, this <strong>mock JSON API</strong> can be called directly from your code, making
+        it perfect for automated testing, CI/CD pipelines, and development workflows.
+    </p>
+    <p>
+        All data returned is randomly generated – no real user information is ever used. This makes it ideal for
+        prototyping, testing frontend components, mocking backend responses, and creating demo environments without
+        privacy concerns.
+    </p>
+    <p><strong>Who is this for?</strong></p>
+    <ul>
+        <li>Frontend developers building UI components</li>
+        <li>Backend developers testing API integrations</li>
+        <li>QA engineers running automated tests</li>
+        <li>Mobile developers prototyping apps</li>
+        <li>DevOps teams setting up CI/CD pipelines</li>
+    </ul>
+</div>
+
+<!-- Use Cases Section -->
+<div class="content-section">
+    <h2>Common Use Cases</h2>
+    <p>
+        Developers use this <strong>JSON API for testing</strong> throughout the software development lifecycle:
+    </p>
+    <div class="use-case-grid">
+        <div class="use-case-card">
+            <strong>🧪 API Testing</strong>
+            <p>Test your API clients without needing a real backend</p>
+        </div>
+        <div class="use-case-card">
+            <strong>🎨 Frontend Development</strong>
+            <p>Build UI components with realistic placeholder data</p>
+        </div>
+        <div class="use-case-card">
+            <strong>⚙️ Mocking Backends</strong>
+            <p>Mock external service responses during development</p>
+        </div>
+        <div class="use-case-card">
+            <strong>📱 Mobile Apps</strong>
+            <p>Populate mobile app views while backend is in progress</p>
+        </div>
+        <div class="use-case-card">
+            <strong>🔄 QA Automation</strong>
+            <p>Create consistent test data for automated test suites</p>
+        </div>
+        <div class="use-case-card">
+            <strong>🎯 Demo Environments</strong>
+            <p>Populate demo apps with realistic-looking data</p>
+        </div>
+    </div>
+</div>
+
+<!-- Endpoint Overview -->
+<div class="content-section">
+    <h2>Available API Endpoints</h2>
+    <p>All endpoints are free, require no authentication, and return JSON data. Simply append <code>?count=N</code> to
+        specify the number of records.</p>
+
+    <div class="endpoints-grid">
+        <div class="endpoint-card">
+            <h3>👤 Users</h3>
+            <code>/api/dummy-json/users/</code>
+            <p>Random user profiles with name, email, phone, company, and status.</p>
+        </div>
+        <div class="endpoint-card">
+            <h3>📦 Products</h3>
+            <code>/api/dummy-json/products/</code>
+            <p>Product data with name, price, category, stock, and rating.</p>
+        </div>
+        <div class="endpoint-card">
+            <h3>📝 Posts</h3>
+            <code>/api/dummy-json/posts/</code>
+            <p>Blog posts with title, body, author, date, and view count.</p>
+        </div>
+        <div class="endpoint-card">
+            <h3>💬 Comments</h3>
+            <code>/api/dummy-json/comments/</code>
+            <p>Comments with name, email, body, and post reference.</p>
+        </div>
+        <div class="endpoint-card">
+            <h3>✅ Todos</h3>
+            <code>/api/dummy-json/todos/</code>
+            <p>Todo items with title, completed status, and priority.</p>
+        </div>
+        <div class="endpoint-card">
+            <h3>🏢 Companies</h3>
+            <code>/api/dummy-json/companies/</code>
+            <p>Company data with name, industry, employees, and revenue.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Example Responses -->
+<div class="content-section">
+    <h2>Example API Responses</h2>
+
+    <h3 style="font-size: 1rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Users Endpoint Response</h3>
+    <div class="endpoint-box">
+        <span class="endpoint-method">GET</span>
+        <span class="endpoint-url">/api/dummy-json/users/?count=3</span>
+    </div>
+    <pre class="json-response">{
+  "success": true,
+  "count": 3,
+  "data": [
+    {
+      "id": 1,
+      "name": "Emma Wilson",
+      "email": "emma.wilson@example.com",
+      "phone": "+1-555-0123",
+      "company": "TechStart Inc",
+      "status": "active"
+    },
+    {
+      "id": 2,
+      "name": "James Rodriguez",
+      "email": "j.rodriguez@example.com",
+      "phone": "+1-555-0456",
+      "company": "DataFlow Systems",
+      "status": "active"
+    },
+    {
+      "id": 3,
+      "name": "Sarah Kim",
+      "email": "sarah.kim@example.com",
+      "phone": "+1-555-0789",
+      "company": "CloudNine Labs",
+      "status": "inactive"
+    }
+  ]
+}</pre>
+
+    <h3 style="font-size: 1rem; margin-top: 2rem; margin-bottom: 0.75rem;">Products Endpoint Response</h3>
+    <div class="endpoint-box">
+        <span class="endpoint-method">GET</span>
+        <span class="endpoint-url">/api/dummy-json/products/?count=2</span>
+    </div>
+    <pre class="json-response">{
+  "success": true,
+  "count": 2,
+  "data": [
+    {
+      "id": 1,
+      "name": "Wireless Headphones Pro",
+      "price": 149.99,
+      "category": "Electronics",
+      "inStock": true,
+      "rating": 4.7
+    },
+    {
+      "id": 2,
+      "name": "Ergonomic Chair Max",
+      "price": 299.99,
+      "category": "Furniture",
+      "inStock": true,
+      "rating": 4.5
+    }
+  ]
+}</pre>
+</div>
+
+<!-- Playground CTA -->
+<div class="playground-cta">
+    <h2>🚀 Try the Interactive Playground</h2>
+    <p>
+        Test all API endpoints live, customize options, and see responses in real-time.
+        Select fields, adjust record counts, and copy generated URLs instantly.
+    </p>
+    <a href="/dummy-json-api/playground/" class="playground-btn">
+        Open API Playground →
+    </a>
+</div>
+
+<!-- FAQ Section -->
+<div class="content-section">
+    <h2>Dummy JSON API FAQ</h2>
+
+    <div class="faq-item">
+        <h3>What is a dummy JSON API?</h3>
+        <p>A dummy JSON API is a web service that returns fake but realistic-looking JSON data. Developers use it for
+            testing, prototyping, and development without needing real backend data.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Is this Dummy JSON API free?</h3>
+        <p>Yes, this API is completely free to use. There's no signup, no API key required, and no usage limits for
+            reasonable development use.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Do I need authentication to use this API?</h3>
+        <p>No authentication is required. Simply make HTTP requests to the API endpoints and receive JSON responses
+            immediately.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>How is this different from a JSON generator?</h3>
+        <p>A <a href="/dummy-json/" style="color: var(--color-primary);">JSON generator</a> is a UI tool where you
+            manually configure and generate data. A JSON API is an endpoint you call programmatically from your code.
+        </p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Can I use this API in production?</h3>
+        <p>This API is designed for testing and development only. Do not use it in production environments as uptime and
+            data consistency are not guaranteed.</p>
+    </div>
+</div>
+
+<!-- Related Tools -->
+<div class="content-section">
+    <h2>🔧 Related JSON Tools</h2>
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <a href="/dummy-json/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>🎲 Dummy JSON Generator</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Generate custom fake
+                JSON</p>
+        </a>
+        <a href="/mock-api/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>🛠️ Mock API Generator</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Create custom API
+                endpoints</p>
+        </a>
+        <a href="/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>📝 JSON Formatter</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Format & beautify
+                JSON</p>
+        </a>
+        <a href="/json-schema-validator/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>📐 JSON Schema Validator</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Validate against
+                schema</p>
+        </a>
+        <a href="/json-diff/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>🔍 JSON Diff</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Compare two JSON
+                files</p>
+        </a>
+    </div>
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script>
+    const copyIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+    const checkIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+
+    // Language tab switching
+    document.querySelectorAll('.lang-tab').forEach(tab => {
+        tab.addEventListener('click', function () {
+            const lang = this.dataset.lang;
+            document.querySelectorAll('.lang-code').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.lang-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById('code-' + lang).style.display = 'block';
+            this.classList.add('active');
+        });
+    });
+
+    function copyCode(lang) {
+        const code = document.querySelector('#code-' + lang + ' pre').textContent;
+        const btn = document.querySelector('#code-' + lang + ' .copy-code-btn');
+        navigator.clipboard.writeText(code).then(() => {
+            btn.innerHTML = checkIcon;
+            setTimeout(() => { btn.innerHTML = copyIcon; }, 2000);
+        });
+    }
+</script>
+<!--@end:extra_js-->

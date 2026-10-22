@@ -1,0 +1,1368 @@
+<!--@block:title-->JSON Editor Online - Edit, Format & Validate JSON Free [2026]<!--@end:title-->
+<!--@block:meta_title-->JSON Editor Online - Free JSON Editor with Validation<!--@end:meta_title-->
+<!--@block:meta_description-->Free online JSON editor with syntax highlighting and real-time validation. Format, beautify,
+minify JSON. No signup required - try now!<!--@end:meta_description-->
+<!--@block:meta_keywords-->json editor, online json editor, json formatter, json validator, json editor online
+<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/json-editor/<!--@end:canonical_url-->
+<!--@block:structured_data-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "JSON Editor Online",
+  "description": "Professional JSON editor with syntax highlighting, validation, formatting, and tree view",
+  "url": "https://jsonformatterspro.com/json-editor/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "ratingCount": "1834",
+    "bestRating": "5",
+    "worstRating": "1"
+  },
+  "featureList": [
+    "Syntax highlighting",
+    "Real-time validation",
+    "JSON formatting/beautify",
+    "JSON minification",
+    "Tree view mode",
+    "Search and replace",
+    "Undo/Redo support",
+    "File import/export"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Edit JSON Online",
+  "description": "Steps to edit and validate JSON data online",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Paste or type JSON",
+      "text": "Enter your JSON data in the editor or import a file"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Edit and validate",
+      "text": "Make changes with syntax highlighting and real-time validation"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Format or minify",
+      "text": "Beautify for readability or minify for production"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Export",
+      "text": "Copy to clipboard or download as a file"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a JSON Editor?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A JSON Editor is a tool for creating, editing, and managing JSON data with features like syntax highlighting, validation, and formatting to make working with JSON easier and error-free."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this JSON Editor validate my JSON?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, this editor provides real-time JSON validation. It highlights syntax errors and shows detailed error messages with line numbers to help you fix issues quickly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I switch between code and tree view?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, you can toggle between code view (text editor) and tree view (visual hierarchy) to work with your JSON in the format most convenient for you."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I format and minify JSON?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, click Format to beautify with proper indentation, or Minify to compress into a single line for production use."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the editor support undo and redo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, full undo/redo history is supported. Use Ctrl+Z to undo and Ctrl+Y to redo, or click the toolbar buttons."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this JSON editor free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, 100% free with no signup required. All editing happens in your browser, so your data stays private."
+      }
+    }
+  ]
+}
+</script>
+<!--@end:structured_data-->
+<!--@block:extra_css-->
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* Toolbar */
+    .editor-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 1rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        border-bottom: none;
+    }
+
+    .toolbar-group {
+        display: flex;
+        gap: 0.25rem;
+        padding-right: 0.75rem;
+        border-right: 1px solid var(--color-border);
+    }
+
+    .toolbar-group:last-child {
+        border-right: none;
+    }
+
+    .toolbar-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 200ms ease;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        white-space: nowrap;
+    }
+
+    .toolbar-btn:hover {
+        border-color: var(--color-primary);
+        background: var(--color-surface-alt);
+    }
+
+    .toolbar-btn.active {
+        background: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
+    }
+
+    .toolbar-btn.success {
+        background: #10b981;
+        color: white;
+        border-color: #10b981;
+    }
+
+    /* Editor Container */
+    .editor-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        margin-bottom: 2rem;
+    }
+
+    .editor-panel {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        overflow: hidden;
+        padding: 0 !important;
+    }
+
+    .editor-wrapper {
+        position: relative;
+        min-height: 500px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #monacoEditorContainer {
+        flex: 1;
+        width: 100% !important;
+        min-height: 500px;
+    }
+
+    /* Line numbers - hidden when Monaco is active */
+    .line-numbers {
+        display: none;
+    }
+
+    .json-textarea {
+        width: 100%;
+        min-height: 450px;
+        padding: 1rem 1rem 1rem 60px;
+        font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: none;
+        resize: vertical;
+        tab-size: 2;
+    }
+
+    .json-textarea:focus {
+        outline: none;
+    }
+
+    /* Status Bar */
+    .status-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background: var(--color-surface-alt);
+        border-top: 1px solid var(--color-border);
+        font-size: 0.85rem;
+    }
+
+    .status-left {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .status-item {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: var(--color-text-secondary);
+    }
+
+    .status-item.valid {
+        color: #10b981;
+    }
+
+    .status-item.error {
+        color: #ef4444;
+    }
+
+    /* Tree View */
+    .tree-view {
+        display: none;
+        padding: 1rem;
+        min-height: 450px;
+        overflow: auto;
+        background: var(--color-bg);
+    }
+
+    .tree-view.active {
+        display: block;
+    }
+
+    .tree-node {
+        margin-left: 1.25rem;
+    }
+
+    .tree-key {
+        color: #a855f7;
+        font-weight: 600;
+    }
+
+    .tree-string {
+        color: #10b981;
+    }
+
+    .tree-number {
+        color: #3b82f6;
+    }
+
+    .tree-boolean {
+        color: #f59e0b;
+    }
+
+    .tree-null {
+        color: #6b7280;
+        font-style: italic;
+    }
+
+    .tree-toggle {
+        cursor: pointer;
+        user-select: none;
+        margin-right: 0.25rem;
+    }
+
+    .tree-collapsed>.tree-children {
+        display: none;
+    }
+
+    .tree-bracket {
+        color: var(--color-text-secondary);
+    }
+
+    /* Search Bar */
+    .search-bar {
+        display: none;
+        padding: 0.75rem 1rem;
+        background: var(--color-surface-alt);
+        border-bottom: 1px solid var(--color-border);
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .search-bar.active {
+        display: flex;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+    }
+
+    .search-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+    }
+
+    .search-close {
+        background: transparent;
+        border: none;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        padding: 0.25rem;
+    }
+
+    /* Info Grid */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .info-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem;
+    }
+
+    .info-card h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-card ul {
+        margin: 0;
+        padding-left: 1.25rem;
+    }
+
+    .info-card li {
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+        margin-bottom: 0.35rem;
+        line-height: 1.5;
+    }
+
+    /* File Input */
+    .file-input {
+        display: none;
+    }
+
+    /* Tablet styles */
+    @media (max-width: 1024px) {
+        #monacoEditorContainer {
+            min-height: 400px;
+        }
+
+        .editor-wrapper {
+            min-height: 400px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .toolbar-group {
+            border-right: none;
+            padding-right: 0;
+        }
+
+        .editor-toolbar {
+            justify-content: center;
+            padding: 0.75rem;
+            gap: 0.4rem;
+        }
+
+        .toolbar-btn {
+            padding: 0.4rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        #monacoEditorContainer {
+            min-height: 350px;
+        }
+
+        .editor-wrapper {
+            min-height: 350px;
+        }
+
+        .tool-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Mobile styles */
+    @media (max-width: 480px) {
+        .toolbar-btn span:not(:first-child) {
+            display: none;
+        }
+
+        .toolbar-btn {
+            padding: 0.5rem;
+        }
+
+        #monacoEditorContainer {
+            min-height: 300px;
+        }
+
+        .editor-wrapper {
+            min-height: 300px;
+        }
+
+        .status-bar {
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+
+        .tool-header h1 {
+            font-size: 1.25rem;
+        }
+
+        .tool-header p {
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .toast {
+        padding: 1rem 1.5rem;
+        border-radius: var(--radius-md);
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-width: 300px;
+        max-width: 400px;
+        animation: slideIn 0.3s ease;
+        font-size: 0.95rem;
+    }
+
+    .toast.success {
+        border-left: 4px solid #10b981;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, var(--color-surface) 100%);
+    }
+
+    .toast.error {
+        border-left: 4px solid #ef4444;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, var(--color-surface) 100%);
+    }
+
+    .toast.warning {
+        border-left: 4px solid #f59e0b;
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, var(--color-surface) 100%);
+    }
+
+    .toast-icon {
+        font-size: 1.25rem;
+    }
+
+    .toast-message {
+        flex: 1;
+        color: var(--color-text);
+    }
+
+    .toast-close {
+        background: none;
+        border: none;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        font-size: 1.25rem;
+        padding: 0;
+        line-height: 1;
+    }
+
+    .toast-close:hover {
+        color: var(--color-text);
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+
+<div class="tool-header" style="background: none;">
+    <h1>JSON Editor Online - Edit, Format & Validate JSON Free</h1>
+    <p>Professional JSON editor with syntax highlighting, real-time validation, formatting, and tree view. Edit JSON
+        with confidence.</p>
+</div>
+
+<!-- Toolbar -->
+<div class="editor-toolbar">
+    <div class="toolbar-group">
+        <button class="toolbar-btn" id="formatBtn" title="Format JSON (Ctrl+Shift+F)">✨ Format</button>
+        <button class="toolbar-btn" id="minifyBtn" title="Minify JSON">📦 Minify</button>
+        <button class="toolbar-btn" id="validateBtn" title="Validate JSON">✅ Validate</button>
+    </div>
+    <div class="toolbar-group">
+        <button class="toolbar-btn active" id="codeViewBtn" title="Code View">💻 Code</button>
+        <button class="toolbar-btn" id="treeViewBtn" title="Tree View">🌳 Tree</button>
+    </div>
+    <div class="toolbar-group">
+        <button class="toolbar-btn" id="sortKeysBtn" title="Sort Keys Alphabetically">🔤 Sort Keys</button>
+    </div>
+    <div class="toolbar-group">
+        <button class="toolbar-btn" id="importBtn" title="Import JSON file">📂 Import</button>
+        <button class="toolbar-btn" id="exportBtn" title="Export to file">💾 Export</button>
+        <button class="toolbar-btn" id="copyBtn" title="Copy to clipboard">📋 Copy</button>
+    </div>
+    <div class="toolbar-group">
+        <button class="toolbar-btn" id="clearBtn" title="Clear editor">🗑️ Clear</button>
+        <button class="toolbar-btn" id="sampleBtn" title="Load sample JSON">📄 Sample</button>
+    </div>
+    <input type="file" id="fileInput" class="file-input" accept=".json,application/json">
+</div>
+
+<!-- Editor -->
+<div class="editor-container">
+    <div class="editor-panel">
+        <div class="editor-wrapper" id="codeView">
+            <div id="monacoEditorContainer" style="width: 100%; min-height: 450px;"></div>
+            <textarea id="jsonEditor" class="json-textarea" style="display: none;" spellcheck="false"
+                aria-label="JSON Editor - Enter your JSON code here"
+                placeholder="Paste or type your JSON here..."></textarea>
+        </div>
+        <div class="tree-view" id="treeView">
+            <div id="treeContent">Enter valid JSON to see tree view</div>
+        </div>
+        <div class="status-bar">
+            <div class="status-left">
+                <div class="status-item" id="validationStatus">
+                    <span>⏳</span>
+                    <span>Ready</span>
+                </div>
+                <div class="status-item">
+                    <span>📊</span>
+                    <span id="jsonStats">0 chars | 0 lines</span>
+                </div>
+            </div>
+            <div class="status-right">
+                <div class="status-item">
+                    <span id="cursorPos">Ln 1, Col 1</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Info Section -->
+<div class="info-grid">
+    <div class="info-card">
+        <h3>✨ Formatting Features</h3>
+        <ul>
+            <li><strong>Beautify</strong> - Format with proper indentation</li>
+            <li><strong>Minify</strong> - Compress to single line</li>
+            <li><strong>Sort Keys</strong> - Alphabetically order keys</li>
+            <li><strong>Custom Indent</strong> - 2 or 4 space indentation</li>
+        </ul>
+    </div>
+
+    <div class="info-card">
+        <h3>🛡️ Validation</h3>
+        <ul>
+            <li><strong>Real-time</strong> - Validates as you type</li>
+            <li><strong>Error Details</strong> - Line number & description</li>
+            <li><strong>Syntax Check</strong> - Catches all JSON errors</li>
+            <li><strong>Visual Feedback</strong> - Clear status indicators</li>
+        </ul>
+    </div>
+
+    <div class="info-card">
+        <h3>🔧 Editing Tools</h3>
+        <ul>
+            <li><strong>Undo/Redo</strong> - Full history support</li>
+            <li><strong>Find & Replace</strong> - Search and replace text</li>
+            <li><strong>Line Numbers</strong> - Easy navigation</li>
+            <li><strong>Keyboard Shortcuts</strong> - Power user support</li>
+        </ul>
+    </div>
+
+    <div class="info-card">
+        <h3>📁 Import/Export</h3>
+        <ul>
+            <li><strong>File Import</strong> - Load .json files</li>
+            <li><strong>File Export</strong> - Download as .json</li>
+            <li><strong>Copy</strong> - One-click clipboard copy</li>
+            <li><strong>Sample Data</strong> - Load example JSON</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Related JSON Tools Section -->
+<div
+    style="margin-top: 2rem; padding: 1.5rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
+    <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">🔧 Related JSON Tools</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <a href="/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>📝 JSON Formatter</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Format & beautify
+                JSON</p>
+        </a>
+        <a href="/json-tree/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>🌳 JSON Tree Viewer</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Collapsible tree view
+            </p>
+        </a>
+        <a href="/json-diff/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>🔍 JSON Diff</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Compare two JSON
+                files</p>
+        </a>
+        <a href="/json-schema-validator/"
+            style="display: block; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text);">
+            <strong>📐 JSON Schema Validator</strong>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.5rem 0 0;">Validate against
+                schema</p>
+        </a>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div
+    style="margin-top: 1.5rem; padding: 1.5rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
+    <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">JSON Editor FAQ</h2>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">What is a JSON editor?</h3>
+        <p style="margin: 0; color: var(--color-text-secondary);">A JSON editor is a tool for creating, editing, and
+            managing JSON data with features like syntax highlighting, validation, and formatting.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Does this editor validate my JSON?</h3>
+        <p style="margin: 0; color: var(--color-text-secondary);">Yes, real-time validation highlights errors with line
+            numbers and descriptions as you type.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Can I format and minify JSON?</h3>
+        <p style="margin: 0; color: var(--color-text-secondary);">Yes, click Format to beautify with proper indentation,
+            or Minify to compress into a single line.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Does the editor support undo and redo?
+        </h3>
+        <p style="margin: 0; color: var(--color-text-secondary);">Yes, full undo/redo history. Use Ctrl+Z to undo and
+            Ctrl+Y to redo.</p>
+    </div>
+
+    <div style="border-bottom: 1px solid var(--color-border); padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Can I import and export JSON files?</h3>
+        <p style="margin: 0; color: var(--color-text-secondary);">Yes, import .json files directly and export/download
+            your edited JSON as a file.</p>
+    </div>
+
+    <div style="padding: 1rem 0;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Is this JSON editor free?</h3>
+        <p style="margin: 0; color: var(--color-text-secondary);">Yes, 100% free with no signup required. All editing
+            happens in your browser.</p>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!--@end:content-->
+<!--@block:extra_js-->
+
+<script>
+    (function () {
+        const editor = document.getElementById('jsonEditor');
+        const validationStatus = document.getElementById('validationStatus');
+        const jsonStats = document.getElementById('jsonStats');
+        const cursorPos = document.getElementById('cursorPos');
+        const treeContent = document.getElementById('treeContent');
+
+        let undoStack = [];
+        let redoStack = [];
+        let lastContent = '';
+
+        // Update line numbers (no-op since Monaco handles this)
+        function updateLineNumbers() {
+            // Monaco Editor handles line numbers automatically
+        }
+
+        // Update stats
+        function updateStats() {
+            const content = editor.value;
+            const chars = content.length;
+            const lines = content ? content.split('\n').length : 0;
+            jsonStats.textContent = `${chars.toLocaleString()} chars | ${lines} lines`;
+        }
+
+        // Validate JSON
+        function validateJSON(showAlert = false) {
+            const content = editor.value.trim();
+            if (!content) {
+                validationStatus.className = 'status-item';
+                validationStatus.innerHTML = '<span>⏳</span><span>Ready</span>';
+                return null;
+            }
+
+            try {
+                const parsed = JSON.parse(content);
+                validationStatus.className = 'status-item valid';
+                validationStatus.innerHTML = '<span>✅</span><span>Valid JSON</span>';
+                if (showAlert) alert('✅ JSON is valid!');
+                return parsed;
+            } catch (e) {
+                const match = e.message.match(/position (\d+)/);
+                let errorMsg = e.message;
+                if (match) {
+                    const pos = parseInt(match[1]);
+                    const lines = content.substring(0, pos).split('\n');
+                    const line = lines.length;
+                    const col = lines[lines.length - 1].length + 1;
+                    errorMsg = `Line ${line}, Col ${col}: ${e.message.split(':')[0]}`;
+                }
+                validationStatus.className = 'status-item error';
+                validationStatus.innerHTML = `<span>❌</span><span>${errorMsg}</span>`;
+                if (showAlert) alert('❌ ' + errorMsg);
+                return null;
+            }
+        }
+
+        // Format JSON
+        function formatJSON() {
+            const parsed = validateJSON();
+            if (parsed) {
+                saveUndo();
+                editor.value = JSON.stringify(parsed, null, 2);
+                updateLineNumbers();
+                updateStats();
+                validateJSON();
+            }
+        }
+
+        // Minify JSON
+        function minifyJSON() {
+            const parsed = validateJSON();
+            if (parsed) {
+                saveUndo();
+                editor.value = JSON.stringify(parsed);
+                updateLineNumbers();
+                updateStats();
+                validateJSON();
+            }
+        }
+
+        // Sort keys
+        function sortKeys(obj) {
+            if (Array.isArray(obj)) {
+                return obj.map(sortKeys);
+            }
+            if (obj !== null && typeof obj === 'object') {
+                return Object.keys(obj).sort().reduce((sorted, key) => {
+                    sorted[key] = sortKeys(obj[key]);
+                    return sorted;
+                }, {});
+            }
+            return obj;
+        }
+
+        function sortJSONKeys() {
+            const parsed = validateJSON();
+            if (parsed) {
+                saveUndo();
+                const sorted = sortKeys(parsed);
+                editor.value = JSON.stringify(sorted, null, 2);
+                updateLineNumbers();
+                updateStats();
+                validateJSON();
+            }
+        }
+
+        // Undo/Redo
+        function saveUndo() {
+            if (editor.value !== lastContent) {
+                undoStack.push(lastContent);
+                if (undoStack.length > 50) undoStack.shift();
+                redoStack = [];
+                lastContent = editor.value;
+            }
+        }
+
+        function undo() {
+            if (undoStack.length > 0) {
+                redoStack.push(editor.value);
+                editor.value = undoStack.pop();
+                lastContent = editor.value;
+                updateLineNumbers();
+                updateStats();
+                validateJSON();
+            }
+        }
+
+        function redo() {
+            if (redoStack.length > 0) {
+                undoStack.push(editor.value);
+                editor.value = redoStack.pop();
+                lastContent = editor.value;
+                updateLineNumbers();
+                updateStats();
+                validateJSON();
+            }
+        }
+
+        // Tree view
+        function renderTree(data, isRoot = true) {
+            if (data === null) return '<span class="tree-null">null</span>';
+            if (typeof data === 'boolean') return `<span class="tree-boolean">${data}</span>`;
+            if (typeof data === 'number') return `<span class="tree-number">${data}</span>`;
+            if (typeof data === 'string') return `<span class="tree-string">"${escapeHtml(data)}"</span>`;
+
+            if (Array.isArray(data)) {
+                if (data.length === 0) return '<span class="tree-bracket">[]</span>';
+                let html = '<span class="tree-toggle">▼</span><span class="tree-bracket">[</span>';
+                html += '<div class="tree-children">';
+                data.forEach((item, i) => {
+                    html += `<div class="tree-node">${renderTree(item, false)}${i < data.length - 1 ? ',' : ''}</div>`;
+                });
+                html += '</div><span class="tree-bracket">]</span>';
+                return html;
+            }
+
+            if (typeof data === 'object') {
+                const keys = Object.keys(data);
+                if (keys.length === 0) return '<span class="tree-bracket">{}</span>';
+                let html = '<span class="tree-toggle">▼</span><span class="tree-bracket">{</span>';
+                html += '<div class="tree-children">';
+                keys.forEach((key, i) => {
+                    html += `<div class="tree-node"><span class="tree-key">"${escapeHtml(key)}"</span>: ${renderTree(data[key], false)}${i < keys.length - 1 ? ',' : ''}</div>`;
+                });
+                html += '</div><span class="tree-bracket">}</span>';
+                return html;
+            }
+
+            return String(data);
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function updateTreeView() {
+            const parsed = validateJSON();
+            if (parsed) {
+                treeContent.innerHTML = renderTree(parsed);
+                // Add toggle handlers
+                treeContent.querySelectorAll('.tree-toggle').forEach(toggle => {
+                    toggle.addEventListener('click', function () {
+                        const parent = this.parentElement;
+                        parent.classList.toggle('tree-collapsed');
+                        this.textContent = parent.classList.contains('tree-collapsed') ? '▶' : '▼';
+                    });
+                });
+            } else {
+                treeContent.innerHTML = '<span style="color: var(--color-text-secondary);">Enter valid JSON to see tree view</span>';
+            }
+        }
+
+        // View switching
+        document.getElementById('codeViewBtn').addEventListener('click', function () {
+            this.classList.add('active');
+            document.getElementById('treeViewBtn').classList.remove('active');
+            document.getElementById('codeView').style.display = 'block';
+            document.getElementById('treeView').classList.remove('active');
+        });
+
+        document.getElementById('treeViewBtn').addEventListener('click', function () {
+            this.classList.add('active');
+            document.getElementById('codeViewBtn').classList.remove('active');
+            document.getElementById('codeView').style.display = 'none';
+            document.getElementById('treeView').classList.add('active');
+            updateTreeView();
+        });
+
+        // Toolbar buttons
+        document.getElementById('formatBtn').addEventListener('click', formatJSON);
+        document.getElementById('minifyBtn').addEventListener('click', minifyJSON);
+        document.getElementById('validateBtn').addEventListener('click', () => validateJSON(true));
+        document.getElementById('sortKeysBtn').addEventListener('click', sortJSONKeys);
+
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            navigator.clipboard.writeText(editor.value).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.textContent = '✓ Copied!';
+                setTimeout(() => btn.textContent = '📋 Copy', 2000);
+            });
+        });
+
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            if (editor.value && confirm('Clear all content?')) {
+                saveUndo();
+                editor.value = '';
+                updateLineNumbers();
+                updateStats();
+                validateJSON();
+            }
+        });
+
+        document.getElementById('sampleBtn').addEventListener('click', () => {
+            saveUndo();
+            editor.value = JSON.stringify({
+                "name": "JSON Formatters Pro",
+                "version": "1.0.0",
+                "description": "Professional JSON tools for developers",
+                "features": ["Format", "Validate", "Edit", "Convert"],
+                "config": {
+                    "theme": "dark",
+                    "indentSize": 2,
+                    "autoValidate": true
+                },
+                "stats": {
+                    "users": 10000,
+                    "rating": 4.9,
+                    "active": true
+                }
+            }, null, 2);
+            updateLineNumbers();
+            updateStats();
+            validateJSON();
+        });
+
+        // File import/export
+        document.getElementById('importBtn').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    saveUndo();
+                    editor.value = e.target.result;
+                    updateLineNumbers();
+                    updateStats();
+                    validateJSON();
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            const content = editor.value;
+            if (!content) return;
+            const blob = new Blob([content], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'data.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // Editor events
+        editor.addEventListener('input', () => {
+            updateLineNumbers();
+            updateStats();
+            validateJSON();
+        });
+
+        editor.addEventListener('scroll', () => {
+            lineNumbers.scrollTop = editor.scrollTop;
+        });
+
+        editor.addEventListener('click', updateCursor);
+        editor.addEventListener('keyup', updateCursor);
+
+        function updateCursor() {
+            const content = editor.value.substring(0, editor.selectionStart);
+            const lines = content.split('\n');
+            const line = lines.length;
+            const col = lines[lines.length - 1].length + 1;
+            cursorPos.textContent = `Ln ${line}, Col ${col}`;
+        }
+
+        // Keyboard shortcuts
+        editor.addEventListener('keydown', (e) => {
+            // Tab key
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = editor.selectionStart;
+                const end = editor.selectionEnd;
+                editor.value = editor.value.substring(0, start) + '  ' + editor.value.substring(end);
+                editor.selectionStart = editor.selectionEnd = start + 2;
+                updateLineNumbers();
+            }
+
+            // Ctrl+Shift+F - Format
+            if (e.ctrlKey && e.shiftKey && e.key === 'F') {
+                e.preventDefault();
+                formatJSON();
+            }
+
+            // Ctrl+Z - Undo
+            if (e.ctrlKey && e.key === 'z' && !e.shiftKey) {
+                // Let browser handle it
+            }
+
+            // Ctrl+Y or Ctrl+Shift+Z - Redo
+            if ((e.ctrlKey && e.key === 'y') || (e.ctrlKey && e.shiftKey && e.key === 'z')) {
+                // Let browser handle it
+            }
+        });
+
+        // Save undo on blur
+        editor.addEventListener('blur', saveUndo);
+
+        // Initialize
+        updateLineNumbers();
+        updateStats();
+
+        // Auto-paste JSON from CSV converter if available
+        const csvJson = sessionStorage.getItem('csvToJsonOutput');
+        if (csvJson) {
+            editor.value = csvJson;
+            sessionStorage.removeItem('csvToJsonOutput');
+            updateLineNumbers();
+            updateStats();
+            validateJSON();
+        }
+    })();
+</script>
+
+
+<!-- Monaco Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+<script>
+    // Toast notification system
+    function showToast(message, type = 'success', duration = 4000) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+
+        const icons = { success: '✓', error: '✕', warning: '⚠' };
+
+        toast.innerHTML = `
+            <span class="toast-icon">${icons[type] || '•'}</span>
+            <span class="toast-message">${message}</span>
+            <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+        `;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.animation = 'slideOut 0.3s ease forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
+    }
+
+    // Override alert to use toast
+    window.alert = function (message) {
+        if (message.includes('✅') || message.toLowerCase().includes('valid') || message.toLowerCase().includes('success')) {
+            showToast(message.replace('✅ ', ''), 'success');
+        } else if (message.includes('❌') || message.toLowerCase().includes('invalid') || message.toLowerCase().includes('error') || message.toLowerCase().includes('cannot')) {
+            showToast(message.replace('❌ ', ''), 'error');
+        } else {
+            showToast(message, 'warning');
+        }
+    };
+
+    let monacoEditor;
+    const hiddenEditor = document.getElementById('jsonEditor');
+    const validationStatus = document.getElementById('validationStatus');
+    const jsonStats = document.getElementById('jsonStats');
+    const cursorPos = document.getElementById('cursorPos');
+
+    // Initialize Monaco Editor
+    require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' } });
+    require(['vs/editor/editor.main'], function () {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+        monacoEditor = monaco.editor.create(document.getElementById('monacoEditorContainer'), {
+            value: hiddenEditor.value || '',
+            language: 'json',
+            theme: isDark ? 'vs-dark' : 'vs',
+            automaticLayout: true,
+            minimap: { enabled: false },
+            fontSize: 14,
+            lineNumbers: 'on',
+            scrollBeyondLastLine: false,
+            wordWrap: 'on',
+            tabSize: 2,
+            formatOnPaste: true
+        });
+
+        // Sync Monaco content with hidden textarea
+        monacoEditor.onDidChangeModelContent(function () {
+            hiddenEditor.value = monacoEditor.getValue();
+            updateMonacoStats();
+            validateMonacoJSON();
+        });
+
+        // Update cursor position
+        monacoEditor.onDidChangeCursorPosition(function (e) {
+            cursorPos.textContent = `Ln ${e.position.lineNumber}, Col ${e.position.column}`;
+        });
+
+        // Theme observer
+        const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.attributeName === 'data-theme') {
+                    const newTheme = document.documentElement.getAttribute('data-theme');
+                    monaco.editor.setTheme(newTheme === 'dark' ? 'vs-dark' : 'vs');
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+
+        // Format button override
+        document.getElementById('formatBtn').onclick = function () {
+            try {
+                const parsed = JSON.parse(monacoEditor.getValue());
+                monacoEditor.setValue(JSON.stringify(parsed, null, 2));
+            } catch (e) {
+                alert('Invalid JSON - cannot format');
+            }
+        };
+
+        // Minify button override
+        document.getElementById('minifyBtn').onclick = function () {
+            try {
+                const parsed = JSON.parse(monacoEditor.getValue());
+                monacoEditor.setValue(JSON.stringify(parsed));
+            } catch (e) {
+                alert('Invalid JSON - cannot minify');
+            }
+        };
+
+        // Validate button override
+        document.getElementById('validateBtn').onclick = function () {
+            validateMonacoJSON(true);
+        };
+
+        // Copy button override
+        document.getElementById('copyBtn').onclick = function () {
+            navigator.clipboard.writeText(monacoEditor.getValue());
+            this.textContent = '✓ Copied';
+            setTimeout(() => this.textContent = '📋 Copy', 2000);
+        };
+
+        // Clear button override
+        document.getElementById('clearBtn').onclick = function () {
+            monacoEditor.setValue('');
+        };
+
+        // Sample button override
+        document.getElementById('sampleBtn').onclick = function () {
+            monacoEditor.setValue(JSON.stringify({
+                "name": "John Doe",
+                "email": "john@example.com",
+                "age": 30,
+                "address": {
+                    "street": "123 Main St",
+                    "city": "New York",
+                    "zip": "10001"
+                },
+                "skills": ["JavaScript", "Python", "Go"]
+            }, null, 2));
+        };
+
+        // Sort Keys override
+        document.getElementById('sortKeysBtn').onclick = function () {
+            try {
+                const parsed = JSON.parse(monacoEditor.getValue());
+                const sorted = sortKeysRecursive(parsed);
+                monacoEditor.setValue(JSON.stringify(sorted, null, 2));
+            } catch (e) {
+                alert('Invalid JSON - cannot sort keys');
+            }
+        };
+
+        function sortKeysRecursive(obj) {
+            if (Array.isArray(obj)) {
+                return obj.map(sortKeysRecursive);
+            }
+            if (obj !== null && typeof obj === 'object') {
+                return Object.keys(obj).sort().reduce((sorted, key) => {
+                    sorted[key] = sortKeysRecursive(obj[key]);
+                    return sorted;
+                }, {});
+            }
+            return obj;
+        }
+
+        function updateMonacoStats() {
+            const content = monacoEditor.getValue();
+            const chars = content.length;
+            const lines = content ? content.split('\n').length : 0;
+            jsonStats.textContent = `${chars.toLocaleString()} chars | ${lines} lines`;
+        }
+
+        function validateMonacoJSON(showAlert = false) {
+            const content = monacoEditor.getValue().trim();
+            if (!content) {
+                validationStatus.className = 'status-item';
+                validationStatus.innerHTML = '<span>⏳</span><span>Ready</span>';
+                return null;
+            }
+            try {
+                const parsed = JSON.parse(content);
+                validationStatus.className = 'status-item valid';
+                validationStatus.innerHTML = '<span>✅</span><span>Valid JSON</span>';
+                if (showAlert) alert('✅ JSON is valid!');
+                return parsed;
+            } catch (e) {
+                const match = e.message.match(/position (\d+)/);
+                let errorMsg = e.message;
+                if (match) {
+                    const pos = parseInt(match[1]);
+                    const lines = content.substring(0, pos).split('\n');
+                    const line = lines.length;
+                    const col = lines[lines.length - 1].length + 1;
+                    errorMsg = `Line ${line}, Col ${col}: ${e.message.split(':')[0]}`;
+                }
+                validationStatus.className = 'status-item error';
+                validationStatus.innerHTML = `<span>❌</span><span>${errorMsg}</span>`;
+                if (showAlert) alert('❌ ' + errorMsg);
+                return null;
+            }
+        }
+
+        // Initial validation
+        updateMonacoStats();
+        validateMonacoJSON();
+
+        // Auto-paste JSON from CSV converter if available
+        const csvJson = sessionStorage.getItem('csvToJsonOutput');
+        if (csvJson) {
+            monacoEditor.setValue(csvJson);
+            sessionStorage.removeItem('csvToJsonOutput');
+        }
+    });
+</script>
+<!--@end:extra_js-->

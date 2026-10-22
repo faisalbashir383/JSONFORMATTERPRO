@@ -1,0 +1,276 @@
+<!--@block:title-->GPA Calculator - Free Grade Point Average Calculator | JSON Formatters Pro<!--@end:title-->
+<!--@block:meta_title-->GPA Calculator - Calculate Your GPA Free Online 2026<!--@end:meta_title-->
+<!--@block:meta_description-->Free GPA calculator. Calculate your grade point average for high school or college. Add
+courses, credits, and grades to get your cumulative GPA instantly.<!--@end:meta_description-->
+<!--@block:meta_keywords-->gpa calculator, grade point average calculator, college gpa calculator, high school gpa
+calculator,
+cumulative gpa calculator, semester gpa calculator, cgpa calculator, sgpa calculator,
+gpa calculator 2026, best gpa calculator free, weighted gpa calculator,
+4.0 gpa calculator, grade calculator, credit hour calculator<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/gpa-calculator/<!--@end:canonical_url-->
+<!--@block:extra_css-->
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .calculator-container {
+        max-width: 800px;
+        margin: 0 auto 2rem;
+    }
+
+    .calc-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    [data-theme="dark"] .calc-card {
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    .course-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 40px;
+        gap: 0.75rem;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .course-row input,
+    .course-row select {
+        padding: 0.75rem;
+        font-size: 0.95rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+    }
+
+    .course-row input:focus,
+    .course-row select:focus {
+        outline: none;
+        border-color: #8b5cf6;
+    }
+
+    .remove-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: none;
+        background: #ef4444;
+        color: white;
+        cursor: pointer;
+        font-size: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .remove-btn:hover {
+        background: #dc2626;
+    }
+
+    .add-btn {
+        width: 100%;
+        padding: 0.75rem;
+        background: var(--color-bg);
+        border: 2px dashed var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: all 0.2s;
+    }
+
+    .add-btn:hover {
+        border-color: #8b5cf6;
+        color: #8b5cf6;
+    }
+
+    .result-card {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1));
+        border: 2px solid rgba(139, 92, 246, 0.2);
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .gpa-value {
+        font-size: 4rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .gpa-label {
+        font-size: 1rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.5rem;
+    }
+
+    .credits-info {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+    }
+
+    .grade-scale {
+        margin-top: 2rem;
+    }
+
+    .grade-scale h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+    }
+
+    .grade-table {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 0.5rem;
+    }
+
+    .grade-item {
+        padding: 0.5rem;
+        background: var(--color-bg);
+        border-radius: var(--radius-sm);
+        text-align: center;
+        font-size: 0.8rem;
+        border: 1px solid var(--color-border);
+    }
+
+    .grade-letter {
+        font-weight: 700;
+        color: #8b5cf6;
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header">
+    <h1>🎓 GPA Calculator</h1>
+    <p>Calculate your Grade Point Average instantly. Add your courses and grades to get your GPA on a 4.0 scale.</p>
+</div>
+
+<div class="calculator-container">
+    <div class="calc-card">
+        <div
+            style="display: grid; grid-template-columns: 2fr 1fr 1fr 40px; gap: 0.75rem; margin-bottom: 1rem; font-weight: 600; font-size: 0.85rem; color: var(--color-text-secondary);">
+            <span>Course Name</span>
+            <span>Credits</span>
+            <span>Grade</span>
+            <span></span>
+        </div>
+
+        <div id="coursesContainer"></div>
+
+        <button class="add-btn" onclick="addCourse()">+ Add Course</button>
+    </div>
+
+    <div class="calc-card result-card">
+        <div class="gpa-value" id="gpaValue">0.00</div>
+        <div class="gpa-label">Your GPA (4.0 Scale)</div>
+        <div class="credits-info" id="creditsInfo">Total Credits: 0</div>
+
+        <div class="grade-scale">
+            <h3>Grade Point Scale</h3>
+            <div class="grade-table">
+                <div class="grade-item"><span class="grade-letter">A+</span> = 4.0</div>
+                <div class="grade-item"><span class="grade-letter">A</span> = 4.0</div>
+                <div class="grade-item"><span class="grade-letter">A-</span> = 3.7</div>
+                <div class="grade-item"><span class="grade-letter">B+</span> = 3.3</div>
+                <div class="grade-item"><span class="grade-letter">B</span> = 3.0</div>
+                <div class="grade-item"><span class="grade-letter">B-</span> = 2.7</div>
+                <div class="grade-item"><span class="grade-letter">C+</span> = 2.3</div>
+                <div class="grade-item"><span class="grade-letter">C</span> = 2.0</div>
+                <div class="grade-item"><span class="grade-letter">C-</span> = 1.7</div>
+                <div class="grade-item"><span class="grade-letter">D</span> = 1.0</div>
+                <div class="grade-item"><span class="grade-letter">F</span> = 0.0</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script>
+    (function () {
+        const gradePoints = {
+            'A+': 4.0, 'A': 4.0, 'A-': 3.7,
+            'B+': 3.3, 'B': 3.0, 'B-': 2.7,
+            'C+': 2.3, 'C': 2.0, 'C-': 1.7,
+            'D': 1.0, 'F': 0.0
+        };
+
+        let courseId = 0;
+
+        window.addCourse = function () {
+            const container = document.getElementById('coursesContainer');
+            const row = document.createElement('div');
+            row.className = 'course-row';
+            row.id = 'course-' + courseId;
+            row.innerHTML = `
+            <input type="text" placeholder="Course name" oninput="calculate()">
+            <input type="number" placeholder="Credits" min="1" max="10" value="3" oninput="calculate()">
+            <select onchange="calculate()">
+                ${Object.keys(gradePoints).map(g => `<option value="${g}">${g}</option>`).join('')}
+            </select>
+            <button class="remove-btn" onclick="removeCourse(${courseId})">×</button>
+        `;
+            container.appendChild(row);
+            courseId++;
+            calculate();
+        };
+
+        window.removeCourse = function (id) {
+            const row = document.getElementById('course-' + id);
+            if (row) row.remove();
+            calculate();
+        };
+
+        window.calculate = function () {
+            const rows = document.querySelectorAll('.course-row');
+            let totalPoints = 0;
+            let totalCredits = 0;
+
+            rows.forEach(row => {
+                const credits = parseFloat(row.querySelector('input[type="number"]').value) || 0;
+                const grade = row.querySelector('select').value;
+                const points = gradePoints[grade] || 0;
+
+                totalPoints += credits * points;
+                totalCredits += credits;
+            });
+
+            const gpa = totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : '0.00';
+
+            document.getElementById('gpaValue').textContent = gpa;
+            document.getElementById('creditsInfo').textContent = `Total Credits: ${totalCredits}`;
+        };
+
+        // Add initial courses
+        for (let i = 0; i < 4; i++) addCourse();
+    })();
+</script>
+<!--@end:extra_js-->

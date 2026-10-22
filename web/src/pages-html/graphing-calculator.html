@@ -1,0 +1,376 @@
+<!--@block:title-->Graphing Calculator - Plot Functions Online Free | JSON Formatters Pro<!--@end:title-->
+<!--@block:meta_title-->Graphing Calculator - Plot Math Functions Free 2026<!--@end:meta_title-->
+<!--@block:meta_description-->Free online graphing calculator. Plot mathematical functions, visualize equations, and
+explore graphs. Supports linear, quadratic, trigonometric, and more.<!--@end:meta_description-->
+<!--@block:meta_keywords-->graphing calculator, function plotter, graph calculator, equation plotter,
+math graphing calculator, plot function online, function graph, y=mx+b graph,
+graphing calculator 2026, parabola calculator, sine wave graph, math visualization<!--@end:meta_keywords-->
+<!--@block:canonical_url-->https://jsonformatterspro.com/graphing-calculator/<!--@end:canonical_url-->
+<!--@block:extra_css-->
+<style>
+    .tool-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+        border-radius: var(--radius-lg);
+    }
+
+    .tool-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-header p {
+        color: var(--color-text-secondary);
+        font-size: 1.15rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .calculator-layout {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .calc-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        padding: 1.5rem;
+    }
+
+    [data-theme="dark"] .calc-card {
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    .calc-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .function-input {
+        margin-bottom: 1rem;
+    }
+
+    .function-row {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .function-color {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+    }
+
+    .function-field {
+        flex: 1;
+        padding: 0.75rem;
+        font-size: 0.95rem;
+        font-family: 'SF Mono', monospace;
+        background: var(--color-bg);
+        color: var(--color-text);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+    }
+
+    .function-field:focus {
+        outline: none;
+        border-color: #8b5cf6;
+    }
+
+    .add-btn {
+        width: 100%;
+        padding: 0.75rem;
+        background: var(--color-bg);
+        border: 2px dashed var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        margin-bottom: 1rem;
+    }
+
+    .add-btn:hover {
+        border-color: #8b5cf6;
+        color: #8b5cf6;
+    }
+
+    .preset-title {
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--color-text-secondary);
+    }
+
+    .presets {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .preset-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.8rem;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .preset-btn:hover {
+        background: #8b5cf6;
+        color: white;
+        border-color: transparent;
+    }
+
+    .graph-container {
+        min-height: 500px;
+        position: relative;
+    }
+
+    .graph-canvas {
+        width: 100%;
+        height: 500px;
+        background: var(--color-bg);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+    }
+
+    .controls {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .control-btn {
+        flex: 1;
+        padding: 0.65rem;
+        font-weight: 600;
+        background: var(--color-bg);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .control-btn:hover {
+        background: #8b5cf6;
+        color: white;
+        border-color: transparent;
+    }
+
+    .info-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .info-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .info-section p {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 900px) {
+        .calculator-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+<!--@end:extra_css-->
+<!--@block:content-->
+<div class="tool-header">
+    <h1>📈 Graphing Calculator</h1>
+    <p>Plot mathematical functions and visualize equations. Explore graphs interactively.</p>
+</div>
+
+<div class="calculator-layout">
+    <div class="calc-card">
+        <h2 class="calc-title">📝 Functions</h2>
+
+        <div id="functionsContainer">
+            <div class="function-row" data-id="0">
+                <input type="color" class="function-color" value="#8b5cf6">
+                <input type="text" class="function-field" placeholder="y = x^2" value="x^2">
+            </div>
+        </div>
+
+        <button class="add-btn" onclick="addFunction()">+ Add Function</button>
+
+        <div class="preset-title">Quick Presets</div>
+        <div class="presets">
+            <button class="preset-btn" onclick="setPreset('x')">y = x</button>
+            <button class="preset-btn" onclick="setPreset('x^2')">y = x²</button>
+            <button class="preset-btn" onclick="setPreset('x^3')">y = x³</button>
+            <button class="preset-btn" onclick="setPreset('sin(x)')">sin(x)</button>
+            <button class="preset-btn" onclick="setPreset('cos(x)')">cos(x)</button>
+            <button class="preset-btn" onclick="setPreset('tan(x)')">tan(x)</button>
+            <button class="preset-btn" onclick="setPreset('sqrt(x)')">√x</button>
+            <button class="preset-btn" onclick="setPreset('1/x')">1/x</button>
+            <button class="preset-btn" onclick="setPreset('abs(x)')">|x|</button>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" onclick="zoomIn()">🔍+</button>
+            <button class="control-btn" onclick="zoomOut()">🔍−</button>
+            <button class="control-btn" onclick="resetView()">↺</button>
+        </div>
+    </div>
+
+    <div class="calc-card graph-container">
+        <canvas id="graphCanvas" class="graph-canvas"></canvas>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>📚 How to Use</h2>
+    <p>Enter mathematical expressions using x as the variable. Supported operations: +, -, *, /, ^ (power), and
+        functions like sin, cos, tan, sqrt, abs, log.</p>
+    <p><strong>Examples:</strong> x^2, 2*x + 3, sin(x), sqrt(x), abs(x-2)</p>
+</div>
+<!--@end:content-->
+<!--@block:extra_js-->
+<script>
+    (function () {
+        const canvas = document.getElementById('graphCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let scale = 40;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width - 48;
+            canvas.height = 500;
+            draw();
+        }
+
+        function draw() {
+            const w = canvas.width;
+            const h = canvas.height;
+            const centerX = w / 2 + offsetX;
+            const centerY = h / 2 + offsetY;
+
+            // Clear
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--color-bg').trim() || '#f8fafc';
+            ctx.fillRect(0, 0, w, h);
+
+            // Grid
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            for (let x = centerX % scale; x < w; x += scale) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+            }
+            for (let y = centerY % scale; y < h; y += scale) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+            }
+
+            // Axes
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(0, centerY); ctx.lineTo(w, centerY); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(centerX, 0); ctx.lineTo(centerX, h); ctx.stroke();
+
+            // Draw functions
+            document.querySelectorAll('.function-row').forEach(row => {
+                const color = row.querySelector('.function-color').value;
+                const expr = row.querySelector('.function-field').value.trim();
+                if (!expr) return;
+
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+
+                let started = false;
+                for (let px = 0; px < w; px++) {
+                    const x = (px - centerX) / scale;
+                    try {
+                        const y = evaluate(expr, x);
+                        if (isNaN(y) || !isFinite(y)) continue;
+                        const py = centerY - y * scale;
+
+                        if (!started) {
+                            ctx.moveTo(px, py);
+                            started = true;
+                        } else {
+                            ctx.lineTo(px, py);
+                        }
+                    } catch (e) { }
+                }
+                ctx.stroke();
+            });
+        }
+
+        function evaluate(expr, x) {
+            // Simple expression parser
+            let parsed = expr
+                .replace(/\^/g, '**')
+                .replace(/sin/g, 'Math.sin')
+                .replace(/cos/g, 'Math.cos')
+                .replace(/tan/g, 'Math.tan')
+                .replace(/sqrt/g, 'Math.sqrt')
+                .replace(/abs/g, 'Math.abs')
+                .replace(/log/g, 'Math.log10')
+                .replace(/ln/g, 'Math.log')
+                .replace(/pi/g, 'Math.PI')
+                .replace(/e(?![a-z])/g, 'Math.E');
+
+            return new Function('x', 'return ' + parsed)(x);
+        }
+
+        let funcId = 1;
+        window.addFunction = function () {
+            const container = document.getElementById('functionsContainer');
+            const colors = ['#ef4444', '#10b981', '#f59e0b', '#3b82f6', '#ec4899'];
+            const row = document.createElement('div');
+            row.className = 'function-row';
+            row.dataset.id = funcId;
+            row.innerHTML = `
+            <input type="color" class="function-color" value="${colors[funcId % colors.length]}">
+            <input type="text" class="function-field" placeholder="y = ..." oninput="draw()">
+        `;
+            container.appendChild(row);
+            funcId++;
+        };
+
+        window.setPreset = function (expr) {
+            document.querySelector('.function-field').value = expr;
+            draw();
+        };
+
+        window.zoomIn = function () { scale *= 1.5; draw(); };
+        window.zoomOut = function () { scale /= 1.5; draw(); };
+        window.resetView = function () { scale = 40; offsetX = 0; offsetY = 0; draw(); };
+
+        window.draw = draw;
+
+        document.getElementById('functionsContainer').addEventListener('input', draw);
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+    })();
+</script>
+<!--@end:extra_js-->
