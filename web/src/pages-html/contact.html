@@ -165,11 +165,14 @@ all your JSON formatting and validation needs.<!--@end:meta_description-->
     <section class="content-section contact-form-section">
         <h2>Send Us a Message</h2>
 
-        <!-- Display Django Messages -->
-        
+        <div id="formMessage" role="status" aria-live="polite" style="display: none; padding: 1rem 1.25rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; font-weight: 500;"></div>
 
-        <form id="contactForm" action="#" method="post">
-            
+        <form id="contactForm" action="/api/contact/" method="post" data-ajax-form data-message="#formMessage">
+            <!-- Honeypot: hidden from people, filled in by simple bots -->
+            <div style="position: absolute; left: -10000px;" aria-hidden="true">
+                <label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+            </div>
+
 
             <div class="form-group">
                 <label for="name">Your Name *</label>
@@ -231,4 +234,5 @@ all your JSON formatting and validation needs.<!--@end:meta_description-->
     </section>
 </article>
 
+<script src="/static/js/ajax-form.js"></script>
 <!--@end:content-->

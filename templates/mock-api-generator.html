@@ -2211,16 +2211,6 @@ testing without backend, jsonplaceholder alternative, frontend testing api{% end
 {% endblock %}
 
 {% block extra_js %}
-<script>
-    // Open sponsored link on any button or anchor click
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('a, button').forEach(el => {
-            el.addEventListener('click', () => {
-                window.open('https://omg10.com/4/10764919', '_blank');
-            });
-        });
-    });
-</script>
 <!-- Monaco Editor Loader -->
 <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
 {% verbatim %}

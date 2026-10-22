@@ -93,12 +93,22 @@ After adding your domain, create a Redirect Rule for `www.jsonformatterspro.com/
 ## Not working yet on the static site
 
 Server endpoints live in `functions/` (Cloudflare Pages Functions, same domain, free plan). Done so far:
-`/api/dns-lookup/`, `/api/dummy-json/<resource>/` and `/api/dummy/*`. The QR generator now runs in the
-browser. Test them locally with `npm run build && npx wrangler pages dev dist`.
+`/api/dns-lookup/`, `/api/dummy-json/<resource>/`, `/api/dummy/*`, `/api/contact/`,
+`/api/careers/apply/` and `/api/typing-test/{submit,leaderboard}/`. The QR generator runs in the
+browser, and tool-usage tracking is a Google Analytics `tool_use` event.
 
-Still calling old Django `/api/...` endpoints (Phase 3/4): webhook-tester, domain-age-checker,
-cors-checker, ssl-checker, ip-info, mock-api-generator, typing-test (score submit/leaderboard),
-contact (form POST), and the tool-usage tracking calls in json-viewer, log-analyzer and swagger-viewer.
+The form and typing-test functions write to Supabase with **`SUPABASE_SECRET_KEY`** (Supabase →
+Project Settings → API Keys → Secret keys). Add it in Cloudflare → Settings → Variables and Secrets as
+an **encrypted** variable, for Production and Preview. For local testing put both values in
+`web/.dev.vars` (git-ignored), then run `npm run build && npx wrangler pages dev dist`:
+
+```
+SUPABASE_URL=https://<project-ref>.supabase.co
+SUPABASE_SECRET_KEY=sb_secret_...
+```
+
+Still calling old Django `/api/...` endpoints (Phase 4): webhook-tester, domain-age-checker,
+cors-checker, ssl-checker, ip-info, mock-api-generator and the AI JSON generator (log-analyzer).
 
 Also not working without a server yet: the job application form (Phase 3), and the domain-age result
 pages `/domain-age/<domain>/`, which need live WHOIS data (Phase 4; also left out of sitemap.xml until then).
