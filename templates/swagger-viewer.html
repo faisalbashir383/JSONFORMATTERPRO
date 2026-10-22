@@ -1001,12 +1001,6 @@ Example:
         const observer = new MutationObserver(syncSwaggerTheme);
         observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
-        // Open sponsored link on any anchor tag click
-        document.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                window.open('https://omg10.com/4/10764919', '_blank');
-            });
-        });
 
         const specUrl = document.getElementById('specUrl');
         const specInput = document.getElementById('specInput');
@@ -1453,8 +1447,6 @@ Example:
                 showError('Please enter an OpenAPI specification');
                 return;
             }
-            // Open sponsored link in new tab
-            window.open('https://omg10.com/4/10764919', '_blank');
             // Track tool usage
             fetch('/api/track/tool-usage/', {
                 method: 'POST',
@@ -1465,13 +1457,11 @@ Example:
         });
 
         sampleBtn.addEventListener('click', () => {
-            window.open('https://omg10.com/4/10764919', '_blank');
             specInput.value = JSON.stringify(sampleSpec, null, 2);
             showToast('Sample spec loaded!');
         });
 
         clearBtn.addEventListener('click', () => {
-            window.open('https://omg10.com/4/10764919', '_blank');
             specInput.value = '';
             specUrl.value = '';
             hideError();
@@ -1484,7 +1474,6 @@ Example:
                 showError('Please enter a URL');
                 return;
             }
-            window.open('https://omg10.com/4/10764919', '_blank');
 
             loading.classList.add('visible');
             hideError();

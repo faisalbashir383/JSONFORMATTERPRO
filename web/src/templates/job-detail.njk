@@ -158,7 +158,13 @@
         </div>
         {% endif %}
 
-        <form method="POST" action="{{ job.get_absolute_url|py }}#apply-section" style="max-width: 600px; margin: 0 auto;">
+        <div id="applyMessage" role="status" aria-live="polite" style="display: none; max-width: 600px; margin: 0 auto 1.5rem; padding: 1rem 1.25rem; border-radius: var(--radius-md); font-weight: 500;"></div>
+        <form method="POST" action="/api/careers/apply/" data-ajax-form data-message="#applyMessage" style="max-width: 600px; margin: 0 auto;">
+            <input type="hidden" name="slug" value="{{ job.slug|py }}">
+            <!-- Honeypot: hidden from people, filled in by simple bots -->
+            <div style="position: absolute; left: -10000px;" aria-hidden="true">
+                <label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+            </div>
             
 
             <!-- Personal Information -->
@@ -308,4 +314,5 @@
         }
     }
 </style>
+<script src="/static/js/ajax-form.js"></script>
 <!--@end:content-->
