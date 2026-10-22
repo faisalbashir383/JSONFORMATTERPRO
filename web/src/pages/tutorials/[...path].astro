@@ -1,0 +1,22 @@
+---
+// /tutorials/ and /tutorials/<slug>/, built from Supabase.
+import { hasData } from '../../lib/db';
+import { tutorialDetailPages, tutorialsListContext } from '../../lib/views';
+import { renderTemplate } from '../../lib/render';
+
+export async function getStaticPaths() {
+  if (!hasData) return [];
+  const pages = [
+    { url: '/tutorials/', context: await tutorialsListContext(), template: 'tutorials-list' },
+    ...(await tutorialDetailPages()).map((p) => ({ ...p, template: 'tutorial-detail' })),
+  ];
+  return pages.map(({ url, context, template }) => ({
+    params: { path: url.replace(/^\/tutorials\/|\/$/g, '') || undefined },
+    props: { context, template },
+  }));
+}
+
+const { context, template } = Astro.props;
+const html = renderTemplate(template, context);
+---
+<Fragment set:html={html} />

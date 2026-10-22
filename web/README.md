@@ -14,7 +14,12 @@ database lives in Supabase.
 | `public/static/` | CSS/JS/images, served at the same `/static/...` URLs as before |
 | `public/_headers`, `public/_redirects` | Security headers and redirects (were Django middleware) |
 
-`src/pages-html` and `src/layouts/base.html` are now the source of truth. Edit them directly.
+| `src/templates/*.njk` | Blog, tutorials and careers templates (Django templates translated to Nunjucks) |
+| `src/lib/views.ts` | Builds each page's data from Supabase, the way the Django views did |
+| `src/lib/django.ts` | Django-compatible filters and escaping for the `.njk` templates |
+| `src/pages/sitemap.xml.ts` | `sitemap.xml`; static list comes from `src/data/sitemap-static.json` |
+
+`src/pages-html`, `src/templates` and `src/layouts/base.html` are now the source of truth. Edit them directly.
 `npm run convert` regenerates them from `../templates` and **overwrites** your edits, so only
 use it while the Django templates are still the ones being edited.
 
@@ -32,7 +37,28 @@ npm run build    # writes dist/
 - Root directory: `web`
 - Build command: `npm run build`
 - Output directory: `dist`
-- Environment variable: `NODE_VERSION=22`
+- Environment variables:
+  - `NODE_VERSION` = `22`
+  - `SUPABASE_URL` = `https://<project-ref>.supabase.co` (Supabase → Project Settings → API)
+  - `SUPABASE_ANON_KEY` = the project's **anon / publishable** key. It is safe to use here: Row Level
+    Security only lets it read published content. Never use the `service_role` key.
+
+Without the Supabase variables the build still succeeds, but skips the blog, tutorials and careers pages.
+
+### Rebuild when content changes
+
+Blog posts, tutorials and jobs are baked into the HTML at build time, so publishing one needs a rebuild:
+
+1. Cloudflare Pages → your project → **Settings** → **Builds** → **Deploy hooks** → add a hook for the
+   production branch and copy its URL.
+2. Supabase → **Database** → **Webhooks** → **Create a new hook** on `formatter_blogpost`,
+   `formatter_tutorial` and `formatter_jobposting` (insert, update, delete), type **HTTP Request**,
+   method **POST**, URL = the deploy hook.
+
+### Offline builds
+
+`DATA_FIXTURE=/path/to/fixture.json npm run build` builds from a JSON export instead of Supabase.
+Create one from the Django database with `env=development python manage.py shell < scripts/export_fixture.py`.
 
 After adding your domain, create a Redirect Rule for `www.jsonformatterspro.com/*` →
 `https://jsonformatterspro.com/${1}` (301). Django's WWWRedirectMiddleware used to do this.
@@ -44,4 +70,10 @@ webhook-tester, domain-age-checker, dns-lookup, cors-checker, ssl-checker, ip-in
 dummy-json-api-playground, mock-api-generator, qr-generator, typing-test (score submit/leaderboard),
 contact (form POST), and the tool-usage tracking calls in json-viewer, log-analyzer and swagger-viewer.
 
-Not built yet (Phase 2, from Supabase): blog, tutorials, careers, domain-age result pages, sitemap.xml.
+Also not working without a server yet: the job application form (Phase 3), and the domain-age result
+pages `/domain-age/<domain>/`, which need live WHOIS data (Phase 4; also left out of sitemap.xml until then).
+
+Differences from the Django site, because a static host can't read query strings:
+- Blog pagination is `/blog/page/2/` instead of `/blog/?page=2`.
+- Careers department/type filters and the tutorials `?lang=` switch show the default (unfiltered) view.
+- View counters show the value at build time.
