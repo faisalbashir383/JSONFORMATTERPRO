@@ -59,6 +59,8 @@ call_command('sqlsequencereset', 'formatter', 'apiutils', 'auth', stdout=buf, no
 with connection.cursor() as cur:
     cur.execute(buf.getvalue())
     for f in sorted(Path('supabase/migrations').glob('*.sql')):
+        if f.name.endswith('_django_schema.sql'):
+            continue  # manage.py migrate above already created the tables
         print('applying', f)
         cur.execute(f.read_text())
 "

@@ -45,6 +45,26 @@ npm run build    # writes dist/
 
 Without the Supabase variables the build still succeeds, but skips the blog, tutorials and careers pages.
 
+### Adding content (Supabase Table Editor)
+
+Supabase → **Table Editor**. Fill in only the fields below; everything else (slug, timestamps,
+`published_at`, `reading_time`, view counts, meta titles/descriptions) is filled in automatically
+by the defaults and triggers in `supabase/migrations/20261022010000_content_defaults.sql`.
+
+| Table | Required fields |
+|---|---|
+| `formatter_blogcategory` | `name` |
+| `formatter_blogpost` | `title`, `category_id`, `excerpt`, `content` (HTML), tick `published` to make it live |
+| `formatter_programminglanguage` | `name` (optional: `icon`, `syntax_highlight`, `order`) |
+| `formatter_tutorialcategory` | `name` (optional: `icon`, `order`) |
+| `formatter_tutorial` | `title`, `category_id`, `description`, `content` (HTML), tick `is_published` |
+| `formatter_codeexample` | `tutorial_id`, `language_id`, `title`, `code` |
+| `formatter_mcqquestion` / `formatter_mcqoption` | `tutorial_id`, `question` / `question_id`, `option_text`, `is_correct` |
+| `formatter_jobposting` | `title`, `description`, `requirements`, `responsibilities` (HTML) |
+
+Only published posts/tutorials and active jobs are visible to the site. Changes show up after the
+next build (see below).
+
 ### Rebuild when content changes
 
 Blog posts, tutorials and jobs are baked into the HTML at build time, so publishing one needs a rebuild:
