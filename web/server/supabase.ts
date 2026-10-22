@@ -64,6 +64,15 @@ export async function update(env: Env, table: string, query: string, values: Rec
   }), `update ${table}`);
 }
 
+/** DELETE rows matching `query`; returns how many were deleted. */
+export async function remove(env: Env, table: string, query: string): Promise<number> {
+  const res = await check(await fetch(rest(env, `${table}?${query}`), {
+    method: 'DELETE',
+    headers: headers(env, { Prefer: 'return=representation' }),
+  }), `delete ${table}`);
+  return ((await res.json()) as unknown[]).length;
+}
+
 export const clientIp = (request: Request) => request.headers.get('CF-Connecting-IP');
 
 export const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);

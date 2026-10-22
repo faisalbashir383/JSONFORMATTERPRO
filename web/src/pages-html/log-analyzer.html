@@ -3007,6 +3007,7 @@ java.lang.NullPointerException: Cannot invoke method on null object
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
+                        mode: 'explain',
                         prompt: `Analyze these error logs and explain what's happening, possible causes, and how to fix them. Be concise and practical:\n\n${errorText}`
                     })
                 });
