@@ -2,14 +2,28 @@
 // formatter/views.py (blog_list, blog_detail, blog_category, careers_page, job_detail,
 // tutorials_list, tutorial_detail). Model methods the templates call are precomputed here.
 import { table, type Row } from './db';
+import { staticPosts } from './static-posts';
 
 const POSTS_PER_PAGE = 10;
 
 // ---------------------------------------------------------------- blog
 
+/** Supabase posts plus the Markdown posts in src/content/blog, newest first. */
 async function blogData() {
-  const categories = await table('formatter_blogcategory', 'name.asc');
+  const categories = [...await table('formatter_blogcategory', 'name.asc')];
   const posts = (await table('formatter_blogpost', 'published_at.desc')).filter((p) => p.published);
+
+  for (const post of staticPosts()) {
+    let category = categories.find((c) => c.slug === post.category_slug);
+    if (!category) {
+      category = { id: `static:${post.category_slug}`, name: post.category_name, slug: post.category_slug, description: '' };
+      categories.push(category);
+    }
+    posts.push({ ...post, category_id: category.id });
+  }
+  categories.sort((a, b) => a.name.localeCompare(b.name));
+  posts.sort((a, b) => (a.published_at < b.published_at ? 1 : a.published_at > b.published_at ? -1 : 0));
+
   const byId = new Map(categories.map((c) => [c.id, { ...c, posts: [] as Row[] }]));
   const enriched = posts.map((p) => ({
     ...p,

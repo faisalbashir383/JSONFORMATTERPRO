@@ -45,6 +45,13 @@ npm run build    # writes dist/
 
 Without the Supabase variables the build still succeeds, but skips the blog, tutorials and careers pages.
 
+### Blog posts in the repo (Markdown)
+
+Add a file to `src/content/blog/<slug>.md`; the file name is the URL (`/blog/<slug>/`). The frontmatter
+fields are listed at the top of `src/lib/static-posts.ts`. Start the body with `##` headings (the
+title is the page's `<h1>`), and tag code blocks with a language (`json`, `javascript`, `python`,
+`bash`, `yaml`) for highlighting. Repo posts and Supabase posts are listed together, newest first.
+
 ### Adding content (Supabase Table Editor)
 
 Supabase → **Table Editor**. Fill in only the fields below; everything else (slug, timestamps,

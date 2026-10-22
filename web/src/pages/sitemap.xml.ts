@@ -15,10 +15,10 @@ const entry = ({ path, lastmod, changefreq, priority }: Entry) =>
 
 export async function GET() {
   const entries: Entry[] = staticPaths.map((path) => ({ path, changefreq: 'weekly', priority: '0.8' }));
+  for (const { url, context } of await blogDetailPages()) {
+    entries.push({ path: url, lastmod: context.post.updated_at, changefreq: 'weekly', priority: '0.9' });
+  }
   if (hasData) {
-    for (const { url, context } of await blogDetailPages()) {
-      entries.push({ path: url, lastmod: context.post.updated_at, changefreq: 'weekly', priority: '0.9' });
-    }
     for (const { url, context } of await tutorialDetailPages()) {
       entries.push({ path: url, lastmod: context.tutorial.updated_at, changefreq: 'weekly', priority: '0.9' });
     }
