@@ -20,8 +20,12 @@ const entry = ({ path, lastmod, changefreq, priority }: Entry) =>
   `<changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
 
 export async function GET() {
-  const entries: Entry[] = staticPaths.map((path) => ({ path, changefreq: 'weekly', priority: '0.8' }));
-  const listed = new Set(staticPaths);
+  // Django's list can name pages that were since removed or merged (e.g. /json-formatter/), so keep
+  // only paths that are built here; the data-driven sections are built from Supabase.
+  const built = new Set([...routes.map((r) => r.path), '/blog/', '/tutorials/', '/careers/']);
+  const live = staticPaths.filter((path) => built.has(path));
+  const entries: Entry[] = live.map((path) => ({ path, changefreq: 'weekly', priority: '0.8' }));
+  const listed = new Set(live);
   for (const { path, page } of routes) {
     if (!listed.has(path) && !isNoindex(page)) entries.push({ path, changefreq: 'weekly', priority: '0.8' });
   }

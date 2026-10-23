@@ -3,6 +3,12 @@
 # Ported from formatter/urls.py RedirectView entries.
 /json-schema/                                                                              /json-schema-validator/ 301
 
+# "json formatter" pages consolidated into the homepage (one page per keyword instead of three).
+/json-formatter/                                                                           / 301
+/json-formatter-online/                                                                    / 301
+/json-formatter                                                                            / 301
+/json-formatter-online                                                                     / 301
+
 # Old Django URLs that Google indexed. Posts go to the closest new article by topic, everything else
 # to its section. Generated from the old database (db.sqlite3); add any further 404s that Search
 # Console reports. www -> non-www is a Cloudflare Redirect Rule on the zone, not a file rule.
