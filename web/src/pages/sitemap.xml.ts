@@ -1,9 +1,15 @@
 // sitemap.xml in the same format and order as Django's (formatter/sitemaps.py):
 // static pages, then blog posts, tutorials and job postings.
-// Approved domain-age pages are added back once those pages exist again (Phase 4).
+// Django's hand-written static list missed some pages, so every built tool page that isn't
+// noindex is added after it, plus the blog category pages.
 import staticPaths from '../data/sitemap-static.json';
+import routes from '../data/routes.json';
 import { hasData } from '../lib/db';
-import { blogDetailPages, jobDetailPages, tutorialDetailPages } from '../lib/views';
+import { blogDetailPages, blogListPages, jobDetailPages, tutorialDetailPages } from '../lib/views';
+
+const pageSources = import.meta.glob<string>('../pages-html/*.html', { query: '?raw', import: 'default', eager: true });
+const isNoindex = (page: string) =>
+  /<!--@block:meta_robots-->[^<]*noindex/.test(pageSources[`../pages-html/${page}.html`] ?? '');
 
 const SITE_URL = 'https://jsonformatterspro.com';
 
@@ -15,6 +21,13 @@ const entry = ({ path, lastmod, changefreq, priority }: Entry) =>
 
 export async function GET() {
   const entries: Entry[] = staticPaths.map((path) => ({ path, changefreq: 'weekly', priority: '0.8' }));
+  const listed = new Set(staticPaths);
+  for (const { path, page } of routes) {
+    if (!listed.has(path) && !isNoindex(page)) entries.push({ path, changefreq: 'weekly', priority: '0.8' });
+  }
+  for (const { url } of await blogListPages()) {
+    if (url.startsWith('/blog/category/') && !url.includes('/page/')) entries.push({ path: url, changefreq: 'weekly', priority: '0.6' });
+  }
   for (const { url, context } of await blogDetailPages()) {
     entries.push({ path: url, lastmod: context.post.updated_at, changefreq: 'weekly', priority: '0.9' });
   }

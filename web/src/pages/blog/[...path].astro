@@ -9,11 +9,11 @@ export async function getStaticPaths() {
   const detail = (await blogDetailPages()).map((p) => ({ ...p, template: 'blog_detail' }));
   return [...list, ...detail].map(({ url, context, template }) => ({
     params: { path: url.replace(/^\/blog\/|\/$/g, '') || undefined },
-    props: { context, template },
+    props: { context, template, url },
   }));
 }
 
-const { context, template } = Astro.props;
-const html = renderTemplate(template, context);
+const { context, template, url } = Astro.props;
+const html = renderTemplate(template, context, url);
 ---
 <Fragment set:html={html} />

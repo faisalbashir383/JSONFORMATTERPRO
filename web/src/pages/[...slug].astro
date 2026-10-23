@@ -3,18 +3,18 @@
 // pages-html/<page>.html inside layouts/base.html.
 import layout from '../layouts/base.html?raw';
 import routes from '../data/routes.json';
-import { parseBlocks, renderPage } from '../lib/blocks';
+import { parseBlocks, renderPage, withSeoDefaults } from '../lib/blocks';
 
 const pages = import.meta.glob<string>('../pages-html/*.html', { query: '?raw', import: 'default', eager: true });
 
 export function getStaticPaths() {
   return routes.map((r) => ({
     params: { slug: r.path.replace(/^\/|\/$/g, '') || undefined },
-    props: { page: r.page },
+    props: { page: r.page, path: r.path },
   }));
 }
 
-const { page } = Astro.props;
-const html = renderPage(layout, parseBlocks(pages[`../pages-html/${page}.html`]));
+const { page, path } = Astro.props;
+const html = renderPage(layout, withSeoDefaults(parseBlocks(pages[`../pages-html/${page}.html`]), path));
 ---
 <Fragment set:html={html} />
