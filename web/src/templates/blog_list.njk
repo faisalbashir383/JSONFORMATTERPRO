@@ -1,8 +1,6 @@
-<!--@block:title-->Programming Articles - Tech Tutorials & Learning | JSON Formatters Pro<!--@end:title-->
-<!--@block:meta_title-->Programming Articles - Python, JavaScript, AI & Tech Tutorials | JSON Formatters Pro<!--@end:meta_title-->
-<!--@block:meta_description-->Learn programming with free tutorials on Python, JavaScript, React, Node.js, Django, Web
-Development, APIs, JSON, and more. Step-by-step coding guides, practical examples, and best practices for developers of
-all levels.<!--@end:meta_description-->
+<!--@block:title-->{% if (category|pytruth) %}{{ category.name|py }} Articles{% else %}JSON Guides & Developer Articles{% endif %}{% if page_obj.number > 1 %} - Page {{ page_obj.number|py }}{% endif %} | JSON Formatters Pro<!--@end:title-->
+<!--@block:meta_title-->{% if (category|pytruth) %}{{ category.name|py }} Articles{% else %}JSON Guides & Developer Articles{% endif %}{% if page_obj.number > 1 %} - Page {{ page_obj.number|py }}{% endif %} | JSON Formatters Pro<!--@end:meta_title-->
+<!--@block:meta_description-->{% if (category|pytruth) %}Practical {{ category.name|py }} articles for developers, with working code examples and fixes you can use right away.{% else %}Practical JSON guides for developers: fixing parse errors, JSON vs YAML, comparing JSON files and more, with working code examples.{% endif %}{% if page_obj.number > 1 %} Page {{ page_obj.number|py }}.{% endif %}<!--@end:meta_description-->
 <!--@block:meta_keywords-->programming articles, tech articles, coding tutorials, developer guides, python tutorials,
 javascript
 tutorials, web development, software development, programming tutorials, coding tips, how to programming, learn
@@ -13,10 +11,6 @@ machine learning, ai programming, programming for beginners, code examples, algo
 tutorial, git tutorial, docker tutorial, kubernetes guide, aws tutorial, cloud computing, devops, mongodb tutorial, sql
 tutorial, responsive design, coding best practices, clean code, programming interview questions, software architecture,
 microservices<!--@end:meta_keywords-->
-<!--@block:og_title-->Programming Articles - Free Tech Tutorials | JSON Formatter Pro<!--@end:og_title-->
-<!--@block:og_description-->Learn programming with our comprehensive tutorials on Python, JavaScript, AI, Web Development,
-and more. Free code examples and step-by-step guides.<!--@end:og_description-->
-<!--@block:canonical_url-->https://jsonformatterspro.com/blog/<!--@end:canonical_url-->
 <!--@block:structured_data-->
 <script type="application/ld+json">
 {

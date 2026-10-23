@@ -12,11 +12,11 @@ export async function getStaticPaths() {
   ];
   return pages.map(({ url, context, template }) => ({
     params: { path: url.replace(/^\/careers\/|\/$/g, '') || undefined },
-    props: { context, template },
+    props: { context, template, url },
   }));
 }
 
-const { context, template } = Astro.props;
-const html = renderTemplate(template, context);
+const { context, template, url } = Astro.props;
+const html = renderTemplate(template, context, url);
 ---
 <Fragment set:html={html} />
