@@ -140,14 +140,6 @@
     "page": "json-fixer"
   },
   {
-    "path": "/json-formatter-online/",
-    "page": "json-formatter-online"
-  },
-  {
-    "path": "/json-formatter/",
-    "page": "json-formatter"
-  },
-  {
     "path": "/json-generator/",
     "page": "json-generator"
   },

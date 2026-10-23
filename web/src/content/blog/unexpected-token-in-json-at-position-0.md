@@ -47,7 +47,7 @@ Nine times out of ten the problem is obvious the second you see this output. The
 | An invisible character | A byte order mark (BOM) at the start of a file |
 | `'` | Single quotes, which JSON doesn't allow |
 
-If you'd rather not dig through the console, paste the response into our [JSON Formatter](/json-formatter/). It points to the exact line and column where parsing stops, which is quicker than counting characters by hand.
+If you'd rather not dig through the console, paste the response into our [JSON Formatter](/). It points to the exact line and column where parsing stops, which is quicker than counting characters by hand.
 
 ## Cause 1: the server sent HTML
 

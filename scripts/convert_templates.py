@@ -33,7 +33,9 @@ DYNAMIC_TEMPLATES = {
     'blog_list.html', 'blog_detail.html', 'careers.html', 'job-detail.html',
     'tutorials-list.html', 'tutorial-detail.html', 'domain-age-result.html',
 }
-SKIP_TEMPLATES = {'base.html', '500.html', 'test.html'}
+SKIP_TEMPLATES = {'base.html', '500.html', 'test.html',
+                  # merged into the homepage; /json-formatter/ and /json-formatter-online/ 301 to /
+                  'json-formatter.html', 'json-formatter-online.html'}
 # Translated to Nunjucks (web/src/templates/*.njk) and rendered from Supabase data.
 # domain-age-result.html needs live WHOIS data, so it waits for Phase 4.
 NUNJUCKS_TEMPLATES = [
